@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Comprehensive SEO fixes for problabtools.es:
+Comprehensive SEO fixes for problabtools.com:
   1. Fix broken canonical URL in tabla-chi-cuadrado.html
   2. Fix titles > 70 chars (title, og:title, twitter:title)
   3. Fix descriptions > 165 chars (meta desc, og:description, twitter:description)
@@ -32,7 +32,7 @@ def strip_tags(s):
 # ── Fix 1: Canonical URLs ─────────────────────────────────────────────────────
 
 CANONICAL_FIXES = {
-    "tabla-chi-cuadrado.html": "https://problabtools.es/tabla-chi-cuadrado.html",
+    "tabla-chi-cuadrado.html": "https://problabtools.com/tabla-chi-cuadrado.html",
 }
 
 def fix_canonical(content, correct_url):
@@ -127,49 +127,49 @@ TABLA_SCHEMAS = {
     "tabla-normal.html": {
         "name": "Tabla distribución Normal estándar — f(z) y Φ(z) | ProbLab",
         "breadcrumb_name": "Tabla Normal estándar",
-        "url": "https://problabtools.es/tabla-normal.html",
+        "url": "https://problabtools.com/tabla-normal.html",
         "desc": "Tabla completa de la distribución Normal estándar (μ=0, σ=1): función de densidad f(z) y probabilidad acumulada Φ(z) = P(Z≤z), para z de −3.49 a 3.49.",
     },
     "tabla-binomial.html": {
         "name": "Tabla distribución Binomial — P(X=k) y P(X≤k) | ProbLab",
         "breadcrumb_name": "Tabla Binomial",
-        "url": "https://problabtools.es/tabla-binomial.html",
+        "url": "https://problabtools.com/tabla-binomial.html",
         "desc": "Tabla completa de la distribución Binomial: función de masa P(X=k) y distribución acumulada P(X≤k) para distintos valores de n y p.",
     },
     "tabla-chi-cuadrado.html": {
         "name": "Tabla Chi-cuadrado: probabilidades y valores críticos | ProbLab",
         "breadcrumb_name": "Tabla Chi-cuadrado",
-        "url": "https://problabtools.es/tabla-chi-cuadrado.html",
+        "url": "https://problabtools.com/tabla-chi-cuadrado.html",
         "desc": "Tabla de la distribución Chi-cuadrado: densidad f(x,ν), probabilidad acumulada P(X≤x) y valores críticos χ²(p,ν) para cualquier grado de libertad.",
     },
     "tabla-t-student.html": {
         "name": "Tabla t de Student: probabilidades y valores críticos | ProbLab",
         "breadcrumb_name": "Tabla t de Student",
-        "url": "https://problabtools.es/tabla-t-student.html",
+        "url": "https://problabtools.com/tabla-t-student.html",
         "desc": "Tabla t de Student: densidad f(t,ν), probabilidad acumulada P(T≤t) y valores críticos por grado de libertad y nivel de significación.",
     },
     "tabla-f-snedecor.html": {
         "name": "Tabla distribución F de Snedecor — valores críticos | ProbLab",
         "breadcrumb_name": "Tabla F de Snedecor",
-        "url": "https://problabtools.es/tabla-f-snedecor.html",
+        "url": "https://problabtools.com/tabla-f-snedecor.html",
         "desc": "Tabla completa de la distribución F de Snedecor: valores críticos F(α, ν₁, ν₂) para análisis de varianza y contrastes de razón de varianzas.",
     },
     "tabla-gamma.html": {
         "name": "Tabla distribución Gamma — f(x), P(X≤x) y cuantiles | ProbLab",
         "breadcrumb_name": "Tabla Gamma",
-        "url": "https://problabtools.es/tabla-gamma.html",
+        "url": "https://problabtools.com/tabla-gamma.html",
         "desc": "Tabla completa de la distribución Gamma: función de densidad f(x), distribución acumulada P(X≤x) y cuantiles para distintos parámetros de forma y escala.",
     },
     "tabla-beta.html": {
         "name": "Tabla distribución Beta — f(x), P(X≤x) y cuantiles | ProbLab",
         "breadcrumb_name": "Tabla Beta",
-        "url": "https://problabtools.es/tabla-beta.html",
+        "url": "https://problabtools.com/tabla-beta.html",
         "desc": "Tabla completa de la distribución Beta: función de densidad f(x), distribución acumulada P(X≤x) y cuantiles para distintos parámetros α y β.",
     },
     "tabla-poisson.html": {
         "name": "Tabla distribución de Poisson — P(X=k) y P(X≤k) | ProbLab",
         "breadcrumb_name": "Tabla Poisson",
-        "url": "https://problabtools.es/tabla-poisson.html",
+        "url": "https://problabtools.com/tabla-poisson.html",
         "desc": "Tabla completa de la distribución de Poisson: función de masa P(X=k) y distribución acumulada P(X≤k) para distintos valores del parámetro λ.",
     },
 }
@@ -185,13 +185,13 @@ def build_tabla_schema(info):
                         "@type": "ListItem",
                         "position": 1,
                         "name": "Inicio",
-                        "item": "https://problabtools.es/"
+                        "item": "https://problabtools.com/"
                     },
                     {
                         "@type": "ListItem",
                         "position": 2,
                         "name": "Tablas estadísticas",
-                        "item": "https://problabtools.es/tablas-estadisticas/"
+                        "item": "https://problabtools.com/tablas-estadisticas/"
                     },
                     {
                         "@type": "ListItem",
@@ -210,7 +210,7 @@ def build_tabla_schema(info):
                 "isPartOf": {
                     "@type": "WebSite",
                     "name": "ProbLab",
-                    "url": "https://problabtools.es/"
+                    "url": "https://problabtools.com/"
                 }
             }
         ]

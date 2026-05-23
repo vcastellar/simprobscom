@@ -19,7 +19,7 @@ ProbLab es una herramienta web educativa para calcular, simular y visualizar con
 
 Puedes usar la versión online aquí:
 
-👉 **https://problabtools.es**
+👉 **https://problabtools.com**
 
 ---
 

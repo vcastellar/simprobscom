@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Añade <meta name="keywords"> a todas las páginas HTML de problabtools.es.
+Añade <meta name="keywords"> a todas las páginas HTML de problabtools.com.
 Si la página ya tiene el tag, lo omite.
 """
 
