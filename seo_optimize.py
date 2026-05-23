@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-SEO optimizations for problabtools.es:
+SEO optimizations for problabtools.com:
   #2 – Add FAQPage JSON-LD to pages with FAQ content
   #3 – Fix h2→h3 inside #seo-support-content
   #6 – Add 'Distribuciones' breadcrumb level to distribution pages
@@ -46,7 +46,7 @@ def fix_search_action(content):
 
 # ── #6: add Distribuciones breadcrumb level ───────────────────────────────────
 
-DIST_CRUMB = '{"@type": "ListItem", "position": 2, "name": "Distribuciones", "item": "https://problabtools.es/distribuciones/"}'
+DIST_CRUMB = '{"@type": "ListItem", "position": 2, "name": "Distribuciones", "item": "https://problabtools.com/distribuciones/"}'
 
 def fix_breadcrumb(content):
     """
