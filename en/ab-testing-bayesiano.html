@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bayesian A/B test Beta-Binomial online | ProbLab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Online Bayesian A/B test calculator with Beta-Binomial distribution: P(B>A), credibility intervals, posterior distributions and expected lift.">
+  <meta name="keywords" content="Bayesian A/B testing calculator, Bayesian statistics AB test, probability of winner AB test, Bayesian conversion test, A/B testing without p-value, ProbLab, online statistics, statistics calculator">
+  <link rel="canonical" href="https://problabtools.com/en/ab-testing-bayesiano.html">
+  <link rel="alternate" hreflang="en" href="https://problabtools.com/en/ab-testing-bayesiano.html">
+  <link rel="alternate" hreflang="es" href="https://problabtools.com/ab-testing-bayesiano.html">
+  <link rel="alternate" hreflang="x-default" href="https://problabtools.com/ab-testing-bayesiano.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Bayesian A/B test Beta-Binomial online | ProbLab">
+  <meta property="og:description" content="Online Bayesian A/B test calculator with Beta-Binomial distribution: P(B>A), credibility intervals, posterior distributions and expected lift.">
+  <meta property="og:url" content="https://problabtools.com/en/ab-testing-bayesiano.html">
+  <meta property="og:site_name" content="ProbLab">
+  <meta property="og:image" content="https://problabtools.com/og-image.png">
+  <meta property="og:locale" content="en_US">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="author" content="Vicente Castellar">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Bayesian A/B test Beta-Binomial online | ProbLab">
+  <meta name="twitter:description" content="Online Bayesian A/B test calculator with Beta-Binomial distribution: P(B>A), credibility intervals, posterior distributions and expected lift.">
+  <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+          {"@type": "ListItem", "position": 2, "name": "A/B Testing", "item": "https://problabtools.com/en/ab-testing/"},
+          {"@type": "ListItem", "position": 3, "name": "Bayesian A/B test", "item": "https://problabtools.com/en/ab-testing-bayesiano.html"}
+        ]
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Bayesian A/B test Beta-Binomial",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Web",
+        "url": "https://problabtools.com/en/ab-testing-bayesiano.html",
+        "description": "Bayesian A/B test calculator with Beta-Binomial distribution, P(B>A) and posterior distributions.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}
+      }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What prior should I use if I have no historical data?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Beta(1, 1), the uniform prior. If you have historical conversion rates, you can parameterize the prior as if you had α₀ prior successes and β₀ prior failures."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many Monte Carlo samples does the calculator use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "30,000. This gives a standard error for estimating P(B > A) of approximately ±0.003 for values around 0.5."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use this with small sample sizes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The main advantage of the Bayesian approach is that it works correctly with small samples, where the Z-test can be inaccurate."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between P(B > A) = 0.97 and p-value = 0.03?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The p-value measures the probability of observing data as extreme as observed under H₀; P(B > A) directly measures how much you believe B exceeds A given what you have observed. The latter is more intuitive."
+      }
+    }
+  ]
+}
+  </script>
+  <link rel="stylesheet" href="../style_new.css?v=20260522">
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="../index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="distribuciones/">Distributions</a></li>
+            <li><a href="../tablas-estadisticas/">Tables</a></li>
+            <li><a href="../intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="../tamano-muestral/">Sample size</a></li>
+            <li><a href="../contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="ab-testing/">A/B Tests</a></li>
+            <li><a href="../simulaciones/">Simulations</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="ab-testing/">A/B Testing</a></li>
+            <li><span aria-current="page">Bayesian</span></li>
+        </ol>
+    </nav>
+  <header class="hero">
+    <p class="eyebrow">A/B Testing</p>
+    <h1>Bayesian A/B test — Beta-Binomial</h1>
+    <p class="hero-subtitle">Get the direct probability that B outperforms A, credibility intervals, and posterior distributions of conversion rates.</p>
+    <p class="hero-links"><a class="hero-link-button" href="ab-testing/">See all A/B testing tools</a></p>
+  </header>
+
+  <main>
+    <section class="card sample-size-panel">
+      <div class="panel-heading">
+        <h2>Calculator</h2>
+        <p>Enter the experiment data and prior parameters to obtain the full Bayesian analysis.</p>
+      </div>
+
+      <div class="form-grid sample-grid">
+        <div class="inline-inputs">
+          <div class="form-group">
+            <label for="bxA">Conversions group A (x<sub>A</sub>)</label>
+            <input type="number" id="bxA" value="120" step="1" min="0">
+          </div>
+          <div class="form-group">
+            <label for="bnA">Visitors group A (n<sub>A</sub>)</label>
+            <input type="number" id="bnA" value="1000" step="1" min="1">
+          </div>
+        </div>
+        <div class="inline-inputs">
+          <div class="form-group">
+            <label for="bxB">Conversions group B (x<sub>B</sub>)</label>
+            <input type="number" id="bxB" value="145" step="1" min="0">
+          </div>
+          <div class="form-group">
+            <label for="bnB">Visitors group B (n<sub>B</sub>)</label>
+            <input type="number" id="bnB" value="1000" step="1" min="1">
+          </div>
+        </div>
+        <div class="inline-inputs">
+          <div class="form-group">
+            <label for="priorAlpha">Prior α₀ (prior successes)</label>
+            <input type="number" id="priorAlpha" value="1" step="0.5" min="0.01">
+          </div>
+          <div class="form-group">
+            <label for="priorBeta">Prior β₀ (prior failures)</label>
+            <input type="number" id="priorBeta" value="1" step="0.5" min="0.01">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="credLevel">Credibility interval level</label>
+          <select id="credLevel">
+            <option value="0.90">90%</option>
+            <option value="0.95" selected>95%</option>
+            <option value="0.99">99%</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="calculate-btn" id="calcBayesBtn">Calculate Bayesian analysis</button>
+      <div id="bayesResult" class="result-box" style="line-height:1.9;">Result pending…</div>
+      <div class="chart-wrap">
+        <canvas id="bayesChart" aria-label="Posterior Beta distributions of conversion rates for variants A and B" role="img"></canvas>
+      </div>
+    </section>
+
+        <section class="card content-card">
+      <h3>Beta-Binomial model</h3>
+      <p>In the conjugate Bayesian model for proportions, the prior is a Beta distribution and the likelihood is binomial. The resulting posterior is also a Beta, which allows exact analytical calculations.</p>
+      <p class="formula-line">\( p_A \sim \text{Beta}(\alpha_0, \beta_0) \xrightarrow{\text{data}} p_A \mid \text{data} \sim \text{Beta}(\alpha_0 + x_A,\; \beta_0 + n_A - x_A) \)</p>
+      <p class="formula-line">\( p_B \sim \text{Beta}(\alpha_0, \beta_0) \xrightarrow{\text{data}} p_B \mid \text{data} \sim \text{Beta}(\alpha_0 + x_B,\; \beta_0 + n_B - x_B) \)</p>
+      <h3>Choosing the prior</h3>
+      <p>The Beta(1, 1) prior is uniform: it expresses total ignorance about the conversion rate. A Beta(α₀, β₀) prior with large α₀ + β₀ is equivalent to having prior historical data. The calculator allows you to customize it.</p>
+      <h3>P(B &gt; A) via Monte Carlo</h3>
+      <p>The probability that the conversion rate of B exceeds that of A is estimated by sampling from both posteriors:</p>
+      <p class="formula-line">\( P(p_B > p_A) \approx \frac{1}{N}\sum_{i=1}^{N} \mathbf{1}\!\left[p_B^{(i)} > p_A^{(i)}\right], \quad p_A^{(i)}, p_B^{(i)} \sim \text{posteriors} \)</p>
+    </section>
+
+        <section class="card content-card">
+            <h3>Worked example</h3>
+            <p>A product team wants to improve the signup rate on the homepage of a SaaS application. The current version (A) has a known conversion rate of approximately 8%. Variant B incorporates a new headline and a more prominent call-to-action button. A non-informative Beta(1, 1) prior is adopted for both variants, expressing total ignorance about the true rate before observing data.</p>
+            <p>After 14 days of the experiment the following data are collected: group A receives <strong>1,200 visitors</strong> and records <strong>94 conversions</strong>; group B receives <strong>1,200 visitors</strong> and records <strong>113 conversions</strong>.</p>
+            <p>The Bayesian update is immediate thanks to Beta-Binomial conjugacy. The posterior distribution of each rate is:</p>
+            <p class="formula-line">\( p_A \mid \text{data} \sim \text{Beta}(1 + 94,\; 1 + 1\,200 - 94) = \text{Beta}(95,\; 1\,107) \)</p>
+            <p class="formula-line">\( p_B \mid \text{data} \sim \text{Beta}(1 + 113,\; 1 + 1\,200 - 113) = \text{Beta}(114,\; 1\,088) \)</p>
+            <p>The posterior mean of A is \( \hat{p}_A = 95/(95+1\,107) \approx 7.9\,\% \) and that of B is \( \hat{p}_B = 114/(114+1\,088) \approx 9.5\,\% \). Using Monte Carlo with 30,000 samples drawn from both posterior distributions, the probability that B exceeds A is estimated:</p>
+            <p class="formula-line">\( P(p_B > p_A) \approx 0.962 \)</p>
+            <p>The expected lift of B over A is approximately \( (9.5 - 7.9)/7.9 \approx +20\,\% \) in relative terms. With a 96.2% probability that variant B is genuinely better, the team exceeds the usual decision threshold (95%) and can deploy B as the new default version, estimating that the change will generate around 19 additional signups per 1,000 visits.</p>
+        </section>
+
+    <section class="card content-card">
+        <h3>Advantages of the Bayesian approach</h3>
+        <ul>
+        <li>P(B &gt; A) is directly interpretable by stakeholders without statistical training.</li>
+        <li>It does not require fixing the sample size in advance; it can be updated with new data (though peeking must be controlled).</li>
+        <li>The prior allows incorporating historical knowledge about the baseline conversion rate.</li>
+        <li>It avoids the p-value problem: there is no binary significance threshold.</li>
+        </ul>
+    </section>
+
+    <section class="card content-card">
+      <h3>How to interpret the result</h3>
+      <p>The central result of the Bayesian analysis is <strong>P(B &gt; A)</strong>: the posterior probability that the conversion rate of B is genuinely higher than that of A, given what was observed. Unlike the frequentist p-value, this probability is directly interpretable: if P(B &gt; A) = 0.97, it means that, with the current data, there is 97% credibility that B outperforms A. In practice, values above <strong>0.95</strong> are usually considered sufficient evidence to make the decision to implement variant B, although the exact threshold depends on the context and the relative cost of possible errors.</p>
+      <p>The <strong>posterior distributions</strong> represent the updated knowledge about the conversion rate of each variant after combining the prior with the experimental data. Following the Beta-Binomial model, the posterior of A is \(\text{Beta}(\alpha_0 + x_A,\; \beta_0 + n_A - x_A)\) and that of B is \(\text{Beta}(\alpha_0 + x_B,\; \beta_0 + n_B - x_B)\). The mean of each posterior is the point estimate of the true rate; when the two distributions overlap little in the chart, the difference between variants is clear; when the overlap is large, the uncertainty is high and it is advisable to continue collecting data.</p>
+      <p>The <strong>credibility interval</strong> at the selected level (90%, 95%, or 99%) indicates the range of conversion rate values containing 95% of the posterior mass. Unlike the frequentist confidence interval, it can be interpreted directly: "there is a 95% probability that the true rate of B lies between these two values". If the intervals of A and B do not overlap, the evidence of a difference is very strong. The <strong>expected lift</strong> complements this analysis by showing the average relative improvement of B over A according to the posteriors, a more direct indicator of practical relevance than the p-value.</p>
+    </section>
+    <section id="seo-support-content" class="card content-card">
+      <section class="related-tools">
+        <h3>Related calculators</h3>
+        <ul>
+          <li><a href="ab-testing-z-test.html">Conversion Z-test (frequentist)</a></li>
+          <li><a href="ab-testing-potencia.html">MDE, power and sample size for A/B</a></li>
+          <li><a href="ab-testing-simulacion.html">A/B experiment simulation</a></li>
+          <li><a href="beta.html">Beta distribution</a></li>
+        </ul>
+      </section>
+      <h3>Frequently asked questions</h3>
+      <ul>
+        <li><strong>What prior should I use if I have no historical data?</strong> Beta(1, 1), the uniform prior. If you have historical conversion rates, you can parameterize the prior as if you had α₀ prior successes and β₀ prior failures.</li>
+        <li><strong>How many Monte Carlo samples does the calculator use?</strong> 30,000. This gives a standard error for estimating P(B &gt; A) of approximately ±0.003 for values around 0.5.</li>
+        <li><strong>Can I use this with small sample sizes?</strong> Yes. The main advantage of the Bayesian approach is that it works correctly with small samples, where the Z-test can be inaccurate.</li>
+        <li><strong>What is the difference between P(B &gt; A) = 0.97 and p-value = 0.03?</strong> The p-value measures the probability of observing data as extreme as observed under H₀; P(B &gt; A) directly measures how much you believe B exceeds A given what you have observed. The latter is more intuitive.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="legal-footer">
+    <p>
+      © 2026 problabtools.
+      <a href="../aviso-legal.html">Legal notice</a> ·
+      <a href="../privacidad.html">Privacy</a> ·
+      <a href="../cookies.html">Cookies</a> ·
+      <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+    </p>
+  </footer>
+</div>
+
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let bayesChart;
+
+function sampleBeta(alpha, beta) {
+  return jStat.beta.inv(Math.random(), alpha, beta);
+}
+
+function probBgtA(aA, bA, aB, bB, N) {
+  let count = 0;
+  for (let i = 0; i < N; i++) {
+    if (sampleBeta(aB, bB) > sampleBeta(aA, bA)) count++;
+  }
+  return count / N;
+}
+
+function renderBayesChart(aA, bA, aB, bB) {
+  const ctx = document.getElementById('bayesChart');
+  if (!ctx) return;
+
+  const meanA = aA / (aA + bA);
+  const meanB = aB / (aB + bB);
+  const modeA = aA > 1 ? (aA - 1) / (aA + bA - 2) : 0;
+  const modeB = aB > 1 ? (aB - 1) / (aB + bB - 2) : 0;
+  const center = (meanA + meanB) / 2;
+
+  const lo = Math.max(0.001, Math.min(modeA, modeB, meanA, meanB) - 0.1);
+  const hi = Math.min(0.999, Math.max(modeA, modeB, meanA, meanB) + 0.1);
+  const step = (hi - lo) / 300;
+
+  const pointsA = [], pointsB = [];
+  for (let x = lo; x <= hi; x += step) {
+    pointsA.push({ x, y: jStat.beta.pdf(x, aA, bA) });
+    pointsB.push({ x, y: jStat.beta.pdf(x, aB, bB) });
+  }
+
+  if (bayesChart) bayesChart.destroy();
+  bayesChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      datasets: [
+        {
+          label: 'Posterior A',
+          data: pointsA,
+          borderColor: '#1d4ed8',
+          backgroundColor: 'rgba(29,78,216,0.15)',
+          borderWidth: 2.5,
+          fill: 'origin',
+          pointRadius: 0,
+          parsing: false
+        },
+        {
+          label: 'Posterior B',
+          data: pointsB,
+          borderColor: '#059669',
+          backgroundColor: 'rgba(5,150,105,0.15)',
+          borderWidth: 2.5,
+          fill: 'origin',
+          pointRadius: 0,
+          parsing: false
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: {
+        x: { type: 'linear', min: lo, max: hi, title: { display: true, text: 'Conversion rate p' } },
+        y: { beginAtZero: true, title: { display: true, text: 'Posterior density' } }
+      },
+      plugins: {
+        legend: { display: true, position: 'top' }
+      }
+    }
+  });
+}
+
+function calculateBayes() {
+  const xA = parseFloat(document.getElementById('bxA').value);
+  const nA = parseFloat(document.getElementById('bnA').value);
+  const xB = parseFloat(document.getElementById('bxB').value);
+  const nB = parseFloat(document.getElementById('bnB').value);
+  const a0 = parseFloat(document.getElementById('priorAlpha').value);
+  const b0 = parseFloat(document.getElementById('priorBeta').value);
+  const cred = parseFloat(document.getElementById('credLevel').value);
+  const resultEl = document.getElementById('bayesResult');
+
+  if (![xA, nA, xB, nB, a0, b0, cred].every(Number.isFinite) ||
+      ![xA, nA, xB, nB].every(Number.isInteger) ||
+      nA <= 0 || nB <= 0 || xA < 0 || xB < 0 ||
+      xA > nA || xB > nB || a0 <= 0 || b0 <= 0 || cred <= 0 || cred >= 1) {
+    resultEl.innerHTML = 'Error: check the values. Visitors and conversions must be integers, conversions cannot exceed visitors, and prior parameters must be &gt; 0.';
+    if (bayesChart) { bayesChart.destroy(); bayesChart = null; }
+    return;
+  }
+
+  const aA = a0 + xA, bA = b0 + (nA - xA);
+  const aB = a0 + xB, bB = b0 + (nB - xB);
+
+  const meanA = aA / (aA + bA);
+  const meanB = aB / (aB + bB);
+
+  const tail = (1 - cred) / 2;
+  const ciA = [jStat.beta.inv(tail, aA, bA), jStat.beta.inv(1 - tail, aA, bA)];
+  const ciB = [jStat.beta.inv(tail, aB, bB), jStat.beta.inv(1 - tail, aB, bB)];
+
+  resultEl.innerHTML = 'Calculating P(B &gt; A)…';
+  renderBayesChart(aA, bA, aB, bB);
+
+  setTimeout(() => {
+    const N = 30000;
+    const pBgtA = probBgtA(aA, bA, aB, bB, N);
+    const lift = meanA > 0 ? ((meanB - meanA) / meanA * 100) : NaN;
+    const credPct = (cred * 100).toFixed(0);
+    const posterior = `Beta(${aA.toFixed(1)}, ${bA.toFixed(1)})`;
+    const posteriorB = `Beta(${aB.toFixed(1)}, ${bB.toFixed(1)})`;
+
+    resultEl.innerHTML =
+      `<strong>Posterior A:</strong> ${posterior} &nbsp;→ mean = ${meanA.toFixed(4)}<br>` +
+      `<strong>CI ${credPct}% A:</strong> [${ciA[0].toFixed(4)}, ${ciA[1].toFixed(4)}]<br>` +
+      `<strong>Posterior B:</strong> ${posteriorB} &nbsp;→ mean = ${meanB.toFixed(4)}<br>` +
+      `<strong>CI ${credPct}% B:</strong> [${ciB[0].toFixed(4)}, ${ciB[1].toFixed(4)}]<br>` +
+      `<strong>P(B &gt; A):</strong> ${(pBgtA * 100).toFixed(2)}% &nbsp;<em>(${N.toLocaleString()} Monte Carlo simulations)</em><br>` +
+      (!isNaN(lift) ? `<strong>Expected lift:</strong> ${lift >= 0 ? '+' : ''}${lift.toFixed(2)}%` : '');
+  }, 10);
+}
+
+document.getElementById('calcBayesBtn').addEventListener('click', calculateBayes);
+calculateBayes();
+</script>
+<script src="../search.js?v=20260522"></script>
+<script src="../wizard.js?v=20260522"></script>
+<script src="../i18n.js?v=20260524"></script>
+<script src="../theme.js?v=20260522"></script>
+</body>
+</html>
