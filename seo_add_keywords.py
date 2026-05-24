@@ -7,7 +7,7 @@ Si la página ya tiene el tag, lo omite.
 import os
 import re
 
-BASE = "/home/user/simprobs"
+BASE = os.path.dirname(os.path.abspath(__file__))
 
 # keywords por archivo
 KEYWORDS: dict[str, list[str]] = {

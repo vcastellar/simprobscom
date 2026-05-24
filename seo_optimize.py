@@ -12,7 +12,7 @@ import os
 import html
 import json
 
-BASE = "/home/user/simprobs"
+BASE = os.path.dirname(os.path.abspath(__file__))
 
 DIST_PAGES = {
     "bernoulli.html", "beta.html", "binomial.html", "centralf.html",
@@ -56,8 +56,8 @@ def fix_breadcrumb(content):
     # Match the 2-item itemListElement array
     pattern = (
         r'("itemListElement":\s*\[)\s*'
-        r'(\{"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://problabtools\.es/"\}),\s*'
-        r'(\{"@type": "ListItem", "position": 2, "name": "[^"]+", "item": "https://problabtools\.es/[^"]+\.html"\})\s*'
+        r'(\{"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://problabtools\.com/"\}),\s*'
+        r'(\{"@type": "ListItem", "position": 2, "name": "[^"]+", "item": "https://problabtools\.com/[^"]+\.html"\})\s*'
         r'(\])'
     )
     def replacer(m):

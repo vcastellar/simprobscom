@@ -13,7 +13,7 @@ import os
 import json
 import html as html_module
 
-BASE = "/home/user/simprobs"
+BASE = os.path.dirname(os.path.abspath(__file__))
 
 # ── helpers ──────────────────────────────────────────────────────────────────
 
