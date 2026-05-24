@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>A/B experiment simulation online | ProbLab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Monte Carlo simulation of A/B experiments: empirical power, z-statistic histogram, p-value distribution and type I &amp; II error analysis.">
+  <meta name="keywords" content="A/B testing simulation, statistical experiment simulator, Monte Carlo A/B test, simulate AB testing results, ProbLab, online statistics, statistics calculator">
+  <link rel="canonical" href="https://problabtools.com/en/ab-testing-simulacion.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="A/B experiment simulation online | ProbLab">
+  <meta property="og:description" content="Monte Carlo simulation of A/B experiments: empirical power, z-statistic histogram, p-value distribution and type I &amp; II error analysis.">
+  <meta property="og:url" content="https://problabtools.com/en/ab-testing-simulacion.html">
+  <meta property="og:site_name" content="ProbLab">
+  <meta property="og:image" content="https://problabtools.com/og-image.png">
+  <meta property="og:locale" content="en_US">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="author" content="Vicente Castellar">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="alternate" hreflang="en" href="https://problabtools.com/en/ab-testing-simulacion.html">
+  <link rel="alternate" hreflang="es" href="https://problabtools.com/ab-testing-simulacion.html">
+  <link rel="alternate" hreflang="x-default" href="https://problabtools.com/ab-testing-simulacion.html">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A/B experiment simulation online | ProbLab">
+  <meta name="twitter:description" content="Monte Carlo simulation of A/B experiments: empirical power, z-statistic histogram, p-value distribution and type I &amp; II error analysis.">
+  <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+          {"@type": "ListItem", "position": 2, "name": "A/B Testing", "item": "https://problabtools.com/en/ab-testing/"},
+          {"@type": "ListItem", "position": 3, "name": "A/B Experiment Simulation", "item": "https://problabtools.com/en/ab-testing-simulacion.html"}
+        ]
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "A/B Experiment Simulation",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Web",
+        "url": "https://problabtools.com/en/ab-testing-simulacion.html",
+        "description": "Monte Carlo simulation of A/B experiments: empirical power, z-statistic histogram and p-values.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}
+      }
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="../style_new.css?v=20260522">
+  <style>
+    .sim-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+    .sim-tab {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid #dbe3f1;
+      background: #f8fafc;
+      font-weight: 600;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      color: #334155;
+    }
+    .sim-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .sim-chart-panel { display: none; }
+    .sim-chart-panel.active { display: block; }
+    .stats-summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .stat-card {
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: rgba(37,99,235,0.06);
+      border: 1px solid rgba(37,99,235,0.15);
+      text-align: center;
+    }
+    .stat-card .sc-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1d4ed8;
+      display: block;
+      line-height: 1.2;
+    }
+    .stat-card .sc-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+      display: block;
+    }
+    @media (max-width: 640px) {
+      .stats-summary { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does the simulation use binomial samples?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Each replication approximates x_A ~ Bin(n, p_A) and x_B ~ Bin(n, p_B) using the De Moivre-Laplace normal approximation. This is adequate when n·p and n·(1−p) are not small; for small samples or extreme proportions the simulation should be interpreted as approximate."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does empirical power not exactly match theoretical power?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "There is always sampling variance. With 5,000 replications, the standard error of the simulated proportion is approximately ±0.006 for powers around 80%."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I simulate with p_A = p_B to verify the α level?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes: enter the same value for p_A and p_B and check that the empirical rejection rate is close to α."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are the replications independent?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes: each replication generates new samples with no dependence on previous ones."
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+  <div class="site-nav-inner">
+    <a class="site-brand" href="../index.html">ProbLab</a>
+    <ul class="site-nav-links">
+      <li><a href="distribuciones/">Distributions</a></li>
+      <li><a href="../tablas-estadisticas/">Tables</a></li>
+      <li><a href="../intervalos-confianza/">Confidence intervals</a></li>
+      <li><a href="../tamano-muestral/">Sample size</a></li>
+      <li><a href="../contrastes-hipotesis/">Hypothesis tests</a></li>
+      <li><a href="ab-testing/">A/B Tests</a></li>
+      <li><a href="../simulaciones/">Simulations</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="page-wrap">
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="ab-testing/">A/B Testing</a></li>
+      <li><span aria-current="page">Simulation</span></li>
+    </ol>
+  </nav>
+  <header class="hero">
+    <p class="eyebrow">A/B Testing</p>
+    <h1>A/B experiment simulation</h1>
+    <p class="hero-subtitle">Run thousands of Monte Carlo replications of an A/B experiment and observe the empirical distribution of the z statistic, p-values and the real rejection rate.</p>
+    <p class="hero-links"><a class="hero-link-button" href="ab-testing/">See all A/B tools</a></p>
+  </header>
+
+  <main>
+    <section class="card sample-size-panel">
+      <div class="panel-heading">
+        <h2>Simulation parameters</h2>
+        <p>Set the true conversion rates, group size and number of replications.</p>
+      </div>
+
+      <div class="form-grid sample-grid">
+        <div class="inline-inputs">
+          <div class="form-group">
+            <label for="simPA">True rate group A (p<sub>A</sub>)</label>
+            <input type="number" id="simPA" value="0.12" step="0.001" min="0.001" max="0.999">
+          </div>
+          <div class="form-group">
+            <label for="simPB">True rate group B (p<sub>B</sub>)</label>
+            <input type="number" id="simPB" value="0.138" step="0.001" min="0.001" max="0.999">
+          </div>
+        </div>
+        <div class="inline-inputs">
+          <div class="form-group">
+            <label for="simN">Visitors per group (n)</label>
+            <input type="number" id="simN" value="1500" step="10" min="10" max="50000">
+          </div>
+          <div class="form-group">
+            <label for="simReps">Number of replications</label>
+            <select id="simReps">
+              <option value="1000">1,000</option>
+              <option value="3000">3,000</option>
+              <option value="5000" selected>5,000</option>
+              <option value="10000">10,000</option>
+            </select>
+          </div>
+        </div>
+        <div class="inline-inputs">
+          <div class="form-group">
+            <label for="simAlpha">Significance level (α)</label>
+            <input type="number" id="simAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+          </div>
+          <div class="form-group">
+            <label for="simTail">Test type</label>
+            <select id="simTail">
+              <option value="two" selected>Two-tailed</option>
+              <option value="right">Right-tailed (B &gt; A)</option>
+              <option value="left">Left-tailed (B &lt; A)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button class="calculate-btn" id="simRunBtn">Run simulation</button>
+      <div id="simResult" class="result-box" style="line-height:1.7;">Result pending…</div>
+
+      <div id="simStats" class="stats-summary" hidden>
+        <div class="stat-card">
+          <span class="sc-value" id="scEmpPower">—</span>
+          <span class="sc-label">Empirical power</span>
+        </div>
+        <div class="stat-card">
+          <span class="sc-value" id="scThPower">—</span>
+          <span class="sc-label">Theoretical power</span>
+        </div>
+        <div class="stat-card">
+          <span class="sc-value" id="scMeanZ">—</span>
+          <span class="sc-label">Mean z</span>
+        </div>
+        <div class="stat-card">
+          <span class="sc-value" id="scStdZ">—</span>
+          <span class="sc-label">Std. dev. z</span>
+        </div>
+        <div class="stat-card">
+          <span class="sc-value" id="scMedianP">—</span>
+          <span class="sc-label">Median p-value</span>
+        </div>
+        <div class="stat-card">
+          <span class="sc-value" id="scReps">—</span>
+          <span class="sc-label">Valid replications</span>
+        </div>
+      </div>
+
+      <div class="sim-tabs" id="simTabs" hidden role="tablist">
+        <button class="sim-tab active" data-target="chartZ" role="tab" aria-selected="true">z histogram</button>
+        <button class="sim-tab" data-target="chartP" role="tab" aria-selected="false">p-value distribution</button>
+      </div>
+
+      <div id="chartZ" class="sim-chart-panel active">
+        <div class="chart-wrap">
+          <canvas id="histZCanvas" aria-label="Histogram of the z statistic across simulated replications" role="img"></canvas>
+        </div>
+      </div>
+      <div id="chartP" class="sim-chart-panel">
+        <div class="chart-wrap">
+          <canvas id="histPCanvas" aria-label="Distribution of p-values across simulated replications" role="img"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="card content-card">
+      <h3>What this tool simulates</h3>
+      <p>In each replication, the calculator generates random samples of size n from two Bernoulli distributions with the true rates p_A and p_B, calculates the z statistic of the two-proportions test and records whether H₀ is rejected. After N replications, it obtains the empirical distribution of z and p-values, and compares the rejection rate with the theoretical power.</p>
+      <p class="formula-line">\( z^{(i)} = \dfrac{\hat{p}_B^{(i)} - \hat{p}_A^{(i)}}{\sqrt{\hat{p}^{(i)}(1-\hat{p}^{(i)})\left(\tfrac{1}{n_A}+\tfrac{1}{n_B}\right)}} \)</p>
+      <p>If p_A = p_B, the empirical rejection rate estimates the <strong>real type I error</strong> (it should be close to α). If p_A ≠ p_B, it estimates the <strong>empirical power</strong>.</p>
+    </section>
+
+    <section class="card content-card">
+      <h3>Worked example</h3>
+      <p>A digital marketing team wants to evaluate whether a new email subject line (variant B) improves the open rate compared to the current subject line (variant A). Historical data shows that the current open rate is <strong>p_A = 0.22</strong> (22%). Variant B is expected to reach a rate of <strong>p_B = 0.26</strong> (26%), an absolute improvement of 4 percentage points.</p>
+      <p>The team sets α = 0.05 two-tailed and 80% power, which with the standard analytical formula yields approximately <strong>n = 476 users per group</strong> (952 in total). Before launching the real experiment, they decide to validate these results via Monte Carlo simulation with <strong>N = 5,000 replications</strong>.</p>
+      <p>In each replication i the tool generates \( n_A = n_B = 476 \) Bernoulli observations with the true rates, calculates the z statistic of the two-proportions test and records whether H₀ is rejected:</p>
+      <p class="formula-line">\( z^{(i)} = \dfrac{\hat{p}_B^{(i)} - \hat{p}_A^{(i)}}{\sqrt{\hat{p}^{(i)}(1-\hat{p}^{(i)})\!\left(\tfrac{1}{476}+\tfrac{1}{476}\right)}} \)</p>
+      <p>After 5,000 replications, the simulation produces the following results: the empirical rejection rate is <strong>80.3%</strong>, in excellent agreement with the theoretical power of 80%. The histogram of the z statistic shifts to the right compared to the null N(0,1), with the empirical mean around \( \bar{z} \approx 1.32 \), reflecting the real effect of \( \Delta = 0.04 \). The p-value distribution shows a strong concentration near 0: in 80% of replications the p-value falls below 0.05.</p>
+      <p>To check the type I error control, the team also runs the simulation under H₀ (setting p_B = p_A = 0.22). With the same 5,000 replications, the empirical rejection rate is <strong>4.9%</strong>, very close to the nominal level α = 0.05, and the p-value distribution is approximately Uniform(0,1), as theory predicts.</p>
+      <p>The practical conclusion is twofold: the analytically calculated sample size is correct (empirical power matches theoretical power), and the test maintains good type I error control. The team can launch the experiment with confidence, knowing that if the real improvement is 4 pp they will have an 80% probability of detecting it with statistically significant results.</p>
+    </section>
+
+    <section class="card content-card">
+      <h3>How to interpret the result</h3>
+      <p>The Monte Carlo simulation allows you to empirically verify the properties of the test: whether the type I error is really α when p_A = p_B, whether the power matches the theoretical value, and how the distribution of the z statistic behaves in practice. It is especially useful when you want to understand the behavior of the test under specific conditions or when model assumptions are not exactly met. The empirical rejection rate returned by the simulation is the direct estimate of power: how many times out of 100 identical experiments you would correctly conclude that B is different from A.</p>
+
+      <h3>How to read the z histogram</h3>
+      <p>Under H₀ (p_A = p_B), the z statistic approximately follows a N(0,1): the histogram should be symmetric and centered at 0, and the proportion of red bars (rejection zone) should be close to α. Under H₁ (p_A ≠ p_B), the histogram shifts in the direction of the effect: the larger the real difference between rates or the larger the sample size, the more pronounced the shift and the higher the proportion of replications that fall in the rejection zone.</p>
+
+      <h3>How to read the p-value distribution</h3>
+      <p>Under a perfect H₀, p-values follow a Uniform(0,1) distribution: the bar from 0 to 0.05 should contain approximately 5% of replications, and all bars should have similar heights. Under H₁, p-values concentrate near 0: the proportion of replications with p &lt; α is the empirical power. A p-value distribution with a marked concentration in the first bar and a rapid decline indicates that the test has good capacity to detect the configured effect.</p>
+    </section>
+
+    <section id="seo-support-content" class="card content-card">
+      <section class="related-tools">
+        <h3>Related calculators</h3>
+        <ul>
+          <li><a href="ab-testing-z-test.html">Conversion Z-test (frequentist)</a></li>
+          <li><a href="ab-testing-bayesiano.html">Bayesian A/B test (Beta-Binomial)</a></li>
+          <li><a href="ab-testing-potencia.html">MDE, power and sample size for A/B</a></li>
+        </ul>
+      </section>
+      <h3>Frequently asked questions</h3>
+      <ul>
+        <li><strong>Does the simulation use binomial samples?</strong> Each replication approximates x_A ~ Bin(n, p_A) and x_B ~ Bin(n, p_B) using the De Moivre-Laplace normal approximation. This is adequate when n·p and n·(1−p) are not small; for small samples or extreme proportions the simulation should be interpreted as approximate.</li>
+        <li><strong>Why does empirical power not exactly match theoretical power?</strong> There is always sampling variance. With 5,000 replications, the standard error of the simulated proportion is approximately ±0.006 for powers around 80%.</li>
+        <li><strong>Can I simulate with p_A = p_B to verify the α level?</strong> Yes: enter the same value for p_A and p_B and check that the empirical rejection rate is close to α.</li>
+        <li><strong>Are the replications independent?</strong> Yes: each replication generates new samples with no dependence on previous ones.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="legal-footer">
+    <p>
+      © 2026 problabtools.
+      <a href="../aviso-legal.html">Legal notice</a> ·
+      <a href="../privacidad.html">Privacy</a> ·
+      <a href="../cookies.html">Cookies</a> ·
+      <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+    </p>
+  </footer>
+</div>
+
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let histZChart, histPChart;
+
+function randn() {
+  const u1 = Math.random(), u2 = Math.random();
+  return Math.sqrt(-2 * Math.log(Math.max(u1, 1e-15))) * Math.cos(2 * Math.PI * u2);
+}
+
+function sampleBinom(n, p) {
+  const mean = n * p;
+  const std = Math.sqrt(n * p * (1 - p));
+  return Math.max(0, Math.min(n, Math.round(mean + std * randn())));
+}
+
+function computePowerTheoretical(pA, pB, n, alpha, tail) {
+  const pBar = (pA + pB) / 2;
+  const effect = pB - pA;
+  const nullScale = Math.sqrt(2 * pBar * (1 - pBar));
+  const altScale = Math.sqrt(pA * (1 - pA) + pB * (1 - pB));
+  if (altScale === 0) return alpha;
+
+  if (tail === 'two') {
+    const zAlpha = jStat.normal.inv(1 - alpha / 2, 0, 1);
+    const upper = 1 - jStat.normal.cdf((zAlpha * nullScale - effect * Math.sqrt(n)) / altScale, 0, 1);
+    const lower = jStat.normal.cdf((-zAlpha * nullScale - effect * Math.sqrt(n)) / altScale, 0, 1);
+    return Math.min(1, Math.max(0, upper + lower));
+  }
+
+  const zAlpha = jStat.normal.inv(1 - alpha, 0, 1);
+  if (tail === 'right') {
+    return 1 - jStat.normal.cdf((zAlpha * nullScale - effect * Math.sqrt(n)) / altScale, 0, 1);
+  }
+  return jStat.normal.cdf((-zAlpha * nullScale - effect * Math.sqrt(n)) / altScale, 0, 1);
+}
+
+function makeBins(data, nBins) {
+  const min = Math.min(...data), max = Math.max(...data);
+  const w = (max - min) / nBins || 1;
+  const counts = new Array(nBins).fill(0);
+  const labels = [];
+  for (let i = 0; i < nBins; i++) {
+    labels.push((min + (i + 0.5) * w).toFixed(2));
+  }
+  for (const v of data) {
+    const idx = Math.min(Math.floor((v - min) / w), nBins - 1);
+    counts[idx]++;
+  }
+  return { labels, counts, min, max, w };
+}
+
+function renderHistZ(zStats, alpha, tail) {
+  const ctx = document.getElementById('histZCanvas');
+  if (!ctx) return;
+
+  const zCritRight = tail === 'two'
+    ? jStat.normal.inv(1 - alpha / 2, 0, 1)
+    : tail === 'right' ? jStat.normal.inv(1 - alpha, 0, 1) : Infinity;
+  const zCritLeft = tail === 'two'
+    ? -jStat.normal.inv(1 - alpha / 2, 0, 1)
+    : tail === 'left' ? jStat.normal.inv(alpha, 0, 1) : -Infinity;
+
+  const nBins = 40;
+  const { labels, counts, min, w } = makeBins(zStats, nBins);
+  const colors = labels.map((lbl, i) => {
+    const center = min + (i + 0.5) * w;
+    const inReject = center < zCritLeft || center > zCritRight;
+    return inReject ? 'rgba(239,68,68,0.7)' : 'rgba(37,99,235,0.55)';
+  });
+
+  if (histZChart) histZChart.destroy();
+  histZChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'z frequency',
+        data: counts,
+        backgroundColor: colors,
+        borderWidth: 0,
+        categoryPercentage: 1.0,
+        barPercentage: 1.0
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: {
+        x: { title: { display: true, text: 'z statistic' }, ticks: { maxTicksLimit: 10 } },
+        y: { title: { display: true, text: 'Frequency' }, beginAtZero: true }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+function renderHistP(pValues, alpha) {
+  const ctx = document.getElementById('histPCanvas');
+  if (!ctx) return;
+
+  const nBins = 20;
+  const counts = new Array(nBins).fill(0);
+  const labels = [];
+  const w = 1 / nBins;
+  for (let i = 0; i < nBins; i++) {
+    labels.push(((i + 0.5) * w).toFixed(3));
+  }
+  for (const v of pValues) {
+    const idx = Math.min(Math.floor(v / w), nBins - 1);
+    counts[idx]++;
+  }
+  const colors = labels.map((_, i) => i * w < alpha ? 'rgba(239,68,68,0.65)' : 'rgba(37,99,235,0.45)');
+
+  if (histPChart) histPChart.destroy();
+  histPChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'p-value frequency',
+        data: counts,
+        backgroundColor: colors,
+        borderWidth: 0,
+        categoryPercentage: 1.0,
+        barPercentage: 1.0
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: {
+        x: { title: { display: true, text: 'p-value' }, ticks: { maxTicksLimit: 10 } },
+        y: { title: { display: true, text: 'Frequency' }, beginAtZero: true }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+function runSimulation() {
+  const pA = parseFloat(document.getElementById('simPA').value);
+  const pB = parseFloat(document.getElementById('simPB').value);
+  const n = Number(document.getElementById('simN').value);
+  const reps = Number(document.getElementById('simReps').value);
+  const alpha = parseFloat(document.getElementById('simAlpha').value);
+  const tail = document.getElementById('simTail').value;
+  const resultEl = document.getElementById('simResult');
+
+  if (![pA, pB, alpha].every(Number.isFinite) ||
+      pA <= 0 || pA >= 1 || pB <= 0 || pB >= 1 ||
+      !Number.isInteger(n) || n < 10 ||
+      !Number.isInteger(reps) || reps <= 0 ||
+      alpha <= 0 || alpha >= 1) {
+    resultEl.innerHTML = 'Error: check the input parameters.';
+    return;
+  }
+
+  resultEl.innerHTML = `Simulating ${reps.toLocaleString()} replications…`;
+
+  setTimeout(() => {
+    const zCritRight = tail === 'two'
+      ? jStat.normal.inv(1 - alpha / 2, 0, 1)
+      : tail === 'right' ? jStat.normal.inv(1 - alpha, 0, 1) : Infinity;
+    const zCritLeft = tail === 'two'
+      ? -jStat.normal.inv(1 - alpha / 2, 0, 1)
+      : tail === 'left' ? jStat.normal.inv(alpha, 0, 1) : -Infinity;
+
+    const zStats = [], pValues = [];
+    let rejections = 0, valid = 0;
+
+    for (let i = 0; i < reps; i++) {
+      const xA = sampleBinom(n, pA);
+      const xB = sampleBinom(n, pB);
+      const hpA = xA / n, hpB = xB / n;
+      const pPool = (xA + xB) / (2 * n);
+
+      if (pPool <= 0 || pPool >= 1) continue;
+
+      const se = Math.sqrt(pPool * (1 - pPool) * 2 / n);
+      if (se === 0) continue;
+
+      const z = (hpB - hpA) / se;
+      let pv;
+      if (tail === 'two') pv = 2 * jStat.normal.cdf(-Math.abs(z), 0, 1);
+      else if (tail === 'right') pv = jStat.normal.cdf(-z, 0, 1);
+      else pv = jStat.normal.cdf(z, 0, 1);
+
+      zStats.push(z);
+      pValues.push(pv);
+      if (z < zCritLeft || z > zCritRight) rejections++;
+      valid++;
+    }
+
+    if (valid === 0) { resultEl.innerHTML = 'Error: no valid replications.'; return; }
+
+    const empPower = rejections / valid;
+    const thPower = computePowerTheoretical(pA, pB, n, alpha, tail);
+    const meanZ = zStats.reduce((a, b) => a + b, 0) / valid;
+    const stdZ = Math.sqrt(zStats.reduce((a, b) => a + (b - meanZ) ** 2, 0) / valid);
+    const sortedP = [...pValues].sort((a, b) => a - b);
+    const medP = sortedP[Math.floor(valid / 2)];
+    const isSameP = Math.abs(pA - pB) < 1e-9;
+
+    resultEl.innerHTML =
+      `<strong>${isSameP ? 'Empirical type I error' : 'Empirical power'}:</strong> ${(empPower * 100).toFixed(2)}% ` +
+      `(${rejections.toLocaleString()} of ${valid.toLocaleString()} replications rejected H₀)<br>` +
+      `<strong>Theoretical power:</strong> ${isSameP ? '≈ α = ' + alpha : (thPower * 100).toFixed(2) + '%'}<br>` +
+      `<strong>Configuration:</strong> p_A = ${pA}, p_B = ${pB}, n = ${n.toLocaleString()} per group, α = ${alpha}`;
+
+    document.getElementById('scEmpPower').textContent = (empPower * 100).toFixed(1) + '%';
+    document.getElementById('scThPower').textContent = isSameP ? 'α=' + alpha : (thPower * 100).toFixed(1) + '%';
+    document.getElementById('scMeanZ').textContent = meanZ.toFixed(3);
+    document.getElementById('scStdZ').textContent = stdZ.toFixed(3);
+    document.getElementById('scMedianP').textContent = medP.toFixed(4);
+    document.getElementById('scReps').textContent = valid.toLocaleString();
+    document.getElementById('simStats').hidden = false;
+    document.getElementById('simTabs').hidden = false;
+
+    renderHistZ(zStats, alpha, tail);
+    renderHistP(pValues, alpha);
+  }, 10);
+}
+
+document.querySelectorAll('.sim-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.sim-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+    document.querySelectorAll('.sim-chart-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    tab.setAttribute('aria-selected', 'true');
+    document.getElementById(tab.dataset.target).classList.add('active');
+  });
+});
+
+document.getElementById('simRunBtn').addEventListener('click', runSimulation);
+</script>
+<script src="../search.js?v=20260522"></script>
+<script src="../wizard.js?v=20260522"></script>
+<script src="../i18n.js?v=20260524"></script>
+<script src="../theme.js?v=20260522"></script>
+</body>
+</html>
