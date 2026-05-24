@@ -1,10 +1,12 @@
 RewriteEngine On
 RewriteRule ^index\.html$ / [R=301,L]
 
-# Redirect unknown /en/ paths to English homepage
+# Serve English homepage for any /en/ path that has no matching file
+DirectoryIndex index.html
 RewriteCond %{REQUEST_URI} ^/en/
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^en/.*$ /en/ [R=302,L]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^en/(.*)$ /en/index.html [L]
 
 <IfModule mod_headers.c>
   <FilesMatch "\.(?:html?)$">
