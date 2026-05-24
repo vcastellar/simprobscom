@@ -23,6 +23,14 @@ function hasOwn(obj, key) {
     return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
+function tjs(key) {
+    if (window.i18n && typeof window.i18n.t === 'function') {
+        var v = window.i18n.t(key);
+        if (v !== key) return v;
+    }
+    return null;
+}
+
 let _mathJaxRafId = null;
 
 function refreshMathJax() {
@@ -56,12 +64,8 @@ const distributionDescriptions = {
 
 function updateDistributionDescription(dist) {
     const descriptionEl = document.getElementById("distributionDescription");
-
-    if (!descriptionEl) {
-        return;
-    }
-
-    descriptionEl.textContent = distributionDescriptions[dist] || "";
+    if (!descriptionEl) return;
+    descriptionEl.textContent = tjs('desc_' + dist) || distributionDescriptions[dist] || "";
 }
 
 const referenceLinePlugin = {
@@ -166,7 +170,8 @@ function initializeDistributionPage() {
         const distInfoEl = document.getElementById("distributionPageInfo");
 
         if (distInfoEl && hasOwn(distributionLabels, distributionSelect.value)) {
-            distInfoEl.innerText = `Calculadora específica para ${distributionLabels[distributionSelect.value]}.`;
+            const distName = tjs('dist_' + distributionSelect.value) || distributionLabels[distributionSelect.value];
+            distInfoEl.innerText = `${tjs('page_info_specific') || 'Calculadora específica para'} ${distName}.`;
         }
     }
 
@@ -190,17 +195,19 @@ function updateCdfControls() {
 
     if (!isCdf) {
         bValueGroup.hidden = true;
-        xValueLabel.innerText = calc === "quantile" ? "Probabilidad (entre 0 y 1)" : "valor de x";
+        xValueLabel.innerText = calc === "quantile"
+            ? (tjs('label_prob') || "Probabilidad (entre 0 y 1)")
+            : (tjs('label_x') || "valor de x");
         return;
     }
 
     if (cdfMode.value === "interval") {
-        xValueLabel.innerText = "valor de a";
+        xValueLabel.innerText = tjs('label_a') || "valor de a";
         bValueGroup.hidden = false;
         return;
     }
 
-    xValueLabel.innerText = "valor de x";
+    xValueLabel.innerText = tjs('label_x') || "valor de x";
     bValueGroup.hidden = true;
 }
 
@@ -496,11 +503,11 @@ function loadParameters() {
     if (dist === "normal") {
         container.innerHTML = `
             <div class="form-group">
-                <label>Media (μ)</label>
+                <label>${tjs('param_mean') || 'Media (μ)'}</label>
                 <input type="number" id="param1" value="0">
             </div>
             <div class="form-group">
-                <label>Desviación estándar (σ)</label>
+                <label>${tjs('param_std') || 'Desviación estándar (σ)'}</label>
                 <input type="number" id="param2" value="1" min="0.0001">
             </div>
         `;
@@ -509,11 +516,11 @@ function loadParameters() {
     if (dist === "binomial") {
         container.innerHTML = `
             <div class="form-group">
-                <label>n</label>
+                <label>${tjs('param_n') || 'n'}</label>
                 <input type="number" id="param1" value="10" min="1">
             </div>
             <div class="form-group">
-                <label>p (entre 0 y 1)</label>
+                <label>${tjs('param_p') || 'p (entre 0 y 1)'}</label>
                 <input type="number" id="param2" value="0.5" step="0.01" min="0" max="1">
             </div>
         `;
@@ -522,7 +529,7 @@ function loadParameters() {
     if (dist === "poisson") {
         container.innerHTML = `
             <div class="form-group">
-                <label>λ</label>
+                <label>${tjs('param_lambda') || 'λ'}</label>
                 <input type="number" id="param1" value="4" min="0.0001">
             </div>
         `;
@@ -531,7 +538,7 @@ function loadParameters() {
     if (dist === "studentt") {
         container.innerHTML = `
             <div class="form-group">
-                <label>Grados de libertad (ν)</label>
+                <label>${tjs('param_df_nu') || 'Grados de libertad (ν)'}</label>
                 <input type="number" id="param1" value="10" min="1" step="1">
             </div>
         `;
@@ -540,7 +547,7 @@ function loadParameters() {
     if (dist === "chisquare") {
         container.innerHTML = `
             <div class="form-group">
-                <label>Grados de libertad (k)</label>
+                <label>${tjs('param_df_k') || 'Grados de libertad (k)'}</label>
                 <input type="number" id="param1" value="8" min="1" step="1">
             </div>
         `;
@@ -549,11 +556,11 @@ function loadParameters() {
     if (dist === "centralf") {
         container.innerHTML = `
             <div class="form-group">
-                <label>Grados de libertad (d1)</label>
+                <label>${tjs('param_df_d1') || 'Grados de libertad (d1)'}</label>
                 <input type="number" id="param1" value="5" min="1" step="1">
             </div>
             <div class="form-group">
-                <label>Grados de libertad (d2)</label>
+                <label>${tjs('param_df_d2') || 'Grados de libertad (d2)'}</label>
                 <input type="number" id="param2" value="10" min="1" step="1">
             </div>
         `;
@@ -562,7 +569,7 @@ function loadParameters() {
     if (dist === "exponential") {
         container.innerHTML = `
             <div class="form-group">
-                <label>Tasa (λ)</label>
+                <label>${tjs('param_rate') || 'Tasa (λ)'}</label>
                 <input type="number" id="param1" value="1" min="0.0001" step="0.1">
             </div>
         `;
@@ -571,11 +578,11 @@ function loadParameters() {
     if (dist === "negbin") {
         container.innerHTML = `
             <div class="form-group">
-                <label>r (éxitos objetivo)</label>
+                <label>${tjs('param_r_target') || 'r (éxitos objetivo)'}</label>
                 <input type="number" id="param1" value="5" min="1" step="1">
             </div>
             <div class="form-group">
-                <label>p (entre 0 y 1)</label>
+                <label>${tjs('param_p') || 'p (entre 0 y 1)'}</label>
                 <input type="number" id="param2" value="0.4" step="0.01" min="0.0001" max="0.9999">
             </div>
         `;
@@ -584,7 +591,7 @@ function loadParameters() {
     if (dist === "geometric") {
         container.innerHTML = `
             <div class="form-group">
-                <label>p (entre 0 y 1)</label>
+                <label>${tjs('param_p') || 'p (entre 0 y 1)'}</label>
                 <input type="number" id="param1" value="0.3" step="0.01" min="0.0001" max="0.9999">
             </div>
         `;
@@ -593,11 +600,11 @@ function loadParameters() {
     if (dist === "uniform") {
         container.innerHTML = `
             <div class="form-group">
-                <label>a (mínimo)</label>
+                <label>${tjs('param_a_min') || 'a (mínimo)'}</label>
                 <input type="number" id="param1" value="0">
             </div>
             <div class="form-group">
-                <label>b (máximo)</label>
+                <label>${tjs('param_b_max') || 'b (máximo)'}</label>
                 <input type="number" id="param2" value="1">
             </div>
         `;
@@ -606,11 +613,11 @@ function loadParameters() {
     if (dist === "gamma") {
         container.innerHTML = `
             <div class="form-group">
-                <label>Forma (k)</label>
+                <label>${tjs('param_shape_k') || 'Forma (k)'}</label>
                 <input type="number" id="param1" value="2" min="0.0001" step="0.1">
             </div>
             <div class="form-group">
-                <label>Escala (θ)</label>
+                <label>${tjs('param_scale_theta') || 'Escala (θ)'}</label>
                 <input type="number" id="param2" value="2" min="0.0001" step="0.1">
             </div>
         `;
@@ -619,11 +626,11 @@ function loadParameters() {
     if (dist === "beta") {
         container.innerHTML = `
             <div class="form-group">
-                <label>α (alfa)</label>
+                <label>${tjs('param_alpha') || 'α (alfa)'}</label>
                 <input type="number" id="param1" value="2" min="0.0001" step="0.1">
             </div>
             <div class="form-group">
-                <label>β (beta)</label>
+                <label>${tjs('param_beta_p') || 'β (beta)'}</label>
                 <input type="number" id="param2" value="5" min="0.0001" step="0.1">
             </div>
         `;
@@ -632,11 +639,11 @@ function loadParameters() {
     if (dist === "lognormal") {
         container.innerHTML = `
             <div class="form-group">
-                <label>μ (media log)</label>
+                <label>${tjs('param_mu_log') || 'μ (media log)'}</label>
                 <input type="number" id="param1" value="0" step="0.1">
             </div>
             <div class="form-group">
-                <label>σ (desv. log)</label>
+                <label>${tjs('param_sigma_log') || 'σ (desv. log)'}</label>
                 <input type="number" id="param2" value="0.5" min="0.0001" step="0.1">
             </div>
         `;
@@ -645,11 +652,11 @@ function loadParameters() {
     if (dist === "weibull") {
         container.innerHTML = `
             <div class="form-group">
-                <label>Forma (k)</label>
+                <label>${tjs('param_shape_k') || 'Forma (k)'}</label>
                 <input type="number" id="param1" value="1.5" min="0.0001" step="0.1">
             </div>
             <div class="form-group">
-                <label>Escala (λ)</label>
+                <label>${tjs('param_scale_lambda') || 'Escala (λ)'}</label>
                 <input type="number" id="param2" value="1" min="0.0001" step="0.1">
             </div>
         `;
@@ -658,15 +665,15 @@ function loadParameters() {
     if (dist === "hypergeometric") {
         container.innerHTML = `
             <div class="form-group">
-                <label>N (población)</label>
+                <label>${tjs('param_N_pop') || 'N (población)'}</label>
                 <input type="number" id="param1" value="50" min="1" step="1">
             </div>
             <div class="form-group">
-                <label>K (éxitos en población)</label>
+                <label>${tjs('param_K_succ') || 'K (éxitos en población)'}</label>
                 <input type="number" id="param2" value="15" min="0" step="1">
             </div>
             <div class="form-group">
-                <label>n (tamaño de muestra)</label>
+                <label>${tjs('param_n_sample') || 'n (tamaño de muestra)'}</label>
                 <input type="number" id="param3" value="10" min="0" step="1">
             </div>
         `;
@@ -675,7 +682,7 @@ function loadParameters() {
     if (dist === "bernoulli") {
         container.innerHTML = `
             <div class="form-group">
-                <label>p (éxito = 1)</label>
+                <label>${tjs('param_p_success') || 'p (éxito = 1)'}</label>
                 <input type="number" id="param1" value="0.5" step="0.01" min="0.0001" max="0.9999">
             </div>
         `;
@@ -1506,3 +1513,19 @@ function renderSampleSizeFormula(type, values = null) {
     formulaEl.innerHTML = "Fórmula pendiente…";
     refreshMathJax();
 }
+
+document.addEventListener('langchange', function () {
+    if (!distributionSelect) return;
+    const dist = distributionSelect.value;
+    loadParameters();
+    updateCdfControls();
+    updateDistributionDescription(dist);
+
+    if (document.body && document.body.dataset.lockDistribution === 'true') {
+        const distInfoEl = document.getElementById('distributionPageInfo');
+        if (distInfoEl) {
+            const distName = tjs('dist_' + dist) || distributionLabels[dist];
+            distInfoEl.innerText = `${tjs('page_info_specific') || 'Calculadora específica para'} ${distName}.`;
+        }
+    }
+});
