@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weibull distribution calculator | Reliability | ProbLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Weibull distribution calculator: compute PDF, CDF and quantiles for shape k and scale λ. Essential for reliability analysis and survival modelling.">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Vicente Castellar">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="canonical" href="https://problabtools.com/en/weibull.html">
+    <link rel="alternate" hreflang="en" href="https://problabtools.com/en/weibull.html">
+    <link rel="alternate" hreflang="es" href="https://problabtools.com/weibull.html">
+    <link rel="alternate" hreflang="x-default" href="https://problabtools.com/weibull.html">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Weibull distribution calculator | Reliability | ProbLab">
+    <meta property="og:description" content="Weibull distribution calculator: compute PDF, CDF and quantiles for shape k and scale λ. Essential for reliability analysis and survival modelling.">
+    <meta property="og:url" content="https://problabtools.com/en/weibull.html">
+    <meta property="og:site_name" content="ProbLab">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image" content="https://problabtools.com/og-image.png">
+    <meta property="og:image:alt" content="Weibull Distribution Calculator — ProbLab">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Weibull distribution calculator | Reliability | ProbLab">
+    <meta name="twitter:description" content="Weibull distribution calculator: compute PDF, CDF and quantiles for shape k and scale λ. Essential for reliability analysis and survival modelling.">
+    <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+    <meta name="twitter:image:alt" content="Weibull Distribution Calculator — ProbLab">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+            {"@type": "ListItem", "position": 2, "name": "Distributions", "item": "https://problabtools.com/distribuciones/"},
+            {"@type": "ListItem", "position": 3, "name": "Weibull Distribution", "item": "https://problabtools.com/en/weibull.html"}
+          ]
+        },
+        {
+          "@type": "WebPage",
+          "name": "Weibull distribution calculator | Reliability | ProbLab",
+          "url": "https://problabtools.com/en/weibull.html",
+          "description": "Weibull distribution calculator: compute PDF, CDF and quantiles for shape k and scale λ. Essential for reliability analysis and survival modelling.",
+          "inLanguage": "en",
+          "isPartOf": {"@type": "WebSite", "name": "ProbLab", "url": "https://problabtools.com/"}
+        }
+      ]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Weibull distribution calculator",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web",
+      "url": "https://problabtools.com/en/weibull.html",
+      "description": "Weibull distribution calculator: compute PDF, CDF and quantiles for shape k and scale λ. Essential for reliability analysis and survival modelling.",
+      "inLanguage": "en",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What does shape k mean in practice?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "k<1: failure rate decreases (infant mortality); k=1: constant failure rate (exponential); k>1: failure rate increases (wear-out)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the scale λ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It is the 63.2nd percentile — 63.2% of items fail by time λ regardless of k."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is B10 life?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The time by which 10% of a population has failed (10th percentile), a standard reliability metric."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional"></noscript>
+    <link rel="stylesheet" href="../style_new.css?v=20260522">
+</head>
+<body data-default-distribution="weibull" data-lock-distribution="true">
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="../index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="../distribuciones/">Distributions</a></li>
+            <li><a href="../tablas-estadisticas/">Tables</a></li>
+            <li><a href="../intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="../tamano-muestral/">Sample size</a></li>
+            <li><a href="../contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="../ab-testing/">A/B Testing</a></li>
+            <li><a href="../simulaciones/">Simulations</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../distribuciones/">Distributions</a></li>
+            <li><span aria-current="page">Weibull</span></li>
+        </ol>
+    </nav>
+    <header class="hero">
+        <p class="eyebrow">Calculator</p>
+        <h1>Weibull distribution calculator</h1>
+        <p class="hero-subtitle">Calculate density, cumulative probability and quantiles for the Weibull distribution.</p>
+        <p class="hero-links"><a class="hero-link-button" href="../distribuciones/">See all distributions</a></p>
+    </header>
+
+    <main>
+        <section class="app-shell" aria-label="Weibull Distribution Calculator">
+            <section class="card control-panel">
+                <div class="panel-heading">
+                    <h2>Settings</h2>
+                    <p id="distributionPageInfo">Calculator focused on this distribution.</p>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Distribution</label>
+                        <select id="distribution">
+                            <option value="normal">Normal</option>
+                            <option value="binomial">Binomial</option>
+                            <option value="poisson">Poisson</option>
+                            <option value="studentt">Student's t</option>
+                            <option value="chisquare">Chi-square</option>
+                            <option value="centralf">Snedecor's F</option>
+                            <option value="exponential">Exponential</option>
+                            <option value="negbin">Negative binomial</option>
+                            <option value="geometric">Geometric</option>
+                            <option value="uniform">Uniform</option>
+                            <option value="gamma">Gamma</option>
+                            <option value="beta">Beta</option>
+                            <option value="lognormal">Log-normal</option>
+                            <option value="weibull">Weibull</option>
+                            <option value="hypergeometric">Hypergeometric</option>
+                            <option value="bernoulli">Bernoulli</option>
+                        </select>
+                        <p id="distributionDescription" class="distribution-description"></p>
+                    </div>
+
+                    <div id="parameters" class="dynamic-parameters"></div>
+
+                    <div class="form-group">
+                        <label>Calculation type</label>
+                        <select id="calculation">
+                            <option value="pdf">Density / probability function</option>
+                            <option value="cdf">Cumulative probability</option>
+                            <option value="quantile">Percentile / quantile</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="cdfModeGroup" hidden>
+                        <label>Cumulative probability type</label>
+                        <select id="cdfMode">
+                            <option value="left">P(X ≤ x)</option>
+                            <option value="right">P(X ≥ x)</option>
+                            <option value="interval">P(a ≤ X ≤ b)</option>
+                        </select>
+                    </div>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label id="xValueLabel">x value</label>
+                            <input type="number" id="xValue" value="0">
+                        </div>
+                        <div class="form-group" id="bValueGroup" hidden>
+                            <label>b value</label>
+                            <input type="number" id="bValue" value="1">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="calculate-btn" onclick="calculate()">Calculate</button>
+            </section>
+
+            <section class="card results-panel">
+                <div class="panel-heading">
+                    <h2>Result and visualization</h2>
+                    <p>Calculate PDF/PMF, CDF and percentiles instantly.</p>
+                </div>
+                <div id="result" class="result-box">Pending result…</div>
+                <div class="chart-wrap">
+                    <canvas id="chart"></canvas>
+                </div>
+            </section>
+        </section>
+
+        <article class="card content-card">
+            <h3>Explanation</h3>
+            <p>The Weibull distribution is a continuous distribution for non-negative values widely used in reliability engineering and survival analysis. It is parameterized by shape \(k\) and scale \(\lambda\). The mean is \(\lambda\,\Gamma(1+1/k)\). When \(k=1\) it reduces to the exponential distribution; when \(k=2\) it is the Rayleigh distribution. For \(k&lt;1\) the hazard rate decreases over time (infant mortality); for \(k=1\) it is constant; for \(k&gt;1\) it increases (wear-out failures).</p>
+            <p>The CDF is \(F(x)=1-\exp(-(x/\lambda)^k)\), which gives a straight line on a Weibull probability plot. Applications include component lifetime modelling, wind speed distributions, time to machine failure, and survival times in clinical trials.</p>
+            <h3>Formula</h3>
+            <p class="formula-line">\[ f(x) = \frac{k}{\lambda}\left(\frac{x}{\lambda}\right)^{k-1} \exp\!\left(-\left(\frac{x}{\lambda}\right)^k\right), \quad x \geq 0 \]</p>
+            <h3>Parameters</h3>
+            <ul>
+                <li><strong>k (shape):</strong> controls the shape of the hazard rate (\(k&gt;0\)).</li>
+                <li><strong>λ (lambda / scale):</strong> characteristic life — the 63.2nd percentile of the distribution (\(\lambda&gt;0\)).</li>
+            </ul>
+            <h3>Worked example</h3>
+            <p><strong>Situation:</strong> Ball bearings have a Weibull lifetime with \(k=2.5\) (shape) and \(\lambda=10{,}000\) hours (scale). Let \(X\) be the lifetime in hours.</p>
+            <p><strong>Question 1:</strong> What is \(P(X&gt;8{,}000)\)?</p>
+            <p><strong>Solution:</strong> The survival function gives
+            \[ P(X&gt;8000) = \exp\!\left(-\left(\frac{8000}{10000}\right)^{2.5}\right) = \exp(-0.8^{2.5}) = \exp(-0.572) \approx 0.564 \]
+            So <strong>56.4%</strong> of bearings survive past 8,000 hours.</p>
+            <p><strong>Question 2:</strong> What is the median lifetime?</p>
+            <p><strong>Solution:</strong>
+            \[ \text{Median} = \lambda(\ln 2)^{1/k} = 10000 \times (0.693)^{1/2.5} = 10000 \times 0.857 \approx 8{,}570 \text{ hours} \]</p>
+            <p><strong>Question 3:</strong> What is the B10 life (10th percentile)?</p>
+            <p><strong>Solution:</strong>
+            \[ B_{10} = \lambda(-\ln 0.9)^{1/k} = 10000 \times (0.1054)^{0.4} \approx 5{,}840 \text{ hours} \]
+            10% of the population has failed by this time.</p>
+        </article>
+
+        <section class="card content-card">
+            <h3>How to interpret the result</h3>
+            <p>The <strong>PDF</strong> \(f(x)\) gives the probability density at a given lifetime \(x\). The <strong>CDF</strong> \(F(x)=P(X\leq x)\) gives the failure probability by time \(x\); the survival function \(S(x)=1-F(x)\) gives the probability of surviving beyond \(x\). The shape \(k\) tells the failure pattern: early failures (\(k&lt;1\)), random failures (\(k=1\), exponential), or wear-out (\(k&gt;1\)). The scale \(\lambda\) is the characteristic life — 63.2% of units fail before this time, regardless of \(k\).</p>
+            <p>The <strong>quantile</strong> (inverse CDF) returns the time \(x\) at which a given fraction of the population has failed — useful for computing B10, B50 (median) or any other B-life in reliability engineering.</p>
+        </section>
+
+        <section id="seo-support-content" class="card content-card">
+            <section class="related-tools">
+                <h3>Related calculators</h3>
+                <ul>
+                    <li><a href="../exponential.html">Exponential distribution calculator</a></li>
+                    <li><a href="../gamma.html">Gamma distribution calculator</a></li>
+                    <li><a href="../lognormal.html">Log-normal distribution calculator</a></li>
+                </ul>
+            </section>
+            <h3>Frequently asked questions</h3>
+            <ul>
+                <li><strong>What does shape k mean in practice?</strong> \(k&lt;1\): failure rate decreases (infant mortality); \(k=1\): constant failure rate (exponential); \(k&gt;1\): failure rate increases (wear-out).</li>
+                <li><strong>What is the scale λ?</strong> It is the 63.2nd percentile — 63.2% of items fail by time λ regardless of k.</li>
+                <li><strong>What is B10 life?</strong> The time by which 10% of a population has failed (10th percentile), a standard reliability metric.</li>
+            </ul>
+            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Weibull_distribution" target="_blank" rel="noopener noreferrer">Weibull distribution</a> — Wikipedia</p>
+        </section>
+    </main>
+
+    <footer class="legal-footer">
+        <p>
+            © 2026 problabtools.
+            <a href="../aviso-legal.html">Legal notice</a> ·
+            <a href="../privacidad.html">Privacy</a> ·
+            <a href="../cookies.html">Cookies</a> ·
+            <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+        </p>
+    </footer>
+</div>
+
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)'], ['$', '$']]
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+<script src="../script.js?v=20260522" defer></script>
+<script src="../search.js?v=20260522"></script>
+<script src="../wizard.js?v=20260522"></script>
+<script src="../i18n.js?v=20260524"></script>
+<script src="../theme.js?v=20260522"></script>
+</body>
+</html>
