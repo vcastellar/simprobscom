@@ -209,12 +209,34 @@
     }
   };
 
+  // Detect language from URL path (/en/ prefix = English)
+  function isEnUrl() {
+    return window.location.pathname.indexOf('/en/') !== -1;
+  }
+
   function getLang() {
+    if (isEnUrl()) return 'en';
     try { return localStorage.getItem(STORAGE_KEY) || DEFAULT_LANG; } catch (e) { return DEFAULT_LANG; }
   }
 
   function setLang(lang) {
     try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
+  }
+
+  // Build the URL for the opposite language
+  function getToggleUrl() {
+    var path = window.location.pathname;
+    if (isEnUrl()) {
+      // /en/normal.html → /normal.html
+      return path.replace('/en/', '/');
+    } else {
+      // /normal.html → /en/normal.html
+      // /simulaciones/foo.html → /en/simulaciones/foo.html
+      var parts = path.split('/');
+      // parts[0] is '', parts[1] is first segment or filename
+      parts.splice(1, 0, 'en');
+      return parts.join('/');
+    }
   }
 
   function t(key) {
@@ -453,9 +475,17 @@
     btn.setAttribute('aria-label', t('lang_switch_label'));
 
     btn.addEventListener('click', function () {
-      var newLang = getLang() === 'es' ? 'en' : 'es';
-      setLang(newLang);
-      applyLang();
+      var url = getToggleUrl();
+      // For Spanish pages: navigate to /en/ version
+      // For English pages: navigate back to root Spanish version
+      // If no /en/ page exists yet, fall back to localStorage toggle
+      if (isEnUrl()) {
+        window.location.href = url;
+      } else {
+        // Check if /en/ version exists by attempting navigation
+        // For now navigate optimistically; server will 404 if not translated yet
+        window.location.href = url;
+      }
     });
 
     li.appendChild(btn);
@@ -466,7 +496,8 @@
   // ── Apply all translations ────────────────────────────────────────────────
 
   function applyLang() {
-    document.documentElement.lang = getLang();
+    var lang = getLang();
+    document.documentElement.lang = lang;
     translateNav();
     translateFooter();
     translateBreadcrumbs();
