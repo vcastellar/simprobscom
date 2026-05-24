@@ -228,14 +228,19 @@
     var path = window.location.pathname;
     if (isEnUrl()) {
       // /en/normal.html → /normal.html
-      return path.replace('/en/', '/');
+      // /en/ or /en/index.html → /
+      var spanish = path.replace('/en/', '/');
+      if (spanish === '/index.html') return '/';
+      return spanish;
     } else {
       // /normal.html → /en/normal.html
-      // /simulaciones/foo.html → /en/simulaciones/foo.html
+      // / or /index.html → /en/index.html
       var parts = path.split('/');
-      // parts[0] is '', parts[1] is first segment or filename
       parts.splice(1, 0, 'en');
-      return parts.join('/');
+      var url = parts.join('/');
+      // Trailing slash means a directory index — point explicitly to index.html
+      if (url.slice(-1) === '/') url += 'index.html';
+      return url;
     }
   }
 
