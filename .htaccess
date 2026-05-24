@@ -1,6 +1,11 @@
 RewriteEngine On
 RewriteRule ^index\.html$ / [R=301,L]
 
+# Redirect unknown /en/ paths to English homepage
+RewriteCond %{REQUEST_URI} ^/en/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^en/.*$ /en/ [R=302,L]
+
 <IfModule mod_headers.c>
   <FilesMatch "\.(?:html?)$">
     Header set Cache-Control "no-cache, must-revalidate"
