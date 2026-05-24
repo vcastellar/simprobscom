@@ -1,12 +1,12 @@
 RewriteEngine On
 RewriteRule ^index\.html$ / [R=301,L]
 
-# Serve English homepage for any /en/ path that has no matching file
-DirectoryIndex index.html
-RewriteCond %{REQUEST_URI} ^/en/
+# English pages: /en and /en/ go to the English homepage
+RewriteRule ^en/?$ /en/index.html [L]
+# English pages: any /en/path that has no matching file falls back to English homepage
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^en/(.*)$ /en/index.html [L]
+RewriteRule ^en/(.+)$ /en/index.html [L]
 
 <IfModule mod_headers.c>
   <FilesMatch "\.(?:html?)$">
