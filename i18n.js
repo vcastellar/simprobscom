@@ -223,22 +223,31 @@
     try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
   }
 
+  // Returns the site base path ('' for custom domains, '/reponame' for GitHub Pages)
+  function getSiteBase() {
+    if (window.location.hostname.endsWith('.github.io')) {
+      var seg = window.location.pathname.split('/')[1];
+      return seg ? '/' + seg : '';
+    }
+    return '';
+  }
+
   // Build the URL for the opposite language
   function getToggleUrl() {
-    var path = window.location.pathname;
+    var base = getSiteBase();                          // e.g. '' or '/simprobscom'
+    var full = window.location.pathname;
+    var rel  = full.slice(base.length) || '/';        // path relative to site root
+
     if (isEnUrl()) {
-      // /en/normal.html → /normal.html
-      // /en/ or /en/index.html → /
-      var spanish = path.replace('/en/', '/');
-      if (spanish === '/index.html') return '/';
-      return spanish;
+      // /en/normal.html → /normal.html, /en/ → /
+      var spanish = rel.replace('/en/', '/');
+      if (spanish === '/index.html') spanish = '/';
+      return base + spanish;
     } else {
-      // /normal.html → /en/normal.html
-      // / or /index.html → /en/index.html
-      var parts = path.split('/');
+      // /normal.html → /en/normal.html, / → /en/index.html
+      var parts = rel.split('/');
       parts.splice(1, 0, 'en');
-      var url = parts.join('/');
-      // Trailing slash means a directory index — point explicitly to index.html
+      var url = base + parts.join('/');
       if (url.slice(-1) === '/') url += 'index.html';
       return url;
     }
