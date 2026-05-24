@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A/B testing: guide and online calculators | ProbLab</title>
+  <meta name="description" content="Statistical tools for A/B testing: Z-test, Bayesian analysis, power calculation and experiment simulation. Online and free.">
+  <link rel="canonical" href="https://problabtools.com/en/ab-testing/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="A/B testing: guide and online calculators | ProbLab">
+  <meta property="og:description" content="Statistical tools for A/B testing: Z-test, Bayesian analysis, power calculation and experiment simulation. Online and free.">
+  <meta property="og:url" content="https://problabtools.com/en/ab-testing/">
+  <meta property="og:site_name" content="ProbLab">
+  <meta property="og:image" content="https://problabtools.com/og-image.png">
+  <meta property="og:locale" content="en_US">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="author" content="Vicente Castellar">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="alternate" hreflang="en" href="https://problabtools.com/en/ab-testing/">
+  <link rel="alternate" hreflang="es" href="https://problabtools.com/ab-testing/">
+  <link rel="alternate" hreflang="x-default" href="https://problabtools.com/ab-testing/">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A/B testing: guide and online calculators | ProbLab">
+  <meta name="twitter:description" content="Statistical tools for A/B testing: Z-test, Bayesian analysis, power calculation and experiment simulation. Online and free.">
+  <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+          {"@type": "ListItem", "position": 2, "name": "A/B Testing", "item": "https://problabtools.com/en/ab-testing/"}
+        ]
+      },
+      {
+        "@type": "Article",
+        "headline": "What is an A/B test and how does it work",
+        "description": "Complete guide to A/B testing: what it is, how it works, hypotheses, p-value, statistical power, sample size and common mistakes.",
+        "url": "https://problabtools.com/en/ab-testing/",
+        "inLanguage": "en",
+        "author": {"@type": "Person", "name": "Vicente Castellar"},
+        "publisher": {"@type": "Organization", "name": "ProbLab", "url": "https://problabtools.com/"},
+        "isPartOf": {"@type": "WebSite", "name": "ProbLab", "url": "https://problabtools.com/"}
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is an A/B test?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "An A/B test is a controlled experiment in which two variants are compared — control (A) and treatment (B) — to determine which produces better results on a metric of interest, using inferential statistics to distinguish the real effect from chance."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How many users do I need for an A/B test?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It depends on the baseline conversion rate, the minimum detectable effect (MDE) you want to detect, the significance level α, and the desired power. With a 5% baseline rate and a 10% relative MDE (p_B = 5.5%), you need approximately 31,200 users per variant with α=0.05, a two-tailed test and power=0.80."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the p-value in an A/B test?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The p-value is the probability of obtaining a difference equal to or greater than the observed one assuming the null hypothesis (no difference) is true. A p-value smaller than the significance level α (usually 0.05) leads to rejecting H₀."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the difference between frequentist and Bayesian A/B testing?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The frequentist approach tests hypotheses and returns a p-value. The Bayesian approach updates a belief distribution with the data and directly returns the probability P(B > A), which is more intuitive for business decisions."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="../../style_new.css?v=20260522">
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="../../index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="../distribuciones/">Distributions</a></li>
+            <li><a href="../../tablas-estadisticas/">Tables</a></li>
+            <li><a href="../../intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="../../tamano-muestral/">Sample size</a></li>
+            <li><a href="../../contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="./">A/B Tests</a></li>
+            <li><a href="../../simulaciones/">Simulations</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="../../index.html">Home</a></li>
+      <li><span aria-current="page">A/B Testing</span></li>
+    </ol>
+  </nav>
+  <header class="hero">
+    <p class="eyebrow">A/B Testing</p>
+    <h1>What is an A/B test and how does it work</h1>
+    <p class="hero-subtitle">Complete guide to the statistical foundations of A/B testing — hypotheses, p-value, power, sample size — and online calculators to design and analyse your experiments.</p>
+    <p class="hero-links"><a class="hero-link-button" href="../../index.html">Back to home</a></p>
+  </header>
+
+  <main>
+
+    <!-- ── CALCULATORS ─────────────────────────────────────────── -->
+    <section class="card content-card">
+      <h2>A/B testing calculators</h2>
+      <p>Go directly to the tools to analyse, plan and simulate your A/B experiments:</p>
+      <ul class="tools-grid ab-tools-grid" aria-label="List of A/B testing calculators">
+        <li><a href="../ab-testing-z-test.html">Conversion Z-test</a></li>
+        <li><a href="../ab-testing-bayesiano.html">Bayesian Beta-Binomial</a></li>
+        <li><a href="../ab-testing-potencia.html">MDE, power and sample size</a></li>
+        <li><a href="../ab-testing-simulacion.html">Experiment simulation</a></li>
+        <li><a href="../potencia-test-ab.html">Power and critical regions (two proportions)</a></li>
+      </ul>
+    </section>
+
+    <!-- ── ARTICLE ─────────────────────────────────────────────── -->
+    <article>
+
+      <section class="card content-card">
+        <h2>What is an A/B test?</h2>
+        <p>An <strong>A/B test</strong> — also called an <strong>A/B experiment</strong> or <em>split test</em> — is a controlled experimental method in which two versions of something are compared to determine which produces better results. The original version is called the <strong>control</strong> (A) and the modified version is called the <strong>treatment</strong> or variant (B).</p>
+        <p>The principle is simple: users are randomly divided into two groups, each group experiences one of the two versions, and at the end the metric of interest — conversion rate, click-through rate, time on page, revenue per visit, etc. — is compared using <strong>inferential statistics</strong> to determine whether the observed difference is real or simply the result of chance.</p>
+        <p>The A/B test is the central tool of <strong>experimentation marketing</strong>, <strong>CRO</strong> (Conversion Rate Optimisation) and <strong>data-driven product design</strong>. Companies like Google, Amazon and Netflix run thousands of A/B tests simultaneously to make evidence-backed decisions.</p>
+        <h3>What is an A/B test used for?</h3>
+        <p>The A/B test is used to make objective decisions in any context where a binary or continuous outcome can be measured. The most common use cases are:</p>
+        <ul>
+          <li><strong>E-commerce and CRO</strong>: comparing two versions of a product page, a buy button, a headline or a sign-up form.</li>
+          <li><strong>Email marketing</strong>: contrasting subject lines, calls to action or formats to maximise open or click rates.</li>
+          <li><strong>Mobile and web applications</strong>: evaluating interface changes, onboarding flows or new features before rolling them out to 100% of users.</li>
+          <li><strong>Online advertising</strong>: comparing creatives, audiences or landing pages to optimise cost per acquisition.</li>
+          <li><strong>Clinical research and behavioural science</strong>: where randomised experimental design is the most rigorous standard of evidence.</li>
+        </ul>
+      </section>
+
+      <section class="card content-card">
+        <h2>How an A/B test works step by step</h2>
+        <p>A well-designed A/B experiment always follows the same sequence. Skipping any of these steps is the most frequent cause of invalid results.</p>
+        <ol>
+          <li>
+            <strong>Define the hypothesis and the primary metric.</strong>
+            Before touching anything, document what you are changing, why you expect it to improve, and which single metric you will use to decide. A poorly defined hypothesis opens the door to confirmation bias.
+          </li>
+          <li>
+            <strong>Calculate the required sample size.</strong>
+            Based on the current baseline rate, the minimum detectable effect (MDE) you consider relevant for the business, the significance level α and the desired power (1−β). Use the <a href="../ab-testing-potencia.html">MDE and power calculator</a> for this step.
+          </li>
+          <li>
+            <strong>Randomise the assignment.</strong>
+            Each unit of analysis (user, session, device) is independently assigned to group A or group B with equal probability. Randomisation is what guarantees the groups are comparable.
+          </li>
+          <li>
+            <strong>Run the experiment for the planned duration.</strong>
+            Do not stop it early even if the p-value crosses the threshold. <em>Peeking</em> — looking at interim results and deciding based on them — severely inflates the type I error rate.
+          </li>
+          <li>
+            <strong>Analyse the results.</strong>
+            With the complete data, calculate the test statistic, the p-value and the confidence interval for the difference. Use the <a href="../ab-testing-z-test.html">conversion Z-test</a> if you prefer the frequentist approach, or the <a href="../ab-testing-bayesiano.html">Bayesian analysis</a> to obtain P(B &gt; A) directly.
+          </li>
+          <li>
+            <strong>Make a decision and implement.</strong>
+            Interpret the result in business terms: is the effect statistically significant and also practically meaningful? Does the cost of implementing B justify the estimated improvement?
+          </li>
+        </ol>
+      </section>
+
+      <section class="card content-card">
+        <h2>Key statistical concepts in A/B testing</h2>
+
+        <h3>Null hypothesis and alternative hypothesis</h3>
+        <p>Every A/B test is formulated as a hypothesis test. The <strong>null hypothesis</strong> (H₀) states that there is no difference between the two variants: the conversion rate of A and B is the same. The <strong>alternative hypothesis</strong> (H₁) states that a difference exists.</p>
+        <p>The goal of the statistical analysis is to assess whether the data are sufficiently inconsistent with H₀ to reject it. Rejecting H₀ does not prove that H₁ is true; it only indicates that the data are unlikely under the assumption that there is no effect.</p>
+        <p>Tests can be <strong>two-tailed</strong> (is B different from A, in either direction?) or <strong>one-tailed</strong> (is B better than A?). In practice, the two-tailed test is recommended unless there is a very strong reason to exclude one direction.</p>
+
+        <h3>Significance level (α) and p-value</h3>
+        <p>The <strong>significance level α</strong> is the maximum probability of a type I error you are willing to tolerate: the probability of rejecting H₀ when it is actually true (false positive). The standard value in digital experimentation is α = 0.05, although in high-risk contexts lower values are used (0.01 or 0.001).</p>
+        <p>The <strong>p-value</strong> is the probability of obtaining, under H₀, a difference as large as or larger than the observed one. If p &lt; α, H₀ is rejected and the difference is concluded to be statistically significant. It is important not to confuse the p-value with the probability that H₀ is true: they are different things.</p>
+        <p>A small p-value does not imply that the effect is important for the business: with very large samples, tiny differences become statistically significant. This is why the p-value should always be accompanied by the <strong>confidence interval</strong> for the difference and the <strong>effect size</strong>.</p>
+
+        <h3>Statistical power and type II error</h3>
+        <p><strong>Statistical power</strong> (1−β) is the probability of detecting a real difference when one exists. In other words, it is the test's ability to avoid a <strong>false negative</strong>: concluding there is no effect when there actually is one. The standard power in experimentation is 0.80, although many teams use 0.90 to reduce the risk of missing real improvements.</p>
+        <p>Power depends on sample size, the true effect size and α. Increasing n always increases power. Reducing α (being more stringent about false positives) decreases power if all other parameters remain the same.</p>
+
+        <h3>Sample size and minimum detectable effect (MDE)</h3>
+        <p>The <strong>sample size</strong> is the number of observations required in each variant for the test to have the desired power. There is no universal rule: it depends on four parameters that must be fixed before the experiment:</p>
+        <ul>
+          <li><strong>Baseline rate</strong> (p₀): the current conversion rate of the control.</li>
+          <li><strong>Minimum detectable effect (MDE)</strong>: the minimum improvement — absolute or relative — that you consider relevant for the business. Smaller effects require larger samples.</li>
+          <li><strong>Significance level α</strong>: usually 0.05.</li>
+          <li><strong>Power (1−β)</strong>: usually 0.80.</li>
+        </ul>
+        <p>The MDE is perhaps the most underused parameter. Setting it forces you to answer: "What minimum improvement would justify the cost of implementing the change?" An overly ambitious MDE (detecting 1% relative improvements) drives up sample size. A realistic MDE aligns statistics and business from the start.</p>
+        <p>Calculate the sample size for your test with the <a href="../ab-testing-potencia.html">MDE, power and sample size calculator</a>.</p>
+      </section>
+
+      <section class="card content-card">
+        <h2>Frequentist vs. Bayesian A/B testing</h2>
+        <p>There are two main statistical frameworks for analysing an A/B test. Each answers different questions and has advantages and disadvantages depending on the context.</p>
+
+        <h3>Frequentist approach</h3>
+        <p>The frequentist approach is the classical standard. It defines H₀, fixes α before the experiment and, at the end, calculates the <strong>p-value</strong> and decides whether to reject H₀. The conclusion is binary: significant or not significant.</p>
+        <p>Its advantages are the controlled interpretation of type I error and broad methodological consensus. Its main limitation is that the p-value does not say how probable it is that B is better than A: it only measures the compatibility of the data with H₀.</p>
+        <p>Use the <a href="../ab-testing-z-test.html">conversion Z-test</a> for the frequentist analysis.</p>
+
+        <h3>Bayesian approach</h3>
+        <p>The Bayesian approach starts with a <strong>prior distribution</strong> over conversion rates (usually a Beta distribution) and updates it with the observed data to obtain a <strong>posterior distribution</strong>. The main result is <strong>P(B &gt; A)</strong>: the direct probability that variant B is better than variant A.</p>
+        <p>This interpretation is more intuitive for product and business teams, as it directly answers the relevant question. In addition, Bayesian analysis does not use the frequentist concept of type I error, although that does not mean peeking is harmless: repeatedly making decisions based on a P(B &gt; A) threshold can produce high false positive rates in the long run. It also requires specifying a prior distribution.</p>
+        <p>Use the <a href="../ab-testing-bayesiano.html">Bayesian Beta-Binomial analyser</a> for this approach.</p>
+
+        <h3>Which one to choose?</h3>
+        <p>There is no single answer. The frequentist approach is appropriate when the decision must meet strict significance criteria (regulated environments, scientific publications). The Bayesian approach is preferable when you want to monitor the test in real time, when the team values the direct interpretability of probabilities, or when solid prior information about the conversion rate is available.</p>
+      </section>
+
+      <section class="card content-card">
+        <h2>Type I and type II errors in A/B tests</h2>
+        <p>When making a statistical decision there are four possible outcomes, two of which are errors:</p>
+
+        <div class="decision-grid">
+          <div>
+            <h3>Type I error (false positive)</h3>
+            <p>Concluding that B is better than A when it actually is not. It occurs with probability α. In digital experimentation this error is costly because you would implement a change that does not improve (or even worsens) the metric.</p>
+            <p>It is controlled by setting a low α <strong>before</strong> the experiment and not peeking: every time you look at interim data and could make a decision, you are implicitly running multiple tests and the actual type I error shoots above α.</p>
+          </div>
+          <div>
+            <h3>Type II error (false negative)</h3>
+            <p>Concluding that there is no difference when B is actually better than A. It occurs with probability β = 1 − power. In digital experimentation this error is equally costly: you would discard real improvements.</p>
+            <p>It is controlled primarily by increasing the sample size. Relaxing α also reduces β, but at the cost of raising the type I error: both errors are communicating vessels and one cannot be reduced without increasing the other or increasing n.</p>
+          </div>
+        </div>
+
+        <h3>The peeking problem</h3>
+        <p><strong>Peeking</strong> — stopping the test as soon as the p-value crosses the threshold for the first time — is one of the most frequent mistakes in A/B testing. The problem is that the p-value fluctuates during the experiment: if you look repeatedly and decide at the first p &lt; 0.05, the actual type I error can exceed 25% even when α is set at 0.05. The solution is to respect the sample size calculated in advance or to use sequential monitoring methods if flexibility is needed (always-valid p-values, SPRT).</p>
+
+        <h3>Multiple comparisons</h3>
+        <p>If multiple secondary metrics or multiple variants are tested without correction, the probability of obtaining at least one false positive grows rapidly. The Bonferroni correction (dividing α by the number of comparisons) is the most conservative. In A/B tests with many variants, the Benjamini-Hochberg method is preferable; it controls the false discovery rate (FDR) rather than the familywise error rate.</p>
+      </section>
+
+      <section class="card content-card">
+        <h2>When does it make sense to run an A/B test?</h2>
+        <p>An A/B test is the right tool when these conditions are met:</p>
+        <ul>
+          <li><strong>Sufficient volume</strong>: the available traffic or sample allows the required sample size to be reached within a reasonable timeframe. With very little traffic, tests take months and results are contaminated by seasonal effects.</li>
+          <li><strong>Measurable and stable metric</strong>: the outcome variable can be measured reliably and its baseline rate does not fluctuate abnormally during the experiment.</li>
+          <li><strong>Randomisation is possible</strong>: each unit can be randomly assigned to a variant without contamination between groups (network effects, spillover).</li>
+          <li><strong>The hypothesis is specific</strong>: one thing or a coherent set of changes is altered, not multiple elements simultaneously that would make it impossible to attribute the effect to a specific cause.</li>
+        </ul>
+        <p>When volume is insufficient or randomisation is not possible there are alternatives: before-after tests with synthetic control, difference-in-differences, regression discontinuity or Bayesian analysis with informative priors.</p>
+      </section>
+
+      <section class="card content-card">
+        <h2>Best practices and common mistakes in A/B testing</h2>
+        <ul>
+          <li><strong>Plan before you start.</strong> Define the hypothesis, primary metric, MDE, α, power and sample size before launching the experiment. A test without prior planning can almost never be interpreted correctly.</li>
+          <li><strong>Do not peek.</strong> Do not make decisions until the planned sample size is reached. Use the <a href="../ab-testing-simulacion.html">experiment simulation</a> to see empirically how peeking inflates the type I error.</li>
+          <li><strong>One primary metric.</strong> Defining multiple primary metrics without correction multiplies the risk of false positives. Secondary metrics are exploratory and do not determine the decision.</li>
+          <li><strong>Verify randomisation.</strong> Run an A/A test or check that pre-experiment covariates (age, device, acquisition channel) are balanced between groups before drawing conclusions.</li>
+          <li><strong>Report the confidence interval.</strong> The p-value only says "significant or not". The confidence interval for the difference in rates informs about the magnitude of the effect and its uncertainty, which is what matters for the business decision.</li>
+          <li><strong>Consider practical significance.</strong> A statistically significant difference may not be relevant for the business if the effect is too small to justify the cost of implementation.</li>
+          <li><strong>Respect the minimum duration.</strong> Even if the sample size is reached early, it is advisable to keep the test running for at least one full week to capture day-of-week variability.</li>
+          <li><strong>Do not reuse historical data.</strong> Comparing variant B with historical control data violates the randomisation assumption and produces biased comparisons.</li>
+        </ul>
+      </section>
+
+      <section class="card content-card example-card">
+        <h2>Worked example: conversion A/B test</h2>
+        <p>Suppose you have a product page with a conversion rate of <strong>4.2%</strong> and you want to evaluate whether a new buy-button design improves that rate. Your MDE is 10% relative (i.e., you want to detect if the new rate exceeds 4.62%). With α = 0.05, a two-tailed test and power = 0.80, the <a href="../ab-testing-potencia.html">sample size calculator</a> tells you that you need approximately <strong>37,500 users per variant</strong>.</p>
+        <p>After running the test for three full weeks you obtain the following results:</p>
+        <ul>
+          <li><strong>Control (A)</strong>: 37,500 visits, 1,575 conversions → rate = 4.20%</li>
+          <li><strong>Variant (B)</strong>: 37,500 visits, 1,800 conversions → rate = 4.80%</li>
+        </ul>
+        <p>The absolute improvement is <strong>0.60 percentage points</strong> and the relative improvement is <strong>14.3%</strong>. With the <a href="../ab-testing-z-test.html">conversion Z-test</a> you obtain a p-value of approximately 0.000074, below α = 0.05, so <strong>H₀ is rejected</strong>: the difference is statistically significant. The 95% confidence interval for the difference runs from +0.30 pp to +0.90 pp, indicating that the true effect is positive, although its practical impact still needs to be assessed.</p>
+        <p>With the <a href="../ab-testing-bayesiano.html">Bayesian analyser</a>, P(B &gt; A) is practically 100%, reinforcing the conclusion. You can then implement the new design with statistical confidence and an effect size that is meaningful for the business.</p>
+      </section>
+
+      <section class="card content-card pillar-guide">
+        <h2>Recommended workflow for an A/B experiment</h2>
+        <ol>
+          <li><strong>Define</strong> the hypothesis, the primary metric and the minimum detectable effect before touching anything.</li>
+          <li><strong>Plan</strong> the sample size and estimated duration with realistic traffic using the <a href="../ab-testing-potencia.html">power calculator</a>.</li>
+          <li><strong>Randomise</strong> the assignment and verify balance between groups before launch.</li>
+          <li><strong>Run</strong> the test without intervening: do not stop it because of the p-value, do not change the variant mid-experiment.</li>
+          <li><strong>Analyse</strong> with the <a href="../ab-testing-z-test.html">Z-test</a> or the <a href="../ab-testing-bayesiano.html">Bayesian analysis</a> once the planned sample size is reached.</li>
+          <li><strong>Decide</strong> by combining statistical significance, effect magnitude and implementation cost.</li>
+          <li><strong>Document</strong> the result, including cases where no effect was detected: null results are also valuable.</li>
+        </ol>
+      </section>
+
+      <section class="card content-card">
+        <h2>Frequently asked questions about A/B testing</h2>
+
+        <h3>How long should an A/B test run?</h3>
+        <p>The minimum duration is calculated by dividing the required sample size by the available daily traffic. Regardless of the result, it is recommended to keep the test running for at least <strong>one full week</strong> to capture the day-of-week effect. In environments with marked weekly seasonality, two full weeks are preferable.</p>
+
+        <h3>What if the p-value is exactly 0.05?</h3>
+        <p>A p-value of exactly 0.05 does not change anything qualitatively compared to 0.049 or 0.051. The boundary is a convention, not an absolute truth. At that threshold, the confidence interval for the difference will touch zero at one of its ends and uncertainty about the effect is at its maximum. Consider increasing the sample size or turning to Bayesian analysis for a complementary perspective.</p>
+
+        <h3>Can I run an A/B test with very little traffic?</h3>
+        <p>With little traffic, the test will take a long time to reach the required sample size and seasonal effects will contaminate the results. In that case, the <a href="../ab-testing-bayesiano.html">Bayesian approach with informative priors</a> allows you to incorporate prior knowledge about the conversion rate and reach conclusions more quickly, subject to the additional trade-offs implied by the choice of prior.</p>
+
+        <h3>Can I run an A/B test with more than two variants?</h3>
+        <p>Yes: this is called an A/B/n test or multivariate test. Statistical complexity increases because multiple comparisons must be controlled. The most common approach is to use a Bonferroni correction for pairwise contrasts or an ANOVA analysis followed by post-hoc comparisons. The required sample size also grows with the number of variants.</p>
+
+        <h3>What is an A/A test?</h3>
+        <p>An A/A test exposes both groups to the same experience. It is used to verify that the randomisation system is working correctly and that no pre-existing differences between groups exist. If the A/A test frequently concludes with significant differences, there is a problem in the experiment implementation.</p>
+      </section>
+
+    </article>
+
+  </main>
+
+  <footer class="legal-footer">
+    <p>
+      © 2026 problabtools.
+      <a href="../../sobre.html">About ProbLab</a> ·
+      <a href="../../metodologia.html">Methodology</a> ·
+      <a href="../../aviso-legal.html">Legal notice</a> ·
+      <a href="../../privacidad.html">Privacy</a> ·
+      <a href="../../cookies.html">Cookies</a> ·
+      <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+    </p>
+  </footer>
+</div>
+
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="../../search.js?v=20260522"></script>
+<script src="../../wizard.js?v=20260522"></script>
+<script src="../../i18n.js?v=20260524"></script>
+<script src="../../theme.js?v=20260522"></script>
+</body>
+</html>
