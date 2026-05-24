@@ -7,7 +7,7 @@ Si la página ya tiene el tag, lo omite.
 import os
 import re
 
-BASE = "/home/user/simprobs"
+BASE = os.path.dirname(os.path.abspath(__file__))
 
 # keywords por archivo
 KEYWORDS: dict[str, list[str]] = {
@@ -386,6 +386,267 @@ KEYWORDS: dict[str, list[str]] = {
         "tamaño muestral potencia AB",
         "diseño experimento AB testing",
     ],
+
+    # ── Contrastes nuevos ─────────────────────────────────────────────────────
+    "contraste-hipotesis-correlacion.html": [
+        "contraste hipótesis correlación de Pearson",
+        "prueba correlación Pearson estadística",
+        "test correlación significativa",
+        "calcular p-valor correlación",
+        "coeficiente de correlación estadística",
+    ],
+    "contraste-hipotesis-dos-varianzas.html": [
+        "contraste hipótesis dos varianzas",
+        "test F varianzas calculadora",
+        "prueba igualdad de varianzas",
+        "comparar varianzas dos muestras",
+        "calcular p-valor varianzas",
+    ],
+    "contraste-hipotesis-medias-apareadas.html": [
+        "contraste hipótesis medias apareadas",
+        "prueba t muestras dependientes",
+        "test medias apareadas calculadora",
+        "muestras relacionadas t-test",
+        "calcular p-valor medias apareadas",
+    ],
+    "contraste-hipotesis-no-inferioridad.html": [
+        "contraste no inferioridad estadística",
+        "test equivalencia estadística",
+        "prueba no inferioridad calculadora",
+        "margen de no inferioridad",
+        "ensayo clínico no inferioridad",
+    ],
+    "contraste-hipotesis-odds-ratio.html": [
+        "contraste hipótesis odds ratio",
+        "prueba odds ratio caso-control",
+        "test odds ratio calculadora",
+        "significancia odds ratio estadística",
+        "OR intervalo de confianza contraste",
+    ],
+    "contraste-hipotesis-proporciones-apareadas.html": [
+        "contraste proporciones apareadas",
+        "test McNemar calculadora",
+        "prueba McNemar estadística",
+        "proporciones dependientes contraste",
+        "calcular p-valor McNemar",
+    ],
+
+    # ── Intervalos de confianza nuevos ────────────────────────────────────────
+    "intervalo-confianza-diferencia-proporciones.html": [
+        "intervalo de confianza diferencia proporciones",
+        "IC diferencia de proporciones calculadora",
+        "calcular IC dos proporciones",
+        "intervalo confianza comparar proporciones",
+    ],
+    "intervalo-confianza-media-poblacion-finita.html": [
+        "intervalo de confianza media población finita",
+        "IC media corrección finita",
+        "calculadora IC población finita media",
+        "estimación media población pequeña",
+    ],
+    "intervalo-confianza-medias-apareadas.html": [
+        "intervalo de confianza medias apareadas",
+        "IC diferencias apareadas",
+        "calculadora IC muestras dependientes",
+        "intervalo confianza pares apareados",
+    ],
+    "intervalo-confianza-odds-ratio.html": [
+        "intervalo de confianza odds ratio",
+        "IC odds ratio calculadora",
+        "calcular IC OR estadística",
+        "odds ratio intervalo confianza",
+    ],
+    "intervalo-confianza-proporcion-poblacion-finita.html": [
+        "intervalo de confianza proporción población finita",
+        "IC proporción corrección finita",
+        "calculadora IC proporción población pequeña",
+        "estimación proporción población finita",
+    ],
+    "intervalo-confianza-ratio-proporciones.html": [
+        "intervalo de confianza ratio proporciones",
+        "IC razón de proporciones",
+        "calculadora IC ratio proporciones",
+        "riesgo relativo intervalo confianza",
+    ],
+
+    # ── Potencia estadística ──────────────────────────────────────────────────
+    "potencia-contraste-una-proporcion.html": [
+        "potencia estadística una proporción",
+        "calcular potencia contraste proporción",
+        "error tipo II proporción",
+        "potencia test proporción calculadora",
+        "tamaño efecto proporción",
+    ],
+    "potencia-test-ab.html": [
+        "potencia estadística test A/B",
+        "calcular potencia dos proporciones",
+        "error tipo II A/B testing",
+        "potencia test AB calculadora",
+        "potencia experimento online",
+    ],
+
+    # ── Tamaños muestrales nuevos ─────────────────────────────────────────────
+    "tamano-muestral-anova.html": [
+        "tamaño muestral ANOVA",
+        "calcular muestra análisis de varianza",
+        "tamaño muestral comparar grupos",
+        "potencia ANOVA tamaño muestral",
+        "muestra para ANOVA un factor",
+    ],
+    "tamano-muestral-chi-cuadrado-bondad.html": [
+        "tamaño muestral chi cuadrado bondad de ajuste",
+        "calcular muestra test bondad ajuste",
+        "muestra para chi-cuadrado goodness of fit",
+        "tamaño muestral distribución teórica",
+    ],
+    "tamano-muestral-chi-cuadrado-independencia.html": [
+        "tamaño muestral chi cuadrado independencia",
+        "calcular muestra test independencia",
+        "muestra para tabla contingencia chi-cuadrado",
+        "tamaño muestral asociación variables",
+    ],
+    "tamano-muestral-contraste-una-media.html": [
+        "tamaño muestral contraste una media",
+        "calcular muestra test t una muestra",
+        "potencia contraste media tamaño muestral",
+        "muestra para contrastar media",
+    ],
+    "tamano-muestral-contraste-una-proporcion.html": [
+        "tamaño muestral contraste una proporción",
+        "calcular muestra test proporción",
+        "potencia contraste proporción muestra",
+        "muestra para contrastar proporción",
+    ],
+    "tamano-muestral-correlacion.html": [
+        "tamaño muestral correlación",
+        "calcular muestra coeficiente correlación",
+        "muestra para detectar correlación",
+        "potencia test correlación Pearson",
+        "tamaño muestral r de Pearson",
+    ],
+    "tamano-muestral-diferencia-proporciones-ic.html": [
+        "tamaño muestral diferencia proporciones intervalo confianza",
+        "calcular muestra IC diferencia proporciones",
+        "muestra estimación diferencia proporciones",
+        "precisión IC dos proporciones",
+    ],
+    "tamano-muestral-dos-varianzas.html": [
+        "tamaño muestral dos varianzas",
+        "calcular muestra comparar varianzas",
+        "muestra para test F varianzas",
+        "potencia contraste varianzas tamaño muestral",
+    ],
+    "tamano-muestral-fisher.html": [
+        "tamaño muestral test exacto Fisher",
+        "calcular muestra test Fisher",
+        "muestra para tablas 2x2 Fisher",
+        "potencia test exacto Fisher",
+    ],
+    "tamano-muestral-kolmogorov-smirnov.html": [
+        "tamaño muestral Kolmogorov-Smirnov",
+        "calcular muestra test KS",
+        "muestra para test normalidad KS",
+        "potencia Kolmogorov-Smirnov",
+    ],
+    "tamano-muestral-medias-apareadas-ic.html": [
+        "tamaño muestral medias apareadas intervalo confianza",
+        "calcular muestra IC diferencias apareadas",
+        "muestra estimación medias pareadas",
+        "precisión IC muestras dependientes",
+    ],
+    "tamano-muestral-no-inferioridad.html": [
+        "tamaño muestral no inferioridad",
+        "calcular muestra ensayo no inferioridad",
+        "muestra estudio equivalencia",
+        "tamaño muestral margen no inferioridad",
+    ],
+    "tamano-muestral-odds-ratio.html": [
+        "tamaño muestral odds ratio",
+        "calcular muestra estudio caso-control",
+        "muestra para detectar OR",
+        "potencia odds ratio tamaño muestral",
+    ],
+    "tamano-muestral-odds-ratio-ic.html": [
+        "tamaño muestral odds ratio intervalo confianza",
+        "calcular muestra IC odds ratio",
+        "precisión estimación OR estadística",
+        "muestra IC razón de ventajas",
+    ],
+    "tamano-muestral-shapiro-wilk.html": [
+        "tamaño muestral test Shapiro-Wilk",
+        "calcular muestra prueba normalidad",
+        "muestra para test Shapiro-Wilk",
+        "potencia test normalidad Shapiro",
+    ],
+    "tamano-muestral-una-varianza.html": [
+        "tamaño muestral contraste varianza",
+        "calcular muestra test chi-cuadrado varianza",
+        "muestra para contrastar varianza",
+        "potencia contraste una varianza",
+    ],
+    "tamano-muestral-varianza-ic.html": [
+        "tamaño muestral varianza intervalo confianza",
+        "calcular muestra IC varianza",
+        "precisión estimación varianza estadística",
+        "muestra IC desviación típica",
+    ],
+
+    # ── Simulaciones ──────────────────────────────────────────────────────────
+    "simulaciones/index.html": [
+        "simulaciones estadísticas interactivas",
+        "simulador estadístico online",
+        "visualizar conceptos estadísticos",
+        "experimentos estadísticos online",
+        "estadística interactiva visualización",
+    ],
+    "simulaciones/simulador-bootstrap.html": [
+        "simulador bootstrap estadística",
+        "remuestreo bootstrap online",
+        "bootstrap intervalo de confianza",
+        "estadística bootstrap calculadora",
+        "inferencia bootstrap distribución",
+    ],
+    "simulaciones/simulador-cadenas-markov.html": [
+        "simulador cadenas de Markov",
+        "cadena de Markov online",
+        "procesos estocásticos simulación",
+        "matriz de transición Markov",
+        "distribución estacionaria Markov",
+    ],
+    "simulaciones/simulador-errores-tipo-i-ii.html": [
+        "simulador errores tipo I y tipo II",
+        "error alfa beta estadística",
+        "visualizar potencia estadística",
+        "error tipo I tipo II calculadora",
+        "potencia test hipótesis simulación",
+    ],
+    "simulaciones/simulador-intervalos-confianza.html": [
+        "simulador intervalos de confianza",
+        "visualizar intervalos de confianza",
+        "cobertura intervalo de confianza simulación",
+        "intervalo de confianza interactivo",
+    ],
+    "simulaciones/simulador-paseo-aleatorio.html": [
+        "simulador paseo aleatorio",
+        "random walk online",
+        "paseo aleatorio 1D 2D simulación",
+        "movimiento browniano simulación",
+        "proceso estocástico paseo aleatorio",
+    ],
+    "simulaciones/simulador-proceso-poisson.html": [
+        "simulador proceso de Poisson",
+        "proceso Poisson online",
+        "llegadas Poisson simulación",
+        "proceso estocástico Poisson",
+        "simulación distribución Poisson",
+    ],
+    "simulaciones/teorema-central-limite.html": [
+        "simulador teorema central del límite",
+        "teorema central límite online",
+        "TCL distribución muestral media",
+        "visualizar teorema central límite",
+        "distribución muestral simulación",
+    ],
 }
 
 # keywords comunes a todas las páginas
@@ -406,21 +667,22 @@ def write(path: str, content: str) -> None:
         f.write(content)
 
 
-def build_keywords_tag(filename: str) -> str:
-    specific = KEYWORDS.get(filename, [])
+def build_keywords_tag(key: str) -> str:
+    specific = KEYWORDS.get(key, [])
     combined = specific + [k for k in COMMON if k not in specific]
     return f'    <meta name="keywords" content="{", ".join(combined)}">'
 
 
 def process(filepath: str) -> bool:
     filename = os.path.basename(filepath)
+    key = os.path.relpath(filepath, BASE).replace(os.sep, "/")
     content = read(filepath)
 
     if 'name="keywords"' in content:
         print(f"  - {filename}: ya tiene keywords, omitido")
         return False
 
-    tag = build_keywords_tag(filename)
+    tag = build_keywords_tag(key)
     # Insertar justo después de <meta name="description" ...>
     new_content = re.sub(
         r'(<meta name="description"[^>]*>)',
@@ -443,6 +705,13 @@ def main() -> None:
         for f in os.listdir(BASE)
         if f.endswith(".html")
     )
+    sim_dir = os.path.join(BASE, "simulaciones")
+    if os.path.isdir(sim_dir):
+        html_files += sorted(
+            os.path.join(sim_dir, f)
+            for f in os.listdir(sim_dir)
+            if f.endswith(".html")
+        )
     print(f"Procesando {len(html_files)} archivos…\n")
     changed = sum(process(fp) for fp in html_files)
     print(f"\nListo. {changed} archivos actualizados.")

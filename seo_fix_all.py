@@ -13,7 +13,7 @@ import os
 import json
 import html as html_module
 
-BASE = "/home/user/simprobs"
+BASE = os.path.dirname(os.path.abspath(__file__))
 
 # ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -357,7 +357,8 @@ def main():
     )
     # Subdirectory index files
     subdirs = ["ab-testing", "distribuciones", "tablas-estadisticas",
-               "intervalos-confianza", "tamano-muestral", "contrastes-hipotesis"]
+               "intervalos-confianza", "tamano-muestral", "contrastes-hipotesis",
+               "simulaciones"]
     for sd in subdirs:
         idx = os.path.join(BASE, sd, "index.html")
         if os.path.exists(idx):
