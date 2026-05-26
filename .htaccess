@@ -8,7 +8,11 @@ RewriteRule ^(.*)$ https://problabtools.com/$1 [L,R=301]
 # 2. Redirigir index.html a /
 RewriteRule ^index\.html$ / [R=301,L]
 
-# 3. Cache
+# 3. Eliminar parámetro ?q= de la home
+RewriteCond %{QUERY_STRING} ^q=
+RewriteRule ^$ /? [R=301,L]
+
+# 4. Cache
 <IfModule mod_headers.c>
   <FilesMatch "\.(?:html?)$">
     Header set Cache-Control "no-cache, must-revalidate"
