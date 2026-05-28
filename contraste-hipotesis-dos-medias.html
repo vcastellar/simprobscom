@@ -194,8 +194,9 @@
                 <li><strong>\(\bar{x}_1, \bar{x}_2\)</strong>: medias muestrales de los grupos 1 y 2.</li>
                 <li><strong>\(s_1, s_2\)</strong>: desviaciones estándar muestrales de cada grupo.</li>
                 <li><strong>\(n_1, n_2\)</strong>: tamaños de los grupos 1 y 2.</li>
-                <li><strong>gl</strong>: grados de libertad de Welch-Satterthwaite (aproximados, no necesariamente enteros).</li>
+                <li><strong>gl</strong>: grados de libertad de Welch-Satterthwaite (aproximados, no necesariamente enteros):</li>
             </ul>
+            <p class="formula-line">\( \nu = \dfrac{(s_1^2/n_1 + s_2^2/n_2)^2}{\dfrac{(s_1^2/n_1)^2}{n_1-1} + \dfrac{(s_2^2/n_2)^2}{n_2-1}} \)</p>
         </section>
 
 
@@ -358,8 +359,8 @@ function calculateTwoMeansTest() {
     const mean2 = parseFloat(document.getElementById('mean2').value);
     const sd1 = parseFloat(document.getElementById('sd1').value);
     const sd2 = parseFloat(document.getElementById('sd2').value);
-    const n1 = parseFloat(document.getElementById('n1').value);
-    const n2 = parseFloat(document.getElementById('n2').value);
+    const n1 = parseInt(document.getElementById('n1').value, 10);
+    const n2 = parseInt(document.getElementById('n2').value, 10);
     const alpha = parseFloat(document.getElementById('alpha').value);
     const tail = document.getElementById('tail').value;
     const resultEl = document.getElementById('twoMeansResult');
