@@ -290,15 +290,15 @@
             <h3>Ejemplo resuelto: no inferioridad de proporciones</h3>
             <p>Un nuevo tratamiento tiene una tasa de éxito \(\hat{p}_1 = 0{,}72\) en \(n_1 = 200\) pacientes. El tratamiento de referencia tiene \(\hat{p}_2 = 0{,}75\) en \(n_2 = 200\) pacientes. El margen de no inferioridad es \(\delta = 0{,}10\) con \(\alpha = 0{,}05\).</p>
             <p class="formula-line">\( \hat{\Delta} = 0{,}72 - 0{,}75 = -0{,}03 \)</p>
-            <p class="formula-line">\( \text{SE} = \sqrt{\dfrac{0{,}72\cdot0{,}28}{200} + \dfrac{0{,}75\cdot0{,}25}{200}} = \sqrt{0{,}001008 + 0{,}0009375} \approx 0{,}04437 \)</p>
-            <p class="formula-line">\( z_{\text{NI}} = \dfrac{-0{,}03 + 0{,}10}{0{,}04437} \approx 1{,}578, \quad p \approx 0{,}057 \)</p>
+            <p class="formula-line">\( \text{SE} = \sqrt{\dfrac{0{,}72\cdot0{,}28}{200} + \dfrac{0{,}75\cdot0{,}25}{200}} = \sqrt{0{,}001008 + 0{,}0009375} = \sqrt{0{,}0019455} \approx 0{,}04411 \)</p>
+            <p class="formula-line">\( z_{\text{NI}} = \dfrac{-0{,}03 + 0{,}10}{0{,}04411} \approx 1{,}587, \quad p \approx 0{,}056 \)</p>
             <p>Como \(p = 0{,}057 > \alpha = 0{,}05\), <strong>no se declara no inferioridad</strong> al nivel del 5 % (resultado limítrofe). El IC al 90 % de \(\hat{\Delta}\) no cabe completamente por encima de \(-0{,}10\).</p>
         </section>
 
         <section class="card content-card">
             <h3>Cómo interpretar el resultado</h3>
                 <p><strong>No inferioridad (test unilateral):</strong> rechazar \(H_0\) (p-valor &lt; α) significa que el límite inferior del intervalo de confianza al \((1-2\alpha)\cdot100\%\) para la diferencia \(\Delta = \mu_T - \mu_C\) supera el margen de no inferioridad \(-\delta\). En términos prácticos, se concluye que el tratamiento experimental no es peor que el control en más de la cantidad clínicamente tolerable. No rechazar \(H_0\) (p-valor ≥ α) indica que los datos no excluyen que el tratamiento sea peor que el control más allá del margen definido.</p>
-                <p><strong>Equivalencia (TOST):</strong> se declara equivalencia si ambos tests unilaterales rechazan \(H_0\) simultáneamente (p_TOST &lt; α) y el intervalo de confianza al 90% para \(\Delta\) queda completamente dentro de \([-\delta, +\delta]\). Un resultado de equivalencia no afirma que los tratamientos sean idénticos, sino que cualquier diferencia es lo bastante pequeña para ser clínicamente inaceptable. Si solo uno de los dos tests unilaterales rechaza, la conclusión es unidireccional: no inferioridad, pero no equivalencia.</p>
+                <p><strong>Equivalencia (TOST):</strong> se declara equivalencia si ambos tests unilaterales rechazan \(H_0\) simultáneamente (p_TOST &lt; α) y el intervalo de confianza al 90% para \(\Delta\) queda completamente dentro de \([-\delta, +\delta]\). Un resultado de equivalencia no afirma que los tratamientos sean idénticos, sino que cualquier diferencia es lo bastante pequeña para ser clínicamente aceptable. Si solo uno de los dos tests unilaterales rechaza, la conclusión es unidireccional: no inferioridad, pero no equivalencia.</p>
                 <p>La elección del margen \(\delta\) es la decisión más crítica del diseño: debe fijarse a priori con criterio clínico o regulatorio, no estadístico. En la visualización, la zona verde corresponde a la región de equivalencia o no inferioridad, la zona roja es la región de inferioridad inaceptable y la línea ámbar muestra la diferencia estimada con su intervalo de confianza. Un intervalo estrecho centrado cerca de cero es evidencia tanto de no inferioridad como de equivalencia práctica; un intervalo ancho señala incertidumbre y posiblemente insuficiencia muestral.</p>
         </section>
         <section id="seo-support-content" class="card content-card">
@@ -514,7 +514,7 @@ function calculate() {
             decisionLabel = declared ? 'Declarado no superior.' : 'No se declara no superioridad.';
             resultText += `z_NS = ${zStat.toFixed(4)} | p = ${pVal.toFixed(6)} | ${decisionLabel}\n`;
             resultText += `IC ${ciLevel}% de Δ̂: (−∞, ${upperCI.toFixed(4)}] | Margen superior: +δ = ${delta.toFixed(4)}`;
-            renderNIChart(alpha, -zStat, 'ni', null); // flip sign so it shows as right-tail on standard plot
+            renderNIChart(alpha, zStat, 'ni', null);
         }
     } else {
         // TOST
