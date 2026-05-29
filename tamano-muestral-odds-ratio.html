@@ -187,7 +187,7 @@
             </ul>
 
             <h3>Ejemplo sencillo</h3>
-            <p>Estudio sobre tabaquismo y cáncer de pulmón: exposición (fumadores) en controles p₀ = 0,30, OR = 2,0, α = 0,05 bilateral, potencia 0,80, relación 1:1. Esto implica p₁ = 0,462. Necesitas aproximadamente <strong>113 casos y 113 controles</strong> (total ≈ 226).</p>
+            <p>Estudio sobre tabaquismo y cáncer de pulmón: exposición (fumadores) en controles p₀ = 0,30, OR = 2,0, α = 0,05 bilateral, potencia 0,80, relación 1:1. Esto implica p₁ = 0,462. Necesitas aproximadamente <strong>141 casos y 141 controles</strong> (total ≈ 282).</p>
 
             <h3>Usos frecuentes</h3>
             <ul>
@@ -212,12 +212,11 @@
             <p>Un equipo epidemiológico diseña un estudio caso-control para investigar la asociación entre el tabaquismo y el cáncer de pulmón. La proporción de fumadores entre los controles (personas sanas de características similares) se estima en \(p_2 = 0{,}30\). Se quiere detectar un odds ratio de al menos \(\text{OR} = 2{,}5\) con \(\alpha = 0{,}05\) bilateral y potencia del 80 %.</p>
             <p>El primer paso es convertir el OR en la proporción de expuestos esperada entre los casos:</p>
             <p class="formula-line">\( p_1 = \frac{\text{OR} \times p_2}{1 + p_2 \times (\text{OR} - 1)} = \frac{2{,}5 \times 0{,}30}{1 + 0{,}30 \times 1{,}5} = \frac{0{,}75}{1{,}45} \approx 0{,}517 \)</p>
-            <p>Con \(z_{\alpha/2} = 1{,}960\) y \(z_{\beta} = 0{,}842\), se aplica la fórmula de comparación de dos proporciones independientes:</p>
-            <p class="formula-line">\( n = \frac{(z_{\alpha/2} + z_{\beta})^2 \cdot \bigl[p_1(1-p_1) + p_2(1-p_2)\bigr]}{(p_1 - p_2)^2} \)</p>
-            <p>Sustituyendo: \(p_1(1-p_1) = 0{,}517 \times 0{,}483 \approx 0{,}2497\) y \(p_2(1-p_2) = 0{,}30 \times 0{,}70 = 0{,}2100\). La diferencia entre proporciones es \(p_1 - p_2 = 0{,}217\).</p>
-            <p class="formula-line">\( n = \frac{7{,}851 \times (0{,}2497 + 0{,}2100)}{(0{,}217)^2} = \frac{7{,}851 \times 0{,}4597}{0{,}04709} = \frac{3{,}609}{0{,}04709} \approx 76{,}6 \)</p>
-            <p>Redondeando al entero superior, se necesitan <strong>77 casos y 77 controles</strong> (154 participantes en total) para alcanzar el 80 % de potencia.</p>
-            <p>Si el OR a detectar fuese más pequeño, por ejemplo \(\text{OR} = 1{,}8\), la proporción en casos sería \(p_1 \approx 0{,}435\), la diferencia se reduciría y el tamaño muestral aumentaría notablemente. Esta sensibilidad al OR hace especialmente importante definir con precisión el efecto mínimo clínicamente relevante antes de calcular el tamaño de muestra.</p>
+            <p>Con \(z_{\alpha/2} = 1{,}960\) y \(z_{\beta} = 0{,}842\), se aplica la fórmula de Fleiss para dos proporciones independientes:</p>
+            <p class="formula-line">\( n = \frac{\bigl(z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})} + z_{\beta}\sqrt{p_1(1-p_1)+p_2(1-p_2)}\bigr)^2}{(p_1-p_2)^2} \)</p>
+            <p>Con \(\bar{p} = (0{,}517+0{,}30)/2 = 0{,}4085\): el primer término es \(1{,}960\times\sqrt{2\times0{,}4085\times0{,}5915} = 1{,}960\times0{,}6951 = 1{,}362\); el segundo, \(0{,}842\times\sqrt{0{,}517\times0{,}483+0{,}30\times0{,}70} = 0{,}842\times\sqrt{0{,}4597} = 0{,}842\times0{,}6780 = 0{,}571\). La diferencia entre proporciones es \(p_1 - p_2 = 0{,}217\).</p>
+            <p class="formula-line">\( n = \frac{(1{,}362 + 0{,}571)^2}{(0{,}217)^2} = \frac{(1{,}933)^2}{0{,}04709} = \frac{3{,}736}{0{,}04709} \approx 79{,}3 \rightarrow 80 \)</p>
+            <p>Redondeando al entero superior, se necesitan <strong>80 casos y 80 controles</strong> (160 participantes en total) para alcanzar el 80 % de potencia.</p>
         </section>
 
         <section class="card content-card">

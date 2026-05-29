@@ -281,9 +281,18 @@ function calculateOnePropSampleSize() {
 
     const zAlpha = alternative === "two-sided" ? jStat.normal.inv(1 - alpha / 2, 0, 1) : jStat.normal.inv(1 - alpha, 0, 1);
     const zBeta = jStat.normal.inv(power, 0, 1);
-    const signedDelta = alternative === "less" ? -delta : delta;
-    const p1 = Math.min(0.9999, Math.max(0.0001, p0 + signedDelta));
-    const n = Math.ceil(Math.pow((zAlpha * Math.sqrt(p0 * (1 - p0)) + zBeta * Math.sqrt(p1 * (1 - p1))) / delta, 2));
+    let n;
+    if (alternative === "two-sided") {
+        const p1a = Math.min(0.9999, Math.max(0.0001, p0 + delta));
+        const p1b = Math.min(0.9999, Math.max(0.0001, p0 - delta));
+        const na = Math.ceil(Math.pow((zAlpha * Math.sqrt(p0 * (1 - p0)) + zBeta * Math.sqrt(p1a * (1 - p1a))) / delta, 2));
+        const nb = Math.ceil(Math.pow((zAlpha * Math.sqrt(p0 * (1 - p0)) + zBeta * Math.sqrt(p1b * (1 - p1b))) / delta, 2));
+        n = Math.max(na, nb);
+    } else {
+        const signedDelta = alternative === "less" ? -delta : delta;
+        const p1 = Math.min(0.9999, Math.max(0.0001, p0 + signedDelta));
+        n = Math.ceil(Math.pow((zAlpha * Math.sqrt(p0 * (1 - p0)) + zBeta * Math.sqrt(p1 * (1 - p1))) / delta, 2));
+    }
     const altText = alternative === "two-sided" ? "Ha: p ≠ p0" : (alternative === "greater" ? "Ha: p ≥ p0" : "Ha: p ≤ p0");
 
     resultEl.innerText = `n mínimo recomendado: ${n} observaciones para H0: p = ${p0} y ${altText}.`;

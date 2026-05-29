@@ -197,7 +197,7 @@
             </ul>
 
             <h3>Ejemplo sencillo</h3>
-            <p>Evaluación de una campaña de vacunación: <strong>p₀₁ = 0,18</strong> (se vacunan tras la campaña quienes no lo habían hecho), <strong>p₁₀ = 0,08</strong> (dejan de estar vacunados — muy improbable en la práctica). Con <strong>α = 0,05</strong> y potencia <strong>0,80</strong>, el resultado es <strong>≈ 205 pares</strong>.</p>
+            <p>Evaluación de una campaña de vacunación: <strong>p₀₁ = 0,18</strong> (se vacunan tras la campaña quienes no lo habían hecho), <strong>p₁₀ = 0,08</strong> (dejan de estar vacunados — muy improbable en la práctica). Con <strong>α = 0,05</strong> y potencia <strong>0,80</strong>, el resultado es <strong>≈ 202 pares</strong>.</p>
 
             <h3>Usos frecuentes</h3>
             <ul>
@@ -221,8 +221,8 @@
             <p>En el test de McNemar solo los pares discordantes aportan información. La proporción total de pares discordantes es \(p_d = p_{12} + p_{21} = 0{,}23\) y la diferencia entre proporciones discordantes es \(\Delta = |p_{12} - p_{21}| = 0{,}07\). Con \(z_{\alpha/2} = 1{,}960\) y \(z_{\beta} = 0{,}842\):</p>
             <p class="formula-line">\( n = \frac{\left(z_{\alpha/2}\sqrt{p_d} + z_{\beta}\sqrt{p_d - \Delta^2}\right)^2}{\Delta^2} \)</p>
             <p>Sustituyendo los valores: \(\sqrt{p_d} = \sqrt{0{,}23} \approx 0{,}4796\) y \(\sqrt{p_d - \Delta^2} = \sqrt{0{,}23 - 0{,}0049} = \sqrt{0{,}2251} \approx 0{,}4745\). Por tanto:</p>
-            <p class="formula-line">\( n = \frac{(1{,}960 \times 0{,}4796 + 0{,}842 \times 0{,}4745)^2}{0{,}07^2} = \frac{(0{,}9400 + 0{,}3995)^2}{0{,}0049} = \frac{(1{,}3395)^2}{0{,}0049} = \frac{1{,}7942}{0{,}0049} \approx 366 \)</p>
-            <p>Se necesitan <strong>366 pares</strong> de pacientes (cada uno evaluado con ambos métodos) para alcanzar el 80 % de potencia. Este tamaño elevado refleja que la diferencia a detectar (\(\Delta = 0{,}07\)) es pequeña en relación con la proporción de pares discordantes.</p>
+            <p class="formula-line">\( n = \frac{(1{,}960 \times 0{,}4796 + 0{,}842 \times 0{,}4745)^2}{0{,}07^2} = \frac{(0{,}9400 + 0{,}3995)^2}{0{,}0049} = \frac{(1{,}3395)^2}{0{,}0049} = \frac{1{,}7942}{0{,}0049} \approx 366{,}2 \rightarrow 367 \)</p>
+            <p>Se necesitan <strong>367 pares</strong> de pacientes (cada uno evaluado con ambos métodos) para alcanzar el 80 % de potencia. Este tamaño elevado refleja que la diferencia a detectar (\(\Delta = 0{,}07\)) es pequeña en relación con la proporción de pares discordantes.</p>
             <p>Si la diferencia esperada fuese mayor —por ejemplo \(p_{12} = 0{,}20\) y \(p_{21} = 0{,}08\), con \(\Delta = 0{,}12\)— el tamaño muestral se reduciría considerablemente, lo que ilustra la sensibilidad del test de McNemar al tamaño del efecto en los pares discordantes.</p>
         </section>
 
@@ -287,7 +287,9 @@ function calculatePairedPropSampleSize(){
 
  const zAlpha=jStat.normal.inv(1-(alpha/2),0,1);
  const zBeta=jStat.normal.inv(power,0,1);
- const n=Math.ceil((Math.pow(zAlpha+zBeta,2)*(p01+p10))/Math.pow(p10-p01,2));
+ const pd = p01 + p10;
+ const delta = Math.abs(p10 - p01);
+ const n = Math.ceil(Math.pow(zAlpha * Math.sqrt(pd) + zBeta * Math.sqrt(pd - delta * delta), 2) / (delta * delta));
 
  resultEl.innerText=`n mínimo recomendado: ${n} pares.`;
 }
