@@ -209,14 +209,34 @@
                 </ul>
             </p>
 
+            <h3>Simulación de Monte Carlo para el p-valor</h3>
+
             <p>
-                Dado que el estadístico \(W\) no posee una distribución de probabilidad cerrada bajo la hipótesis de normalidad,
-                su distribución se aproxima mediante simulación de Monte Carlo. Para ello se generan muchas muestras normales
-                \(N(0,1)\), ya que el valor de \(W\) es invariante a cambios de escala y traslación: solo importa el orden de los datos,
-                la forma de la distribución y la relación lineal entre los cuantiles normales teóricos y los datos observados.
-                En cada muestra simulada de tamaño \(n\) se calcula el estadístico \(W\), y con todos esos valores se construye una
-                distribución empírica. El valor observado \(W_{\text{obs}}\) se compara con esta distribución simulada para obtener
-                el p‑valor del test.
+                La distribución exacta del estadístico \(W\) bajo \(H_0\) no tiene una forma cerrada, por lo que el p-valor
+                se obtiene mediante simulación de Monte Carlo. El procedimiento es el siguiente:
+            </p>
+            <ol>
+                <li>Se genera una muestra aleatoria de tamaño \(n\) a partir de \(N(0,1)\). Puede usarse la normal estándar
+                    porque \(W\) es invariante a cambios de media y escala: solo depende de la <em>forma</em> de los datos ordenados,
+                    no de su nivel o dispersión.</li>
+                <li>Se calcula el estadístico \(W\) en esa muestra simulada.</li>
+                <li>Se repite \(B\) veces (por ejemplo, \(B = 5000\)). Con ello se obtiene una distribución empírica
+                    de \(W\) bajo \(H_0\): es decir, cómo se comportaría \(W\) si los datos realmente fueran normales.</li>
+                <li>El p-valor empírico se calcula como la fracción de simulaciones con \(W_{\text{sim}} \leq W_{\text{obs}}\):
+                    \[p\text{-valor} = \dfrac{\#\{W_{\text{sim}} \leq W_{\text{obs}}\}}{B}\]
+                    Un \(W\) observado muy pequeño (lejos de 1) caerá en la cola izquierda de la distribución simulada,
+                    dando un p-valor pequeño y llevando a rechazar la normalidad.</li>
+            </ol>
+            <p>
+                El histograma del gráfico muestra precisamente esa distribución empírica: las barras acumulan los \(B\) valores simulados
+                de \(W\). El marcador rojo señala el \(W\) observado en tu muestra; si cae en la cola izquierda (zona de valores bajos),
+                hay evidencia contra la normalidad. El marcador verde indica el valor crítico \(W_\alpha\): el percentil \(\alpha\)
+                de la distribución simulada, que es el umbral por debajo del cual se rechazaría \(H_0\).
+            </p>
+            <p>
+                La semilla aleatoria permite reproducir exactamente el mismo resultado: fijar la misma semilla garantiza
+                que las \(B\) muestras simuladas sean idénticas en distintas ejecuciones, lo que facilita compartir y verificar resultados.
+                Con valores grandes de \(B\) (\(\geq 5000\)) la variabilidad del p-valor empírico es pequeña y la estimación es fiable.
             </p>
 
 
@@ -260,12 +280,45 @@
         <section class="card content-card">
             <h3>Ejemplo resuelto</h3>
             <p>En un proceso de control de calidad se miden las dimensiones (en mm) de 10 piezas fabricadas: 23,1; 24,5; 22,8; 25,2; 24,1; 23,7; 24,9; 23,5; 25,0; 24,3. Se desea verificar, con \(\alpha = 0{,}05\), si estos datos son compatibles con una distribución normal.</p>
-            <p>Se ordenan los datos de menor a mayor: 22,8; 23,1; 23,5; 23,7; 24,1; 24,3; 24,5; 24,9; 25,0; 25,2. La media muestral es \(\bar{x} = 24{,}11\) mm y la suma de cuadrados de desviaciones respecto a la media es \(\sum(x_i - \bar{x})^2 = 6{,}069\).</p>
-            <p>El estadístico de Shapiro–Wilk combina los datos ordenados con los coeficientes tabulados \(a_i\) para \(n = 10\). Aplicando esos coeficientes a los pares simétricos de la muestra ordenada se obtiene la suma \(b = \sum a_i x_{(n+1-i)}\). El estadístico es:</p>
-            <p class="formula-line">\( W = \frac{b^2}{\sum_{i=1}^{n}(x_i - \bar{x})^2} \approx \frac{5{,}808}{6{,}069} \approx 0{,}957 \)</p>
-            <p>Para \(n = 10\) y \(W = 0{,}957\), el p-valor aproximado obtenido por interpolación en las tablas de Shapiro–Wilk es \(p \approx 0{,}80\).</p>
-            <p>Dado que \(p = 0{,}94 \gg 0{,}05 = \alpha\), no se rechaza \(H_0\). Un valor de \(W\) cercano a 1 indica que los datos se ajustan bien a una distribución normal; valores próximos a 0 indicarían fuertes desviaciones.</p>
-            <p>Conclusión: con un nivel de significación del 5 %, no hay evidencia estadística de que las dimensiones de las piezas no sigan una distribución normal. Este resultado permite aplicar con confianza herramientas paramétricas como gráficos de control \(\bar{x}\)-R o cartas de control basadas en la distribución normal en etapas posteriores del análisis de calidad.</p>
+
+            <p><strong>Paso 1 – Ordenar los datos, calcular la media y la suma de cuadrados</strong></p>
+            <p>Datos ordenados: 22,8; 23,1; 23,5; 23,7; 24,1; 24,3; 24,5; 24,9; 25,0; 25,2.</p>
+            <p>\(\bar{x} = \dfrac{22{,}8 + 23{,}1 + \cdots + 25{,}2}{10} = \dfrac{241{,}1}{10} = 24{,}11 \text{ mm}\)</p>
+            <p>\(\displaystyle SS = \sum_{i=1}^{10}(x_i - \bar{x})^2 = (22{,}8-24{,}11)^2 + \cdots + (25{,}2-24{,}11)^2 = 6{,}069\)</p>
+
+            <p><strong>Paso 2 – Calcular los coeficientes \(a_i\)</strong></p>
+            <p>Para cada posición \(i = 1, \ldots, n\) se obtiene el cuantil normal esperado \(m_i = \Phi^{-1}\!\left(\tfrac{i - 0{,}375}{n + 0{,}25}\right)\) y se normaliza: \(a_i = m_i / \lVert \mathbf{m} \rVert\), donde \(\lVert \mathbf{m} \rVert = \sqrt{\sum m_i^2}\).</p>
+            <p>Para \(n = 10\), \(\lVert \mathbf{m} \rVert \approx 2{,}821\) y los coeficientes (redondeados) son:</p>
+            <div class="table-wrap" style="overflow-x:auto;">
+            <table class="stat-table">
+              <thead><tr><th>\(i\)</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead>
+              <tbody>
+                <tr><td>\(m_i\)</td><td>−1,547</td><td>−1,002</td><td>−0,655</td><td>−0,375</td><td>−0,122</td><td>+0,122</td><td>+0,375</td><td>+0,655</td><td>+1,002</td><td>+1,547</td></tr>
+                <tr><td>\(a_i\)</td><td>−0,548</td><td>−0,355</td><td>−0,232</td><td>−0,133</td><td>−0,043</td><td>+0,043</td><td>+0,133</td><td>+0,232</td><td>+0,355</td><td>+0,548</td></tr>
+              </tbody>
+            </table>
+            </div>
+            <p>Nótese que los coeficientes son antisimétricos: \(a_{n+1-i} = -a_i\). Esto significa que el par simétrico \((x_{(1)}, x_{(10)})\) recibe el mismo coeficiente en valor absoluto, el mayor de todos.</p>
+
+            <p><strong>Paso 3 – Calcular el numerador</strong></p>
+            <p>Dado que los coeficientes son antisimétricos, la suma \(b = \sum_{i=1}^{n} a_i\,x_{(i)}\) es equivalente a sumar sobre los \(m = \lfloor n/2 \rfloor\) pares:</p>
+            <p class="formula-line">\(b = \sum_{i=1}^{m} a_i\bigl(x_{(n+1-i)} - x_{(i)}\bigr)\)</p>
+            <p>Sustituyendo los valores:</p>
+            <p>\(b = (-0{,}548)(22{,}8) + (-0{,}355)(23{,}1) + (-0{,}232)(23{,}5) + (-0{,}133)(23{,}7) + (-0{,}043)(24{,}1)\)</p>
+            <p>\(\phantom{b} + (0{,}043)(24{,}3) + (0{,}133)(24{,}5) + (0{,}232)(24{,}9) + (0{,}355)(25{,}0) + (0{,}548)(25{,}2)\)</p>
+            <p>\(b \approx -30{,}35 + 32{,}78 = 2{,}430\)</p>
+
+            <p><strong>Paso 4 – Estadístico \(W\)</strong></p>
+            <p class="formula-line">\(W = \dfrac{b^2}{SS} = \dfrac{2{,}430^2}{6{,}069} = \dfrac{5{,}905}{6{,}069} \approx 0{,}9730\)</p>
+            <p>Un valor de \(W = 0{,}9730\) es muy próximo a 1, lo que indica que los datos se alinean bien con el patrón esperado bajo normalidad.</p>
+
+            <p><strong>Paso 5 – p-valor mediante simulación Monte Carlo</strong></p>
+            <p>La calculadora genera \(B = 5000\) muestras normales \(N(0,1)\) de tamaño \(n = 10\), calcula \(W\) en cada una y estima el p-valor como la proporción de simulaciones con \(W \leq W_{\text{obs}}\):</p>
+            <p class="formula-line">\(p\text{-valor} = \dfrac{\#\{W_{\text{sim}} \leq 0{,}9730\}}{5000}\)</p>
+            <p>Para estos datos y la semilla por defecto (12345), la calculadora arroja \(p \approx 0{,}73\). Puedes reproducirlo exactamente introduciendo los datos en la calculadora con \(B = 5000\) y semilla 12345.</p>
+
+            <p><strong>Conclusión</strong></p>
+            <p>Dado que \(p \approx 0{,}73 \gg 0{,}05 = \alpha\), no se rechaza \(H_0\). Con un nivel de significación del 5 %, no hay evidencia estadística de que las dimensiones de las piezas no sigan una distribución normal. Este resultado permite aplicar con confianza herramientas paramétricas como gráficos de control \(\bar{x}\text{-}R\) en etapas posteriores del análisis de calidad.</p>
         </section>
 
         <section class="card content-card">
