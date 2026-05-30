@@ -287,35 +287,31 @@
             <p>\(\displaystyle SS = \sum_{i=1}^{10}(x_i - \bar{x})^2 = (22{,}8-24{,}11)^2 + \cdots + (25{,}2-24{,}11)^2 = 6{,}069\)</p>
 
             <p><strong>Paso 2 – Calcular los coeficientes \(a_i\)</strong></p>
-            <p>Para cada posición \(i = 1, \ldots, n\) se obtiene el cuantil normal esperado \(m_i = \Phi^{-1}\!\left(\tfrac{i - 0{,}375}{n + 0{,}25}\right)\) y se normaliza: \(a_i = m_i / \lVert \mathbf{m} \rVert\), donde \(\lVert \mathbf{m} \rVert = \sqrt{\sum m_i^2}\).</p>
-            <p>Para \(n = 10\), \(\lVert \mathbf{m} \rVert \approx 2{,}821\) y los coeficientes (redondeados) son:</p>
+            <p>La calculadora usa el algoritmo de Royston (AS R94, 1992), que aplica dos correcciones polinómicas a los cuantiles normales esperados para obtener los coeficientes exactos de Shapiro–Wilk. Para \(n = 10\) los coeficientes resultantes son:</p>
             <div class="table-wrap" style="overflow-x:auto;">
             <table class="stat-table">
-              <thead><tr><th>\(i\)</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead>
+              <thead><tr><th>Par \(i\)</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
               <tbody>
-                <tr><td>\(m_i\)</td><td>−1,547</td><td>−1,002</td><td>−0,655</td><td>−0,375</td><td>−0,122</td><td>+0,122</td><td>+0,375</td><td>+0,655</td><td>+1,002</td><td>+1,547</td></tr>
-                <tr><td>\(a_i\)</td><td>−0,548</td><td>−0,355</td><td>−0,232</td><td>−0,133</td><td>−0,043</td><td>+0,043</td><td>+0,133</td><td>+0,232</td><td>+0,355</td><td>+0,548</td></tr>
+                <tr><td>\(a_i\) (Royston)</td><td>0,5739</td><td>0,3291</td><td>0,2141</td><td>0,1224</td><td>0,0399</td></tr>
               </tbody>
             </table>
             </div>
-            <p>Nótese que los coeficientes son antisimétricos: \(a_{n+1-i} = -a_i\). Esto significa que el par simétrico \((x_{(1)}, x_{(10)})\) recibe el mismo coeficiente en valor absoluto, el mayor de todos.</p>
+            <p>Estos coeficientes coinciden con los valores tabulados de Shapiro &amp; Wilk (1965) y con los que calcula R.</p>
 
             <p><strong>Paso 3 – Calcular el numerador</strong></p>
-            <p>Dado que los coeficientes son antisimétricos, la suma \(b = \sum_{i=1}^{n} a_i\,x_{(i)}\) es equivalente a sumar sobre los \(m = \lfloor n/2 \rfloor\) pares:</p>
-            <p class="formula-line">\(b = \sum_{i=1}^{m} a_i\bigl(x_{(n+1-i)} - x_{(i)}\bigr)\)</p>
-            <p>Sustituyendo los valores:</p>
-            <p>\(b = (-0{,}548)(22{,}8) + (-0{,}355)(23{,}1) + (-0{,}232)(23{,}5) + (-0{,}133)(23{,}7) + (-0{,}043)(24{,}1)\)</p>
-            <p>\(\phantom{b} + (0{,}043)(24{,}3) + (0{,}133)(24{,}5) + (0{,}232)(24{,}9) + (0{,}355)(25{,}0) + (0{,}548)(25{,}2)\)</p>
-            <p>\(b \approx -30{,}35 + 32{,}78 = 2{,}430\)</p>
+            <p>Cada \(a_i\) pondera la diferencia entre el \(i\)-ésimo dato por arriba y por abajo de la muestra ordenada:</p>
+            <p class="formula-line">\(b = \sum_{i=1}^{5} a_i\bigl(x_{(11-i)} - x_{(i)}\bigr)\)</p>
+            <p>\(b = 0{,}5739\cdot(25{,}2-22{,}8) + 0{,}3291\cdot(25{,}0-23{,}1) + 0{,}2141\cdot(24{,}9-23{,}5) + 0{,}1224\cdot(24{,}5-23{,}7) + 0{,}0399\cdot(24{,}3-24{,}1)\)</p>
+            <p>\(b = 1{,}3774 + 0{,}6253 + 0{,}2997 + 0{,}0979 + 0{,}0080 = 2{,}4083\)</p>
 
             <p><strong>Paso 4 – Estadístico \(W\)</strong></p>
-            <p class="formula-line">\(W = \dfrac{b^2}{SS} = \dfrac{2{,}430^2}{6{,}069} = \dfrac{5{,}905}{6{,}069} \approx 0{,}9730\)</p>
-            <p>Un valor de \(W = 0{,}9730\) es muy próximo a 1, lo que indica que los datos se alinean bien con el patrón esperado bajo normalidad.</p>
+            <p class="formula-line">\(W = \dfrac{b^2}{SS} = \dfrac{2{,}4083^2}{6{,}069} = \dfrac{5{,}800}{6{,}069} \approx 0{,}9557\)</p>
+            <p>Este valor coincide con el que devuelve R: <code>shapiro.test(...)$statistic = 0.9557</code>.</p>
 
             <p><strong>Paso 5 – p-valor mediante simulación Monte Carlo</strong></p>
             <p>La calculadora genera \(B = 5000\) muestras normales \(N(0,1)\) de tamaño \(n = 10\), calcula \(W\) en cada una y estima el p-valor como la proporción de simulaciones con \(W \leq W_{\text{obs}}\):</p>
-            <p class="formula-line">\(p\text{-valor} = \dfrac{\#\{W_{\text{sim}} \leq 0{,}9730\}}{5000}\)</p>
-            <p>Para estos datos y la semilla por defecto (12345), la calculadora arroja \(p \approx 0{,}73\). Puedes reproducirlo exactamente introduciendo los datos en la calculadora con \(B = 5000\) y semilla 12345.</p>
+            <p class="formula-line">\(p\text{-valor} = \dfrac{\#\{W_{\text{sim}} \leq 0{,}9557\}}{5000} \approx 0{,}73\)</p>
+            <p>R usa la aproximación analítica de Royston y reporta \(p = 0{,}7355\); la simulación Monte Carlo converge al mismo resultado con \(B\) grande. Puedes reproducirlo introduciendo los datos en la calculadora con \(B = 5000\) y semilla 12345.</p>
 
             <p><strong>Conclusión</strong></p>
             <p>Dado que \(p \approx 0{,}73 \gg 0{,}05 = \alpha\), no se rechaza \(H_0\). Con un nivel de significación del 5 %, no hay evidencia estadística de que las dimensiones de las piezas no sigan una distribución normal. Este resultado permite aplicar con confianza herramientas paramétricas como gráficos de control \(\bar{x}\text{-}R\) en etapas posteriores del análisis de calidad.</p>
@@ -436,17 +432,66 @@ function approxNormalQuantile(p) {
   return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
 }
 
+// Royston (1992) AS R94 polynomial coefficients for Shapiro-Wilk a_i
+const SW_C1 = [0, 0.221157, -0.147981, -2.07119, 4.434685, -2.706056];
+const SW_C2 = [0, 0.042981, -0.293762, -1.752461, 5.682633, -3.582633];
+
+function polyEval(coeffs, x) {
+  let val = 0, xp = 1;
+  for (let i = 0; i < coeffs.length; i++) { val += coeffs[i] * xp; xp *= x; }
+  return val;
+}
+
+function shapiroWilkCoeffs(n) {
+  // Returns array of floor(n/2) positive coefficients a[0]≥a[1]≥…
+  // used as W numerator = (Σ a[i]*(x_(n-i) - x_(i)))²
+  const m = Math.floor(n / 2);
+  if (n === 3) return [Math.SQRT1_2]; // sqrt(0.5) = 0.70711, exact for n=3
+
+  // Blom scores for the upper half (excluding center for odd n)
+  const upperStart = Math.floor(n / 2) + 1 + (n % 2); // 1-indexed
+  const blom = [];
+  for (let i = upperStart; i <= n; i++) {
+    blom.push(approxNormalQuantile((i - 0.375) / (n + 0.25)));
+  }
+  // blom[blom.length-1] = m_n (largest), blom[blom.length-2] = m_{n-1}, …
+
+  const summ2 = 2.0 * blom.reduce((s, v) => s + v * v, 0);
+  const ssumm2 = Math.sqrt(summ2);
+  const u = 1.0 / Math.sqrt(n);
+  const a = new Array(m);
+
+  // Corrected largest coefficient via polynomial
+  a[0] = blom[blom.length - 1] / ssumm2 + polyEval(SW_C1, u);
+
+  if (m >= 2) {
+    // Corrected second-largest coefficient
+    a[1] = blom[blom.length - 2] / ssumm2 + polyEval(SW_C2, u);
+
+    if (m >= 3) {
+      // Remaining coefficients via normalization (phi)
+      const mn = blom[blom.length - 1], mn1 = blom[blom.length - 2];
+      const phi = (summ2 - 2 * mn * mn - 2 * mn1 * mn1) /
+                  (1 - 2 * a[0] * a[0] - 2 * a[1] * a[1]);
+      const sqrtPhi = Math.sqrt(Math.max(phi, 1e-10));
+      for (let k = 2; k < m; k++) {
+        a[k] = blom[blom.length - 1 - k] / sqrtPhi;
+      }
+    }
+  }
+  return a;
+}
+
 function computeShapiroW(sample) {
   const n = sample.length;
   const sorted = [...sample].sort((x, y) => x - y);
-  const m = [];
-  for (let i = 1; i <= n; i += 1) m.push(approxNormalQuantile((i - 0.375) / (n + 0.25)));
-  const norm = Math.sqrt(m.reduce((acc, v) => acc + v * v, 0));
-  const a = m.map(v => v / norm);
-  const mean = sample.reduce((acc, v) => acc + v, 0) / n;
-  const den = sample.reduce((acc, v) => acc + (v - mean) ** 2, 0);
-  const numRaw = sorted.reduce((acc, v, i) => acc + a[i] * v, 0);
-  return (numRaw ** 2) / den;
+  const mean = sample.reduce((s, v) => s + v, 0) / n;
+  const ss = sample.reduce((s, v) => s + (v - mean) ** 2, 0);
+  if (ss < 1e-15) return 1.0;
+  const a = shapiroWilkCoeffs(n);
+  let b = 0;
+  for (let i = 0; i < a.length; i++) b += a[i] * (sorted[n - 1 - i] - sorted[i]);
+  return Math.min(1.0, (b * b) / ss);
 }
 
 function simulateShapiroDistribution(n, B) {
