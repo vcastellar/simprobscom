@@ -23,25 +23,9 @@
     return document.documentElement.classList.contains('dark-mode');
   }
 
-  // Apply immediately (before paint) to avoid flash. Default is light.
-  var stored = getStored();
-  if (stored === 'dark') {
-    applyTheme(true);
-  } else {
-    applyTheme(false);
-  }
-
   function init() {
-    var nav = document.querySelector('.site-nav-links');
-    if (!nav) return;
-
-    var li = document.createElement('li');
-    li.style.cssText = 'display:flex;align-items:center;';
-
-    var btn = document.createElement('button');
-    btn.className = 'theme-btn';
-    btn.setAttribute('aria-label', 'Cambiar tema');
-    btn.title = 'Cambiar tema claro/oscuro';
+    var btn = document.querySelector('.site-nav-links .theme-btn');
+    if (!btn) return;
 
     function updateIcon() {
       btn.innerHTML = isDark()
@@ -57,9 +41,6 @@
       setStored(nowDark ? 'dark' : 'light');
       updateIcon();
     });
-
-    li.appendChild(btn);
-    nav.appendChild(li);
   }
 
   if (document.readyState === 'loading') {
