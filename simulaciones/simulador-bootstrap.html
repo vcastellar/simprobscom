@@ -642,7 +642,7 @@
     normal:      { mean: 5,      median: 5,      sd: 2       },
     exponential: { mean: 2,      median: 1.3863, sd: 2       },
     uniform:     { mean: 5,      median: 5,      sd: 2.8868  },
-    lognormal:   { mean: 3.0802, median: 2.7183, sd: 1.6487  }
+    lognormal:   { mean: 3.0802, median: 2.7183, sd: 1.6416  }
   };
 
   // Theoretical SE formulas for the mean (others are hard/unknown analytically)
@@ -665,9 +665,9 @@
         const fMed = lambda * Math.exp(-lambda * med);
         return 1 / (2 * fMed * Math.sqrt(n));
       }
-      // uniform [0,10]: SE of median = (b-a)/(2*sqrt(3)*sqrt(n)) [via order stats]
+      // uniform [0,10]: SE of median = 1/(2*f(median)*sqrt(n)), f(x)=1/(b-a)=1/10 → 5/sqrt(n)
       if (dist === 'uniform') {
-        return 10 / (2 * Math.sqrt(3) * Math.sqrt(n));
+        return 5 / Math.sqrt(n);
       }
       return null; // lognormal: no simple formula
     }
