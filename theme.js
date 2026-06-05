@@ -24,6 +24,8 @@
   }
 
   function init() {
+    if (!getStored()) setStored('light');
+
     var btn = document.querySelector('.site-nav-links .theme-btn');
     if (!btn) return;
 

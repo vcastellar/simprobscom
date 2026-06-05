@@ -26,7 +26,7 @@
   <meta name="twitter:title" content="Simulador de paseo aleatorio 1D y 2D | ProbLab">
   <meta name="twitter:description" content="Simulador interactivo de paseo aleatorio en 1D y 2D. Visualiza trayectorias, bandas de difusión ±2σ y el comportamiento √n.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../style_new.css?v=20260605">
+  <link rel="stylesheet" href="../style_new.css?v=20260606">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -271,7 +271,45 @@
     .faq-item:first-child { margin-top: 0; padding-top: 0; border-top: none; }
     .faq-item h3 { margin: 0 0 6px; font-size: 1rem; color: #1e293b; }
     .faq-item p  { margin: 0; font-size: 0.95rem; color: #334155; line-height: 1.7; }
+
+    /* ── application cards ── */
+    .app-card {
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .app-card h3 { margin: 0 0 8px; font-size: 0.97rem; color: #1e293b; }
+    .app-card p  { margin: 0; font-size: 0.9rem; color: #334155; line-height: 1.6; }
+    .app-card--indigo { background: rgba(79,70,229,0.06);  border: 1px solid rgba(79,70,229,0.18); }
+    .app-card--cyan   { background: rgba(8,145,178,0.06);  border: 1px solid rgba(8,145,178,0.20); }
+    .app-card--green  { background: rgba(22,163,74,0.06);  border: 1px solid rgba(22,163,74,0.20); }
+    .app-card--red    { background: rgba(220,38,38,0.06);  border: 1px solid rgba(220,38,38,0.20); }
+
+    /* ── dark mode overrides ── */
+    html.dark-mode .app-card h3,
+    html.dark-mode .faq-item h3,
+    html.dark-mode .chart-outer h3,
+    html.dark-mode .stat-cell .stat-val { color: var(--text-main); }
+
+    html.dark-mode .app-card p,
+    html.dark-mode .faq-item p,
+    html.dark-mode .result-box { color: var(--text-muted); }
+
+    html.dark-mode .stat-cell .stat-label { color: #94a3b8; }
+
+    html.dark-mode .app-card--indigo { background: rgba(79,70,229,0.18);  border-color: rgba(79,70,229,0.40); }
+    html.dark-mode .app-card--cyan   { background: rgba(8,145,178,0.18);  border-color: rgba(8,145,178,0.40); }
+    html.dark-mode .app-card--green  { background: rgba(22,163,74,0.18);  border-color: rgba(22,163,74,0.40); }
+    html.dark-mode .app-card--red    { background: rgba(220,38,38,0.18);  border-color: rgba(220,38,38,0.40); }
+
+    html.dark-mode .form-group select,
+    html.dark-mode .form-group input[type="number"] {
+      background: var(--surface);
+      color: var(--text-main);
+      border-color: rgba(148,163,184,0.3);
+    }
+    html.dark-mode #canvas2d { background: #1e293b; }
   </style>
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Navegación principal">
@@ -285,7 +323,14 @@
             <li><a href="../contrastes-hipotesis/">Contrastes</a></li>
             <li><a href="../ab-testing/">Test A/B</a></li>
             <li><a href="../simulaciones/">Simulaciones</a></li>
-        </ul>
+                    <li id="nav-search-li" style="display:flex;align-items:center;gap:4px">
+                <button class="search-btn" type="button" aria-label="Buscar herramienta (Ctrl+K)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span class="search-btn-text">Buscar</span><kbd class="search-btn-kbd">Ctrl K</kbd></button>
+                <button class="wz-nav-btn" type="button" aria-label="Asistente de selección de herramienta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span class="wz-nav-btn-text">¿Qué necesito?</span></button>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Cambiar tema" title="Cambiar tema claro/oscuro"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+</ul>
     </div>
 </nav>
 <div class="page-wrap">
@@ -581,21 +626,21 @@
     <section class="card content-card">
       <h2>Aplicaciones del paseo aleatorio</h2>
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px;">
-        <div style="background:rgba(79,70,229,0.04); border:1px solid rgba(79,70,229,0.12); border-radius:12px; padding:16px;">
-          <h3 style="margin:0 0 8px; font-size:0.97rem; color:#1e293b;">📈 Finanzas</h3>
-          <p style="margin:0; font-size:0.9rem; color:#334155; line-height:1.6;">La hipótesis del mercado eficiente de Eugene Fama (1970) propone que los precios de los activos siguen un paseo aleatorio, lo que implica que no se puede predecir el precio futuro a partir del historial. El modelo de Black-Scholes asume movimiento browniano geométrico para el precio subyacente.</p>
+        <div class="app-card app-card--indigo">
+          <h3>📈 Finanzas</h3>
+          <p>La hipótesis del mercado eficiente de Eugene Fama (1970) propone que los precios de los activos siguen un paseo aleatorio, lo que implica que no se puede predecir el precio futuro a partir del historial. El modelo de Black-Scholes asume movimiento browniano geométrico para el precio subyacente.</p>
         </div>
-        <div style="background:rgba(8,145,178,0.04); border:1px solid rgba(8,145,178,0.15); border-radius:12px; padding:16px;">
-          <h3 style="margin:0 0 8px; font-size:0.97rem; color:#1e293b;">🧬 Biología y ecología</h3>
-          <p style="margin:0; font-size:0.9rem; color:#334155; line-height:1.6;">El movimiento de microorganismos como bacterias se modela con paseos aleatorios. En ecología, la dispersión de semillas y animales sigue patrones de paseo aleatorio, aunque muchas especies usan estrategias más eficientes (vuelos de Lévy).</p>
+        <div class="app-card app-card--cyan">
+          <h3>🧬 Biología y ecología</h3>
+          <p>El movimiento de microorganismos como bacterias se modela con paseos aleatorios. En ecología, la dispersión de semillas y animales sigue patrones de paseo aleatorio, aunque muchas especies usan estrategias más eficientes (vuelos de Lévy).</p>
         </div>
-        <div style="background:rgba(22,163,74,0.04); border:1px solid rgba(22,163,74,0.15); border-radius:12px; padding:16px;">
-          <h3 style="margin:0 0 8px; font-size:0.97rem; color:#1e293b;">💻 Algoritmos e IA</h3>
-          <p style="margin:0; font-size:0.9rem; color:#334155; line-height:1.6;">El algoritmo de PageRank de Google se basa en el vector estacionario de un paseo aleatorio sobre el grafo de la web. El método MCMC (Markov Chain Monte Carlo) en estadística bayesiana explora distribuciones complejas mediante paseos aleatorios en el espacio de parámetros.</p>
+        <div class="app-card app-card--green">
+          <h3>💻 Algoritmos e IA</h3>
+          <p>El algoritmo de PageRank de Google se basa en el vector estacionario de un paseo aleatorio sobre el grafo de la web. El método MCMC (Markov Chain Monte Carlo) en estadística bayesiana explora distribuciones complejas mediante paseos aleatorios en el espacio de parámetros.</p>
         </div>
-        <div style="background:rgba(220,38,38,0.04); border:1px solid rgba(220,38,38,0.15); border-radius:12px; padding:16px;">
-          <h3 style="margin:0 0 8px; font-size:0.97rem; color:#1e293b;">⚛️ Física</h3>
-          <p style="margin:0; font-size:0.9rem; color:#334155; line-height:1.6;">La difusión de partículas cargadas en plasmas, la conducción de neutrones en reactores nucleares, la resistividad eléctrica en metales y la dinámica molecular en simulaciones computacionales utilizan el formalismo del paseo aleatorio.</p>
+        <div class="app-card app-card--red">
+          <h3>⚛️ Física</h3>
+          <p>La difusión de partículas cargadas en plasmas, la conducción de neutrones en reactores nucleares, la resistividad eléctrica en metales y la dinámica molecular en simulaciones computacionales utilizan el formalismo del paseo aleatorio.</p>
         </div>
       </div>
     </section>
@@ -1083,8 +1128,8 @@ function simulate2D() {
 
 document.getElementById('btn2d').addEventListener('click', simulate2D);
 </script>
-<script src="../search.js?v=20260605"></script>
-<script src="../wizard.js?v=20260605"></script>
-<script src="../theme.js?v=20260605"></script>
+<script src="../search.js?v=20260606"></script>
+<script src="../wizard.js?v=20260606"></script>
+<script src="../theme.js?v=20260606"></script>
 </body>
 </html>
