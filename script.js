@@ -1359,7 +1359,7 @@ function calculateSampleSize() {
             const n = Math.ceil(Math.pow((z * sigma) / e, 2));
 
             renderSampleSizeFormula("onemean", { z, sigma, e });
-            resultEl.innerText = `n mínimo recomendado: ${n} observations (one mean, ${Math.round(confidence * 100)}% de confianza).`;
+            resultEl.innerText = `n mínimo recomendado: ${n} observaciones (una media, ${Math.round(confidence * 100)}% de confianza).`;
             return;
         }
 
