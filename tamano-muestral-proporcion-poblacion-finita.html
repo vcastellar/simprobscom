@@ -146,6 +146,8 @@
     </header>
 
     <main>
+        <p class="tool-intro">Esta calculadora ajusta el tamaño de muestra para estimar una proporción cuando el universo total \(N\) es limitado, aplicando el factor de corrección por población finita.</p>
+
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
@@ -182,11 +184,10 @@
             <div id="finitePropResult" class="result-box">Resultado pendiente…</div>
         </section>
 
-        <section class="card content-card">
+                <section class="card content-card">
             <h3>Explicación</h3>
             <p>Cuando el tamaño de la población N es conocido y finito, la fórmula estándar de Cochran sobreestima el tamaño muestral necesario. El <strong>factor de corrección por población finita</strong> (FPC) corrige esto: cuanto mayor sea la fracción de muestreo n₀/N, mayor es la reducción obtenida.</p>
             <p>La corrección es significativa cuando la muestra sin corregir representa más del 5 % de la población total (n₀/N &gt; 0,05). Si N es muy grande (por ejemplo, &gt; 100 000) y n₀/N &lt; 5 %, la corrección prácticamente no cambia el resultado y puedes usar la <a href="tamano-muestral-una-proporcion.html">fórmula estándar para una proporción</a>.</p>
-
             <h3>Fórmula de tamaño muestral</h3>
             <p class="formula-line">\( n_0 = \frac{Z^2\,p(1-p)}{E^2} \)</p>
             <p class="formula-line">\( n = \frac{n_0}{1 + \dfrac{n_0-1}{N}} \)</p>
@@ -197,12 +198,8 @@
                 <li><strong>E</strong>: margen de error absoluto máximo.</li>
                 <li><strong>N</strong>: tamaño total conocido de la población.</li>
             </ul>
-
             <h3>Efecto del factor de corrección</h3>
             <p>El FPC es \(\sqrt{(N-n)/(N-1)}\). Para N = 500 y n₀ = 217, la corrección reduce la muestra a 145 (una reducción del 33 %). Para N = 10 000 y n₀ = 385, baja a 369 (menos del 5 % de reducción). La ganancia es mayor cuanto más pequeño es N y mayor es n₀/N.</p>
-        </section>
-
-        <section class="card content-card">
             <h3>Configuración rápida</h3>
             <ul>
                 <li><strong>p:</strong> si no conoces la proporción, usa 0,5 (escenario conservador).</li>
@@ -210,7 +207,6 @@
                 <li><strong>E:</strong> 0,05 (±5 %) es habitual en encuestas organizacionales; 0,03 si necesitas más precisión.</li>
                 <li><strong>Nivel de confianza:</strong> 95 % es el estándar.</li>
             </ul>
-
             <h3>Ejemplo resuelto</h3>
             <p>El área de Personas de una empresa de servicios quiere medir la proporción de empleados satisfechos con el plan de formación interno. La empresa tiene <strong>N = 2 000 empleados</strong> en nómina, un censo exactamente conocido y cerrado, lo que hace posible —y conveniente— aplicar la corrección por población finita.</p>
             <p>No existen datos históricos de satisfacción, por lo que se adopta la estimación más conservadora: <strong>p = 0,5</strong> (máxima varianza, que sobredimensiona el tamaño muestral). El margen de error admisible es <strong>E = 0,05</strong> (±5 puntos porcentuales) con un nivel de confianza del <strong>95 %</strong> (z = 1,96).</p>
@@ -220,7 +216,12 @@
             <p class="formula-line">\( n = \dfrac{n_0}{1 + \dfrac{n_0 - 1}{N}} = \dfrac{385}{1 + \dfrac{384}{2\,000}} = \dfrac{385}{1{,}192} \approx 322{,}9 \rightarrow \mathbf{323} \)</p>
             <p>La corrección permite reducir la muestra de 385 a <strong>323 encuestas</strong>, un ahorro de 62 entrevistas (≈ 16 %). La fracción de muestreo es \( f = 323/2\,000 \approx 16{,}2\,\% \), claramente superior al umbral del 5 % a partir del cual la corrección es recomendable.</p>
             <p>Con las 323 encuestas realizadas a empleados elegidos de forma aleatoria se puede afirmar, con un 95 % de confianza, que la proporción real de empleados satisfechos no se aleja en más de ±5 puntos porcentuales del valor muestral observado. Si se desea mayor precisión —por ejemplo, ±3 pp—, la muestra corregida ascendería a aproximadamente 638 empleados.</p>
-
+            <h3>Supuestos del modelo</h3>
+            <ul>
+                <li>Muestreo aleatorio simple sin reemplazamiento de una población de tamaño N conocido.</li>
+                <li>N es un número fijo y bien definido antes del muestreo.</li>
+                <li>La aproximación normal es válida para n·p ≥ 5 y n·(1−p) ≥ 5.</li>
+            </ul>
             <h3>Usos frecuentes</h3>
             <ul>
                 <li>Encuestas a plantillas de empresas o instituciones.</li>
@@ -228,21 +229,12 @@
                 <li>Auditorías de carteras de clientes, proveedores o registros cerrados.</li>
                 <li>Control de calidad sobre lotes o inventarios de tamaño conocido.</li>
             </ul>
-
-            <h3>Supuestos del modelo</h3>
-            <ul>
-                <li>Muestreo aleatorio simple sin reemplazamiento de una población de tamaño N conocido.</li>
-                <li>N es un número fijo y bien definido antes del muestreo.</li>
-                <li>La aproximación normal es válida para n·p ≥ 5 y n·(1−p) ≥ 5.</li>
-            </ul>
-        </section>
-
-        <section class="card content-card">
             <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) es el <strong>tamaño muestral mínimo corregido por población finita</strong> para estimar una proporción con el margen de error \(E\) y el nivel de confianza especificados. La corrección por población finita reduce el \(n\) respecto a la fórmula estándar para poblaciones infinitas: si la fracción de muestreo \(f = n/N < 5\,\%\), la reducción es prácticamente despreciable; si \(f > 20\,\%\), el ahorro es sustancial y la corrección es necesaria para no reclutar más individuos de los necesarios. En casos extremos (\(f > 50\,\%\)), considera si no es más eficiente realizar un censo completo.</p>
                 <p>La proporción \(p\) sigue siendo el parámetro más incierto. Si no tienes información previa, usa \(p = 0{,}5\) (escenario conservador). Es fundamental que \(N\) represente el <strong>tamaño real y verificado de la población objetivo</strong>: si estudias la satisfacción de los clientes activos de un negocio con 800 cuentas activas, \(N = 800\). Usar un \(N\) aproximado o incorrecto elimina la ventaja de la FPC. Realiza un análisis de sensibilidad variando \(p\) en ±0,10 y \(N\) en ±10 % para ver cómo cambia \(n\); cuando \(N\) es grande, la FPC es insensible a pequeños errores en \(N\), pero con \(N\) pequeño puede ser relevante.</p>
                 <p>Si prevés tasas de no respuesta, calcula el número de individuos a contactar como \(\lceil n / (1 - \text{tasa de no respuesta}) \rceil\), verificando que el total no supere \(N\). Una vez recogidos los datos, construye el intervalo de confianza real con la <a href="intervalo-confianza-proporcion.html">calculadora de IC para una proporción</a>; si la fracción de muestreo fue significativa (\(f > 5\,\%\)), aplica también la FPC en el cálculo del IC para obtener una estimación más precisa.</p>
         </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>

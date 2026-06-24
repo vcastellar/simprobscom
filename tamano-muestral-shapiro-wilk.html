@@ -141,6 +141,8 @@
     </header>
 
     <main>
+        <p class="tool-intro">Estima el número de observaciones para que el test de Shapiro–Wilk detecte desviaciones de la normalidad con la potencia objetivo, usando la aproximación de Jarque–Bera.</p>
+
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
@@ -192,11 +194,10 @@
             </div>
         </section>
 
-        <section class="card content-card">
+                <section class="card content-card">
             <h3>Explicación</h3>
             <p>El test de Shapiro–Wilk contrasta la hipótesis nula de que una muestra proviene de una distribución normal. Su potencia depende de cuánto difiere la distribución real (alternativa) de la normal, y esa diferencia se cuantifica principalmente mediante la <strong>asimetría</strong> (\(\gamma_1\)) y la <strong>curtosis en exceso</strong> (\(\gamma_2\)) de la distribución alternativa. Para la distribución normal, \(\gamma_1 = 0\) y \(\gamma_2 = 0\).</p>
             <p>Dado que el test de Shapiro–Wilk no dispone de una fórmula analítica de potencia en función de \(n\), esta calculadora utiliza la <strong>aproximación de Jarque–Bera</strong>, que combina asimetría y curtosis en un estadístico ómnibus cuya distribución bajo \(H_0\) es asintóticamente \(\chi^2(2)\). Esta aproximación proporciona una estimación del n necesario que es <em>conservadora</em>: el n real requerido con Shapiro–Wilk suele ser menor, ya que SW aprovecha más información de la muestra que el test JB.</p>
-
             <h3>Fórmula de potencia (aproximación Jarque–Bera)</h3>
             <p>Bajo la alternativa con parámetros de forma \(\gamma_1\) y \(\gamma_2\), el parámetro de no centralidad del estadístico Jarque–Bera para una muestra de tamaño \(n\) es:</p>
             <p class="formula-line">\( \lambda(n) = n \left(\frac{\gamma_1^2}{6} + \frac{\gamma_2^2}{24}\right) \)</p>
@@ -205,9 +206,6 @@
             <p>La distribución chi-cuadrado no central se evalúa mediante la mezcla de Poisson de chi-cuadrados centrales:</p>
             <p class="formula-line">\( F_{\chi^2(df,\lambda)}(x) = \sum_{k=0}^{\infty} \frac{e^{-\lambda/2}(\lambda/2)^k}{k!} \cdot F_{\chi^2(df+2k)}(x) \)</p>
             <p>La calculadora busca el mínimo entero \(n \geq 3\) para el que la potencia calculada supera el objetivo.</p>
-        </section>
-
-        <section class="card content-card">
             <h3>Distribuciones de referencia</h3>
             <p>La siguiente tabla muestra los momentos y el tamaño muestral aproximado para detectar no-normalidad con potencia del 80 % y \(\alpha = 0{,}05\) (aproximación JB).</p>
             <div class="content-table-wrap">
@@ -261,7 +259,6 @@
                 </table>
             </div>
             <p style="font-size:0.875rem; color:var(--text-muted);">Los valores de n son estimaciones basadas en la aproximación JB. El test de Shapiro–Wilk suele requerir muestras menores en la práctica.</p>
-
             <h3>Configuración rápida</h3>
             <ul>
                 <li><strong>Distribución alternativa desconocida:</strong> si no tienes información sobre γ₁ y γ₂, usa los valores de la distribución más parecida en la tabla anterior o aplica uno de los presets.</li>
@@ -270,9 +267,6 @@
                 <li><strong>Alfa:</strong> 0,05 es el estándar. En estudios confirmatorios donde la normalidad es un supuesto crítico, considera α = 0,10 para ganar potencia.</li>
                 <li><strong>Potencia:</strong> 0,80 es el mínimo habitual. Para estudios donde el incumplimiento de normalidad tiene consecuencias graves, usa 0,90.</li>
             </ul>
-        </section>
-
-        <section class="card content-card">
             <h3>Ejemplo resuelto</h3>
             <p>Un investigador espera que los tiempos de respuesta en un experimento sigan una distribución exponencial (\(\gamma_1 = 2\), \(\gamma_2 = 6\)). Quiere planificar su estudio de forma que, si los datos realmente provienen de una exponencial, el test de Shapiro–Wilk rechace la normalidad al menos el 80 % de las veces con \(\alpha = 0{,}05\).</p>
             <p><strong>Paso 1 — Parámetro de no centralidad:</strong></p>
@@ -282,14 +276,19 @@
             <p class="formula-line">\( \lambda(10) = 10 \times 2{,}1\overline{6} \approx 21{,}67 \)</p>
             <p class="formula-line">\( 1 - \beta \approx 1 - F_{\chi^2(2,\,21{,}67)}(5{,}991) \approx 0{,}83 \geq 0{,}80 \checkmark \)</p>
             <p>Con tan solo <strong>n = 10 observaciones</strong> se supera la potencia objetivo del 80 %. Esto refleja que la distribución exponencial se aleja mucho de la normal (asimetría y curtosis elevadas), por lo que es fácilmente detectable. Puedes verificarlo pulsando el preset "Exponencial" en la calculadora.</p>
-        </section>
-
-        <section class="card content-card">
+            <h3>Supuestos del modelo</h3>
+            <ul>
+                <li>Muestra aleatoria de observaciones independientes de una única variable continua.</li>
+                <li>Se contrasta la hipótesis nula de normalidad frente a una alternativa con asimetría y/o curtosis dadas.</li>
+                <li>La potencia se aproxima mediante el estadístico de Jarque–Bera.</li>
+                <li>Apropiado para tamaños de muestra de pequeños a moderados.</li>
+            </ul>
             <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) es la <strong>cota inferior del tamaño muestral</strong> recomendado para que el test de Shapiro-Wilk (SW) detecte la desviación de normalidad especificada con la potencia deseada. La fórmula empleada usa la aproximación de Jarque-Bera, que tiende a ser conservadora; el SW es generalmente más potente que JB y puede detectar no-normalidad con muestras algo menores. Redondea siempre hacia arriba. Si prevés pérdidas de datos, divide \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener el reclutamiento necesario. Ten en cuenta que el SW solo está diseñado para \(3 \leq n \leq 5000\); para \(n > 5000\) no es aplicable directamente.</p>
                 <p>La potencia de SW para detectar no-normalidad depende del tipo de desviación y del \(n\): el test es especialmente potente frente a distribuciones simétricas con colas pesadas (leptocúrticas) o con colas ligeras (platocúrticas), y algo menos eficaz para distribuciones asimétricas moderadas con muestras pequeñas. Para \(n < 8\), la potencia de SW es muy baja independientemente del efecto; si tu muestra es muy pequeña, los tests de normalidad tienen poca utilidad práctica y es preferible apoyarse en el diseño y los gráficos (histograma, Q-Q plot). Realiza un <em>análisis de sensibilidad</em> variando el parámetro de asimetría o curtosis objetivo para ver cuánto cambia el \(n\) requerido.</p>
                 <p>Si el \(n\) calculado supera 5000, el test SW no es aplicable y deberías usar alternativas como Kolmogorov-Smirnov (con la corrección de Lilliefors para parámetros estimados), Anderson-Darling, o simplemente evaluar la normalidad mediante métodos gráficos (Q-Q plot, histograma). Con muestras grandes, recuerda que el p-valor del test de normalidad se vuelve muy sensible a desviaciones triviales; en ese contexto, la pregunta relevante no es «¿son los datos exactamente normales?» sino «¿se alejan tanto de la normalidad que el procedimiento estadístico se ve comprometido?». Con los datos recogidos, realiza el contraste de normalidad con la <a href="shapiro-wilk-normalidad.html">calculadora de Shapiro-Wilk</a> e interpreta el resultado junto con el Q-Q plot.</p>
         </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>

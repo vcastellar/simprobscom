@@ -146,6 +146,8 @@
     </header>
 
     <main>
+        <p class="tool-intro">Esta herramienta estima el tamaño mínimo de muestra para contrastar si una proporción difiere de un valor de referencia con la potencia que elijas, controlando a la vez el error de tipo I y el de tipo II.</p>
+
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
@@ -187,7 +189,7 @@
             <div id="onePropResult" class="result-box">Resultado pendiente…</div>
         </section>
 
-        <section class="card content-card">
+                <section class="card content-card">
             <h3>Explicación</h3>
             <p>Esta calculadora estima el tamaño muestral para contrastar una proporción con hipótesis nula \(H_0: p=p_0\), nivel de significación \(\alpha\), potencia \(1-\beta\) y diferencia mínima detectable \(\Delta=|p_1-p_0|\).</p>
             <p>Permite alternativas bilateral (\(H_a: p\neq p_0\)) o unilateral (\(H_a: p\geq p_0\), \(H_a: p\leq p_0\)).</p>
@@ -199,9 +201,6 @@
                 <li><strong>\(p_1\)</strong>: proporción bajo alternativa (según \(\Delta\) y dirección).</li>
                 <li><strong>\(1-\beta\)</strong>: potencia objetivo.</li>
             </ul>
-        </section>
-
-        <section class="card content-card">
             <h3>Configuración rápida</h3>
             <ul>
                 <li><strong>p0:</strong> valor nulo que quieres contrastar.</li>
@@ -212,14 +211,6 @@
             </ul>
             <h3>Ejemplo sencillo</h3>
             <p>Si \(p_0=0{,}20\), \(\Delta=0{,}05\), \(\alpha=0{,}05\) y potencia 0,80, el tamaño muestral requerido es del orden de cientos de observaciones.</p>
-            <h3>Supuestos del modelo</h3>
-            <ul>
-                <li>Muestreo aleatorio e independencia.</li>
-                <li>Aproximación normal válida para la proporción en el rango de n planificado.</li>
-            </ul>
-        </section>
-
-        <section class="card content-card">
             <h3>Ejemplo resuelto</h3>
             <p>Una empresa de servicios quiere evaluar si su tasa de satisfacción de clientes ha cambiado respecto al valor histórico de referencia del 30 %. El departamento de calidad plantea el contraste bilateral \(H_0: p = 0{,}30\) frente a \(H_a: p \neq 0{,}30\), y considera que detectar un cambio de al menos 10 puntos porcentuales (hasta \(p_1 = 0{,}40\)) es relevante para la toma de decisiones. Se fija una potencia del 80 % (\(z_\beta = 0{,}842\)) y \(\alpha = 0{,}05\) bilateral (\(z_{\alpha/2} = 1{,}960\)).</p>
             <p>La fórmula para el contraste de una proporción utiliza las varianzas bajo \(H_0\) y bajo \(H_1\) por separado. Calculamos los términos paso a paso:</p>
@@ -229,9 +220,11 @@
             <p>Se necesitan <strong>172 encuestados</strong> para que el contraste tenga un 80 % de probabilidad de detectar un cambio real de 10 pp en la satisfacción, controlando el error tipo I al 5 %. Si la campaña de satisfacción ha elevado realmente la proporción al 40 %, el test lo detectará en 8 de cada 10 aplicaciones del procedimiento.</p>
             <p>Interpretación práctica: si tras recoger 172 respuestas se obtiene \(\hat{p} = 0{,}40\) o más, el contraste concluirá que la proporción ha cambiado significativamente respecto al 30 % histórico. Con menos de 172 respuestas, el estudio estaría infrapotenciado y correría el riesgo de no detectar la mejora aunque sea real.</p>
             <p><strong>Escenario con mayor exigencia estadística (\(\alpha = 0{,}01\)):</strong> si la empresa decide ser más conservadora frente a falsos positivos y usa \(\alpha = 0{,}01\) (\(z_{\alpha/2} = 2{,}576\)), manteniendo la misma potencia del 80 %: \( n = ((2{,}576 \times 0{,}4583 + 0{,}842 \times 0{,}4899) / 0{,}10)^2 = (1{,}1806 + 0{,}4125)^2 / 0{,}01 = (15{,}931)^2 = 253{,}8 \rightarrow n = 254 \). El paso de \(\alpha = 0{,}05\) a \(\alpha = 0{,}01\) requiere un 48 % más de respuestas para mantener la misma potencia.</p>
-        </section>
-
-        <section class="card content-card">
+            <h3>Supuestos del modelo</h3>
+            <ul>
+                <li>Muestreo aleatorio e independencia.</li>
+                <li>Aproximación normal válida para la proporción en el rango de n planificado.</li>
+            </ul>
             <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) es el <strong>número mínimo de observaciones válidas</strong> para que el contraste \(H_0\!: p = p_0\) frente a la alternativa especificada tenga la potencia \((1-\beta)\) al nivel \(\alpha\). Redondea siempre hacia arriba. Si prevés que algunos encuestados no completarán el cuestionario o serán excluidos por criterios de inclusión, divide \(n\) entre \((1 - \text{tasa de no respuesta})\) para obtener el número de individuos a contactar; con un 20 % de no respuesta esperada, planifica \(\lceil n / 0{,}80 \rceil\) contactos.</p>
                 <p>Los parámetros que más influyen en \(n\) son la diferencia \(\Delta = |p_1 - p_0|\) y la proporción bajo la alternativa \(p_1\). La función de varianza \(p(1-p)\) es máxima en \(p = 0{,}5\), así que cuando tanto \(p_0\) como \(p_1\) se alejan de 0,5, el \(n\) disminuye. Reducir \(\Delta\) a la mitad incrementa \(n\) aproximadamente cuatro veces; aumentar la potencia del 80 % al 90 % lo incrementa en torno a un 30 %. La elección entre contraste bilateral y unilateral también importa: un contraste unilateral requiere menor \(n\) para la misma potencia, pero solo está justificado si el efecto puede producirse únicamente en una dirección. Realiza un <em>análisis de sensibilidad</em> variando \(p_0\) y \(p_1\) en ±0,05 para evaluar la robustez del diseño.</p>

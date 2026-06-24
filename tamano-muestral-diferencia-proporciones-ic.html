@@ -141,6 +141,8 @@
     </header>
 
     <main>
+        <p class="tool-intro">Estima cuántas observaciones por grupo necesitas para que el intervalo de confianza de la diferencia entre dos proporciones tenga la precisión (margen de error) que fijes. Es un enfoque por <strong>estimación</strong>, no por contraste.</p>
+
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
@@ -178,12 +180,11 @@
             <div id="dp2Result" class="result-box">Resultado pendiente…</div>
         </section>
 
-        <section class="card content-card">
+                <section class="card content-card">
             <h3>Explicación</h3>
             <p>Esta calculadora determina el número mínimo de observaciones <em>por grupo</em> para estimar la diferencia \(p_1 - p_2\) entre dos proporciones independientes con un margen de error absoluto máximo \(E\) y un nivel de confianza dado. Es el punto de partida para planificar estudios comparativos entre dos grupos antes de recoger los datos.</p>
             <p>Los dos parámetros clave son las proporciones esperadas en cada grupo. Si no dispones de estimaciones previas, el escenario conservador es \(p_1 = p_2 = 0{,}5\), que maximiza la suma \(p_1(1-p_1) + p_2(1-p_2)\) y por tanto el tamaño muestral. En la práctica, usar proporciones informadas de datos piloto o literatura reduce considerablemente la muestra necesaria.</p>
             <p>La fórmula asume asignación equilibrada (mismo número de sujetos en cada grupo) y muestreo aleatorio de dos poblaciones muy grandes. El margen de error \(E\) se aplica a la diferencia \(p_1-p_2\), no a cada proporción por separado.</p>
-
             <h3>Fórmula de tamaño muestral</h3>
             <p class="formula-line">\( n = \frac{Z^2 \cdot \left[p_1(1-p_1) + p_2(1-p_2)\right]}{E^2} \)</p>
             <ul>
@@ -192,12 +193,8 @@
                 <li><strong>\(p_1, p_2\)</strong>: proporciones esperadas en cada grupo.</li>
                 <li><strong>E</strong>: margen de error absoluto máximo para la diferencia \(p_1 - p_2\).</li>
             </ul>
-
             <h3>Interpretación del margen de error</h3>
             <p>Un margen \(E = 0{,}10\) significa que la diferencia estimada \(\hat{p}_1 - \hat{p}_2\) puede diferir del valor poblacional real \(p_1 - p_2\) en como mucho ±10 puntos porcentuales con la confianza elegida. Si la diferencia esperada entre grupos es pequeña, el margen de error debe serlo también, lo que requiere muestras más grandes. Compara siempre el margen de error con la diferencia real esperada: un E mayor que esa diferencia hace el estudio inútil para detectarla.</p>
-        </section>
-
-        <section class="card content-card">
             <h3>Configuración rápida</h3>
             <ul>
                 <li><strong>p₁ y p₂:</strong> tómalas de datos piloto o de la literatura. Si no tienes información, usa ambas en 0,5.</li>
@@ -206,7 +203,6 @@
                 <li><strong>Pérdidas esperadas:</strong> divide n por grupo entre (1 − tasa de pérdida). Con 15 % de abandono: n_reclutar = n / 0,85.</li>
                 <li><strong>Desigualdad entre grupos:</strong> si necesitas un número diferente en cada grupo, la fórmula con ratio de asignación k = n₂/n₁ es más adecuada.</li>
             </ul>
-
             <h3>Ejemplo resuelto</h3>
             <p>Un investigador quiere estimar la diferencia en la tasa de adherencia a tratamiento entre dos intervenciones: la intervención A tiene una adherencia esperada de \(p_1 = 0{,}60\) y la B de \(p_2 = 0{,}40\), según datos de estudios similares. Se fija un margen de error de \(E = 0{,}10\) (±10 pp) con nivel de confianza del 95 % (\(Z = 1{,}960\)).</p>
             <p>Aplicamos la fórmula:</p>
@@ -214,15 +210,6 @@
             <p>Se necesitan <strong>185 participantes por grupo</strong>, es decir <strong>370 en total</strong>. Con una tasa de abandono esperada del 12 %, el número a reclutar por grupo es 185 / 0,88 ≈ 210, y el total a reclutar 420.</p>
             <p><strong>Análisis de sensibilidad:</strong> si el margen se reduce a ±5 pp (E = 0,05), la muestra sube a n = 3,8416 × 0,48 / 0,0025 = 737 por grupo (1 474 total). Definir bien el margen es crítico para la viabilidad del estudio.</p>
             <p><strong>Escenario conservador:</strong> sin información previa (\(p_1 = p_2 = 0{,}5\)), con E = 0,10: n = 3,8416 × 0,50 / 0,01 = 193 por grupo.</p>
-
-            <h3>Usos frecuentes</h3>
-            <ul>
-                <li>Comparación de tasas de satisfacción, adherencia o conversión entre dos grupos o segmentos.</li>
-                <li>Estimación de la diferencia en prevalencia entre dos poblaciones (hombres vs. mujeres, regiones, periodos).</li>
-                <li>Diseño de encuestas comparativas antes/después en estudios epidemiológicos transversales.</li>
-                <li>Planificación de experimentos A/B descriptivos donde el objetivo es caracterizar la diferencia, no contrastar hipótesis.</li>
-            </ul>
-
             <h3>Supuestos del modelo</h3>
             <ul>
                 <li>Muestreo aleatorio simple e independiente en dos poblaciones muy grandes.</li>
@@ -230,14 +217,19 @@
                 <li>La aproximación normal es adecuada cuando \(n_i \hat{p}_i \geq 5\) y \(n_i(1-\hat{p}_i) \geq 5\) en ambos grupos.</li>
                 <li>Asignación equilibrada 1:1. Si se necesitan grupos de distinto tamaño, ajusta la fórmula con el ratio de asignación.</li>
             </ul>
-        </section>
-
-        <section class="card content-card">
+            <h3>Usos frecuentes</h3>
+            <ul>
+                <li>Comparación de tasas de satisfacción, adherencia o conversión entre dos grupos o segmentos.</li>
+                <li>Estimación de la diferencia en prevalencia entre dos poblaciones (hombres vs. mujeres, regiones, periodos).</li>
+                <li>Diseño de encuestas comparativas antes/después en estudios epidemiológicos transversales.</li>
+                <li>Planificación de experimentos A/B descriptivos donde el objetivo es caracterizar la diferencia, no contrastar hipótesis.</li>
+            </ul>
             <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) es el <strong>mínimo de observaciones válidas por grupo</strong> para que el intervalo de confianza de la diferencia \(p_1 - p_2\) tenga un semiancho máximo de \(E\) con el nivel de confianza elegido. En un diseño balanceado, el número total de participantes a reclutar es \(2n\). Redondea siempre hacia arriba y añade el margen por pérdidas dividiendo entre \((1 - \text{tasa de abandono})\) por grupo; con un 10 % de abandono esperado, planifica \(\lceil n / 0{,}90 \rceil\) individuos por grupo.</p>
                 <p>Las proporciones \(p_1\) y \(p_2\) son los parámetros más críticos e inciertos. La varianza de la diferencia depende de \(p_1(1-p_1) + p_2(1-p_2)\), que es máxima cuando ambas están cerca de 0,5. Realiza un <em>análisis de sensibilidad</em> variando \(p_1\) y \(p_2\) en ±0,10 alrededor de los valores esperados: cuando ambas sean extremas (\(&lt;0{,}10\) o \(&gt;0{,}90\)), la varianza disminuye y el \(n\) puede ser menor de lo que se esperaría intuitivamente. Si no tienes información previa, usa \(p_1 = p_2 = 0{,}5\) para el escenario más conservador. También evalúa distintos valores de \(E\): reducir el margen de error a la mitad cuadruplica \(n\).</p>
                 <p>Este enfoque (IC) difiere del de contraste de hipótesis: aquí el objetivo es <em>estimar</em> la magnitud de la diferencia con cierta precisión, no decidir si existe. Si lo que necesitas es detectar si \(p_1 \neq p_2\) con determinada potencia, usa la <a href="tamano-muestral-dos-proporciones.html">calculadora de contraste para dos proporciones</a>. Una vez recogidos los datos, construye el IC real con la <a href="intervalo-confianza-diferencia-proporciones.html">calculadora de intervalo de confianza para diferencia de proporciones</a>. Si las frecuencias esperadas en alguna celda son pequeñas (&lt; 5), considera el <a href="tamano-muestral-fisher.html">test exacto de Fisher</a>.</p>
         </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>

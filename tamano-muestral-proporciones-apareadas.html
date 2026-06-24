@@ -146,6 +146,8 @@
     </header>
 
     <main>
+        <p class="tool-intro">Calcula cuántos pares necesitas para detectar un cambio en una respuesta binaria medida dos veces sobre los mismos sujetos (diseño antes/después), basándose en el test de McNemar.</p>
+
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
@@ -179,12 +181,11 @@
             <div id="pairedPropResult" class="result-box">Resultado pendiente…</div>
         </section>
 
-        <section class="card content-card">
+                <section class="card content-card">
             <h3>Explicación</h3>
             <p>Para datos binarios apareados (sí/no medido dos veces en la misma unidad), el contraste adecuado es el <strong>test de McNemar</strong>. Su lógica central es que los <em>pares concordantes</em> (0→0 y 1→1) no aportan información sobre el cambio: solo los <strong>pares discordantes</strong> determinan si la intervención tiene efecto.</p>
             <p>Los pares discordantes son de dos tipos: \(p_{01}\) (la respuesta cambió de negativa a positiva, 0→1) y \(p_{10}\) (cambió de positiva a negativa, 1→0). El efecto de interés es la diferencia \(p_{10} - p_{01}\): si la intervención es efectiva, \(p_{10}\) será mayor que \(p_{01}\) (más sujetos pasan a respuesta negativa bajo el tratamiento, o viceversa según el diseño).</p>
             <p>La eficiencia del diseño apareado frente al de dos grupos independientes depende de la concordancia: cuantos más pares concordantes (sujetos que no cambian), el apareo ayuda menos porque esos pares quedan excluidos del análisis efectivo.</p>
-
             <h3>Fórmula de tamaño muestral</h3>
             <p class="formula-line">\( n = \left\lceil\frac{\left(Z_{\alpha/2}\sqrt{p_d}+Z_\beta\sqrt{p_d-\Delta^2}\right)^2}{\Delta^2}\right\rceil \)</p>
             <p style="font-size:0.9em;color:var(--text-muted)">donde \(p_d = p_{01}+p_{10}\) y \(\Delta = |p_{10}-p_{01}|\). Fórmula de Connett <em>et al.</em> (1987), más precisa que la aproximación de Fleiss.</p>
@@ -194,9 +195,6 @@
                 <li><strong>p₁₀</strong>: probabilidad de que un par cambie de 1 a 0 (respuesta positiva → negativa).</li>
                 <li><strong>Nota:</strong> el denominador \((p_{10}-p_{01})^2\) requiere \(p_{10} \neq p_{01}\); si son iguales, no hay efecto que detectar.</li>
             </ul>
-        </section>
-
-        <section class="card content-card">
             <h3>Configuración rápida</h3>
             <ul>
                 <li><strong>p₀₁ y p₁₀:</strong> deben estimarse de un piloto o de datos históricos. Si solo tienes la prevalencia antes (p_antes) y el efecto esperado, necesitas hacer suposiciones sobre la estructura de pares.</li>
@@ -204,27 +202,8 @@
                 <li><strong>Relación con prevalencias:</strong> p_antes = p₁₀ + p₁₁ (concordantes positivos); p_después = p₀₁ + p₁₁. Si conoces ambas prevalencias y una de las p discordantes, puedes calcular la otra.</li>
                 <li><strong>Alfa y potencia:</strong> 0,05 y 0,80 son la base estándar.</li>
             </ul>
-
             <h3>Ejemplo sencillo</h3>
             <p>Evaluación de una campaña de vacunación: <strong>p₀₁ = 0,18</strong> (se vacunan tras la campaña quienes no lo habían hecho), <strong>p₁₀ = 0,08</strong> (dejan de estar vacunados — muy improbable en la práctica). Con <strong>α = 0,05</strong> y potencia <strong>0,80</strong>, el resultado es <strong>≈ 202 pares</strong>.</p>
-
-            <h3>Usos frecuentes</h3>
-            <ul>
-                <li>Evaluación de adherencia a tratamiento o comportamiento antes/después de una intervención.</li>
-                <li>Comparación de diagnóstico binario de dos observadores o en dos momentos.</li>
-                <li>Estudios de cambio en variables dicotómicas (sí/no, positivo/negativo) en el mismo individuo.</li>
-                <li>Diseños cruzados con resultado binario.</li>
-            </ul>
-
-            <h3>Supuestos del modelo</h3>
-            <ul>
-                <li>Los pares son independientes entre sí.</li>
-                <li>Dentro de cada par, las dos observaciones pueden estar correlacionadas (es el punto de la prueba de McNemar).</li>
-                <li>Los valores de p₀₁ y p₁₀ se estiman correctamente; errores en ellos impactan directamente en el n calculado.</li>
-            </ul>
-        </section>
-
-        <section class="card content-card">
             <h3>Ejemplo resuelto</h3>
             <p>Un equipo de diagnóstico clínico quiere comparar un nuevo método de detección de una enfermedad infecciosa frente al método estándar actual. En cada paciente se aplican ambas pruebas, formando así pares. De un estudio piloto con 100 pacientes se observa que el 15 % de los pares son discordantes de tipo «nuevo+/estándar−» (\(p_{12} = 0{,}15\)) y el 8 % son discordantes de tipo «nuevo−/estándar+» (\(p_{21} = 0{,}08\)). El objetivo es detectar esta diferencia con \(\alpha = 0{,}05\) bilateral y potencia del 80 %.</p>
             <p>En el test de McNemar solo los pares discordantes aportan información. La proporción total de pares discordantes es \(p_d = p_{12} + p_{21} = 0{,}23\) y la diferencia entre proporciones discordantes es \(\Delta = |p_{12} - p_{21}| = 0{,}07\). Con \(z_{\alpha/2} = 1{,}960\) y \(z_{\beta} = 0{,}842\):</p>
@@ -233,14 +212,25 @@
             <p class="formula-line">\( n = \frac{(1{,}960 \times 0{,}4796 + 0{,}842 \times 0{,}4745)^2}{0{,}07^2} = \frac{(0{,}9400 + 0{,}3995)^2}{0{,}0049} = \frac{(1{,}3395)^2}{0{,}0049} = \frac{1{,}7942}{0{,}0049} \approx 366{,}2 \rightarrow 367 \)</p>
             <p>Se necesitan <strong>367 pares</strong> de pacientes (cada uno evaluado con ambos métodos) para alcanzar el 80 % de potencia. Este tamaño elevado refleja que la diferencia a detectar (\(\Delta = 0{,}07\)) es pequeña en relación con la proporción de pares discordantes.</p>
             <p>Si la diferencia esperada fuese mayor —por ejemplo \(p_{12} = 0{,}20\) y \(p_{21} = 0{,}08\), con \(\Delta = 0{,}12\)— el tamaño muestral se reduciría considerablemente, lo que ilustra la sensibilidad del test de McNemar al tamaño del efecto en los pares discordantes.</p>
-        </section>
-
-        <section class="card content-card">
+            <h3>Supuestos del modelo</h3>
+            <ul>
+                <li>Los pares son independientes entre sí.</li>
+                <li>Dentro de cada par, las dos observaciones pueden estar correlacionadas (es el punto de la prueba de McNemar).</li>
+                <li>Los valores de p₀₁ y p₁₀ se estiman correctamente; errores en ellos impactan directamente en el n calculado.</li>
+            </ul>
+            <h3>Usos frecuentes</h3>
+            <ul>
+                <li>Evaluación de adherencia a tratamiento o comportamiento antes/después de una intervención.</li>
+                <li>Comparación de diagnóstico binario de dos observadores o en dos momentos.</li>
+                <li>Estudios de cambio en variables dicotómicas (sí/no, positivo/negativo) en el mismo individuo.</li>
+                <li>Diseños cruzados con resultado binario.</li>
+            </ul>
             <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) es el <strong>número mínimo de pares totales</strong> (incluyendo los concordantes, es decir, los pares en que ambas condiciones producen el mismo resultado). Redondea siempre hacia arriba. Añade un margen por pérdidas de pares completos: si esperas que un 10 % de los sujetos no complete ambas mediciones o condiciones, recluta \(\lceil n / 0{,}90 \rceil\) pares. Es fundamental distinguir entre el número de pares y el número de observaciones: cada par aporta dos observaciones binarias, pero el test de McNemar solo utiliza los pares <em>discordantes</em>.</p>
                 <p>La característica más importante de este diseño es que el poder estadístico depende fundamentalmente de la proporción esperada de <strong>pares discordantes</strong> \((p_{01} + p_{10})\), no del total de pares. Si los sujetos responden de forma muy consistente en ambas condiciones (alta concordancia), los pares discordantes serán escasos y el estudio quedará infrapotenciado aunque el \(n\) total sea grande. Por ello, cuando se estime que la proporción de pares discordantes es baja (&lt; 20 %), será necesario reclutar muchos más sujetos para acumular los pares discordantes suficientes. Realiza un <em>análisis de sensibilidad</em> variando \(p_{01}\) y \(p_{10}\) en ±0,05 para ver el impacto en \(n\).</p>
                 <p>Si el \(n\) requerido resulta inviable, las alternativas son: (1) relajar la potencia (p. ej., de 90 % a 80 %), (2) reducir las exigencias de nivel de significación (aumentar \(\alpha\)), o (3) replantear el diseño del estudio para aumentar la tasa de discordancia esperada cambiando las condiciones. Con los datos recogidos, analiza los resultados con el <a href="contraste-hipotesis-proporciones-apareadas.html">test de McNemar para proporciones apareadas</a>; si los recuentos de pares discordantes son muy bajos (&lt; 25 en total), usa la versión exacta del test.</p>
         </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>

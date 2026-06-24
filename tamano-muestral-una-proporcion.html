@@ -146,6 +146,8 @@
     </header>
 
     <main>
+        <p class="tool-intro">Calcula el tamaño mínimo de muestra para estimar una proporción con el margen de error y el nivel de confianza que desees. Útil en encuestas y estudios de prevalencia.</p>
+
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
@@ -178,12 +180,11 @@
             <div id="onePropResult" class="result-box">Resultado pendiente…</div>
         </section>
 
-        <section class="card content-card">
+                <section class="card content-card">
             <h3>Explicación</h3>
             <p>Esta calculadora aplica la fórmula de Cochran para determinar el número mínimo de observaciones necesarias para estimar una proporción poblacional \(p\) con una precisión preestablecida. El objetivo es que el intervalo de confianza resultante tenga un semiancho máximo igual al margen de error \(E\).</p>
             <p>El parámetro más influyente es la proporción esperada \(p\): la varianza de una proporción es \(p(1-p)\), que alcanza su máximo en \(p = 0{,}5\). Por eso, si no tienes información previa, usar \(p = 0{,}5\) garantiza que la muestra será suficiente cualquiera que sea el valor real.</p>
             <p>Esta fórmula asume muestreo aleatorio simple en una población muy grande. Si la muestra representará más del 5 % del total, usa la <a href="tamano-muestral-proporcion-poblacion-finita.html">calculadora con corrección por población finita</a>.</p>
-
             <h3>Fórmula de tamaño muestral</h3>
             <p class="formula-line">\( n = \frac{Z^2 \cdot p \cdot (1-p)}{E^2} \)</p>
             <ul>
@@ -192,12 +193,8 @@
                 <li><strong>p</strong>: proporción esperada. Usa 0,5 si no tienes información previa.</li>
                 <li><strong>E</strong>: margen de error absoluto (semiancho del intervalo de confianza deseado).</li>
             </ul>
-
             <h3>Interpretación del margen de error</h3>
             <p>Un margen E = 0,05 significa que tu estimación muestral \(\hat{p}\) puede diferir del valor poblacional real en ±5 puntos porcentuales, con la probabilidad marcada por el nivel de confianza. Por ejemplo, si obtienes \(\hat{p} = 0{,}62\) con E = 0,05 al 95 %, puedes afirmar con 95 % de confianza que la proporción verdadera está entre el 57 % y el 67 %. Reducir E a la mitad cuadruplica la muestra necesaria, ya que n es proporcional a 1/E².</p>
-        </section>
-
-        <section class="card content-card">
             <h3>Configuración rápida</h3>
             <ul>
                 <li><strong>Si no conoces p:</strong> usa <strong>0,5</strong> — es el escenario conservador que maximiza la varianza y, por tanto, el tamaño muestral.</li>
@@ -206,27 +203,8 @@
                 <li><strong>Margen de error E:</strong> entre 0,03 y 0,05 es habitual en encuestas; en estudios de prevalencia clínica puede necesitarse E = 0,01–0,02.</li>
                 <li><strong>Pérdidas esperadas:</strong> divide n entre (1 − tasa de no respuesta esperada). Con 15 % de abandono: n_reclutado = n / 0,85.</li>
             </ul>
-
             <h3>Ejemplo sencillo</h3>
             <p>Quieres estimar el porcentaje de clientes satisfechos. Con <strong>p = 0,5</strong>, <strong>95 %</strong> de confianza y error máximo <strong>±5 %</strong> (E = 0,05) el resultado es <strong>n ≈ 385</strong>. Si reduces el margen a ±3 % (E = 0,03), la muestra sube a <strong>1 068</strong>.</p>
-
-            <h3>Usos frecuentes</h3>
-            <ul>
-                <li>Encuestas de satisfacción, opinión y preferencias del consumidor.</li>
-                <li>Estimación de tasas de prevalencia o incidencia en salud pública.</li>
-                <li>Control de calidad: porcentaje de defectos o no conformidades.</li>
-                <li>Sondeos electorales e intención de voto.</li>
-            </ul>
-
-            <h3>Supuestos del modelo</h3>
-            <ul>
-                <li>Muestreo aleatorio simple (cada unidad tiene la misma probabilidad de selección).</li>
-                <li>Población muy grande respecto a la muestra (n/N &lt; 5 %). Si no se cumple, aplica la <a href="tamano-muestral-proporcion-poblacion-finita.html">corrección por población finita</a>.</li>
-                <li>La aproximación normal es válida cuando n·p ≥ 5 y n·(1−p) ≥ 5.</li>
-            </ul>
-        </section>
-
-        <section class="card content-card">
             <h3>Ejemplo resuelto</h3>
             <p>Una tienda de comercio electrónico quiere estimar la proporción de visitantes que completan una compra (tasa de conversión). Datos de sesiones anteriores sugieren que esta proporción es de aproximadamente \(p = 0{,}08\) (8 %). El equipo de analítica quiere una estimación con un margen de error de \(E = 0{,}02\) (±2 puntos porcentuales) y un nivel de confianza del 95 % (\(Z = 1{,}960\)).</p>
             <p>Aplicamos la fórmula de Cochran con los valores conocidos:</p>
@@ -235,14 +213,25 @@
             <p class="formula-line">\( n_{\text{ajustado}} = \frac{707}{1 - 0{,}10} = \frac{707}{0{,}90} \approx 786 \text{ sesiones} \)</p>
             <p>El equipo configurará el sistema de analítica para recoger datos de <strong>786 sesiones consecutivas</strong>, con lo que espera poder estimar la tasa de conversión con una precisión de ±2 puntos porcentuales al 95 % de confianza.</p>
             <p><strong>Escenario conservador (p desconocida):</strong> si no se dispusiese de datos previos sobre la tasa de conversión, la práctica habitual es usar \(p = 0{,}5\), que maximiza la varianza \(p(1-p)\) y por tanto el tamaño muestral necesario: \( n = (1{,}960)^2 \times 0{,}5 \times 0{,}5 / (0{,}02)^2 = 3{,}8416 \times 0{,}25 / 0{,}0004 = 2\,401 \). Esta muestra conservadora garantiza precisión de ±2 pp independientemente del valor real de la proporción, a costa de requerir más de tres veces más sesiones que la estimación informada.</p>
-        </section>
-
-        <section class="card content-card">
+            <h3>Supuestos del modelo</h3>
+            <ul>
+                <li>Muestreo aleatorio simple (cada unidad tiene la misma probabilidad de selección).</li>
+                <li>Población muy grande respecto a la muestra (n/N &lt; 5 %). Si no se cumple, aplica la <a href="tamano-muestral-proporcion-poblacion-finita.html">corrección por población finita</a>.</li>
+                <li>La aproximación normal es válida cuando n·p ≥ 5 y n·(1−p) ≥ 5.</li>
+            </ul>
+            <h3>Usos frecuentes</h3>
+            <ul>
+                <li>Encuestas de satisfacción, opinión y preferencias del consumidor.</li>
+                <li>Estimación de tasas de prevalencia o incidencia en salud pública.</li>
+                <li>Control de calidad: porcentaje de defectos o no conformidades.</li>
+                <li>Sondeos electorales e intención de voto.</li>
+            </ul>
             <h3>Cómo interpretar el resultado</h3>
                 <p>El \(n\) calculado es el <strong>mínimo de respuestas válidas</strong> necesarias para que el intervalo de confianza no supere el margen de error \(E\) especificado. Siempre redondea hacia arriba. Ten en cuenta que este \(n\) representa <em>respuestas completas y aprovechables</em>, no simplemente el número de encuestas enviadas o individuos contactados. Si esperas una tasa de no respuesta o de exclusión del \(r\,\%\), el número de individuos a contactar es \(\lceil n / (1 - r) \rceil\); con un 20 % de pérdida, por ejemplo, deberás contactar a \(\lceil n / 0{,}80 \rceil\) personas.</p>
                 <p>La proporción \(p\) es el parámetro más influyente y, a menudo, el más incierto. La función \(p(1-p)\) alcanza su máximo en \(p = 0{,}5\), que es también el escenario más conservador: usar \(p = 0{,}5\) cuando se desconoce la proporción real garantiza que \(n\) nunca sea insuficiente. Si dispones de un estudio piloto o datos previos que apuntan a un valor diferente de \(p\), úsalo para obtener un \(n\) más ajustado, pero haz un <em>análisis de sensibilidad</em> variando \(p\) entre \(\pm 0{,}1\) para ver cuánto varía el resultado; en la zona central (\(p\) entre 0,3 y 0,7) la variación de \(n\) suele ser modesta, pero en los extremos (\(p < 0{,}1\) o \(p > 0{,}9\)) una pequeña diferencia en \(p\) puede alterar \(n\) de forma importante.</p>
                 <p>Si el \(n\) resultante es inviable, las palancas disponibles son: (1) aumentar \(E\) (aceptar menor precisión), (2) reducir el nivel de confianza (p. ej., pasar del 95 % al 90 %), o (3) restringir la población objetivo para que sea más homogénea. Una vez recopilados los datos, utiliza la <a href="intervalo-confianza-proporcion.html">calculadora de intervalo de confianza para una proporción</a> para obtener el IC real; o la <a href="contraste-hipotesis-una-proporcion.html">calculadora de contraste de hipótesis</a> si quieres comparar \(\hat{p}\) frente a un valor de referencia.</p>
         </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>

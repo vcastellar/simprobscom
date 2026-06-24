@@ -146,6 +146,8 @@
     </header>
 
     <main>
+        <p class="tool-intro">Esta calculadora estima la media de una población <strong>finita y conocida</strong> con la precisión deseada, aplicando el factor de corrección por población finita cuando la muestra representa una fracción apreciable del total.</p>
+
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
@@ -184,11 +186,10 @@
             <div id="finiteMeanResult" class="result-box">Resultado pendiente…</div>
         </section>
 
-        <section class="card content-card">
+                <section class="card content-card">
             <h3>Explicación</h3>
             <p>Cuando estimas una media poblacional y el tamaño total de la población N es conocido y finito, la fórmula estándar sobreestima la muestra necesaria. El <strong>factor de corrección por población finita</strong> (FPC) aprovecha el hecho de que muestrear una fracción grande de la población aporta más información de la que predice la fórmula infinita.</p>
             <p>La corrección es relevante cuando n₀/N &gt; 5 %. Por ejemplo, para N = 1 000 y n₀ = 139, la fracción de muestreo es 13,9 %, lo que justifica la corrección. Si N &gt; 10 000 y n₀ es pequeño, el ahorro es mínimo y puedes usar la <a href="tamano-muestral-una-media.html">fórmula estándar para una media</a>.</p>
-
             <h3>Fórmula de tamaño muestral</h3>
             <p class="formula-line">\( n_0 = \left(\frac{Z\,\sigma}{E}\right)^2 \)</p>
             <p class="formula-line">\( n = \frac{n_0}{1 + \dfrac{n_0-1}{N}} \)</p>
@@ -199,9 +200,6 @@
                 <li><strong>E</strong>: margen de error absoluto máximo tolerable.</li>
                 <li><strong>N</strong>: tamaño total conocido de la población.</li>
             </ul>
-        </section>
-
-        <section class="card content-card">
             <h3>Configuración rápida</h3>
             <ul>
                 <li><strong>σ:</strong> obtén de datos históricos, un piloto o la literatura. Si no la tienes, usa rango/4 como estimación conservadora.</li>
@@ -209,7 +207,6 @@
                 <li><strong>E:</strong> define el error en las mismas unidades que σ — ¿a partir de qué diferencia cambia tu decisión?</li>
                 <li><strong>Nivel de confianza:</strong> 95 % es el estándar; 99 % para decisiones críticas.</li>
             </ul>
-
             <h3>Ejemplo resuelto</h3>
             <p>El departamento de recursos humanos de una planta industrial quiere estimar el tiempo medio que los operarios dedican a una tarea de ensamblaje concreta. La planta cuenta con <strong>N = 1 200 trabajadores</strong> en plantilla, un número exactamente conocido, lo que hace obligatoria la corrección por población finita.</p>
             <p>Estudios ergonómicos anteriores indican que la desviación típica del tiempo de tarea es <strong>σ = 12 minutos</strong>. El ingeniero de métodos fija un margen de error admisible de <strong>E = 2 minutos</strong> y trabaja con un nivel de confianza del <strong>95 %</strong> (z = 1,96).</p>
@@ -219,7 +216,12 @@
             <p class="formula-line">\( n = \dfrac{n_0}{1 + \dfrac{n_0 - 1}{N}} = \dfrac{139}{1 + \dfrac{138}{1\,200}} = \dfrac{139}{1{,}115} \approx 124{,}7 \rightarrow \mathbf{125} \)</p>
             <p>El ahorro es de 14 entrevistas respecto al diseño sin corrección. La fracción de muestreo es \( f \approx 125/1\,200 \approx 10{,}4\,\% \), suficientemente grande para que la corrección sea relevante (regla práctica: corregir siempre que f &gt; 5 %).</p>
             <p>Con una muestra de 125 operarios elegidos al azar se puede afirmar, con un 95 % de confianza, que el tiempo medio estimado no se aleja más de ±2 minutos del verdadero tiempo medio de toda la plantilla. Este resultado permite dimensionar los tiempos de ciclo y detectar cuellos de botella con una precisión suficiente para la toma de decisiones.</p>
-
+            <h3>Supuestos del modelo</h3>
+            <ul>
+                <li>Muestreo aleatorio simple sin reemplazamiento de una población de tamaño N exactamente conocido.</li>
+                <li>La variable sigue aproximadamente una distribución normal, o n es suficientemente grande (TLC).</li>
+                <li>N es fijo y no cambia durante el muestreo.</li>
+            </ul>
             <h3>Usos frecuentes</h3>
             <ul>
                 <li>Tiempo medio de tarea en una planta o departamento concreto.</li>
@@ -227,21 +229,12 @@
                 <li>Consumo medio en una comunidad cerrada (edificio, campus, residencia).</li>
                 <li>Inventario: peso o valor medio de artículos en un almacén conocido.</li>
             </ul>
-
-            <h3>Supuestos del modelo</h3>
-            <ul>
-                <li>Muestreo aleatorio simple sin reemplazamiento de una población de tamaño N exactamente conocido.</li>
-                <li>La variable sigue aproximadamente una distribución normal, o n es suficientemente grande (TLC).</li>
-                <li>N es fijo y no cambia durante el muestreo.</li>
-            </ul>
-        </section>
-
-        <section class="card content-card">
             <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) es el <strong>tamaño muestral mínimo corregido por la finitud de la población</strong> para estimar una media con el margen de error \(E\) y el nivel de confianza especificados. La corrección por población finita (FPC) reduce el \(n\) respecto al caso de población infinita: cuanto mayor es la fracción de muestreo \(f = n/N\), mayor es el ahorro. Si \(f < 5\,\%\), la FPC es prácticamente irrelevante (reduce \(n\) menos de un 5 %) y la fórmula estándar sería suficiente; si \(f > 20\,\%\), el ahorro es sustancial y la corrección resulta necesaria para no sobredimensionar el estudio.</p>
                 <p>Es fundamental que \(N\) represente el <strong>tamaño real de la población objetivo</strong>, no el marco muestral aproximado ni la población de referencia general. Por ejemplo, si el estudio se dirige a los trabajadores de una empresa concreta con 450 empleados, \(N = 450\); usar un \(N\) inflado (como la plantilla de todas las empresas del sector) eliminaría la ventaja de la corrección. Realiza un análisis de sensibilidad probando \(N \pm 10\,\%\) para evaluar cuánto afecta una estimación imprecisa del tamaño poblacional al \(n\) resultante; con poblaciones grandes la sensibilidad es baja, pero con poblaciones pequeñas puede ser relevante.</p>
                 <p>Si prevés tasas de no respuesta o exclusión, calcula el \(n\) de reclutamiento dividiendo el \(n\) corregido entre \((1 - \text{tasa de pérdida})\), siempre verificando que el resultado no supere \(N\). Si tras el ajuste el tamaño muestral necesario supera el 80 % de la población, plantéate un <em>censo</em> en lugar de un muestreo. Con los datos recogidos, usa la <a href="intervalo-confianza-media.html">calculadora de intervalo de confianza para la media</a> aplicando también la FPC para obtener el IC real del estudio.</p>
         </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>

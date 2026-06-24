@@ -146,6 +146,8 @@
     </header>
 
     <main>
+        <p class="tool-intro">Esta calculadora estima el tamaño de muestra necesario para medir una media con la precisión (margen de error) que fijes y un nivel de confianza dado. Es un enfoque por <strong>estimación</strong>; si tu objetivo es contrastar una hipótesis, usa la versión por potencia.</p>
+
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
@@ -178,12 +180,11 @@
             <div id="oneMeanResult" class="result-box">Resultado pendiente…</div>
         </section>
 
-        <section class="card content-card">
+                <section class="card content-card">
             <h3>Explicación</h3>
             <p>Esta calculadora determina el número mínimo de observaciones para estimar una media poblacional \(\mu\) con un margen de error absoluto máximo \(E\) y un nivel de confianza dado. Es el cálculo análogo al de una proporción, pero para variables cuantitativas continuas.</p>
             <p>El parámetro clave que debes conocer de antemano es la desviación estándar \(\sigma\). Si no la tienes, puedes estimarla de datos históricos, de la literatura o de un estudio piloto. Una regla práctica conservadora cuando la distribución es aproximadamente normal: \(\sigma \approx \text{rango} / 4\) (un cuarto del rango probable de los datos).</p>
             <p>Esta fórmula usa el cuantil normal Z, lo que supone que \(\sigma\) es conocida o que la muestra es suficientemente grande para que el cuantil t converja a Z. Para muestras pequeñas (&lt; 30) con \(\sigma\) desconocida, el n real puede ser algo mayor (usa el cuantil t con n−1 grados de libertad de forma iterativa).</p>
-
             <h3>Fórmula de tamaño muestral</h3>
             <p class="formula-line">\( n = \left(\frac{Z \cdot \sigma}{E}\right)^2 \)</p>
             <ul>
@@ -192,12 +193,8 @@
                 <li><strong>\(\sigma\)</strong>: desviación estándar esperada de la variable.</li>
                 <li><strong>E</strong>: margen de error absoluto máximo tolerable (en las mismas unidades que \(\sigma\)).</li>
             </ul>
-
             <h3>Relación entre σ, E y n</h3>
             <p>El tamaño muestral crece cuadráticamente con la precisión exigida: reducir E a la mitad cuadruplica n. También crece cuadráticamente con \(\sigma\): si la variabilidad de la población es el doble, necesitas cuatro veces más observaciones para la misma precisión. Comprueba siempre que E sea razonable en términos prácticos: un E muy pequeño puede hacer el estudio inviable.</p>
-        </section>
-
-        <section class="card content-card">
             <h3>Configuración rápida</h3>
             <ul>
                 <li><strong>Desviación estándar (σ):</strong> tómala de estudios previos, de la literatura o de una muestra piloto de 10–30 observaciones.</li>
@@ -206,7 +203,6 @@
                 <li><strong>Error máximo E:</strong> defínelo en términos prácticos — ¿a partir de qué diferencia respecto a la media real tomarías una decisión diferente?</li>
                 <li><strong>Pérdidas esperadas:</strong> divide n entre (1 − tasa de abandono esperada).</li>
             </ul>
-
             <h3>Ejemplo resuelto</h3>
             <p>Un hospital quiere estimar la estancia media (en días) de sus pacientes post-quirúrgicos para optimizar la planificación de camas. De registros anteriores se sabe que la desviación estándar de la estancia es \(\sigma \approx 4{,}2\) días. El equipo de gestión establece que la estimación debe ser precisa dentro de \(E = 0{,}5\) días con un nivel de confianza del 95 % (\(Z = 1{,}960\)).</p>
             <p>Aplicamos la fórmula directamente:</p>
@@ -215,15 +211,6 @@
             <p class="formula-line">\( n_{\text{reclutar}} = \frac{272}{1 - 0{,}15} = \frac{272}{0{,}85} \approx 320 \text{ pacientes} \)</p>
             <p>El equipo planificará la recogida de datos en 320 pacientes consecutivos post-quirúrgicos, esperando disponer de al menos 272 registros completos y obtener así una estimación de la estancia media con precisión de ±0,5 días al 95 % de confianza.</p>
             <p><strong>Análisis de sensibilidad:</strong> si el hospital decidiese que una precisión de ±1 día es suficiente para la toma de decisiones, la muestra necesaria se reduce drásticamente: \( n = (1{,}960 \times 4{,}2 / 1{,}0)^2 = (8{,}232)^2 = 67{,}77 \rightarrow n = 68 \). Esto muestra que duplicar el margen de error tolerable reduce la muestra en un factor de 4, haciendo el estudio mucho más factible en entornos con recursos limitados.</p>
-
-            <h3>Usos frecuentes</h3>
-            <ul>
-                <li>Estimación de tiempos medios de proceso o servicio.</li>
-                <li>Medición de consumo o gasto medio en clientes o usuarios.</li>
-                <li>Control estadístico de procesos en manufactura y calidad.</li>
-                <li>Encuestas sobre variables continuas (peso, altura, puntuación).</li>
-            </ul>
-
             <h3>Supuestos del modelo</h3>
             <ul>
                 <li>Muestreo aleatorio simple de una población muy grande (o infinita).</li>
@@ -231,14 +218,19 @@
                 <li>La desviación estándar \(\sigma\) es conocida o se estima de forma fiable.</li>
                 <li>Si la población es finita y n/N &gt; 5 %, aplica la <a href="tamano-muestral-media-poblacion-finita.html">corrección por población finita</a>.</li>
             </ul>
-        </section>
-
-        <section class="card content-card">
+            <h3>Usos frecuentes</h3>
+            <ul>
+                <li>Estimación de tiempos medios de proceso o servicio.</li>
+                <li>Medición de consumo o gasto medio en clientes o usuarios.</li>
+                <li>Control estadístico de procesos en manufactura y calidad.</li>
+                <li>Encuestas sobre variables continuas (peso, altura, puntuación).</li>
+            </ul>
             <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) que devuelve la calculadora es el <strong>mínimo de observaciones válidas</strong> que debes recoger para que el intervalo de confianza resultante tenga, como máximo, el margen de error \(E\) especificado. Redondea siempre hacia arriba (nunca hacia abajo), porque trabajar con una sola observación menos ya hace que el margen real supere el objetivo. Si prevés que algún participante abandonará el estudio o que ciertas observaciones quedarán fuera por criterios de exclusión, divide \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener el número de reclutamiento; por ejemplo, con una pérdida esperada del 15 %, recluta \(\lceil n / 0{,}85 \rceil\) sujetos.</p>
                 <p>La sensibilidad de \(n\) a los parámetros de entrada es asimétrica: \(n\) crece con el <strong>cuadrado</strong> de \(\sigma\) y decrece con el cuadrado de \(E\). Esto significa que si la desviación estándar real resulta ser un 20 % mayor de lo esperado, necesitarás aproximadamente un 44 % más de sujetos \((1{,}2^2 = 1{,}44)\). Por ello se recomienda un <em>análisis de sensibilidad</em>: calcula \(n\) para \(\sigma - 25\,\%\), \(\sigma\) y \(\sigma + 25\,\%\) y utiliza el valor mayor como margen de seguridad. Reducir \(E\) a la mitad cuadruplica \(n\), de modo que si el tamaño calculado resulta inviable es preferible relajar la precisión requerida antes que bajar el nivel de confianza.</p>
                 <p>Cuando el \(n\) obtenido sea muy pequeño (por ejemplo, &lt; 30), comprueba que los datos son razonablemente normales o que el teorema central del límite puede aplicarse, ya que la fórmula se basa en la distribución normal. Si \(n\) resulta inasumible por restricciones de tiempo o coste, considera aceptar un margen de error mayor o una confianza del 90 % en lugar del 95 %. Una vez recogida la muestra, usa la <a href="intervalo-confianza-media.html">calculadora de intervalo de confianza para la media</a> para obtener el IC real con los datos observados.</p>
         </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>

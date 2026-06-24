@@ -141,6 +141,8 @@
     </header>
 
     <main>
+        <p class="tool-intro">Determina cuántas observaciones necesitas para que el test exacto de Fisher detecte una diferencia entre dos proporciones, especialmente cuando se esperan frecuencias bajas. Emplea la aproximación de Fleiss.</p>
+
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
@@ -194,14 +196,11 @@
             <div id="fisherResult" class="result-box">Resultado pendiente…</div>
         </section>
 
-        <section class="card content-card">
+                <section class="card content-card">
             <h3>Explicación</h3>
             <p>El <strong>test exacto de Fisher</strong> se usa para contrastar la independencia entre dos variables binarias en una tabla de contingencia 2×2. Es el método preferido cuando las frecuencias esperadas en alguna celda son inferiores a 5, o cuando el tamaño muestral total es pequeño, situaciones en las que la aproximación asintótica chi-cuadrado puede no ser válida.</p>
             <p>Al ser un test exacto basado en la distribución hipergeométrica, calcular su potencia de forma analítica requeriría enumerar toda la distribución de tablas posibles, lo cual es computacionalmente costoso para uso general. La solución práctica estándar es utilizar la <strong>aproximación de Fleiss (1981)</strong> para dos proporciones independientes, seguida de la <strong>corrección de continuidad de Casagrande y Pike (1978)</strong>, que ajusta el tamaño muestral para compensar la naturaleza discreta del test exacto.</p>
             <p>Esta aproximación produce resultados muy similares a los obtenidos por simulación y es la recomendación habitual en textos de referencia como Fleiss, Levin y Paik (2003).</p>
-        </section>
-
-        <section class="card content-card">
             <h3>Fórmula utilizada</h3>
             <p>Sea \(p_1\) la proporción en el grupo 1, \(p_2\) la proporción en el grupo 2, \(r = n_2/n_1\) la razón de tamaños, y \(\bar{p} = (p_1 + r\,p_2)/(1+r)\) la proporción conjunta ponderada.</p>
 
@@ -218,9 +217,6 @@
                 <li><strong>\(\bar{p}\):</strong> proporción conjunta ponderada; representa la proporción bajo \(H_0\) si los grupos fuesen iguales.</li>
                 <li><strong>Corrección de continuidad:</strong> aumenta el n para compensar la discretización del test exacto.</li>
             </ul>
-        </section>
-
-        <section class="card content-card">
             <h3>Configuración rápida</h3>
             <ul>
                 <li><strong>p₁ y p₂:</strong> introduce las proporciones que esperas observar en cada grupo. La diferencia \(|p_1 - p_2|\) es el efecto a detectar. Diferencias mayores requieren menos muestra.</li>
@@ -230,7 +226,6 @@
                 <li><strong>Contraste unilateral:</strong> úsalo solo si tienes una hipótesis direccional a priori justificada; un contraste unilateral requiere menos muestra pero no detecta diferencias en la dirección contraria.</li>
                 <li><strong>Corrección de continuidad:</strong> la calculadora siempre aplica la corrección de Casagrande y Pike para el test exacto de Fisher. Si prefieres el n sin corrección (por ejemplo para un chi-cuadrado estándar), úsalo como referencia inferior.</li>
             </ul>
-
             <h3>Ejemplo resuelto</h3>
             <p>Un ensayo clínico compara la tasa de respuesta a un tratamiento en dos grupos. Se espera una respuesta del 40 % en el grupo tratado (\(p_1 = 0{,}40\)) y del 20 % en el grupo control (\(p_2 = 0{,}20\)). Se elige \(\alpha = 0{,}05\) bilateral y potencia del 80 %. Los grupos tienen el mismo tamaño (\(r = 1\)).</p>
             <p>Paso 1 — proporción ponderada: \(\bar{p} = (0{,}40 + 0{,}20)/2 = 0{,}30\).</p>
@@ -239,14 +234,19 @@
             <p>Paso 2 — corrección de continuidad:</p>
             <p class="formula-line">\( n_1 = \frac{81{,}2}{4}\left(1 + \sqrt{1 + \frac{4}{81{,}2\times0{,}20}}\right)^2 \approx 20{,}3\times(1+\sqrt{1{,}246})^2 \approx 20{,}3\times(1+1{,}116)^2 \approx 20{,}3\times4{,}478 \approx 90{,}9 \)</p>
             <p>Redondeando: <strong>n₁ = 91 y n₂ = 91</strong> (total = 182). Con esta muestra, el test exacto de Fisher detectará la diferencia de 20 puntos porcentuales el 80 % de las veces.</p>
-        </section>
-
-        <section class="card content-card">
+            <h3>Supuestos del modelo</h3>
+            <ul>
+                <li>Dos grupos independientes con una respuesta binaria (éxito/fracaso).</li>
+                <li>Observaciones independientes; cada unidad contribuye a una sola celda de la tabla 2×2.</li>
+                <li>Planteamiento condicional de Fisher (totales marginales fijos), adecuado cuando las frecuencias esperadas son bajas.</li>
+                <li>El tamaño se obtiene con la aproximación de Fleiss y se redondea hacia arriba.</li>
+            </ul>
             <h3>Cómo interpretar el resultado</h3>
                 <p>Los valores \(n_1\) y \(n_2\) son los <strong>tamaños mínimos por grupo</strong> para detectar la diferencia entre proporciones \(p_1\) y \(p_2\) mediante el test exacto de Fisher con la potencia y el nivel \(\alpha\) especificados. El total a reclutar es \(N = n_1 + n_2\). Redondea siempre hacia arriba y añade un margen por pérdidas: divide cada \(n_i\) entre \((1 - \text{tasa de pérdida})\). El test exacto de Fisher es apropiado precisamente cuando alguna frecuencia esperada cae por debajo de 5; si todas las frecuencias esperadas son \(\geq 5\), el chi-cuadrado de Pearson es igualmente válido y generalmente más familiar para revisores.</p>
                 <p>El cálculo de tamaño muestral para Fisher se basa en la distribución hipergeométrica, que es discreta. Esto implica que el nivel de significación real del test puede ser inferior al nominal \(\alpha\) (el test es conservador), y la potencia real puede ser ligeramente distinta de la planificada para el \(n\) exacto calculado. En la práctica, se recomienda añadir un par de unidades adicionales al \(n\) por grupo para compensar la discretización. Realiza un <em>análisis de sensibilidad</em> variando \(p_1\) y \(p_2\) en ±0,05: cuando ambas proporciones son muy extremas (\(&lt;0{,}05\) o \(&gt;0{,}95\)), el test exacto gana importancia frente al chi-cuadrado y el \(n\) puede ser distinto del estimado por la fórmula normal aproximada.</p>
                 <p>Si el \(n\) calculado resulta tan grande que las frecuencias esperadas en todas las celdas superarían ampliamente 5, considera si el test chi-cuadrado no sería más apropiado (y planifica el \(n\) con la <a href="tamano-muestral-dos-proporciones.html">calculadora de contraste para dos proporciones</a>). Cuando el \(n\) sea inviable, revisa si la diferencia mínima detectable \(|p_1 - p_2|\) es realista o si puede ampliarse. Con los datos recogidos, realiza el análisis con la <a href="contraste-hipotesis-dos-proporciones.html">calculadora de contraste para dos proporciones</a> eligiendo el test de Fisher si las frecuencias esperadas son bajas.</p>
         </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>
