@@ -141,6 +141,8 @@
     </header>
 
     <main>
+        <p class="tool-intro">Esta calculadora determina el tamaño de muestra necesario para que un test chi-cuadrado de independencia detecte una asociación entre dos variables categóricas con la potencia objetivo, a partir de la \(w\) de Cohen y las dimensiones de la tabla.</p>
+
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
@@ -193,24 +195,19 @@
             </details>
         </section>
 
-        <section class="card content-card">
+                <section class="card content-card">
             <h3>Explicación</h3>
             <p>El test chi-cuadrado de independencia contrasta si dos variables categóricas son independientes en una tabla de contingencia \(r \times c\). Bajo \(H_0\) el estadístico \(\chi^2\) sigue una distribución chi-cuadrado con \(df = (r-1)(c-1)\) grados de libertad.</p>
             <p>Bajo la alternativa, \(\chi^2\) sigue una distribución chi-cuadrado <em>no central</em> con parámetro de no centralidad \(\lambda = N \cdot w^2\), donde \(N\) es el tamaño total de la muestra y \(w\) es la \(w\) de Cohen.</p>
-
             <h3>Parámetro de no centralidad y potencia</h3>
             <p class="formula-line">\( \lambda = N \cdot w^2 \)</p>
             <p class="formula-line">\( \text{Potencia} = 1 - F_{\chi^2_{df,\,\lambda}}\!\left(\chi^2_{1-\alpha,\,df}\right) \)</p>
             <p>La distribución chi-cuadrado no central se evalúa exactamente mediante la mezcla de Poisson de chi-cuadrados centrales:</p>
             <p class="formula-line">\( F_{\chi^2_{df,\lambda}}(x) = \sum_{k=0}^{\infty} \frac{e^{-\lambda/2}(\lambda/2)^k}{k!} \cdot F_{\chi^2_{df+2k}}(x) \)</p>
-
             <h3>W de Cohen para tablas 2×2</h3>
             <p>Con \(p_1\) y \(p_2\) las proporciones en los dos grupos y \(\bar{p} = (p_1+p_2)/2\):</p>
             <p class="formula-line">\( w = \frac{|p_1 - p_2|}{2\sqrt{\bar{p}(1-\bar{p})}} \)</p>
             <p>Valores orientativos según Cohen (1988): \(w = 0{,}1\) (efecto pequeño), \(w = 0{,}3\) (mediano), \(w = 0{,}5\) (grande).</p>
-        </section>
-
-        <section class="card content-card">
             <h3>Configuración rápida</h3>
             <ul>
                 <li><strong>w:</strong> 0,1 para efectos sutiles, 0,3 para efectos moderados (el más habitual), 0,5 para efectos grandes. Para tablas 2×2 usa el asistente.</li>
@@ -218,19 +215,23 @@
                 <li><strong>α:</strong> 0,05 es el estándar.</li>
                 <li><strong>Potencia:</strong> 0,80 como mínimo frecuente; 0,90 para estudios confirmatorios.</li>
             </ul>
-
             <h3>Ejemplo resuelto</h3>
             <p>Un investigador quiere estudiar si existe asociación entre el género (2 categorías) y la preferencia por tres tipos de producto (3 categorías), es decir, una tabla 2×3. Espera un efecto mediano (\(w = 0{,}3\)) con \(\alpha = 0{,}05\) y potencia del 80 %. Los grados de libertad son \(df = (2-1)(3-1) = 2\).</p>
             <p>La calculadora devuelve aproximadamente <strong>\(N = 107\) observaciones en total</strong>. Con esa muestra, si la asociación real tiene un tamaño de efecto \(w \geq 0{,}3\), el test la detectará el 80 % de las veces.</p>
             <p><strong>Tabla 2×2 con asistente:</strong> si p₁ = 0,40 y p₂ = 0,60, la \(\bar{p} = 0{,}50\) y \(w = |0{,}40-0{,}60|/(2\sqrt{0{,}5 \times 0{,}5}) = 0{,}20/1{,}00 = 0{,}20\). Con df=1, α=0,05 y potencia=0,80 se necesitan N ≈ 197 observaciones.</p>
-        </section>
-
-        <section class="card content-card">
+            <h3>Supuestos del modelo</h3>
+            <ul>
+                <li>Muestra aleatoria de observaciones independientes.</li>
+                <li>Dos variables categóricas cruzadas en una tabla de contingencia; cada unidad contribuye a una sola celda.</li>
+                <li>Frecuencias esperadas \(\ge 5\) en la mayoría de las celdas.</li>
+                <li>Efecto medido con la \(w\) de Cohen y \((\text{filas}-1)(\text{columnas}-1)\) grados de libertad sobre la chi-cuadrado no central.</li>
+            </ul>
             <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(N\) es el <strong>número total de observaciones</strong> (suma de todas las celdas de la tabla de contingencia) para que el test chi-cuadrado de independencia detecte la asociación especificada con la potencia y el nivel de significación deseados. Redondea siempre hacia arriba. En un diseño donde se fija el tamaño de cada fila (p. ej., grupos de estudio y control), divide \(N\) entre el número de filas para obtener el tamaño de cada grupo; en un muestreo irrestricto, \(N\) es simplemente el total de sujetos. Añade un margen por pérdidas dividiendo entre \((1 - \text{tasa de pérdida})\).</p>
                 <p>El tamaño del efecto \(w\) de Cohen se calcula a partir de las frecuencias esperadas bajo \(H_1\): \(w = \sqrt{\sum_{ij}(p_{1,ij} - p_{0,ij})^2 / p_{0,ij}}\), donde \(p_{0,ij} = p_{i\cdot} \times p_{\cdot j}\) son las proporciones bajo independencia. Los valores de referencia son \(w = 0{,}10\) (efecto pequeño), \(w = 0{,}30\) (mediano) y \(w = 0{,}50\) (grande). La condición de aplicabilidad más importante es que las frecuencias esperadas en cada celda bajo \(H_0\) —calculadas como \(N \times p_{0,ij}\)— sean todas \(\geq 5\); si no, el estadístico chi-cuadrado puede no seguir la distribución chi-cuadrado y el p-valor sería poco fiable. Cuando varias celdas tengan frecuencias esperadas bajas, fusiona categorías con sentido sustantivo y reduce los grados de libertad \((r-1)(c-1)\) del test.</p>
                 <p>Si el \(N\) resultante es inviable, revisa si el tamaño del efecto especificado es realista: una asociación muy débil puede requerir miles de observaciones. Considera si puede ampliarse el rango de variación de alguna de las variables categóricas o si algunas categorías pueden fusionarse para concentrar el efecto. Cuando la tabla es \(2 \times 2\) y el \(N\) es pequeño, el test exacto de Fisher es más apropiado que el chi-cuadrado; en ese caso, usa la <a href="tamano-muestral-fisher.html">calculadora de tamaño muestral para el test de Fisher</a>. Con los datos recogidos, realiza el análisis con la <a href="contraste-independencia-chi-cuadrado.html">calculadora de chi-cuadrado de independencia</a> e interpreta los residuos tipificados de cada celda para localizar la fuente de la asociación.</p>
         </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>

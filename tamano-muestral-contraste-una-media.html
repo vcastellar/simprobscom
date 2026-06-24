@@ -146,6 +146,8 @@
     </header>
 
     <main>
+        <p class="tool-intro">Calcula cuántas observaciones necesitas para contrastar si la media poblacional difiere de un valor de referencia con la potencia deseada. A diferencia del enfoque por precisión, aquí el objetivo es <strong>detectar</strong> una diferencia mínima relevante.</p>
+
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
@@ -193,11 +195,10 @@
             <div id="oneMeanResult" class="result-box">Resultado pendiente…</div>
         </section>
 
-        <section class="card content-card">
+                <section class="card content-card">
             <h3>Explicación</h3>
             <p>Esta calculadora estima el tamaño muestral para el contraste de una media poblacional con hipótesis nula \(H_0: \mu=\mu_0\), nivel de significación \(\alpha\), potencia \(1-\beta\) y diferencia mínima detectable \(\Delta=|\mu-\mu_0|\).</p>
             <p>Se puede configurar alternativa bilateral (\(H_a: \mu \neq \mu_0\)) o unilateral (\(H_a: \mu \geq \mu_0\) o \(H_a: \mu \leq \mu_0\)). En unilateral, el cuantil crítico es menor y el tamaño muestral suele reducirse.</p>
-
             <h3>Fórmula de tamaño muestral</h3>
             <p class="formula-line">\( n = \left(\frac{(Z_{\alpha^*}+Z_{\beta})\sigma}{\Delta}\right)^2 \)</p>
             <ul>
@@ -206,9 +207,6 @@
                 <li><strong>\(\Delta\)</strong>: diferencia mínima detectable \(|\mu-\mu_0|\).</li>
                 <li><strong>\(1-\beta\)</strong>: potencia objetivo del contraste.</li>
             </ul>
-        </section>
-
-        <section class="card content-card">
             <h3>Configuración rápida</h3>
             <ul>
                 <li><strong>σ:</strong> usa datos históricos, piloto o literatura.</li>
@@ -219,15 +217,6 @@
             </ul>
             <h3>Ejemplo sencillo</h3>
             <p>Con \(\sigma=10\), \(\Delta=2\), \(\alpha=0{,}05\), potencia 0,80 y alternativa bilateral, se requiere aproximadamente \(n \approx 197\).</p>
-            <h3>Supuestos del modelo</h3>
-            <ul>
-                <li>Muestra aleatoria e independencia entre observaciones.</li>
-                <li>Distribución aproximadamente normal o n grande (TLC).</li>
-                <li>Desviación estándar esperada razonablemente estimada.</li>
-            </ul>
-        </section>
-
-        <section class="card content-card">
             <h3>Ejemplo resuelto</h3>
             <p>Un técnico de control de calidad en una planta de envasado quiere verificar si el volumen medio de llenado de los envases sigue siendo el nominal de 50 ml. Las especificaciones del proceso indican que la desviación estándar es \(\sigma = 6\) ml. El técnico quiere tener una potencia del 90 % para detectar cualquier desviación de al menos \(\Delta = 2\) ml respecto al nominal, usando un contraste bilateral con \(\alpha = 0{,}05\) (\(z_{\alpha/2} = 1{,}960\), \(z_\beta = 1{,}282\)).</p>
             <p>La hipótesis a contrastar es \(H_0: \mu = 50\) ml frente a \(H_a: \mu \neq 50\) ml. Aplicamos la fórmula:</p>
@@ -235,14 +224,18 @@
             <p>Se deben medir <strong>95 envases</strong> de la línea de producción para que el contraste tenga un 90 % de probabilidad de detectar desviaciones de 2 ml o más, con un error tipo I del 5 %. Si el lote de producción total tiene menos de 1 000 unidades, convendría aplicar también la corrección por población finita.</p>
             <p>Interpretación práctica: con esta muestra, si el proceso está centrado en 48 ml o 52 ml (una desviación de 2 ml), el test detectará el problema en el 90 % de las inspecciones. Desviaciones mayores se detectarán con probabilidad aún más alta.</p>
             <p><strong>Variante con \(\alpha = 0{,}01\):</strong> si el proceso de envasado tiene consecuencias regulatorias y se requiere mayor control sobre los falsos positivos, se puede usar \(\alpha = 0{,}01\) (\(z_{\alpha/2} = 2{,}576\)): \( n = ((2{,}576 + 1{,}282) \times 6 / 2)^2 = (3{,}858 \times 3)^2 = (11{,}574)^2 = 133{,}97 \rightarrow n = 134 \). El mayor rigor estadístico requiere un 41 % más de mediciones para mantener la misma potencia del 90 %.</p>
-        </section>
-
-        <section class="card content-card">
+            <h3>Supuestos del modelo</h3>
+            <ul>
+                <li>Muestra aleatoria e independencia entre observaciones.</li>
+                <li>Distribución aproximadamente normal o n grande (TLC).</li>
+                <li>Desviación estándar esperada razonablemente estimada.</li>
+            </ul>
             <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) es el <strong>número mínimo de observaciones válidas</strong> para que el contraste \(H_0\!: \mu = \mu_0\) frente a \(H_1\!: \mu = \mu_1\) tenga la potencia \((1-\beta)\) especificada al nivel de significación \(\alpha\). Redondea siempre hacia arriba. Si prevés pérdidas de datos o sujetos que no completarán el estudio, el número de reclutamiento es \(\lceil n / (1 - \text{tasa de pérdida}) \rceil\); con un 15 % de pérdida esperada, recluta \(\lceil n / 0{,}85 \rceil\) individuos.</p>
                 <p>Los parámetros que más influyen en \(n\) son el tamaño del efecto \(|\mu_1 - \mu_0| / \sigma\) y la potencia. Reducir la diferencia mínima detectable \(\delta = |\mu_1 - \mu_0|\) a la mitad cuadruplica el \(n\); aumentar la potencia del 80 % al 90 % incrementa \(n\) aproximadamente un 30 %. El error en \(\sigma\) se propaga cuadráticamente: si la desviación estándar real es un 20 % mayor de la supuesta, necesitarás un 44 % más de sujetos. Por ello, realiza siempre un <em>análisis de sensibilidad</em> calculando \(n\) para \(\sigma - 25\,\%\), \(\sigma\) y \(\sigma + 25\,\%\) y planifica con el \(n\) mayor.</p>
                 <p>Cuando el \(n\) resultante sea inviable, las palancas disponibles son: (1) revisar si \(\delta\) puede ser mayor sin perder relevancia práctica, (2) aceptar una potencia del 80 % en lugar del 90 %, o (3) usar un diseño de una cola si el contexto lo justifica (que requiere un \(n\) algo menor). Si \(n\) es muy pequeño (&lt; 20), comprueba que la distribución de los datos es aproximadamente normal o aplica un test no paramétrico (test de Wilcoxon de una muestra) y ajusta \(n\) con el factor de eficiencia relativa correspondiente. Con los datos recogidos, realiza el contraste con la <a href="contraste-hipotesis-una-media.html">calculadora de contraste de hipótesis para una media</a>.</p>
         </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>

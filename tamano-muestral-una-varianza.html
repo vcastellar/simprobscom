@@ -141,6 +141,8 @@
     </header>
 
     <main>
+        <p class="tool-intro">Esta herramienta calcula el tamaño de muestra para contrastar si la varianza (o desviación típica) difiere de un valor de referencia (\(H_0: \sigma = \sigma_0\)) con la potencia objetivo, mediante la distribución chi-cuadrado exacta.</p>
+
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
@@ -178,11 +180,10 @@
             <div id="varResult" class="result-box">Resultado pendiente…</div>
         </section>
 
-        <section class="card content-card">
+                <section class="card content-card">
             <h3>Explicación</h3>
             <p>El test chi-cuadrado de varianza contrasta \(H_0: \sigma^2 = \sigma_0^2\) mediante el estadístico \(T = (n-1)S^2/\sigma_0^2\), que bajo \(H_0\) sigue una distribución \(\chi^2_{n-1}\).</p>
             <p>Bajo la alternativa \(\sigma_1 = R\cdot\sigma_0\), el estadístico \(T\) sigue una distribución \(R^2 \cdot \chi^2_{n-1}\), equivalentemente \(T/R^2 \sim \chi^2_{n-1}\). La potencia exacta se evalúa usando la CDF de la distribución chi-cuadrado central, sin aproximaciones normales.</p>
-
             <h3>Fórmula de potencia exacta</h3>
             <p>Para alternativa bilateral (\(H_a: \sigma \neq \sigma_0\)):</p>
             <p class="formula-line">\( \text{Potencia} = F_{\chi^2_{n-1}}\!\left(\frac{\chi^2_{\alpha/2,\,n-1}}{R^2}\right) + 1 - F_{\chi^2_{n-1}}\!\left(\frac{\chi^2_{1-\alpha/2,\,n-1}}{R^2}\right) \)</p>
@@ -191,9 +192,6 @@
             <p>Para alternativa unilateral inferior (\(H_a: \sigma \leq \sigma_0\)):</p>
             <p class="formula-line">\( \text{Potencia} = F_{\chi^2_{n-1}}\!\left(\frac{\chi^2_{\alpha,\,n-1}}{R^2}\right) \)</p>
             <p>La calculadora busca el menor \(n\) tal que la potencia exacta alcanza el valor objetivo.</p>
-        </section>
-
-        <section class="card content-card">
             <h3>Configuración rápida</h3>
             <ul>
                 <li><strong>R:</strong> especifica la razón σ₁/σ₀ que quieres detectar. R=1,5 (incremento del 50 %) es un tamaño de efecto moderado. R=2 (varianza cuádruple) se detecta con muestras más pequeñas.</li>
@@ -202,19 +200,23 @@
                 <li><strong>Alternativa:</strong> bilateral si no tienes dirección previa; unilateral superior para detectar incrementos de variabilidad (control de calidad).</li>
                 <li><strong>Normalidad:</strong> este test es muy sensible a desviaciones de la normalidad; verifica el supuesto antes de aplicarlo.</li>
             </ul>
-
             <h3>Ejemplo resuelto</h3>
             <p>Un fabricante de semiconductores quiere detectar un incremento de al menos un 50 % en la desviación estándar del diámetro de los chips (R = σ₁/σ₀ = 1,5). El proceso nominal tiene \(\sigma_0 = 2\) μm. Se quiere un contraste bilateral con \(\alpha = 0{,}05\) y potencia del 80 %.</p>
             <p>La calculadora busca el menor \(n\) tal que la potencia exacta sea ≥ 0,80 con R = 1,5, y devuelve aproximadamente <strong>n = 54 observaciones</strong>. Con esa muestra, si la varianza real es \((1{,}5 \times 2)^2 = 9\) μm² (en lugar de los 4 μm² nominales), el test detectará el cambio el 80 % de las veces.</p>
             <p><strong>Análisis de sensibilidad:</strong> con R = 2 (varianza cuádruple), la muestra se reduce a n ≈ 18. Para detectar R = 1,25 (incremento del 25 %) con la misma potencia se necesitan n ≈ 184. Los contrastes de varianza requieren muestras considerablemente mayores que los de media para el mismo nivel de efecto relativo.</p>
-        </section>
-
-        <section class="card content-card">
+            <h3>Supuestos del modelo</h3>
+            <ul>
+                <li>Muestreo aleatorio simple con observaciones independientes.</li>
+                <li>La variable sigue una distribución normal: el contraste \(\chi^2\) sobre la varianza es muy sensible a desviaciones de la normalidad.</li>
+                <li>\(\sigma_0\) es el valor de referencia de la desviación típica bajo \(H_0\).</li>
+                <li>El cálculo emplea la distribución chi-cuadrado exacta con \(n-1\) grados de libertad.</li>
+            </ul>
             <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) obtenido es el <strong>mínimo de observaciones necesarias</strong> para que el contraste de hipótesis sobre la varianza alcance la potencia especificada. Con ese tamaño muestral, si la desviación real de la varianza respecto a \(\sigma_0^2\) es al menos la indicada por el cociente \(R = \sigma_1/\sigma_0\), el test la detectará con la probabilidad deseada. Redondea siempre hacia arriba. Si prevés pérdidas de observaciones, divide \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener el reclutamiento necesario.</p>
                 <p>La potencia del contraste de varianza depende de la desviación relativa \(R\) de forma no lineal: detectar variaciones pequeñas (por ejemplo \(R = 1{,}2\)) requiere muestras muy grandes, mientras que variaciones grandes (\(R = 2\) o más) se detectan con pocas observaciones. Realiza un análisis de sensibilidad variando \(R\) en ±0{,}1 o ±0{,}2 para evaluar la robustez del tamaño muestral a la incertidumbre sobre la magnitud real del efecto.</p>
                 <p>Un supuesto crítico es la <strong>normalidad de los datos</strong>: el estadístico chi-cuadrado para la varianza es notablemente sensible a desviaciones de la normalidad, mucho más que el estadístico \(t\) para la media. Si los datos son asimétricos o presentan colas pesadas, el nivel nominal \(\alpha\) puede no respetarse. Antes de usar este resultado, verifica la normalidad con la <a href="tamano-muestral-shapiro-wilk.html">calculadora de tamaño muestral para Shapiro-Wilk</a> o realiza un gráfico Q-Q. Una vez recogidos los datos, realiza el contraste con la <a href="contraste-hipotesis-varianzas.html">calculadora de contraste de hipótesis para varianzas</a>.</p>
         </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>

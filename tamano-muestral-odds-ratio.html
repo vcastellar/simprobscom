@@ -113,6 +113,8 @@
     </header>
 
     <main>
+        <p class="tool-intro">Calcula cuántos <strong>casos y controles</strong> necesitas para que un estudio caso-control detecte una odds ratio distinta de 1 con la potencia deseada, fijando la razón controles:casos.</p>
+
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
@@ -157,11 +159,10 @@
             <div id="orResult" class="result-box">Resultado pendiente…</div>
         </section>
 
-        <section class="card content-card">
+                <section class="card content-card">
             <h3>Explicación</h3>
             <p>En un estudio <strong>caso-control</strong> el parámetro de interés no es la diferencia de medias sino el <strong>odds ratio</strong> (OR): el cociente entre las odds de exposición en casos y en controles. El OR es una medida de asociación fundamental en epidemiología, especialmente útil cuando la enfermedad es rara, porque estima el riesgo relativo con buena aproximación en ese escenario.</p>
             <p>Para calcular el tamaño muestral se convierte el OR en proporciones de exposición y se aplica la fórmula de Fleiss para dos proporciones independientes. La clave es que el OR define implícitamente la proporción de expuestos en los casos (\(p_1\)) a partir de la proporción en controles (\(p_0\)) y del OR deseado. Permite además ajustar la razón de controles por caso (r), lo que resulta útil cuando los casos son escasos y los controles abundantes.</p>
-
             <h3>Fórmula de tamaño muestral</h3>
             <p>Sea \(p_0\) la proporción de expuestos en controles. La proporción en casos se obtiene como:</p>
             <p class="formula-line">\( p_1 = \frac{\text{OR}\cdot p_0}{1 + p_0\,(\text{OR}-1)} \)</p>
@@ -174,7 +175,24 @@
                 <li><strong>r</strong>: número de controles por caso. Aumentar r incrementa la potencia cuando los casos son escasos, pero con rendimientos decrecientes: pasar de r = 1 a r = 2 gana más que de r = 3 a r = 4.</li>
                 <li><strong>p̄</strong>: proporción ponderada de exposición conjunta en la muestra.</li>
             </ul>
-
+            <h3>Configuración rápida</h3>
+            <ul>
+                <li><strong>p₀:</strong> usa datos poblacionales o registros de salud. Si es desconocido, 0,20–0,30 es frecuente en muchos factores de riesgo ambientales y de estilo de vida.</li>
+                <li><strong>OR:</strong> el OR mínimo relevante que quieres detectar. OR = 2 es un efecto moderado en epidemiología; OR = 1,5 es pequeño y requiere muestras grandes.</li>
+                <li><strong>r:</strong> aumentar a 2–3 controles por caso mejora la potencia cuando los casos son escasos; más de 4 controles por caso aporta poca ganancia adicional de potencia.</li>
+                <li><strong>OR protector (OR &lt; 1):</strong> introdúcelo directamente; la calculadora lo maneja correctamente (p₁ &lt; p₀ en ese caso).</li>
+            </ul>
+            <h3>Ejemplo sencillo</h3>
+            <p>Estudio sobre tabaquismo y cáncer de pulmón: exposición (fumadores) en controles p₀ = 0,30, OR = 2,0, α = 0,05 bilateral, potencia 0,80, relación 1:1. Esto implica p₁ = 0,462. Necesitas aproximadamente <strong>141 casos y 141 controles</strong> (total ≈ 282).</p>
+            <h3>Ejemplo resuelto</h3>
+            <p>Un equipo epidemiológico diseña un estudio caso-control para investigar la asociación entre el tabaquismo y el cáncer de pulmón. La proporción de fumadores entre los controles (personas sanas de características similares) se estima en \(p_2 = 0{,}30\). Se quiere detectar un odds ratio de al menos \(\text{OR} = 2{,}5\) con \(\alpha = 0{,}05\) bilateral y potencia del 80 %.</p>
+            <p>El primer paso es convertir el OR en la proporción de expuestos esperada entre los casos:</p>
+            <p class="formula-line">\( p_1 = \frac{\text{OR} \times p_2}{1 + p_2 \times (\text{OR} - 1)} = \frac{2{,}5 \times 0{,}30}{1 + 0{,}30 \times 1{,}5} = \frac{0{,}75}{1{,}45} \approx 0{,}517 \)</p>
+            <p>Con \(z_{\alpha/2} = 1{,}960\) y \(z_{\beta} = 0{,}842\), se aplica la fórmula de Fleiss para dos proporciones independientes:</p>
+            <p class="formula-line">\( n = \frac{\bigl(z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})} + z_{\beta}\sqrt{p_1(1-p_1)+p_2(1-p_2)}\bigr)^2}{(p_1-p_2)^2} \)</p>
+            <p>Con \(\bar{p} = (0{,}517+0{,}30)/2 = 0{,}4085\): el primer término es \(1{,}960\times\sqrt{2\times0{,}4085\times0{,}5915} = 1{,}960\times0{,}6951 = 1{,}362\); el segundo, \(0{,}842\times\sqrt{0{,}517\times0{,}483+0{,}30\times0{,}70} = 0{,}842\times\sqrt{0{,}4597} = 0{,}842\times0{,}6780 = 0{,}571\). La diferencia entre proporciones es \(p_1 - p_2 = 0{,}217\).</p>
+            <p class="formula-line">\( n = \frac{(1{,}362 + 0{,}571)^2}{(0{,}217)^2} = \frac{(1{,}933)^2}{0{,}04709} = \frac{3{,}736}{0{,}04709} \approx 79{,}3 \rightarrow 80 \)</p>
+            <p>Redondeando al entero superior, se necesitan <strong>80 casos y 80 controles</strong> (160 participantes en total) para alcanzar el 80 % de potencia.</p>
             <h3>Supuestos del modelo</h3>
             <ul>
                 <li><strong>Muestreo independiente:</strong> casos y controles se seleccionan de forma independiente, sin emparejamiento (para diseños emparejados, usar el <a href="contraste-hipotesis-proporciones-apareadas.html">método de McNemar</a>).</li>
@@ -183,20 +201,6 @@
                 <li><strong>OR constante:</strong> la fórmula supone un OR homogéneo; no considera interacción ni confusión residual.</li>
                 <li><strong>Enfermedad rara:</strong> la interpretación del OR como aproximación al riesgo relativo es válida cuando la incidencia es baja (&lt; 10 %). Con enfermedades frecuentes, el OR sobreestima el RR.</li>
             </ul>
-        </section>
-
-        <section class="card content-card">
-            <h3>Configuración rápida</h3>
-            <ul>
-                <li><strong>p₀:</strong> usa datos poblacionales o registros de salud. Si es desconocido, 0,20–0,30 es frecuente en muchos factores de riesgo ambientales y de estilo de vida.</li>
-                <li><strong>OR:</strong> el OR mínimo relevante que quieres detectar. OR = 2 es un efecto moderado en epidemiología; OR = 1,5 es pequeño y requiere muestras grandes.</li>
-                <li><strong>r:</strong> aumentar a 2–3 controles por caso mejora la potencia cuando los casos son escasos; más de 4 controles por caso aporta poca ganancia adicional de potencia.</li>
-                <li><strong>OR protector (OR &lt; 1):</strong> introdúcelo directamente; la calculadora lo maneja correctamente (p₁ &lt; p₀ en ese caso).</li>
-            </ul>
-
-            <h3>Ejemplo sencillo</h3>
-            <p>Estudio sobre tabaquismo y cáncer de pulmón: exposición (fumadores) en controles p₀ = 0,30, OR = 2,0, α = 0,05 bilateral, potencia 0,80, relación 1:1. Esto implica p₁ = 0,462. Necesitas aproximadamente <strong>141 casos y 141 controles</strong> (total ≈ 282).</p>
-
             <h3>Usos frecuentes</h3>
             <ul>
                 <li>Estudios sobre factores de riesgo de enfermedades raras (canceres poco frecuentes, enfermedades autoinmunes).</li>
@@ -204,7 +208,10 @@
                 <li>Investigación de brotes infecciosos o exposiciones ocupacionales.</li>
                 <li>Estudios de casos y controles anidados en cohortes.</li>
             </ul>
-
+            <h3>Cómo interpretar el resultado</h3>
+                <p>El valor \(n\) es el <strong>tamaño mínimo por grupo</strong> (casos y controles, o expuestos y no expuestos) para detectar el odds ratio especificado con la potencia y el nivel \(\alpha\) indicados. El total de participantes a reclutar es \(2n\) en un diseño balanceado. Redondea siempre hacia arriba y añade el margen por pérdidas: divide \(n\) entre \((1 - \text{tasa de pérdida})\) por grupo. Si el diseño es no balanceado (diferente número de casos y controles en ratio \(k\!:\!1\)), el grupo de casos necesita \(n\) y el de controles \(k \cdot n\); aumentar \(k\) más allá de 4:1 rara vez reduce sustancialmente el \(n\) total.</p>
+                <p>El OR es el parámetro de interés, pero la sensibilidad del \(n\) depende también de la probabilidad basal \(p_0\) (proporción de eventos en el grupo de referencia). Un OR dado requiere más sujetos cuando \(p_0\) es extrema (cercana a 0 o a 1) que cuando es cercana a 0,5. Realiza un <em>análisis de sensibilidad</em> variando \(p_0\) en ±0,05 y el OR en un rango razonable (\(\pm 0{,}2\) en escala natural) para evaluar la robustez del plan. Ten en cuenta que el OR es una medida de asociación relativa; para que tenga interpretación clínica, es útil traducirlo al riesgo relativo (RR) o a la diferencia de riesgos (DR) cuando la prevalencia de base es conocida.</p>
+                <p>Si el \(n\) calculado es inviable, considera si el OR mínimo detectable puede aumentarse o si la potencia puede reducirse al 80 %. En estudios de casos y controles, también puede aumentarse el ratio de controles por caso (p. ej., 2:1 o 3:1) para reducir el número de casos necesarios cuando estos son escasos. Con los datos recogidos, estima el OR y su IC con la <a href="intervalo-confianza-odds-ratio.html">calculadora de odds ratio</a>; si el objetivo era estimar el OR con una precisión dada en lugar de contrastarlo, usa la <a href="tamano-muestral-odds-ratio-ic.html">calculadora de tamaño muestral para el IC del OR</a>.</p>
             <h3>Referencias externas</h3>
             <ul>
                 <li><a href="https://es.wikipedia.org/wiki/Odds_ratio" target="_blank" rel="noopener">Odds ratio (Wikipedia en español)</a> — definición, interpretación y relación con el riesgo relativo</li>
@@ -215,24 +222,6 @@
             </ul>
         </section>
 
-        <section class="card content-card">
-            <h3>Ejemplo resuelto</h3>
-            <p>Un equipo epidemiológico diseña un estudio caso-control para investigar la asociación entre el tabaquismo y el cáncer de pulmón. La proporción de fumadores entre los controles (personas sanas de características similares) se estima en \(p_2 = 0{,}30\). Se quiere detectar un odds ratio de al menos \(\text{OR} = 2{,}5\) con \(\alpha = 0{,}05\) bilateral y potencia del 80 %.</p>
-            <p>El primer paso es convertir el OR en la proporción de expuestos esperada entre los casos:</p>
-            <p class="formula-line">\( p_1 = \frac{\text{OR} \times p_2}{1 + p_2 \times (\text{OR} - 1)} = \frac{2{,}5 \times 0{,}30}{1 + 0{,}30 \times 1{,}5} = \frac{0{,}75}{1{,}45} \approx 0{,}517 \)</p>
-            <p>Con \(z_{\alpha/2} = 1{,}960\) y \(z_{\beta} = 0{,}842\), se aplica la fórmula de Fleiss para dos proporciones independientes:</p>
-            <p class="formula-line">\( n = \frac{\bigl(z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})} + z_{\beta}\sqrt{p_1(1-p_1)+p_2(1-p_2)}\bigr)^2}{(p_1-p_2)^2} \)</p>
-            <p>Con \(\bar{p} = (0{,}517+0{,}30)/2 = 0{,}4085\): el primer término es \(1{,}960\times\sqrt{2\times0{,}4085\times0{,}5915} = 1{,}960\times0{,}6951 = 1{,}362\); el segundo, \(0{,}842\times\sqrt{0{,}517\times0{,}483+0{,}30\times0{,}70} = 0{,}842\times\sqrt{0{,}4597} = 0{,}842\times0{,}6780 = 0{,}571\). La diferencia entre proporciones es \(p_1 - p_2 = 0{,}217\).</p>
-            <p class="formula-line">\( n = \frac{(1{,}362 + 0{,}571)^2}{(0{,}217)^2} = \frac{(1{,}933)^2}{0{,}04709} = \frac{3{,}736}{0{,}04709} \approx 79{,}3 \rightarrow 80 \)</p>
-            <p>Redondeando al entero superior, se necesitan <strong>80 casos y 80 controles</strong> (160 participantes en total) para alcanzar el 80 % de potencia.</p>
-        </section>
-
-        <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
-                <p>El valor \(n\) es el <strong>tamaño mínimo por grupo</strong> (casos y controles, o expuestos y no expuestos) para detectar el odds ratio especificado con la potencia y el nivel \(\alpha\) indicados. El total de participantes a reclutar es \(2n\) en un diseño balanceado. Redondea siempre hacia arriba y añade el margen por pérdidas: divide \(n\) entre \((1 - \text{tasa de pérdida})\) por grupo. Si el diseño es no balanceado (diferente número de casos y controles en ratio \(k\!:\!1\)), el grupo de casos necesita \(n\) y el de controles \(k \cdot n\); aumentar \(k\) más allá de 4:1 rara vez reduce sustancialmente el \(n\) total.</p>
-                <p>El OR es el parámetro de interés, pero la sensibilidad del \(n\) depende también de la probabilidad basal \(p_0\) (proporción de eventos en el grupo de referencia). Un OR dado requiere más sujetos cuando \(p_0\) es extrema (cercana a 0 o a 1) que cuando es cercana a 0,5. Realiza un <em>análisis de sensibilidad</em> variando \(p_0\) en ±0,05 y el OR en un rango razonable (\(\pm 0{,}2\) en escala natural) para evaluar la robustez del plan. Ten en cuenta que el OR es una medida de asociación relativa; para que tenga interpretación clínica, es útil traducirlo al riesgo relativo (RR) o a la diferencia de riesgos (DR) cuando la prevalencia de base es conocida.</p>
-                <p>Si el \(n\) calculado es inviable, considera si el OR mínimo detectable puede aumentarse o si la potencia puede reducirse al 80 %. En estudios de casos y controles, también puede aumentarse el ratio de controles por caso (p. ej., 2:1 o 3:1) para reducir el número de casos necesarios cuando estos son escasos. Con los datos recogidos, estima el OR y su IC con la <a href="intervalo-confianza-odds-ratio.html">calculadora de odds ratio</a>; si el objetivo era estimar el OR con una precisión dada en lugar de contrastarlo, usa la <a href="tamano-muestral-odds-ratio-ic.html">calculadora de tamaño muestral para el IC del OR</a>.</p>
-        </section>
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>

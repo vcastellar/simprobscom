@@ -141,6 +141,8 @@
     </header>
 
     <main>
+        <p class="tool-intro">Esta herramienta calcula el tamaño de muestra necesario para contrastar la igualdad de dos varianzas (\(H_0: \sigma_1 = \sigma_2\)) con la potencia objetivo, mediante el test \(F\) exacto.</p>
+
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
@@ -170,11 +172,10 @@
             <div id="twoVarResult" class="result-box">Resultado pendiente…</div>
         </section>
 
-        <section class="card content-card">
+                <section class="card content-card">
             <h3>Explicación</h3>
             <p>El test F de Snedecor-Fisher contrasta la igualdad de varianzas de dos poblaciones normales independientes mediante el estadístico \(F = S_1^2/S_2^2\), que bajo \(H_0\) sigue una distribución \(F(n_1-1, n_2-1)\).</p>
             <p>Bajo la alternativa \(\sigma_1 = R \cdot \sigma_2\) con \(R \neq 1\), se tiene que \(F/R^2 \sim F(n_1-1, n_2-1)\), lo que permite calcular la potencia exacta sin necesidad de distribuciones F no centrales. La calculadora busca el menor \(n\) (por grupo) para que la potencia exacta bilateral alcance el objetivo.</p>
-
             <h3>Fórmula de potencia exacta</h3>
             <p>Para el contraste bilateral \(H_a: \sigma_1 \neq \sigma_2\) con grupos de igual tamaño \(n\):</p>
             <p class="formula-line">\( \text{Potencia} = F_{F(df,df)}\!\left(\frac{F_{\alpha/2,\,df,\,df}}{R^2}\right) + 1 - F_{F(df,df)}\!\left(\frac{F_{1-\alpha/2,\,df,\,df}}{R^2}\right) \)</p>
@@ -183,9 +184,6 @@
                 <li><strong>R > 1:</strong> σ₁ > σ₂ (el grupo 1 es más variable).</li>
                 <li><strong>R < 1:</strong> equivale a R'=1/R con grupos intercambiados; la potencia es la misma por simetría.</li>
             </ul>
-        </section>
-
-        <section class="card content-card">
             <h3>Configuración rápida</h3>
             <ul>
                 <li><strong>R:</strong> usa siempre R > 1 (o equivale al inverso por simetría). R=1,5 es un efecto moderado; R=2 ya es grande.</li>
@@ -193,19 +191,23 @@
                 <li><strong>Potencia:</strong> 0,80 como mínimo; 0,90 para estudios de validación.</li>
                 <li><strong>Normalidad:</strong> el test F de varianzas es muy sensible a la no normalidad. Si los datos no son normales, considera el test de Levene o Bartlett.</li>
             </ul>
-
             <h3>Ejemplo resuelto</h3>
             <p>Un estudio compara la variabilidad de tiempos de reacción entre un grupo con y sin tratamiento farmacológico. El investigador considera relevante detectar diferencias de un 50 % o más en la desviación estándar (R = 1,5), con \(\alpha = 0{,}05\) y potencia del 80 %.</p>
             <p>La calculadora devuelve aproximadamente <strong>n = 80 por grupo (160 en total)</strong>. El test F con 79 grados de libertad en cada grupo tiene un 80 % de probabilidad de rechazar \(H_0\) cuando la razón real de desviaciones estándar es ≥ 1,5.</p>
             <p><strong>Análisis de sensibilidad:</strong> con R = 2 (varianza cuádruple) la muestra se reduce a n ≈ 22 por grupo. Para R = 1,25 se necesitan n ≈ 283 por grupo. El tamaño muestral es muy sensible a R en la región R ∈ (1, 2).</p>
-        </section>
-
-        <section class="card content-card">
+            <h3>Supuestos del modelo</h3>
+            <ul>
+                <li>Dos muestras aleatorias independientes entre sí.</li>
+                <li>Ambas poblaciones son normales: el test \(F\) es sensible a la falta de normalidad.</li>
+                <li>Las observaciones dentro de cada grupo son independientes.</li>
+                <li>El tamaño muestral se deriva de la distribución \(F\) exacta para el cociente de varianzas.</li>
+            </ul>
             <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) es el <strong>tamaño mínimo de cada grupo</strong> en un diseño balanceado para contrastar si dos varianzas poblacionales difieren mediante el test F de Snedecor. El tamaño total del estudio es \(2n\), y los grados de libertad del numerador y denominador son \(n - 1\) cada uno. Redondea siempre hacia arriba; una observación menos puede reducir los grados de libertad justo en el borde crítico. Si prevés pérdidas o rechazos, divide cada \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener el número de reclutamiento real por grupo.</p>
                 <p>El efecto de interés es la razón de varianzas \(\lambda = \sigma_1^2 / \sigma_2^2\) (o su inversa si \(\lambda < 1\)). La sensibilidad del diseño a la especificación de \(\lambda\) es alta: si la razón real resulta ser más cercana a 1 de lo supuesto, el test tendrá menos potencia de la planificada. Realiza un <em>análisis de sensibilidad</em> calculando \(n\) para distintos valores de \(\lambda\) en un rango razonable. Es importante tener presente que el test F es extraordinariamente sensible a la <strong>no normalidad</strong>: incluso desviaciones moderadas de la normalidad pueden inflar gravemente la tasa de error de tipo I, haciendo que el p-valor sea infiable. Si los datos no son claramente normales, considera tests alternativos como Levene o Bartlett (más robustos a la no normalidad) y adapta el \(n\) en consecuencia.</p>
                 <p>Cuando el \(n\) calculado sea muy grande, suele indicar que el tamaño del efecto especificado (\(\lambda\) cercano a 1) es demasiado pequeño para ser detectado de forma eficiente con un test de razón de varianzas; valora si la diferencia entre varianzas tiene relevancia práctica. Si el objetivo es estimar la razón de varianzas con una precisión determinada en lugar de contrastarla, usa la <a href="tamano-muestral-varianza-ic.html">calculadora de tamaño muestral para el IC de la varianza</a>. Una vez recogidos los datos, analiza los resultados con el <a href="contraste-hipotesis-dos-varianzas.html">contraste F para dos varianzas</a>.</p>
         </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>

@@ -146,6 +146,8 @@
     </header>
 
     <main>
+        <p class="tool-intro">Calcula cuántos pares necesitas para detectar un cambio medio mínimo en un diseño de medidas repetidas o antes/después, con la potencia objetivo. Trabaja sobre la desviación típica de las diferencias.</p>
+
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
@@ -179,12 +181,11 @@
             <div id="pairedMeanResult" class="result-box">Resultado pendiente…</div>
         </section>
 
-        <section class="card content-card">
+                <section class="card content-card">
             <h3>Explicación</h3>
             <p>En un diseño apareado se mide la misma unidad experimental en dos condiciones (antes/después, tratamiento/control cruzado, ojo derecho/izquierdo). El contraste de interés no es la diferencia de medias de dos grupos independientes, sino la <strong>media de las diferencias individuales</strong> \(\bar{d} = \bar{X}_1 - \bar{X}_2\).</p>
             <p>La ventaja clave del diseño apareado es que elimina la variabilidad entre individuos, que suele ser la mayor fuente de ruido. Por eso, el parámetro relevante es \(\sigma_d\) (desviación estándar de las diferencias intraindividuales), que generalmente es mucho menor que \(\sigma\) de cada grupo por separado. Esto se traduce en muestras significativamente más pequeñas comparado con el diseño de dos grupos independientes.</p>
             <p>La relación entre \(\sigma_d\) y las desviaciones estándar de cada medición es: \(\sigma_d^2 = \sigma_1^2 + \sigma_2^2 - 2\rho\sigma_1\sigma_2\), donde \(\rho\) es la correlación entre ambas mediciones. Cuanto mayor sea \(\rho\), menor será \(\sigma_d\) y más eficiente el diseño apareado.</p>
-
             <h3>Fórmula de tamaño muestral</h3>
             <p class="formula-line">\( n = \left\lceil\left(\frac{(Z_{\alpha/2}+Z_\beta)\,\sigma_d}{\Delta}\right)^2\right\rceil \)</p>
             <ul>
@@ -193,9 +194,6 @@
                 <li><strong>\(\Delta\)</strong>: diferencia media mínima que quieres detectar.</li>
                 <li><strong>\(Z_{\alpha/2}\)</strong> y <strong>\(Z_\beta\)</strong>: cuantiles normales para alfa bilateral y potencia.</li>
             </ul>
-        </section>
-
-        <section class="card content-card">
             <h3>Configuración rápida</h3>
             <ul>
                 <li><strong>σd:</strong> estímala de un piloto apareado (mide diferencias en cada par) o de la literatura. <em>No</em> uses las σ individuales de cada grupo por separado.</li>
@@ -203,28 +201,8 @@
                 <li><strong>Δ:</strong> la diferencia mínima prácticamente relevante (cambio clínico mínimo, mínima mejora operativa).</li>
                 <li><strong>Alfa y potencia:</strong> 0,05 y 0,80 como base; 0,90 si los falsos negativos son costosos.</li>
             </ul>
-
             <h3>Ejemplo sencillo</h3>
             <p>Intervención de entrenamiento: <strong>σd = 8</strong>, cambio mínimo a detectar <strong>Δ = 3</strong>, <strong>α = 0,05</strong>, potencia <strong>0,80</strong>. Resultado: <strong>≈ 56 pares</strong>. Para la misma situación con dos grupos independientes (σ = 8) necesitarías ~113 por grupo si ρ = 0, pero solo ~56 pares si ρ = 0,5 gracias al diseño apareado.</p>
-
-            <h3>Usos frecuentes</h3>
-            <ul>
-                <li>Estudios pre-post intervención (antes y después del tratamiento).</li>
-                <li>Diseños cruzados (crossover) en ensayos clínicos.</li>
-                <li>Comparación de dos métodos de medición aplicados al mismo sujeto.</li>
-                <li>Evaluaciones de cambio de habilidad, peso, presión arterial, etc.</li>
-            </ul>
-
-            <h3>Supuestos del modelo</h3>
-            <ul>
-                <li>Las diferencias \(d_i = X_{1i} - X_{2i}\) son independientes entre pares.</li>
-                <li>Las diferencias siguen aproximadamente una distribución normal (o n es grande).</li>
-                <li>\(\sigma_d\) es constante en todos los pares (homocedasticidad de las diferencias).</li>
-                <li>El efecto del orden no contamina las mediciones (en diseños cruzados, usa periodos de lavado adecuados).</li>
-            </ul>
-        </section>
-
-        <section class="card content-card">
             <h3>Ejemplo resuelto</h3>
             <p>Un centro de fisioterapia quiere evaluar la eficacia de un nuevo protocolo de tratamiento midiendo el nivel de dolor (escala 0–10) antes y después de la intervención en cada paciente. De un estudio piloto previo se estima que la desviación estándar de las diferencias individuales es \(\sigma_d = 2{,}1\) puntos. El equipo clínico considera relevante detectar una mejoría media mínima de \(\delta = 1{,}0\) punto. Se fija un nivel de significación bilateral \(\alpha = 0{,}05\) y una potencia del 80 %.</p>
             <p>Los valores críticos correspondientes son \(z_{\alpha/2} = 1{,}960\) (percentil 97,5 de la normal estándar) y \(z_{\beta} = 0{,}842\) (percentil 80). Sustituyendo en la fórmula:</p>
@@ -234,14 +212,26 @@
             <p class="formula-line">\( n = \frac{(1{,}960 + 1{,}282)^2 \times 4{,}41}{1{,}0^2} = \frac{(3{,}242)^2 \times 4{,}41}{1} = \frac{10{,}511 \times 4{,}41}{1} \approx 46{,}4 \)</p>
             <p>Se precisarían entonces <strong>47 pares</strong>. Este incremento de 12 pares ilustra cómo el aumento de potencia del 80 % al 90 % supone aproximadamente un 34 % más de muestra.</p>
             <p>Si la variabilidad real fuese mayor —por ejemplo \(\sigma_d = 3{,}0\)— con potencia del 80 % el tamaño muestral ascendería a \(n = 7{,}851 \times 9{,}0 / 1{,}0 \approx 71\) pares, lo que pone de manifiesto la importancia de disponer de un estudio piloto fiable para estimar \(\sigma_d\) con precisión.</p>
-        </section>
-
-        <section class="card content-card">
+            <h3>Supuestos del modelo</h3>
+            <ul>
+                <li>Las diferencias \(d_i = X_{1i} - X_{2i}\) son independientes entre pares.</li>
+                <li>Las diferencias siguen aproximadamente una distribución normal (o n es grande).</li>
+                <li>\(\sigma_d\) es constante en todos los pares (homocedasticidad de las diferencias).</li>
+                <li>El efecto del orden no contamina las mediciones (en diseños cruzados, usa periodos de lavado adecuados).</li>
+            </ul>
+            <h3>Usos frecuentes</h3>
+            <ul>
+                <li>Estudios pre-post intervención (antes y después del tratamiento).</li>
+                <li>Diseños cruzados (crossover) en ensayos clínicos.</li>
+                <li>Comparación de dos métodos de medición aplicados al mismo sujeto.</li>
+                <li>Evaluaciones de cambio de habilidad, peso, presión arterial, etc.</li>
+            </ul>
             <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) es el <strong>número mínimo de sujetos</strong>, cada uno de los cuales aporta dos mediciones (antes/después, o condición A/condición B). El número total de observaciones es \(2n\), pero el número de unidades estadísticas independientes sigue siendo \(n\). Redondea siempre hacia arriba y aplica el ajuste por pérdidas: si esperas un 15 % de abandono entre la primera y la segunda medición, recluta \(\lceil n / 0{,}85 \rceil\) sujetos en la primera fase.</p>
                 <p>El parámetro clave y más delicado es \(\sigma_d\), la <strong>desviación estándar de las diferencias</strong> intraindividuales, que no debe confundirse con las desviaciones estándar de cada medición por separado. Si se usa \(\sigma\) de una sola medición en lugar de \(\sigma_d\), el \(n\) calculado puede estar sobreestimado o subestimado dependiendo de la correlación entre ambas medidas: cuando la correlación intraindividual \(\rho\) es alta, \(\sigma_d \approx \sigma\sqrt{2(1-\rho)}\) es considerablemente menor que \(\sigma\) y el diseño apareado exige muchos menos sujetos que el diseño independiente. Haz un <em>análisis de sensibilidad</em> con \(\sigma_d \pm 25\,\%\) y usa el \(n\) mayor.</p>
                 <p>Si el \(n\) calculado resulta muy pequeño (&lt; 15 pares), verifica que la distribución de las diferencias sea aproximadamente normal, ya que el test t para medidas repetidas se basa en ese supuesto. Con muy pocos pares, considera el test de Wilcoxon para muestras relacionadas. Cuando \(n\) sea inasumiblemente grande, revisa si la diferencia mínima detectable \(\delta\) es prácticamente relevante o si puede relajarse. Con los datos recogidos, usa la <a href="contraste-hipotesis-medias-apareadas.html">calculadora de contraste para medias apareadas</a> para el análisis principal.</p>
         </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>

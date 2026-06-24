@@ -113,6 +113,8 @@
     </header>
 
     <main>
+        <p class="tool-intro">Calcula cuántos pares de observaciones necesitas para que un test de correlación de Pearson detecte, con la potencia objetivo, una correlación mínima distinta de cero. Se basa en la transformación \(z\) de Fisher.</p>
+
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
@@ -160,11 +162,10 @@
             <div id="corrResult" class="result-box">Resultado pendiente…</div>
         </section>
 
-        <section class="card content-card">
+                <section class="card content-card">
             <h3>Explicación</h3>
             <p>Este cálculo determina cuántos pares de observaciones (n) se necesitan para detectar una correlación poblacional \(\rho\) diferente de cero con una potencia y un nivel de significación dados. La lógica es diferente a la de las calculadoras de medias o proporciones: aquí se utiliza la <strong>transformación z de Fisher</strong>, que estabiliza la varianza de \(\hat{\rho}\).</p>
             <p>El estimador muestral \(\hat{\rho}\) (correlación de Pearson) tiene una distribución sesgada y asimétrica cuando \(\rho \neq 0\), con varianza que depende del propio \(\rho\). La transformación \(z = \operatorname{arctanh}(\hat{\rho})\) convierte esta distribución en aproximadamente normal con varianza \(1/(n-3)\), independiente de \(\rho\). Esto permite derivar n de forma directa a partir del cociente señal-ruido.</p>
-
             <h3>Fórmula de tamaño muestral</h3>
             <p>Sea \(z_\rho = \operatorname{arctanh}(\rho) = \frac{1}{2}\ln\!\left(\frac{1+\rho}{1-\rho}\right)\). Entonces:</p>
             <p class="formula-line">\( n = \left\lceil \frac{(Z_{\alpha/2} + Z_\beta)^2}{z_\rho^2} \right\rceil + 3 \)</p>
@@ -175,17 +176,6 @@
                 <li><strong>+3</strong>: corrección estándar derivada de la distribución exacta de \(\hat{\rho}\); mejora la aproximación para n pequeños.</li>
                 <li>Referencia (Cohen, 1988): ρ = 0,10 (pequeña), 0,30 (moderada), 0,50 (grande).</li>
             </ul>
-
-            <h3>Supuestos del modelo</h3>
-            <ul>
-                <li><strong>Normalidad bivariada:</strong> la fórmula asume que (X, Y) sigue una distribución normal bivariada. Desviaciones severas afectan la distribución de \(\hat{\rho}\).</li>
-                <li><strong>Independencia:</strong> cada par (x<sub>i</sub>, y<sub>i</sub>) es independiente de los demás.</li>
-                <li><strong>Relación lineal:</strong> la correlación de Pearson mide únicamente asociación lineal; una relación curvilínea fuerte con ρ ≈ 0 no sería detectada.</li>
-                <li><strong>Ausencia de valores atípicos influyentes:</strong> los outliers pueden distorsionar gravemente \(\hat{\rho}\); en muestras pequeñas es especialmente relevante.</li>
-            </ul>
-        </section>
-
-        <section class="card content-card">
             <h3>Configuración rápida</h3>
             <ul>
                 <li><strong>ρ desconocido:</strong> usa ρ = 0,30 como referencia conservadora de efecto moderado.</li>
@@ -193,29 +183,8 @@
                 <li><strong>Contraste unilateral:</strong> solo si tienes razones sólidas para esperar una correlación positiva (o negativa) — reduce n pero exige justificación a priori.</li>
                 <li><strong>Potencia:</strong> 0,80 es el mínimo habitual; 0,90 para estudios confirmatorios o validación psicométrica.</li>
             </ul>
-
             <h3>Ejemplo sencillo</h3>
             <p>Quieres detectar una correlación de al menos ρ = 0,30 con α = 0,05 bilateral y potencia 0,80. La transformación da z<sub>ρ</sub> = arctanh(0,30) ≈ 0,3095. Necesitas aproximadamente <strong>85 pares de observaciones</strong>.</p>
-
-            <h3>Usos frecuentes</h3>
-            <ul>
-                <li>Validación de escalas psicométricas y cuestionarios (correlación ítem-total, fiabilidad test-retest).</li>
-                <li>Estudios de asociación entre dos variables continuas (biomarcadores, escalas clínicas, parámetros fisiológicos).</li>
-                <li>Análisis de concordancia inter-observador mediante correlación de Pearson o intraclase.</li>
-                <li>Estudios de validación de métodos de medición (p. ej. comparación de dos técnicas de laboratorio).</li>
-            </ul>
-
-            <h3>Referencias externas</h3>
-            <ul>
-                <li><a href="https://es.wikipedia.org/wiki/Coeficiente_de_correlaci%C3%B3n_de_Pearson" target="_blank" rel="noopener">Coeficiente de correlación de Pearson (Wikipedia en español)</a></li>
-                <li><a href="https://en.wikipedia.org/wiki/Fisher_transformation" target="_blank" rel="noopener">Fisher transformation (Wikipedia en inglés)</a> — transformación arctanh y su uso para inferencia sobre ρ</li>
-                <li><a href="https://en.wikipedia.org/wiki/Pearson_correlation_coefficient" target="_blank" rel="noopener">Pearson correlation coefficient (Wikipedia en inglés)</a></li>
-                <li><a href="https://en.wikipedia.org/wiki/Sample_size_determination" target="_blank" rel="noopener">Sample size determination (Wikipedia en inglés)</a></li>
-                <li>Cohen, J. (1988). <em>Statistical Power Analysis for the Behavioral Sciences</em> (2ª ed.). Lawrence Erlbaum Associates. — referencia de los umbrales ρ = 0,10/0,30/0,50.</li>
-            </ul>
-        </section>
-
-        <section class="card content-card">
             <h3>Ejemplo resuelto</h3>
             <p>Un equipo de investigación educativa quiere estudiar si existe una correlación entre las horas semanales de estudio autónomo y la calificación obtenida en el examen final. Basándose en la literatura previa, estiman que la correlación de Pearson poblacional es \(\rho \approx 0{,}40\) (correlación moderada). El contraste es bilateral con \(\alpha = 0{,}05\) y se desea una potencia del 80 % para detectar correlaciones de magnitud \(\rho \geq 0{,}40\).</p>
             <p>El primer paso es aplicar la transformación de Fisher \(z_r\) para estabilizar la varianza:</p>
@@ -226,14 +195,34 @@
             <p>Si la correlación esperada fuese más débil, por ejemplo \(\rho = 0{,}25\), la transformación de Fisher daría \(z_r = 0{,}5 \times \ln(1{,}25/0{,}75) \approx 0{,}5 \times 0{,}5108 = 0{,}2554\). En ese caso:</p>
             <p class="formula-line">\( n = \frac{7{,}851}{(0{,}2554)^2} + 3 = \frac{7{,}851}{0{,}0652} + 3 \approx 120{,}4 + 3 = 124 \)</p>
             <p>Se precisarían <strong>124 participantes</strong>, casi el triple que para \(\rho = 0{,}40\). Este contraste ilustra la alta sensibilidad del tamaño muestral al valor de la correlación esperada, especialmente en el rango \(\rho < 0{,}30\).</p>
-        </section>
-
-        <section class="card content-card">
+            <h3>Supuestos del modelo</h3>
+            <ul>
+                <li><strong>Normalidad bivariada:</strong> la fórmula asume que (X, Y) sigue una distribución normal bivariada. Desviaciones severas afectan la distribución de \(\hat{\rho}\).</li>
+                <li><strong>Independencia:</strong> cada par (x<sub>i</sub>, y<sub>i</sub>) es independiente de los demás.</li>
+                <li><strong>Relación lineal:</strong> la correlación de Pearson mide únicamente asociación lineal; una relación curvilínea fuerte con ρ ≈ 0 no sería detectada.</li>
+                <li><strong>Ausencia de valores atípicos influyentes:</strong> los outliers pueden distorsionar gravemente \(\hat{\rho}\); en muestras pequeñas es especialmente relevante.</li>
+            </ul>
+            <h3>Usos frecuentes</h3>
+            <ul>
+                <li>Validación de escalas psicométricas y cuestionarios (correlación ítem-total, fiabilidad test-retest).</li>
+                <li>Estudios de asociación entre dos variables continuas (biomarcadores, escalas clínicas, parámetros fisiológicos).</li>
+                <li>Análisis de concordancia inter-observador mediante correlación de Pearson o intraclase.</li>
+                <li>Estudios de validación de métodos de medición (p. ej. comparación de dos técnicas de laboratorio).</li>
+            </ul>
             <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) es el <strong>número mínimo de pares de observaciones</strong> (sujetos con las dos medidas requeridas) para detectar una correlación de Pearson \(\rho_1\) cuando la hipótesis nula es \(\rho = \rho_0\) (habitualmente \(\rho_0 = 0\)) con la potencia y el nivel de significación especificados. Redondea siempre hacia arriba. Si prevés que algunos sujetos no podrán ser medidos en ambas variables (pérdidas de seguimiento, datos faltantes), divide \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener el reclutamiento necesario.</p>
                 <p>La fórmula utiliza la transformación \(z\) de Fisher \(z = \frac{1}{2}\ln\!\left(\frac{1+\rho}{1-\rho}\right)\) para estabilizar la varianza. Esta transformación es más precisa cuando \(n \geq 10\) y \(|\rho| < 0{,}9\); para correlaciones muy altas (\(|\rho| > 0{,}9\)) la aproximación puede subestimar el \(n\) necesario. Realiza un <em>análisis de sensibilidad</em> variando \(\rho_1\) en ±0,10: una correlación esperada de 0,5 en lugar de 0,6 puede exigir un 40–60 % más de pares. Si la correlación real resulta ser mayor de la esperada, el test tendrá más potencia de la planificada (lo que generalmente es una buena noticia), pero si resulta ser menor, el estudio puede quedar infrapotenciado.</p>
                 <p>Cuando el \(n\) calculado resulte muy pequeño (&lt; 20 pares), verifica que la relación entre las variables es razonablemente lineal y que no hay valores atípicos influyentes, ya que la correlación de Pearson es sensible a ambos factores. Si los datos presentan no linealidad o colas pesadas, considera la correlación de Spearman y ajusta el \(n\) con un factor de eficiencia relativa. Con los datos recogidos, calcula la correlación y su IC con la <a href="contraste-hipotesis-correlacion.html">calculadora de contraste de hipótesis para la correlación</a> o realiza el contraste formal con la herramienta correspondiente.</p>
+            <h3>Referencias externas</h3>
+            <ul>
+                <li><a href="https://es.wikipedia.org/wiki/Coeficiente_de_correlaci%C3%B3n_de_Pearson" target="_blank" rel="noopener">Coeficiente de correlación de Pearson (Wikipedia en español)</a></li>
+                <li><a href="https://en.wikipedia.org/wiki/Fisher_transformation" target="_blank" rel="noopener">Fisher transformation (Wikipedia en inglés)</a> — transformación arctanh y su uso para inferencia sobre ρ</li>
+                <li><a href="https://en.wikipedia.org/wiki/Pearson_correlation_coefficient" target="_blank" rel="noopener">Pearson correlation coefficient (Wikipedia en inglés)</a></li>
+                <li><a href="https://en.wikipedia.org/wiki/Sample_size_determination" target="_blank" rel="noopener">Sample size determination (Wikipedia en inglés)</a></li>
+                <li>Cohen, J. (1988). <em>Statistical Power Analysis for the Behavioral Sciences</em> (2ª ed.). Lawrence Erlbaum Associates. — referencia de los umbrales ρ = 0,10/0,30/0,50.</li>
+            </ul>
         </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>

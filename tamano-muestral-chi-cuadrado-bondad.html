@@ -141,6 +141,8 @@
     </header>
 
     <main>
+        <p class="tool-intro">Usa esta herramienta para planificar un test chi-cuadrado de bondad de ajuste: calcula cuántas observaciones necesitas para detectar, con la potencia deseada, que tus datos se apartan de una distribución teórica. El efecto se expresa con la \(w\) de Cohen.</p>
+
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
@@ -191,20 +193,16 @@
             </details>
         </section>
 
-        <section class="card content-card">
+                <section class="card content-card">
             <h3>Explicación</h3>
             <p>El test chi-cuadrado de bondad de ajuste contrasta si la distribución observada de una variable categórica se ajusta a una distribución teórica especificada \(H_0\). Con \(k\) categorías, el estadístico tiene \(df = k-1\) grados de libertad bajo \(H_0\) (asumiendo que los parámetros de la distribución teórica son conocidos).</p>
             <p>Bajo la alternativa, el estadístico sigue una distribución chi-cuadrado no central con parámetro \(\lambda = N \cdot w^2\), donde \(N\) es el tamaño muestral y \(w\) es la \(w\) de Cohen.</p>
-
             <h3>Parámetro de no centralidad y potencia</h3>
             <p class="formula-line">\( \lambda = N \cdot w^2 \)</p>
             <p class="formula-line">\( w = \sqrt{\sum_{i=1}^k \frac{(p_{\text{obs},i} - p_{\text{teo},i})^2}{p_{\text{teo},i}}} \)</p>
             <p class="formula-line">\( \text{Potencia} = 1 - F_{\chi^2_{df,\,\lambda}}\!\left(\chi^2_{1-\alpha,\,df}\right) \quad \text{con } df = k-1 \)</p>
             <p>La distribución chi-cuadrado no central se evalúa exactamente mediante la mezcla de Poisson de chi-cuadrados centrales:</p>
             <p class="formula-line">\( F_{\chi^2_{df,\lambda}}(x) = \sum_{k=0}^{\infty} \frac{e^{-\lambda/2}(\lambda/2)^k}{k!} \cdot F_{\chi^2_{df+2k}}(x) \)</p>
-        </section>
-
-        <section class="card content-card">
             <h3>Configuración rápida</h3>
             <ul>
                 <li><strong>w:</strong> 0,1 (pequeño), 0,3 (mediano), 0,5 (grande) según Cohen. Usa el asistente si tienes las proporciones esperadas.</li>
@@ -212,20 +210,24 @@
                 <li><strong>Frecuencias esperadas:</strong> comprueba que N/k ≥ 5 para que la aproximación chi-cuadrado sea válida.</li>
                 <li><strong>Parámetros estimados:</strong> si estimas p parámetros de los datos, resta p a df: df = k−1−p.</li>
             </ul>
-
             <h3>Ejemplo resuelto</h3>
             <p>Un biólogo quiere contrastar si el color de ciertos insectos (5 categorías: amarillo, rojo, verde, azul, negro) sigue una distribución uniforme (\(p_0 = 0{,}20\) para cada categoría). Basándose en datos previos, espera que la distribución real sea (0,30; 0,25; 0,20; 0,15; 0,10).</p>
             <p>Con el asistente: \(w = \sqrt{(0{,}30-0{,}20)^2/0{,}20 + (0{,}25-0{,}20)^2/0{,}20 + 0 + (0{,}15-0{,}20)^2/0{,}20 + (0{,}10-0{,}20)^2/0{,}20} = \sqrt{0{,}05+0{,}0125+0+0{,}0125+0{,}05} = \sqrt{0{,}125} \approx 0{,}354\).</p>
             <p>Con \(w = 0{,}354\), \(df = 4\), \(\alpha = 0{,}05\) y potencia del 80 %, se necesitan aproximadamente <strong>N = 69 insectos</strong>. Con esa muestra, el test detectará la desviación de la distribución uniforme el 80 % de las veces.</p>
             <p><strong>Verificación:</strong> N/k = 69/5 = 13,8 ≥ 5. La aproximación chi-cuadrado es adecuada.</p>
-        </section>
-
-        <section class="card content-card">
+            <h3>Supuestos del modelo</h3>
+            <ul>
+                <li>Muestra aleatoria de observaciones independientes.</li>
+                <li>Variable categórica con \(k\) categorías mutuamente excluyentes y exhaustivas.</li>
+                <li>Frecuencias esperadas suficientemente grandes (regla habitual: \(E_i \ge 5\)).</li>
+                <li>El tamaño del efecto se expresa con la \(w\) de Cohen y la potencia se calcula con la distribución chi-cuadrado no central.</li>
+            </ul>
             <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(N\) es el <strong>total de observaciones necesarias</strong> (suma de todas las categorías) para que el test chi-cuadrado de bondad de ajuste tenga la potencia y el nivel de significación especificados. Redondea siempre hacia arriba. Si prevés que algunos registros serán descartados por errores o valores faltantes, divide \(N\) entre \((1 - \text{tasa de pérdida})\) para obtener el número de recogida real. El número de observaciones esperadas en cada categoría \(i\) bajo \(H_0\) es \(N \times p_{0i}\); verifica que todas estas frecuencias esperadas sean \(\geq 5\) para que la aproximación chi-cuadrado sea válida.</p>
                 <p>El tamaño del efecto \(w\) de Cohen cuantifica cuánto se aleja la distribución real (\(p_{1i}\)) de la distribución teórica (\(p_{0i}\)): \(w = \sqrt{\sum_i (p_{1i} - p_{0i})^2 / p_{0i}}\). Un valor \(w = 0{,}10\) es pequeño, \(w = 0{,}30\) mediano y \(w = 0{,}50\) grande. La sensibilidad del \(N\) a \(w\) es cuadrática: si el efecto real es un 30 % menor de lo especificado, \(N\) aumenta aproximadamente un 100 \% \((1/0{,}7^2 \approx 2{,}04)\). Si alguna de las proporciones teóricas \(p_{0i}\) es muy pequeña, la categoría correspondiente puede tener muy pocas observaciones esperadas; en ese caso, fusiona categorías con sentido teórico hasta alcanzar frecuencias esperadas \(\geq 5\) y recalcula los grados de libertad del test.</p>
                 <p>Cuando el \(N\) calculado resulte inviable, las palancas son: (1) aceptar un \(w\) mayor (detectar solo efectos más grandes), (2) reducir la potencia, o (3) reducir el número de categorías fusionando las más pequeñas. Si alguna frecuencia esperada cae por debajo de 5 incluso con el \(N\) calculado, recurre a pruebas exactas multinomiales. Con los datos recogidos, realiza el contraste con la <a href="chi-cuadrado-bondad-ajuste.html">calculadora de chi-cuadrado de bondad de ajuste</a> y compara los residuos estandarizados por categoría para identificar dónde se concentran las diferencias respecto a la distribución teórica.</p>
         </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>

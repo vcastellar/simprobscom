@@ -145,6 +145,8 @@
     </header>
 
     <main>
+        <p class="tool-intro">Estima cuántos pares necesitas para que el intervalo de confianza de la diferencia media en un diseño antes/después (o de medidas repetidas) alcance la precisión que fijes.</p>
+
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
@@ -177,12 +179,11 @@
             <div id="pairedResult" class="result-box">Resultado pendiente…</div>
         </section>
 
-        <section class="card content-card">
+                <section class="card content-card">
             <h3>Explicación</h3>
             <p>Esta calculadora determina el número mínimo de pares de observaciones para estimar la diferencia media poblacional \(\mu_d\) con un margen de error absoluto máximo \(E\) y un nivel de confianza dado. Se usa cuando el diseño empareja cada observación de un grupo con una observación concreta del otro: medición antes/después en los mismos sujetos, dos métodos aplicados a las mismas muestras, o pares emparejados por características relevantes.</p>
             <p>La fórmula es matemáticamente idéntica a la del tamaño muestral para una media, pero aplicada a las diferencias. El parámetro clave que debes conocer de antemano es \(\sigma_d\), la desviación estándar de las diferencias individuales \(d_i = x_{i,\text{después}} - x_{i,\text{antes}}\). Este valor no es la desviación estándar de cada grupo por separado, sino la dispersión de los cambios individuales.</p>
             <p>La fórmula usa el cuantil normal Z, lo que supone que \(\sigma_d\) es conocida o que la muestra es suficientemente grande. Para muestras pequeñas (&lt; 30 pares) con \(\sigma_d\) desconocida, el n real puede ser algo mayor; puedes iterar reemplazando Z por el cuantil t con n−1 grados de libertad.</p>
-
             <h3>Fórmula de tamaño muestral</h3>
             <p class="formula-line">\( n = \left(\dfrac{Z \cdot \sigma_d}{E}\right)^2 \)</p>
             <ul>
@@ -191,12 +192,8 @@
                 <li><strong>\(\sigma_d\)</strong>: desviación estándar de las diferencias individuales \(d_i\).</li>
                 <li><strong>E</strong>: margen de error absoluto máximo tolerable para \(\mu_d\) (en las mismas unidades que las diferencias).</li>
             </ul>
-
             <h3>Relación entre σ_d, E y n</h3>
             <p>El tamaño muestral crece cuadráticamente con la precisión exigida: reducir E a la mitad cuadruplica n. También crece cuadráticamente con \(\sigma_d\): si la variabilidad de los cambios individuales es el doble, necesitas cuatro veces más pares. Una clave del diseño apareado es que \(\sigma_d\) suele ser menor que la desviación estándar de cada grupo por separado cuando las mediciones están correlacionadas, lo que hace este diseño más eficiente que comparar dos grupos independientes.</p>
-        </section>
-
-        <section class="card content-card">
             <h3>Configuración rápida</h3>
             <ul>
                 <li><strong>Desviación estándar de las diferencias (σ_d):</strong> tómala de estudios piloto, de la literatura o de datos históricos del mismo tipo de medición. No confundas σ_d con la desviación típica de cada grupo.</li>
@@ -205,7 +202,6 @@
                 <li><strong>Error máximo E:</strong> defínelo en las mismas unidades que las diferencias y en términos prácticos: ¿a partir de qué diferencia en el cambio medio tomarías una decisión diferente?</li>
                 <li><strong>Pérdidas esperadas:</strong> divide n entre (1 − tasa de abandono esperada). En estudios longitudinales es habitual reservar un 10–20 % adicional.</li>
             </ul>
-
             <h3>Ejemplo resuelto</h3>
             <p>Un equipo clínico quiere estimar el descenso medio de la presión arterial sistólica (mmHg) tras 8 semanas de tratamiento con un nuevo fármaco. De un estudio piloto con 15 pacientes obtienen que la desviación estándar de las diferencias individuales (antes − después) es \(\sigma_d \approx 8{,}0\) mmHg. El equipo decide que la estimación debe ser precisa dentro de \(E = 2\) mmHg con un nivel de confianza del 95 % (\(Z = 1{,}960\)).</p>
             <p>Aplicamos la fórmula directamente:</p>
@@ -213,15 +209,6 @@
             <p>Se necesitan al menos <strong>62 pacientes</strong> con mediciones válidas antes y después. Con una pérdida esperada del 15 %, el número de pacientes a reclutar inicialmente es:</p>
             <p class="formula-line">\( n_{\text{reclutar}} = \frac{62}{1 - 0{,}15} = \frac{62}{0{,}85} \approx 73 \text{ pacientes} \)</p>
             <p><strong>Análisis de sensibilidad:</strong> si el equipo aceptase un margen de error de \(E = 3\) mmHg, la muestra se reduciría considerablemente: \( n = (1{,}960 \times 8{,}0 / 3{,}0)^2 = (5{,}227)^2 = 27{,}3 \rightarrow n = 28\). Definir correctamente el margen de error tolerable tiene un impacto enorme en la viabilidad del estudio.</p>
-
-            <h3>Usos frecuentes</h3>
-            <ul>
-                <li>Ensayos clínicos de intervención con medición pre y post en los mismos sujetos.</li>
-                <li>Estudios de validación de métodos de medición (comparación instrumento A vs. B en las mismas muestras).</li>
-                <li>Experimentos educativos o psicológicos con diseño antes/después.</li>
-                <li>Control de calidad con muestras medidas por dos operarios o en dos momentos.</li>
-            </ul>
-
             <h3>Supuestos del modelo</h3>
             <ul>
                 <li>Los pares son independientes entre sí (pero las dos observaciones dentro de cada par no lo son, y eso es exactamente lo que el diseño aprovecha).</li>
@@ -229,14 +216,19 @@
                 <li>La desviación estándar \(\sigma_d\) es conocida o se estima de forma fiable.</li>
                 <li>El margen de error \(E\) se aplica a la diferencia media \(\mu_d\), no a cada grupo por separado.</li>
             </ul>
-        </section>
-
-        <section class="card content-card">
+            <h3>Usos frecuentes</h3>
+            <ul>
+                <li>Ensayos clínicos de intervención con medición pre y post en los mismos sujetos.</li>
+                <li>Estudios de validación de métodos de medición (comparación instrumento A vs. B en las mismas muestras).</li>
+                <li>Experimentos educativos o psicológicos con diseño antes/después.</li>
+                <li>Control de calidad con muestras medidas por dos operarios o en dos momentos.</li>
+            </ul>
             <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) es el <strong>número mínimo de pares válidos</strong> (sujetos con ambas mediciones completas) para que el intervalo de confianza de la diferencia media intraindividual tenga una semiancho máximo de \(E\) con el nivel de confianza especificado. Redondea siempre hacia arriba. Si prevés que algunos pares quedarán incompletos (pérdida de una de las dos mediciones), añade un margen: divide \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener los pares que debes iniciar.</p>
                 <p>El parámetro más influyente y más difícil de conocer de antemano es \(\sigma_d\), la <strong>desviación estándar de las diferencias</strong> pareadas. Esta cantidad no es la desviación estándar de cada medición individual, sino la variabilidad de la diferencia \(d_i = x_{i,\text{post}} - x_{i,\text{pre}}\) para cada sujeto. Si dispones de datos piloto, estímala directamente a partir de las diferencias observadas. En ausencia de datos previos, usa la relación \(\sigma_d \approx \sigma\sqrt{2(1-\rho)}\) donde \(\sigma\) es la desviación estándar de una medición y \(\rho\) es la correlación test-retest esperada. Realiza un análisis de sensibilidad con \(\sigma_d - 25\,\%\), \(\sigma_d\) y \(\sigma_d + 25\,\%\) y planifica con el valor mayor.</p>
                 <p>La ventaja del diseño apareado frente al de grupos independientes es que elimina la variabilidad entre sujetos, lo que puede reducir sustancialmente \(n\) cuando la correlación intraindividual es alta (\(\rho > 0{,}5\)). Si el IC resultante va a usarse para tomar una decisión clínica, comprueba que el valor de \(E\) tiene una interpretación práctica clara (p. ej., diferencia mínima clínicamente relevante). Con los pares recogidos, usa la <a href="tamano-muestral-medias-apareadas.html">calculadora de contraste para medias apareadas</a> si quieres realizar un test de hipótesis, o construye directamente el IC con la <a href="intervalo-confianza-diferencia-medias.html">calculadora de intervalo de confianza para diferencia de medias</a>.</p>
         </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>
