@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../chi-cuadrado-bondad-ajuste.html">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi-Square Goodness-of-Fit Test Calculator | ProbLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chi-square goodness-of-fit test to assess whether observed frequencies follow a specified theoretical distribution.">
+    <meta name="keywords" content="chi-square goodness-of-fit test, chi-square goodness of fit calculator, goodness-of-fit test calculator, categorical distribution fit test, chi-square test calculator, ProbLab, online statistics, statistics calculator">
+    <link rel="canonical" href="https://problabtools.com/en/chi-cuadrado-bondad-ajuste.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Chi-Square Goodness-of-Fit Test Calculator | ProbLab">
+    <meta property="og:description" content="Chi-square goodness-of-fit test to assess whether observed frequencies follow a specified theoretical distribution.">
+    <meta property="og:url" content="https://problabtools.com/en/chi-cuadrado-bondad-ajuste.html">
+    <meta property="og:site_name" content="ProbLab">
+    <meta property="og:image" content="https://problabtools.com/og-image.png">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image:alt" content="Chi-square goodness-of-fit test calculator">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Vicente Castellar">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="alternate" hreflang="en" href="https://problabtools.com/en/chi-cuadrado-bondad-ajuste.html">
+    <link rel="alternate" hreflang="es" href="https://problabtools.com/chi-cuadrado-bondad-ajuste.html">
+    <link rel="alternate" hreflang="x-default" href="https://problabtools.com/chi-cuadrado-bondad-ajuste.html">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Chi-Square Goodness-of-Fit Test Calculator | ProbLab">
+    <meta name="twitter:description" content="Chi-square goodness-of-fit test to assess whether observed frequencies follow a specified theoretical distribution.">
+    <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+    <meta name="twitter:image:alt" content="Chi-square goodness-of-fit test calculator">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+            {"@type": "ListItem", "position": 2, "name": "Hypothesis tests", "item": "https://problabtools.com/en/contrastes-hipotesis/"},
+            {"@type": "ListItem", "position": 3, "name": "Chi-square goodness of fit", "item": "https://problabtools.com/en/chi-cuadrado-bondad-ajuste.html"}
+          ]
+        },
+        {
+          "@type": "WebPage",
+          "name": "Chi-Square Goodness-of-Fit Test Calculator | ProbLab",
+          "url": "https://problabtools.com/en/chi-cuadrado-bondad-ajuste.html",
+          "description": "Chi-square goodness-of-fit test to assess whether observed frequencies follow a specified theoretical distribution.",
+          "inLanguage": "en",
+          "isPartOf": {"@type": "WebSite", "name": "ProbLab", "url": "https://problabtools.com/"}
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Chi-Square Goodness-of-Fit Test Calculator",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web",
+      "url": "https://problabtools.com/en/chi-cuadrado-bondad-ajuste.html",
+      "description": "Tool to test whether observed frequencies in mutually exclusive categories follow a specified theoretical distribution.",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+    }
+    </script>
+
+    <link rel="stylesheet" href="../style_new.css?v=20260624">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "When is the chi-square goodness-of-fit test used?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "When you want to know whether the counts observed in mutually exclusive\n                    categories are compatible with a previously specified theoretical distribution."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many degrees of freedom does the statistic have?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The degrees of freedom are \\(k - 1\\), where \\(k\\) is the number of categories.\n                    If additional model parameters have been estimated from the sample itself,\n                    one degree of freedom is subtracted for each estimated parameter."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What condition must the expected frequencies meet?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The approximation is adequate when all expected frequencies are ≥ 5.\n                    If any is lower, consider grouping infrequent categories."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's the difference from the chi-square test of independence?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The goodness-of-fit test checks whether a variable follows a specific\n                    theoretical distribution. The independence test checks whether two variables\n                    are associated with each other, based on a contingency table."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do the theoretical probabilities need to add up to exactly 1?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The tool checks that the entered probabilities add up to 1\n                    (within numerical tolerance) and warns if that condition is not met."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does sample size affect the result?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "With very large samples, the test can detect very small deviations\n                    from the theoretical model that are not practically relevant.\n                    In those cases it is a good idea to complement the p-value with a measure\n                    of effect size."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the minimum detectable effect (MDE) in goodness-of-fit testing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It is the smallest deviation from the theoretical model that the test can detect with a given power and α. The smaller the sample, the larger the discrepancy needs to be for the test to detect it; detecting small deviations requires a larger n."
+      }
+    }
+  ]
+}
+    </script>
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="distribuciones/">Distributions</a></li>
+            <li><a href="tablas-estadisticas/">Tables</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="../tamano-muestral/">Sample size</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="../ab-testing/">A/B testing</a></li>
+            <li><a href="../simulaciones/">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../chi-cuadrado-bondad-ajuste.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><span aria-current="page">Chi-square goodness of fit</span></li>
+        </ol>
+    </nav>
+    <header class="hero">
+        <p class="eyebrow">Hypothesis tests</p>
+        <h1>Chi-square goodness-of-fit test calculator</h1>
+        <p class="hero-subtitle">Assess whether observed frequencies follow a specified theoretical distribution.</p>
+        <p class="hero-links"><a class="hero-link-button" href="contrastes-hipotesis/">See all hypothesis tests</a></p>
+    </header>
+
+    <main>
+
+        <section class="card sample-size-panel">
+            <div class="panel-heading">
+                <h2>Calculator</h2>
+                <p>Enter the observed frequencies and the theoretical probabilities separated by commas. If you don't provide probabilities, a uniform distribution is assumed.</p>
+            </div>
+
+            <div class="form-grid sample-grid">
+                <div class="form-group">
+                    <label for="observed">Observed frequencies</label>
+                    <input type="text" id="observed" value="25, 30, 20, 15, 10">
+                </div>
+
+                <div class="form-group">
+                    <label for="probabilities">Theoretical probabilities (optional)</label>
+                    <input type="text" id="probabilities" placeholder="E.g.: 0.2, 0.2, 0.2, 0.2, 0.2 (or leave empty for uniform)">
+                </div>
+
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="alpha">Significance level (α)</label>
+                        <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="calcChiBtn">Calculate test</button>
+            <div id="chiResult" class="result-box">Result pending…</div>
+            <div id="expectedTable" class="result-box" style="margin-top:12px;">Expected frequencies pending…</div>
+            <div class="chart-wrap">
+                <canvas id="chiGoodnessChart" aria-label="Chart of acceptance and rejection zones for the chi-square goodness-of-fit test" role="img"></canvas>
+            </div>
+        </section>
+
+        <section class="card content-card">
+            <h3>Explanation</h3>
+
+            <p>
+                The chi-square goodness-of-fit test lets you assess whether the empirical
+                distribution of a categorical variable is compatible with a previously
+                specified theoretical distribution. The question it answers is: are the
+                counts observed in each category compatible with the probabilities postulated
+                by the model, or is there evidence that the actual distribution differs?
+            </p>
+
+            <p>
+                The core idea is to compare the observed frequencies with the expected
+                frequencies that would occur if the null hypothesis were true. If the
+                discrepancies are too large to attribute to sampling chance, the proposed
+                theoretical model is rejected.
+            </p>
+
+            <p>
+                For example, a fair die should produce each face with probability 1/6. After
+                120 rolls, you compare whether the observed counts are compatible with those
+                probabilities. Another common use is checking whether the proportion of
+                defects by type on a production line matches the expected historical pattern.
+            </p>
+
+            <p>
+                The test statistic aggregates the weighted discrepancies across all categories
+                and follows a chi-square distribution under the null hypothesis. The degrees
+                of freedom are \(k - 1\), where \(k\) is the number of categories, minus the
+                number of additional parameters estimated from the sample.
+            </p>
+
+            <h3>Hypotheses and test statistic</h3>
+            <p class="formula-line">\(H_0\): the observed distribution matches the theoretical one</p>
+            <p class="formula-line">\(H_1\): the observed distribution does not match the theoretical one</p>
+            <p class="formula-line">
+                \(\chi^2 = \sum_{i=1}^{k}\frac{(O_i - E_i)^2}{E_i}\), &nbsp;
+                with \(E_i = n \cdot p_i\)
+            </p>
+        </section>
+
+
+
+        <section class="card content-card">
+            <h3>Quick check</h3>
+
+            <p>
+                The chi-square statistic sums, for each category, the squared difference
+                between observed and expected frequency, divided by the expected frequency.
+                Under the null hypothesis that the data follow the theoretical distribution,
+                this statistic approximately follows a \(\chi^2\) distribution with \(k - 1\)
+                degrees of freedom:
+            </p>
+
+            <p class="formula-line">
+                \(\chi^2 = \sum_{i=1}^{k} \frac{(O_i - E_i)^2}{E_i} \sim \chi^2_{k-1}\)
+            </p>
+
+            <p>
+                Expected frequencies are computed from the sample size \(n\) and the
+                theoretical probabilities \(p_i\):
+            </p>
+
+            <p class="formula-line">
+                \(E_i = n \cdot p_i\)
+            </p>
+
+            <p>
+                where \(n = \sum_{i=1}^{k} O_i\) is the total number of observations. If the
+                theoretical probabilities are equal across all categories (uniform
+                distribution), \(E_i = n / k\) for every \(i\).
+            </p>
+
+            <p>
+                For the chi-square approximation to be reliable, all expected frequencies
+                should be greater than or equal to 5. If any category has very low expected
+                frequencies, consider grouping categories before applying the test.
+            </p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Worked example</h3>
+            <p>A fair die is rolled 60 times and the observed frequencies are recorded for each face: face 1 → 8 times; face 2 → 12; face 3 → 9; face 4 → 11; face 5 → 10; face 6 → 10. Is there statistical evidence, at \(\alpha = 0.05\), that the die is not fair?</p>
+            <p>Under \(H_0\) (fair die), the probability of each face is \(1/6\), so the expected frequency for each category is \(E_i = 60 \times \tfrac{1}{6} = 10\) rolls.</p>
+            <p>The chi-square goodness-of-fit statistic is computed as:</p>
+            <p class="formula-line">\( \chi^2 = \sum_{i=1}^{k} \frac{(O_i - E_i)^2}{E_i} = \frac{(8-10)^2}{10} + \frac{(12-10)^2}{10} + \frac{(9-10)^2}{10} + \frac{(11-10)^2}{10} + \frac{(10-10)^2}{10} + \frac{(10-10)^2}{10} \)</p>
+            <p class="formula-line">\( \chi^2 = 0.4 + 0.4 + 0.1 + 0.1 + 0 + 0 = 1.0 \)</p>
+            <p>The degrees of freedom are \(df = k - 1 = 6 - 1 = 5\). The critical value for \(\alpha = 0.05\) and \(df = 5\) is \(\chi^2_{0.05;\,5} \approx 11.07\), and the p-value associated with \(\chi^2 = 1.0\) at 5 degrees of freedom is \(p \approx 0.96\).</p>
+            <p>Since \(\chi^2 = 1.0 \ll 11.07\) (and \(p \gg 0.05\)), \(H_0\) is not rejected. All expected frequencies equal 10, well above the recommended minimum of 5, so the test is valid in this case.</p>
+            <p>Conclusion: there is no statistical evidence that the die is loaded. The observed deviations from the expected frequencies are perfectly compatible with the random variability of a fair die over 60 rolls.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>How to interpret the result</h3>
+
+                <p>
+                <strong>Rejecting \(H_0\)</strong> (p-value &lt; \(\alpha\)) means that the
+                observed frequencies differ from those expected under the theoretical model
+                by more than chance can explain. In practice, the proposed distributional
+                model (uniform, binomial, Poisson, etc.) does not adequately describe the
+                data. However, overall significance does not reveal <em>where</em> the
+                discrepancy lies: to locate it, check the <strong>standardized residuals</strong>
+                \((O_i - E_i)/\sqrt{E_i}\) for each category. Absolute values greater than 2
+                flag the categories that most drive the statistic away from what is expected
+                under \(H_0\).
+                </p>
+
+                <p>
+                <strong>Failing to reject \(H_0\)</strong> (p-value ≥ \(\alpha\)) does not prove
+                that the data "follow" the theoretical model; it only indicates that they are
+                compatible with it at the chosen significance level. With small samples the
+                power of the test is limited, and moderate deviations can go unnoticed. With
+                very large samples, on the other hand, small systematic deviations of little
+                practical relevance can turn out to be significant.
+                </p>
+
+                <p>
+                The <strong>chi-square statistic</strong> \(\chi^2 = \sum_i (O_i - E_i)^2 / E_i\)
+                aggregates the squared discrepancies across all categories, weighted by the
+                expected frequency. In the chart, the green zone is the non-rejection region
+                and the red zone is the right-tailed critical region (the goodness-of-fit test
+                is always right-tailed, since \(\chi^2 \geq 0\)); the amber line marks the
+                observed statistic. Before interpreting the result, check that all expected
+                frequencies are ≥ 5; if not, group categories or use an exact test.
+                </p>
+        </section>
+        <section id="seo-support-content" class="card content-card">
+            <section class="related-tools">
+                <h3>Related calculators</h3>
+                <ul>
+                    <li><a href="chisquare.html">Chi-square distribution</a></li>
+                    <li><a href="contraste-independencia-chi-cuadrado.html">Chi-square test of independence</a></li>
+                    <li><a href="test-exacto-fisher.html">Fisher's exact test</a></li>
+                    <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+                </ul>
+            </section>
+
+            <h3>Frequently asked questions</h3>
+
+            <ul>
+                <li>
+                    <strong>When is the chi-square goodness-of-fit test used?</strong>
+                    When you want to know whether the counts observed in mutually exclusive
+                    categories are compatible with a previously specified theoretical distribution.
+                </li>
+                <li>
+                    <strong>How many degrees of freedom does the statistic have?</strong>
+                    The degrees of freedom are \(k - 1\), where \(k\) is the number of categories.
+                    If additional model parameters have been estimated from the sample itself,
+                    one degree of freedom is subtracted for each estimated parameter.
+                </li>
+                <li>
+                    <strong>What condition must the expected frequencies meet?</strong>
+                    The approximation is adequate when all expected frequencies are ≥ 5.
+                    If any is lower, consider grouping infrequent categories.
+                </li>
+                <li>
+                    <strong>What's the difference from the chi-square test of independence?</strong>
+                    The goodness-of-fit test checks whether a variable follows a specific
+                    theoretical distribution. The independence test checks whether two variables
+                    are associated with each other, based on a contingency table.
+                </li>
+                <li>
+                    <strong>Do the theoretical probabilities need to add up to exactly 1?</strong>
+                    Yes. The tool checks that the entered probabilities add up to 1
+                    (within numerical tolerance) and warns if that condition is not met.
+                </li>
+                <li>
+                    <strong>How does sample size affect the result?</strong>
+                    With very large samples, the test can detect very small deviations from
+                    the theoretical model that are not practically relevant. In those cases
+                    it is a good idea to complement the p-value with a measure of effect size.
+                </li>
+                <li>
+                    <strong>What is the minimum detectable effect (MDE) in this test?</strong>
+                    It is the smallest deviation from the theoretical model that the test can
+                    detect with the power and \(\alpha\) set. If the actual discrepancy is
+                    smaller, the test may fail to reject \(H_0\) even though a small difference
+                    exists.
+                </li>
+            </ul>
+            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Pearson%27s_chi-squared_test" target="_blank" rel="noopener noreferrer">Chi-square goodness-of-fit test</a> — Wikipedia</p>
+        </section>
+    </main>
+
+    <footer class="legal-footer">
+        <p>
+            © 2026 problabtools.
+            <a href="../aviso-legal.html">Legal notice</a> ·
+            <a href="../privacidad.html">Privacy</a> ·
+            <a href="../cookies.html">Cookies</a> ·
+            <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+        </p>
+    </footer>
+</div>
+
+<script>
+window.MathJax = {
+    tex: { inlineMath: [['\\(','\\)'], ['$', '$']] },
+    startup: {
+        ready: () => {
+            MathJax.startup.defaultReady();
+            MathJax.typesetPromise();
+        }
+    }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let chiGoodnessChart;
+
+function gammaLn(z){
+  const cof=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.001208650973866179,-0.000005395239384953];
+  let x=z, y=z, tmp=x+5.5;
+  tmp-=(x+0.5)*Math.log(tmp);
+  let ser=1.000000000190015;
+  for(let j=0;j<cof.length;j++){ y+=1; ser+=cof[j]/y; }
+  return -tmp+Math.log(2.5066282746310005*ser/x);
+}
+function gammaP(a,x){
+  if(x<=0) return 0;
+  if(x<a+1){
+    let ap=a, sum=1/a, del=sum;
+    for(let n=1;n<=200;n++){ ap++; del*=x/ap; sum+=del; if(Math.abs(del)<Math.abs(sum)*1e-12) break; }
+    return sum*Math.exp(-x+a*Math.log(x)-gammaLn(a));
+  }
+  let b=x+1-a, c=1/1e-30, d=1/b, h=d;
+  for(let i=1;i<=200;i++){
+    const an=-i*(i-a); b+=2; d=an*d+b; if(Math.abs(d)<1e-30) d=1e-30;
+    c=b+an/c; if(Math.abs(c)<1e-30) c=1e-30; d=1/d;
+    const del=d*c; h*=del; if(Math.abs(del-1)<1e-12) break;
+  }
+  return 1-Math.exp(-x+a*Math.log(x)-gammaLn(a))*h;
+}
+function chiSquareSurvival(x,df){ return 1-gammaP(df/2,x/2); }
+
+function parseValues(raw){
+  return raw.trim().split(/[\s,;]+/).map(Number).filter(v => raw.trim() !== '' && !isNaN(v));
+}
+
+function chiSquarePdf(x, df){
+  if(x<=0) return 0;
+  const k=df/2;
+  return Math.exp((k-1)*Math.log(x)-x/2-k*Math.log(2)-gammaLn(k));
+}
+
+function chiSquareQuantile(p, df){
+  if(p<=0) return 0;
+  if(p>=1) return Infinity;
+  let lo=0, hi=Math.max(1, df);
+  while(gammaP(df/2, hi/2) < p) hi *= 2;
+  for(let i=0;i<80;i++){
+    const mid=(lo+hi)/2;
+    if(gammaP(df/2, mid/2) < p) lo=mid; else hi=mid;
+  }
+  return (lo+hi)/2;
+}
+
+function renderChiGoodnessChart(df, alpha, statValue){
+  const ctx=document.getElementById('chiGoodnessChart');
+  if(!ctx) return;
+  const critical=chiSquareQuantile(1-alpha, df);
+  const maxX=Math.max(critical*1.4, statValue*1.4, df+10, 10);
+  const step=maxX/350;
+  const curve=[];
+  const acceptance=[];
+  const rejection=[];
+  for(let x=0;x<=maxX;x+=step){
+    const y=chiSquarePdf(x, df);
+    curve.push({x,y});
+    if(x<=critical){ acceptance.push({x,y}); rejection.push({x,y:null}); }
+    else { acceptance.push({x,y:null}); rejection.push({x,y}); }
+  }
+  const maxY=Math.max(...curve.map(p=>p.y));
+  const statLine=Number.isFinite(statValue)?[{x:statValue,y:0},{x:statValue,y:maxY}]:[];
+
+  if(chiGoodnessChart) chiGoodnessChart.destroy();
+  chiGoodnessChart=new Chart(ctx,{
+    type:'line',
+    data:{datasets:[
+      {label:'Acceptance zone',data:acceptance,borderColor:'rgba(34,197,94,0)',backgroundColor:'rgba(34,197,94,0.35)',fill:'origin',pointRadius:0,parsing:false},
+      {label:'Rejection zone',data:rejection,borderColor:'rgba(239,68,68,0)',backgroundColor:'rgba(239,68,68,0.35)',fill:'origin',pointRadius:0,parsing:false},
+      {label:`χ² distribution (df=${df})`,data:curve,borderColor:'#1d4ed8',borderWidth:2,pointRadius:0,fill:false,parsing:false},
+      {label:'Observed χ²',data:statLine,borderColor:'#f59e0b',borderWidth:2,pointRadius:0,fill:false,parsing:false}
+    ]},
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      scales:{
+        x:{type:'linear',min:0,max:maxX,title:{display:true,text:'χ² statistic'}},
+        y:{beginAtZero:true,title:{display:true,text:'Density'}}
+      }
+    }
+  });
+}
+
+function formatExpectedGoodness(observed, expected){
+  const header='<tr><th>Category</th><th>Observed (O)</th><th>Expected (E)</th><th>Standardized residual</th></tr>';
+  const rows=observed.map((o,i)=>{
+    const e=expected[i];
+    const res=((o-e)/Math.sqrt(e)).toFixed(3);
+    return `<tr><td>${i+1}</td><td>${o}</td><td>${e.toFixed(2)}</td><td>${res}</td></tr>`;
+  }).join('');
+  return `<strong>Frequency table</strong><br><table><thead>${header}</thead><tbody>${rows}</tbody></table>`;
+}
+
+document.getElementById('calcChiBtn').addEventListener('click',()=>{
+  try{
+    const obsRaw=document.getElementById('observed').value;
+    const probRaw=document.getElementById('probabilities').value.trim();
+    const alpha=parseFloat(document.getElementById('alpha').value);
+
+    const observed=parseValues(obsRaw);
+    if(observed.length<2) throw new Error('Enter at least 2 categories.');
+    if(observed.some(v=>!Number.isFinite(v)||v<0)) throw new Error('Use only non-negative frequencies.');
+
+    const k=observed.length;
+    const n=observed.reduce((a,b)=>a+b,0);
+    if(n<=0) throw new Error('The sample total must be greater than 0.');
+
+    let probs;
+    if(probRaw===''){
+      probs=Array(k).fill(1/k);
+    } else {
+      probs=parseValues(probRaw);
+      if(probs.length!==k) throw new Error(`Enter ${k} probabilities (one per category) or leave the field empty for a uniform distribution.`);
+      if(probs.some(p=>!Number.isFinite(p)||p<0)) throw new Error('Probabilities must be non-negative values.');
+      const sum=probs.reduce((a,b)=>a+b,0);
+      if(Math.abs(sum-1)>0.001) throw new Error(`Probabilities must add up to 1 (they add up to ${sum.toFixed(4)}).`);
+      probs=probs.map(p=>p/sum);
+    }
+
+    const expected=probs.map(p=>n*p);
+    const lowExpected=expected.filter(e=>e<5).length;
+
+    let chi2=0;
+    for(let i=0;i<k;i++) chi2 += Math.pow(observed[i]-expected[i],2)/expected[i];
+
+    const df=k-1;
+    const p=Math.max(0,Math.min(1,chiSquareSurvival(chi2,df)));
+    const decision=p<alpha?'Reject H₀ (the observed distribution differs from the theoretical one).':'Fail to reject H₀ (the data are compatible with the theoretical distribution).';
+
+    let warning='';
+    if(lowExpected>0) warning=`<br><em>Warning: ${lowExpected} category(ies) with expected frequency below 5. Consider grouping categories.</em>`;
+
+    document.getElementById('chiResult').innerHTML =
+      `Observed χ²: <strong>${chi2.toFixed(4)}</strong><br>`+
+      `Degrees of freedom: <strong>${df}</strong><br>`+
+      `p-value: <strong>${p.toFixed(6)}</strong><br>`+
+      `Decision (α=${alpha}): <strong>${decision}</strong>`+
+      warning;
+
+    document.getElementById('expectedTable').innerHTML = formatExpectedGoodness(observed, expected);
+    renderChiGoodnessChart(df, alpha, chi2);
+  }catch(err){
+    document.getElementById('chiResult').textContent = `Error: ${err.message}`;
+    if(chiGoodnessChart){ chiGoodnessChart.destroy(); chiGoodnessChart = null; }
+  }
+});
+document.getElementById('calcChiBtn').click();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>

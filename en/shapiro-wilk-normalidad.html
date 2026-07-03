@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../shapiro-wilk-normalidad.html">
+<head>
+    <meta charset="UTF-8">
+    <title>Shapiro-Wilk Normality Test Calculator | ProbLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Shapiro-Wilk normality test calculator: get the W statistic, sample size and p-value to assess whether your data is normally distributed.">
+    <meta name="keywords" content="Shapiro-Wilk test, Shapiro-Wilk normality test, test for normality calculator online, calculate Shapiro-Wilk W statistic, check data normality, ProbLab, online statistics, statistics calculator">
+    <link rel="canonical" href="https://problabtools.com/en/shapiro-wilk-normalidad.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Shapiro-Wilk Normality Test Calculator | ProbLab">
+    <meta property="og:description" content="Shapiro-Wilk normality test calculator: get the W statistic, sample size and p-value to assess whether your data is normally distributed.">
+    <meta property="og:url" content="https://problabtools.com/en/shapiro-wilk-normalidad.html">
+    <meta property="og:site_name" content="ProbLab">
+    <meta property="og:image" content="https://problabtools.com/og-image.png">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image:alt" content="Shapiro-Wilk normality test calculator">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Vicente Castellar">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="alternate" hreflang="en" href="https://problabtools.com/en/shapiro-wilk-normalidad.html">
+    <link rel="alternate" hreflang="es" href="https://problabtools.com/shapiro-wilk-normalidad.html">
+    <link rel="alternate" hreflang="x-default" href="https://problabtools.com/shapiro-wilk-normalidad.html">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Shapiro-Wilk Normality Test Calculator | ProbLab">
+    <meta name="twitter:description" content="Shapiro-Wilk normality test calculator: get the W statistic, sample size and p-value to assess whether your data is normally distributed.">
+    <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+    <meta name="twitter:image:alt" content="Shapiro-Wilk normality test calculator">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+            {"@type": "ListItem", "position": 2, "name": "Hypothesis tests", "item": "https://problabtools.com/en/contrastes-hipotesis/"},
+            {"@type": "ListItem", "position": 3, "name": "Shapiro-Wilk normality", "item": "https://problabtools.com/en/shapiro-wilk-normalidad.html"}
+          ]
+        },
+        {
+          "@type": "WebPage",
+          "name": "Shapiro-Wilk Normality Test Calculator | ProbLab",
+          "url": "https://problabtools.com/en/shapiro-wilk-normalidad.html",
+          "description": "Shapiro-Wilk normality test calculator: get the W statistic, sample size and p-value to assess whether your data is normally distributed.",
+          "inLanguage": "en",
+          "isPartOf": {"@type": "WebSite", "name": "ProbLab", "url": "https://problabtools.com/"}
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Shapiro-Wilk Normality Test Calculator",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web",
+      "url": "https://problabtools.com/en/shapiro-wilk-normalidad.html",
+      "description": "Tool to interpret the Shapiro-Wilk normality test using W, sample size, significance level and p-value.",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+    }
+    </script>
+
+    <link rel="stylesheet" href="../style_new.css?v=20260624">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What sample sizes are typical for Shapiro-Wilk?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It is widely used for small and moderate sample sizes, although it can also be\n                    applied to larger sizes depending on the software."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does a high p-value prove normality?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. It only indicates that there is not enough evidence to reject normality with\n                    that sample and that significance level."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I rely on the test alone?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Best practice is to combine the formal test with a Q-Q plot and a histogram."
+      }
+    }
+  ]
+}
+    </script>
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="distribuciones/">Distributions</a></li>
+            <li><a href="tablas-estadisticas/">Tables</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="../tamano-muestral/">Sample size</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="../ab-testing/">A/B testing</a></li>
+            <li><a href="../simulaciones/">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../shapiro-wilk-normalidad.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><span aria-current="page">Shapiro-Wilk normality</span></li>
+        </ol>
+    </nav>
+    <header class="hero">
+        <p class="eyebrow">Hypothesis tests</p>
+        <h1>Shapiro-Wilk normality test calculator</h1>
+        <p class="hero-subtitle">Test whether a sample is compatible with a normal distribution.</p>
+        <p class="hero-links"><a class="hero-link-button" href="contrastes-hipotesis/">See all hypothesis tests</a></p>
+    </header>
+
+    <main>
+
+        <section class="card sample-size-panel">
+            <div class="panel-heading">
+                <h2>Calculator</h2>
+                <p>Enter the sample data and simulate the null distribution of \(W\) via Monte Carlo to obtain an empirical p-value.</p>
+            </div>
+
+            <div class="form-grid sample-grid">
+                <div class="form-group">
+                    <label for="sampleData">Sample data (separated by commas or spaces)</label>
+                    <textarea id="sampleData" rows="4" placeholder="Example: 12.1, 11.8, 12.5, 13.0, 12.4, 11.9, 12.2"></textarea>
+                </div>
+
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="mcIter">Monte Carlo iterations (B)</label>
+                        <input type="number" id="mcIter" value="5000" step="500" min="1000" max="100000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="alpha">Significance level (α)</label>
+                        <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mcSeed">Random seed (optional)</label>
+                        <input type="number" id="mcSeed" value="12345" step="1" min="0">
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="calcShapiroBtn">Calculate test</button>
+            <div id="shapiroResult" class="result-box">Result pending…</div>
+            <div id="shapiroNotes" class="result-box" style="margin-top:12px;">Interpretation notes pending…</div>
+            <div class="chart-wrap">
+                <canvas id="shapiroChart" aria-label="Chart comparing the p-value with the significance level" role="img"></canvas>
+            </div>
+            <p class="chart-note"><strong>How to read the chart (step by step):</strong> 1) The Monte Carlo simulation generates many normal samples under \(H_0\) of the same size as your sample and computes a \(W\) for each one. 2) The <strong>blue bars</strong> count how many simulations fell in each range of \(W\): that is why their Y axis is frequency and their X axis is the value of \(W\). 3) The <strong>red</strong> marker shows your observed \(W\) and the <strong>green</strong> marker the critical \(W\) for \(\alpha\). <strong>Only their horizontal position (X) matters</strong>; their vertical height is set artificially so they are visible above the bars.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Explanation</h3>
+
+            <p>
+                The Shapiro-Wilk test is a statistical test designed to assess
+                whether a data sample can be considered to come from a normal distribution.
+                It is one of the most powerful normality tests, recommended for small and moderate sample sizes.
+            </p>
+
+            <p>
+               The test compares:
+               <ul>
+                   <li>The sorted values of your sample</li>
+                   <li>The expected values of a sorted normal sample</li>
+               </ul>
+               If your data "line up" well with what would be expected from a normal sample, the statistic will be large (close to 1).
+               If they deviate from that alignment, the statistic will be small.
+            </p>
+
+            <p>
+                The null hypothesis states that the data follow a normal distribution; the alternative states
+                that they do not. The test statistic is denoted by \(W\), and it takes
+                values between 0 and 1: the closer to 1, the greater the compatibility with normality.
+            </p>
+
+            <p>
+                The Shapiro-Wilk statistic is built by combining the sorted data
+                \(x_{(i)}\) with coefficients \(a_i\) that depend on \(n\):
+            </p>
+
+            <p>
+                \(W = \dfrac{\left(\sum_{i=1}^{m} a_i(x_{(n+1-i)}-x_{(i)})\right)^2}{\sum_{i=1}^{n}(x_i-\bar{x})^2}\)
+                where:
+                <ul>
+                    <li>\(x_{(i)}\) are the sorted data,</li>
+                    <li>\(a_i\) are coefficients computed from the theoretical normal quantiles,</li>
+                   <li>the denominator is the total variability of the sample.</li>
+                </ul>
+            </p>
+
+            <h3>Monte Carlo simulation for the p-value</h3>
+
+            <p>
+                The exact distribution of the \(W\) statistic under \(H_0\) has no closed form, so the p-value
+                is obtained by Monte Carlo simulation. The procedure is as follows:
+            </p>
+            <ol>
+                <li>A random sample of size \(n\) is generated from \(N(0,1)\). The standard normal can be used
+                    because \(W\) is invariant to changes in mean and scale: it depends only on the <em>shape</em> of the sorted data,
+                    not on its level or spread.</li>
+                <li>The statistic \(W\) is computed for that simulated sample.</li>
+                <li>This is repeated \(B\) times (for example, \(B = 5000\)). This produces an empirical
+                    distribution of \(W\) under \(H_0\): that is, how \(W\) would behave if the data really were normal.</li>
+                <li>The empirical p-value is computed as the fraction of simulations with \(W_{\text{sim}} \leq W_{\text{obs}}\):
+                    \[p\text{-value} = \dfrac{\#\{W_{\text{sim}} \leq W_{\text{obs}}\}}{B}\]
+                    A very small observed \(W\) (far from 1) will fall in the left tail of the simulated distribution,
+                    giving a small p-value and leading to a rejection of normality.</li>
+            </ol>
+            <p>
+                The histogram in the chart shows precisely that empirical distribution: the bars accumulate the \(B\) simulated
+                values of \(W\). The red marker shows the \(W\) observed in your sample; if it falls in the left tail (the low-value region),
+                there is evidence against normality. The green marker shows the critical value \(W_\alpha\): the \(\alpha\) percentile
+                of the simulated distribution, the threshold below which \(H_0\) would be rejected.
+            </p>
+            <p>
+                The random seed lets you reproduce the exact same result: fixing the same seed guarantees
+                that the \(B\) simulated samples are identical across different runs, which makes it easy to share and verify results.
+                With large values of \(B\) (\(\geq 5000\)) the variability of the empirical p-value is small and the estimate is reliable.
+            </p>
+
+
+            <p>
+                The formal decision is made using the p-value: if it is smaller than the
+                significance level \(\alpha\), normality is rejected.
+            </p>
+
+            <h3>Hypotheses and statistic</h3>
+            <p class="formula-line">\(H_0\): the sample comes from a normal distribution</p>
+            <p class="formula-line">\(H_1\): the sample does not come from a normal distribution</p>
+            <p class="formula-line">\(W = \dfrac{\left(\sum_{i=1}^{m} a_i(x_{(n+1-i)}-x_{(i)})\right)^2}{\sum_{i=1}^{n}(x_i-\bar{x})^2}\)</p>
+        </section>
+
+
+
+        <section class="card content-card">
+            <h3>Quick check</h3>
+
+            <p>
+                In Shapiro-Wilk, the p-value is the basis for the statistical decision. The statistic
+                \(W\) summarizes how much the sorted data deviate from the pattern expected under
+                normality.
+            </p>
+
+            <p class="formula-line">
+                \(\text{If } p &lt; \alpha\Rightarrow\) reject \(H_0\)
+            </p>
+
+            <p class="formula-line">
+                \(\text{If } p \ge \alpha\Rightarrow\) fail to reject \(H_0\)
+            </p>
+
+            <p>
+                A non-significant result does not prove perfect normality: it indicates that, with the
+                evidence available in that sample, no clear deviations are detected. It is advisable to
+                complement it with a Q-Q plot and a histogram.
+            </p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Worked example</h3>
+            <p>In a quality-control process, the dimensions (in mm) of 10 manufactured parts are measured: 23.1, 24.5, 22.8, 25.2, 24.1, 23.7, 24.9, 23.5, 25.0, 24.3. We want to check, with \(\alpha = 0.05\), whether these data are compatible with a normal distribution.</p>
+
+            <p><strong>Step 1 - Sort the data, compute the mean and the sum of squares</strong></p>
+            <p>Sorted data: 22.8, 23.1, 23.5, 23.7, 24.1, 24.3, 24.5, 24.9, 25.0, 25.2.</p>
+            <p>\(\bar{x} = \dfrac{22.8 + 23.1 + \cdots + 25.2}{10} = \dfrac{241.1}{10} = 24.11 \text{ mm}\)</p>
+            <p>\(\displaystyle SS = \sum_{i=1}^{10}(x_i - \bar{x})^2 = (22.8-24.11)^2 + \cdots + (25.2-24.11)^2 = 6.069\)</p>
+
+            <p><strong>Step 2 - Compute the coefficients \(a_i\)</strong></p>
+            <p>The calculator uses Royston's algorithm (AS R94, 1992), which applies two polynomial corrections to the expected normal quantiles to obtain the exact Shapiro-Wilk coefficients. For \(n = 10\) the resulting coefficients are:</p>
+            <div class="table-wrap" style="overflow-x:auto;">
+            <table class="stat-table">
+              <thead><tr><th>Pair \(i\)</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+              <tbody>
+                <tr><td>\(a_i\) (Royston)</td><td>0.5739</td><td>0.3291</td><td>0.2141</td><td>0.1224</td><td>0.0399</td></tr>
+              </tbody>
+            </table>
+            </div>
+            <p>These coefficients match the values tabulated by Shapiro &amp; Wilk (1965) and those computed by R.</p>
+
+            <p><strong>Step 3 - Compute the numerator</strong></p>
+            <p>Each \(a_i\) weights the difference between the \(i\)-th data point from the top and from the bottom of the sorted sample:</p>
+            <p class="formula-line">\(b = \sum_{i=1}^{5} a_i\bigl(x_{(11-i)} - x_{(i)}\bigr)\)</p>
+            <p>\(b = 0.5739\cdot(25.2-22.8) + 0.3291\cdot(25.0-23.1) + 0.2141\cdot(24.9-23.5) + 0.1224\cdot(24.5-23.7) + 0.0399\cdot(24.3-24.1)\)</p>
+            <p>\(b = 1.3774 + 0.6253 + 0.2997 + 0.0979 + 0.0080 = 2.4083\)</p>
+
+            <p><strong>Step 4 - Statistic \(W\)</strong></p>
+            <p class="formula-line">\(W = \dfrac{b^2}{SS} = \dfrac{2.4083^2}{6.069} = \dfrac{5.800}{6.069} \approx 0.9557\)</p>
+            <p>This value matches the one returned by R: <code>shapiro.test(...)$statistic = 0.9557</code>.</p>
+
+            <p><strong>Step 5 - p-value via Monte Carlo simulation</strong></p>
+            <p>The calculator generates \(B = 5000\) normal \(N(0,1)\) samples of size \(n = 10\), computes \(W\) for each one and estimates the p-value as the proportion of simulations with \(W \leq W_{\text{obs}}\):</p>
+            <p class="formula-line">\(p\text{-value} = \dfrac{\#\{W_{\text{sim}} \leq 0.9557\}}{5000} \approx 0.73\)</p>
+            <p>R uses Royston's analytical approximation and reports \(p = 0.7355\); the Monte Carlo simulation converges to the same result for large \(B\). You can reproduce it by entering the data in the calculator with \(B = 5000\) and seed 12345.</p>
+
+            <p><strong>Conclusion</strong></p>
+            <p>Since \(p \approx 0.73 \gg 0.05 = \alpha\), \(H_0\) is not rejected. At a 5% significance level, there is no statistical evidence that the dimensions of the parts fail to follow a normal distribution. This result allows parametric tools such as \(\bar{x}\text{-}R\) control charts to be applied with confidence in later stages of the quality analysis.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>How to interpret the result</h3>
+
+                <p>
+                <strong>Rejecting \(H_0\)</strong> (p-value &lt; \(\alpha\)) indicates that there is statistical
+                evidence that the data do not come from a normal distribution. However,
+                the cause can vary: heavier tails than normal (leptokurtosis), skewness,
+                or simply the presence of outliers. To identify the type of deviation,
+                complement the test with a Q-Q (quantile-quantile) plot: if the points curve upward
+                in the right tail there is positive skewness; if the tails move away from the
+                reference line, there is excess kurtosis.
+                </p>
+
+                <p>
+                <strong>Failing to reject \(H_0\)</strong> (p-value ≥ \(\alpha\)) does not prove normality;
+                it only indicates that the data are compatible with a normal distribution at the chosen level.
+                With small samples (\(n &lt; 20\)), the test has very little power and will almost never
+                reject \(H_0\), even when the data clearly depart from normal. With
+                large samples (\(n &gt; 200\)), on the other hand, trivial deviations can turn out to be
+                highly significant without affecting the validity of the parametric methods that
+                assume normality. In practice, what matters is whether the deviation is severe enough
+                to invalidate the test you intend to apply.
+                </p>
+
+                <p>
+                The Shapiro-Wilk <strong>W statistic</strong> ranges between 0 and 1: values close
+                to 1 indicate that the sample is consistent with normality; values close to 0
+                signal a severe deviation. Unlike chi-square- or KS-based tests,
+                Shapiro-Wilk has greater power to detect deviations in small samples and is
+                the recommended normality test for \(n \leq 50\). The tool shows the W value,
+                the p-value and, in the chart, the Q-Q plot with the confidence band; if the points
+                fall within the band, the deviation from normality is compatible with
+                chance at the chosen level.
+                </p>
+        </section>
+        <section id="seo-support-content" class="card content-card">
+            <section class="related-tools">
+                <h3>Related calculators</h3>
+                <ul>
+                    <li><a href="normal.html">Normal distribution</a></li>
+                    <li><a href="kolmogorov-smirnov-bondad-ajuste.html">Kolmogorov-Smirnov</a></li>
+                    <li><a href="contraste-hipotesis-una-media.html">Test for one mean</a></li>
+                    <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+                </ul>
+            </section>
+
+            <h3>Frequently asked questions</h3>
+
+            <ul>
+                <li>
+                    <strong>What sample sizes are typical for Shapiro-Wilk?</strong>
+                    It is widely used for small and moderate sample sizes, although it can also be
+                    applied to larger sizes depending on the software.
+                </li>
+                <li>
+                    <strong>Does a high p-value prove normality?</strong>
+                    No. It only indicates that there is not enough evidence to reject normality with
+                    that sample and that significance level.
+                </li>
+                <li>
+                    <strong>Should I rely on the test alone?</strong>
+                    No. Best practice is to combine the formal test with a Q-Q plot and a histogram.
+                </li>
+            </ul>
+            <p class="external-ref">References:</p>
+            <ul class="ref-list">
+                <li>Shapiro, S. S. &amp; Wilk, M. B. (1965). An analysis of variance test for normality (complete samples). <em>Biometrika</em>, 52(3-4), 591-611. — Original paper of the test and of the tabulated \(a_i\) coefficients.</li>
+                <li>Royston, J. P. (1992). Approximating the Shapiro-Wilk W-test for non-normality. <em>Statistics and Computing</em>, 2, 117-119. — Polynomial approximation algorithm for the \(a_i\) coefficients implemented in this calculator.</li>
+                <li>Royston, J. P. (1995). Remark AS R94: A remark on Algorithm AS 181: The W-test for normality. <em>Applied Statistics</em>, 44(4), 547-551. — Revised version of the algorithm (AS R94), the basis for the computation of \(W\) in R and in this tool.</li>
+                <li>Wichura, M. J. (1988). Algorithm AS 241: The percentage points of the normal distribution. <em>Applied Statistics</em>, 37(3), 477-484. — Source of the coefficients of the rational approximation of \(\Phi^{-1}(p)\) used in the code.</li>
+            </ul>
+        </section>
+
+    </main>
+
+    <footer class="legal-footer">
+        <p>
+            © 2026 problabtools.
+            <a href="../aviso-legal.html">Legal notice</a> ·
+            <a href="../privacidad.html">Privacy</a> ·
+            <a href="../cookies.html">Cookies</a> ·
+            <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+        </p>
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let shapiroChart;
+
+let rngState = 12345;
+
+function setSeed(seed) {
+  rngState = (seed >>> 0) || 12345;
+}
+
+function randomUniform() {
+  rngState = (1664525 * rngState + 1013904223) >>> 0;
+  return rngState / 4294967296;
+}
+
+function randomNormal() {
+  let u = 0;
+  let v = 0;
+  while (u === 0) u = randomUniform();
+  while (v === 0) v = randomUniform();
+  return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+}
+
+function approxNormalQuantile(p) {
+  const a=[-39.6968302866538,220.946098424521,-275.928510446969,138.357751867269,-30.6647980661472,2.50662827745924];
+  const b=[-54.4760987982241,161.585836858041,-155.698979859887,66.8013118877197,-13.2806815528857];
+  const c=[-0.00778489400243029,-0.322396458041136,-2.40075827716184,-2.54973253934373,4.37466414146497,2.93816398269878];
+  const d=[0.00778469570904146,0.32246712907004,2.445134137143,3.75440866190742];
+  const plow=0.02425, phigh=1-plow;
+  if (p < plow) { const q=Math.sqrt(-2*Math.log(p)); return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
+  if (p > phigh) { const q=Math.sqrt(-2*Math.log(1-p)); return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
+  const q=p-0.5, r=q*q;
+  return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
+}
+
+// Royston (1992) AS R94 polynomial coefficients for Shapiro-Wilk a_i
+const SW_C1 = [0, 0.221157, -0.147981, -2.07119, 4.434685, -2.706056];
+const SW_C2 = [0, 0.042981, -0.293762, -1.752461, 5.682633, -3.582633];
+
+function polyEval(coeffs, x) {
+  let val = 0, xp = 1;
+  for (let i = 0; i < coeffs.length; i++) { val += coeffs[i] * xp; xp *= x; }
+  return val;
+}
+
+function shapiroWilkCoeffs(n) {
+  // Returns array of floor(n/2) positive coefficients a[0]≥a[1]≥…
+  // used as W numerator = (Σ a[i]*(x_(n-i) - x_(i)))²
+  const m = Math.floor(n / 2);
+  if (n === 3) return [Math.SQRT1_2]; // sqrt(0.5) = 0.70711, exact for n=3
+
+  // Blom scores for the upper half (excluding center for odd n)
+  const upperStart = Math.floor(n / 2) + 1 + (n % 2); // 1-indexed
+  const blom = [];
+  for (let i = upperStart; i <= n; i++) {
+    blom.push(approxNormalQuantile((i - 0.375) / (n + 0.25)));
+  }
+  // blom[blom.length-1] = m_n (largest), blom[blom.length-2] = m_{n-1}, …
+
+  const summ2 = 2.0 * blom.reduce((s, v) => s + v * v, 0);
+  const ssumm2 = Math.sqrt(summ2);
+  const u = 1.0 / Math.sqrt(n);
+  const a = new Array(m);
+
+  // Corrected largest coefficient via polynomial
+  a[0] = blom[blom.length - 1] / ssumm2 + polyEval(SW_C1, u);
+
+  if (m >= 2) {
+    // Corrected second-largest coefficient
+    a[1] = blom[blom.length - 2] / ssumm2 + polyEval(SW_C2, u);
+
+    if (m >= 3) {
+      // Remaining coefficients via normalization (phi)
+      const mn = blom[blom.length - 1], mn1 = blom[blom.length - 2];
+      const phi = (summ2 - 2 * mn * mn - 2 * mn1 * mn1) /
+                  (1 - 2 * a[0] * a[0] - 2 * a[1] * a[1]);
+      const sqrtPhi = Math.sqrt(Math.max(phi, 1e-10));
+      for (let k = 2; k < m; k++) {
+        a[k] = blom[blom.length - 1 - k] / sqrtPhi;
+      }
+    }
+  }
+  return a;
+}
+
+function computeShapiroW(sample) {
+  const n = sample.length;
+  const sorted = [...sample].sort((x, y) => x - y);
+  const mean = sample.reduce((s, v) => s + v, 0) / n;
+  const ss = sample.reduce((s, v) => s + (v - mean) ** 2, 0);
+  if (ss < 1e-15) return 1.0;
+  const a = shapiroWilkCoeffs(n);
+  let b = 0;
+  for (let i = 0; i < a.length; i++) b += a[i] * (sorted[n - 1 - i] - sorted[i]);
+  return Math.min(1.0, (b * b) / ss);
+}
+
+function simulateShapiroDistribution(n, B) {
+  const out = [];
+  for (let b = 0; b < B; b += 1) {
+    const x = Array.from({ length: n }, () => randomNormal());
+    out.push(computeShapiroW(x));
+  }
+  return out;
+}
+
+function drawShapiroChart(wSim, wObs, wCrit) {
+  const ctx = document.getElementById('shapiroChart');
+  if (!ctx) return;
+  if (shapiroChart) shapiroChart.destroy();
+
+  const bins = 24;
+  const minW = 0;
+  const maxW = 1;
+  const bw = (maxW - minW) / bins;
+  const counts = Array(bins).fill(0);
+  wSim.forEach(w => {
+    const idx = Math.min(bins - 1, Math.floor((w - minW) / bw));
+    if (idx >= 0) counts[idx] += 1;
+  });
+  const labels = counts.map((_, i) => (minW + bw * (i + 0.5)).toFixed(3));
+  const markerObs = labels.map(x => Math.abs(parseFloat(x) - wObs) < bw / 2 ? Math.max(...counts) * 0.95 : null);
+  const markerCrit = labels.map(x => Math.abs(parseFloat(x) - wCrit) < bw / 2 ? Math.max(...counts) * 0.8 : null);
+
+  shapiroChart = new Chart(ctx, {
+    data: {
+      labels,
+      datasets: [
+        { type: 'bar', label: 'MC distribution of W', data: counts, backgroundColor: '#93c5fd' },
+        { type: 'line', label: 'Observed W', data: markerObs, borderColor: '#dc2626', pointBackgroundColor: '#dc2626', showLine: false, pointRadius: 6 },
+        { type: 'line', label: 'Critical W (left tail)', data: markerCrit, borderColor: '#16a34a', pointBackgroundColor: '#16a34a', showLine: false, pointRadius: 6 }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false, scales: { x: { title: { display: true, text: 'W' } }, y: { title: { display: true, text: 'Frequency' } } } }
+  });
+}
+
+document.getElementById('calcShapiroBtn').addEventListener('click', () => {
+  const sampleText = document.getElementById('sampleData').value;
+  const sample = sampleText.split(/[\s,;]+/).map(v => parseFloat(v)).filter(v => !Number.isNaN(v));
+  const B = parseInt(document.getElementById('mcIter').value, 10);
+  const alpha = parseFloat(document.getElementById('alpha').value);
+  const n = sample.length;
+  const seedRaw = document.getElementById('mcSeed').value;
+  const seed = seedRaw === '' ? 12345 : parseInt(seedRaw, 10);
+
+  if (n < 3) { document.getElementById('shapiroResult').textContent = 'Enter at least 3 valid observations.'; return; }
+  if (Number.isNaN(B) || B < 1000 || B > 100000) { document.getElementById('shapiroResult').textContent = 'B must be between 1000 and 100000.'; return; }
+  if (Number.isNaN(alpha) || alpha <= 0 || alpha >= 1) { document.getElementById('shapiroResult').textContent = 'The significance level α must be between 0 and 1.'; return; }
+  if (Number.isNaN(seed) || seed < 0) { document.getElementById('shapiroResult').textContent = 'The seed must be an integer ≥ 0.'; return; }
+
+  setSeed(seed);
+  const wObs = computeShapiroW(sample);
+  const wSim = simulateShapiroDistribution(n, B);
+  const pValue = wSim.filter(w => w <= wObs).length / B;
+  const wCrit = [...wSim].sort((a, b) => a - b)[Math.floor(alpha * B)];
+  const decision = pValue < alpha ? 'Reject H₀ (not normal).' : 'Fail to reject H₀ (compatible with normality).';
+
+  document.getElementById('shapiroResult').innerHTML =
+    `n: <strong>${n}</strong><br>` +
+    `Observed W: <strong>${wObs.toFixed(4)}</strong><br>` +
+    `Monte Carlo p-value: <strong>${pValue.toFixed(4)}</strong><br>` +
+    `Critical W (left tail, α=${alpha}): <strong>${wCrit.toFixed(4)}</strong><br>` +
+    `Decision: <strong>${decision}</strong>`;
+
+  document.getElementById('shapiroNotes').innerHTML =
+    `Rejection region: W ≤ ${wCrit.toFixed(4)} (left tail).<br>` +
+    `The simulation used ${B.toLocaleString('en-US')} normal samples under H₀ with seed ${seed}.`;
+
+  drawShapiroChart(wSim, wObs, wCrit);
+});
+
+</script>
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(','\\)'], ['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>

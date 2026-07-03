@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../kolmogorov-smirnov-bondad-ajuste.html">
+<head>
+    <meta charset="UTF-8">
+    <title>Kolmogorov-Smirnov Goodness-of-Fit Test Calculator | ProbLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kolmogorov-Smirnov goodness-of-fit test calculator to assess whether a sample follows a specified continuous theoretical distribution.">
+    <meta name="keywords" content="Kolmogorov-Smirnov test, KS goodness-of-fit test, Kolmogorov-Smirnov test calculator, online normality test, goodness-of-fit test calculator, ProbLab, online statistics, statistics calculator">
+    <link rel="canonical" href="https://problabtools.com/en/kolmogorov-smirnov-bondad-ajuste.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Kolmogorov-Smirnov Goodness-of-Fit Test Calculator | ProbLab">
+    <meta property="og:description" content="Kolmogorov-Smirnov goodness-of-fit test calculator to assess whether a sample follows a specified continuous theoretical distribution.">
+    <meta property="og:url" content="https://problabtools.com/en/kolmogorov-smirnov-bondad-ajuste.html">
+    <meta property="og:site_name" content="ProbLab">
+    <meta property="og:image" content="https://problabtools.com/og-image.png">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image:alt" content="Kolmogorov-Smirnov goodness-of-fit test calculator">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Vicente Castellar">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="alternate" hreflang="en" href="https://problabtools.com/en/kolmogorov-smirnov-bondad-ajuste.html">
+    <link rel="alternate" hreflang="es" href="https://problabtools.com/kolmogorov-smirnov-bondad-ajuste.html">
+    <link rel="alternate" hreflang="x-default" href="https://problabtools.com/kolmogorov-smirnov-bondad-ajuste.html">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Kolmogorov-Smirnov Goodness-of-Fit Test Calculator | ProbLab">
+    <meta name="twitter:description" content="Kolmogorov-Smirnov goodness-of-fit test calculator to assess whether a sample follows a specified continuous theoretical distribution.">
+    <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+    <meta name="twitter:image:alt" content="Kolmogorov-Smirnov goodness-of-fit test calculator">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+            {"@type": "ListItem", "position": 2, "name": "Hypothesis tests", "item": "https://problabtools.com/en/contrastes-hipotesis/"},
+            {"@type": "ListItem", "position": 3, "name": "Kolmogorov-Smirnov goodness of fit", "item": "https://problabtools.com/en/kolmogorov-smirnov-bondad-ajuste.html"}
+          ]
+        },
+        {
+          "@type": "WebPage",
+          "name": "Kolmogorov-Smirnov Goodness-of-Fit Test Calculator | ProbLab",
+          "url": "https://problabtools.com/en/kolmogorov-smirnov-bondad-ajuste.html",
+          "description": "Kolmogorov-Smirnov goodness-of-fit test calculator to assess whether a sample follows a specified continuous theoretical distribution.",
+          "inLanguage": "en",
+          "isPartOf": {"@type": "WebSite", "name": "ProbLab", "url": "https://problabtools.com/"}
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Kolmogorov-Smirnov Goodness-of-Fit Test Calculator",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web",
+      "url": "https://problabtools.com/en/kolmogorov-smirnov-bondad-ajuste.html",
+      "description": "Tool to test whether a sample of continuous data follows a specified theoretical distribution using the Kolmogorov-Smirnov test.",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+    }
+    </script>
+
+    <link rel="stylesheet" href="../style_new.css?v=20260624">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "When should I use the KS test instead of the chi-square goodness-of-fit test?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The KS test is preferable for continuous distributions and not-too-large samples,\n                    because it does not require grouping data into intervals and is more powerful in that context.\n                    The chi-square test is more suitable for categorical data or when working with\n                    large samples of continuous data that have already been grouped."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens if I estimate the parameters from the data itself?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "If the parameters of the theoretical distribution are estimated from the same sample,\n                    the standard KS test becomes conservative: the p-values are larger than they should be,\n                    which reduces power. For normality with estimated parameters use the Lilliefors\n                    test; for other distributions analogous variants exist."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the KS test work for discrete distributions?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It is not designed for discrete distributions. With them, the distribution of the\n                    statistic \\(D_n\\) under \\(H_0\\) changes and the Kolmogorov approximation is\n                    inaccurate. For discrete data (counts by category), use the\n                    chi-square goodness-of-fit test."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many observations are needed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For the asymptotic p-value approximation to be reliable, \\(n \\geq 20\\) is\n                    recommended. With smaller samples the p-value is approximate and the\n                    power to detect moderate deviations is low."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the test always two-sided?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The statistic \\(D_n = \\sup|F_n - F_0|\\) measures the maximum discrepancy in\n                    either direction, so the test detects both excess and deficit of mass\n                    relative to the theoretical model in any region. There is no standard\n                    one-sided version of the one-sample KS test."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference with the two-sample KS test?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The one-sample test (goodness-of-fit) compares the data with a fully specified\n                    theoretical distribution. The two-sample test checks whether two independent\n                    samples come from the same distribution, without needing to specify what that\n                    distribution is."
+      }
+    }
+  ]
+}
+    </script>
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="distribuciones/">Distributions</a></li>
+            <li><a href="tablas-estadisticas/">Tables</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="../tamano-muestral/">Sample size</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="../ab-testing/">A/B testing</a></li>
+            <li><a href="../simulaciones/">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../kolmogorov-smirnov-bondad-ajuste.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><span aria-current="page">Kolmogorov-Smirnov goodness of fit</span></li>
+        </ol>
+    </nav>
+    <header class="hero">
+        <p class="eyebrow">Hypothesis tests</p>
+        <h1>Kolmogorov-Smirnov goodness-of-fit test calculator</h1>
+        <p class="hero-subtitle">Assess whether a data sample follows a specified continuous theoretical distribution.</p>
+        <p class="hero-links"><a class="hero-link-button" href="contrastes-hipotesis/">See all hypothesis tests</a></p>
+    </header>
+
+    <main>
+
+        <section class="card sample-size-panel">
+            <div class="panel-heading">
+                <h2>Calculator</h2>
+                <p>Enter the sample data separated by commas, select the theoretical distribution and enter its known parameters.</p>
+            </div>
+
+            <div class="form-grid sample-grid">
+                <div class="form-group">
+                    <label for="sampleData">Sample data</label>
+                    <input type="text" id="sampleData" value="165, 170, 172, 168, 175, 160, 180, 163, 171, 169">
+                </div>
+
+                <div class="form-group">
+                    <label for="distType">Theoretical distribution</label>
+                    <select id="distType">
+                        <option value="normal">Normal</option>
+                        <option value="uniform">Uniform</option>
+                        <option value="exponential">Exponential</option>
+                    </select>
+                </div>
+
+                <div id="paramsNormal" class="inline-inputs">
+                    <div class="form-group">
+                        <label for="paramMu">Mean (μ)</label>
+                        <input type="number" id="paramMu" value="170" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label for="paramSigma">Standard deviation (σ)</label>
+                        <input type="number" id="paramSigma" value="7" min="0.001" step="any">
+                    </div>
+                </div>
+
+                <div id="paramsUniform" class="inline-inputs" style="display:none">
+                    <div class="form-group">
+                        <label for="paramA">Minimum (a)</label>
+                        <input type="number" id="paramA" value="0" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label for="paramB">Maximum (b)</label>
+                        <input type="number" id="paramB" value="1" step="any">
+                    </div>
+                </div>
+
+                <div id="paramsExp" class="inline-inputs" style="display:none">
+                    <div class="form-group">
+                        <label for="paramLambda">Rate (λ)</label>
+                        <input type="number" id="paramLambda" value="1" min="0.001" step="any">
+                    </div>
+                </div>
+
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="alpha">Significance level (α)</label>
+                        <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="calcKsBtn">Calculate test</button>
+            <div id="ksResult" class="result-box">Result pending…</div>
+            <div id="ksTable" class="result-box" style="margin-top:12px;"></div>
+            <div class="chart-wrap">
+                <canvas id="ksChart" aria-label="Chart of empirical and theoretical distribution functions for the Kolmogorov-Smirnov test" role="img"></canvas>
+            </div>
+        </section>
+
+        <section class="card content-card">
+            <h3>Explanation</h3>
+
+            <p>
+                The Kolmogorov-Smirnov goodness-of-fit test (KS test) is used to assess whether a
+                data sample comes from a previously specified continuous probability distribution.
+                Unlike the chi-square goodness-of-fit test, it does not require grouping the data
+                into intervals and works directly with the individual sample values, which makes it
+                especially suitable for continuous distributions.
+            </p>
+
+            <p>
+                The core idea is to compare the empirical distribution function \(F_n(x)\) —the
+                proportion of observations less than or equal to \(x\)— with the theoretical
+                distribution function \(F_0(x)\) under the null hypothesis. The test statistic is
+                the maximum absolute discrepancy between the two functions.
+            </p>
+
+            <p>
+                For example, if the response times of 25 servers are recorded and we want to know
+                whether they follow an Exponential distribution with rate λ = 0.5, the KS test
+                quantifies how far the empirical distribution departs from that Exponential and
+                computes the probability that this difference is attributable to sampling chance.
+            </p>
+
+            <p>
+                The statistic \(D_n\) follows the Kolmogorov distribution under the null hypothesis
+                when the parameters of the distribution are known and not estimated from the data
+                itself. The test is always two-sided: it detects any type of deviation from the
+                theoretical model, in any region of the distribution.
+            </p>
+
+            <h3>Hypotheses and statistic</h3>
+            <p class="formula-line">\(H_0\): the sample comes from the theoretical distribution \(F_0\)</p>
+            <p class="formula-line">\(H_1\): the sample does not come from \(F_0\)</p>
+            <p class="formula-line">
+                \(D_n = \sup_x \left| F_n(x) - F_0(x) \right|\)
+            </p>
+        </section>
+
+
+
+        <section class="card content-card">
+            <h3>Quick check</h3>
+
+            <p>
+                The data are sorted from smallest to largest: \(x_{(1)} \leq x_{(2)} \leq \cdots \leq x_{(n)}\).
+                The empirical distribution function \(F_n\) is the step function that jumps by
+                \(1/n\) at each observation. The statistic \(D_n\) measures the maximum distance
+                between \(F_n\) and the theoretical distribution \(F_0\), considering both the value
+                just before and just after each jump:
+            </p>
+
+            <p class="formula-line">
+                \(D_n = \max_{1 \leq i \leq n}\left\{ \left|\frac{i}{n} - F_0(x_{(i)})\right|,\, \left|\frac{i-1}{n} - F_0(x_{(i)})\right| \right\}\)
+            </p>
+
+            <p>
+                Under \(H_0\), the distribution of \(\sqrt{n}\,D_n\) converges to the Kolmogorov
+                distribution. The p-value is obtained using the asymptotic formula:
+            </p>
+
+            <p class="formula-line">
+                \(p \approx 2\sum_{k=1}^{\infty}(-1)^{k-1}\exp\!\left(-2k^2 n D_n^2\right)\)
+            </p>
+
+            <p>
+                This approximation is reliable for \(n \geq 20\). With smaller samples, the p-value
+                is approximate and results should be interpreted with caution. If the distribution
+                parameters have been estimated from the data itself (rather than being known in
+                advance), the p-values computed with this formula are too large: the test becomes
+                conservative. In that case, the Lilliefors test is recommended for normality; for
+                other distributions, analogous variants with specific corrections exist.
+            </p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Worked example</h3>
+            <p>The waiting times (in minutes) of 8 customers at an office are measured: 1.2, 2.1, 2.8, 3.4, 4.1, 5.0, 5.8, 6.5. We want to check, with \(\alpha = 0.05\), whether these data come from a Uniform distribution on the interval \([0,\, 8]\).</p>
+            <p>The hypotheses are \(H_0\): the sample follows a \(\text{Uniform}(0,8)\) distribution versus \(H_1\): the sample does not follow that distribution. The theoretical distribution function is \(F_0(x) = x/8\) for \(x \in [0,8]\).</p>
+            <p>With the data already sorted, the empirical distribution function \(F_n(x_i) = i/n\) is built and the maximum difference \(D = \max_i |F_n(x_i) - F_0(x_i)|\) is computed:</p>
+            <p class="formula-line">\( D = \max\!\left\{\left|\tfrac{i}{8} - \tfrac{x_i}{8}\right|,\; \left|\tfrac{i-1}{8} - \tfrac{x_i}{8}\right|\right\} \)</p>
+            <p>At each observation two differences are computed: the upper step \(|i/n - F_0(x_i)|\) and the lower step \(|(i-1)/n - F_0(x_i)|\), and the larger one is kept. The most notable values are: for \(x_1 = 1.2\), lower step \(|0/8 - 0.150| = 0.150\); for \(x_7 = 5.8\), upper step \(|7/8 - 0.725| = 0.150\); for \(x_8 = 6.5\), upper step \(|8/8 - 0.8125| = 0.1875\). The overall maximum is \(D = 0.1875\), attained at \(x_8 = 6.5\).</p>
+            <p>The tabulated critical value for \(n = 8\) and \(\alpha = 0.05\) is \(D_{0.05;\,8} \approx 0.457\). Since \(D = 0.1875 < 0.457\), \(H_0\) is not rejected.</p>
+            <p>Conclusion: at a 5% significance level, there is not enough evidence to claim that the waiting times differ from a Uniform distribution on \([0, 8]\). The maximum observed discrepancy between the empirical and theoretical distributions is small relative to the variability expected for samples of that size.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>How to interpret the result</h3>
+
+                <p>
+                <strong>Rejecting \(H_0\)</strong> (p-value &lt; \(\alpha\)) means that the empirical
+                distribution function \(F_n(x)\) departs from the theoretical function \(F_0(x)\) by
+                more than chance can explain. The data are not compatible with the proposed
+                distributional model at the chosen significance level. The <strong>location</strong>
+                of the maximum discrepancy —marked by the vertical amber line in the chart— reveals
+                which region of the distribution the misfit is concentrated in: a discrepancy in the
+                left tail indicates that the data have less mass than expected at low values; in the
+                right tail, the opposite; in the center, a misfit around the median or the mode.
+                </p>
+
+                <p>
+                <strong>Failing to reject \(H_0\)</strong> (p-value ≥ \(\alpha\)) does not prove that
+                the data "follow" the theoretical distribution; it only indicates that they are
+                compatible with it at the chosen level. With small samples the power is low and
+                moderate deviations can go unnoticed. With very large samples, the test may reject
+                models that fit reasonably well in practice. It is therefore advisable to complement
+                the p-value with a visual inspection of the empirical and theoretical CDF curves: if
+                they overlap almost perfectly, the model is adequate even if \(D_n\) is nonzero.
+                </p>
+
+                <p>
+                The <strong>statistic \(D_n\)</strong> is the maximum vertical distance between the
+                empirical and theoretical CDFs. The green zone in the chart represents the tolerance
+                band around \(F_0(x)\) compatible with \(H_0\); if the empirical CDF exceeds that
+                band, \(D_n\) falls into the critical region (red zone). One advantage of the KS test
+                over the chi-square goodness-of-fit test is that it does not require grouping data
+                into categories, making it especially useful for continuous distributions. However,
+                if the parameters of the theoretical distribution have been estimated from the data
+                itself, the critical values must be corrected (the Lilliefors test for normality,
+                for example).
+                </p>
+        </section>
+        <section id="seo-support-content" class="card content-card">
+            <section class="related-tools">
+                <h3>Related calculators</h3>
+                <ul>
+                    <li><a href="chi-cuadrado-bondad-ajuste.html">Chi-square goodness-of-fit test</a></li>
+                    <li><a href="normal.html">Normal distribution</a></li>
+                    <li><a href="exponential.html">Exponential distribution</a></li>
+                    <li><a href="uniform.html">Uniform distribution</a></li>
+                    <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+                </ul>
+            </section>
+
+            <h3>Frequently asked questions</h3>
+
+            <ul>
+                <li>
+                    <strong>When should I use the KS test instead of the chi-square goodness-of-fit test?</strong>
+                    The KS test is preferable for continuous distributions and not-too-large samples,
+                    because it does not require grouping data into intervals and is more powerful in
+                    that context. The chi-square test is more suitable for categorical data or when
+                    working with large samples of continuous data that have already been grouped.
+                </li>
+                <li>
+                    <strong>What happens if I estimate the parameters from the data itself?</strong>
+                    If the parameters of the theoretical distribution are estimated from the same
+                    sample, the standard KS test becomes conservative: the p-values are larger than
+                    they should be, which reduces power. For normality with estimated parameters use
+                    the Lilliefors test; for other distributions analogous variants exist.
+                </li>
+                <li>
+                    <strong>Does the KS test work for discrete distributions?</strong>
+                    It is not designed for discrete distributions. With them, the distribution of the
+                    statistic \(D_n\) under \(H_0\) changes and the Kolmogorov approximation is
+                    inaccurate. For discrete data (counts by category), use the
+                    chi-square goodness-of-fit test.
+                </li>
+                <li>
+                    <strong>How many observations are needed?</strong>
+                    For the asymptotic p-value approximation to be reliable, \(n \geq 20\) is
+                    recommended. With smaller samples the p-value is approximate and the
+                    power to detect moderate deviations is low.
+                </li>
+                <li>
+                    <strong>Is the test always two-sided?</strong>
+                    Yes. The statistic \(D_n = \sup|F_n - F_0|\) measures the maximum discrepancy in
+                    either direction, so the test detects both excess and deficit of mass relative to
+                    the theoretical model in any region. There is no standard one-sided version of the
+                    one-sample KS test.
+                </li>
+                <li>
+                    <strong>What is the difference with the two-sample KS test?</strong>
+                    The one-sample test (goodness-of-fit) compares the data with a fully specified
+                    theoretical distribution. The two-sample test checks whether two independent
+                    samples come from the same distribution, without needing to specify what that
+                    distribution is.
+                </li>
+            </ul>
+            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test" target="_blank" rel="noopener noreferrer">Kolmogorov–Smirnov test</a> — Wikipedia</p>
+        </section>
+    </main>
+
+    <footer class="legal-footer">
+        <p>
+            © 2026 problabtools.
+            <a href="../aviso-legal.html">Legal notice</a> ·
+            <a href="../privacidad.html">Privacy</a> ·
+            <a href="../cookies.html">Cookies</a> ·
+            <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+        </p>
+    </footer>
+</div>
+
+<script>
+window.MathJax = {
+    tex: { inlineMath: [['\\(','\\)'], ['$', '$']] },
+    startup: {
+        ready: () => {
+            MathJax.startup.defaultReady();
+            MathJax.typesetPromise();
+        }
+    }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let ksChart;
+
+document.getElementById('distType').addEventListener('change', function(){
+    const v = this.value;
+    document.getElementById('paramsNormal').style.display = v === 'normal' ? '' : 'none';
+    document.getElementById('paramsUniform').style.display = v === 'uniform' ? '' : 'none';
+    document.getElementById('paramsExp').style.display = v === 'exponential' ? '' : 'none';
+});
+
+function erf(x){
+    const sign = x >= 0 ? 1 : -1;
+    x = Math.abs(x);
+    const a1=0.254829592, a2=-0.284496736, a3=1.421413741, a4=-1.453152027, a5=1.061405429, p=0.3275911;
+    const t = 1 / (1 + p * x);
+    const y = 1 - (((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);
+    return sign * y;
+}
+
+function getCDFFunction(distType){
+    if(distType === 'normal'){
+        const mu = parseFloat(document.getElementById('paramMu').value);
+        const sigma = parseFloat(document.getElementById('paramSigma').value);
+        if(!Number.isFinite(mu)) throw new Error('Enter a valid value for μ.');
+        if(!Number.isFinite(sigma) || sigma <= 0) throw new Error('The standard deviation (σ) must be a positive number.');
+        return x => 0.5 * (1 + erf((x - mu) / (sigma * Math.SQRT2)));
+    }
+    if(distType === 'uniform'){
+        const a = parseFloat(document.getElementById('paramA').value);
+        const b = parseFloat(document.getElementById('paramB').value);
+        if(!Number.isFinite(a) || !Number.isFinite(b)) throw new Error('Enter valid values for a and b.');
+        if(b <= a) throw new Error('The maximum (b) must be greater than the minimum (a).');
+        return x => {
+            if(x <= a) return 0;
+            if(x >= b) return 1;
+            return (x - a) / (b - a);
+        };
+    }
+    if(distType === 'exponential'){
+        const lambda = parseFloat(document.getElementById('paramLambda').value);
+        if(!Number.isFinite(lambda) || lambda <= 0) throw new Error('The rate (λ) must be a positive number.');
+        return x => x <= 0 ? 0 : 1 - Math.exp(-lambda * x);
+    }
+    throw new Error('Unsupported distribution.');
+}
+
+function kolmogorovPValue(n, d){
+    if(d <= 0) return 1;
+    if(d >= 1) return 0;
+    const nd2 = n * d * d;
+    let sum = 0;
+    for(let k = 1; k <= 150; k++){
+        const term = Math.pow(-1, k - 1) * Math.exp(-2 * k * k * nd2);
+        sum += term;
+        if(Math.abs(term) < 1e-13) break;
+    }
+    return Math.min(1, Math.max(0, 2 * sum));
+}
+
+function parseValues(raw){
+    return raw.trim().split(/[\s,;]+/).map(Number).filter(v => raw.trim() !== '' && !isNaN(v));
+}
+
+function renderKSChart(sortedData, getCDF, maxDiffX, fnAtMax, f0AtMax, Dn){
+    const ctx = document.getElementById('ksChart');
+    if(!ctx) return;
+
+    const n = sortedData.length;
+    const xMin = sortedData[0];
+    const xMax = sortedData[n - 1];
+    const range = Math.max(xMax - xMin, 1e-6);
+    const padL = range * 0.12;
+    const padR = range * 0.12;
+    const xL = xMin - padL;
+    const xR = xMax + padR;
+
+    // Empirical CDF: step function with stepped:'after'
+    // Points at (xL,0) then (x_i, i/n) for each observation
+    const empiricalData = [{x: xL, y: 0}];
+    for(let i = 0; i < n; i++) empiricalData.push({x: sortedData[i], y: (i + 1) / n});
+    empiricalData.push({x: xR, y: 1});
+
+    // Theoretical CDF: smooth curve
+    const steps = 300;
+    const theoreticalData = [];
+    for(let i = 0; i <= steps; i++){
+        const x = xL + i * (xR - xL) / steps;
+        theoreticalData.push({x, y: getCDF(x)});
+    }
+
+    // Dn segment: vertical line at the point of maximum discrepancy
+    const dnLine = [
+        {x: maxDiffX, y: Math.min(fnAtMax, f0AtMax)},
+        {x: maxDiffX, y: Math.max(fnAtMax, f0AtMax)}
+    ];
+
+    if(ksChart) ksChart.destroy();
+    ksChart = new Chart(ctx, {
+        type: 'line',
+        data: {datasets: [
+            {
+                label: 'Empirical CDF Fₙ(x)',
+                data: empiricalData,
+                borderColor: '#1d4ed8',
+                borderWidth: 2,
+                pointRadius: 2,
+                pointBackgroundColor: '#1d4ed8',
+                fill: false,
+                parsing: false,
+                stepped: 'after'
+            },
+            {
+                label: 'Theoretical CDF F₀(x)',
+                data: theoreticalData,
+                borderColor: '#16a34a',
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: false,
+                parsing: false
+            },
+            {
+                label: `Dₙ = ${Dn.toFixed(4)}`,
+                data: dnLine,
+                borderColor: '#dc2626',
+                borderWidth: 3,
+                pointRadius: 5,
+                pointBackgroundColor: '#dc2626',
+                fill: false,
+                parsing: false
+            }
+        ]},
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {type: 'linear', min: xL, max: xR, title: {display: true, text: 'x'}},
+                y: {min: 0, max: 1, title: {display: true, text: 'Cumulative probability'}}
+            },
+            plugins: {legend: {display: true}}
+        }
+    });
+}
+
+function buildKSTable(sortedData, getCDF){
+    const n = sortedData.length;
+    if(n > 30){
+        return '<em>The detailed table is shown only for samples of up to 30 observations.</em>';
+    }
+    const header = '<tr><th>i</th><th>x(i)</th><th>Fₙ(x) = i/n</th><th>F₀(x)</th><th>|Fₙ − F₀|</th></tr>';
+    const rows = sortedData.map((x, i) => {
+        const fn = (i + 1) / n;
+        const f0 = getCDF(x);
+        const diff = Math.abs(fn - f0).toFixed(4);
+        return `<tr><td>${i + 1}</td><td>${x}</td><td>${fn.toFixed(4)}</td><td>${f0.toFixed(4)}</td><td>${diff}</td></tr>`;
+    }).join('');
+    return `<strong>Cumulative distribution table</strong><br><table><thead>${header}</thead><tbody>${rows}</tbody></table>`;
+}
+
+document.getElementById('calcKsBtn').addEventListener('click', () => {
+    try{
+        const rawData = document.getElementById('sampleData').value;
+        const distType = document.getElementById('distType').value;
+        const alpha = parseFloat(document.getElementById('alpha').value);
+
+        if(!Number.isFinite(alpha) || alpha <= 0 || alpha >= 1) throw new Error('The significance level α must be between 0 and 1.');
+
+        const data = parseValues(rawData);
+        if(data.length < 2) throw new Error('Enter at least 2 observations.');
+        if(data.some(v => !Number.isFinite(v))) throw new Error('The data must be finite numbers.');
+
+        const getCDF = getCDFFunction(distType);
+
+        const n = data.length;
+        const sorted = [...data].sort((a, b) => a - b);
+
+        let Dn = 0;
+        let maxDiffX = sorted[0];
+        let fnAtMax = 0;
+        let f0AtMax = 0;
+
+        for(let i = 0; i < n; i++){
+            const x = sorted[i];
+            const fnHi = (i + 1) / n;
+            const fnLo = i / n;
+            const f0 = getCDF(x);
+            const d1 = Math.abs(fnHi - f0);
+            const d2 = Math.abs(fnLo - f0);
+            if(Math.max(d1, d2) > Dn){
+                Dn = Math.max(d1, d2);
+                maxDiffX = x;
+                f0AtMax = f0;
+                fnAtMax = d1 >= d2 ? fnHi : fnLo;
+            }
+        }
+
+        const pValue = kolmogorovPValue(n, Dn);
+        const decision = pValue < alpha
+            ? 'Reject H₀ (the data do not follow the specified theoretical distribution).'
+            : 'Fail to reject H₀ (the data are compatible with the theoretical distribution).';
+
+        let warning = '';
+        if(n < 20) warning = '<br><em>Note: with n &lt; 20 the p-value is an asymptotic approximation. Interpret the result with caution.</em>';
+
+        document.getElementById('ksResult').innerHTML =
+            `Statistic Dₙ: <strong>${Dn.toFixed(6)}</strong><br>` +
+            `Sample size (n): <strong>${n}</strong><br>` +
+            `p-value (approx.): <strong>${pValue.toFixed(6)}</strong><br>` +
+            `Decision (α=${alpha}): <strong>${decision}</strong>` +
+            warning;
+
+        document.getElementById('ksTable').innerHTML = buildKSTable(sorted, getCDF);
+        renderKSChart(sorted, getCDF, maxDiffX, fnAtMax, f0AtMax, Dn);
+
+    }catch(err){
+        document.getElementById('ksResult').textContent = `Error: ${err.message}`;
+        document.getElementById('ksTable').innerHTML = '';
+        if(ksChart){ ksChart.destroy(); ksChart = null; }
+    }
+});
+document.getElementById('calcKsBtn').click();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>

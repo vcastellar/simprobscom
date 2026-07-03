@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../contraste-independencia-chi-cuadrado.html">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi-Square Test of Independence Calculator | ProbLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chi-square test of independence to assess whether two categorical variables are associated.">
+    <meta name="keywords" content="chi-square test of independence, chi-square independence test calculator, contingency table chi-square test, categorical variable association test, chi-square test calculator, ProbLab, online statistics, statistics calculator">
+    <link rel="canonical" href="https://problabtools.com/en/contraste-independencia-chi-cuadrado.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Chi-Square Test of Independence Calculator | ProbLab">
+    <meta property="og:description" content="Chi-square test of independence to assess whether two categorical variables are associated.">
+    <meta property="og:url" content="https://problabtools.com/en/contraste-independencia-chi-cuadrado.html">
+    <meta property="og:site_name" content="ProbLab">
+    <meta property="og:image" content="https://problabtools.com/og-image.png">
+    <link rel="alternate" hreflang="en" href="https://problabtools.com/en/contraste-independencia-chi-cuadrado.html">
+    <link rel="alternate" hreflang="es" href="https://problabtools.com/contraste-independencia-chi-cuadrado.html">
+    <link rel="alternate" hreflang="x-default" href="https://problabtools.com/contraste-independencia-chi-cuadrado.html">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Chi-Square Test of Independence Calculator",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web",
+      "url": "https://problabtools.com/en/contraste-independencia-chi-cuadrado.html",
+      "description": "Tool to test independence between categorical variables using a contingency table.",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+    }
+    </script>
+
+    <link rel="stylesheet" href="../style_new.css?v=20260624">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "When is the chi-square test of independence used?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "When you want to know whether two categorical variables are associated, based\n                    on the counts in a contingency table."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many degrees of freedom does the statistic have?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The degrees of freedom are \\((r-1)(c-1)\\), where \\(r\\) is the number of\n                    rows and \\(c\\) is the number of columns in the table."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What condition must the expected frequencies meet?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The approximation is adequate when most expected frequencies are ≥ 5. If\n                    some cells have very low expected frequencies, it's best to use Fisher's\n                    exact test or group categories."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's the difference from the chi-square goodness-of-fit test?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The goodness-of-fit test checks whether a variable follows a specific\n                    theoretical distribution. The independence test checks whether two\n                    variables are associated with each other, without assuming any specific\n                    distribution."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can there be association without causation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The test detects statistical association, but it does not allow you to\n                    conclude that one variable causes the other. Establishing causation\n                    requires experimental design or additional argumentation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does sample size affect the result?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "With very large samples, the test can detect very small associations that\n                    are not practically relevant. In those cases it is a good idea to\n                    complement the p-value with an effect size measure such as Cramér's\n                    V."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the minimum detectable effect (MDE) in the chi-square test of independence?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It is the smallest association between variables (usually expressed as Cramér's V) that the study can detect with the power and α set. With a small N only moderate or large associations can be detected; to detect very small associations you need to increase the sample size."
+      }
+    }
+  ]
+}
+    </script>
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="distribuciones/">Distributions</a></li>
+            <li><a href="tablas-estadisticas/">Tables</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="../tamano-muestral/">Sample size</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="../ab-testing/">A/B testing</a></li>
+            <li><a href="../simulaciones/">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../contraste-independencia-chi-cuadrado.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><span aria-current="page">Chi-square independence</span></li>
+        </ol>
+    </nav>
+    <header class="hero">
+        <p class="eyebrow">Hypothesis tests</p>
+        <h1>Chi-Square Test of Independence Calculator</h1>
+        <p class="hero-subtitle">Assess whether two categorical variables are independent.</p>
+        <p class="hero-links"><a class="hero-link-button" href="contrastes-hipotesis/">See all hypothesis tests</a></p>
+    </header>
+
+    <main>
+
+        <section class="card sample-size-panel">
+            <div class="panel-heading">
+                <h2>Calculator</h2>
+                <p>Enter the contingency table (rows separated by line breaks, columns by commas or spaces).</p>
+            </div>
+
+            <div class="form-grid sample-grid">
+                <div class="form-group">
+                    <label for="tableInput">Observed table</label>
+                    <textarea id="tableInput" rows="6">40, 10, 15
+30, 25, 20
+20, 15, 25</textarea>
+                </div>
+
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="alpha">Significance level (α)</label>
+                        <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="calcChiBtn">Calculate test</button>
+            <div id="chiResult" class="result-box">Result pending…</div>
+            <div id="expectedTable" class="result-box" style="margin-top:12px;">Expected frequencies pending…</div>
+            <div class="chart-wrap">
+                <canvas id="chiIndependenceChart" aria-label="Chart of acceptance and rejection zones for the chi-square test of independence" role="img"></canvas>
+            </div>
+        </section>
+
+        <section class="card content-card">
+            <h3>Explanation</h3>
+
+            <p>
+                The chi-square test of independence lets you evaluate whether there is an
+                association between two categorical variables based on the counts observed
+                in a contingency table. The question it answers is: are the data compatible
+                with both variables being distributed independently, or is there evidence
+                that one variable influences the other?
+            </p>
+
+            <p>
+                The core idea is to compare what was observed with what would be expected if
+                the variables were truly independent. If the differences between observed and
+                expected frequencies are too large to attribute to chance, the hypothesis of
+                independence is rejected and it is concluded that an association exists.
+            </p>
+
+            <p>
+                For example, a company wants to know whether customer satisfaction (high,
+                medium, low) depends on the purchase channel (physical store, website, app).
+                It collects data from a sample and builds a contingency table. If the test is
+                significant, there is evidence that channel and satisfaction are associated;
+                if it is not, the data are compatible with both variables being independent.
+            </p>
+
+            <p>
+                The test statistic aggregates the discrepancies across all cells of the table
+                and follows a chi-square distribution under the null hypothesis. The degrees
+                of freedom depend on the size of the table: \((r-1)(c-1)\), where \(r\) is the
+                number of rows and \(c\) is the number of columns.
+            </p>
+
+            <h3>Hypotheses and test statistic</h3>
+            <p class="formula-line">\(H_0\): the variables are independent</p>
+            <p class="formula-line">\(H_1\): there is an association between the variables</p>
+            <p class="formula-line">
+                \(\chi^2 = \sum_{i,j}\frac{(O_{ij}-E_{ij})^2}{E_{ij}}\), &nbsp;
+                with \(E_{ij} = \frac{n_{i\cdot} \cdot n_{\cdot j}}{n}\)
+            </p>
+        </section>
+
+
+
+        <section class="card content-card">
+            <h3>Quick check</h3>
+
+            <p>
+                The chi-square statistic sums, for each cell of the table, the squared
+                difference between observed and expected frequency, divided by the expected
+                frequency. Under the null hypothesis of independence, this statistic
+                approximately follows a \(\chi^2\) distribution with \((r-1)(c-1)\) degrees
+                of freedom:
+            </p>
+
+            <p class="formula-line">
+                \(\chi^2 = \sum_{i=1}^{r}\sum_{j=1}^{c} \frac{(O_{ij} - E_{ij})^2}{E_{ij}}
+                \sim \chi^2_{(r-1)(c-1)}\)
+            </p>
+
+            <p>
+                Expected frequencies are obtained from the marginal totals of the table. For
+                the cell in row \(i\) and column \(j\):
+            </p>
+
+            <p class="formula-line">
+                \(E_{ij} = \frac{n_{i\cdot} \cdot n_{\cdot j}}{n}\)
+            </p>
+
+            <p>
+                where \(n_{i\cdot}\) is the total of row \(i\), \(n_{\cdot j}\) is the total
+                of column \(j\), and \(n\) is the overall total of the table.
+            </p>
+
+            <p>
+                For the chi-square approximation to be reliable, most expected frequencies
+                should be greater than or equal to 5. If the table is 2×2 with small
+                frequencies, consider the <a href="test-exacto-fisher.html">Fisher's exact
+                test</a>.
+            </p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Worked example</h3>
+            <p>A study looks at the possible relationship between smoking habits and lung disease in a sample of 200 people. The observed contingency table is:</p>
+            <p>Non-smokers: with disease = 10, without disease = 90 (total 100). Smokers: with disease = 25, without disease = 75 (total 100). Overall totals: with disease = 35, without disease = 165, \(N = 200\).</p>
+            <p>Expected frequencies under independence are computed as \(E_{ij} = (\text{row total}_i \times \text{column total}_j) / N\). For example, for non-smokers with disease: \(E_{11} = 100 \cdot 35 / 200 = 17.5\). For smokers with disease: \(E_{21} = 100 \cdot 35 / 200 = 17.5\). For non-smokers without disease: \(E_{12} = 100 \cdot 165 / 200 = 82.5\). For smokers without disease: \(E_{22} = 82.5\).</p>
+            <p>The chi-square statistic accumulates the discrepancies between observed and expected frequencies:</p>
+            <p class="formula-line">\( \chi^2 = \sum \dfrac{(O_{ij}-E_{ij})^2}{E_{ij}} = \dfrac{(10-17.5)^2}{17.5}+\dfrac{(90-82.5)^2}{82.5}+\dfrac{(25-17.5)^2}{17.5}+\dfrac{(75-82.5)^2}{82.5} \approx 7.79 \)</p>
+            <p>The degrees of freedom are \(df = (2-1)(2-1) = 1\). The critical value for \(\alpha = 0.05\) is \(\chi^2_{0.05,\,1} \approx 3.84\). Since \(7.79 > 3.84\), \(H_0\) is rejected. The p-value is \(p \approx 0.0052 < 0.05\).</p>
+            <p>Conclusion: <strong>independence is rejected</strong>. There is a statistically significant association between smoking habits and the presence of lung disease: smokers show a clearly higher proportion of disease than expected under independence.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>How to interpret the result</h3>
+
+                <p>
+                <strong>Rejecting \(H_0\)</strong> (p-value &lt; \(\alpha\)) means there is
+                statistical evidence that the two categorical variables are not independent,
+                i.e., that the distribution of one changes depending on the category of the
+                other. However, the chi-square test does not indicate either the
+                <em>direction</em> or the <em>magnitude</em> of the association: it only
+                detects its existence. To quantify the strength, compute <strong>Cramér's
+                V</strong> \(V = \sqrt{\chi^2 / (n \cdot \min(r-1, c-1))}\), which ranges
+                between 0 (independence) and 1 (perfect association). Values of \(V\) around
+                0.1, 0.3, and 0.5 are usually interpreted as weak, moderate, and strong
+                association, respectively.
+                </p>
+
+                <p>
+                <strong>Failing to reject \(H_0\)</strong> (p-value ≥ \(\alpha\)) does not prove
+                independence; it only indicates that the data are compatible with it at the
+                chosen level. With large tables or cells with small expected frequencies, power
+                may be insufficient. Check that no expected frequency \(E_{ij} = n \cdot
+                p_{i\cdot} \cdot p_{\cdot j}\) is below 5; if some are, consider merging
+                categories or using Fisher's exact test (for 2×2 tables).
+                </p>
+
+                <p>
+                The <strong>chi-square statistic</strong> is computed by summing the weighted
+                squared discrepancies of all cells: \(\chi^2 = \sum_{ij}(O_{ij}-E_{ij})^2/E_{ij}\).
+                Cells with standardized residuals \((O_{ij}-E_{ij})/\sqrt{E_{ij}}\) whose absolute
+                value exceeds 2 contribute the most and point to where the association is
+                concentrated. In the chart, the green zone is the non-rejection region and the
+                red zone is the right critical tail; the amber line shows the observed statistic.
+                </p>
+        </section>
+        <section id="seo-support-content" class="card content-card">
+            <section class="related-tools">
+                <h3>Related calculators</h3>
+                <ul>
+                    <li><a href="chisquare.html">Chi-square distribution</a></li>
+                    <li><a href="chi-cuadrado-bondad-ajuste.html">Chi-square goodness-of-fit test</a></li>
+                    <li><a href="test-exacto-fisher.html">Fisher's exact test</a></li>
+                    <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+                </ul>
+            </section>
+
+            <h3>Frequently asked questions</h3>
+
+            <ul>
+                <li>
+                    <strong>When is the chi-square test of independence used?</strong>
+                    When you want to know whether two categorical variables are associated
+                    based on the counts in a contingency table.
+                </li>
+                <li>
+                    <strong>How many degrees of freedom does the statistic have?</strong>
+                    The degrees of freedom are \((r-1)(c-1)\), where \(r\) is the number of
+                    rows and \(c\) is the number of columns of the table.
+                </li>
+                <li>
+                    <strong>What condition must the expected frequencies meet?</strong>
+                    The approximation is adequate when most expected frequencies are ≥ 5. If
+                    there are cells with very low expected frequencies, it's best to use the
+                    <a href="test-exacto-fisher.html">Fisher's exact test</a> or group categories.
+                </li>
+                <li>
+                    <strong>What's the difference from the chi-square goodness-of-fit test?</strong>
+                    The goodness-of-fit test checks whether a variable follows a specific
+                    theoretical distribution. The independence test checks whether two variables
+                    are associated with each other, without assuming any specific distribution.
+                </li>
+                <li>
+                    <strong>Can there be association without causation?</strong>
+                    Yes. The test detects statistical association, but it does not allow you
+                    to conclude that one variable causes the other. Causation requires
+                    experimental design or additional argumentation.
+                </li>
+                <li>
+                    <strong>How does sample size affect the result?</strong>
+                    With very large samples, the test can detect very small associations that
+                    are not practically relevant. In those cases it is a good idea to
+                    complement the p-value with an effect size measure such as Cramér's V.
+                </li>
+            </ul>
+            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Chi-squared_test" target="_blank" rel="noopener noreferrer">Chi-squared test of independence</a> — Wikipedia</p>
+        </section>
+    </main>
+
+    <footer class="legal-footer">
+        <p>
+            © 2026 problabtools.
+            <a href="../aviso-legal.html">Legal notice</a> ·
+            <a href="../privacidad.html">Privacy</a> ·
+            <a href="../cookies.html">Cookies</a> ·
+            <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+        </p>
+    </footer>
+</div>
+
+<script>
+window.MathJax = {
+    tex: { inlineMath: [['\\(','\\)'], ['$', '$']] },
+    startup: {
+        ready: () => {
+            MathJax.startup.defaultReady();
+            MathJax.typesetPromise();
+        }
+    }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let chiIndependenceChart;
+
+function gammaLn(z){
+  const cof=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.001208650973866179,-0.000005395239384953];
+  let x=z, y=z, tmp=x+5.5;
+  tmp-=(x+0.5)*Math.log(tmp);
+  let ser=1.000000000190015;
+  for(let j=0;j<cof.length;j++){ y+=1; ser+=cof[j]/y; }
+  return -tmp+Math.log(2.5066282746310005*ser/x);
+}
+function gammaP(a,x){
+  if(x<=0) return 0;
+  if(x<a+1){
+    let ap=a, sum=1/a, del=sum;
+    for(let n=1;n<=200;n++){ ap++; del*=x/ap; sum+=del; if(Math.abs(del)<Math.abs(sum)*1e-12) break; }
+    return sum*Math.exp(-x+a*Math.log(x)-gammaLn(a));
+  }
+  let b=x+1-a, c=1/1e-30, d=1/b, h=d;
+  for(let i=1;i<=200;i++){
+    const an=-i*(i-a); b+=2; d=an*d+b; if(Math.abs(d)<1e-30) d=1e-30;
+    c=b+an/c; if(Math.abs(c)<1e-30) c=1e-30; d=1/d;
+    const del=d*c; h*=del; if(Math.abs(del-1)<1e-12) break;
+  }
+  return 1-Math.exp(-x+a*Math.log(x)-gammaLn(a))*h;
+}
+function chiSquareSurvival(x,df){ return 1-gammaP(df/2,x/2); }
+
+function parseTable(raw){
+  const rows=raw.trim().split(/\n+/).map(r=>r.trim()).filter(Boolean);
+  const data=rows.map(r=>r.split(/[\s,;]+/).map(Number));
+  if(data.length<2) throw new Error('Include at least 2 rows.');
+  const cols=data[0].length;
+  if(cols<2) throw new Error('Include at least 2 columns.');
+  if(data.some(r=>r.length!==cols)) throw new Error('All rows must have the same number of columns.');
+  if(data.flat().some(v=>!Number.isFinite(v)||v<0)) throw new Error('Use only non-negative frequencies.');
+  return data;
+}
+
+function chiSquarePdf(x, df){
+  if(x<=0) return 0;
+  const k=df/2;
+  return Math.exp((k-1)*Math.log(x)-x/2-k*Math.log(2)-gammaLn(k));
+}
+
+function chiSquareQuantile(p, df){
+  if(p<=0) return 0;
+  if(p>=1) return Infinity;
+  let lo=0, hi=Math.max(1, df);
+  while(gammaP(df/2, hi/2) < p) hi *= 2;
+  for(let i=0;i<80;i++){
+    const mid=(lo+hi)/2;
+    if(gammaP(df/2, mid/2) < p) lo=mid; else hi=mid;
+  }
+  return (lo+hi)/2;
+}
+
+function renderChiIndependenceChart(df, alpha, statValue){
+  const ctx=document.getElementById('chiIndependenceChart');
+  if(!ctx) return;
+  const critical=chiSquareQuantile(1-alpha, df);
+  const maxX=Math.max(critical*1.4, statValue*1.4, df+10, 10);
+  const step=maxX/350;
+  const curve=[];
+  const acceptance=[];
+  const rejection=[];
+  for(let x=0;x<=maxX;x+=step){
+    const y=chiSquarePdf(x, df);
+    curve.push({x,y});
+    if(x<=critical){ acceptance.push({x,y}); rejection.push({x,y:null}); }
+    else { acceptance.push({x,y:null}); rejection.push({x,y}); }
+  }
+  const maxY=Math.max(...curve.map(p=>p.y));
+  const statLine=Number.isFinite(statValue)?[{x:statValue,y:0},{x:statValue,y:maxY}]:[];
+
+  if(chiIndependenceChart) chiIndependenceChart.destroy();
+  chiIndependenceChart=new Chart(ctx,{
+    type:'line',
+    data:{datasets:[
+      {label:'Acceptance zone',data:acceptance,borderColor:'rgba(34,197,94,0)',backgroundColor:'rgba(34,197,94,0.35)',fill:'origin',pointRadius:0,parsing:false},
+      {label:'Rejection zone',data:rejection,borderColor:'rgba(239,68,68,0)',backgroundColor:'rgba(239,68,68,0.35)',fill:'origin',pointRadius:0,parsing:false},
+      {label:`χ² distribution (df=${df})`,data:curve,borderColor:'#1d4ed8',borderWidth:2,pointRadius:0,fill:false,parsing:false},
+      {label:'Observed χ²',data:statLine,borderColor:'#f59e0b',borderWidth:2,pointRadius:0,fill:false,parsing:false}
+    ]},
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      scales:{
+        x:{type:'linear',min:0,max:maxX,title:{display:true,text:'χ² statistic'}},
+        y:{beginAtZero:true,title:{display:true,text:'Density'}}
+      }
+    }
+  });
+}
+
+function formatExpected(expected){
+  const rows=expected.map(r=>`<tr>${r.map(v=>`<td>${v.toFixed(2)}</td>`).join('')}</tr>`).join('');
+  return `<strong>Expected frequencies</strong><br><table><tbody>${rows}</tbody></table>`;
+}
+
+document.getElementById('calcChiBtn').addEventListener('click',()=>{
+  try{
+    const table=parseTable(document.getElementById('tableInput').value);
+    const alpha=parseFloat(document.getElementById('alpha').value);
+
+    const r=table.length, c=table[0].length;
+    const rowTotals=table.map(row=>row.reduce((a,b)=>a+b,0));
+    const colTotals=Array.from({length:c},(_,j)=>table.reduce((s,row)=>s+row[j],0));
+    const n=rowTotals.reduce((a,b)=>a+b,0);
+    if(n<=0) throw new Error('The sample total must be greater than 0.');
+
+    const expected=table.map((row,i)=>row.map((_,j)=>rowTotals[i]*colTotals[j]/n));
+    let chi2=0;
+    for(let i=0;i<r;i++) for(let j=0;j<c;j++) chi2 += Math.pow(table[i][j]-expected[i][j],2)/expected[i][j];
+
+    const df=(r-1)*(c-1);
+    const p=Math.max(0,Math.min(1,chiSquareSurvival(chi2,df)));
+    const decision=p<alpha?'Reject H₀ (there is evidence of association).':'Fail to reject H₀ (not enough evidence of association).';
+
+    document.getElementById('chiResult').innerHTML =
+      `Observed χ²: <strong>${chi2.toFixed(4)}</strong><br>`+
+      `Degrees of freedom: <strong>${df}</strong><br>`+
+      `p-value: <strong>${p.toFixed(6)}</strong><br>`+
+      `Decision (α=${alpha}): <strong>${decision}</strong>`;
+
+    document.getElementById('expectedTable').innerHTML = formatExpected(expected);
+    renderChiIndependenceChart(df, alpha, chi2);
+  }catch(err){
+    document.getElementById('chiResult').textContent = `Error: ${err.message}`;
+    if(chiIndependenceChart){ chiIndependenceChart.destroy(); chiIndependenceChart = null; }
+  }
+});
+document.getElementById('calcChiBtn').click();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>
