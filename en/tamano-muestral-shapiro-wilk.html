@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../tamano-muestral-shapiro-wilk.html">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample size for Shapiro-Wilk test calculator | ProbLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate the sample size for a Shapiro-Wilk normality test based on skewness, kurtosis, power and significance level.">
+    <meta name="keywords" content="sample size Shapiro-Wilk calculator, sample size for normality test, power Shapiro-Wilk test, normality test sample size, skewness kurtosis sample size, Jarque-Bera approximation, ProbLab, online statistics, statistics calculator">
+    <link rel="canonical" href="https://problabtools.com/en/tamano-muestral-shapiro-wilk.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Sample size for Shapiro-Wilk test calculator | ProbLab">
+    <meta property="og:description" content="Calculate the sample size for a Shapiro-Wilk normality test based on skewness, kurtosis, power and significance level.">
+    <meta property="og:url" content="https://problabtools.com/en/tamano-muestral-shapiro-wilk.html">
+    <meta property="og:site_name" content="ProbLab">
+    <meta property="og:image" content="https://problabtools.com/og-image.png">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image:alt" content="Sample size calculator for the Shapiro–Wilk test">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Vicente Castellar">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="alternate" hreflang="en" href="https://problabtools.com/en/tamano-muestral-shapiro-wilk.html">
+    <link rel="alternate" hreflang="es" href="https://problabtools.com/tamano-muestral-shapiro-wilk.html">
+    <link rel="alternate" hreflang="x-default" href="https://problabtools.com/tamano-muestral-shapiro-wilk.html">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sample size for Shapiro-Wilk test calculator | ProbLab">
+    <meta name="twitter:description" content="Calculate the sample size for a Shapiro-Wilk normality test based on skewness, kurtosis, power and significance level.">
+    <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+    <meta name="twitter:image:alt" content="Sample size calculator for the Shapiro–Wilk test">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+            {"@type": "ListItem", "position": 2, "name": "Sample size", "item": "https://problabtools.com/en/tamano-muestral/"},
+            {"@type": "ListItem", "position": 3, "name": "Shapiro–Wilk", "item": "https://problabtools.com/en/tamano-muestral-shapiro-wilk.html"}
+          ]
+        },
+        {
+          "@type": "WebPage",
+          "name": "Sample size for Shapiro-Wilk test calculator | ProbLab",
+          "url": "https://problabtools.com/en/tamano-muestral-shapiro-wilk.html",
+          "description": "Calculate the sample size for a Shapiro-Wilk normality test based on skewness, kurtosis, power and significance level.",
+          "inLanguage": "en",
+          "isPartOf": {"@type": "WebSite", "name": "ProbLab", "url": "https://problabtools.com/"}
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Sample size calculator for the Shapiro–Wilk test",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web",
+      "url": "https://problabtools.com/en/tamano-muestral-shapiro-wilk.html",
+      "description": "Calculate the sample size for the Shapiro–Wilk normality test using the Jarque–Bera approximation.",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is skewness (γ₁) and excess kurtosis (γ₂)?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Skewness γ₁ measures the degree to which the distribution is asymmetric about its mean: γ₁ = 0 for symmetric distributions, positive if the right tail is longer, negative if the left tail is longer. Excess kurtosis γ₂ quantifies the 'heaviness' of the tails relative to the normal distribution: γ₂ = 0 for the normal, positive for leptokurtic distributions (heavier tails), negative for platykurtic distributions (lighter tails). Both moments are zero for the normal distribution, so any deviation from zero indicates non-normality."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why use the Jarque–Bera approximation?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Jarque–Bera test combines skewness and kurtosis into a single statistic that, under H₀ of normality, asymptotically follows a chi-square distribution with 2 degrees of freedom. This analytical structure yields a closed-form formula for power as a function of n, γ₁ and γ₂, which makes computing the sample size straightforward. The Shapiro–Wilk test has no equivalent analytical power formula, so the JB approximation provides a conservative lower bound on the required n: in practice, SW is usually more powerful and requires fewer observations."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What sample sizes is the Shapiro–Wilk test valid for?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Shapiro–Wilk test is designed for samples between n = 3 and n = 5000. For n &lt; 8 power is very low and the test rarely detects deviations from normality. For n &gt; 5000, the test becomes excessively sensitive and may reject H₀ for statistically significant but practically irrelevant deviations from normality; in that range it is recommended to inspect the data graphically (Q-Q plot) or complement the test with the Kolmogorov–Smirnov test."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is this calculator valid for detecting kurtosis without skewness?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. If γ₁ = 0 and γ₂ ≠ 0 (as in Student's t or the Laplace distribution), the noncentrality parameter reduces to λ(n) = n·γ₂²/24, and the calculation remains valid. For symmetric distributions with heavy tails, detection requires considerably larger samples than for asymmetric distributions with a similar 'distance' from the normal."
+          }
+        }
+      ]
+    }
+    </script>
+    <link rel="stylesheet" href="../style_new.css?v=20260624">
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="distribuciones/">Distributions</a></li>
+            <li><a href="tablas-estadisticas/">Tables</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="tamano-muestral/">Sample size</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="../ab-testing/">A/B testing</a></li>
+            <li><a href="../simulaciones/">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../tamano-muestral-shapiro-wilk.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="tamano-muestral/">Sample size</a></li>
+            <li><span aria-current="page">Shapiro–Wilk</span></li>
+        </ol>
+    </nav>
+    <header class="hero">
+        <p class="eyebrow">Sample size</p>
+        <h1>Sample size calculator for the Shapiro–Wilk test</h1>
+        <p class="hero-subtitle">Estimate the number of observations needed to detect deviations from normality with the Shapiro–Wilk test using the Jarque–Bera approximation.</p>
+        <p class="hero-links"><a class="hero-link-button" href="tamano-muestral/">See all sample size calculators</a></p>
+    </header>
+
+    <main>
+        <p class="tool-intro">Estimate the number of observations needed for the Shapiro–Wilk test to detect deviations from normality with the target power, using the Jarque–Bera approximation.</p>
+
+        <section class="card sample-size-panel">
+            <div class="panel-heading">
+                <h2>Calculator</h2>
+                <p>Enter the skewness and excess kurtosis of the alternative distribution, the significance level and the desired power.</p>
+            </div>
+
+            <div class="form-grid sample-grid">
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="swGamma1">Expected skewness under H₁ (γ₁)</label>
+                        <input type="number" id="swGamma1" value="2.0" step="0.1" min="-10" max="10">
+                    </div>
+                    <div class="form-group">
+                        <label for="swGamma2">Expected excess kurtosis under H₁ (γ₂)</label>
+                        <input type="number" id="swGamma2" value="6.0" step="0.1" min="-2" max="200">
+                    </div>
+                </div>
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="swAlpha">Alpha (α)</label>
+                        <input type="number" id="swAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                    </div>
+                    <div class="form-group">
+                        <label for="swPower">Power (1-β)</label>
+                        <input type="number" id="swPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top:1rem;">
+                <label>Quick reference distributions</label>
+                <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.4rem;">
+                    <button type="button" class="calculate-btn" style="width:auto; padding:7px 14px; font-size:0.85rem; font-weight:600;" onclick="applyPreset(2, 6)">Exponential</button>
+                    <button type="button" class="calculate-btn" style="width:auto; padding:7px 14px; font-size:0.85rem; font-weight:600;" onclick="applyPreset(0, -1.2)">Uniform</button>
+                    <button type="button" class="calculate-btn" style="width:auto; padding:7px 14px; font-size:0.85rem; font-weight:600;" onclick="applyPreset(1.75, 5.9)">Log-normal (σ=0.5)</button>
+                    <button type="button" class="calculate-btn" style="width:auto; padding:7px 14px; font-size:0.85rem; font-weight:600;" onclick="applyPreset(0, 6)">Student's t (5 df)</button>
+                    <button type="button" class="calculate-btn" style="width:auto; padding:7px 14px; font-size:0.85rem; font-weight:600;" onclick="applyPreset(0, 3)">Laplace</button>
+                    <button type="button" class="calculate-btn" style="width:auto; padding:7px 14px; font-size:0.85rem; font-weight:600;" onclick="applyPreset(2, 6)">Chi²(2)</button>
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="swCalculateBtn" style="margin-top:1.25rem;">Calculate sample size</button>
+            <div id="swResult" class="result-box">Result pending…</div>
+
+            <div style="margin-top:1rem; padding:0.75rem 1rem; background:var(--surface-alt, #f8f9fc); border-radius:8px; border-left:3px solid var(--accent, #4f46e5); font-size:0.875rem; color:var(--text-muted, #6b7280);">
+                <strong>Notes:</strong>
+                (a) This calculation is a conservative lower bound: the Jarque–Bera approximation tends to overestimate the required n because the Shapiro–Wilk test is generally more powerful.
+                (b) The Shapiro–Wilk test is valid for 3 ≤ n ≤ 5000; n ≥ 8 is recommended for reasonable power.
+            </div>
+        </section>
+
+                <section class="card content-card">
+            <h3>Explanation</h3>
+            <p>The Shapiro–Wilk test contrasts the null hypothesis that a sample comes from a normal distribution. Its power depends on how much the real (alternative) distribution differs from the normal, and that difference is mainly quantified by the <strong>skewness</strong> (\(\gamma_1\)) and <strong>excess kurtosis</strong> (\(\gamma_2\)) of the alternative distribution. For the normal distribution, \(\gamma_1 = 0\) and \(\gamma_2 = 0\).</p>
+            <p>Since the Shapiro–Wilk test has no analytical power formula as a function of \(n\), this calculator uses the <strong>Jarque–Bera approximation</strong>, which combines skewness and kurtosis into an omnibus statistic whose distribution under \(H_0\) is asymptotically \(\chi^2(2)\). This approximation gives an estimate of the required n that is <em>conservative</em>: the actual n required with Shapiro–Wilk tends to be smaller, since SW makes better use of the sample information than the JB test.</p>
+            <h3>Power formula (Jarque–Bera approximation)</h3>
+            <p>Under the alternative with shape parameters \(\gamma_1\) and \(\gamma_2\), the noncentrality parameter of the Jarque–Bera statistic for a sample of size \(n\) is:</p>
+            <p class="formula-line">\( \lambda(n) = n \left(\frac{\gamma_1^2}{6} + \frac{\gamma_2^2}{24}\right) \)</p>
+            <p>Under \(H_1\), the JB statistic approximately follows a noncentral chi-square distribution with 2 degrees of freedom and noncentrality parameter \(\lambda(n)\). The power of the test at level \(\alpha\) is:</p>
+            <p class="formula-line">\( 1 - \beta = 1 - F_{\chi^2(2,\,\lambda(n))}\!\left(\chi^2_{1-\alpha,\,2}\right) \)</p>
+            <p>The noncentral chi-square distribution is evaluated using the Poisson mixture of central chi-squares:</p>
+            <p class="formula-line">\( F_{\chi^2(df,\lambda)}(x) = \sum_{k=0}^{\infty} \frac{e^{-\lambda/2}(\lambda/2)^k}{k!} \cdot F_{\chi^2(df+2k)}(x) \)</p>
+            <p>The calculator searches for the minimum integer \(n \geq 3\) for which the computed power exceeds the target.</p>
+            <h3>Reference distributions</h3>
+            <p>The table below shows the moments and the approximate sample size needed to detect non-normality with 80% power and \(\alpha = 0.05\) (JB approximation).</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr>
+                            <th>Distribution</th>
+                            <th>γ₁ (skewness)</th>
+                            <th>γ₂ (excess kurtosis)</th>
+                            <th>Approx. n (80%, α=0.05)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Exponential</td>
+                            <td>2</td>
+                            <td>6</td>
+                            <td>≈ 10</td>
+                        </tr>
+                        <tr>
+                            <td>Log-normal (σ = 0.5)</td>
+                            <td>1.75</td>
+                            <td>5.9</td>
+                            <td>≈ 11</td>
+                        </tr>
+                        <tr>
+                            <td>Chi-square (2 df)</td>
+                            <td>2</td>
+                            <td>6</td>
+                            <td>≈ 10</td>
+                        </tr>
+                        <tr>
+                            <td>Laplace (double exponential)</td>
+                            <td>0</td>
+                            <td>3</td>
+                            <td>≈ 52</td>
+                        </tr>
+                        <tr>
+                            <td>Student's t (5 df)</td>
+                            <td>0</td>
+                            <td>6</td>
+                            <td>≈ 26</td>
+                        </tr>
+                        <tr>
+                            <td>Uniform</td>
+                            <td>0</td>
+                            <td>−1.2</td>
+                            <td>≈ 130</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="font-size:0.875rem; color:var(--text-muted);">The n values are estimates based on the JB approximation. The Shapiro–Wilk test typically requires smaller samples in practice.</p>
+            <h3>Quick setup</h3>
+            <ul>
+                <li><strong>Unknown alternative distribution:</strong> if you have no information about γ₁ and γ₂, use the values for the closest distribution in the table above or apply one of the presets.</li>
+                <li><strong>Kurtosis only (symmetric distributions):</strong> set γ₁ = 0 and enter the expected γ₂. Keep in mind that detecting kurtosis without skewness requires considerably larger samples.</li>
+                <li><strong>Skewness only:</strong> set γ₂ = 0 and enter γ₁. Highly skewed distributions (|γ₁| &gt; 1.5) can be detected with small samples.</li>
+                <li><strong>Alpha:</strong> 0.05 is the standard. In confirmatory studies where normality is a critical assumption, consider α = 0.10 to gain power.</li>
+                <li><strong>Power:</strong> 0.80 is the usual minimum. For studies where failing to meet normality has serious consequences, use 0.90.</li>
+            </ul>
+            <h3>Worked example</h3>
+            <p>A researcher expects response times in an experiment to follow an exponential distribution (\(\gamma_1 = 2\), \(\gamma_2 = 6\)). They want to plan the study so that, if the data really do come from an exponential distribution, the Shapiro–Wilk test rejects normality at least 80% of the time with \(\alpha = 0.05\).</p>
+            <p><strong>Step 1 — Noncentrality parameter:</strong></p>
+            <p class="formula-line">\( \lambda(n) = n\!\left(\frac{2^2}{6} + \frac{6^2}{24}\right) = n\!\left(\frac{4}{6} + \frac{36}{24}\right) = n\!\left(0.6\overline{6} + 1.5\right) = n \cdot 2.1\overline{6} \)</p>
+            <p><strong>Step 2 — Critical value:</strong> \(\chi^2_{0.95,\,2} \approx 5.991\).</p>
+            <p><strong>Step 3 — Power for n = 10:</strong></p>
+            <p class="formula-line">\( \lambda(10) = 10 \times 2.1\overline{6} \approx 21.67 \)</p>
+            <p class="formula-line">\( 1 - \beta \approx 1 - F_{\chi^2(2,\,21.67)}(5.991) \approx 0.83 \geq 0.80 \checkmark \)</p>
+            <p>With as few as <strong>n = 10 observations</strong>, the target power of 80% is exceeded. This reflects that the exponential distribution deviates strongly from the normal (high skewness and kurtosis), so it is easily detectable. You can verify this by clicking the "Exponential" preset in the calculator.</p>
+            <h3>Model assumptions</h3>
+            <ul>
+                <li>Random sample of independent observations of a single continuous variable.</li>
+                <li>The null hypothesis of normality is tested against an alternative with given skewness and/or kurtosis.</li>
+                <li>Power is approximated using the Jarque–Bera statistic.</li>
+                <li>Appropriate for small to moderate sample sizes.</li>
+            </ul>
+            <h3>How to interpret the result</h3>
+                <p>The value \(n\) is the <strong>lower bound on the recommended sample size</strong> for the Shapiro-Wilk (SW) test to detect the specified deviation from normality with the desired power. The formula used relies on the Jarque-Bera approximation, which tends to be conservative; SW is generally more powerful than JB and can detect non-normality with somewhat smaller samples. Always round up. If you anticipate data loss, divide \(n\) by \((1 - \text{dropout rate})\) to obtain the required recruitment. Keep in mind that SW is only designed for \(3 \leq n \leq 5000\); for \(n > 5000\) it is not directly applicable.</p>
+                <p>The power of SW to detect non-normality depends on the type of deviation and on \(n\): the test is especially powerful against symmetric distributions with heavy tails (leptokurtic) or light tails (platykurtic), and somewhat less effective for moderately skewed distributions with small samples. For \(n < 8\), the power of SW is very low regardless of the effect; if your sample is very small, normality tests have limited practical value and it is preferable to rely on the study design and graphical tools (histogram, Q-Q plot). Perform a <em>sensitivity analysis</em> by varying the target skewness or kurtosis parameter to see how much the required \(n\) changes.</p>
+                <p>If the computed \(n\) exceeds 5000, the SW test is not applicable and you should use alternatives such as Kolmogorov-Smirnov (with the Lilliefors correction for estimated parameters), Anderson-Darling, or simply assess normality using graphical methods (Q-Q plot, histogram). With large samples, remember that the p-value of a normality test becomes very sensitive to trivial deviations; in that context, the relevant question is not "are the data exactly normal?" but "do they deviate enough from normality to compromise the statistical procedure?". Once you have collected the data, run the normality test with the <a href="shapiro-wilk-normalidad.html">Shapiro-Wilk calculator</a> and interpret the result together with the Q-Q plot.</p>
+        </section>
+
+        <section id="seo-support-content" class="card content-card">
+            <section class="related-tools">
+                <h3>Related calculators</h3>
+                <ul>
+                    <li><a href="shapiro-wilk-normalidad.html">Shapiro–Wilk normality test</a></li>
+                    <li><a href="tamano-muestral-kolmogorov-smirnov.html">Sample size for Kolmogorov–Smirnov</a></li>
+                    <li><a href="kolmogorov-smirnov-bondad-ajuste.html">Kolmogorov–Smirnov goodness-of-fit test</a></li>
+                </ul>
+            </section>
+            <h3>References</h3>
+            <ul>
+                <li>Razali, N. M. &amp; Wah, Y. B. (2011). Power comparisons of Shapiro–Wilk, Kolmogorov–Smirnov, Lilliefors and Anderson–Darling tests. <em>Journal of Statistical Modeling and Analytics</em>, 2(1), 21–33.</li>
+                <li>D'Agostino, R. B. (1990). A suggestion for using powerful and informative tests of normality. <em>The American Statistician</em>, 44(4), 316–321.</li>
+                <li>Jarque, C. M. &amp; Bera, A. K. (1987). A test for normality of observations and regression residuals. <em>International Statistical Review</em>, 55(2), 163–172.</li>
+                <li>Shapiro, S. S. &amp; Wilk, M. B. (1965). An analysis of variance test for normality (complete samples). <em>Biometrika</em>, 52(3–4), 591–611.</li>
+            </ul>
+            <h3>Frequently asked questions</h3>
+            <ul>
+                <li><strong>What is skewness (γ₁) and excess kurtosis (γ₂)?</strong> Skewness measures the degree of tilt in the distribution (\(\gamma_1 = 0\) for symmetric distributions). Excess kurtosis measures the heaviness of the tails relative to the normal (\(\gamma_2 = 0\) for the normal, positive for heavier tails). Any deviation from these zero values indicates non-normality.</li>
+                <li><strong>Why use the Jarque–Bera approximation?</strong> Because it provides an analytical power formula based on the noncentral chi-square distribution, allowing the sample size to be computed without simulation. The estimate is conservative: SW generally requires fewer observations in practice.</li>
+                <li><strong>What sample sizes is the Shapiro–Wilk test valid for?</strong> For 3 ≤ n ≤ 5000. For n &lt; 8 power is very low. For n &gt; 5000, the test is excessively sensitive; it is recommended to combine it with graphical analysis (Q-Q plot).</li>
+                <li><strong>Is this calculator valid for detecting kurtosis without skewness?</strong> Yes. With γ₁ = 0, the noncentrality parameter reduces to λ(n) = n·γ₂²/24. Symmetric distributions with high kurtosis (Student's t, Laplace) require larger samples than skewed distributions at a comparable distance from the normal.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="legal-footer">
+        <p>
+            © 2026 problabtools.
+            <a href="../aviso-legal.html">Legal notice</a> ·
+            <a href="../privacidad.html">Privacy</a> ·
+            <a href="../cookies.html">Cookies</a> ·
+            <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+        </p>
+    </footer>
+</div>
+
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+<script>
+function ncChiSqCDF(x, df, lambda) {
+    if (x <= 0) return 0;
+    const halfLambda = lambda / 2;
+    let sum = 0;
+    let logPoissonWeight = -halfLambda;
+    for (let k = 0; k <= 500; k++) {
+        if (k > 0) logPoissonWeight += Math.log(halfLambda / k);
+        const weight = Math.exp(logPoissonWeight);
+        sum += weight * jStat.chisquare.cdf(x, df + 2 * k);
+        if (weight < 1e-14 && k > halfLambda + 10) break;
+    }
+    return Math.min(1, sum);
+}
+
+function applyPreset(g1, g2) {
+    document.getElementById('swGamma1').value = g1;
+    document.getElementById('swGamma2').value = g2;
+    calculateSWsampleSize();
+}
+
+function calculateSWsampleSize() {
+    const gamma1 = parseFloat(document.getElementById('swGamma1').value);
+    const gamma2 = parseFloat(document.getElementById('swGamma2').value);
+    const alpha  = parseFloat(document.getElementById('swAlpha').value);
+    const power  = parseFloat(document.getElementById('swPower').value);
+    const resultEl = document.getElementById('swResult');
+
+    if (!Number.isFinite(gamma1)) { resultEl.innerText = 'Error: γ₁ must be a number.'; return; }
+    if (!Number.isFinite(gamma2)) { resultEl.innerText = 'Error: γ₂ must be a number.'; return; }
+    if (!Number.isFinite(alpha) || alpha <= 0 || alpha >= 1) { resultEl.innerText = 'Error: α must be between 0 and 1.'; return; }
+    if (!Number.isFinite(power) || power <= 0 || power >= 1) { resultEl.innerText = 'Error: power must be between 0 and 1.'; return; }
+
+    const jbComponent = gamma1 * gamma1 / 6 + gamma2 * gamma2 / 24;
+    if (jbComponent <= 0) {
+        resultEl.innerText = 'γ₁ = 0 and γ₂ = 0 correspond to the normal distribution (H₀). Enter at least one nonzero value.';
+        return;
+    }
+
+    const critVal = jStat.chisquare.inv(1 - alpha, 2);
+
+    let n = 3;
+    let achievedPower = 0;
+    while (n <= 100000) {
+        const lambda = n * jbComponent;
+        achievedPower = 1 - ncChiSqCDF(critVal, 2, lambda);
+        if (achievedPower >= power) break;
+        n++;
+    }
+
+    if (achievedPower < power) {
+        resultEl.innerText = 'No solution found with n ≤ 100,000. Check the parameters.';
+        return;
+    }
+
+    const lambda = n * jbComponent;
+    const warning = n < 8 ? '\nWarning: n < 8; the Shapiro–Wilk test may have low power at such small sample sizes.' :
+                    n > 5000 ? '\nWarning: n > 5000 exceeds the optimal range of the Shapiro–Wilk test. Consider alternative tests.' : '';
+
+    resultEl.innerText =
+        `Minimum recommended n: ${n} observations\n` +
+        `Achieved power: ${(achievedPower * 100).toFixed(2)}% (target: ${(power * 100).toFixed(0)}%)\n` +
+        `γ₁ = ${gamma1}  |  γ₂ = ${gamma2}  |  λ = n·(γ₁²/6 + γ₂²/24) = ${lambda.toFixed(3)}  |  α = ${alpha}` +
+        warning;
+}
+
+document.getElementById('swCalculateBtn').addEventListener('click', calculateSWsampleSize);
+calculateSWsampleSize();
+</script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>

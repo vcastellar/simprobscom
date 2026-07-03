@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../tamano-muestral-fisher.html">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample size for Fisher's exact test (2×2) | ProbLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate the sample size for Fisher's exact test on a 2x2 table: two proportions, power, alpha and the Fleiss continuity correction.">
+    <meta name="keywords" content="sample size Fisher's exact test, Fisher exact test 2x2 calculator, sample size Fisher test, statistical power Fisher, Fleiss continuity correction, ProbLab, online statistics">
+    <link rel="canonical" href="https://problabtools.com/en/tamano-muestral-fisher.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Sample size for Fisher's exact test (2×2) | ProbLab">
+    <meta property="og:description" content="Calculate the sample size for Fisher's exact test on a 2x2 table: two proportions, power, alpha and the Fleiss continuity correction.">
+    <meta property="og:url" content="https://problabtools.com/en/tamano-muestral-fisher.html">
+    <meta property="og:site_name" content="ProbLab">
+    <meta property="og:image" content="https://problabtools.com/og-image.png">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image:alt" content="Sample size calculator for Fisher's exact test (2×2)">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Vicente Castellar">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="alternate" hreflang="en" href="https://problabtools.com/en/tamano-muestral-fisher.html">
+    <link rel="alternate" hreflang="es" href="https://problabtools.com/tamano-muestral-fisher.html">
+    <link rel="alternate" hreflang="x-default" href="https://problabtools.com/tamano-muestral-fisher.html">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sample size for Fisher's exact test (2×2) | ProbLab">
+    <meta name="twitter:description" content="Calculate the sample size for Fisher's exact test on a 2x2 table: two proportions, power, alpha and the Fleiss continuity correction.">
+    <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+    <meta name="twitter:image:alt" content="Sample size calculator for Fisher's exact test (2×2)">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+            {"@type": "ListItem", "position": 2, "name": "Sample size", "item": "https://problabtools.com/en/tamano-muestral/"},
+            {"@type": "ListItem", "position": 3, "name": "Fisher's exact test", "item": "https://problabtools.com/en/tamano-muestral-fisher.html"}
+          ]
+        },
+        {
+          "@type": "WebPage",
+          "name": "Sample size for Fisher's exact test (2×2) | ProbLab",
+          "url": "https://problabtools.com/en/tamano-muestral-fisher.html",
+          "description": "Calculate the sample size for Fisher's exact test on a 2x2 table: two proportions, power, alpha and the Fleiss continuity correction.",
+          "inLanguage": "en",
+          "isPartOf": {"@type": "WebSite", "name": "ProbLab", "url": "https://problabtools.com/en/"}
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Sample size calculator for Fisher's exact test (2×2)",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web",
+      "url": "https://problabtools.com/en/tamano-muestral-fisher.html",
+      "description": "Calculate the sample size for Fisher's exact test on a 2x2 table: two proportions, power, alpha and the Fleiss continuity correction.",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "When should I use Fisher's exact test instead of chi-square?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Fisher's exact test is preferable when some expected frequency in the 2×2 table is below 5, or when the total sample size is small (typically N < 20-25). Chi-square with Yates' correction is an alternative, but Fisher's test is more exact since it doesn't rely on any asymptotic approximation."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is the Fleiss approximation used to calculate the sample size for Fisher's test?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Exact power calculation for Fisher's test requires simulation or full enumeration of the hypergeometric distributions, which is computationally intensive. The Fleiss (1981) approximation with the Casagrande and Pike continuity correction offers a closed-form formula that agrees well with simulation results and is the recommended standard in practice."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What does the continuity correction mean for the Fisher sample size?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Casagrande and Pike continuity correction adjusts the Fleiss sample size upward to compensate for the discrete nature of the hypergeometric distribution. It produces more conservative estimates (a larger n) that more reliably reach the target power."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's the difference between the uncorrected sample size and the continuity-corrected one?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The uncorrected n (basic Fleiss) can underestimate the size needed for Fisher's exact test because it doesn't account for discretization. The Casagrande and Pike correction increases n by a factor that depends on the difference between proportions and the ratio r. For large differences between proportions, the correction is small; for small differences, it can increase n by 10-20%."
+          }
+        }
+      ]
+    }
+    </script>
+    <link rel="stylesheet" href="../style_new.css?v=20260624">
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="distribuciones/">Distributions</a></li>
+            <li><a href="tablas-estadisticas/">Tables</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="tamano-muestral/">Sample size</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="../ab-testing/">A/B testing</a></li>
+            <li><a href="../simulaciones/">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../tamano-muestral-fisher.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="tamano-muestral/">Sample size</a></li>
+            <li><span aria-current="page">Fisher's exact test</span></li>
+        </ol>
+    </nav>
+    <header class="hero">
+        <p class="eyebrow">Sample size</p>
+        <h1>Sample size calculator for Fisher's exact test (2×2)</h1>
+        <p class="hero-subtitle">Determine the number of observations needed to detect a difference between two proportions with Fisher's exact test, using the Fleiss approximation.</p>
+        <p class="hero-links"><a class="hero-link-button" href="tamano-muestral/">See all sample size calculators</a></p>
+    </header>
+
+    <main>
+        <p class="tool-intro">Determine how many observations you need for Fisher's exact test to detect a difference between two proportions, especially when low frequencies are expected. Uses the Fleiss approximation.</p>
+
+        <section class="card sample-size-panel">
+            <div class="panel-heading">
+                <h2>Calculator</h2>
+                <p>Enter the expected proportions in each group, the significance level, the desired power, the group size ratio and the type of test.</p>
+            </div>
+
+            <div class="form-grid sample-grid">
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="fisherP1">Expected proportion group 1 (p₁)</label>
+                        <input type="number" id="fisherP1" value="0.40" step="0.01" min="0.0001" max="0.9999">
+                    </div>
+                    <div class="form-group">
+                        <label for="fisherP2">Expected proportion group 2 (p₂)</label>
+                        <input type="number" id="fisherP2" value="0.20" step="0.01" min="0.0001" max="0.9999">
+                    </div>
+                </div>
+
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="fisherAlpha">Alpha (α)</label>
+                        <input type="number" id="fisherAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                    </div>
+                    <div class="form-group">
+                        <label for="fisherPower">Power (1-β)</label>
+                        <input type="number" id="fisherPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fisherRatio">Relative size of group 2 (r = n₂/n₁)</label>
+                    <select id="fisherRatio">
+                        <option value="1" selected>r = 1 (equal groups)</option>
+                        <option value="2">r = 2 (group 2 double group 1)</option>
+                        <option value="3">r = 3 (group 2 triple group 1)</option>
+                        <option value="4">r = 4 (group 2 quadruple group 1)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="fisherTail">Test type</label>
+                    <select id="fisherTail">
+                        <option value="two" selected>Two-tailed (p₁ ≠ p₂)</option>
+                        <option value="right">Right tail (p₁ &gt; p₂)</option>
+                        <option value="left">Left tail (p₁ &lt; p₂)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="fisherCalculateBtn">Calculate sample size</button>
+            <div id="fisherResult" class="result-box">Result pending…</div>
+        </section>
+
+                <section class="card content-card">
+            <h3>Explanation</h3>
+            <p><strong>Fisher's exact test</strong> is used to test independence between two binary variables in a 2×2 contingency table. It's the preferred method when the expected frequencies in some cell are below 5, or when the total sample size is small — situations where the asymptotic chi-square approximation may not be valid.</p>
+            <p>Since it's an exact test based on the hypergeometric distribution, calculating its power analytically would require enumerating the entire distribution of possible tables, which is computationally expensive for general use. The standard practical solution is to use the <strong>Fleiss (1981) approximation</strong> for two independent proportions, followed by the <strong>Casagrande and Pike (1978) continuity correction</strong>, which adjusts the sample size to compensate for the discrete nature of the exact test.</p>
+            <p>This approximation produces results very similar to those obtained by simulation and is the standard recommendation in reference texts such as Fleiss, Levin and Paik (2003).</p>
+            <h3>Formula used</h3>
+            <p>Let \(p_1\) be the proportion in group 1, \(p_2\) the proportion in group 2, \(r = n_2/n_1\) the size ratio, and \(\bar{p} = (p_1 + r\,p_2)/(1+r)\) the pooled weighted proportion.</p>
+
+            <p><strong>Step 1 — Fleiss approximation (without correction):</strong></p>
+            <p class="formula-line">\( n_1^{(0)} = \frac{\left(z_\alpha\,\sqrt{(1+1/r)\,\bar{p}(1-\bar{p})} + z_\beta\,\sqrt{p_1(1-p_1)+p_2(1-p_2)/r}\right)^2}{(p_1-p_2)^2} \)</p>
+            <p>where \(z_\alpha\) is the \(1-\alpha/2\) quantile (two-tailed) or \(1-\alpha\) quantile (one-tailed) of the standard normal, and \(z_\beta\) is the \(1-\beta\) quantile.</p>
+
+            <p><strong>Step 2 — Continuity correction (Casagrande and Pike, 1978):</strong></p>
+            <p class="formula-line">\( n_1 = \frac{n_1^{(0)}}{4}\left(1 + \sqrt{1 + \frac{2(1+1/r)}{n_1^{(0)}\,|p_1-p_2|}}\right)^2 \)</p>
+            <p class="formula-line">\( n_2 = \lceil r \cdot n_1 \rceil \quad;\quad n_1 = \lceil n_1 \rceil \quad;\quad N = n_1 + n_2 \)</p>
+            <ul>
+                <li><strong>\(p_1\), \(p_2\):</strong> proportions expected under the alternative \(H_1\) in each group.</li>
+                <li><strong>\(r\):</strong> ratio \(n_2/n_1\). With \(r = 1\) the groups have the same size.</li>
+                <li><strong>\(\bar{p}\):</strong> pooled weighted proportion; represents the proportion under \(H_0\) if the groups were equal.</li>
+                <li><strong>Continuity correction:</strong> increases n to compensate for the discretization of the exact test.</li>
+            </ul>
+            <h3>Quick settings</h3>
+            <ul>
+                <li><strong>p₁ and p₂:</strong> enter the proportions you expect to observe in each group. The difference \(|p_1 - p_2|\) is the effect to detect. Larger differences require a smaller sample.</li>
+                <li><strong>α:</strong> significance level. 0.05 is the usual standard; use 0.01 if you want tighter control of the type I error.</li>
+                <li><strong>Power:</strong> 0.80 (80%) is the common minimum; 0.90 or 0.95 for confirmatory studies or ones with high clinical relevance.</li>
+                <li><strong>r:</strong> if the groups are naturally unequal (e.g., cases and controls), set r to the expected ratio of sizes. r = 1 is the most efficient per total participant.</li>
+                <li><strong>One-tailed test:</strong> use it only if you have a justified a priori directional hypothesis; a one-tailed test requires a smaller sample but won't detect differences in the opposite direction.</li>
+                <li><strong>Continuity correction:</strong> the calculator always applies the Casagrande and Pike correction for Fisher's exact test. If you prefer the uncorrected n (for example for a standard chi-square), use it as a lower-bound reference.</li>
+            </ul>
+            <h3>Worked example</h3>
+            <p>A clinical trial compares the response rate to a treatment in two groups. A response rate of 40% is expected in the treated group (\(p_1 = 0.40\)) and 20% in the control group (\(p_2 = 0.20\)). A two-tailed \(\alpha = 0.05\) is chosen along with 80% power. The groups are the same size (\(r = 1\)).</p>
+            <p>Step 1 — pooled proportion: \(\bar{p} = (0.40 + 0.20)/2 = 0.30\).</p>
+            <p>With \(z_{\alpha/2} = 1.960\) and \(z_\beta = 0.842\):</p>
+            <p class="formula-line">\( n_1^{(0)} = \frac{\bigl(1.960\sqrt{2\times0.30\times0.70} + 0.842\sqrt{0.40\times0.60+0.20\times0.80}\bigr)^2}{(0.20)^2} \approx \frac{(1.960\times0.648 + 0.842\times0.566)^2}{0.04} \approx \frac{(1.270+0.477)^2}{0.04} \approx \frac{3.050}{0.04} \approx 76.3 \)</p>
+            <p>Step 2 — continuity correction:</p>
+            <p class="formula-line">\( n_1 = \frac{81.2}{4}\left(1 + \sqrt{1 + \frac{4}{81.2\times0.20}}\right)^2 \approx 20.3\times(1+\sqrt{1.246})^2 \approx 20.3\times(1+1.116)^2 \approx 20.3\times4.478 \approx 90.9 \)</p>
+            <p>Rounding up: <strong>n₁ = 91 and n₂ = 91</strong> (total = 182). With this sample, Fisher's exact test will detect the 20-percentage-point difference 80% of the time.</p>
+            <h3>Model assumptions</h3>
+            <ul>
+                <li>Two independent groups with a binary outcome (success/failure).</li>
+                <li>Independent observations; each unit contributes to a single cell of the 2×2 table.</li>
+                <li>Fisher's conditional framework (fixed marginal totals), appropriate when expected frequencies are low.</li>
+                <li>The sample size is obtained with the Fleiss approximation and rounded up.</li>
+            </ul>
+            <h3>How to interpret the result</h3>
+                <p>The values \(n_1\) and \(n_2\) are the <strong>minimum sizes per group</strong> needed to detect the difference between proportions \(p_1\) and \(p_2\) using Fisher's exact test with the specified power and \(\alpha\) level. The total to recruit is \(N = n_1 + n_2\). Always round up and add a margin for attrition: divide each \(n_i\) by \((1 - \text{dropout rate})\). Fisher's exact test is appropriate precisely when some expected frequency falls below 5; if all expected frequencies are \(\geq 5\), Pearson's chi-square is equally valid and generally more familiar to reviewers.</p>
+                <p>The sample size calculation for Fisher's test is based on the hypergeometric distribution, which is discrete. This means the test's actual significance level can be lower than the nominal \(\alpha\) (the test is conservative), and the actual power may differ slightly from the planned value for the exact \(n\) calculated. In practice, it's recommended to add a couple of extra units to the \(n\) per group to compensate for the discretization. Run a <em>sensitivity analysis</em> by varying \(p_1\) and \(p_2\) by ±0.05: when both proportions are very extreme (\(&lt;0.05\) or \(&gt;0.95\)), the exact test becomes more important relative to chi-square and the \(n\) may differ from the estimate given by the approximate normal formula.</p>
+                <p>If the calculated \(n\) is so large that the expected frequencies in all cells would comfortably exceed 5, consider whether the chi-square test wouldn't be more appropriate (and plan the \(n\) with the <a href="tamano-muestral-dos-proporciones.html">sample size calculator for two proportions</a>). When the \(n\) is unfeasible, check whether the minimum detectable difference \(|p_1 - p_2|\) is realistic or could be widened. Once the data has been collected, run the analysis with the <a href="contraste-hipotesis-dos-proporciones.html">hypothesis test calculator for two proportions</a>, choosing Fisher's test if the expected frequencies are low.</p>
+        </section>
+
+        <section id="seo-support-content" class="card content-card">
+            <section class="related-tools">
+                <h3>Related calculators</h3>
+                <ul>
+                    <li><a href="test-exacto-fisher.html">Fisher's exact test (hypothesis test)</a></li>
+                    <li><a href="tamano-muestral-chi-cuadrado-independencia.html">Sample size for chi-square independence test</a></li>
+                    <li><a href="contraste-hipotesis-dos-proporciones.html">Hypothesis test for two proportions</a></li>
+                </ul>
+            </section>
+            <h3>References</h3>
+            <ul>
+                <li>Fleiss, J. L. (1981). <em>Statistical Methods for Rates and Proportions</em> (2nd ed.). Wiley.</li>
+                <li>Casagrande, J. T., &amp; Pike, M. C. (1978). An improved approximate formula for calculating sample sizes for comparing two binomial distributions. <em>Biometrics</em>, 34(3), 483–486.</li>
+                <li>Fleiss, J. L., Levin, B., &amp; Paik, M. C. (2003). <em>Statistical Methods for Rates and Proportions</em> (3rd ed.). Wiley.</li>
+            </ul>
+        </section>
+
+        <section class="card content-card">
+            <h3>Frequently asked questions</h3>
+            <ul>
+                <li><strong>When should I use Fisher's exact test instead of chi-square?</strong> When some expected frequency in the 2×2 table is below 5, or when the total sample size is small (N &lt; 20–25). In large samples, both tests converge to the same result.</li>
+                <li><strong>Why does the continuity correction increase the sample size?</strong> Because Fisher's exact test operates on the discrete hypergeometric distribution. The correction adjusts n to guarantee that the actual power of the discrete test reaches the target, rather than the continuous asymptotic power.</li>
+                <li><strong>Is the calculated sample size exact?</strong> No; it's an approximation. The actual value depends on the true parameters and on the discretization of the hypergeometric distribution. For confirmation in critical studies, supplement with Monte Carlo simulation.</li>
+                <li><strong>Can I use this calculator for a case-control design?</strong> Yes. Enter the proportion of exposed cases as \(p_1\), the proportion of exposed controls as \(p_2\), and set \(r\) to the desired ratio of controls per case.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="legal-footer">
+        <p>
+            © 2026 problabtools.
+            <a href="../aviso-legal.html">Legal notice</a> ·
+            <a href="../privacidad.html">Privacy</a> ·
+            <a href="../cookies.html">Cookies</a> ·
+            <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+        </p>
+    </footer>
+</div>
+
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+<script>
+function calculateFisherSampleSize() {
+    const resultEl = document.getElementById('fisherResult');
+    try {
+        const p1    = parseFloat(document.getElementById('fisherP1').value);
+        const p2    = parseFloat(document.getElementById('fisherP2').value);
+        const alpha = parseFloat(document.getElementById('fisherAlpha').value);
+        const power = parseFloat(document.getElementById('fisherPower').value);
+        const r     = parseInt(document.getElementById('fisherRatio').value);
+        const tail  = document.getElementById('fisherTail').value;
+
+        if (!Number.isFinite(p1) || p1 <= 0 || p1 >= 1) throw new Error('p₁ must be between 0 and 1 (exclusive).');
+        if (!Number.isFinite(p2) || p2 <= 0 || p2 >= 1) throw new Error('p₂ must be between 0 and 1 (exclusive).');
+        if (Math.abs(p1 - p2) < 1e-9) throw new Error('p₁ and p₂ must be different to calculate the sample size.');
+        if (!Number.isFinite(alpha) || alpha <= 0 || alpha >= 1) throw new Error('α must be between 0 and 1.');
+        if (!Number.isFinite(power) || power <= 0 || power >= 1) throw new Error('Power must be between 0 and 1.');
+
+        // z quantiles
+        const z_alpha = (tail === 'two')
+            ? jStat.normal.inv(1 - alpha / 2, 0, 1)
+            : jStat.normal.inv(1 - alpha, 0, 1);
+        const z_beta = jStat.normal.inv(power, 0, 1);
+
+        // Fleiss (1981) approximation
+        const p_bar = (p1 + r * p2) / (1 + r);
+        const q_bar = 1 - p_bar;
+
+        const n1_approx = Math.pow(
+            z_alpha * Math.sqrt((1 + 1 / r) * p_bar * q_bar) +
+            z_beta  * Math.sqrt(p1 * (1 - p1) + p2 * (1 - p2) / r),
+            2
+        ) / Math.pow(p1 - p2, 2);
+
+        // Continuity correction (Casagrande & Pike, 1978)
+        const n1_cc = (n1_approx / 4) * Math.pow(
+            1 + Math.sqrt(1 + 2 * (1 + 1 / r) / (n1_approx * Math.abs(p1 - p2))),
+            2
+        );
+
+        const n1_final = Math.ceil(n1_cc);
+        const n2_cc    = Math.ceil(r * n1_final);
+        const n_total  = n1_final + n2_cc;
+
+        const tailLabel = tail === 'two' ? 'two-tailed' : (tail === 'right' ? 'right tail' : 'left tail');
+
+        resultEl.innerText =
+            `n₁ (group 1): ${n1_final}  |  n₂ (group 2): ${n2_cc}  |  N total: ${n_total}\n` +
+            `With α = ${alpha} (${tailLabel}), power = ${(power * 100).toFixed(0)} %, p₁ = ${p1}, p₂ = ${p2}, r = ${r}.\n` +
+            `n₁ without continuity correction (basic Fleiss): ${Math.ceil(n1_approx)}`;
+    } catch (e) {
+        resultEl.innerText = 'Error: ' + e.message;
+    }
+}
+
+document.getElementById('fisherCalculateBtn').addEventListener('click', calculateFisherSampleSize);
+calculateFisherSampleSize();
+</script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>

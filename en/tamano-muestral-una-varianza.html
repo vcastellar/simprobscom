@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../tamano-muestral-una-varianza.html">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample size calculator for a variance test | ProbLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate the sample size for the hypothesis test H0: σ=σ0 with a target power, significance level and variance ratio.">
+    <meta name="keywords" content="sample size variance test, sample size calculator variance, statistical power variance, H0 sigma equals sigma0, chi-square variance test, ProbLab, online statistics">
+    <link rel="canonical" href="https://problabtools.com/en/tamano-muestral-una-varianza.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Sample size calculator for a variance test | ProbLab">
+    <meta property="og:description" content="Calculate the sample size for the test H0: σ=σ0 with a target power, alpha and ratio R=σ1/σ0.">
+    <meta property="og:url" content="https://problabtools.com/en/tamano-muestral-una-varianza.html">
+    <meta property="og:site_name" content="ProbLab">
+    <meta property="og:image" content="https://problabtools.com/og-image.png">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image:alt" content="Sample size calculator for a one-variance test">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Vicente Castellar">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="alternate" hreflang="en" href="https://problabtools.com/en/tamano-muestral-una-varianza.html">
+    <link rel="alternate" hreflang="es" href="https://problabtools.com/tamano-muestral-una-varianza.html">
+    <link rel="alternate" hreflang="x-default" href="https://problabtools.com/tamano-muestral-una-varianza.html">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sample size calculator for a variance test | ProbLab">
+    <meta name="twitter:description" content="Calculate the sample size for the test H0: σ=σ0 with a target power, alpha and ratio R=σ1/σ0.">
+    <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+    <meta name="twitter:image:alt" content="Sample size calculator for a one-variance test">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+            {"@type": "ListItem", "position": 2, "name": "Sample size", "item": "https://problabtools.com/en/tamano-muestral/"},
+            {"@type": "ListItem", "position": 3, "name": "One-variance test", "item": "https://problabtools.com/en/tamano-muestral-una-varianza.html"}
+          ]
+        },
+        {
+          "@type": "WebPage",
+          "name": "Sample size calculator for a variance test | ProbLab",
+          "url": "https://problabtools.com/en/tamano-muestral-una-varianza.html",
+          "description": "Calculate the sample size for a hypothesis test on a variance with defined power and significance level.",
+          "inLanguage": "en",
+          "isPartOf": {"@type": "WebSite", "name": "ProbLab", "url": "https://problabtools.com/en/"}
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Sample size calculator for a one-variance test",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web",
+      "url": "https://problabtools.com/en/tamano-muestral-una-varianza.html",
+      "description": "Calculate the sample size for the test H0: σ=σ0 with a target power, alpha and ratio R=σ1/σ0.",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the ratio R in this test?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "R = σ1/σ0 is the ratio between the true standard deviation under H1 and the hypothesized one under H0. R>1 indicates that the true variability exceeds the nominal one; R<1 indicates it is smaller."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why isn't power calculated with the normal distribution?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The test statistic for a variance test, (n-1)S²/σ0², follows a chi-square distribution under H0 and a scaled chi-square distribution under H1. Exact power is obtained by evaluating the chi-square CDF, not the normal one."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "When should I use a one-sided alternative?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "When the goal is to detect only an increase (Ha: σ≥σ0) or only a decrease (Ha: σ≤σ0) in variance. In quality control, the upper one-sided test is common for detecting increases in variability."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What assumptions does this test require?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The variable must follow a normal distribution. The chi-square variance test is very sensitive to non-normality; with non-normal data, the actual type I error rate can differ substantially from the nominal one."
+          }
+        }
+      ]
+    }
+    </script>
+    <link rel="stylesheet" href="../style_new.css?v=20260624">
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="distribuciones/">Distributions</a></li>
+            <li><a href="tablas-estadisticas/">Tables</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="tamano-muestral/">Sample size</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="../ab-testing/">A/B testing</a></li>
+            <li><a href="../simulaciones/">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../tamano-muestral-una-varianza.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="tamano-muestral/">Sample size</a></li>
+            <li><span aria-current="page">One-variance test</span></li>
+        </ol>
+    </nav>
+    <header class="hero">
+        <p class="eyebrow">Sample size</p>
+        <h1>Sample size calculator for a one-variance test</h1>
+        <p class="hero-subtitle">Calculate the sample size needed to test \(H_0: \sigma = \sigma_0\) with a target power using the exact chi-square distribution.</p>
+        <p class="hero-links"><a class="hero-link-button" href="tamano-muestral/">See all sample size calculators</a></p>
+    </header>
+
+    <main>
+        <p class="tool-intro">This tool calculates the sample size needed to test whether the variance (or standard deviation) differs from a reference value (\(H_0: \sigma = \sigma_0\)) at a target power, using the exact chi-square distribution.</p>
+
+        <section class="card sample-size-panel">
+            <div class="panel-heading">
+                <h2>Calculator</h2>
+                <p>Enter the ratio R = σ₁/σ₀, the significance level, the desired power and the type of alternative to get the minimum sample size.</p>
+            </div>
+
+            <div class="form-grid sample-grid">
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="varR">Ratio R = σ₁/σ₀</label>
+                        <input type="number" id="varR" value="1.5" step="0.05" min="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="varAlternative">Alternative hypothesis</label>
+                        <select id="varAlternative">
+                            <option value="two-sided">Ha: σ ≠ σ0</option>
+                            <option value="greater">Ha: σ ≥ σ0</option>
+                            <option value="less">Ha: σ ≤ σ0</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="varAlpha">Alpha (α)</label>
+                        <input type="number" id="varAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                    </div>
+                    <div class="form-group">
+                        <label for="varPower">Power (1-β)</label>
+                        <input type="number" id="varPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="varCalculateBtn">Calculate sample size</button>
+            <div id="varResult" class="result-box">Result pending…</div>
+        </section>
+
+                <section class="card content-card">
+            <h3>Explanation</h3>
+            <p>The chi-square variance test checks \(H_0: \sigma^2 = \sigma_0^2\) using the statistic \(T = (n-1)S^2/\sigma_0^2\), which under \(H_0\) follows a \(\chi^2_{n-1}\) distribution.</p>
+            <p>Under the alternative \(\sigma_1 = R\cdot\sigma_0\), the statistic \(T\) follows an \(R^2 \cdot \chi^2_{n-1}\) distribution, equivalently \(T/R^2 \sim \chi^2_{n-1}\). Exact power is evaluated using the central chi-square CDF, without normal approximations.</p>
+            <h3>Exact power formula</h3>
+            <p>For the two-sided alternative (\(H_a: \sigma \neq \sigma_0\)):</p>
+            <p class="formula-line">\( \text{Power} = F_{\chi^2_{n-1}}\!\left(\frac{\chi^2_{\alpha/2,\,n-1}}{R^2}\right) + 1 - F_{\chi^2_{n-1}}\!\left(\frac{\chi^2_{1-\alpha/2,\,n-1}}{R^2}\right) \)</p>
+            <p>For the upper one-sided alternative (\(H_a: \sigma \geq \sigma_0\)):</p>
+            <p class="formula-line">\( \text{Power} = 1 - F_{\chi^2_{n-1}}\!\left(\frac{\chi^2_{1-\alpha,\,n-1}}{R^2}\right) \)</p>
+            <p>For the lower one-sided alternative (\(H_a: \sigma \leq \sigma_0\)):</p>
+            <p class="formula-line">\( \text{Power} = F_{\chi^2_{n-1}}\!\left(\frac{\chi^2_{\alpha,\,n-1}}{R^2}\right) \)</p>
+            <p>The calculator finds the smallest \(n\) such that the exact power reaches the target value.</p>
+            <h3>Quick setup</h3>
+            <ul>
+                <li><strong>R:</strong> specify the ratio σ₁/σ₀ you want to detect. R=1.5 (a 50% increase) is a moderate effect size. R=2 (quadruple variance) is detected with smaller samples.</li>
+                <li><strong>α:</strong> 0.05 is the standard; 0.01 for decisions with critical consequences.</li>
+                <li><strong>Power:</strong> 0.80 is the usual minimum; 0.90 if false negatives are costly.</li>
+                <li><strong>Alternative:</strong> two-sided if you have no prior direction; upper one-sided to detect increases in variability (quality control).</li>
+                <li><strong>Normality:</strong> this test is very sensitive to deviations from normality; check the assumption before applying it.</li>
+            </ul>
+            <h3>Worked example</h3>
+            <p>A semiconductor manufacturer wants to detect an increase of at least 50% in the standard deviation of chip diameter (R = σ₁/σ₀ = 1.5). The nominal process has \(\sigma_0 = 2\) μm. A two-sided test is wanted with \(\alpha = 0.05\) and 80% power.</p>
+            <p>The calculator finds the smallest \(n\) such that the exact power is ≥ 0.80 with R = 1.5, and returns approximately <strong>n = 54 observations</strong>. With that sample, if the true variance is \((1.5 \times 2)^2 = 9\) μm² (instead of the nominal 4 μm²), the test will detect the change 80% of the time.</p>
+            <p><strong>Sensitivity analysis:</strong> with R = 2 (quadruple variance), the sample shrinks to n ≈ 18. To detect R = 1.25 (a 25% increase) with the same power requires n ≈ 184. Variance tests need considerably larger samples than mean tests for the same relative effect size.</p>
+            <h3>Model assumptions</h3>
+            <ul>
+                <li>Simple random sampling with independent observations.</li>
+                <li>The variable follows a normal distribution: the \(\chi^2\) test on the variance is very sensitive to deviations from normality.</li>
+                <li>\(\sigma_0\) is the reference value of the standard deviation under \(H_0\).</li>
+                <li>The calculation uses the exact chi-square distribution with \(n-1\) degrees of freedom.</li>
+            </ul>
+            <h3>How to interpret the result</h3>
+                <p>The value \(n\) obtained is the <strong>minimum number of observations needed</strong> for the hypothesis test on the variance to reach the specified power. With that sample size, if the true deviation of the variance from \(\sigma_0^2\) is at least the one indicated by the ratio \(R = \sigma_1/\sigma_0\), the test will detect it with the desired probability. Always round up. If you expect losses of observations, divide \(n\) by \((1 - \text{dropout rate})\) to get the recruitment size needed.</p>
+                <p>The power of the variance test depends on the relative deviation \(R\) in a nonlinear way: detecting small variations (for example \(R = 1.2\)) requires very large samples, while large variations (\(R = 2\) or more) are detected with few observations. Run a sensitivity analysis varying \(R\) by ±0.1 or ±0.2 to assess the robustness of the sample size to uncertainty about the true magnitude of the effect.</p>
+                <p>A critical assumption is <strong>normality of the data</strong>: the chi-square statistic for the variance is notably more sensitive to deviations from normality than the \(t\) statistic for the mean. If the data are skewed or heavy-tailed, the nominal \(\alpha\) level may not hold. Before using this result, check normality with the <a href="tamano-muestral-shapiro-wilk.html">sample size calculator for Shapiro-Wilk</a> or draw a Q-Q plot. Once the data are collected, run the test with the <a href="contraste-hipotesis-varianzas.html">hypothesis test calculator for variances</a>.</p>
+        </section>
+
+        <section id="seo-support-content" class="card content-card">
+            <section class="related-tools">
+                <h3>Related calculators</h3>
+                <ul>
+                    <li><a href="tamano-muestral-varianza-ic.html">Sample size for variance (CI)</a></li>
+                    <li><a href="tamano-muestral-dos-varianzas.html">Two-variance test (H0)</a></li>
+                    <li><a href="contraste-hipotesis-varianzas.html">Hypothesis test for variances</a></li>
+                    <li><a href="intervalo-confianza-varianza.html">CI for the variance</a></li>
+                    <li><a href="chisquare.html">Chi-square distribution</a></li>
+                </ul>
+            </section>
+            <h3>References</h3>
+            <ul>
+                <li>Zar, J. H. (2010). <em>Biostatistical Analysis</em> (5th ed.). Pearson.</li>
+                <li>Montgomery, D. C. (2019). <em>Introduction to Statistical Quality Control</em> (8th ed.). Wiley.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="legal-footer">
+        <p>
+            © 2026 problabtools.
+            <a href="../aviso-legal.html">Legal notice</a> ·
+            <a href="../privacidad.html">Privacy</a> ·
+            <a href="../cookies.html">Cookies</a> ·
+            <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+        </p>
+    </footer>
+</div>
+
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+<script>
+function powerOneVariance(n, R, alpha, alternative) {
+    const df = n - 1;
+    const R2 = R * R;
+    if (alternative === 'two-sided') {
+        const chiLow = jStat.chisquare.inv(alpha / 2, df);
+        const chiHigh = jStat.chisquare.inv(1 - alpha / 2, df);
+        return jStat.chisquare.cdf(chiLow / R2, df) + (1 - jStat.chisquare.cdf(chiHigh / R2, df));
+    } else if (alternative === 'greater') {
+        return 1 - jStat.chisquare.cdf(jStat.chisquare.inv(1 - alpha, df) / R2, df);
+    } else {
+        return jStat.chisquare.cdf(jStat.chisquare.inv(alpha, df) / R2, df);
+    }
+}
+
+function calculateOneVarianceSampleSize() {
+    const R = parseFloat(document.getElementById('varR').value);
+    const alpha = parseFloat(document.getElementById('varAlpha').value);
+    const power = parseFloat(document.getElementById('varPower').value);
+    const alternative = document.getElementById('varAlternative').value;
+    const resultEl = document.getElementById('varResult');
+
+    if (!Number.isFinite(R) || R <= 0 || R === 1) {
+        resultEl.innerText = 'Error: R must be a positive number different from 1.';
+        return;
+    }
+    if (!Number.isFinite(alpha) || alpha <= 0 || alpha >= 1) {
+        resultEl.innerText = 'Error: α must be between 0 and 1.';
+        return;
+    }
+    if (!Number.isFinite(power) || power <= 0 || power >= 1) {
+        resultEl.innerText = 'Error: power must be between 0 and 1.';
+        return;
+    }
+
+    const altText = { 'two-sided': 'Ha: σ ≠ σ0', 'greater': 'Ha: σ ≥ σ0', 'less': 'Ha: σ ≤ σ0' }[alternative];
+    let n = 2;
+    let actualPower = 0;
+    while (n <= 100000) {
+        actualPower = powerOneVariance(n, R, alpha, alternative);
+        if (actualPower >= power) break;
+        n++;
+    }
+
+    if (actualPower < power) {
+        resultEl.innerText = 'No solution found within the search limit. Check the parameters.';
+        return;
+    }
+
+    resultEl.innerText =
+        `Recommended minimum n: ${n} observations\n` +
+        `Power achieved: ${(actualPower * 100).toFixed(2)}% (target: ${(power * 100).toFixed(0)}%)\n` +
+        `R = ${R}  |  α = ${alpha}  |  ${altText}`;
+}
+
+document.getElementById('varCalculateBtn').addEventListener('click', calculateOneVarianceSampleSize);
+calculateOneVarianceSampleSize();
+</script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>
