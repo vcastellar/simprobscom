@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../../simulaciones/simulador-intervalos-confianza.html">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Confidence Interval Simulator | ProbLab</title>
+  <meta name="description" content="Confidence interval simulator: observe empirical coverage, nominal coverage, and sampling variability.">
+    <meta name="keywords" content="confidence interval simulator, visualize confidence intervals, confidence interval coverage simulation, interactive confidence interval, ProbLab, online statistics, statistics calculator">
+  <link rel="canonical" href="https://problabtools.com/en/simulaciones/simulador-intervalos-confianza.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Confidence Interval Simulator | ProbLab">
+  <meta property="og:description" content="Confidence interval simulator: observe empirical coverage, nominal coverage, and sampling variability.">
+  <meta property="og:url" content="https://problabtools.com/en/simulaciones/simulador-intervalos-confianza.html">
+  <meta property="og:site_name" content="ProbLab">
+  <meta property="og:image" content="https://problabtools.com/og-image.png">
+  <meta property="og:locale" content="en_US">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="author" content="Vicente Castellar">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="alternate" hreflang="en" href="https://problabtools.com/en/simulaciones/simulador-intervalos-confianza.html">
+  <link rel="alternate" hreflang="es" href="https://problabtools.com/simulaciones/simulador-intervalos-confianza.html">
+  <link rel="alternate" hreflang="x-default" href="https://problabtools.com/simulaciones/simulador-intervalos-confianza.html">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Confidence Interval Simulator | ProbLab">
+  <meta name="twitter:description" content="Confidence interval simulator: observe empirical coverage, nominal coverage, and sampling variability.">
+  <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+  <link rel="stylesheet" href="../../style_new.css?v=20260624">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+          {"@type": "ListItem", "position": 2, "name": "Simulations", "item": "https://problabtools.com/en/simulaciones/"},
+          {"@type": "ListItem", "position": 3, "name": "Confidence Intervals", "item": "https://problabtools.com/en/simulaciones/simulador-intervalos-confianza.html"}
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "name": "Confidence Interval Simulator | ProbLab",
+        "url": "https://problabtools.com/en/simulaciones/simulador-intervalos-confianza.html",
+        "description": "Confidence interval simulator: observe empirical coverage, nominal coverage, and sampling variability.",
+        "inLanguage": "en",
+        "isPartOf": {"@type": "WebSite", "name": "ProbLab", "url": "https://problabtools.com/"}
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Confidence Interval Simulator",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Web",
+        "url": "https://problabtools.com/en/simulaciones/simulador-intervalos-confianza.html",
+        "description": "Interactive confidence interval simulator for the mean (known σ) and for a proportion (Wald / Wilson). Observe the empirical coverage against the nominal level.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+      }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "If the CI doesn't contain the true value, was it calculated wrong?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. A 95% confidence interval is designed to cover the true parameter in 95% of repetitions of the experiment. So in roughly 5% of cases the interval will NOT cover the parameter, and that is exactly what's expected. Seeing red intervals in the simulation doesn't indicate an error: it's the correct behavior of the procedure."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why does the Wilson method give better coverage than Wald?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Wald interval uses the direct normal approximation for proportions, which deteriorates when p̂ is close to 0 or 1 or when n is small. The Wilson interval inverts Pearson's score test, which incorporates the curvature of the binomial distribution and produces empirical coverage much closer to the nominal level, especially at the extremes."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I interpret the frequentist CI as a Bayesian probability?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Not directly. The frequentist confidence interval states that the procedure captures the parameter in (1-α)% of repetitions; it does not assign a probability to the unknown parameter. The Bayesian equivalent is the credible interval, which does express P(θ ∈ CI | data) = 1-α, but it requires specifying a prior distribution."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does sample size affect the width of the CI?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The width of the interval is proportional to 1/√n. Doubling the sample size reduces the width by a factor of √2 ≈ 1.41, i.e. 29% narrower. To get a CI four times narrower you need to multiply n by 16."
+        }
+      }
+    ]
+  }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+  <style>
+    /* ---- Mode tabs ---- */
+    .mode-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .mode-tab {
+      padding: 8px 18px;
+      border-radius: 999px;
+      border: 1.5px solid #dbe3f1;
+      background: #f8fafc;
+      font-weight: 600;
+      font-size: 0.84rem;
+      cursor: pointer;
+      transition: background 0.18s, border-color 0.18s, color 0.18s;
+      color: #334155;
+    }
+    .mode-tab.active {
+      background: var(--accent, #4f46e5);
+      color: #fff;
+      border-color: var(--accent, #4f46e5);
+    }
+    .mode-panel { display: none; }
+    .mode-panel.active { display: block; }
+
+    /* ---- Canvas wrapper ---- */
+    .chart-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      padding: 12px 0 4px;
+      margin-top: 18px;
+    }
+    #ciCanvas {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    /* ---- Stats grid ---- */
+    .ci-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+    @media (min-width: 640px) {
+      .ci-stats-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .ci-stat-card {
+      padding: 14px 12px;
+      border-radius: 12px;
+      background: rgba(79, 70, 229, 0.06);
+      border: 1px solid rgba(79, 70, 229, 0.15);
+      text-align: center;
+    }
+    .ci-stat-card.miss {
+      background: rgba(220, 38, 38, 0.06);
+      border-color: rgba(220, 38, 38, 0.18);
+    }
+    .ci-stat-card .sc-value {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #4338ca;
+      display: block;
+      line-height: 1.2;
+    }
+    .ci-stat-card.miss .sc-value { color: #b91c1c; }
+    .ci-stat-card .sc-label {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* ---- Legend ---- */
+    .ci-legend {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+      color: #475569;
+      margin-top: 10px;
+      padding: 0 4px;
+    }
+    .ci-legend-dot {
+      display: inline-block;
+      width: 14px;
+      height: 4px;
+      border-radius: 2px;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+
+    /* ---- Placeholder ---- */
+    .canvas-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 180px;
+      color: #94a3b8;
+      font-size: 0.95rem;
+      font-style: italic;
+      text-align: center;
+      padding: 24px;
+    }
+
+    /* ---- Interpretation box ---- */
+    .interpretation-box {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      color: #166534;
+      font-size: 0.93rem;
+      line-height: 1.6;
+    }
+    .interpretation-box.warn {
+      background: #fefce8;
+      border-color: #fde047;
+      color: #854d0e;
+    }
+    .interpretation-box.info {
+      background: #eff6ff;
+      border-color: #93c5fd;
+      color: #1e3a5f;
+    }
+
+    /* ---- Inline form grid ---- */
+    .form-grid-ci {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 20px;
+    }
+    @media (max-width: 540px) {
+      .form-grid-ci { grid-template-columns: 1fr; }
+    }
+
+    /* ---- FAQ ---- */
+    .faq-list { list-style: none; padding: 0; margin: 0; }
+    .faq-list li { margin-bottom: 18px; }
+    .faq-list li strong { display: block; margin-bottom: 4px; color: #1e293b; }
+
+    /* ---- Formula line ---- */
+    .formula-line {
+      text-align: center;
+      font-size: 1.05rem;
+      margin: 12px 0;
+      overflow-x: auto;
+    }
+
+    /* ---- Canvas axis labels ---- */
+    .canvas-axis-note {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      text-align: center;
+      margin-top: 4px;
+    }
+  </style>
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="../index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="../distribuciones/">Distributions</a></li>
+            <li><a href="../tablas-estadisticas/">Tables</a></li>
+            <li><a href="../intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="../tamano-muestral/">Sample size</a></li>
+            <li><a href="../contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="../ab-testing/">A/B testing</a></li>
+            <li><a href="./">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../../simulaciones/simulador-intervalos-confianza.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+</ul>
+    </div>
+</nav>
+
+<div class="page-wrap">
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="./">Simulations</a></li>
+      <li><span aria-current="page">Confidence Intervals</span></li>
+    </ol>
+  </nav>
+
+  <header class="hero">
+    <p class="eyebrow">Statistical simulation</p>
+    <h1>Confidence Interval Simulator</h1>
+    <p class="hero-subtitle">Generate samples repeatedly and see what fraction of the confidence intervals cover the true parameter. The empirical coverage converges to the nominal level.</p>
+  </header>
+
+  <main>
+    <!-- ============================================================
+         INTERACTIVE SIMULATOR
+    ============================================================ -->
+    <section class="card sample-size-panel" id="simulator-section">
+      <div class="panel-heading">
+        <h2>Interactive simulator</h2>
+        <p>Select the mode, adjust the parameters, and click <strong>Simulate</strong>.</p>
+      </div>
+
+      <!-- Mode tabs -->
+      <div class="mode-tabs" role="tablist" aria-label="Simulator mode">
+        <button class="mode-tab active" id="tabMedia" role="tab" aria-selected="true" aria-controls="panelMedia" data-mode="media">
+          Mode: Mean (known σ)
+        </button>
+        <button class="mode-tab" id="tabProp" role="tab" aria-selected="false" aria-controls="panelProp" data-mode="proporcion">
+          Mode: Proportion
+        </button>
+      </div>
+
+      <!-- Panel: Mean -->
+      <div class="mode-panel active" id="panelMedia" role="tabpanel" aria-labelledby="tabMedia">
+        <div class="form-grid-ci">
+          <div class="form-group">
+            <label for="trueMu">True μ (population mean)</label>
+            <input type="number" id="trueMu" value="50" step="1" min="0" max="1000">
+          </div>
+          <div class="form-group">
+            <label for="trueSigma">True σ (population standard deviation)</label>
+            <input type="number" id="trueSigma" value="10" step="0.1" min="0.1" max="1000">
+          </div>
+          <div class="form-group">
+            <label for="nMedia">Sample size n</label>
+            <select id="nMedia">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="30" selected>30</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="confMedia">Confidence level</label>
+            <select id="confMedia">
+              <option value="0.90">90%</option>
+              <option value="0.95" selected>95%</option>
+              <option value="0.99">99%</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="numIntMedia">Number of intervals</label>
+            <select id="numIntMedia">
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100" selected>100</option>
+              <option value="200">200</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel: Proportion -->
+      <div class="mode-panel" id="panelProp" role="tabpanel" aria-labelledby="tabProp">
+        <div class="form-grid-ci">
+          <div class="form-group">
+            <label for="trueP">True p (population proportion)</label>
+            <input type="number" id="trueP" value="0.5" step="0.01" min="0.01" max="0.99">
+          </div>
+          <div class="form-group">
+            <label for="nProp">Sample size n</label>
+            <select id="nProp">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="50" selected>50</option>
+              <option value="100">100</option>
+              <option value="200">200</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="confProp">Confidence level</label>
+            <select id="confProp">
+              <option value="0.90">90%</option>
+              <option value="0.95" selected>95%</option>
+              <option value="0.99">99%</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="numIntProp">Number of intervals</label>
+            <select id="numIntProp">
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100" selected>100</option>
+              <option value="200">200</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="methodProp">Method for the CI</label>
+            <select id="methodProp">
+              <option value="wald">Wald (normal)</option>
+              <option value="wilson" selected>Wilson (recommended)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button class="calculate-btn" id="simBtn">Simulate</button>
+
+      <!-- Canvas visualization -->
+      <div class="chart-wrap" id="chartWrap">
+        <div class="canvas-placeholder" id="canvasPlaceholder">
+          Click "Simulate" to get started
+        </div>
+        <canvas id="ciCanvas" aria-label="Visualization of simulated confidence intervals" role="img" style="display:none;"></canvas>
+        <p class="canvas-axis-note" id="axisNote" style="display:none;"></p>
+      </div>
+
+      <!-- Legend -->
+      <div class="ci-legend" id="ciLegend" style="display:none;">
+        <span><span class="ci-legend-dot" style="background:#3b82f6;"></span>CI that covers the parameter</span>
+        <span><span class="ci-legend-dot" style="background:#dc2626;"></span>CI that does NOT cover the parameter</span>
+        <span><span class="ci-legend-dot" style="background:#1f2937; border-top: 2px dashed #1f2937; height:0;"></span>True value of the parameter</span>
+      </div>
+
+      <!-- Stats -->
+      <div class="ci-stats-grid" id="ciStatsGrid" style="display:none;">
+        <div class="ci-stat-card">
+          <span class="sc-value" id="scNominal">—</span>
+          <span class="sc-label">Nominal coverage</span>
+        </div>
+        <div class="ci-stat-card">
+          <span class="sc-value" id="scEmpiricalPct">—</span>
+          <span class="sc-label">Empirical coverage</span>
+        </div>
+        <div class="ci-stat-card">
+          <span class="sc-value" id="scCoveredFraction">—</span>
+          <span class="sc-label">Intervals that cover</span>
+        </div>
+        <div class="ci-stat-card">
+          <span class="sc-value" id="scMeanWidth">—</span>
+          <span class="sc-label">Mean CI width</span>
+        </div>
+      </div>
+
+      <!-- Result box with interpretation -->
+      <div class="result-box" id="ciResultBox" style="display:none; margin-top: 16px; line-height: 1.7;">
+        <div id="ciInterpretation"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         EDUCATIONAL SECTION 1: What is a CI?
+    ============================================================ -->
+    <section class="card content-card">
+      <h2>What does a 95% confidence interval actually mean?</h2>
+      <p>The correct interpretation of a 95% confidence interval is frequently misunderstood, even by researchers with statistical training. The correct statement is:</p>
+      <blockquote style="border-left: 4px solid var(--accent, #4f46e5); padding: 10px 18px; margin: 16px 0; background: #f5f3ff; border-radius: 0 8px 8px 0; color: #3730a3; font-style: italic;">
+        "If we repeated the experiment infinitely many times and built the confidence interval on each repetition, 95% of those intervals would contain the true parameter."
+      </blockquote>
+      <p>This is the statement the simulator makes visible: each row in the chart is one repetition of the experiment. The blue bars are the intervals that captured the parameter; the red ones did not. If the procedure is correct, roughly 5% of the intervals will be red.</p>
+      <p><strong>What it does NOT mean:</strong> "there is a 95% probability that the parameter is in this particular interval." Once you've computed the interval from your data, the parameter either is inside it or it isn't. There's no probability in that classical sense: the parameter is a fixed (though unknown) value, and the computed interval is also fixed. The 95% probability refers to the construction <em>procedure</em>, not to the individual interval.</p>
+      <p>This distinction matters because it has practical consequences: you can't say "I'm 95% sure μ is between 47 and 53." What you can say is "the method I used to compute this interval produces intervals that cover the true μ 95% of the time across repetitions of the experiment."</p>
+      <p>The Bayesian interpretation — "the probability that the parameter lies in this range is 95%" — is valid for Bayesian <em>credible intervals</em>, which require specifying a prior distribution and are conceptually different.</p>
+    </section>
+
+    <!-- ============================================================
+         EDUCATIONAL SECTION 2: Nominal vs actual coverage
+    ============================================================ -->
+    <section class="card content-card">
+      <h2>Nominal coverage vs actual coverage</h2>
+      <p>The <strong>nominal level</strong> is the confidence value we specify when constructing the CI (90%, 95%, 99%). The <strong>actual (or empirical) coverage</strong> is the fraction of intervals that actually cover the true parameter across a long series of repetitions.</p>
+      <p>For the CI of the mean with known σ, the actual coverage matches the nominal level exactly for any sample size, because the distribution of the sample mean is exactly normal (if the population is too) or asymptotically normal by the CLT.</p>
+      <p>For proportions, the situation is more complicated. The parameter p is continuous, but the binomial variable X ~ Bin(n, p) is discrete, and this discretization causes the actual coverage to fluctuate around the nominal level:</p>
+      <ul>
+        <li><strong>Wald interval:</strong> uses the normal approximation directly, \(\hat{p} \pm z_{\alpha/2}\sqrt{\hat{p}(1-\hat{p})/n}\). It works well for large n and p away from 0 and 1, but its coverage can be noticeably below the nominal level when n is small or p is near the extremes.</li>
+        <li><strong>Wilson interval:</strong> obtained by inverting Pearson's score test. It tends to have actual coverage closer to the nominal level, especially at the extremes, though it can be slightly conservative (coverage above nominal) in some cases.</li>
+      </ul>
+      <p>You can observe this phenomenon directly with the simulator: select Proportion mode, set p = 0.05 and n = 20, and compare the empirical coverage of Wald vs Wilson.</p>
+    </section>
+
+    <!-- ============================================================
+         EDUCATIONAL SECTION 3: Effect of sample size
+    ============================================================ -->
+    <section class="card content-card">
+      <h2>How does sample size affect it?</h2>
+      <p>The sample size n has a direct and clear effect on the width of the confidence interval. For the CI of the mean with known σ:</p>
+      <p class="formula-line">\[ \text{Width} = 2 \times z_{\alpha/2} \times \dfrac{\sigma}{\sqrt{n}} \]</p>
+      <p>The width is proportional to \(1/\sqrt{n}\): if we <strong>quadruple n</strong>, the width is cut in half. To reduce the width to a third, we need to multiply n by 9.</p>
+      <p>However, increasing n <strong>does not change the coverage</strong>: a 95% interval is still 95% regardless of whether n = 10 or n = 1000. What changes is how narrow that interval is, i.e. the <em>precision</em> of the estimate. Narrower intervals are more useful in practice, even though both have the same nominal coverage guarantee.</p>
+      <p>You can verify this in the simulator: keep the confidence level fixed at 95% and the number of intervals at 100, and vary n between 5 and 100. You'll observe that:</p>
+      <ul>
+        <li>The fraction of blue intervals stays at roughly 95% for all values of n.</li>
+        <li>The intervals become progressively narrower as n increases.</li>
+        <li>With small n, there's more variability in the position of the CI's endpoints.</li>
+      </ul>
+    </section>
+
+    <!-- ============================================================
+         FAQ
+    ============================================================ -->
+    <section class="card content-card">
+      <h2>Frequently asked questions</h2>
+      <ul class="faq-list">
+        <li>
+          <strong>If the CI doesn't contain the true value, was it calculated wrong?</strong>
+          No. A 95% CI is designed to fail to cover the parameter roughly 5% of the time. Seeing red intervals in the simulation is exactly what's expected; it doesn't indicate any calculation error. If 95% of the intervals are blue, the procedure is working correctly.
+        </li>
+        <li>
+          <strong>Why does the Wilson method give better coverage than Wald?</strong>
+          The Wald interval applies the normal approximation directly to \(\hat{p}\), which deteriorates when \(\hat{p}\) is close to 0 or 1 or when n is small (the distribution of \(\hat{p}\) isn't symmetric enough). The Wilson interval gets its bounds by inverting Pearson's score test, which accounts for the curvature of the binomial distribution. This produces empirical coverage much closer to the nominal level across the whole range of p.
+        </li>
+        <li>
+          <strong>Can I interpret the CI in Bayesian terms?</strong>
+          Only if you use a <em>Bayesian credible interval</em>, which has a completely different construction. The frequentist CI doesn't assign probabilities to the parameter (which is treated as fixed but unknown). The Bayesian credible interval does express P(θ ∈ CI | data) = 1 − α, but it requires specifying a prior distribution over θ. Both tools are valid in their own context, but they shouldn't be confused.
+        </li>
+        <li>
+          <strong>How many intervals do I need to simulate to see the coverage converge?</strong>
+          With 20 intervals there's a lot of variability: the empirical coverage can swing between 80% and 100% even if the procedure is correct. With 100 intervals, the standard error of the proportion is ≈ √(0.95 × 0.05 / 100) ≈ 2.2%, so the empirical coverage will typically fall between 91% and 99%. With 200 intervals, the variability drops to ≈ 1.5%.
+        </li>
+        <li>
+          <strong>Does the simulator use an exact normal distribution for the mean?</strong>
+          Yes: in Mean mode (known σ) each observation is generated from an N(μ, σ) using the Box-Muller method. The sample mean has an exactly N(μ, σ/√n) distribution for any n, so the empirical coverage should match the nominal level even for small n.
+        </li>
+      </ul>
+    </section>
+
+    <!-- Related tools -->
+    <section class="card content-card">
+      <h2>Related tools</h2>
+      <ul>
+        <li><a href="../intervalos-confianza/">Confidence interval calculators</a></li>
+        <li><a href="teorema-central-limite.html">Central limit theorem simulator</a></li>
+        <li><a href="../tamano-muestral/">Sample size calculators</a></li>
+        <li><a href="../contrastes-hipotesis/">Hypothesis tests</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="legal-footer">
+    <p>
+      © 2026 problabtools.
+      <a href="../../sobre.html">About ProbLab</a> ·
+      <a href="../../metodologia.html">Methodology</a> ·
+      <a href="../../aviso-legal.html">Legal notice</a> ·
+      <a href="../../privacidad.html">Privacy</a> ·
+      <a href="../../cookies.html">Cookies</a> ·
+      <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+    </p>
+  </footer>
+</div><!-- /page-wrap -->
+
+<script>
+/* ================================================================
+   UTILITY: Statistical functions
+================================================================ */
+
+/** Critical z value for given alpha (two-tailed) */
+function zCrit(alpha) {
+  return jStat.normal.inv(1 - alpha / 2, 0, 1);
+}
+
+/** CI for mean with known sigma */
+function ciMean(xbar, sigma, n, conf) {
+  const z = zCrit(1 - conf);
+  const margin = z * sigma / Math.sqrt(n);
+  return [xbar - margin, xbar + margin];
+}
+
+/** CI for proportion: Wald */
+function ciWald(phat, n, conf) {
+  const z = zCrit(1 - conf);
+  const margin = z * Math.sqrt(Math.max(0, phat * (1 - phat) / n));
+  return [Math.max(0, phat - margin), Math.min(1, phat + margin)];
+}
+
+/** CI for proportion: Wilson score */
+function ciWilson(phat, n, conf) {
+  const z = zCrit(1 - conf);
+  const z2 = z * z;
+  const denom = 1 + z2 / n;
+  const center = (phat + z2 / (2 * n)) / denom;
+  const margin = (z / denom) * Math.sqrt(phat * (1 - phat) / n + z2 / (4 * n * n));
+  return [Math.max(0, center - margin), Math.min(1, center + margin)];
+}
+
+/** Sample one observation from N(mu, sigma) via Box-Muller */
+function sampleNormal(mu, sigma) {
+  let u1;
+  do { u1 = Math.random(); } while (u1 === 0);
+  const u2 = Math.random();
+  return mu + sigma * Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+}
+
+/** Sample proportion: binomial sampling */
+function sampleProportion(p, n) {
+  let successes = 0;
+  for (let i = 0; i < n; i++) {
+    if (Math.random() < p) successes++;
+  }
+  return successes / n;
+}
+
+/* ================================================================
+   SIMULATION
+================================================================ */
+
+/**
+ * Run simulation and return array of interval objects.
+ * Each object: { lo, hi, estimate, covers }
+ */
+function runSimulation(mode, params) {
+  const results = [];
+  const { conf, numIntervals } = params;
+
+  if (mode === 'media') {
+    const { mu, sigma, n } = params;
+    for (let i = 0; i < numIntervals; i++) {
+      let sum = 0;
+      for (let j = 0; j < n; j++) sum += sampleNormal(mu, sigma);
+      const xbar = sum / n;
+      const [lo, hi] = ciMean(xbar, sigma, n, conf);
+      results.push({ lo, hi, estimate: xbar, covers: lo <= mu && mu <= hi });
+    }
+  } else {
+    const { p, n, method } = params;
+    for (let i = 0; i < numIntervals; i++) {
+      const phat = sampleProportion(p, n);
+      const [lo, hi] = method === 'wilson' ? ciWilson(phat, n, conf) : ciWald(phat, n, conf);
+      results.push({ lo, hi, estimate: phat, covers: lo <= p && p <= hi });
+    }
+  }
+
+  return results;
+}
+
+/* ================================================================
+   CANVAS DRAWING
+================================================================ */
+
+/** Last simulation state — used for responsive redraw on resize */
+let _lastDrawState = null;
+
+/**
+ * Draw confidence intervals on canvas.
+ * @param {HTMLCanvasElement} canvas
+ * @param {Array}  intervals  - array of {lo, hi, estimate, covers}
+ * @param {number} trueParam  - true parameter value
+ * @param {string} paramLabel - label shown on the dashed line
+ */
+function drawIntervals(canvas, intervals, trueParam, paramLabel) {
+  // Cache state for resize redraws
+  _lastDrawState = { canvas, intervals, trueParam, paramLabel };
+
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+
+  // Layout
+  const marginLeft   = 50;
+  const marginRight  = 24;
+  const marginTop    = 8;
+  const marginBottom = 28;
+  const numIv = intervals.length;
+
+  // Row height: tighter for more intervals
+  const rowH = numIv <= 20 ? 18
+             : numIv <= 50 ? 10
+             : numIv <= 100 ? 6
+             : 4;
+
+  const plotHeight  = numIv * rowH;
+  const totalHeight = plotHeight + marginTop + marginBottom;
+
+  // Resize canvas to container width
+  const logicalW = (canvas.parentElement.clientWidth || 700);
+  canvas.style.width  = logicalW + 'px';
+  canvas.style.height = totalHeight + 'px';
+  canvas.width  = logicalW * dpr;
+  canvas.height = totalHeight * dpr;
+  ctx.scale(dpr, dpr);
+
+  const plotW = logicalW - marginLeft - marginRight;
+  ctx.clearRect(0, 0, logicalW, totalHeight);
+
+  // Compute display range
+  let paramMin = trueParam;
+  let paramMax = trueParam;
+  intervals.forEach(iv => {
+    if (iv.lo < paramMin) paramMin = iv.lo;
+    if (iv.hi > paramMax) paramMax = iv.hi;
+  });
+  const span = (paramMax - paramMin) || 1;
+  const pad  = span * 0.1;
+  paramMin -= pad;
+  paramMax += pad;
+
+  function toX(v) {
+    return marginLeft + (v - paramMin) / (paramMax - paramMin) * plotW;
+  }
+
+  // Axis baseline
+  ctx.strokeStyle = '#e2e8f0';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(marginLeft, marginTop + plotHeight);
+  ctx.lineTo(marginLeft + plotW, marginTop + plotHeight);
+  ctx.stroke();
+
+  // Draw interval segments
+  intervals.forEach((iv, i) => {
+    const y  = marginTop + i * rowH + rowH / 2;
+    const x1 = toX(iv.lo);
+    const x2 = toX(iv.hi);
+
+    ctx.strokeStyle = iv.covers ? '#3b82f6' : '#dc2626';
+    ctx.lineWidth   = Math.max(1.5, rowH - 1.5);
+    ctx.lineCap     = 'round';
+    ctx.beginPath();
+    ctx.moveTo(x1, y);
+    ctx.lineTo(x2, y);
+    ctx.stroke();
+
+    // Point-estimate dot when rows are tall enough
+    if (rowH >= 5) {
+      const xe = toX(iv.estimate);
+      ctx.fillStyle = iv.covers ? '#1d4ed8' : '#991b1b';
+      ctx.beginPath();
+      ctx.arc(xe, y, Math.min(2.5, rowH / 3), 0, 2 * Math.PI);
+      ctx.fill();
+    }
+  });
+
+  // Dashed vertical line at true parameter
+  const tx = toX(trueParam);
+  ctx.save();
+  ctx.strokeStyle = '#111827';
+  ctx.lineWidth   = 1.5;
+  ctx.setLineDash([5, 4]);
+  ctx.lineCap = 'butt';
+  ctx.beginPath();
+  ctx.moveTo(tx, marginTop);
+  ctx.lineTo(tx, marginTop + plotHeight + 4);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.restore();
+
+  // True-parameter label (drawn first so axis ticks overwrite if they overlap)
+  ctx.fillStyle   = '#111827';
+  ctx.font        = '11px system-ui, -apple-system, sans-serif';
+  ctx.textAlign   = 'center';
+  ctx.fillText(paramLabel, tx, marginTop + plotHeight + marginBottom - 4);
+
+  // X-axis ticks (5 evenly spaced values)
+  const numTicks = 5;
+  ctx.fillStyle = '#94a3b8';
+  ctx.font      = '10px system-ui, -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  for (let t = 0; t <= numTicks; t++) {
+    const v    = paramMin + (t / numTicks) * (paramMax - paramMin);
+    const tx2  = toX(v);
+    const lbl  = Math.abs(v) < 0.0005 ? '0'
+               : Math.abs(v) >= 10    ? v.toFixed(1)
+               :                        v.toFixed(3);
+    ctx.fillText(lbl, tx2, marginTop + plotHeight + marginBottom - 4);
+  }
+
+  // Y-axis label (rotated)
+  ctx.save();
+  ctx.translate(12, marginTop + plotHeight / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = '#94a3b8';
+  ctx.font      = '10px system-ui, -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Interval #', 0, 0);
+  ctx.restore();
+}
+
+/* ================================================================
+   STATS AND INTERPRETATION
+================================================================ */
+
+function computeStats(intervals) {
+  const n       = intervals.length;
+  const covered = intervals.filter(iv => iv.covers).length;
+  const meanWidth = intervals.reduce((s, iv) => s + (iv.hi - iv.lo), 0) / n;
+  return { n, covered, meanWidth };
+}
+
+function interpretCoverage(empiricalPct, nominalPct, mode, method) {
+  const diff    = empiricalPct - nominalPct;
+  const absDiff = Math.abs(diff);
+
+  if (absDiff <= 3) {
+    return {
+      cls: '',
+      text: `The empirical coverage (${empiricalPct.toFixed(1)}%) is very close to the nominal level (${nominalPct}%). The procedure is working as expected: the remaining variability is due to the finite number of simulated intervals.`
+    };
+  }
+  if (diff < -5) {
+    let extra = '';
+    if (mode === 'proporcion' && method === 'wald') {
+      extra = ' This is typical of the Wald interval with small sample sizes or proportions close to 0 or 1: the normal approximation isn\'t accurate enough. Try the Wilson method to get better coverage.';
+    }
+    return {
+      cls: 'warn',
+      text: `The empirical coverage (${empiricalPct.toFixed(1)}%) is notably below the nominal level (${nominalPct}%). The procedure is underestimating the uncertainty.${extra}`
+    };
+  }
+  if (diff > 5) {
+    return {
+      cls: 'info',
+      text: `The empirical coverage (${empiricalPct.toFixed(1)}%) is above the nominal level (${nominalPct}%). The procedure is conservative: it produces wider intervals than necessary.`
+    };
+  }
+  return {
+    cls: 'info',
+    text: `The empirical coverage (${empiricalPct.toFixed(1)}%) is close to the nominal level (${nominalPct}%), with a difference of ${absDiff.toFixed(1)} percentage points. With more intervals, the estimate will improve.`
+  };
+}
+
+/* ================================================================
+   UI WIRING
+================================================================ */
+
+let currentMode = 'media';
+
+// Mode tab switching
+document.querySelectorAll('.mode-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.mode-tab').forEach(t => {
+      t.classList.remove('active');
+      t.setAttribute('aria-selected', 'false');
+    });
+    document.querySelectorAll('.mode-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    tab.setAttribute('aria-selected', 'true');
+    currentMode = tab.dataset.mode;
+    document.getElementById(tab.getAttribute('aria-controls')).classList.add('active');
+  });
+});
+
+// Simulate button handler
+function runAndDisplay() {
+  let params, mode;
+
+  if (currentMode === 'media') {
+    mode = 'media';
+    const mu           = parseFloat(document.getElementById('trueMu').value);
+    const sigma        = parseFloat(document.getElementById('trueSigma').value);
+    const n            = parseInt(document.getElementById('nMedia').value, 10);
+    const conf         = parseFloat(document.getElementById('confMedia').value);
+    const numIntervals = parseInt(document.getElementById('numIntMedia').value, 10);
+
+    if (isNaN(mu) || isNaN(sigma) || sigma <= 0) {
+      alert('Please enter valid values for μ and σ (σ must be > 0).');
+      return;
+    }
+    params = { mu, sigma, n, conf, numIntervals };
+  } else {
+    mode = 'proporcion';
+    const p            = parseFloat(document.getElementById('trueP').value);
+    const n            = parseInt(document.getElementById('nProp').value, 10);
+    const conf         = parseFloat(document.getElementById('confProp').value);
+    const numIntervals = parseInt(document.getElementById('numIntProp').value, 10);
+    const method       = document.getElementById('methodProp').value;
+
+    if (isNaN(p) || p <= 0 || p >= 1) {
+      alert('The proportion p must be between 0.01 and 0.99.');
+      return;
+    }
+    params = { p, n, conf, numIntervals, method };
+  }
+
+  const intervals = runSimulation(mode, params);
+  const { n: total, covered, meanWidth } = computeStats(intervals);
+  const nominalPct  = params.conf * 100;
+  const empiricalPct = (covered / total) * 100;
+
+  // Show canvas
+  const canvas = document.getElementById('ciCanvas');
+  document.getElementById('canvasPlaceholder').style.display = 'none';
+  canvas.style.display = 'block';
+
+  const trueParam  = mode === 'media' ? params.mu : params.p;
+  const paramLabel = mode === 'media' ? `μ = ${trueParam}` : `p = ${trueParam}`;
+  drawIntervals(canvas, intervals, trueParam, paramLabel);
+
+  // Legend
+  document.getElementById('ciLegend').style.display = 'flex';
+
+  // Stats cards
+  document.getElementById('ciStatsGrid').style.display = 'grid';
+  document.getElementById('scNominal').textContent        = nominalPct.toFixed(0) + '%';
+  document.getElementById('scEmpiricalPct').textContent   = empiricalPct.toFixed(1) + '%';
+  document.getElementById('scCoveredFraction').textContent = `${covered} / ${total}`;
+  document.getElementById('scMeanWidth').textContent      = '± ' + (meanWidth / 2).toFixed(4);
+
+  const empCard  = document.getElementById('scEmpiricalPct').closest('.ci-stat-card');
+  const absDiff  = Math.abs(empiricalPct - nominalPct);
+  empCard.classList.toggle('miss', absDiff > 5 && empiricalPct < nominalPct);
+
+  // Interpretation
+  const methodUsed = mode === 'proporcion' ? params.method : null;
+  const interp = interpretCoverage(empiricalPct, nominalPct, mode, methodUsed);
+  const box = document.getElementById('ciResultBox');
+  box.style.display = 'block';
+  box.className = 'result-box interpretation-box' + (interp.cls ? ' ' + interp.cls : '');
+  document.getElementById('ciInterpretation').textContent = interp.text;
+
+  // Axis note
+  const axisNote = document.getElementById('axisNote');
+  axisNote.style.display = 'block';
+  axisNote.textContent = mode === 'media'
+    ? `Horizontal axis: mean scale. Dashed line: μ = ${trueParam}. Each row = one CI computed from n = ${params.n} observations.`
+    : `Horizontal axis: proportion scale [0, 1]. Dashed line: p = ${trueParam}. Each row = one ${methodUsed === 'wilson' ? 'Wilson' : 'Wald'} CI computed from n = ${params.n} observations.`;
+}
+
+document.getElementById('simBtn').addEventListener('click', runAndDisplay);
+
+// Responsive redraw on window resize (debounced)
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (_lastDrawState) {
+      const { canvas, intervals, trueParam, paramLabel } = _lastDrawState;
+      if (canvas.style.display !== 'none') {
+        drawIntervals(canvas, intervals, trueParam, paramLabel);
+      }
+    }
+  }, 150);
+});
+</script>
+<script src="../../theme.js?v=20260624"></script>
+<script src="../../lang-suggest.js?v=20260624"></script>
+</body>
+</html>

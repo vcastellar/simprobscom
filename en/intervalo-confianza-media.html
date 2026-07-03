@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../intervalo-confianza-media.html">
+<head>
+    <meta charset="UTF-8">
+    <title>CI for the mean using Student's t | ProbLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Confidence interval calculator for the mean with unknown σ. Uses Student's t distribution. Formula, chart and results table.">
+    <meta name="keywords" content="confidence interval mean calculator, calculate confidence interval mean, CI mean unknown sigma, confidence interval Student t, confidence interval small sample mean, ProbLab, online statistics, statistics calculator">
+    <link rel="canonical" href="https://problabtools.com/en/intervalo-confianza-media.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="CI for the mean using Student's t | ProbLab">
+    <meta property="og:description" content="Confidence interval calculator for the mean with unknown σ. Uses Student's t distribution. Formula, chart and results table.">
+    <meta property="og:url" content="https://problabtools.com/en/intervalo-confianza-media.html">
+    <meta property="og:site_name" content="ProbLab">
+    <meta property="og:image" content="https://problabtools.com/og-image.png">
+    <meta property="og:locale" content="en_US">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Vicente Castellar">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="alternate" hreflang="en" href="https://problabtools.com/en/intervalo-confianza-media.html">
+    <link rel="alternate" hreflang="es" href="https://problabtools.com/intervalo-confianza-media.html">
+    <link rel="alternate" hreflang="x-default" href="https://problabtools.com/intervalo-confianza-media.html">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CI for the mean using Student's t | ProbLab">
+    <meta name="twitter:description" content="Confidence interval calculator for the mean with unknown σ. Uses Student's t distribution. Formula, chart and results table.">
+    <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+            {"@type": "ListItem", "position": 2, "name": "Confidence intervals", "item": "https://problabtools.com/en/intervalos-confianza/"},
+            {"@type": "ListItem", "position": 3, "name": "CI mean unknown σ", "item": "https://problabtools.com/en/intervalo-confianza-media.html"}
+          ]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "Confidence interval for one mean with unknown σ",
+          "applicationCategory": "EducationalApplication",
+          "operatingSystem": "Web",
+          "url": "https://problabtools.com/en/intervalo-confianza-media.html",
+          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+        }
+      ]
+    }
+    </script>
+    <link rel="stylesheet" href="../style_new.css?v=20260624">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why use t instead of z?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Because estimating \\(\\sigma\\) with \\(s\\) introduces extra uncertainty; the t distribution has heavier tails to account for it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When do t and z converge?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For n ≥ 30 the difference is practically negligible in most applications."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need the data to be normal?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For small n it does matter. For large n, the CLT guarantees that \\(\\bar{x}\\) is approximately normally distributed."
+      }
+    }
+  ]
+}
+    </script>
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="distribuciones/">Distributions</a></li>
+            <li><a href="tablas-estadisticas/">Tables</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="tamano-muestral/">Sample size</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="ab-testing/">A/B testing</a></li>
+            <li><a href="simulaciones/">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../intervalo-confianza-media.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><span aria-current="page">Mean, unknown σ</span></li>
+        </ol>
+    </nav>
+    <header class="hero">
+        <p class="eyebrow">Confidence intervals</p>
+        <h1>Confidence interval for one mean (unknown σ)</h1>
+        <p class="hero-subtitle">Estimate the population mean when the standard deviation is unknown, using Student's t distribution.</p>
+        <p class="hero-links"><a class="hero-link-button" href="intervalos-confianza/">See all confidence intervals</a></p>
+    </header>
+
+    <main>
+        <section class="card sample-size-panel">
+            <div class="panel-heading">
+                <h2>Calculator</h2>
+                <p>Enter the data to get the confidence interval using Student's t distribution.</p>
+            </div>
+
+            <div class="form-grid sample-grid">
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="xbar">Sample mean (x̄)</label>
+                        <input type="number" id="xbar" value="245.3" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="s">Sample standard deviation (s)</label>
+                        <input type="number" id="s" value="38.7" step="0.001" min="0.0001">
+                    </div>
+                </div>
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="n">Sample size (n)</label>
+                        <input type="number" id="n" value="15" step="1" min="2">
+                    </div>
+                    <div class="form-group">
+                        <label for="conf">Confidence level</label>
+                        <select id="conf">
+                            <option value="0.90">90%</option>
+                            <option value="0.95" selected>95%</option>
+                            <option value="0.99">99%</option>
+                            <option value="custom">Custom…</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="inline-inputs" id="customConfRow" style="display:none">
+                    <div class="form-group">
+                        <label for="customConf">Custom confidence level (0–1)</label>
+                        <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="calcBtn">Calculate interval</button>
+            <div id="result" class="result-box">Result pending…</div>
+            <div class="chart-wrap">
+                <canvas id="ciChart" aria-label="Chart of the confidence interval over Student's t distribution" role="img"></canvas>
+            </div>
+        </section>
+
+        <section class="card content-card">
+            <h3>Explanation</h3>
+            <p>In practice, the population standard deviation \(\sigma\) is rarely known exactly. When it is estimated from the sample data itself using \(s\), extra uncertainty appears, which Student's t distribution with \(n-1\) degrees of freedom models correctly.</p>
+            <p>With large samples (n ≥ 30), Student's t converges to the standard normal and both intervals give very similar results. For small samples, t produces wider intervals, correctly reflecting the greater uncertainty.</p>
+
+            <h3>Formula</h3>
+            <p>Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area outside the interval. For 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\) in each tail.</p>
+            <p class="formula-line">\( \bar{x} \pm t_{\alpha/2,\, n-1} \cdot \dfrac{s}{\sqrt{n}} \)</p>
+            <ul>
+                <li><strong>\(\bar{x}\)</strong>: observed sample mean.</li>
+                <li><strong>\(t_{\alpha/2,\, n-1}\)</strong>: critical value of Student's t with \(n-1\) degrees of freedom.</li>
+                <li><strong>\(s\)</strong>: sample standard deviation (with divisor \(n-1\)).</li>
+                <li><strong>\(n\)</strong>: sample size.</li>
+            </ul>
+            <p>The margin of error is \(E = t_{\alpha/2,\, n-1} \cdot s/\sqrt{n}\) and the interval is \([\bar{x} - E,\; \bar{x} + E]\).</p>
+
+            <h3>Worked example</h3>
+            <p>The response time (in ms) of a web service is measured over 15 requests: \(\bar{x} = 245.3\) ms, \(s = 38.7\) ms. With 95% confidence (\(C=0.95\), \(\alpha=0.05\)) and \(df = 14\):</p>
+            <p class="formula-line">\( 245.3 \pm 2.145 \cdot \frac{38.7}{\sqrt{15}} \approx [223.9,\; 266.7] \text{ ms} \)</p>
+        </section>
+
+
+
+        <section class="card content-card">
+            <h3>Assumptions of the t interval</h3>
+            <ul>
+                <li>The sample is random and independent.</li>
+                <li>The variable is normally distributed in the population (especially important for small samples). For large n, the central limit theorem justifies it even if the distribution isn't exactly normal.</li>
+                <li>\(\sigma\) is unknown and estimated with \(s\).</li>
+            </ul>
+        </section>
+
+        <section class="card content-card">
+            <h3>How to interpret the result</h3>
+            <p>The interval \([L, U]\) is the range of values of the population mean \(\mu\) compatible with the observed data and the chosen confidence level. The frequentist meaning is the following: if you repeated the experiment many times — each time taking a sample of the same size and building the CI with the same procedure — approximately \(C \times 100\%\) of those intervals would contain the true value of \(\mu\). It is not a probability statement about the specific parameter, but about the long-run reliability of the method.</p>
+            <p>The width of the interval directly communicates the precision of the estimate. A narrow interval indicates greater precision: it is obtained with larger samples, lower variability in the data, or by accepting a somewhat lower confidence level. A wide interval is not an error in itself; it honestly reflects that with that sample there is a lot of uncertainty about \(\mu\). In the chart, the green region is the confidence zone under the t curve and the red tails each represent \(\alpha/2\) of the total area; the critical values \(\pm t_{\alpha/2,\,n-1}\) delimit those regions.</p>
+            <ul>
+                <li><strong>Connection with hypothesis testing:</strong> if a reference value \(\mu_0\) falls outside the interval, the data would reject \(H_0\!: \mu = \mu_0\) at significance level \(\alpha = 1 - C\) in the equivalent two-sided test. If \(\mu_0\) falls inside, there is no evidence to reject it.</li>
+                <li><strong>Effect of sample size:</strong> doubling \(n\) reduces the margin of error by a factor of \(\sqrt{2} \approx 1.41\); to halve it you need to quadruple \(n\).</li>
+                <li><strong>Effect of confidence level:</strong> increasing confidence from 95% to 99% widens the interval because the critical value \(t\) grows; demanding more certainty comes at the cost of less precision.</li>
+            </ul>
+        </section>
+
+        <section id="seo-support-content" class="card content-card">
+            <section class="related-tools">
+                <h3>Related calculators</h3>
+                <ul>
+                    <li><a href="intervalo-confianza-media-sigma-conocida.html">CI for one mean (known σ)</a></li>
+                    <li><a href="intervalo-confianza-diferencia-medias.html">CI for difference of means</a></li>
+                    <li><a href="contraste-hipotesis-una-media.html">Hypothesis test for one mean</a></li>
+                    <li><a href="studentt.html">Student's t distribution</a></li>
+                </ul>
+            </section>
+            <h3>Frequently asked questions</h3>
+            <ul>
+                <li><strong>Why use t instead of z?</strong> Because estimating \(\sigma\) with \(s\) introduces extra uncertainty; the t distribution has heavier tails to account for it.</li>
+                <li><strong>When do t and z converge?</strong> For n ≥ 30 the difference is practically negligible in most applications.</li>
+                <li><strong>Do I need the data to be normal?</strong> For small n it does matter. For large n, the CLT guarantees that \(\bar{x}\) is approximately normally distributed.</li>
+            </ul>
+            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Confidence_interval" target="_blank" rel="noopener noreferrer">Confidence interval</a> — Wikipedia</p>
+        </section>
+    </main>
+
+    <footer class="legal-footer">
+        <p>
+            © 2026 problabtools.
+            <a href="../aviso-legal.html">Legal notice</a> ·
+            <a href="../privacidad.html">Privacy</a> ·
+            <a href="../cookies.html">Cookies</a> ·
+            <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+        </p>
+    </footer>
+</div>
+
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let ciChart;
+
+document.getElementById('conf').addEventListener('change', function () {
+    document.getElementById('customConfRow').style.display = this.value === 'custom' ? '' : 'none';
+});
+
+function getConfLevel() {
+    const sel = document.getElementById('conf').value;
+    if (sel === 'custom') return parseFloat(document.getElementById('customConf').value);
+    return parseFloat(sel);
+}
+
+function renderChart(tCrit, df) {
+    const ctx = document.getElementById('ciChart');
+    if (!ctx) return;
+
+    const bound = Math.max(4, Math.abs(tCrit) + 0.8);
+    const minX = -bound, maxX = bound;
+    const step = 0.02;
+
+    const curve = [], inside = [], outside = [];
+    for (let x = minX; x <= maxX; x += step) {
+        const y = jStat.studentt.pdf(x, df);
+        curve.push({ x, y });
+        if (x >= -tCrit && x <= tCrit) {
+            inside.push({ x, y });
+            outside.push({ x, y: null });
+        } else {
+            inside.push({ x, y: null });
+            outside.push({ x, y });
+        }
+    }
+
+    if (ciChart) ciChart.destroy();
+    ciChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [
+                { label: 'Confidence region', data: inside, borderColor: 'rgba(34,197,94,0)', backgroundColor: 'rgba(34,197,94,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
+                { label: 'Tails (α/2 each)', data: outside, borderColor: 'rgba(239,68,68,0)', backgroundColor: 'rgba(239,68,68,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
+                { label: `Student's t (df = ${df})`, data: curve, borderColor: '#1d4ed8', borderWidth: 2, pointRadius: 0, fill: false, parsing: false }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: { type: 'linear', min: minX, max: maxX, title: { display: true, text: `t (df = ${df})` } },
+                y: { beginAtZero: true, title: { display: true, text: 'Density' } }
+            }
+        }
+    });
+}
+
+function calculate() {
+    const xbar = parseFloat(document.getElementById('xbar').value);
+    const s = parseFloat(document.getElementById('s').value);
+    const n = parseFloat(document.getElementById('n').value);
+    const conf = getConfLevel();
+    const resultEl = document.getElementById('result');
+
+    if (![xbar, s, n, conf].every(Number.isFinite) || s <= 0 || n < 2 || conf <= 0 || conf >= 1) {
+        resultEl.innerText = 'Error: check that s > 0, n ≥ 2 and 0 < confidence < 1.';
+        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        return;
+    }
+
+    const alpha = 1 - conf;
+    const df = n - 1;
+    const tCrit = jStat.studentt.inv(1 - alpha / 2, df);
+    const se = s / Math.sqrt(n);
+    const margin = tCrit * se;
+    const lower = xbar - margin;
+    const upper = xbar + margin;
+
+    resultEl.innerText =
+        `Confidence level: ${(conf * 100).toFixed(1)}%  |  df = ${df}  |  Critical t: ±${tCrit.toFixed(4)}\n` +
+        `Standard error: ${se.toFixed(6)}  |  Margin of error: ±${margin.toFixed(6)}\n` +
+        `Confidence interval: [${lower.toFixed(6)}, ${upper.toFixed(6)}]`;
+
+    renderChart(tCrit, df);
+}
+
+document.getElementById('calcBtn').addEventListener('click', calculate);
+document.getElementById('conf').addEventListener('change', calculate);
+document.getElementById('customConf').addEventListener('input', calculate);
+calculate();
+</script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>

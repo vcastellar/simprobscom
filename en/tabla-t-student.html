@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../tabla-t-student.html">
+<head>
+    <meta charset="UTF-8">
+    <title>Student's t Distribution Table — Critical Values | ProbLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Student's t distribution table: density f(t,ν), cumulative probability P(T≤t) and critical values by degrees of freedom and significance level.">
+    <meta name="keywords" content="t table calculator, student t distribution table, t distribution critical values, t table degrees of freedom, two-tailed one-tailed t table, ProbLab, online statistics, statistics calculator">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Vicente Castellar">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="canonical" href="https://problabtools.com/en/tabla-t-student.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Student's t Distribution Table — Critical Values | ProbLab">
+    <meta property="og:description" content="Student's t distribution table: density f(t,ν), cumulative probability P(T≤t) and critical values by degrees of freedom and significance level.">
+    <meta property="og:url" content="https://problabtools.com/en/tabla-t-student.html">
+    <meta property="og:site_name" content="ProbLab">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image" content="https://problabtools.com/og-image.png">
+    <meta property="og:image:alt" content="Student's t Distribution Table — ProbLab">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Student's t Distribution Table — Critical Values | ProbLab">
+    <meta name="twitter:description" content="Student's t distribution table: density f(t,ν), cumulative probability P(T≤t) and critical values by degrees of freedom and significance level.">
+    <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+    <meta name="twitter:image:alt" content="Student's t Distribution Table — ProbLab">
+    <link rel="alternate" hreflang="en" href="https://problabtools.com/en/tabla-t-student.html">
+    <link rel="alternate" hreflang="es" href="https://problabtools.com/tabla-t-student.html">
+    <link rel="alternate" hreflang="x-default" href="https://problabtools.com/tabla-t-student.html">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional"></noscript>
+    <link rel="stylesheet" href="../style_new.css?v=20260624">
+    <style>
+        .site-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(15,23,42,0.08);
+        }
+        .site-nav-inner {
+            width: min(1200px,94vw);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+        }
+        .site-brand { font-size:1.15rem; font-weight:700; color:#2563eb; text-decoration:none; letter-spacing:-0.03em; }
+        .site-brand:hover { color:#1d4ed8; }
+        .site-nav-links { list-style:none; margin:0; padding:0; display:flex; gap:4px; }
+        .site-nav-links a {
+            display:block; padding:6px 14px; border-radius:999px;
+            font-size:0.875rem; font-weight:600; color:#334155; text-decoration:none;
+            transition:background 0.15s,color 0.15s;
+        }
+        .site-nav-links a:hover { background:rgba(37,99,235,0.08); color:#2563eb; }
+
+        /* Tabs */
+        .tab-bar { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+        .tab-btn {
+            padding:8px 18px; border-radius:999px;
+            border:1px solid rgba(37,99,235,0.25);
+            background:#f8fafc; color:#334155;
+            font-size:0.875rem; font-weight:600; cursor:pointer;
+            transition:background 0.15s,color 0.15s,border-color 0.15s;
+        }
+        .tab-btn.active { background:#2563eb; color:#fff; border-color:#2563eb; }
+        .tab-btn:hover:not(.active) { background:rgba(37,99,235,0.08); color:#2563eb; }
+        .tab-content { display:none; }
+        .tab-content.active { display:block; }
+
+        /* Sign toggle */
+        .sign-toggle { display:inline-flex; border:1px solid rgba(37,99,235,0.25); border-radius:10px; overflow:hidden; margin-bottom:14px; }
+        .sign-btn { padding:6px 16px; border:none; background:#f8fafc; color:#334155; font-size:0.82rem; font-weight:600; cursor:pointer; transition:background 0.15s,color 0.15s; }
+        .sign-btn.active { background:#2563eb; color:#fff; }
+        .sign-btn:hover:not(.active) { background:rgba(37,99,235,0.08); }
+
+        /* df controls */
+        .df-control {
+            display:flex; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap;
+        }
+        .df-control label { font-size:0.85rem; font-weight:600; color:#334155; margin:0; }
+        .df-select {
+            padding:7px 12px; border-radius:10px; border:1px solid #dbe3f1;
+            font-size:0.88rem; color:#0f172a; background:#fff; width:auto;
+            transition:border-color 0.2s,box-shadow 0.2s;
+        }
+        .df-select:focus { outline:none; border-color:#2563eb; box-shadow:0 0 0 4px rgba(37,99,235,0.2); }
+
+        /* Table */
+        .dist-table-wrap { overflow-x:auto; border-radius:12px; border:1px solid rgba(15,23,42,0.08); }
+        .dist-table {
+            border-collapse:collapse; font-size:0.78rem; white-space:nowrap;
+            width:100%; font-variant-numeric:tabular-nums;
+        }
+        .dist-table thead th {
+            background:#2563eb; color:#fff; padding:8px 10px;
+            text-align:center; font-weight:700; font-size:0.76rem;
+            position:sticky; top:0; z-index:2;
+        }
+        .dist-table thead th:first-child { background:#1d4ed8; position:sticky; left:0; z-index:3; }
+        .dist-table tbody td {
+            padding:5px 10px; text-align:center;
+            border-bottom:1px solid rgba(15,23,42,0.05);
+            border-right:1px solid rgba(15,23,42,0.04);
+            color:#1e293b; cursor:pointer; transition:background 0.1s;
+        }
+        .dist-table tbody tr:nth-child(even) td { background:#f8fafc; }
+        .dist-table tbody tr:nth-child(even) td:first-child { background:rgba(37,99,235,0.1); }
+        .dist-table tbody td:first-child {
+            font-weight:700; background:rgba(37,99,235,0.07); color:#1e40af;
+            position:sticky; left:0; z-index:1; border-right:2px solid rgba(37,99,235,0.2);
+        }
+        .dist-table tbody tr:hover td { background:rgba(37,99,235,0.08); }
+        .dist-table tbody tr:hover td:first-child { background:rgba(37,99,235,0.15); }
+        .dist-table td.cell-highlight { background:rgba(37,99,235,0.25) !important; font-weight:700; color:#1d4ed8; }
+
+        /* Critical values table — special two-row header */
+        .crit-table thead tr:first-child th { background:#1d4ed8; font-size:0.72rem; }
+        .crit-table thead tr:nth-child(2) th { background:#2563eb; font-size:0.72rem; top:33px; }
+        .crit-table thead tr:first-child th:first-child,
+        .crit-table thead tr:nth-child(2) th:first-child { background:#1a3fae; left:0; z-index:3; }
+
+        /* Result display */
+        .lookup-result {
+            margin-top:12px; padding:12px 16px; border-radius:12px;
+            background:rgba(79,70,229,0.08); border:1px solid rgba(79,70,229,0.2);
+            color:#312e81; font-size:0.95rem; font-weight:600; min-height:44px;
+            display:flex; align-items:center;
+        }
+        .lookup-result span { color:#64748b; font-weight:400; }
+
+        /* Info box */
+        .info-box {
+            margin-bottom:16px; padding:12px 16px; border-radius:10px;
+            background:rgba(8,145,178,0.07); border:1px solid rgba(8,145,178,0.2);
+            font-size:0.87rem; color:#0e7490; line-height:1.55;
+        }
+        .info-box strong { color:#0c4a6e; }
+
+        .table-section-title {
+            font-size:0.82rem; font-weight:700; color:#64748b;
+            text-transform:uppercase; letter-spacing:0.06em; margin:16px 0 8px;
+        }
+
+        @media (max-width:640px) {
+            .site-nav-links a { padding:6px 10px; font-size:0.82rem; }
+            .dist-table { font-size:0.72rem; }
+            .dist-table thead th, .dist-table tbody td { padding:4px 7px; }
+            .df-control { gap:8px; }
+        }
+    </style>
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://problabtools.com/en/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Statistical tables",
+          "item": "https://problabtools.com/en/tablas-estadisticas/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Student's t table",
+          "item": "https://problabtools.com/en/tabla-t-student.html"
+        }
+      ]
+    },
+    {
+      "@type": "WebPage",
+      "name": "Student's t Distribution Table — Critical Values | ProbLab",
+      "url": "https://problabtools.com/en/tabla-t-student.html",
+      "description": "Student's t distribution table: density f(t,ν), cumulative probability P(T≤t) and critical values by degrees of freedom and significance level.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "ProbLab",
+        "url": "https://problabtools.com/en/"
+      }
+    }
+  ]
+}
+    </script>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="distribuciones/">Distributions</a></li>
+            <li><a href="tablas-estadisticas/">Tables</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="tamano-muestral/">Sample size</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="ab-testing/">A/B testing</a></li>
+            <li><a href="simulaciones/">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../tabla-t-student.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="tablas-estadisticas/">Tables</a></li>
+            <li><span aria-current="page">Student's t</span></li>
+        </ol>
+    </nav>
+    <header class="hero">
+        <p class="eyebrow">Statistical tables</p>
+        <h1>Student's t Distribution</h1>
+        <p class="hero-subtitle">Table of critical values, density function f(t,ν) and cumulative distribution P(T ≤ t) for any degrees of freedom. Click a cell to read the value.</p>
+        <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">See all tables</a></p>
+    </header>
+
+    <main>
+        <section class="card" style="margin-top:4px;">
+            <div class="tab-bar" role="tablist">
+                <button class="tab-btn active" role="tab" aria-selected="true"  onclick="switchTab('crit',this)">Critical values t<sub>α,ν</sub></button>
+                <button class="tab-btn"         role="tab" aria-selected="false" onclick="switchTab('cdf',this)">P(T ≤ t) — Cumulative</button>
+                <button class="tab-btn"         role="tab" aria-selected="false" onclick="switchTab('pdf',this)">f(t,ν) — Density</button>
+            </div>
+
+            <!-- CRITICAL VALUES TAB -->
+            <div id="tab-crit" class="tab-content active">
+                <div class="info-box">
+                    <strong>How to read the table:</strong> each cell shows the critical t value such that P(T &gt; t) = α (one-tailed) or P(|T| &gt; t) = α (two-tailed). For a two-tailed test at 5%, look up the column <em>α₂ = 0.05</em>. Example with 10 degrees of freedom: t = 2.228.
+                </div>
+                <div id="lookup-crit" class="lookup-result"><span>Click a cell to read the critical value.</span></div>
+                <div class="dist-table-wrap">
+                    <table id="tbl-crit" class="dist-table crit-table"></table>
+                </div>
+            </div>
+
+            <!-- CDF TAB -->
+            <div id="tab-cdf" class="tab-content">
+                <div class="info-box">
+                    <strong>How to read the table:</strong> each cell shows P(T ≤ t) for the selected degrees of freedom. For negative t: P(T ≤ −t) = 1 − P(T ≤ t), or switch the sign with the button.
+                </div>
+                <div class="df-control">
+                    <label for="df-cdf">Degrees of freedom (ν):</label>
+                    <select id="df-cdf" class="df-select" onchange="rebuildStudentTable('cdf')"></select>
+                </div>
+                <div class="sign-toggle">
+                    <button class="sign-btn active" onclick="switchSign('cdf','pos',this)">t ≥ 0</button>
+                    <button class="sign-btn"        onclick="switchSign('cdf','neg',this)">t &lt; 0</button>
+                </div>
+                <div id="lookup-cdf" class="lookup-result"><span>Click a cell to read the value.</span></div>
+                <div id="cdf-pos-wrap">
+                    <p class="table-section-title">P(T ≤ t) for t from 0.00 to 6.09</p>
+                    <div class="dist-table-wrap"><table id="tbl-cdf-pos" class="dist-table"></table></div>
+                </div>
+                <div id="cdf-neg-wrap" style="display:none;">
+                    <p class="table-section-title">P(T ≤ t) for t from −6.09 to −0.00</p>
+                    <div class="dist-table-wrap"><table id="tbl-cdf-neg" class="dist-table"></table></div>
+                </div>
+            </div>
+
+            <!-- PDF TAB -->
+            <div id="tab-pdf" class="tab-content">
+                <div class="info-box">
+                    <strong>How to read the table:</strong> each cell shows the density f(t, ν). The function is symmetric: f(−t, ν) = f(t, ν). As ν increases the curve approaches the standard Normal.
+                </div>
+                <div class="df-control">
+                    <label for="df-pdf">Degrees of freedom (ν):</label>
+                    <select id="df-pdf" class="df-select" onchange="rebuildStudentTable('pdf')"></select>
+                </div>
+                <div id="lookup-pdf" class="lookup-result"><span>Click a cell to read the value.</span></div>
+                <p class="table-section-title">f(t, ν) for t from 0.00 to 6.09 (symmetric: f(−t,ν) = f(t,ν))</p>
+                <div class="dist-table-wrap"><table id="tbl-pdf-pos" class="dist-table"></table></div>
+            </div>
+        </section>
+
+        <section class="card content-card" style="border-top:3px solid #2563eb;">
+            <h3>How to use these tables</h3>
+            <h3>Student's t Distribution</h3>
+            <p>Student's t distribution with ν degrees of freedom has density function:</p>
+            <p class="formula-line">\( f(t,\nu) = \dfrac{\Gamma\!\left(\tfrac{\nu+1}{2}\right)}{\sqrt{\nu\pi}\;\Gamma\!\left(\tfrac{\nu}{2}\right)} \left(1+\dfrac{t^2}{\nu}\right)^{-\frac{\nu+1}{2}} \)</p>
+            <p>As ν → ∞ the distribution converges to the standard Normal N(0,1).</p>
+
+            <h3>Critical values table</h3>
+            <p>Shows the quantiles t<sub>α,ν</sub> such that P(T &gt; t<sub>α,ν</sub>) = α (one-tailed test). For a two-tailed test at level α₂, use column α₁ = α₂/2.</p>
+            <ul>
+                <li><strong>Example:</strong> two-tailed test α = 0.05, ν = 20 → column α₁ = 0.025 → t = 2.086.</li>
+                <li>When ν = ∞ the values match the quantiles of the standard Normal.</li>
+            </ul>
+
+            <h3>Cumulative distribution table</h3>
+            <p>Each cell shows P(T ≤ t) for the selected number of degrees of freedom. To compute two-tailed p-values: p = 2 · P(T &gt; |t<sub>obs</sub>|) = 2 · (1 − P(T ≤ |t<sub>obs</sub>|)).</p>
+
+            <h3>Related calculators</h3>
+            <ul class="distribution-links">
+                <li><a href="studentt.html">Student's t distribution calculator</a></li>
+                <li><a href="tabla-normal.html">Standard Normal table</a></li>
+                <li><a href="contraste-hipotesis-una-media.html">Hypothesis test for one mean</a></li>
+                <li><a href="contraste-hipotesis-dos-medias.html">Hypothesis test for two means</a></li>
+                <li><a href="intervalo-confianza-media.html">CI for the mean (unknown σ)</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="legal-footer">
+        <p>
+            © 2026 problabtools.
+            <a href="../aviso-legal.html">Legal notice</a> ·
+            <a href="../privacidad.html">Privacy</a> ·
+            <a href="../cookies.html">Cookies</a> ·
+            <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+        </p>
+    </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script>
+    // ── Constants ─────────────────────────────────────────────────────────────
+
+    const COL_DECS = [0,1,2,3,4,5,6,7,8,9];
+
+    // Degrees of freedom options
+    const DF_LIST = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
+                     21,22,23,24,25,26,27,28,29,30,35,40,45,50,60,70,80,
+                     90,100,120,150,200,500,1000];
+
+    // Critical values: one-tailed α and two-tailed α
+    const ALPHA1 = [0.25, 0.20, 0.15, 0.10, 0.05, 0.025, 0.01, 0.005, 0.001];
+    const ALPHA2 = [0.50, 0.40, 0.30, 0.20, 0.10, 0.050, 0.02, 0.010, 0.002];
+
+    // t rows for PDF/CDF tables: 0.0 to 6.0 (61 rows)
+    const T_MAX_ROW = 60; // rows: 0.0 … 6.0
+
+    // ── Build df selectors ────────────────────────────────────────────────────
+
+    function buildDfSelector(id) {
+        const sel = document.getElementById(id);
+        DF_LIST.forEach(df => {
+            const opt = document.createElement('option');
+            opt.value = df;
+            opt.textContent = df;
+            sel.appendChild(opt);
+        });
+        // Default to df=10
+        sel.value = 10;
+    }
+
+    // ── Build critical values table ───────────────────────────────────────────
+
+    function buildCritTable() {
+        const el = document.getElementById('tbl-crit');
+        let html = '<thead>';
+
+        // Row 1: labels
+        html += '<tr><th rowspan="2" style="vertical-align:bottom">ν (df)</th>';
+        ALPHA1.forEach(() => { html += '<th colspan="1" style="text-align:center">one-tailed α₁</th>'; });
+        html += '</tr>';
+
+        // Row 2: α values
+        html += '<tr>';
+        ALPHA1.forEach((a1, i) => {
+            html += `<th title="One-tailed: α₁=${a1}  /  Two-tailed: α₂=${ALPHA2[i]}">${a1}<br><span style="font-weight:400;font-size:0.68rem;opacity:0.85">(α₂=${ALPHA2[i]})</span></th>`;
+        });
+        html += '</tr></thead><tbody>';
+
+        DF_LIST.forEach(df => {
+            html += `<tr><td>${df}</td>`;
+            ALPHA1.forEach((a1, i) => {
+                // t such that P(T > t) = a1  →  inv CDF at (1 - a1)
+                const t = jStat.studentt.inv(1 - a1, df);
+                const val = t.toFixed(3);
+                html += `<td data-df="${df}" data-a1="${a1}" data-a2="${ALPHA2[i]}" data-val="${val}" onclick="critCellClick(this)">${val}</td>`;
+            });
+            html += '</tr>';
+        });
+
+        html += '</tbody>';
+        el.innerHTML = html;
+    }
+
+    // ── Build student t PDF / CDF table ──────────────────────────────────────
+
+    function buildStudentTable(tableId, type, sign, df) {
+        const el = document.getElementById(tableId);
+        let html = '<thead><tr><th>t</th>';
+        COL_DECS.forEach(c => { html += `<th>.0${c}</th>`; });
+        html += '</tr></thead><tbody>';
+
+        for (let r = 0; r <= T_MAX_ROW; r++) {
+            const rowBase = r * 0.1;
+            const rowLabel = sign === 1
+                ? rowBase.toFixed(1)
+                : (rowBase === 0 ? '−0.0' : '−' + rowBase.toFixed(1));
+            html += `<tr><td>${rowLabel}</td>`;
+            COL_DECS.forEach(c => {
+                const tVal = sign * (rowBase + c * 0.01);
+                let val;
+                if (type === 'cdf') {
+                    val = jStat.studentt.cdf(tVal, df).toFixed(4);
+                } else {
+                    val = jStat.studentt.pdf(Math.abs(tVal), df).toFixed(4);
+                }
+                html += `<td data-t="${tVal.toFixed(2)}" data-val="${val}" data-type="${type}" data-df="${df}" onclick="cellClick(this)">${val}</td>`;
+            });
+            html += '</tr>';
+        }
+
+        html += '</tbody>';
+        el.innerHTML = html;
+    }
+
+    // ── Rebuild after df change ───────────────────────────────────────────────
+
+    function rebuildStudentTable(type) {
+        const df = parseInt(document.getElementById('df-' + type).value, 10);
+        if (type === 'cdf') {
+            buildStudentTable('tbl-cdf-pos', 'cdf',  1, df);
+            buildStudentTable('tbl-cdf-neg', 'cdf', -1, df);
+        } else {
+            buildStudentTable('tbl-pdf-pos', 'pdf',  1, df);
+        }
+        document.getElementById('lookup-' + type).innerHTML = '<span>Click a cell to read the value.</span>';
+    }
+
+    // ── Tab & sign logic ──────────────────────────────────────────────────────
+
+    function switchTab(tab, btn) {
+        document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected','true');
+        document.getElementById('tab-' + tab).classList.add('active');
+    }
+
+    function switchSign(type, sign, btn) {
+        btn.parentElement.querySelectorAll('.sign-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const isPos = sign === 'pos';
+        document.getElementById(type + '-pos-wrap').style.display = isPos ? '' : 'none';
+        document.getElementById(type + '-neg-wrap').style.display = isPos ? 'none' : '';
+        document.getElementById('lookup-' + type).innerHTML = '<span>Click a cell to read the value.</span>';
+    }
+
+    // ── Cell click ────────────────────────────────────────────────────────────
+
+    let lastHighlight = null;
+
+    function cellClick(td) {
+        if (lastHighlight) lastHighlight.classList.remove('cell-highlight');
+        td.classList.add('cell-highlight');
+        lastHighlight = td;
+
+        const t    = parseFloat(td.dataset.t);
+        const val  = td.dataset.val;
+        const type = td.dataset.type;
+        const df   = td.dataset.df;
+        const el   = document.getElementById('lookup-' + type);
+
+        if (type === 'cdf') {
+            el.innerHTML = `ν = ${df}, <strong>t = ${t.toFixed(2)}</strong>: <strong>P(T ≤ ${t.toFixed(2)}) = ${val}</strong>`;
+        } else {
+            el.innerHTML = `ν = ${df}, <strong>t = ${t >= 0 ? '+' : ''}${t.toFixed(2)}</strong>: <strong>f(t,ν) = ${val}</strong>`;
+        }
+    }
+
+    function critCellClick(td) {
+        if (lastHighlight) lastHighlight.classList.remove('cell-highlight');
+        td.classList.add('cell-highlight');
+        lastHighlight = td;
+
+        const df  = td.dataset.df;
+        const a1  = td.dataset.a1;
+        const a2  = td.dataset.a2;
+        const val = td.dataset.val;
+        document.getElementById('lookup-crit').innerHTML =
+            `ν = ${df}, α₁ = ${a1} (α₂ = ${a2}): <strong>t<sub>${a1},${df}</sub> = ${val}</strong> &nbsp;→ P(T &gt; ${val}) = ${a1}`;
+    }
+
+    // ── Init ──────────────────────────────────────────────────────────────────
+
+    buildDfSelector('df-cdf');
+    buildDfSelector('df-pdf');
+    buildCritTable();
+
+    const defaultDf = 10;
+    buildStudentTable('tbl-cdf-pos', 'cdf',  1, defaultDf);
+    buildStudentTable('tbl-cdf-neg', 'cdf', -1, defaultDf);
+    buildStudentTable('tbl-pdf-pos', 'pdf',  1, defaultDf);
+</script>
+<script src="../table-actions.js?v=20260624"></script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>

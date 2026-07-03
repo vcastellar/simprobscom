@@ -1,6 +1,11 @@
 (function () {
     "use strict";
 
+    const isEn = document.documentElement.lang === "en";
+    const STR = isEn
+        ? { fallbackTitle: "Statistical table", actionsLabel: "Table actions", csv: "Download CSV", print: "Print table" }
+        : { fallbackTitle: "Tabla estadística", actionsLabel: "Acciones de tabla", csv: "Descargar CSV", print: "Imprimir tabla" };
+
     function slugify(value) {
         return (value || "tabla-estadistica")
             .toString()
@@ -24,7 +29,7 @@
         }
 
         const heading = document.querySelector("h1");
-        return heading ? heading.textContent.trim() : "Tabla estadística";
+        return heading ? heading.textContent.trim() : STR.fallbackTitle;
     }
 
     function csvEscape(value) {
@@ -76,7 +81,7 @@
         const safeTitle = escapeHtml(title);
         const safeDocumentTitle = escapeHtml(document.title);
         printWindow.document.write(`<!doctype html>
-<html lang="es">
+<html lang="${document.documentElement.lang || "es"}">
 <head>
 <meta charset="utf-8">
 <title>${safeTitle}</title>
@@ -120,9 +125,9 @@ ${tableHtml}
 
             const actions = document.createElement("div");
             actions.className = "table-actions";
-            actions.setAttribute("aria-label", "Acciones de tabla");
-            actions.appendChild(createButton("Descargar CSV", "csv", () => downloadTableCsv(table)));
-            actions.appendChild(createButton("Imprimir tabla", "print", () => printTable(table)));
+            actions.setAttribute("aria-label", STR.actionsLabel);
+            actions.appendChild(createButton(STR.csv, "csv", () => downloadTableCsv(table)));
+            actions.appendChild(createButton(STR.print, "print", () => printTable(table)));
             wrapper.parentNode.insertBefore(actions, wrapper.nextSibling);
             wrapper.dataset.tableActionsReady = "true";
         });

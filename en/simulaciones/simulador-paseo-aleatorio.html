@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../../simulaciones/simulador-paseo-aleatorio.html">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Random Walk Simulator: 1D and 2D | ProbLab</title>
+  <meta name="description" content="Random walk simulator in 1D and 2D: trajectories, ±2σ diffusion bands, drift and the connection to Brownian motion.">
+    <meta name="keywords" content="random walk simulator, random walk simulation online, 1D 2D random walk, Brownian motion simulation, stochastic process random walk, ProbLab, online statistics, statistics calculator">
+  <link rel="canonical" href="https://problabtools.com/en/simulaciones/simulador-paseo-aleatorio.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Random Walk Simulator: 1D and 2D | ProbLab">
+  <meta property="og:description" content="Interactive random walk simulator in 1D and 2D. Visualize trajectories, ±2σ diffusion bands and the √n behavior. With and without drift.">
+  <meta property="og:url" content="https://problabtools.com/en/simulaciones/simulador-paseo-aleatorio.html">
+  <meta property="og:site_name" content="ProbLab">
+  <meta property="og:image" content="https://problabtools.com/og-image.png">
+  <meta property="og:locale" content="en_US">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="author" content="Vicente Castellar">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="alternate" hreflang="en" href="https://problabtools.com/en/simulaciones/simulador-paseo-aleatorio.html">
+  <link rel="alternate" hreflang="es" href="https://problabtools.com/simulaciones/simulador-paseo-aleatorio.html">
+  <link rel="alternate" hreflang="x-default" href="https://problabtools.com/simulaciones/simulador-paseo-aleatorio.html">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Random Walk Simulator: 1D and 2D | ProbLab">
+  <meta name="twitter:description" content="Interactive random walk simulator in 1D and 2D. Visualize trajectories, ±2σ diffusion bands and the √n behavior.">
+  <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+  <link rel="stylesheet" href="../../style_new.css?v=20260624">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+          {"@type": "ListItem", "position": 2, "name": "Simulations", "item": "https://problabtools.com/en/simulaciones/"},
+          {"@type": "ListItem", "position": 3, "name": "Random walk", "item": "https://problabtools.com/en/simulaciones/simulador-paseo-aleatorio.html"}
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "name": "Random Walk Simulator: 1D and 2D | ProbLab",
+        "url": "https://problabtools.com/en/simulaciones/simulador-paseo-aleatorio.html",
+        "description": "Interactive random walk simulator in 1D and 2D with trajectory visualization, diffusion bands and statistical analysis.",
+        "inLanguage": "en",
+        "isPartOf": {"@type": "WebSite", "name": "ProbLab", "url": "https://problabtools.com/en/"}
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Random walk simulator",
+        "url": "https://problabtools.com/en/simulaciones/simulador-paseo-aleatorio.html",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript",
+        "description": "Interactive simple random walk simulator in 1D and 2D. Configure the step probability, number of steps and number of trajectories, with theoretical diffusion bands.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+        "author": {"@type": "Person", "name": "Vicente Castellar"}
+      }
+    ]
+  }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+  <style>
+    /* ── layout ── */
+    .sim-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    @media (max-width: 700px) {
+      .sim-layout { grid-template-columns: 1fr; }
+    }
+    .sim-panel {
+      position: sticky;
+      top: 72px;
+    }
+
+    /* ── control panel ── */
+    .panel-heading {
+      margin: 0 0 16px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 5px;
+    }
+    .form-group select,
+    .form-group input[type="number"] {
+      width: 100%;
+      padding: 7px 10px;
+      border: 1px solid rgba(148,163,184,0.5);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      background: #fff;
+      color: #1e293b;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-group select:focus,
+    .form-group input[type="number"]:focus {
+      border-color: var(--accent);
+    }
+    .form-group.checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .form-group.checkbox-group label {
+      margin: 0;
+      font-size: 0.86rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .form-group.checkbox-group input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+    .calculate-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* ── chart area ── */
+    .chart-outer {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 14px rgba(15,23,42,0.05);
+    }
+    .chart-outer h3 {
+      margin: 0 0 4px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .chart-outer p.chart-sub {
+      margin: 0 0 12px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .chart-wrap {
+      position: relative;
+      height: 380px;
+    }
+    .chart-wrap canvas {
+      height: 380px !important;
+    }
+    .canvas2d-wrap {
+      position: relative;
+    }
+    #canvas2d {
+      display: block;
+      width: 100%;
+      border-radius: 10px;
+      background: #f8fafc;
+    }
+
+    /* ── placeholder ── */
+    .sim-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      min-height: 340px;
+      color: #94a3b8;
+      font-size: 0.92rem;
+      text-align: center;
+      border: 2px dashed rgba(148,163,184,0.4);
+      border-radius: 12px;
+      gap: 8px;
+    }
+    .sim-placeholder .icon { font-size: 2.2rem; }
+
+    /* ── stats ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .stat-cell {
+      background: rgba(79,70,229,0.05);
+      border: 1px solid rgba(79,70,229,0.12);
+      border-radius: 10px;
+      padding: 10px 14px;
+      text-align: center;
+    }
+    .stat-cell .stat-label {
+      font-size: 0.76rem;
+      color: #64748b;
+      margin-bottom: 4px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .stat-cell .stat-val {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1e293b;
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-cell .stat-expected {
+      font-size: 0.75rem;
+      color: #dc2626;
+      margin-top: 2px;
+    }
+
+    /* ── interpretation ── */
+    .result-box {
+      margin-top: 16px;
+      padding: 14px 18px;
+      background: rgba(79,70,229,0.05);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      font-size: 0.93rem;
+      color: #334155;
+      line-height: 1.65;
+    }
+
+    /* ── legend dots ── */
+    .legend-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 10px;
+      font-size: 0.82rem;
+      color: #475569;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-line {
+      display: inline-block;
+      width: 24px;
+      height: 3px;
+      border-radius: 2px;
+    }
+    .legend-circle {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── FAQ ── */
+    .faq-item {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(148,163,184,0.25);
+    }
+    .faq-item:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+    .faq-item h3 { margin: 0 0 6px; font-size: 1rem; color: #1e293b; }
+    .faq-item p  { margin: 0; font-size: 0.95rem; color: #334155; line-height: 1.7; }
+
+    /* ── application cards ── */
+    .app-card {
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .app-card h3 { margin: 0 0 8px; font-size: 0.97rem; color: #1e293b; }
+    .app-card p  { margin: 0; font-size: 0.9rem; color: #334155; line-height: 1.6; }
+    .app-card--indigo { background: rgba(79,70,229,0.06);  border: 1px solid rgba(79,70,229,0.18); }
+    .app-card--cyan   { background: rgba(8,145,178,0.06);  border: 1px solid rgba(8,145,178,0.20); }
+    .app-card--green  { background: rgba(22,163,74,0.06);  border: 1px solid rgba(22,163,74,0.20); }
+    .app-card--red    { background: rgba(220,38,38,0.06);  border: 1px solid rgba(220,38,38,0.20); }
+
+    /* ── dark mode overrides ── */
+    html.dark-mode .app-card h3,
+    html.dark-mode .faq-item h3,
+    html.dark-mode .chart-outer h3,
+    html.dark-mode .stat-cell .stat-val { color: var(--text-main); }
+
+    html.dark-mode .app-card p,
+    html.dark-mode .faq-item p,
+    html.dark-mode .result-box { color: var(--text-muted); }
+
+    html.dark-mode .stat-cell .stat-label { color: #94a3b8; }
+
+    html.dark-mode .app-card--indigo { background: rgba(79,70,229,0.18);  border-color: rgba(79,70,229,0.40); }
+    html.dark-mode .app-card--cyan   { background: rgba(8,145,178,0.18);  border-color: rgba(8,145,178,0.40); }
+    html.dark-mode .app-card--green  { background: rgba(22,163,74,0.18);  border-color: rgba(22,163,74,0.40); }
+    html.dark-mode .app-card--red    { background: rgba(220,38,38,0.18);  border-color: rgba(220,38,38,0.40); }
+
+    html.dark-mode .form-group select,
+    html.dark-mode .form-group input[type="number"] {
+      background: var(--surface);
+      color: var(--text-main);
+      border-color: rgba(148,163,184,0.3);
+    }
+    html.dark-mode #canvas2d { background: #1e293b; }
+  </style>
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="../index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="../distribuciones/">Distributions</a></li>
+            <li><a href="../tablas-estadisticas/">Tables</a></li>
+            <li><a href="../intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="../tamano-muestral/">Sample size</a></li>
+            <li><a href="../contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="../ab-testing/">A/B testing</a></li>
+            <li><a href="./">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../../simulaciones/simulador-paseo-aleatorio.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+</ul>
+    </div>
+</nav>
+<div class="page-wrap">
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="./">Simulations</a></li>
+      <li><span aria-current="page">Random walk</span></li>
+    </ol>
+  </nav>
+
+  <header class="hero">
+    <p class="eyebrow">Statistical simulation</p>
+    <h1>Random walk simulator: 1D and 2D</h1>
+    <p class="hero-subtitle">Visualize how a particle moves at random, step by step. Observe diffusion proportional to √n, the effect of drift, and recurrence in 2D.</p>
+  </header>
+
+  <main>
+
+    <!-- ═══════════════════════════════ TABS ═══════════════════════════════ -->
+    <div class="mode-tabs" role="tablist" aria-label="Walk dimension">
+      <button class="mode-tab active" role="tab" aria-selected="true"
+              aria-controls="panel-1d" id="tab-1d" data-tab="1d">1D walk</button>
+      <button class="mode-tab" role="tab" aria-selected="false"
+              aria-controls="panel-2d" id="tab-2d" data-tab="2d">2D walk</button>
+    </div>
+
+    <!-- ═══════════════════════════════ 1D ═══════════════════════════════ -->
+    <div id="panel-1d" class="mode-section active" role="tabpanel" aria-labelledby="tab-1d">
+      <div class="sim-layout">
+
+        <!-- Control panel -->
+        <aside class="card sample-size-panel sim-panel" aria-label="1D walk parameters">
+          <h2 class="panel-heading">Parameters</h2>
+
+          <div class="form-group">
+            <label for="p1d">Probability of +1 (p)</label>
+            <select id="p1d">
+              <option value="0.3">0.30 — negative drift</option>
+              <option value="0.4">0.40 — slight negative drift</option>
+              <option value="0.5" selected>0.50 — symmetric (no drift)</option>
+              <option value="0.6">0.60 — slight positive drift</option>
+              <option value="0.7">0.70 — positive drift</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="n1d">Number of steps (n)</label>
+            <select id="n1d">
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="200">200</option>
+              <option value="500" selected>500</option>
+              <option value="1000">1,000</option>
+              <option value="2000">2,000</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="paths1d">Number of trajectories</label>
+            <select id="paths1d">
+              <option value="1">1</option>
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <input type="checkbox" id="bands1d" checked>
+            <label for="bands1d">Show theoretical ±2σ bands</label>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <input type="checkbox" id="meanline1d" checked>
+            <label for="meanline1d">Show expected mean</label>
+          </div>
+
+          <button class="calculate-btn" id="btn1d" type="button">Simulate</button>
+        </aside>
+
+        <!-- Results area -->
+        <div>
+          <div class="chart-outer">
+            <h3>Trajectories X(t)</h3>
+            <p class="chart-sub">Cumulative position as a function of step t</p>
+            <div class="chart-wrap">
+              <div class="sim-placeholder" id="ph1d">
+                <span class="icon">📉</span>
+                Click <strong>Simulate</strong> to begin.
+              </div>
+              <canvas id="canvas1d" style="display:none;" aria-label="Chart of 1D random walk trajectories"></canvas>
+            </div>
+            <div id="legend1d" class="legend-row" style="display:none;"></div>
+          </div>
+
+          <div id="stats1d" style="display:none;">
+            <div class="stats-grid">
+              <div class="stat-cell">
+                <div class="stat-label">Mean final pos.</div>
+                <div class="stat-val" id="s1d-mean">—</div>
+                <div class="stat-expected" id="s1d-emean"></div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-label">Final std. dev.</div>
+                <div class="stat-val" id="s1d-sd">—</div>
+                <div class="stat-expected" id="s1d-esd"></div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-label">Final min.</div>
+                <div class="stat-val" id="s1d-min">—</div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-label">Final max.</div>
+                <div class="stat-val" id="s1d-max">—</div>
+              </div>
+            </div>
+            <div class="result-box" id="interp1d"></div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /panel-1d -->
+
+    <!-- ═══════════════════════════════ 2D ═══════════════════════════════ -->
+    <div id="panel-2d" class="mode-section" role="tabpanel" aria-labelledby="tab-2d" style="display:none;">
+      <div class="sim-layout">
+
+        <!-- Control panel -->
+        <aside class="card sample-size-panel sim-panel" aria-label="2D walk parameters">
+          <h2 class="panel-heading">Parameters</h2>
+
+          <div class="form-group">
+            <label for="n2d">Number of steps (n)</label>
+            <select id="n2d">
+              <option value="100">100</option>
+              <option value="500">500</option>
+              <option value="1000" selected>1,000</option>
+              <option value="5000">5,000</option>
+              <option value="10000">10,000</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="paths2d">Number of trajectories</label>
+            <select id="paths2d">
+              <option value="1">1</option>
+              <option value="3">3</option>
+              <option value="5" selected>5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+            </select>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <input type="checkbox" id="circle2d" checked>
+            <label for="circle2d">Show √n diffusion circle</label>
+          </div>
+
+          <button class="calculate-btn" id="btn2d" type="button">Simulate</button>
+
+          <div id="legend2d" class="legend-row" style="margin-top:20px;"></div>
+        </aside>
+
+        <!-- Results area -->
+        <div>
+          <div class="chart-outer">
+            <h3>Trajectories in the plane</h3>
+            <p class="chart-sub">Position (x, y) at each step. Black dot = origin. The dashed circle marks the expected distance √n.</p>
+            <div class="canvas2d-wrap">
+              <div class="sim-placeholder" id="ph2d" style="min-height:420px;">
+                <span class="icon">🗺️</span>
+                Click <strong>Simulate</strong> to begin.
+              </div>
+              <canvas id="canvas2d" style="display:none;" aria-label="Chart of 2D random walk trajectories"></canvas>
+            </div>
+          </div>
+
+          <div id="stats2d" style="display:none;">
+            <div class="stats-grid">
+              <div class="stat-cell">
+                <div class="stat-label">Mean final distance</div>
+                <div class="stat-val" id="s2d-dist">—</div>
+                <div class="stat-expected" id="s2d-edist"></div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-label">Mean distance²</div>
+                <div class="stat-val" id="s2d-dist2">—</div>
+                <div class="stat-expected" id="s2d-edist2"></div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-label">Max. displac.</div>
+                <div class="stat-val" id="s2d-maxdist">—</div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-label">Returns to origin</div>
+                <div class="stat-val" id="s2d-returns">—</div>
+              </div>
+            </div>
+            <div class="result-box" id="interp2d"></div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /panel-2d -->
+
+
+    <!-- ═══════════════════════════════ EDUCATIONAL ═══════════════════════ -->
+
+    <section class="card content-card">
+      <h2>What is a random walk?</h2>
+      <p>A <strong>random walk</strong> is a sequence of steps in which the direction of each step is chosen randomly and independently. The simplest model in one dimension is the <strong>simple random walk</strong>: a particle starts at position X₀ = 0 and at each instant t moves +1 (with probability p) or −1 (with probability 1 − p).</p>
+      <p>If p = 0.5, the walk is <strong>symmetric</strong>: there is no trend or preferred direction. If p ≠ 0.5, there is a <strong>drift</strong> that systematically pushes the trajectory in one direction, although random noise is still the dominant component in the short term.</p>
+      <p>Formally, the position at step n is:</p>
+      <p style="text-align:center; font-size:1.05rem; margin: 1rem 0;">
+        \( X_n = \sum_{i=1}^{n} \xi_i \)
+      </p>
+      <p>where each \(\xi_i\) is an independent random variable with P(\(\xi_i = +1\)) = p and P(\(\xi_i = -1\)) = 1 − p.</p>
+    </section>
+
+    <section class="card content-card">
+      <h2>Mathematical properties</h2>
+
+      <h3>Mean and variance</h3>
+      <p>Since E[\(\xi_i\)] = p − (1−p) = 2p − 1 and Var(\(\xi_i\)) = 1 − (2p−1)² = 4p(1−p), by linearity of expectation and independence:</p>
+      <ul>
+        <li><strong>Mean:</strong> E[X<sub>n</sub>] = n(2p − 1). For p = 0.5, the mean is 0 for all n.</li>
+        <li><strong>Variance:</strong> Var(X<sub>n</sub>) = 4p(1−p) · n. For p = 0.5, Var = n.</li>
+        <li><strong>Standard deviation:</strong> σ(X<sub>n</sub>) = 2√(p(1−p)) · √n. For p = 0.5, σ = √n.</li>
+      </ul>
+      <p>The fact that the spread grows as <strong>√n</strong> rather than n is the most characteristic property of the random walk. The trajectories "fan out," but more slowly than one might expect. For example, after 10,000 steps, the standard deviation of the position is only √10,000 = 100.</p>
+
+      <h3>Asymptotic distribution and the connection to the CLT</h3>
+      <p>By the <a href="teorema-central-limite.html">central limit theorem</a>, X<sub>n</sub> is a sum of n iid variables, so for large n:</p>
+      <p style="text-align:center; font-size:1.05rem; margin: 1rem 0;">
+        \( X_n \approx \mathcal{N}\!\left(n(2p-1),\; 4p(1-p)\,n\right) \)
+      </p>
+      <p>This justifies the theoretical ±2σ bands you can see in the simulator: approximately 95% of trajectories should fall within the band E[X<sub>n</sub>] ± 2 · 2√(p(1−p)n). Notice how the bands widen following the √n curve rather than a straight line.</p>
+
+      <h3>The random walk in 2D</h3>
+      <p>In two dimensions, the particle moves with equal probability 1/4 along each of the four axes (north, south, east, west). Now X<sub>n</sub> and Y<sub>n</sub> are two independent 1D random walks that evolve on alternating steps: on average, each component receives n/2 effective steps.</p>
+      <p>The Euclidean distance to the origin is still of order √n:</p>
+      <p style="text-align:center; font-size:1.05rem; margin: 1rem 0;">
+        \( \mathrm{E}\!\left[\,r_n^2\,\right] = \mathrm{E}[X_n^2 + Y_n^2] = n \)
+        <span style="margin-left:2rem;">⟹</span>
+        <span style="margin-left:2rem;">\( r_{\mathrm{RMS}} = \sqrt{n} \)</span>
+      </p>
+      <p>The dashed circle in the 2D simulator has radius √n and corresponds to this root-mean-square distance. Notice how the endpoints of the trajectories cluster roughly within that circle.</p>
+    </section>
+
+    <section class="card content-card">
+      <h2>Recurrence: the walk always returns to the origin</h2>
+      <p>One of the most counterintuitive properties of the random walk was proved by the Polish mathematician <strong>George Pólya in 1921</strong>. His most famous theorem states:</p>
+      <ul>
+        <li><strong>In 1D and 2D:</strong> the simple random walk is <em>recurrent</em> — the probability of returning to the starting point (and to any point already visited) is exactly 1. Given enough time, the walker always comes back.</li>
+        <li><strong>In 3D and higher dimensions:</strong> the walk is <em>transient</em> — the probability of returning to the origin is less than 1 (≈ 0.3405 in 3D). A drunk bird can get lost forever.</li>
+      </ul>
+      <p>The intuition behind this result is that in low dimensions the space is "small" compared to how thoroughly the walk explores it, whereas in high dimensions there are too many possible directions and the particle disperses irreversibly. This property has deep implications in statistical physics, graph theory and ecology.</p>
+      <p>In the 2D simulator, set a large number of steps (5,000–10,000) with a single trajectory and watch how the particle repeatedly returns to the origin even though it seems to have wandered off for good.</p>
+    </section>
+
+    <section class="card content-card">
+      <h2>The gambler's ruin</h2>
+      <p>Imagine a gambler who starts with $<em>a</em> and plays a series of $1 bets against an opponent with $<em>b</em>. On each round, the gambler wins $1 with probability p or loses $1 with probability q = 1 − p. The game ends when someone goes broke.</p>
+      <p>This classic problem is equivalent to a random walk with absorbing barriers at 0 and a + b. The probability that the gambler goes broke is:</p>
+      <p style="text-align:center; font-size:1.02rem; margin: 1rem 0;">
+        \[
+          P(\text{ruin}) = \begin{cases}
+            \dfrac{(q/p)^a - (q/p)^{a+b}}{1 - (q/p)^{a+b}} & \text{if } p \neq \tfrac{1}{2} \\[1.4em]
+            \dfrac{b}{a+b} & \text{if } p = \tfrac{1}{2}
+          \end{cases}
+        \]
+      </p>
+      <p>For a fair game (p = 0.5), the probability of ruin depends only on the ratio of capital: if the gambler has $100 and the house has $900, the probability that the gambler goes broke is 900/1000 = 90%. Even with a perfectly fair game, the asymmetry in capital makes ruin nearly certain for the poorer player.</p>
+      <p>With p &lt; 0.5 (the real situation in a casino, where the house has the edge), ruin is practically inevitable in the long run. Only with p &gt; 0.5 can the gambler have a positive probability of ruining the opponent before going broke.</p>
+      <p>In the 1D simulator, change p to 0.40 or 0.30 with negative drift and watch how the trajectories decline systematically — that's the house edge at work.</p>
+    </section>
+
+    <section class="card content-card">
+      <h2>Brownian motion: the continuous limit</h2>
+      <p>When the step size and the time interval both shrink toward 0 in a coordinated way, the random walk converges in distribution to <strong>Brownian motion</strong> (also called the Wiener process), the continuous model of diffusion.</p>
+      <p>Formally, if we define B<sub>t</sub> = X<sub>⌊nt⌋</sub>/√n, then B<sub>t</sub> → W<sub>t</sub> where W is a standard Wiener process with W₀ = 0, independent increments and W<sub>t</sub> − W<sub>s</sub> ~ N(0, t − s).</p>
+      <p>Brownian motion was first observed by Robert Brown (1827), who noted the erratic movement of pollen grains in water, and was explained mathematically by Albert Einstein in 1905 as the result of molecular bombardment. The same mathematics of the random walk describes:</p>
+      <ul>
+        <li><strong>Molecular diffusion</strong> in a fluid (Fick's diffusion equation, D = σ²/2t).</li>
+        <li><strong>Heat conduction</strong> (the heat equation is a diffusion equation).</li>
+        <li><strong>Financial prices</strong> (the Black-Scholes model, geometric Brownian motion).</li>
+        <li><strong>Polymers</strong> in chemistry (the conformation of a polymer chain follows a random walk in 3D).</li>
+      </ul>
+    </section>
+
+    <section class="card content-card">
+      <h2>Applications of the random walk</h2>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px;">
+        <div class="app-card app-card--indigo">
+          <h3>📈 Finance</h3>
+          <p>The efficient market hypothesis of Eugene Fama (1970) proposes that asset prices follow a random walk, implying that future prices cannot be predicted from past history. The Black-Scholes model assumes geometric Brownian motion for the underlying price.</p>
+        </div>
+        <div class="app-card app-card--cyan">
+          <h3>🧬 Biology and ecology</h3>
+          <p>The movement of microorganisms such as bacteria is modeled with random walks. In ecology, the dispersal of seeds and animals follows random-walk patterns, although many species use more efficient strategies (Lévy flights).</p>
+        </div>
+        <div class="app-card app-card--green">
+          <h3>💻 Algorithms and AI</h3>
+          <p>Google's PageRank algorithm is based on the stationary vector of a random walk over the web graph. Markov Chain Monte Carlo (MCMC) methods in Bayesian statistics explore complex distributions using random walks in parameter space.</p>
+        </div>
+        <div class="app-card app-card--red">
+          <h3>⚛️ Physics</h3>
+          <p>The diffusion of charged particles in plasmas, neutron transport in nuclear reactors, electrical resistivity in metals, and molecular dynamics in computer simulations all use the random-walk formalism.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card content-card">
+      <h2>Frequently asked questions</h2>
+
+      <div class="faq-item">
+        <h3>Why do positions spread as √n and not as n?</h3>
+        <p>Because the position X<sub>n</sub> is a sum of n independent random variables, and by the central limit theorem the standard deviation of a sum grows as √n. If each step can be ±1, the variance of the sum is n·Var(ξ), and the standard deviation is √n·σ. This sublinear growth is the mathematical signature of diffusion.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Does the random walk actually predict stock prices?</h3>
+        <p>It's an active debate. The weak form of the efficient market hypothesis says that past prices do not allow you to predict future ones — which is consistent with the random walk. However, behavioral finance has documented numerous anomalies (mean reversion, momentum, calendar effects) suggesting that markets are not perfectly efficient. In practice, the random walk is a useful first approximation, not an exact description.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>What's the difference between p = 0.5 and p = 0.51?</h3>
+        <p>In the short run, very little: noise dominates. But in the long run, the difference is enormous. With p = 0.51 and n = 10,000 steps, the expected drift is n(2p−1) = 10,000 × 0.02 = 200 positions, while the standard deviation is √10,000 ≈ 100. The drift far exceeds the random variability. This is why a small but consistent edge (like the house edge in blackjack) dominates the outcome over the long run.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>How does the 2D walk relate to Markov chains?</h3>
+        <p>The 2D random walk on the grid ℤ² is a special case of a Markov chain with an infinite state space. The Markov property holds because the next position depends only on the current position, not on the history. However, since there are infinitely many states, analyzing the stationary distribution differs from the finite chains in the <a href="simulador-cadenas-markov.html">Markov chain simulator</a>.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>What are Lévy flights?</h3>
+        <p>Lévy flights are a generalization of the random walk in which the steps do not have finite variance: most are small, but occasionally very large jumps occur, following a heavy-tailed distribution (stable Lévy distribution). Many animals, from albatrosses to sharks, use search strategies that resemble Lévy flights because they are optimal for exploring environments where prey is scarce and randomly distributed.</p>
+      </div>
+    </section>
+
+    <section class="card content-card">
+      <h2>Related tools</h2>
+      <div class="related-tools">
+        <p><a href="teorema-central-limite.html">CLT simulator</a> — the random walk is a special case: X<sub>n</sub>/√n → N(0,1) by the CLT.</p>
+        <p><a href="simulador-cadenas-markov.html">Markov chain simulator</a> — the random walk with finite states is a Markov chain.</p>
+        <p><a href="simulador-proceso-poisson.html">Poisson process simulator</a> — the Poisson process is the continuous analogue of the random walk for rare events.</p>
+        <p><a href="../distribuciones/">Distribution calculators</a> — the asymptotic normal distribution of X<sub>n</sub> and the binomial distribution of the number of positive steps.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="legal-footer">
+    <p>
+      © 2026 problabtools.
+      <a href="../../sobre.html">About ProbLab</a> ·
+      <a href="../../metodologia.html">Methodology</a> ·
+      <a href="../../aviso-legal.html">Legal notice</a> ·
+      <a href="../../privacidad.html">Privacy</a> ·
+      <a href="../../cookies.html">Cookies</a> ·
+      <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+    </p>
+  </footer>
+</div>
+
+<script>
+/* ════════════════════════════════════════════
+   TABS
+════════════════════════════════════════════ */
+document.querySelectorAll('.mode-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mode-tab').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+    });
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+    const tab = btn.dataset.tab;
+    document.getElementById('panel-1d').style.display = tab === '1d' ? '' : 'none';
+    document.getElementById('panel-2d').style.display = tab === '2d' ? '' : 'none';
+  });
+});
+
+/* ════════════════════════════════════════════
+   HELPERS
+════════════════════════════════════════════ */
+const COLORS = [
+  '#4f46e5','#0891b2','#dc2626','#16a34a','#d97706',
+  '#7c3aed','#db2777','#059669','#b45309','#64748b',
+  '#0f172a','#0369a1','#15803d','#b91c1c','#92400e',
+  '#6d28d9','#be185d','#047857','#c2410c','#334155'
+];
+
+function hexToRgba(hex, a) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+function fmtN(v, dec=2) {
+  return Number.isFinite(v) ? v.toFixed(dec) : '—';
+}
+
+function arrMean(a) { return a.reduce((s,v)=>s+v,0)/a.length; }
+function arrStd(a) {
+  const m = arrMean(a);
+  return Math.sqrt(a.reduce((s,v)=>s+(v-m)**2,0)/a.length);
+}
+
+/* ════════════════════════════════════════════
+   1D SIMULATION
+════════════════════════════════════════════ */
+let chart1D = null;
+
+function walk1D(n, p) {
+  const pos = new Float32Array(n + 1);
+  for (let i = 1; i <= n; i++) {
+    pos[i] = pos[i-1] + (Math.random() < p ? 1 : -1);
+  }
+  return pos;
+}
+
+function simulate1D() {
+  const n       = parseInt(document.getElementById('n1d').value);
+  const p       = parseFloat(document.getElementById('p1d').value);
+  const nPaths  = parseInt(document.getElementById('paths1d').value);
+  const bands   = document.getElementById('bands1d').checked;
+  const showMean= document.getElementById('meanline1d').checked;
+
+  const btn = document.getElementById('btn1d');
+  btn.disabled = true;
+  btn.textContent = 'Simulating…';
+
+  // defer to next frame so UI updates
+  setTimeout(() => {
+    // generate walks
+    const walks = [];
+    for (let k = 0; k < nPaths; k++) walks.push(walk1D(n, p));
+
+    // subsample indices (max 600 display points for performance)
+    const maxPts = 600;
+    const skip = Math.max(1, Math.ceil(n / maxPts));
+    const idxs = [];
+    for (let i = 0; i <= n; i += skip) idxs.push(i);
+    if (idxs[idxs.length-1] !== n) idxs.push(n);
+
+    // trajectory datasets
+    const datasets = walks.map((w, k) => ({
+      label: nPaths === 1 ? 'Trajectory' : (nPaths <= 10 ? `Traj. ${k+1}` : null),
+      data: idxs.map(i => ({x: i, y: w[i]})),
+      borderColor: COLORS[k % COLORS.length],
+      borderWidth: nPaths > 10 ? 0.8 : (nPaths > 5 ? 1.1 : 1.5),
+      pointRadius: 0,
+      fill: false,
+      parsing: false,
+      tension: 0
+    }));
+
+    // theoretical reference lines
+    const mu  = 2*p - 1;                     // drift per step
+    const sig = 2 * Math.sqrt(p * (1-p));    // σ per √step (σ_step * √1 per step)
+    // after n steps: σ_n = sig * √n
+
+    if (bands) {
+      const upper = idxs.map(i => ({x: i, y: mu*i + 2*sig*Math.sqrt(i)}));
+      const lower = idxs.map(i => ({x: i, y: mu*i - 2*sig*Math.sqrt(i)}));
+      datasets.push({
+        label: 'Band +2σ',
+        data: upper,
+        borderColor: 'rgba(148,163,184,0.55)',
+        borderWidth: 1.5,
+        borderDash: [5,3],
+        pointRadius: 0,
+        fill: {target: '+1', above: 'rgba(148,163,184,0.09)', below: 'rgba(148,163,184,0.09)'},
+        parsing: false, tension: 0
+      });
+      datasets.push({
+        label: 'Band −2σ',
+        data: lower,
+        borderColor: 'rgba(148,163,184,0.55)',
+        borderWidth: 1.5,
+        borderDash: [5,3],
+        pointRadius: 0,
+        fill: false,
+        parsing: false, tension: 0
+      });
+    }
+    if (showMean) {
+      datasets.push({
+        label: 'Mean E[X]',
+        data: idxs.map(i => ({x: i, y: mu*i})),
+        borderColor: 'rgba(100,116,139,0.75)',
+        borderWidth: 1.8,
+        borderDash: [9,4],
+        pointRadius: 0,
+        fill: false,
+        parsing: false, tension: 0
+      });
+    }
+
+    // chart
+    if (chart1D) chart1D.destroy();
+    const canvas = document.getElementById('canvas1d');
+    document.getElementById('ph1d').style.display = 'none';
+    canvas.style.display = 'block';
+
+    chart1D = new Chart(canvas.getContext('2d'), {
+      type: 'line',
+      data: { datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        interaction: { mode: 'nearest', intersect: false },
+        plugins: {
+          legend: {
+            display: nPaths <= 10 || bands || showMean,
+            labels: {
+              filter: item => item.text && !item.text.startsWith('null'),
+              boxWidth: 20, boxHeight: 2,
+              font: {size: 11}
+            }
+          },
+          tooltip: {enabled: false}
+        },
+        scales: {
+          x: {
+            type: 'linear',
+            min: 0, max: n,
+            title: {display: true, text: 'Step t', font:{size:11}},
+            ticks: {maxTicksLimit: 8, font:{size:10}}
+          },
+          y: {
+            title: {display: true, text: 'Position X(t)', font:{size:11}},
+            ticks: {maxTicksLimit: 8, font:{size:10}}
+          }
+        }
+      }
+    });
+
+    // stats
+    const finals = walks.map(w => w[n]);
+    const eMean = fmtN(arrMean(finals));
+    const eStd  = fmtN(arrStd(finals));
+    const eMin  = fmtN(Math.min(...finals), 0);
+    const eMax  = fmtN(Math.max(...finals), 0);
+    const thMean = fmtN(n * mu);
+    const thStd  = fmtN(sig * Math.sqrt(n));
+
+    document.getElementById('s1d-mean').textContent = eMean;
+    document.getElementById('s1d-emean').textContent = `Expected: ${thMean}`;
+    document.getElementById('s1d-sd').textContent = eStd;
+    document.getElementById('s1d-esd').textContent = `Expected: ${thStd}`;
+    document.getElementById('s1d-min').textContent = eMin;
+    document.getElementById('s1d-max').textContent = eMax;
+    document.getElementById('stats1d').style.display = '';
+
+    // interpretation
+    let txt;
+    const drift = Math.abs(n * mu);
+    const noise  = sig * Math.sqrt(n);
+    if (Math.abs(p - 0.5) < 0.001) {
+      txt = `Symmetric walk (p = 0.5): there is no drift. The expected mean position is 0 and the standard deviation is σ = √n = √${n} ≈ ${fmtN(Math.sqrt(n), 1)}. The trajectories fan out following the ±2σ bands, which grow proportionally to √t.`;
+    } else if (p > 0.5) {
+      txt = `With p = ${p}, there is a <strong>positive drift</strong> of ${fmtN(n*mu, 1)} positions over ${n} steps. The standard deviation is ${thStd}. After enough steps, the drift overtakes the random noise and the trajectories show a clear upward trend.`;
+    } else {
+      txt = `With p = ${p}, there is a <strong>negative drift</strong> of ${fmtN(n*mu, 1)} positions over ${n} steps. The standard deviation is ${thStd}. This illustrates the situation of the disadvantaged gambler: even with fluctuations, the downward trend is inevitable in the long run.`;
+    }
+    const interp = document.getElementById('interp1d');
+    interp.innerHTML = txt;
+    interp.style.display = '';
+
+    btn.disabled = false;
+    btn.textContent = 'Simulate';
+  }, 20);
+}
+
+document.getElementById('btn1d').addEventListener('click', simulate1D);
+
+
+/* ════════════════════════════════════════════
+   2D SIMULATION
+════════════════════════════════════════════ */
+function walk2D(n) {
+  const dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+  let x = 0, y = 0;
+  const xs = new Int16Array(n + 1);
+  const ys = new Int16Array(n + 1);
+  for (let i = 1; i <= n; i++) {
+    const d = dirs[(Math.random() * 4) | 0];
+    x += d[0]; y += d[1];
+    xs[i] = x; ys[i] = y;
+  }
+  return {xs, ys};
+}
+
+function simulate2D() {
+  const n      = parseInt(document.getElementById('n2d').value);
+  const nPaths = parseInt(document.getElementById('paths2d').value);
+  const showC  = document.getElementById('circle2d').checked;
+
+  const btn = document.getElementById('btn2d');
+  btn.disabled = true;
+  btn.textContent = 'Simulating…';
+
+  setTimeout(() => {
+    const paths = [];
+    for (let k = 0; k < nPaths; k++) paths.push(walk2D(n));
+
+    // compute bounds
+    let xMin = 0, xMax = 0, yMin = 0, yMax = 0;
+    paths.forEach(({xs, ys}) => {
+      for (let i = 0; i <= n; i++) {
+        if (xs[i] < xMin) xMin = xs[i];
+        if (xs[i] > xMax) xMax = xs[i];
+        if (ys[i] < yMin) yMin = ys[i];
+        if (ys[i] > yMax) yMax = ys[i];
+      }
+    });
+    // ensure √n circle fits
+    const sqrtN = Math.sqrt(n);
+    xMin = Math.min(xMin, -sqrtN * 1.05);
+    xMax = Math.max(xMax,  sqrtN * 1.05);
+    yMin = Math.min(yMin, -sqrtN * 1.05);
+    yMax = Math.max(yMax,  sqrtN * 1.05);
+    // make square with margin
+    const span = Math.max(xMax - xMin, yMax - yMin) * 1.08;
+    const cx   = (xMin + xMax) / 2;
+    const cy   = (yMin + yMax) / 2;
+    xMin = cx - span/2; xMax = cx + span/2;
+    yMin = cy - span/2; yMax = cy + span/2;
+
+    // canvas
+    const canvas = document.getElementById('canvas2d');
+    document.getElementById('ph2d').style.display = 'none';
+    canvas.style.display = 'block';
+    const W = canvas.parentElement.clientWidth || 600;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width  = W * dpr;
+    canvas.height = W * dpr;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = W + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    const toX = v => (v - xMin) / (xMax - xMin) * W;
+    const toY = v => (1 - (v - yMin) / (yMax - yMin)) * W;
+
+    // background
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillRect(0, 0, W, W);
+
+    // light grid lines at rounded intervals
+    const gridInterval = Math.pow(10, Math.floor(Math.log10(span / 5)));
+    ctx.strokeStyle = 'rgba(203,213,225,0.6)';
+    ctx.lineWidth = 0.5;
+    const gStart = Math.floor(xMin / gridInterval) * gridInterval;
+    for (let g = gStart; g <= xMax; g += gridInterval) {
+      ctx.beginPath();
+      ctx.moveTo(toX(g), 0);
+      ctx.lineTo(toX(g), W);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(0,    toY(g));
+      ctx.lineTo(W, toY(g));
+      ctx.stroke();
+    }
+
+    // axes
+    ctx.strokeStyle = 'rgba(100,116,139,0.4)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(toX(0), 0); ctx.lineTo(toX(0), W);
+    ctx.moveTo(0, toY(0)); ctx.lineTo(W, toY(0));
+    ctx.stroke();
+
+    // √n diffusion circle
+    if (showC) {
+      const r = (sqrtN / (xMax - xMin)) * W;
+      ctx.beginPath();
+      ctx.arc(toX(0), toY(0), r, 0, 2*Math.PI);
+      ctx.strokeStyle = 'rgba(79,70,229,0.35)';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([6,4]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = 'rgba(79,70,229,0.55)';
+      ctx.font = `${Math.max(10, W/50)}px system-ui, sans-serif`;
+      ctx.textAlign = 'left';
+      ctx.fillText('r = √n ≈ ' + fmtN(sqrtN, 1), toX(sqrtN * 0.72), toY(sqrtN * 0.72) - 6);
+    }
+
+    // trajectories
+    const skip = Math.max(1, Math.ceil(n / 3000));
+    const alpha = nPaths > 10 ? 0.45 : (nPaths > 5 ? 0.60 : 0.75);
+
+    paths.forEach(({xs, ys}, k) => {
+      const col = COLORS[k % COLORS.length];
+      ctx.strokeStyle = hexToRgba(col, alpha);
+      ctx.lineWidth = nPaths > 10 ? 0.7 : (nPaths > 5 ? 1.0 : 1.3);
+      ctx.beginPath();
+      ctx.moveTo(toX(xs[0]), toY(ys[0]));
+      for (let i = skip; i <= n; i += skip) {
+        ctx.lineTo(toX(xs[i]), toY(ys[i]));
+      }
+      ctx.lineTo(toX(xs[n]), toY(ys[n]));
+      ctx.stroke();
+
+      // end point
+      const R = Math.max(3, W/120);
+      ctx.beginPath();
+      ctx.arc(toX(xs[n]), toY(ys[n]), R, 0, 2*Math.PI);
+      ctx.fillStyle = col;
+      ctx.fill();
+    });
+
+    // origin
+    const or = Math.max(4, W/100);
+    ctx.beginPath();
+    ctx.arc(toX(0), toY(0), or + 1.5, 0, 2*Math.PI);
+    ctx.fillStyle = '#1e293b';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(toX(0), toY(0), or - 0.5, 0, 2*Math.PI);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+
+    // legend
+    const legendEl = document.getElementById('legend2d');
+    legendEl.innerHTML = paths.map((_, k) => {
+      const col = COLORS[k % COLORS.length];
+      return `<span class="legend-item">
+        <span class="legend-circle" style="background:${col};"></span>
+        Traj. ${k+1} — final (${paths[k].xs[n]}, ${paths[k].ys[n]})
+      </span>`;
+    }).join('');
+    if (showC) {
+      legendEl.innerHTML += `<span class="legend-item">
+        <span class="legend-line" style="background:rgba(79,70,229,0.5); border-top:2px dashed rgba(79,70,229,0.5); height:0;"></span>
+        √n circle ≈ ${fmtN(sqrtN,1)}
+      </span>`;
+    }
+
+    // stats
+    const dists   = paths.map(({xs, ys}) => Math.sqrt(xs[n]**2 + ys[n]**2));
+    const dists2  = dists.map(d => d*d);
+    const maxDist = Math.max(...paths.map(({xs, ys}) => {
+      let mxD = 0;
+      for (let i = 0; i <= n; i++) {
+        const d = Math.sqrt(xs[i]**2 + ys[i]**2);
+        if (d > mxD) mxD = d;
+      }
+      return mxD;
+    }));
+    // count returns to origin (for single path)
+    let returns = '—';
+    if (nPaths === 1) {
+      const {xs, ys} = paths[0];
+      let cnt = 0;
+      for (let i = 1; i <= n; i++) if (xs[i]===0 && ys[i]===0) cnt++;
+      returns = cnt.toString();
+    }
+
+    document.getElementById('s2d-dist').textContent  = fmtN(arrMean(dists));
+    document.getElementById('s2d-edist').textContent  = `Expected ≈ ${fmtN(sqrtN * Math.sqrt(Math.PI/2), 2)}`;
+    document.getElementById('s2d-dist2').textContent  = fmtN(arrMean(dists2), 1);
+    document.getElementById('s2d-edist2').textContent = `Expected: n = ${n}`;
+    document.getElementById('s2d-maxdist').textContent = fmtN(maxDist, 1);
+    document.getElementById('s2d-returns').textContent = returns;
+    document.getElementById('stats2d').style.display = '';
+
+    // interpretation
+    const dMean  = arrMean(dists);
+    const thDist = sqrtN * Math.sqrt(Math.PI / 2);
+    const ratio  = dMean / thDist;
+    let txt2 = `With n = ${n} steps, the distance from the origin is still of order √n ≈ ${fmtN(sqrtN, 1)}. `;
+    txt2 += `The empirical mean distance is ${fmtN(dMean, 2)} (theoretical: √(πn/2) ≈ ${fmtN(thDist, 2)}). `;
+    if (nPaths === 1) {
+      txt2 += `The trajectory has returned to the origin <strong>${returns}</strong> times, illustrating the recurrence of the 2D walk.`;
+    } else {
+      txt2 += `The mean squared distance E[r²] = n = ${n} (empirical: ${fmtN(arrMean(dists2), 1)}) confirms the diffusion law.`;
+    }
+    const interp2 = document.getElementById('interp2d');
+    interp2.innerHTML = txt2;
+    interp2.style.display = '';
+
+    btn.disabled = false;
+    btn.textContent = 'Simulate';
+  }, 20);
+}
+
+document.getElementById('btn2d').addEventListener('click', simulate2D);
+</script>
+<script src="../../theme.js?v=20260624"></script>
+<script src="../../lang-suggest.js?v=20260624"></script>
+</body>
+</html>

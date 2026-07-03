@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../tamano-muestral-varianza-ic.html">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample size calculator for a variance confidence interval | ProbLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate the sample size needed to estimate a variance with a target confidence interval U/L ratio, using the chi-square distribution.">
+    <meta name="keywords" content="sample size variance confidence interval, sample size calculator variance CI, chi-square variance sample size, population variance interval precision, ProbLab, online statistics">
+    <link rel="canonical" href="https://problabtools.com/en/tamano-muestral-varianza-ic.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Sample size calculator for a variance confidence interval | ProbLab">
+    <meta property="og:description" content="Calculate the sample size needed to estimate a variance with a target confidence interval U/L ratio, using the chi-square distribution.">
+    <meta property="og:url" content="https://problabtools.com/en/tamano-muestral-varianza-ic.html">
+    <meta property="og:site_name" content="ProbLab">
+    <meta property="og:image" content="https://problabtools.com/og-image.png">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image:alt" content="Sample size calculator for the variance">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Vicente Castellar">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="alternate" hreflang="en" href="https://problabtools.com/en/tamano-muestral-varianza-ic.html">
+    <link rel="alternate" hreflang="es" href="https://problabtools.com/tamano-muestral-varianza-ic.html">
+    <link rel="alternate" hreflang="x-default" href="https://problabtools.com/tamano-muestral-varianza-ic.html">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sample size calculator for a variance confidence interval | ProbLab">
+    <meta name="twitter:description" content="Calculate the minimum sample size to estimate the population variance with a predefined confidence interval U/L ratio.">
+    <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+    <meta name="twitter:image:alt" content="Sample size calculator for the variance">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+            {"@type": "ListItem", "position": 2, "name": "Sample size", "item": "https://problabtools.com/en/tamano-muestral/"},
+            {"@type": "ListItem", "position": 3, "name": "Variance (CI)", "item": "https://problabtools.com/en/tamano-muestral-varianza-ic.html"}
+          ]
+        },
+        {
+          "@type": "WebPage",
+          "name": "Sample size calculator for a variance confidence interval | ProbLab",
+          "url": "https://problabtools.com/en/tamano-muestral-varianza-ic.html",
+          "description": "Calculate the minimum number of observations needed so that the chi-square confidence interval for the variance has an upper/lower limit ratio no greater than the specified value.",
+          "inLanguage": "en",
+          "isPartOf": {"@type": "WebSite", "name": "ProbLab", "url": "https://problabtools.com/en/"}
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Sample size calculator for the variance (CI)",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web",
+      "url": "https://problabtools.com/en/tamano-muestral-varianza-ic.html",
+      "description": "Calculate the minimum number of observations needed so that the chi-square confidence interval for the variance has a U/L ratio no greater than the specified value.",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the U/L ratio of the confidence interval for the variance?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It is the ratio between the upper and lower limits of the CI for σ². The larger this ratio, the wider and less precise the interval. A ratio of 2 means the upper limit is double the lower limit."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why isn't an absolute margin of error used, as in other calculations?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Because the absolute width of the CI for the variance depends on the unknown value of σ². The U/L ratio depends only on the sample size and the confidence level, not on σ², which makes it the most natural measure of relative precision."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to know σ² to calculate the sample size?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The U/L ratio is independent of σ²: U/L = χ²_{1-α/2,n-1}/χ²_{α/2,n-1}. The search depends purely on n and the confidence level."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What assumptions are needed?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The underlying variable must follow a normal distribution. The chi-square CI for the variance is very sensitive to deviations from normality, more so than the CI for the mean."
+          }
+        }
+      ]
+    }
+    </script>
+    <link rel="stylesheet" href="../style_new.css?v=20260624">
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="distribuciones/">Distributions</a></li>
+            <li><a href="tablas-estadisticas/">Tables</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="tamano-muestral/">Sample size</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="ab-testing/">A/B testing</a></li>
+            <li><a href="simulaciones/">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../tamano-muestral-varianza-ic.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="tamano-muestral/">Sample size</a></li>
+            <li><span aria-current="page">Variance (CI)</span></li>
+        </ol>
+    </nav>
+    <header class="hero">
+        <p class="eyebrow">Sample size</p>
+        <h1>Sample size calculator for the variance (CI)</h1>
+        <p class="hero-subtitle">Estimate the minimum number of observations so that the chi-square confidence interval for the variance has a maximum relative width.</p>
+        <p class="hero-links"><a class="hero-link-button" href="tamano-muestral/">See all sample size calculators</a></p>
+    </header>
+
+    <main>
+        <p class="tool-intro">Estimate how many observations you need so that the chi-square confidence interval for the variance has a maximum relative width, for a fixed confidence level.</p>
+
+        <section class="card sample-size-panel">
+            <div class="panel-heading">
+                <h2>Calculator</h2>
+                <p>Enter the maximum tolerable U/L ratio of the CI and the confidence level to get the minimum sample size.</p>
+            </div>
+
+            <div class="form-grid sample-grid">
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="varR">Maximum U/L ratio of the CI (R)</label>
+                        <input type="number" id="varR" value="2.5" step="0.1" min="1.001">
+                    </div>
+                    <div class="form-group">
+                        <label for="varConfidence">Confidence level</label>
+                        <select id="varConfidence">
+                            <option value="0.90">90%</option>
+                            <option value="0.95" selected>95%</option>
+                            <option value="0.99">99%</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="varCalculateBtn">Calculate sample size</button>
+            <div id="varResult" class="result-box">Result pending…</div>
+        </section>
+
+                <section class="card content-card">
+            <h3>Explanation</h3>
+            <p>The confidence interval for the variance \(\sigma^2\) uses the chi-square distribution and has the form:</p>
+            <p class="formula-line">\( \left[\frac{(n-1)s^2}{\chi^2_{1-\alpha/2,\,n-1}},\;\; \frac{(n-1)s^2}{\chi^2_{\alpha/2,\,n-1}}\right] \)</p>
+            <p>Unlike CIs for means or proportions, the <em>absolute</em> width of the CI for the variance depends on the unknown value of \(\sigma^2\), which makes it impossible to express precision in absolute units without knowing it beforehand. The natural solution is to specify precision in relative terms: the <strong>U/L ratio</strong> between the upper and lower limits of the CI.</p>
+            <p>This ratio depends only on the quantiles of the chi-square distribution, and therefore only on the sample size \(n\) and the confidence level. No assumption about \(\sigma^2\) is needed.</p>
+            <h3>Formula for the U/L ratio</h3>
+            <p class="formula-line">\( \frac{U}{L} = \frac{\chi^2_{1-\alpha/2,\,n-1}}{\chi^2_{\alpha/2,\,n-1}} \)</p>
+            <p>For a given confidence level and a desired ratio \(R\), the calculator searches for the smallest \(n\) such that \(\chi^2_{1-\alpha/2,\,n-1}/\chi^2_{\alpha/2,\,n-1} \leq R\). There is no closed-form formula: the result is obtained by an iterative search over \(n\).</p>
+            <ul>
+                <li><strong>R close to 1</strong>: very narrow CI → enormous sample.</li>
+                <li><strong>R = 2</strong>: the upper limit doubles the lower limit → reasonable sample (≈ 65 observations at 95%).</li>
+                <li><strong>R = 3</strong>: the upper limit triples the lower limit → much smaller sample (≈ 28 observations at 95%).</li>
+            </ul>
+            <h3>Interpreting the U/L ratio</h3>
+            <p>A ratio \(R = 2.5\) means the upper limit of the CI can be up to 2.5 times larger than the lower limit. For example, if \(s^2 = 4.0\), the CI could go from 2.5 to 6.25 (a variability of 2.5 to 1 between the extremes). The smaller \(R\) is, the narrower and more informative the CI, but the more observations are needed.</p>
+            <h3>Quick setup</h3>
+            <ul>
+                <li><strong>Ratio R:</strong> R between 2 and 4 is common in quality control and process studies. R very close to 1 requires prohibitively large samples.</li>
+                <li><strong>Confidence level:</strong> 95% is the standard. With 99% the required n is significantly larger for the same R.</li>
+                <li><strong>Normality:</strong> make sure the data are compatible with normality; the chi-square CI is very sensitive to this assumption.</li>
+                <li><strong>Expected losses:</strong> divide n by (1 − dropout rate) to get the number of subjects to recruit.</li>
+            </ul>
+            <h3>Worked example</h3>
+            <p>A metrology laboratory wants to estimate the variance of a measurement instrument's error to validate its calibration. It is established that the 95% CI must have a U/L ratio no greater than \(R = 2.5\) (the upper limit cannot be more than 2.5 times the lower limit).</p>
+            <p>The calculator searches for the smallest \(n\) such that \(\chi^2_{0.975,\,n-1} / \chi^2_{0.025,\,n-1} \leq 2.5\). For \(n = 39\) (df = 38): \(\chi^2_{0.975,38} \approx 56.90\) and \(\chi^2_{0.025,38} \approx 22.88\), ratio \(\approx 2.49 \leq 2.5\). For \(n = 38\): ratio \(\approx 2.52 > 2.5\). Result: <strong>\(n = 39\) observations</strong>.</p>
+            <p>With those 39 measurements, if \(s = 0.12\) mm (variance \(s^2 = 0.0144\) mm²), the 95% CI would be approximately... more precisely, using the exact quantiles: \([(38 \times 0.0144)/56.90,\; (38 \times 0.0144)/22.88] = [0.0096,\; 0.0239]\) mm². The actual U/L ratio is \(0.0239/0.0096 \approx 2.49\).</p>
+            <p><strong>Sensitivity analysis:</strong> if the laboratory accepts \(R = 3\) (the upper limit can triple the lower limit), the sample shrinks to \(n = 28\). With \(R = 2\) the sample rises to \(n \approx 65\). The choice of \(R\) has a very large impact on the required n.</p>
+            <h3>Model assumptions</h3>
+            <ul>
+                <li>The variable of interest follows a normal distribution. The chi-square CI for the variance is very sensitive to non-normality, more so than any CI for the mean.</li>
+                <li>Observations are independent of each other.</li>
+                <li>The target U/L ratio must be greater than 1; the iterative search starts at \(n = 2\).</li>
+            </ul>
+            <h3>Common uses</h3>
+            <ul>
+                <li>Statistical process control (SPC): estimating the process variance for control charts.</li>
+                <li>Validation of measurement instruments and reproducibility studies.</li>
+                <li>Design of experiments where variability is the main variable of interest.</li>
+                <li>Auditing of production processes where dispersion needs to be characterized.</li>
+            </ul>
+            <h3>How to interpret the result</h3>
+                <p>The value \(n\) <strong>guarantees that the confidence interval</strong> for \(\sigma^2\) based on the chi-square distribution will have a ratio between the upper and lower limits no greater than the specified value \(R\), at the chosen confidence level. This ensures relative precision: the upper limit of the CI will not exceed \(R\) times the lower limit. Always round up. If you expect losses or exclusions during data collection, divide \(n\) by \((1 - \text{dropout rate})\); with a 10% dropout rate, recruit \(\lceil n / 0.90 \rceil\) units.</p>
+                <p>The most critical and delicate assumption of this method is the <strong>normality of the data</strong>: the chi-square CI for \(\sigma^2\) is very sensitive to deviations from normality, much more so than the CI for the mean. With skewed or heavy-tailed distributions, the actual CI can have coverage well below the nominal level (e.g., a 95% CI may cover the true \(\sigma^2\) only 85% of the time). Before applying this result, check normality with the <a href="shapiro-wilk-normalidad.html">Shapiro-Wilk test</a> or with Q-Q plots. Sensitivity to \(R\): requiring a ratio \(R = 2\) (narrow CI) requires many more subjects than \(R = 4\) (wide CI); increasing \(R\) by 50% can cut \(n\) in half.</p>
+                <p>If the calculated \(n\) is not feasible, the alternatives are: (1) accept a larger ratio \(R\) (wider CI), (2) reduce the confidence level (e.g., from 99% to 95%), or (3) if the data are not normal, use bootstrap methods to build the CI for \(\sigma^2\) without relying on the chi-square distribution. Once the data are collected, build the actual CI with the <a href="intervalo-confianza-varianza.html">CI calculator for the variance</a>; if you also want to test \(\sigma^2\) against a reference value, use the <a href="tamano-muestral-una-varianza.html">sample size calculator for a one-variance test</a>.</p>
+        </section>
+
+        <section id="seo-support-content" class="card content-card">
+            <section class="related-tools">
+                <h3>Related calculators</h3>
+                <ul>
+                    <li><a href="intervalo-confianza-varianza.html">CI for the variance</a></li>
+                    <li><a href="tamano-muestral-una-media.html">Sample size for one mean (CI)</a></li>
+                    <li><a href="contraste-hipotesis-varianzas.html">Hypothesis test for variances</a></li>
+                    <li><a href="shapiro-wilk-normalidad.html">Shapiro-Wilk normality test</a></li>
+                    <li><a href="chisquare.html">Chi-square distribution</a></li>
+                </ul>
+            </section>
+            <h3>References and further reading</h3>
+            <ul>
+                <li>Zar, J. H. (2010). <em>Biostatistical Analysis</em> (5th ed.). Pearson. — sample size calculation for variance.</li>
+                <li>Montgomery, D. C. (2019). <em>Introduction to Statistical Quality Control</em> (8th ed.). Wiley. — applications in SPC.</li>
+                <li>Wikipedia (en): <a href="https://en.wikipedia.org/wiki/Chi-squared_distribution" target="_blank" rel="noopener">Chi-squared distribution</a> — properties and percentiles.</li>
+            </ul>
+            <h3>Frequently asked questions</h3>
+            <ul>
+                <li><strong>Why do I need such a large sample for a narrow variance CI?</strong> Because the chi-square distribution converges slowly to symmetry. With few degrees of freedom, the extreme quantiles are far apart, producing very asymmetric and wide CIs.</li>
+                <li><strong>What happens if the data aren't normal?</strong> The chi-square CI can have actual coverage very different from the nominal confidence level. First apply a normality test (<a href="shapiro-wilk-normalidad.html">Shapiro-Wilk</a>) and, if the data aren't normal, consider transformations or bootstrap methods.</li>
+                <li><strong>Can I use this result if I want to estimate σ instead of σ²?</strong> Yes. The CI for σ is obtained by taking the square root of each limit of the σ² CI, and the U/L ratio is the same.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="legal-footer">
+        <p>
+            © 2026 problabtools.
+            <a href="../aviso-legal.html">Legal notice</a> ·
+            <a href="../privacidad.html">Privacy</a> ·
+            <a href="../cookies.html">Cookies</a> ·
+            <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+        </p>
+    </footer>
+</div>
+
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+<script>
+function calculateVarianceSampleSize() {
+    const R = parseFloat(document.getElementById('varR').value);
+    const confidence = parseFloat(document.getElementById('varConfidence').value);
+    const resultEl = document.getElementById('varResult');
+
+    if (!Number.isFinite(R) || R <= 1) {
+        resultEl.innerText = 'Error: the U/L ratio must be greater than 1.';
+        return;
+    }
+    if (!Number.isFinite(confidence) || confidence <= 0 || confidence >= 1) {
+        resultEl.innerText = 'Error: the confidence level must be between 0 and 1.';
+        return;
+    }
+
+    const alpha = 1 - confidence;
+    const confPct = Math.round(confidence * 100);
+
+    let n = 2;
+    let ratio = Infinity;
+    while (n <= 100000) {
+        const df = n - 1;
+        const chiUpper = jStat.chisquare.inv(1 - alpha / 2, df);
+        const chiLower = jStat.chisquare.inv(alpha / 2, df);
+        ratio = chiUpper / chiLower;
+        if (ratio <= R) break;
+        n++;
+    }
+
+    if (ratio > R) {
+        resultEl.innerText = `No solution found for R=${R} at ${confPct}% confidence. Try a larger ratio.`;
+        return;
+    }
+
+    const df = n - 1;
+    const chiUpper = jStat.chisquare.inv(1 - alpha / 2, df);
+    const chiLower = jStat.chisquare.inv(alpha / 2, df);
+    const actualRatio = chiUpper / chiLower;
+
+    resultEl.innerText =
+        `Recommended minimum n: ${n} observations (${confPct}% confidence, U/L ratio ≤ ${R})\n` +
+        `df = ${df}  |  χ²_{1-α/2} = ${chiUpper.toFixed(4)}  |  χ²_{α/2} = ${chiLower.toFixed(4)}\n` +
+        `Actual U/L ratio = ${actualRatio.toFixed(4)} ≤ ${R}`;
+}
+
+document.getElementById('varCalculateBtn').addEventListener('click', calculateVarianceSampleSize);
+calculateVarianceSampleSize();
+</script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>

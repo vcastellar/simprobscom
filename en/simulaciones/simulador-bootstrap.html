@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../../simulaciones/simulador-bootstrap.html">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Bootstrap Resampling Simulator | ProbLab</title>
+  <meta name="description" content="Bootstrap simulator: resampling with replacement, statistic distributions and non-parametric confidence intervals.">
+    <meta name="keywords" content="bootstrap resampling simulator, bootstrap confidence interval simulator online, bootstrap statistics calculator, bootstrap inference distribution, ProbLab, online statistics, statistics calculator">
+  <link rel="canonical" href="https://problabtools.com/en/simulaciones/simulador-bootstrap.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Bootstrap Resampling Simulator | ProbLab">
+  <meta property="og:description" content="Bootstrap simulator: resampling with replacement, statistic distributions and non-parametric confidence intervals.">
+  <meta property="og:url" content="https://problabtools.com/en/simulaciones/simulador-bootstrap.html">
+  <meta property="og:site_name" content="ProbLab">
+  <meta property="og:image" content="https://problabtools.com/og-image.png">
+  <meta property="og:locale" content="en_US">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="author" content="Vicente Castellar">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="alternate" hreflang="en" href="https://problabtools.com/en/simulaciones/simulador-bootstrap.html">
+  <link rel="alternate" hreflang="es" href="https://problabtools.com/simulaciones/simulador-bootstrap.html">
+  <link rel="alternate" hreflang="x-default" href="https://problabtools.com/simulaciones/simulador-bootstrap.html">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Bootstrap Resampling Simulator | ProbLab">
+  <meta name="twitter:description" content="Bootstrap simulator: resampling with replacement, statistic distributions and non-parametric confidence intervals.">
+  <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+  <link rel="stylesheet" href="../../style_new.css?v=20260624">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+          {"@type": "ListItem", "position": 2, "name": "Simulations", "item": "https://problabtools.com/en/simulaciones/"},
+          {"@type": "ListItem", "position": 3, "name": "Bootstrap simulator", "item": "https://problabtools.com/en/simulaciones/simulador-bootstrap.html"}
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "name": "Bootstrap Resampling Simulator | ProbLab",
+        "url": "https://problabtools.com/en/simulaciones/simulador-bootstrap.html",
+        "description": "Bootstrap simulator: resampling with replacement, statistic distributions and non-parametric confidence intervals.",
+        "inLanguage": "en",
+        "isPartOf": {"@type": "WebSite", "name": "ProbLab", "url": "https://problabtools.com/en/"},
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+            {"@type": "ListItem", "position": 2, "name": "Simulations", "item": "https://problabtools.com/en/simulaciones/"},
+            {"@type": "ListItem", "position": 3, "name": "Bootstrap simulator", "item": "https://problabtools.com/en/simulaciones/simulador-bootstrap.html"}
+          ]
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Bootstrap simulator",
+        "url": "https://problabtools.com/en/simulaciones/simulador-bootstrap.html",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript",
+        "description": "Interactive simulator of Efron's bootstrap method. Choose the population distribution, statistic, sample size and number of bootstrap replicates to visualize the bootstrap distribution and build confidence intervals using the percentile method.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Vicente Castellar"
+        }
+      }
+    ]
+  }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+  <style>
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .chart-panel {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+    }
+    .chart-panel h3 {
+      margin: 0 0 4px;
+      font-size: 1rem;
+      color: #1e293b;
+    }
+    .chart-panel p.chart-sub {
+      margin: 0 0 10px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .stats-table-wrap {
+      margin-top: 20px;
+      overflow-x: auto;
+    }
+    .stats-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.94rem;
+      background: #fff;
+      border: 1px solid rgba(79, 70, 229, 0.16);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .stats-table th,
+    .stats-table td {
+      padding: 10px 14px;
+      text-align: center;
+      border-bottom: 1px solid rgba(79, 70, 229, 0.1);
+    }
+    .stats-table th {
+      background: rgba(79, 70, 229, 0.08);
+      color: #1e1b4b;
+      font-weight: 700;
+    }
+    .stats-table td:first-child {
+      text-align: left;
+      font-weight: 600;
+      color: #334155;
+      border-right: 1px solid rgba(79, 70, 229, 0.1);
+    }
+    .stats-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+    .stats-table .val-teorico {
+      color: #dc2626;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums lining-nums;
+    }
+    .stats-table .val-empirico {
+      color: #16a34a;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums lining-nums;
+    }
+    .stats-table .val-na {
+      color: #94a3b8;
+      font-weight: 500;
+    }
+    .sim-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      min-height: 260px;
+      color: #94a3b8;
+      font-size: 0.92rem;
+      text-align: center;
+      border: 2px dashed rgba(148, 163, 184, 0.4);
+      border-radius: 10px;
+    }
+    .panel-heading {
+      margin: 0 0 18px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .sim-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      gap: 16px;
+      align-items: end;
+    }
+    .calculate-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    .calculate-btn:disabled::before {
+      opacity: 0 !important;
+    }
+    .legend-dots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 10px;
+      font-size: 0.82rem;
+      color: #475569;
+    }
+    .legend-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-dot span {
+      display: inline-block;
+      width: 24px;
+      height: 3px;
+      border-radius: 2px;
+    }
+    .legend-dot .dot-bar {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+    }
+    details.faq-item {
+      border-top: 1px solid rgba(148, 163, 184, 0.3);
+      padding: 14px 0;
+    }
+    details.faq-item:last-child {
+      border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+    }
+    details.faq-item summary {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #1e293b;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    details.faq-item summary::-webkit-details-marker { display: none; }
+    details.faq-item summary::after {
+      content: "+";
+      font-size: 1.3rem;
+      color: var(--accent);
+      flex: 0 0 auto;
+      line-height: 1;
+    }
+    details.faq-item[open] summary::after {
+      content: "−";
+    }
+    details.faq-item p {
+      margin: 10px 0 0;
+      font-size: 0.97rem;
+      color: #334155;
+      line-height: 1.7;
+    }
+    @media (max-width: 1100px) {
+      .sim-form-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+    @media (max-width: 900px) {
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+      .sim-form-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 640px) {
+      .sim-form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    /* Button row */
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .btn-secondary {
+      background: #0891b2;
+    }
+    .btn-secondary:hover {
+      background: #0e7490;
+    }
+    /* Chart wrap needs a defined height for canvas */
+    .chart-wrap {
+      position: relative;
+      height: 280px;
+    }
+    .chart-wrap canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100% !important;
+      height: 100% !important;
+    }
+  </style>
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="../index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="../distribuciones/">Distributions</a></li>
+            <li><a href="../tablas-estadisticas/">Tables</a></li>
+            <li><a href="../intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="../tamano-muestral/">Sample size</a></li>
+            <li><a href="../contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="../ab-testing/">A/B testing</a></li>
+            <li><a href="./">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../../simulaciones/simulador-bootstrap.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+</ul>
+    </div>
+</nav>
+
+<div class="page-wrap">
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="./">Simulations</a></li>
+      <li><span aria-current="page">Bootstrap</span></li>
+    </ol>
+  </nav>
+
+  <header class="hero">
+    <p class="eyebrow">Statistical simulation</p>
+    <h1>Bootstrap method simulator</h1>
+    <p class="hero-subtitle">Generate a sample from the chosen distribution, apply bootstrap resampling with replacement, and build confidence intervals for any statistic without parametric assumptions.</p>
+  </header>
+
+  <main>
+
+    <!-- Control panel -->
+    <section class="card sample-size-panel" aria-labelledby="params-heading">
+      <h2 class="panel-heading" id="params-heading">Simulation parameters</h2>
+      <div class="sim-form-grid">
+        <div class="form-group">
+          <label for="popDist">Population distribution</label>
+          <select id="popDist">
+            <option value="normal">Normal (μ=5, σ=2)</option>
+            <option value="exponential">Exponential (λ=0.5)</option>
+            <option value="uniform">Uniform (a=0, b=10)</option>
+            <option value="lognormal">Log-normal (μ<sub>log</sub>=1, σ<sub>log</sub>=0.5)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="statistic">Statistic</label>
+          <select id="statistic">
+            <option value="mean" selected>Mean (x̄)</option>
+            <option value="median">Median</option>
+            <option value="sd">Standard deviation (s)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="sampleN">Sample size <em>n</em></label>
+          <select id="sampleN">
+            <option value="10">n = 10</option>
+            <option value="20">n = 20</option>
+            <option value="30" selected>n = 30</option>
+            <option value="50">n = 50</option>
+            <option value="100">n = 100</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="numBoot">Bootstrap replicates <em>B</em></label>
+          <select id="numBoot">
+            <option value="200">B = 200</option>
+            <option value="500">B = 500</option>
+            <option value="1000" selected>B = 1000</option>
+            <option value="5000">B = 5000</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="confLevel">Confidence level</label>
+          <select id="confLevel">
+            <option value="0.90">90%</option>
+            <option value="0.95" selected>95%</option>
+            <option value="0.99">99%</option>
+          </select>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="calculate-btn" id="newSampleBtn" type="button">New sample</button>
+        <button class="calculate-btn btn-secondary" id="rebootBtn" type="button">Regenerate bootstrap</button>
+      </div>
+    </section>
+
+    <!-- Charts -->
+    <div class="charts-grid" id="chartsSection">
+      <div class="chart-panel">
+        <h3>Original sample</h3>
+        <p class="chart-sub">Histogram of the sample with theoretical density curve</p>
+        <div class="chart-wrap" id="sampleWrap">
+          <div class="sim-placeholder" id="samplePlaceholder">
+            <span>Click "New sample" to start</span>
+          </div>
+          <canvas id="sampleChart" style="display:none;"></canvas>
+        </div>
+      </div>
+      <div class="chart-panel">
+        <h3 id="bootChartTitle">Bootstrap distribution of the statistic</h3>
+        <p class="chart-sub" id="bootChartSub">Histogram of the B replicates with the CI shaded</p>
+        <div class="chart-wrap" id="bootWrap">
+          <div class="sim-placeholder" id="bootPlaceholder">
+            <span>Click "New sample" to start</span>
+          </div>
+          <canvas id="bootChart" style="display:none;"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend-dots" id="legendArea" style="display:none;">
+      <span class="legend-dot"><span class="dot-bar" style="background:rgba(79,70,229,0.5); border:1px solid rgba(79,70,229,0.8);"></span> Relative frequency (sample)</span>
+      <span class="legend-dot"><span style="background:#dc2626;"></span> Theoretical density</span>
+      <span class="legend-dot"><span class="dot-bar" style="background:rgba(22,163,74,0.55); border:1px solid rgba(22,163,74,0.8);"></span> Bootstrap (inside CI)</span>
+      <span class="legend-dot"><span class="dot-bar" style="background:rgba(148,163,184,0.55); border:1px solid rgba(148,163,184,0.8);"></span> Bootstrap (outside CI)</span>
+      <span class="legend-dot"><span style="background:#0891b2;"></span> CI bounds</span>
+    </div>
+
+    <!-- Stats table -->
+    <div class="stats-table-wrap" id="statsSection" style="display:none;">
+      <table class="stats-table" aria-label="Theoretical-empirical comparison of the bootstrap">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Theoretical</th>
+            <th>Bootstrap / Sample</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="trueParamLabel">True parameter (θ)</td>
+            <td class="val-teorico" id="statTrueParam">—</td>
+            <td class="val-empirico" id="statSampleStat">—</td>
+          </tr>
+          <tr>
+            <td>Standard error (SE)</td>
+            <td class="val-teorico" id="statTrueSE">—</td>
+            <td class="val-empirico" id="statBootSE">—</td>
+          </tr>
+          <tr>
+            <td id="ciPercentileLabel">Bootstrap percentile CI</td>
+            <td class="val-na">—</td>
+            <td class="val-empirico" id="statBootCI">—</td>
+          </tr>
+          <tr id="rowNormalCI">
+            <td>Normal CI (x̄ ± z·s/√n)</td>
+            <td class="val-na">—</td>
+            <td class="val-empirico" id="statNormalCI">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Interpretation -->
+    <div id="interpretation" class="result-box" style="display:none;" role="status" aria-live="polite"></div>
+
+    <!-- Educational section 1 -->
+    <section class="card content-card" aria-labelledby="what-bootstrap-heading">
+      <h2 id="what-bootstrap-heading">What is the bootstrap?</h2>
+      <p>
+        The <strong>bootstrap</strong> is a resampling technique proposed by Bradley Efron in 1979. Its name comes
+        from the English expression <em>«pull yourself up by your own bootstraps»</em>, which refers to the idea
+        of learning about the variability of an estimator using only the data from the sample itself, without
+        needing to know the population distribution.
+      </p>
+      <p>
+        The core intuition is simple: if we don't know the population distribution \(F\), we can use the empirical
+        distribution \(\hat{F}_n\) — which assigns probability \(1/n\) to each observation in the sample — as a
+        substitute. If we draw many <strong>bootstrap samples</strong> from \(\hat{F}_n\) (that is, with
+        replacement from the original sample) and compute the statistic of interest on each one, the variability
+        of those replicates approximates the variability of the actual estimator.
+      </p>
+      <p>
+        Formally, let \(\hat{\theta} = T(X_1,\ldots,X_n)\) be an estimator of \(\theta\). Each bootstrap replicate
+        \(\hat{\theta}^* = T(X_1^*,\ldots,X_n^*)\) is computed on a sample \((X_1^*,\ldots,X_n^*)\) drawn with
+        replacement from the original sample. The distribution of \(\hat{\theta}^* - \hat{\theta}\) approximates
+        the distribution of \(\hat{\theta} - \theta\).
+      </p>
+      <div class="formula-box" style="text-align:center; padding: 16px;">
+        \[\widehat{SE}_{\text{boot}} = \sqrt{\frac{1}{B-1}\sum_{b=1}^{B}\left(\hat{\theta}^{*(b)} - \bar{\hat{\theta}}^*\right)^2}\]
+      </div>
+      <p>
+        where \(\bar{\hat{\theta}}^* = \frac{1}{B}\sum_{b=1}^{B}\hat{\theta}^{*(b)}\) is the mean of the
+        bootstrap replicates.
+      </p>
+    </section>
+
+    <!-- Educational section 2 -->
+    <section class="card content-card" aria-labelledby="how-resampling-heading">
+      <h2 id="how-resampling-heading">How the resampling works</h2>
+      <p>The non-parametric bootstrap algorithm follows these steps:</p>
+      <ol>
+        <li>Take the original sample \(\mathbf{x} = (x_1, \ldots, x_n)\) of size \(n\).</li>
+        <li>
+          Generate \(B\) <strong>bootstrap samples</strong> \(\mathbf{x}^{*(1)}, \ldots, \mathbf{x}^{*(B)}\),
+          each of size \(n\), by drawing with replacement from \(\mathbf{x}\). In each replicate some original
+          values will appear several times and others won't appear at all (on average, about
+          \(1 - e^{-1} \approx 63.2\,\%\) of the original values are represented in each replicate).
+        </li>
+        <li>
+          Compute the statistic of interest \(\hat{\theta}^{*(b)} = T(\mathbf{x}^{*(b)})\)
+          for each replicate \(b = 1, \ldots, B\).
+        </li>
+        <li>
+          Estimate the standard error as the standard deviation of the \(B\) replicates (formula above).
+        </li>
+        <li>
+          Build the <strong>percentile CI</strong> at \((1-\alpha) \times 100\,\%\) as the interval
+          between the \(\alpha/2\) and \(1-\alpha/2\) percentiles of the bootstrap distribution:
+        </li>
+      </ol>
+      <div class="formula-box" style="text-align:center; padding: 16px;">
+        \[\text{IC}_{\text{percentil}} = \left[\hat{\theta}^*_{(\alpha/2)},\; \hat{\theta}^*_{(1-\alpha/2)}\right]\]
+      </div>
+      <p>
+        The <strong>percentile method</strong> is the simplest one, and the one implemented in this simulator.
+        For small samples or biased estimators, more sophisticated methods such as
+        <em>BCa</em> (bias-corrected and accelerated) offer better coverage.
+        In practice, \(B = 1000\) replicates is enough to estimate the standard error and
+        build confidence intervals with good precision; \(B = 5000\) provides greater
+        stability in the extreme percentiles.
+      </p>
+    </section>
+
+    <!-- Educational section 3 -->
+    <section class="card content-card" aria-labelledby="when-bootstrap-heading">
+      <h2 id="when-bootstrap-heading">When to use the bootstrap</h2>
+      <p>
+        The bootstrap is especially useful when classical parametric methods aren't directly
+        applicable or their assumptions don't hold:
+      </p>
+      <ul>
+        <li>
+          <strong>Small samples with unknown distribution:</strong> classical methods require
+          normality or large sample sizes for the CLT to guarantee the approximation. The bootstrap
+          works reasonably well from \(n \approx 15\text{–}20\) onward, although the inherent uncertainty
+          of a small sample still persists.
+        </li>
+        <li>
+          <strong>Complex statistics:</strong> the median, Pearson correlation, the coefficient of
+          variation, regression coefficients in non-linear models, or the Kolmogorov-Smirnov statistic
+          don't have simple analytical expressions for their standard error. The bootstrap sidesteps that problem.
+        </li>
+        <li>
+          <strong>Non-normal data:</strong> if the data distribution has heavy tails or marked
+          skewness, the classical confidence interval \(\bar{x} \pm z \cdot s/\sqrt{n}\) may have coverage
+          below the nominal level. The percentile bootstrap captures the skewness of the estimator's distribution.
+        </li>
+        <li>
+          <strong>Comparison with the parametric CI:</strong> for the mean with normal data and large \(n\),
+          the percentile bootstrap CI and the classical \(t\) CI are practically identical. Differences appear
+          with skewed distributions or for statistics other than the mean.
+        </li>
+      </ul>
+      <p>
+        <strong>Limitations:</strong> the bootstrap doesn't work well with statistics that depend on extreme
+        values (maximum, minimum) in distributions with bounded support, nor with data that have strong
+        temporal dependence (that's what the <em>block bootstrap</em> is for). It also doesn't «create»
+        information: if the original sample is small and unrepresentative, the bootstrap can only
+        redistribute the existing uncertainty.
+      </p>
+    </section>
+
+    <!-- Educational section 4: FAQ -->
+    <section class="card content-card" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">Frequently asked questions</h2>
+
+      <details class="faq-item">
+        <summary>Does the bootstrap always work?</summary>
+        <p>
+          Not always. The non-parametric bootstrap fails when the statistic is sensitive to the extreme values
+          of the empirical distribution. A classic example is the maximum of a uniform sample: the bootstrap
+          distribution of the maximum systematically underestimates the parameter. It also fails with very
+          small sample sizes (\(n \leq 5\)), where the empirical distribution is too discrete to approximate
+          the real distribution well. In those cases it's preferable to use Bayesian methods or exact intervals.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>What is the BCa method?</summary>
+        <p>
+          The <strong>BCa</strong> method (<em>Bias-Corrected and Accelerated</em>), also proposed by Efron,
+          corrects two shortcomings of the simple percentile method: the <em>bias</em> of the estimator (the
+          difference between \(\bar{\hat{\theta}}^*\) and \(\hat{\theta}\)) and the <em>acceleration</em> (how
+          the standard error changes with the parameter value). The CI percentiles are shifted according to
+          these corrections, which improves the actual coverage for biased estimators or when the scale of
+          the estimator's distribution isn't constant. The acceleration is usually computed via the
+          <em>jackknife</em> method. For most practical applications with \(n \geq 30\) BCa and the percentile
+          method give similar results.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How many replicates B do I need?</summary>
+        <p>
+          To estimate the bootstrap standard error, \(B = 200\text{–}500\) replicates is usually enough.
+          To build 95% percentile confidence intervals, \(B \geq 1000\) is recommended.
+          For extreme percentiles (99% or 99.9%) or for the BCa method, \(B = 5000\text{–}10\,000\) is advisable.
+          Beyond \(B = 10\,000\), the precision gain is marginal and the computational cost can be
+          high with large datasets. The variability of the bootstrap CI decreases roughly
+          as \(1/\sqrt{B}\), similar to Monte Carlo error.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>What is the difference between the bootstrap and the jackknife?</summary>
+        <p>
+          The <strong>jackknife</strong> (Quenouille, 1949; popularized by Tukey) is another resampling
+          technique that estimates the bias and standard error of an estimator by systematically leaving
+          out one observation at a time: it generates exactly \(n\) «leave-one-out» replicates. It's faster
+          for large datasets but less general than the bootstrap. It doesn't capture the full distribution
+          of the estimator well, nor can it be used to build percentile CIs. The bootstrap, because of its
+          randomness, needs \(B \gg n\) replicates to be stable, but it can estimate the entire shape of the
+          estimator's distribution and handle more complex statistics. The first-order jackknife is a
+          linearization of the bootstrap and converges to it as
+          \(B \to \infty\).
+        </p>
+      </details>
+    </section>
+
+    <!-- Related tools -->
+    <section class="card content-card" aria-labelledby="related-heading">
+      <h2 id="related-heading">Related tools</h2>
+      <ul>
+        <li><a href="../intervalo-confianza-media.html">Confidence interval for the mean (unknown σ)</a></li>
+        <li><a href="../intervalo-confianza-media-sigma-conocida.html">Confidence interval for the mean (known σ)</a></li>
+        <li><a href="teorema-central-limite.html">Central limit theorem simulator</a></li>
+        <li><a href="simulador-intervalos-confianza.html">Confidence interval simulator</a></li>
+        <li><a href="../distribuciones/">Probability distributions</a></li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer class="legal-footer">
+    <p>
+      © 2026 problabtools.
+      <a href="../../sobre.html">About ProbLab</a> ·
+      <a href="../../metodologia.html">Methodology</a> ·
+      <a href="../../aviso-legal.html">Legal notice</a> ·
+      <a href="../../privacidad.html">Privacy</a> ·
+      <a href="../../cookies.html">Cookies</a> ·
+      <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+    </p>
+  </footer>
+</div>
+
+<script>
+  // ─── True population parameters ──────────────────────────────────────────────
+  const TRUE_PARAMS = {
+    normal:      { mean: 5,      median: 5,      sd: 2       },
+    exponential: { mean: 2,      median: 1.3863, sd: 2       },
+    uniform:     { mean: 5,      median: 5,      sd: 2.8868  },
+    lognormal:   { mean: 3.0802, median: 2.7183, sd: 1.6416  }
+  };
+
+  // Theoretical SE formulas for the mean (others are hard/unknown analytically)
+  // SE of mean = sigma / sqrt(n)
+  // SE of median (normal) = sigma * sqrt(pi/2) / sqrt(n)  [asymptotic]
+  // SE of sd (normal): approx sigma/sqrt(2*(n-1))  [asymptotic]
+  function trueTheorSE(dist, stat, n) {
+    const p = TRUE_PARAMS[dist];
+    if (stat === 'mean') {
+      return p.sd / Math.sqrt(n);
+    }
+    if (stat === 'median') {
+      if (dist === 'normal') {
+        return p.sd * Math.sqrt(Math.PI / 2) / Math.sqrt(n);
+      }
+      // exponential: SE of median ≈ 1/(2*f(median)*sqrt(n)), f(median)=lambda*exp(-lambda*median)
+      if (dist === 'exponential') {
+        const lambda = 0.5;
+        const med = Math.log(2) / lambda;
+        const fMed = lambda * Math.exp(-lambda * med);
+        return 1 / (2 * fMed * Math.sqrt(n));
+      }
+      // uniform [0,10]: SE of median = 1/(2*f(median)*sqrt(n)), f(x)=1/(b-a)=1/10 → 5/sqrt(n)
+      if (dist === 'uniform') {
+        return 5 / Math.sqrt(n);
+      }
+      return null; // lognormal: no simple formula
+    }
+    if (stat === 'sd') {
+      if (dist === 'normal') {
+        return p.sd / Math.sqrt(2 * (n - 1));
+      }
+      return null;
+    }
+    return null;
+  }
+
+  // ─── Samplers ─────────────────────────────────────────────────────────────────
+  function generateSample(dist, n) {
+    const arr = [];
+    for (let i = 0; i < n; i++) {
+      switch (dist) {
+        case 'normal':      arr.push(jStat.normal.sample(5, 2));          break;
+        case 'exponential': arr.push(jStat.exponential.sample(0.5));      break;
+        case 'uniform':     arr.push(jStat.uniform.sample(0, 10));        break;
+        case 'lognormal':   arr.push(jStat.lognormal.sample(1, 0.5));     break;
+      }
+    }
+    return arr;
+  }
+
+  // ─── Compute statistic ────────────────────────────────────────────────────────
+  function computeStatistic(sample, stat) {
+    switch (stat) {
+      case 'mean':   return jStat.mean(sample);
+      case 'median': return jStat.median(sample);
+      case 'sd':     return jStat.stdev(sample, true); // sample std dev (ddof=1)
+    }
+  }
+
+  // ─── Bootstrap CI (percentile method) ────────────────────────────────────────
+  function bootstrapCI(bootStats, confLevel) {
+    const sorted = [...bootStats].sort((a, b) => a - b);
+    const alpha = 1 - confLevel;
+    const lo = sorted[Math.floor(alpha / 2 * sorted.length)];
+    const hi = sorted[Math.ceil((1 - alpha / 2) * sorted.length) - 1];
+    return [lo, hi];
+  }
+
+  // ─── Theoretical PDFs ─────────────────────────────────────────────────────────
+  function theoreticalPdf(dist, x) {
+    switch (dist) {
+      case 'normal':      return jStat.normal.pdf(x, 5, 2);
+      case 'exponential': return x >= 0 ? 0.5 * Math.exp(-0.5 * x) : 0;
+      case 'uniform':     return (x >= 0 && x <= 10) ? 0.1 : 0;
+      case 'lognormal':   return x > 0 ? jStat.lognormal.pdf(x, 1, 0.5) : 0;
+      default: return 0;
+    }
+  }
+
+  // ─── Histogram builder ────────────────────────────────────────────────────────
+  function makeHistogram(values, numBins) {
+    const minV = Math.min(...values);
+    const maxV = Math.max(...values);
+    const range = (maxV - minV) || 1;
+    const binWidth = range / numBins;
+    const counts = new Array(numBins).fill(0);
+    const centers = [];
+    for (let i = 0; i < numBins; i++) {
+      centers.push(minV + (i + 0.5) * binWidth);
+    }
+    values.forEach(v => {
+      let bin = Math.floor((v - minV) / binWidth);
+      if (bin >= numBins) bin = numBins - 1;
+      if (bin < 0) bin = 0;
+      counts[bin]++;
+    });
+    return { centers, counts, binWidth, min: minV, max: maxV };
+  }
+
+  // ─── Build PDF curve points ───────────────────────────────────────────────────
+  function buildPdfPoints(fn, minX, maxX, numPoints = 200) {
+    const step = (maxX - minX) / numPoints;
+    const pts = [];
+    for (let i = 0; i <= numPoints; i++) {
+      const x = minX + i * step;
+      const y = fn(x);
+      if (isFinite(y) && y >= 0) pts.push({ x, y });
+    }
+    return pts;
+  }
+
+  // ─── Number formatting ─────────────────────────────────────────────────────────
+  function fmt(v, d = 4) {
+    if (v === null || v === undefined || !isFinite(v)) return '—';
+    return Number(v.toFixed(d)).toString();
+  }
+
+  // ─── Chart instances ──────────────────────────────────────────────────────────
+  let chartSample = null;
+  let chartBoot   = null;
+
+  function destroyCharts() {
+    if (chartSample) { chartSample.destroy(); chartSample = null; }
+    if (chartBoot)   { chartBoot.destroy();   chartBoot   = null; }
+  }
+
+  // ─── Custom plugin: vertical lines for CI bounds ──────────────────────────────
+  const verticalLinesPlugin = {
+    id: 'verticalLines',
+    afterDraw(chart) {
+      const lines = chart.options.plugins.verticalLines;
+      if (!lines || !lines.length) return;
+      const ctx = chart.ctx;
+      const xScale = chart.scales.x;
+      const yScale = chart.scales.y;
+      lines.forEach(({ x: xVal, color, dash }) => {
+        const xPx = xScale.getPixelForValue(xVal);
+        ctx.save();
+        ctx.beginPath();
+        ctx.strokeStyle = color || '#0891b2';
+        ctx.lineWidth = 2;
+        if (dash) ctx.setLineDash(dash);
+        ctx.moveTo(xPx, yScale.top);
+        ctx.lineTo(xPx, yScale.bottom);
+        ctx.stroke();
+        ctx.restore();
+      });
+    }
+  };
+
+  Chart.register(verticalLinesPlugin);
+
+  // ─── Render sample chart ──────────────────────────────────────────────────────
+  function renderSampleChart(sample, dist) {
+    const n = sample.length;
+    const numBins = Math.max(5, Math.ceil(Math.log2(n) + 1));
+    const hist = makeHistogram(sample, numBins);
+    const total = hist.counts.reduce((a, b) => a + b, 0);
+    const densities = hist.counts.map(c => c / (total * hist.binWidth));
+    const barData = hist.centers.map((x, i) => ({ x, y: densities[i] }));
+
+    // PDF overlay
+    const pad = (hist.max - hist.min) * 0.15 || 1;
+    const pdfPoints = buildPdfPoints(x => theoreticalPdf(dist, x), hist.min - pad, hist.max + pad);
+
+    const ctx = document.getElementById('sampleChart').getContext('2d');
+    return new Chart(ctx, {
+      type: 'bar',
+      data: {
+        datasets: [
+          {
+            type: 'bar',
+            label: 'Relative frequency',
+            data: barData,
+            backgroundColor: 'rgba(79,70,229,0.45)',
+            borderColor: 'rgba(79,70,229,0.75)',
+            borderWidth: 1,
+            barPercentage: 1.0,
+            categoryPercentage: 1.0,
+            parsing: false,
+            order: 2
+          },
+          {
+            type: 'line',
+            label: 'Theoretical density',
+            data: pdfPoints,
+            borderColor: '#dc2626',
+            borderWidth: 2,
+            pointRadius: 0,
+            tension: 0.3,
+            fill: false,
+            parsing: false,
+            order: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 300 },
+        scales: {
+          x: {
+            type: 'linear',
+            title: { display: true, text: 'Value', font: { size: 11 } },
+            ticks: { maxTicksLimit: 10, font: { size: 10 } },
+            grid: { color: 'rgba(148,163,184,0.15)' }
+          },
+          y: {
+            title: { display: true, text: 'Density', font: { size: 11 } },
+            ticks: { font: { size: 10 } },
+            grid: { color: 'rgba(148,163,184,0.15)' },
+            beginAtZero: true
+          }
+        },
+        plugins: {
+          legend: { display: true, labels: { font: { size: 11 }, boxWidth: 18, padding: 12 } },
+          tooltip: {
+            callbacks: {
+              label: ctx => `${ctx.dataset.label}: ${Number(ctx.parsed.y).toFixed(4)}`
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // ─── Render bootstrap chart ───────────────────────────────────────────────────
+  function renderBootChart(bootStats, ciLo, ciHi, statLabel) {
+    const B = bootStats.length;
+    const numBins = Math.max(5, Math.ceil(Math.log2(B) + 1));
+    const hist = makeHistogram(bootStats, numBins);
+    const total = hist.counts.reduce((a, b) => a + b, 0);
+    const densities = hist.counts.map(c => c / (total * hist.binWidth));
+
+    // Color each bar: green if inside CI, gray if outside
+    const colors = hist.centers.map(cx => {
+      const lo = cx - hist.binWidth / 2;
+      const hi = cx + hist.binWidth / 2;
+      // Consider the bin inside if its center is within [ciLo, ciHi]
+      return (cx >= ciLo && cx <= ciHi)
+        ? 'rgba(22,163,74,0.45)'
+        : 'rgba(148,163,184,0.45)';
+    });
+    const borderColors = hist.centers.map(cx =>
+      (cx >= ciLo && cx <= ciHi)
+        ? 'rgba(22,163,74,0.8)'
+        : 'rgba(148,163,184,0.8)'
+    );
+
+    const barData = hist.centers.map((x, i) => ({ x, y: densities[i] }));
+
+    // Normal approximation overlay
+    const bootMean = jStat.mean(bootStats);
+    const bootSd = jStat.stdev(bootStats, true);
+    const pad = (hist.max - hist.min) * 0.2 || bootSd;
+    const normalPts = buildPdfPoints(
+      x => {
+        const y = (1 / (bootSd * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * ((x - bootMean) / bootSd) ** 2);
+        return y;
+      },
+      hist.min - pad,
+      hist.max + pad
+    );
+
+    const ctx = document.getElementById('bootChart').getContext('2d');
+    return new Chart(ctx, {
+      type: 'bar',
+      data: {
+        datasets: [
+          {
+            type: 'bar',
+            label: `Bootstrap (${statLabel})`,
+            data: barData,
+            backgroundColor: colors,
+            borderColor: borderColors,
+            borderWidth: 1,
+            barPercentage: 1.0,
+            categoryPercentage: 1.0,
+            parsing: false,
+            order: 2
+          },
+          {
+            type: 'line',
+            label: 'Normal approx.',
+            data: normalPts,
+            borderColor: '#dc2626',
+            borderWidth: 2,
+            pointRadius: 0,
+            tension: 0.3,
+            fill: false,
+            parsing: false,
+            order: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 300 },
+        scales: {
+          x: {
+            type: 'linear',
+            title: { display: true, text: statLabel, font: { size: 11 } },
+            ticks: { maxTicksLimit: 10, font: { size: 10 } },
+            grid: { color: 'rgba(148,163,184,0.15)' }
+          },
+          y: {
+            title: { display: true, text: 'Density', font: { size: 11 } },
+            ticks: { font: { size: 10 } },
+            grid: { color: 'rgba(148,163,184,0.15)' },
+            beginAtZero: true
+          }
+        },
+        plugins: {
+          legend: { display: true, labels: { font: { size: 11 }, boxWidth: 18, padding: 12 } },
+          tooltip: {
+            callbacks: {
+              label: ctx => `${ctx.dataset.label}: ${Number(ctx.parsed.y).toFixed(4)}`
+            }
+          },
+          verticalLines: [
+            { x: ciLo, color: '#0891b2', dash: [5, 3] },
+            { x: ciHi, color: '#0891b2', dash: [5, 3] }
+          ]
+        }
+      }
+    });
+  }
+
+  // ─── State ────────────────────────────────────────────────────────────────────
+  let currentSample = null;
+
+  // ─── Statistic labels ─────────────────────────────────────────────────────────
+  const STAT_LABELS = {
+    mean:   'Mean (x̄)',
+    median: 'Median',
+    sd:     'Std. dev. (s)'
+  };
+
+  const DIST_NAMES = {
+    normal:      'Normal (μ=5, σ=2)',
+    exponential: 'Exponential (λ=0.5)',
+    uniform:     'Uniform (a=0, b=10)',
+    lognormal:   'Log-normal (μlog=1, σlog=0.5)'
+  };
+
+  // ─── Run full simulation (new sample + bootstrap) ─────────────────────────────
+  function runAll() {
+    const dist      = document.getElementById('popDist').value;
+    const stat      = document.getElementById('statistic').value;
+    const n         = parseInt(document.getElementById('sampleN').value, 10);
+    const B         = parseInt(document.getElementById('numBoot').value, 10);
+    const confLevel = parseFloat(document.getElementById('confLevel').value);
+
+    currentSample = generateSample(dist, n);
+    runBootstrap(dist, stat, n, B, confLevel);
+  }
+
+  // ─── Run bootstrap only (keep currentSample) ─────────────────────────────────
+  function runBootstrap(dist, stat, n, B, confLevel) {
+    if (!currentSample) return;
+
+    // Bootstrap resampling
+    const bootStats = [];
+    for (let b = 0; b < B; b++) {
+      const resample = [];
+      for (let i = 0; i < n; i++) {
+        resample.push(currentSample[Math.floor(Math.random() * n)]);
+      }
+      bootStats.push(computeStatistic(resample, stat));
+    }
+
+    const sampleStat = computeStatistic(currentSample, stat);
+    const [ciLo, ciHi] = bootstrapCI(bootStats, confLevel);
+    const bootSE = jStat.stdev(bootStats, true);
+    const trueSE = trueTheorSE(dist, stat, n);
+    const trueParam = TRUE_PARAMS[dist][stat];
+    const statLabel = STAT_LABELS[stat];
+    const confPct = Math.round(confLevel * 100);
+
+    // Destroy old charts
+    destroyCharts();
+
+    // Show canvases
+    document.getElementById('samplePlaceholder').style.display = 'none';
+    document.getElementById('bootPlaceholder').style.display   = 'none';
+    document.getElementById('sampleChart').style.display       = 'block';
+    document.getElementById('bootChart').style.display         = 'block';
+
+    // Update chart titles
+    document.getElementById('bootChartTitle').textContent =
+      `Bootstrap distribution of ${statLabel}`;
+    document.getElementById('bootChartSub').textContent =
+      `Histogram of the ${B} replicates with the ${confPct}% CI shaded`;
+
+    // Render charts
+    chartSample = renderSampleChart(currentSample, dist);
+    chartBoot   = renderBootChart(bootStats, ciLo, ciHi, statLabel);
+
+    // Stats table
+    document.getElementById('trueParamLabel').textContent = `True parameter (θ = ${statLabel})`;
+    document.getElementById('statTrueParam').textContent  = fmt(trueParam, 4);
+    document.getElementById('statSampleStat').textContent = fmt(sampleStat, 4);
+    document.getElementById('statTrueSE').textContent     = trueSE !== null ? fmt(trueSE, 4) : '—';
+    document.getElementById('statBootSE').textContent     = fmt(bootSE, 4);
+    document.getElementById('ciPercentileLabel').textContent = `Bootstrap percentile CI (${confPct}%)`;
+    document.getElementById('statBootCI').textContent     = `[${fmt(ciLo, 4)}, ${fmt(ciHi, 4)}]`;
+
+    // Normal CI row (only for mean)
+    const rowNCI = document.getElementById('rowNormalCI');
+    if (stat === 'mean') {
+      rowNCI.style.display = '';
+      const sampleMean = jStat.mean(currentSample);
+      const sampleSd   = jStat.stdev(currentSample, true);
+      const z = confLevel === 0.90 ? 1.6449 : confLevel === 0.95 ? 1.9600 : 2.5758;
+      const margin = z * sampleSd / Math.sqrt(n);
+      document.getElementById('statNormalCI').textContent =
+        `[${fmt(sampleMean - margin, 4)}, ${fmt(sampleMean + margin, 4)}]`;
+    } else {
+      rowNCI.style.display = 'none';
+    }
+
+    document.getElementById('statsSection').style.display = 'block';
+    document.getElementById('legendArea').style.display   = 'flex';
+
+    // Interpretation
+    buildInterpretation(dist, stat, n, B, confLevel, bootSE, trueSE, ciLo, ciHi, sampleStat, trueParam);
+  }
+
+  // ─── Interpretation paragraph ─────────────────────────────────────────────────
+  function buildInterpretation(dist, stat, n, B, confLevel, bootSE, trueSE, ciLo, ciHi, sampleStat, trueParam) {
+    const confPct = Math.round(confLevel * 100);
+    const statLabel = STAT_LABELS[stat];
+    const distName  = DIST_NAMES[dist];
+    const ciWidth   = ciHi - ciLo;
+
+    let seComparison = '';
+    if (trueSE !== null) {
+      const ratio = bootSE / trueSE;
+      if (ratio > 1.15) {
+        seComparison = `The bootstrap standard error (${fmt(bootSE, 4)}) is somewhat larger than the theoretical one (${fmt(trueSE, 4)}), which is expected with a small <strong>n = ${n}</strong>.`;
+      } else if (ratio < 0.85) {
+        seComparison = `The bootstrap standard error (${fmt(bootSE, 4)}) is somewhat smaller than the theoretical one (${fmt(trueSE, 4)}), possibly due to sampling variability.`;
+      } else {
+        seComparison = `The bootstrap standard error (${fmt(bootSE, 4)}) is close to the theoretical value (${fmt(trueSE, 4)}), which shows the effectiveness of the resampling.`;
+      }
+    } else {
+      seComparison = `The bootstrap standard error of the ${statLabel} is ${fmt(bootSE, 4)}. There is no simple analytical formula for this distribution and statistic, which is why the bootstrap is especially valuable here.`;
+    }
+
+    const widthComment = ciWidth < 1
+      ? `The ${confPct}% CI is relatively narrow ([${fmt(ciLo, 3)}, ${fmt(ciHi, 3)}]), indicating good precision with <strong>n = ${n}</strong>.`
+      : `The ${confPct}% CI is wide ([${fmt(ciLo, 3)}, ${fmt(ciHi, 3)}]). With <strong>n = ${n}</strong>, the uncertainty about ${statLabel} is considerable.`;
+
+    const nEffect = n < 30
+      ? `With <strong>n = ${n}</strong> the bootstrap distribution has an irregular shape; increasing <em>n</em> will make it smoother and the CI narrower.`
+      : `With <strong>n = ${n}</strong> the bootstrap distribution is already fairly smooth. Increasing <em>n</em> would shrink the CI by roughly √(${n}/${n+20}).`;
+
+    const Beffect = B < 500
+      ? `With only <strong>B = ${B}</strong> replicates, the CI percentiles can vary quite a bit between runs. Use B ≥ 1000 for greater stability.`
+      : `With <strong>B = ${B}</strong> replicates, the CI percentiles are stable. Increasing B beyond 5000 would bring only marginal improvements.`;
+
+    const box = document.getElementById('interpretation');
+    box.innerHTML = `<p>${seComparison} ${widthComment}</p><p>${nEffect} ${Beffect}</p>`;
+    box.style.display = 'block';
+
+    if (window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise([box]).catch(() => {});
+    }
+  }
+
+  // ─── Button wiring ─────────────────────────────────────────────────────────────
+  document.getElementById('newSampleBtn').addEventListener('click', () => {
+    const btn = document.getElementById('newSampleBtn');
+    btn.disabled = true;
+    btn.textContent = 'Generating…';
+    setTimeout(() => {
+      try { runAll(); }
+      finally { btn.disabled = false; btn.textContent = 'New sample'; }
+    }, 20);
+  });
+
+  document.getElementById('rebootBtn').addEventListener('click', () => {
+    const btn = document.getElementById('rebootBtn');
+    btn.disabled = true;
+    btn.textContent = 'Resampling…';
+    setTimeout(() => {
+      try {
+        if (!currentSample) { runAll(); return; }
+        const dist      = document.getElementById('popDist').value;
+        const stat      = document.getElementById('statistic').value;
+        const n         = parseInt(document.getElementById('sampleN').value, 10);
+        const B         = parseInt(document.getElementById('numBoot').value, 10);
+        const confLevel = parseFloat(document.getElementById('confLevel').value);
+        runBootstrap(dist, stat, n, B, confLevel);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Regenerate bootstrap';
+      }
+    }, 20);
+  });
+
+  // ─── Initial simulation on page load ─────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    runAll();
+  });
+</script>
+<script src="../../theme.js?v=20260624"></script>
+<script src="../../lang-suggest.js?v=20260624"></script>
+</body>
+</html>

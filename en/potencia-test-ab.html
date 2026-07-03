@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../potencia-test-ab.html">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>A/B Test Power Calculator | ProbLab</title>
+  <meta name="description" content="Compute statistical power, type II error, and minimum detectable effect (MDE) for a two-proportion A/B test, with H₀/H₁ critical-region visualizations.">
+  <meta name="keywords" content="A/B test power calculator, statistical power A/B testing, minimum detectable effect calculator, type II error two proportions, MDE calculator, ProbLab">
+  <link rel="canonical" href="https://problabtools.com/en/potencia-test-ab.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="A/B Test Power Calculator | ProbLab">
+  <meta property="og:description" content="Compute statistical power, type II error, and minimum detectable effect (MDE) for a two-proportion A/B test, with H₀/H₁ critical-region visualizations.">
+  <meta property="og:url" content="https://problabtools.com/en/potencia-test-ab.html">
+  <meta property="og:site_name" content="ProbLab">
+  <meta property="og:image" content="https://problabtools.com/og-image.png">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:image:alt" content="Statistical power for an A/B test">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="author" content="Vicente Castellar">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="alternate" hreflang="en" href="https://problabtools.com/en/potencia-test-ab.html">
+  <link rel="alternate" hreflang="es" href="https://problabtools.com/potencia-test-ab.html">
+  <link rel="alternate" hreflang="x-default" href="https://problabtools.com/potencia-test-ab.html">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A/B Test Power Calculator | ProbLab">
+  <meta name="twitter:description" content="Compute the statistical power, type II error, and MDE for an A/B proportion test with a visualization of the critical regions.">
+  <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+  <meta name="twitter:image:alt" content="Statistical power for an A/B test">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+          {"@type": "ListItem", "position": 2, "name": "Hypothesis tests", "item": "https://problabtools.com/en/contrastes-hipotesis/"},
+          {"@type": "ListItem", "position": 3, "name": "Power for an A/B test", "item": "https://problabtools.com/en/potencia-test-ab.html"}
+        ]
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Statistical power calculator for an A/B test — two proportions",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Web",
+        "url": "https://problabtools.com/en/potencia-test-ab.html",
+        "description": "Compute statistical power, type II error, and MDE for a two-proportion A/B test with a visualization of the critical regions.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+      }
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is statistical power in an A/B test?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Power (1−β) is the probability of detecting a real difference between groups A and B. With power = 80%, if variant B is truly better than A by the stated amount, the test will detect it in 8 out of every 10 experiments."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the MDE in an A/B test?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The MDE (Minimum Detectable Effect) is the smallest absolute difference between p_A and p_B that the experiment can detect at the target power, given the available sample size. If the real effect is smaller than the MDE, the test will probably not detect it."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the critical-regions chart relate to power?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The blue curve is the distribution of the statistic under H₀ (no difference between groups). The red zones are the rejection regions (area = α). The orange curve is the distribution under H₁ (the difference p_B − p_A exists). The green area is the power: the fraction of H₁ that falls within the rejection region."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "When should I use a two-tailed versus one-tailed test in A/B testing?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "In A/B testing, a two-tailed test is recommended because the variant could be better or worse than the control in either direction. A one-tailed test is only justified if you can guarantee a priori that the variant can only improve (never worsen) the metric."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="stylesheet" href="../style_new.css?v=20260624">
+  <style>
+    .mode-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .mode-tab {
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: 1px solid #dbe3f1;
+      background: #f8fafc;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      color: #334155;
+    }
+    .mode-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .mode-section { display: none; }
+    .mode-section.active { display: block; }
+    .chart-wrap { position: relative; height: 320px; margin-top: 24px; }
+    .chart-legend { font-size: 0.8rem; color: #64748b; margin-top: 8px; display: flex; flex-wrap: wrap; gap: 12px; }
+    .legend-item { display: flex; align-items: center; gap: 5px; }
+    .legend-swatch { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+  </style>
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+  <div class="site-nav-inner">
+    <a class="site-brand" href="index.html">ProbLab</a>
+    <ul class="site-nav-links">
+      <li><a href="distribuciones/">Distributions</a></li>
+      <li><a href="tablas-estadisticas/">Tables</a></li>
+      <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+      <li><a href="tamano-muestral/">Sample size</a></li>
+      <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+      <li><a href="ab-testing/">A/B testing</a></li>
+            <li><a href="simulaciones/">Simulations</a></li>
+                <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../potencia-test-ab.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+</ul>
+  </div>
+</nav>
+<div class="page-wrap">
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+      <li><span aria-current="page">Power for A/B test</span></li>
+    </ol>
+  </nav>
+  <header class="hero">
+    <p class="eyebrow">A/B testing · Statistical power</p>
+    <h1>Statistical power for an A/B test of two proportions</h1>
+    <p class="hero-subtitle">Compute the statistical power, type II error, and minimum detectable effect for an A/B conversion experiment. Visualize the distributions under H₀ and H₁ with their rejection regions.</p>
+    <p class="hero-links"><a class="hero-link-button" href="contrastes-hipotesis/">See all hypothesis tests</a></p>
+  </header>
+
+  <main>
+    <section class="card sample-size-panel">
+      <div class="panel-heading">
+        <h2>Calculator</h2>
+        <p>Select the mode based on what you want to compute.</p>
+      </div>
+
+      <div class="mode-tabs" role="tablist" aria-label="Calculation mode">
+        <button class="mode-tab active" data-target="modePower" role="tab" aria-selected="true">Power</button>
+        <button class="mode-tab" data-target="modeN" role="tab" aria-selected="false">Sample size</button>
+      </div>
+
+      <!-- MODE: Power -->
+      <div id="modePower" class="mode-section active">
+        <div class="form-grid sample-grid">
+          <div class="inline-inputs">
+            <div class="form-group">
+              <label for="pwPA">Group A conversion rate (p<sub>A</sub>)</label>
+              <input type="number" id="pwPA" value="0.12" step="0.001" min="0.001" max="0.999">
+            </div>
+            <div class="form-group">
+              <label for="pwPB">Expected group B conversion rate (p<sub>B</sub>)</label>
+              <input type="number" id="pwPB" value="0.138" step="0.001" min="0.001" max="0.999">
+            </div>
+          </div>
+          <div class="inline-inputs">
+            <div class="form-group">
+              <label for="pwN">Sample size per group (n)</label>
+              <input type="number" id="pwN" value="1500" step="1" min="1">
+            </div>
+            <div class="form-group">
+              <label for="pwAlpha">Significance level (α)</label>
+              <input type="number" id="pwAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="pwTail">Test type</label>
+            <select id="pwTail">
+              <option value="two-sided" selected>Two-tailed — H₀: pA = pB</option>
+              <option value="greater">One-tailed — H₀: pB ≤ pA (detects improvements only)</option>
+            </select>
+          </div>
+        </div>
+        <button class="calculate-btn" id="calcPwBtn">Calculate power</button>
+        <div id="pwResult" class="result-box" style="line-height:1.9;">Result pending…</div>
+      </div>
+
+      <!-- MODE: Sample size -->
+      <div id="modeN" class="mode-section">
+        <div class="form-grid sample-grid">
+          <div class="inline-inputs">
+            <div class="form-group">
+              <label for="nPA">Group A conversion rate (p<sub>A</sub>)</label>
+              <input type="number" id="nPA" value="0.12" step="0.001" min="0.001" max="0.999">
+            </div>
+            <div class="form-group">
+              <label for="nPB">Expected group B conversion rate (p<sub>B</sub>)</label>
+              <input type="number" id="nPB" value="0.138" step="0.001" min="0.001" max="0.999">
+            </div>
+          </div>
+          <div class="inline-inputs">
+            <div class="form-group">
+              <label for="nAlpha">Significance level (α)</label>
+              <input type="number" id="nAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+            </div>
+            <div class="form-group">
+              <label for="nTargetPower">Target power (1−β)</label>
+              <input type="number" id="nTargetPower" value="0.80" step="0.01" min="0.5" max="0.999">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="nTail">Test type</label>
+            <select id="nTail">
+              <option value="two-sided" selected>Two-tailed</option>
+              <option value="greater">One-tailed</option>
+            </select>
+          </div>
+        </div>
+        <button class="calculate-btn" id="calcNBtn">Calculate sample size</button>
+        <div id="nResult" class="result-box" style="line-height:1.9;">Result pending…</div>
+      </div>
+
+      <!-- Critical regions chart -->
+      <div class="chart-wrap">
+        <canvas id="critRegionsChart" aria-label="Distributions under H₀ and H₁ with critical regions for an A/B test" role="img"></canvas>
+      </div>
+      <div class="chart-legend">
+        <span class="legend-item"><span class="legend-swatch" style="background:#2563eb;"></span> H₀: no difference between groups</span>
+        <span class="legend-item"><span class="legend-swatch" style="background:rgba(239,68,68,0.5);"></span> Critical region (α)</span>
+        <span class="legend-item"><span class="legend-swatch" style="background:#f59e0b;"></span> H₁: pB − pA = real effect</span>
+        <span class="legend-item"><span class="legend-swatch" style="background:rgba(16,185,129,0.5);"></span> Power (1−β)</span>
+      </div>
+
+      <div style="margin-top:20px;">
+        <h3 style="margin-top:0;">How to read the chart</h3>
+        <p>The horizontal axis represents the standardized Z statistic \(Z = (\hat{p}_B - \hat{p}_A)/SE_0\), where \(SE_0 = \sqrt{2\bar{p}(1-\bar{p})/n}\) and \(\bar{p}=(p_A+p_B)/2\).</p>
+        <ul>
+          <li><strong>Blue curve (H₀)</strong>: distribution of Z if there were no real difference between groups. It follows an N(0,1). The <strong>red zones</strong> are the rejection regions; their total area is α.</li>
+          <li><strong>Dashed orange curve (H₁)</strong>: distribution of Z if the real difference were p_B − p_A. It is shifted relative to H₀. The <strong>green zone</strong> — the area under H₁ within the rejection region — is the power (1−β). The unshaded area under the orange curve within the acceptance region is β.</li>
+        </ul>
+        <p>The larger the difference |p_B − p_A| or the sample size n, the more the curves separate and the greater the power.</p>
+      </div>
+    </section>
+
+    <section class="card content-card">
+      <h3>Statistical foundation</h3>
+      <p>For the two-proportion test \(H_0: p_A = p_B\) with equal sample sizes n, the test statistic is:</p>
+      <p class="formula-line">\( Z = \frac{\hat{p}_B - \hat{p}_A}{\sqrt{2\bar{p}(1-\bar{p})/n}} \;\sim\; N(0,\,1) \text{ under } H_0 \)</p>
+      <p>where \(\bar{p} = (p_A + p_B)/2\) is the pooled proportion. Under the alternative hypothesis \(H_1: p_B - p_A = \Delta\), the statistic is distributed approximately as:</p>
+      <p class="formula-line">\( Z \;\sim\; N\!\left(\delta,\; \sigma_1^2\right) \quad \text{where} \quad \delta = \frac{\Delta\sqrt{n}}{\sqrt{2\bar{p}(1-\bar{p})}},\quad \sigma_1 = \sqrt{\frac{p_A(1-p_A) + p_B(1-p_B)}{2\bar{p}(1-\bar{p})}} \)</p>
+
+      <h3>Power formulas</h3>
+      <ul>
+        <li><strong>Two-tailed</strong>:
+          <p class="formula-line">\( 1-\beta \;=\; 1 - \Phi\!\left(\frac{z_{\alpha/2}\cdot\sqrt{2\bar{p}(1-\bar{p})} - \Delta\sqrt{n}}{\sqrt{p_A(1-p_A)+p_B(1-p_B)}}\right) + \Phi\!\left(\frac{-z_{\alpha/2}\cdot\sqrt{2\bar{p}(1-\bar{p})} - \Delta\sqrt{n}}{\sqrt{p_A(1-p_A)+p_B(1-p_B)}}\right) \)</p>
+        </li>
+        <li><strong>Upper one-tailed</strong> (\(H_a: p_B > p_A\)):
+          <p class="formula-line">\( 1-\beta \;=\; 1 - \Phi\!\left(\frac{z_\alpha\cdot\sqrt{2\bar{p}(1-\bar{p})} - \Delta\sqrt{n}}{\sqrt{p_A(1-p_A)+p_B(1-p_B)}}\right) \)</p>
+        </li>
+      </ul>
+
+      <h3>Sample size per group</h3>
+      <p class="formula-line">\( n = \left\lceil \dfrac{\left(z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})} + z_{1-\beta}\sqrt{p_A(1-p_A)+p_B(1-p_B)}\right)^2}{\Delta^2} \right\rceil \)</p>
+
+      <h3>Minimum detectable effect (MDE)</h3>
+      <p>The MDE is the smallest \(|\Delta|\) that achieves the target power with the available n. It is computed via binary search over \(\Delta\).</p>
+    </section>
+
+    <section class="card content-card">
+      <h3>Worked example</h3>
+      <p>An e-commerce team wants to test a new checkout flow (variant B) against the current one (group A). The conversion rate of A is p_A = 0.12, and B is expected to improve it to p_B = 0.138 (a +15% relative lift). The experiment is designed with α = 0.05, a two-tailed test, and n = 1,500 users per group.</p>
+
+      <p><strong>Auxiliary parameters:</strong></p>
+      <p class="formula-line">\( \bar{p} = (0.12 + 0.138)/2 = 0.129 \)</p>
+      <p class="formula-line">\( \text{NullScale} = \sqrt{2 \times 0.129 \times 0.871} = \sqrt{0.2247} \approx 0.4740 \)</p>
+      <p class="formula-line">\( \text{AltScale} = \sqrt{0.12 \times 0.88 + 0.138 \times 0.862} = \sqrt{0.1056 + 0.1190} = \sqrt{0.2246} \approx 0.4739 \)</p>
+
+      <p><strong>Two-tailed power (\(z_{0.025} = 1.960\), \(n = 1500\)):</strong></p>
+      <p class="formula-line">\( 1-\beta \approx 1 - \Phi\!\left(\frac{1.960 \times 0.4740 - 0.018\sqrt{1500}}{0.4739}\right) = 1 - \Phi\!\left(\frac{0.9290 - 0.6971}{0.4739}\right) = 1 - \Phi(0.489) \approx 0.313 \)</p>
+
+      <p>With n = 1,500 per group and a 15% lift, the power is only <strong>≈ 31%</strong>: the experiment is severely underpowered for this effect. To reach 80% power, approximately <strong>5,443 users per group</strong> would be needed.</p>
+      <p>This illustrates a common mistake in A/B testing: launching experiments without correctly sizing the sample to detect the effect of interest.</p>
+    </section>
+
+    <section class="card content-card">
+      <h3>How to interpret the results</h3>
+
+      <h3>Power</h3>
+      <p>A power of 80% means that if the real difference is p_B − p_A, the test will reject H₀ 80% of the time. Below 70%, the experiment has a high probability of missing real effects. Above 90%, the design is very conservative: you may be able to shorten the experiment's duration.</p>
+
+      <h3>Type II error (β)</h3>
+      <p>It is the probability of concluding there is "no difference" when there really is one. With β = 0.20, there is a 20% probability of missing a real improvement in variant B. This is the cost of running experiments with too small a sample.</p>
+
+      <h3>Minimum detectable effect (MDE)</h3>
+      <p>With the current sample, any difference smaller than the MDE will not be reliably detected. Compare the MDE with the minimum business-relevant impact: if the MDE is larger than that threshold, the experiment cannot make the right call even if it runs flawlessly.</p>
+
+      <h3>Recommendations for A/B testing</h3>
+      <ul>
+        <li>Always design the experiment <em>before</em> launching it. Stopping early as soon as you see significance inflates the type I error rate.</li>
+        <li>Use a two-tailed test unless you can guarantee a priori that the variant can only improve the metric.</li>
+        <li>With limited traffic, increase the minimum effect of interest or extend the duration instead of lowering α.</li>
+        <li>For full sizing (sample size, power, and MDE all at once), use the <a href="ab-testing-potencia.html">full A/B power calculator</a>.</li>
+      </ul>
+    </section>
+
+    <section id="seo-support-content" class="card content-card">
+      <section class="related-tools">
+        <h3>Related calculators</h3>
+        <ul>
+          <li><a href="ab-testing-potencia.html">MDE, power, and sample size for A/B testing</a></li>
+          <li><a href="ab-testing-z-test.html">Z-test for A/B conversion (results analysis)</a></li>
+          <li><a href="ab-testing-bayesiano.html">Bayesian A/B test</a></li>
+          <li><a href="ab-testing-simulacion.html">Monte Carlo simulation of A/B experiments</a></li>
+          <li><a href="potencia-contraste-una-proporcion.html">Power for a one-proportion test</a></li>
+          <li><a href="tamano-muestral-dos-proporciones.html">Sample size for two proportions</a></li>
+        </ul>
+      </section>
+
+      <h3>Frequently asked questions</h3>
+      <ul>
+        <li><strong>What is statistical power in an A/B test?</strong> The probability of detecting a real difference between groups A and B when that difference exists. With power = 80%, the experiment will detect the effect in 8 out of every 10 repetitions.</li>
+        <li><strong>What is the MDE?</strong> The minimum detectable effect: the smallest difference between p_A and p_B that the experiment can detect at the target power. If the real effect is smaller, the test will probably miss it.</li>
+        <li><strong>How does the chart relate to power?</strong> The blue curve is H₀ (no difference). The red zones are the rejection regions (area = α). The orange curve is H₁ (the effect exists). The green area is the power: the fraction of H₁ that falls within the rejection region.</li>
+        <li><strong>When should I use a two-tailed test?</strong> In A/B testing, a two-tailed test is recommended because the variant could be better or worse than the control. A one-tailed test is only justified if you can guarantee a priori that the variant will never make the metric worse.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="legal-footer">
+    <p>
+      © 2026 problabtools.
+      <a href="../aviso-legal.html">Legal notice</a> ·
+      <a href="../privacidad.html">Privacy</a> ·
+      <a href="../cookies.html">Cookies</a> ·
+      <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+    </p>
+  </footer>
+</div>
+
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// ── Helpers ──────────────────────────────────────────────────────────────────
+function normalPDF(x, mu, sigma) {
+  const d = (x - mu) / sigma;
+  return Math.exp(-0.5 * d * d) / (sigma * Math.sqrt(2 * Math.PI));
+}
+
+function fmt(v, d) { return Number(v).toFixed(d); }
+
+// ── Power for two proportions (equal n) ──────────────────────────────────────
+function computePower(pA, pB, n, alpha, alternative) {
+  const pBar = (pA + pB) / 2;
+  const effect = pB - pA;
+  const nullScale = Math.sqrt(2 * pBar * (1 - pBar));
+  const altScale = Math.sqrt(pA * (1 - pA) + pB * (1 - pB));
+  if (altScale === 0) return 0;
+  const sqrtN = Math.sqrt(n);
+
+  if (alternative === 'two-sided') {
+    const zc = jStat.normal.inv(1 - alpha / 2, 0, 1);
+    const upper = 1 - jStat.normal.cdf((zc * nullScale - effect * sqrtN) / altScale, 0, 1);
+    const lower = jStat.normal.cdf((-zc * nullScale - effect * sqrtN) / altScale, 0, 1);
+    return Math.min(1, Math.max(0, upper + lower));
+  }
+  const zc = jStat.normal.inv(1 - alpha, 0, 1);
+  return Math.min(1, Math.max(0,
+    1 - jStat.normal.cdf((zc * nullScale - effect * sqrtN) / altScale, 0, 1)
+  ));
+}
+
+// ── Sample size per group ─────────────────────────────────────────────────────
+function computeN(pA, pB, alpha, targetPower, alternative) {
+  const pBar = (pA + pB) / 2;
+  const diff = Math.abs(pA - pB);
+  if (diff === 0) return Infinity;
+  const za = alternative === 'two-sided'
+    ? jStat.normal.inv(1 - alpha / 2, 0, 1)
+    : jStat.normal.inv(1 - alpha, 0, 1);
+  const zb = jStat.normal.inv(targetPower, 0, 1);
+  return Math.ceil(Math.pow(
+    (za * Math.sqrt(2 * pBar * (1 - pBar)) + zb * Math.sqrt(pA * (1 - pA) + pB * (1 - pB))) / diff,
+    2
+  ));
+}
+
+// ── MDE by binary search ──────────────────────────────────────────────────────
+function computeMDE(pA, n, alpha, targetPower, alternative) {
+  let lo = 0, hi = Math.min(pA, 1 - pA);
+  for (let i = 0; i < 80; i++) {
+    const mid = (lo + hi) / 2;
+    const pB = pA + mid;
+    if (pB >= 1 || pB <= 0) { hi = mid; continue; }
+    const pw = computePower(pA, pB, n, alpha, alternative);
+    if (pw >= targetPower) hi = mid;
+    else lo = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+// ── Chart ─────────────────────────────────────────────────────────────────────
+let critChart;
+
+function buildChartDatasets(pA, pB, n, alpha, alternative) {
+  const pBar = (pA + pB) / 2;
+  const effect = pB - pA;
+  const nullScale = Math.sqrt(2 * pBar * (1 - pBar));
+  const altScale = Math.sqrt(pA * (1 - pA) + pB * (1 - pB));
+  const delta = effect * Math.sqrt(n) / nullScale;
+  const sigma1 = altScale / nullScale;
+
+  let critLow = null, critHigh = null;
+  if (alternative === 'two-sided') {
+    const z = jStat.normal.inv(1 - alpha / 2, 0, 1);
+    critLow = -z; critHigh = z;
+  } else {
+    critHigh = jStat.normal.inv(1 - alpha, 0, 1);
+  }
+
+  const xMin = Math.min(-4.5, delta - 4.5 * sigma1);
+  const xMax = Math.max(4.5, delta + 4.5 * sigma1);
+
+  const xSet = new Set();
+  for (let i = 0; i <= 500; i++) xSet.add(xMin + i * (xMax - xMin) / 500);
+  const eps = 0.003;
+  [critLow, critHigh].forEach(c => {
+    if (c !== null && c > xMin && c < xMax) {
+      xSet.add(c - eps); xSet.add(c); xSet.add(c + eps);
+    }
+  });
+
+  const xs = Array.from(xSet).sort((a, b) => a - b);
+  const inCrit = x =>
+    (critLow !== null && x <= critLow) ||
+    (critHigh !== null && x >= critHigh);
+
+  const h0Full  = xs.map(x => ({ x, y: normalPDF(x, 0, 1) }));
+  const h0Crit  = xs.map(x => ({ x, y: inCrit(x) ? normalPDF(x, 0, 1) : 0 }));
+  const h1Full  = xs.map(x => ({ x, y: normalPDF(x, delta, sigma1) }));
+  const h1Power = xs.map(x => ({ x, y: inCrit(x) ? normalPDF(x, delta, sigma1) : 0 }));
+
+  return { h0Full, h0Crit, h1Full, h1Power };
+}
+
+function renderChart(pA, pB, n, alpha, alternative) {
+  const ctx = document.getElementById('critRegionsChart');
+  if (!ctx) return;
+
+  const { h0Full, h0Crit, h1Full, h1Power } = buildChartDatasets(pA, pB, n, alpha, alternative);
+
+  const datasets = [
+    {
+      label: 'H₀: pA = pB',
+      data: h0Full,
+      borderColor: '#2563eb',
+      backgroundColor: 'transparent',
+      borderWidth: 2,
+      pointRadius: 0,
+      fill: false,
+      parsing: false
+    },
+    {
+      label: 'Critical region (α)',
+      data: h0Crit,
+      borderColor: 'transparent',
+      backgroundColor: 'rgba(239,68,68,0.35)',
+      borderWidth: 0,
+      pointRadius: 0,
+      fill: 'origin',
+      parsing: false
+    },
+    {
+      label: `H₁: pB − pA = ${fmt(pB - pA, 3)}`,
+      data: h1Full,
+      borderColor: '#f59e0b',
+      backgroundColor: 'transparent',
+      borderWidth: 2,
+      borderDash: [6, 4],
+      pointRadius: 0,
+      fill: false,
+      parsing: false
+    },
+    {
+      label: 'Power (1−β)',
+      data: h1Power,
+      borderColor: 'transparent',
+      backgroundColor: 'rgba(16,185,129,0.4)',
+      borderWidth: 0,
+      pointRadius: 0,
+      fill: 'origin',
+      parsing: false
+    }
+  ];
+
+  if (critChart) critChart.destroy();
+  critChart = new Chart(ctx, {
+    type: 'line',
+    data: { datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { type: 'linear', title: { display: true, text: 'Standardized Z statistic' } },
+        y: { min: 0, title: { display: true, text: 'Density' } }
+      },
+      plugins: {
+        legend: { display: true, position: 'top' },
+        tooltip: { enabled: false }
+      },
+      animation: { duration: 200 }
+    }
+  });
+}
+
+// ── Mode: Power ────────────────────────────────────────────────────────────
+function doPower() {
+  const pA    = parseFloat(document.getElementById('pwPA').value);
+  const pB    = parseFloat(document.getElementById('pwPB').value);
+  const n     = parseInt(document.getElementById('pwN').value, 10);
+  const alpha = parseFloat(document.getElementById('pwAlpha').value);
+  const alt   = document.getElementById('pwTail').value;
+  const el    = document.getElementById('pwResult');
+
+  if (!Number.isFinite(pA) || pA <= 0 || pA >= 1) { el.textContent = 'Error: p_A must be between 0 and 1.'; return; }
+  if (!Number.isFinite(pB) || pB <= 0 || pB >= 1) { el.textContent = 'Error: p_B must be between 0 and 1.'; return; }
+  if (!Number.isFinite(n) || n < 1) { el.textContent = 'Error: n must be a positive integer.'; return; }
+  if (!Number.isFinite(alpha) || alpha <= 0 || alpha >= 1) { el.textContent = 'Error: α must be between 0 and 1.'; return; }
+
+  const power  = computePower(pA, pB, n, alpha, alt);
+  const beta   = 1 - power;
+  const delta  = pB - pA;
+  const liftRel = delta / pA * 100;
+  const mde    = computeMDE(pA, n, alpha, 0.80, alt);
+  const nFor80 = computeN(pA, pB, alpha, 0.80, alt);
+
+  const interp = power >= 0.8
+    ? `The experiment has sufficient power to detect a difference of ${fmt(Math.abs(delta), 3)} (lift ${fmt(Math.abs(liftRel), 1)}%) with α = ${alpha}.`
+    : power >= 0.5
+      ? `The power is moderate. To reach 80% with this effect, ${nFor80} users per group would be needed.`
+      : `The power is low. The experiment will probably not detect the difference even if it exists. ${nFor80} users per group would be needed for 80% power.`;
+
+  el.innerHTML = `
+    <strong>Power (1−β):</strong> ${fmt(power * 100, 1)}%<br>
+    <strong>Type II error (β):</strong> ${fmt(beta * 100, 1)}%<br>
+    <strong>Expected difference Δ = p_B − p_A:</strong> ${fmt(delta, 4)} (lift ${fmt(liftRel, 1)}%)<br>
+    <strong>MDE at 80% power for this n:</strong> ±${fmt(mde, 4)} (lift ±${fmt(mde / pA * 100, 1)}%)<br>
+    <em>${interp}</em>
+  `;
+
+  renderChart(pA, pB, n, alpha, alt);
+  if (window.MathJax?.typesetPromise) MathJax.typesetPromise();
+}
+
+// ── Mode: Sample size ─────────────────────────────────────────────────────
+function doN() {
+  const pA          = parseFloat(document.getElementById('nPA').value);
+  const pB          = parseFloat(document.getElementById('nPB').value);
+  const alpha       = parseFloat(document.getElementById('nAlpha').value);
+  const targetPower = parseFloat(document.getElementById('nTargetPower').value);
+  const alt         = document.getElementById('nTail').value;
+  const el          = document.getElementById('nResult');
+
+  if (!Number.isFinite(pA) || pA <= 0 || pA >= 1) { el.textContent = 'Error: p_A must be between 0 and 1.'; return; }
+  if (!Number.isFinite(pB) || pB <= 0 || pB >= 1) { el.textContent = 'Error: p_B must be between 0 and 1.'; return; }
+  if (pA === pB) { el.textContent = 'Error: p_A and p_B must be different.'; return; }
+  if (!Number.isFinite(alpha) || alpha <= 0 || alpha >= 1) { el.textContent = 'Error: α must be between 0 and 1.'; return; }
+  if (!Number.isFinite(targetPower) || targetPower <= 0 || targetPower >= 1) { el.textContent = 'Error: power must be between 0 and 1.'; return; }
+
+  const n = computeN(pA, pB, alpha, targetPower, alt);
+  const actualPower = computePower(pA, pB, n, alpha, alt);
+  const delta = pB - pA;
+  const liftRel = delta / pA * 100;
+
+  el.innerHTML = `
+    <strong>Minimum sample size per group:</strong> n = ${n} (total: ${2 * n})<br>
+    <strong>Exact power with that n:</strong> ${fmt(actualPower * 100, 1)}%<br>
+    <strong>Effect Δ = p_B − p_A:</strong> ${fmt(delta, 4)} (lift ${fmt(liftRel, 1)}%)<br>
+    <em>With ${n} users per group you reach ≥ ${fmt(targetPower * 100, 0)}% power to detect a difference of ${fmt(Math.abs(delta), 4)} with α = ${alpha} (${alt === 'two-sided' ? 'two-tailed' : 'one-tailed'}).</em>
+  `;
+
+  renderChart(pA, pB, n, alpha, alt);
+  if (window.MathJax?.typesetPromise) MathJax.typesetPromise();
+}
+
+// ── Tabs ──────────────────────────────────────────────────────────────────────
+document.querySelectorAll('.mode-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mode-tab').forEach(b => {
+      b.classList.remove('active'); b.setAttribute('aria-selected', 'false');
+    });
+    document.querySelectorAll('.mode-section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+    document.getElementById(btn.dataset.target).classList.add('active');
+  });
+});
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+document.getElementById('calcPwBtn').addEventListener('click', doPower);
+document.getElementById('calcNBtn').addEventListener('click', doN);
+doPower();
+</script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>

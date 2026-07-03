@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../tamano-muestral-odds-ratio-ic.html">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample size calculator for an odds ratio confidence interval | ProbLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate the minimum sample size per group to estimate an odds ratio with a target precision on the log scale. Formula, example and interpretation.">
+    <meta name="keywords" content="sample size odds ratio confidence interval, sample size calculator odds ratio, sample size OR CI, odds ratio precision epidemiology, ProbLab, online statistics">
+    <link rel="canonical" href="https://problabtools.com/en/tamano-muestral-odds-ratio-ic.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Sample size calculator for an odds ratio confidence interval | ProbLab">
+    <meta property="og:description" content="Calculate the minimum sample size per group to estimate an odds ratio with a target precision on the log scale. Formula, example and interpretation.">
+    <meta property="og:url" content="https://problabtools.com/en/tamano-muestral-odds-ratio-ic.html">
+    <meta property="og:site_name" content="ProbLab">
+    <meta property="og:image" content="https://problabtools.com/og-image.png">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image:alt" content="Sample size calculator for the odds ratio">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Vicente Castellar">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="alternate" hreflang="en" href="https://problabtools.com/en/tamano-muestral-odds-ratio-ic.html">
+    <link rel="alternate" hreflang="es" href="https://problabtools.com/tamano-muestral-odds-ratio-ic.html">
+    <link rel="alternate" hreflang="x-default" href="https://problabtools.com/tamano-muestral-odds-ratio-ic.html">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sample size calculator for an odds ratio confidence interval | ProbLab">
+    <meta name="twitter:description" content="Calculate the minimum sample size per group to estimate an odds ratio with a target precision on the log scale.">
+    <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+    <meta name="twitter:image:alt" content="Sample size calculator for the odds ratio">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+            {"@type": "ListItem", "position": 2, "name": "Sample size", "item": "https://problabtools.com/en/tamano-muestral/"},
+            {"@type": "ListItem", "position": 3, "name": "Odds ratio (CI)", "item": "https://problabtools.com/en/tamano-muestral-odds-ratio-ic.html"}
+          ]
+        },
+        {
+          "@type": "WebPage",
+          "name": "Sample size calculator for an odds ratio confidence interval | ProbLab",
+          "url": "https://problabtools.com/en/tamano-muestral-odds-ratio-ic.html",
+          "description": "Calculate the minimum number of observations per group to estimate an odds ratio with a predefined confidence interval width on the log scale.",
+          "inLanguage": "en",
+          "isPartOf": {"@type": "WebSite", "name": "ProbLab", "url": "https://problabtools.com/en/"}
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Sample size calculator for odds ratio (CI)",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web",
+      "url": "https://problabtools.com/en/tamano-muestral-odds-ratio-ic.html",
+      "description": "Calculate the minimum number of observations per group to estimate an odds ratio with a predefined confidence interval width on the log scale.",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Why is the precision of the CI for OR expressed on the log scale?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Because the sampling distribution of log(OR) is approximately normal, while OR is skewed and only takes positive values. The standard error of log(OR) is the stable parameter that lets you plan the study."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I interpret the margin E_log?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "E_log is the half-width of the CI on the log(OR) scale. The CI for OR goes from OR·e^(−E_log) to OR·e^(+E_log). For example, E_log=0.5 gives a CI between 0.61·OR and 1.65·OR; E_log=log(2)≈0.693 gives a CI between OR/2 and OR·2."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the result per group or the total?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The formula gives the minimum number of observations per group (1:1 allocation between exposed and unexposed). The total number of subjects is 2·n."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the sample size exact?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. It depends on the assumed values of p₂ and OR, which must be estimated from pilot data or the literature. Add a 10–20% buffer to compensate for losses or exclusions."
+          }
+        }
+      ]
+    }
+    </script>
+    <link rel="stylesheet" href="../style_new.css?v=20260624">
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="distribuciones/">Distributions</a></li>
+            <li><a href="tablas-estadisticas/">Tables</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="tamano-muestral/">Sample size</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="ab-testing/">A/B testing</a></li>
+            <li><a href="simulaciones/">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../tamano-muestral-odds-ratio-ic.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="tamano-muestral/">Sample size</a></li>
+            <li><span aria-current="page">Odds ratio (CI)</span></li>
+        </ol>
+    </nav>
+    <header class="hero">
+        <p class="eyebrow">Sample size</p>
+        <h1>Sample size calculator for odds ratio (CI)</h1>
+        <p class="hero-subtitle">Estimate the minimum number of observations per group needed for a confidence interval for the odds ratio with a target width on the log scale.</p>
+        <p class="hero-links"><a class="hero-link-button" href="tamano-muestral/">See all sample size calculators</a></p>
+    </header>
+
+    <main>
+        <p class="tool-intro">Estimate how many observations per group you need to obtain a confidence interval for the odds ratio with the target width on the log scale. This is a precision-based approach.</p>
+
+        <section class="card sample-size-panel">
+            <div class="panel-heading">
+                <h2>Calculator</h2>
+                <p>Enter the expected OR, the event proportion in the reference group, and the desired precision on the log(OR) scale.</p>
+            </div>
+
+            <div class="form-grid sample-grid">
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="orOR">Expected odds ratio (OR)</label>
+                        <input type="number" id="orOR" value="2.0" step="0.1" min="0.0001">
+                    </div>
+                    <div class="form-group">
+                        <label for="orP2">Event proportion in the reference group (p₂)</label>
+                        <input type="number" id="orP2" value="0.20" step="0.01" min="0.0001" max="0.9999">
+                    </div>
+                </div>
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="orElog">CI half-width on the log(OR) scale (E<sub>log</sub>)</label>
+                        <input type="number" id="orElog" value="0.5" step="0.05" min="0.0001">
+                    </div>
+                    <div class="form-group">
+                        <label for="orConfidence">Confidence level</label>
+                        <select id="orConfidence">
+                            <option value="0.90">90%</option>
+                            <option value="0.95" selected>95%</option>
+                            <option value="0.99">99%</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="orCalculateBtn">Calculate sample size</button>
+            <div id="orResult" class="result-box">Result pending…</div>
+        </section>
+
+                <section class="card content-card">
+            <h3>Explanation</h3>
+            <p>The odds ratio (OR) measures the association between an exposure and an event in a 2×2 table. To plan how many subjects are needed to estimate it with a given precision, the calculation is done on the logarithmic scale, because \(\log(\widehat{OR})\) is approximately normally distributed with a standard error that depends on the counts in each cell.</p>
+            <p>The inputs are: the OR expected to be found, the event proportion in the reference group (\(p_2\)), and the desired precision expressed as the half-width of the CI on the \(\log(OR)\) scale. From \(p_2\) and OR, the calculator derives \(p_1\) (the event proportion in the exposed group). With both proportions it calculates the minimum number of subjects per group so that the CI has the specified width.</p>
+            <p>The formula assumes balanced allocation (the same number of subjects in each group) and sufficient counts in all four cells for the normal approximation to be valid.</p>
+            <h3>Formulas</h3>
+            <p>Given the expected OR and \(p_2\), the event proportion in the exposed group is obtained by inverting the definition of the odds ratio:</p>
+            <p class="formula-line">\( p_1 = \frac{OR \cdot p_2}{1 + (OR - 1)\cdot p_2} \)</p>
+            <p>The standard error of \(\log(\widehat{OR})\) for a table with \(n\) observations per group is:</p>
+            <p class="formula-line">\( SE\!\left[\log(\widehat{OR})\right] = \frac{1}{\sqrt{n}} \cdot \sqrt{\frac{1}{p_1(1-p_1)} + \frac{1}{p_2(1-p_2)}} \)</p>
+            <p>Imposing that the CI margin equal \(E_{\log} = Z \cdot SE\), we solve for \(n\):</p>
+            <p class="formula-line">\( n = \frac{Z^2 \cdot \left[\dfrac{1}{p_1(1-p_1)} + \dfrac{1}{p_2(1-p_2)}\right]}{E_{\log}^2} \)</p>
+            <ul>
+                <li><strong>n</strong>: minimum number of observations per group (total N = 2n).</li>
+                <li><strong>Z</strong>: normal quantile — 1.645 (90%), 1.960 (95%), 2.576 (99%).</li>
+                <li><strong>\(E_{\log}\)</strong>: half-width of the CI on the \(\log(OR)\) scale. The CI for OR falls between \(OR \cdot e^{-E_{\log}}\) and \(OR \cdot e^{+E_{\log}}\).</li>
+            </ul>
+            <h3>How to interpret E_log</h3>
+            <p>The half-width \(E_{\log}\) determines how far each CI limit can be from the estimated OR on the multiplicative scale. With OR = 2 and \(E_{\log} = 0.5\), the CI runs from \(2 \cdot e^{-0.5} \approx 1.21\) to \(2 \cdot e^{+0.5} \approx 3.30\). A useful reference: \(E_{\log} = \log(2) \approx 0.693\) produces a CI where the upper limit is exactly double the lower limit.</p>
+            <h3>Quick setup</h3>
+            <ul>
+                <li><strong>Expected OR:</strong> based on prior studies or on the smallest association you consider relevant.</li>
+                <li><strong>p₂ (reference group):</strong> frequency of the event in the unexposed population. It is the parameter with the largest influence, together with OR.</li>
+                <li><strong>E_log:</strong> half-width on the log scale. Values between 0.3 and 0.7 are common. Smaller E_log → narrower CI → more subjects.</li>
+                <li><strong>Confidence level:</strong> 95% is the standard; use 99% for regulatory or high-impact decisions.</li>
+                <li><strong>Expected losses:</strong> divide n per group by (1 − dropout rate).</li>
+            </ul>
+            <h3>Worked example</h3>
+            <p>An epidemiologist wants to estimate the odds ratio of a disease in exposed vs. unexposed subjects to a risk factor. According to the literature, the proportion of the disease among the unexposed is \(p_2 = 0.20\) and the expected OR is 2.0. A 95% CI with a half-width of \(E_{\log} = 0.5\) on the log scale is desired.</p>
+            <p>First we derive \(p_1\):</p>
+            <p class="formula-line">\( p_1 = \frac{2.0 \times 0.20}{1 + (2.0 - 1) \times 0.20} = \frac{0.40}{1.20} = 0.333 \)</p>
+            <p>Now we calculate n:</p>
+            <p class="formula-line">\( n = \frac{(1.960)^2 \cdot \left[\dfrac{1}{0.333 \times 0.667} + \dfrac{1}{0.20 \times 0.80}\right]}{(0.5)^2} = \frac{3.8416 \times (4.502 + 6.25)}{0.25} = \frac{41.30}{0.25} = 165.2 \rightarrow n = 166 \text{ per group} \)</p>
+            <p>We need <strong>166 subjects per group</strong> (332 in total). The resulting CI for OR will run from approximately \(2.0 \cdot e^{-0.5} \approx 1.21\) to \(2.0 \cdot e^{+0.5} \approx 3.30\), which corresponds to a U/L ratio = e ≈ 2.72.</p>
+            <p><strong>Sensitivity analysis:</strong> if the true OR were 3.0 instead of 2.0, n would decrease because the proportions would be farther apart and the OR would be easier to estimate precisely. It's always advisable to recalculate for a plausible range of OR.</p>
+            <h3>Model assumptions</h3>
+            <ul>
+                <li>Design with two equally sized groups (1:1 allocation between exposed and unexposed).</li>
+                <li>Sufficient counts in all four cells (\(n \cdot p_i\) and \(n \cdot (1-p_i)\) ≥ 5 in both groups) for the normal approximation to \(\log(OR)\) to be valid.</li>
+                <li>The values of p₂ and OR are reliably estimated; uncertainty in these assumptions propagates to the sample size.</li>
+                <li>For case-control studies with a cases:controls ratio ≠ 1:1, the formula must be adjusted.</li>
+            </ul>
+            <h3>Common uses</h3>
+            <ul>
+                <li>Design of cohort or cross-sectional studies where the main association measure is the OR.</li>
+                <li>Planning logistic regression analyses when the OR needs to be characterized with sufficient precision.</li>
+                <li>Studies of risk factor prevalence in analytic epidemiology.</li>
+            </ul>
+            <h3>How to interpret the result</h3>
+                <p>The value \(n\) is the <strong>minimum sample size per group</strong> so that the confidence interval of the odds ratio on the log scale has a maximum half-width of \(E_{\log}\) at the specified confidence level. In terms of the natural OR, this means the ratio between the upper and lower limits of the CI will be at most \(e^{2E_{\log}}\). Always round \(n\) up. Add the margin for losses by dividing \(n\) by \((1 - \text{dropout rate})\) to get the recruitment number per group; the total to recruit is \(2n\) adjusted.</p>
+                <p>The most influential parameters are \(p_2\) (the reference proportion) and the specified OR, since together they determine \(p_1 = \text{OR} \times p_2 / (1 + p_2(\text{OR} - 1))\) and the variance of the estimator. Run a <em>sensitivity analysis</em> varying \(p_2\) by ±0.05 and the OR over a reasonable range: when \(p_2\) is very small or very large, the variance of \(\log(\widehat{\text{OR}})\) is larger and more subjects are needed. Likewise, an OR closer to 1 requires more subjects to estimate the log-OR with the same absolute precision. Keep in mind that \(E_{\log}\) is the precision on the log scale; if you need to interpret the result on the natural scale, note that \(E_{\log} = 0.3\) corresponds to a multiplicative factor of \(e^{0.3} \approx 1.35\) on the upper limit relative to the center of the CI.</p>
+                <p>This approach (CI) differs from hypothesis testing: here the goal is to <em>estimate</em> the OR with a given precision, not to decide whether it differs from 1. If what you need is to detect an OR \(\neq 1\) with a certain power, use the <a href="tamano-muestral-odds-ratio.html">sample size calculator for testing the OR</a>. Once the data are collected, calculate the OR and its CI with the <a href="intervalo-confianza-odds-ratio.html">odds ratio calculator</a> and interpret the CI limits in the clinical or epidemiological context of the study.</p>
+        </section>
+
+        <section id="seo-support-content" class="card content-card">
+            <section class="related-tools">
+                <h3>Related calculators</h3>
+                <ul>
+                    <li><a href="intervalo-confianza-odds-ratio.html">CI for the odds ratio</a></li>
+                    <li><a href="tamano-muestral-odds-ratio.html">Sample size for odds ratio (H0 test)</a></li>
+                    <li><a href="intervalo-confianza-ratio-proporciones.html">CI for the ratio of proportions (RR)</a></li>
+                    <li><a href="test-exacto-fisher.html">Fisher's exact test</a></li>
+                    <li><a href="contraste-independencia-chi-cuadrado.html">Chi-square independence test</a></li>
+                </ul>
+            </section>
+            <h3>References and further reading</h3>
+            <ul>
+                <li>Woolf, B. (1955). On estimating the relation between blood group and disease, <em>Annals of Human Genetics</em>, 19, 251–253.</li>
+                <li>Kelsey, J. L., Whittemore, A. S., Evans, A. S., &amp; Thompson, W. D. (1996). <em>Methods in Observational Epidemiology</em> (2nd ed.). Oxford University Press.</li>
+                <li>Schlesselman, J. J. (1982). <em>Case-Control Studies: Design, Conduct, Analysis</em>. Oxford University Press.</li>
+            </ul>
+            <h3>Frequently asked questions</h3>
+            <ul>
+                <li><strong>What E_log is reasonable?</strong> It depends on how much imprecision is tolerable. E_log=0.5 gives a CI that varies by a factor of e≈2.7 between limits; E_log=0.3 reduces it to e^(0.6)≈1.82. Smaller E_log requires more sample.</li>
+                <li><strong>Why is the OR estimated on the log scale?</strong> Because log(OR) has an approximately normal sampling distribution and a stable standard error, while OR is positive and skewed.</li>
+                <li><strong>Does this calculation work for case-control studies?</strong> With caution. In case-control studies the logic is different (the groups are cases and controls, not exposed and unexposed), although the formula can be used as an approximation when the event is not rare.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="legal-footer">
+        <p>
+            © 2026 problabtools.
+            <a href="../aviso-legal.html">Legal notice</a> ·
+            <a href="../privacidad.html">Privacy</a> ·
+            <a href="../cookies.html">Cookies</a> ·
+            <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+        </p>
+    </footer>
+</div>
+
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+<script>
+function calculateORSampleSize() {
+    const OR = parseFloat(document.getElementById('orOR').value);
+    const p2 = parseFloat(document.getElementById('orP2').value);
+    const eLog = parseFloat(document.getElementById('orElog').value);
+    const confidence = parseFloat(document.getElementById('orConfidence').value);
+    const resultEl = document.getElementById('orResult');
+
+    if (!Number.isFinite(OR) || OR <= 0) {
+        resultEl.innerText = 'Error: OR must be greater than 0.';
+        return;
+    }
+    if (!Number.isFinite(p2) || p2 <= 0 || p2 >= 1) {
+        resultEl.innerText = 'Error: p₂ must be between 0 and 1 (exclusive).';
+        return;
+    }
+    if (!Number.isFinite(eLog) || eLog <= 0) {
+        resultEl.innerText = 'Error: E_log must be greater than 0.';
+        return;
+    }
+    if (!Number.isFinite(confidence) || confidence <= 0 || confidence >= 1) {
+        resultEl.innerText = 'Error: the confidence level must be between 0 and 1.';
+        return;
+    }
+
+    const p1 = (OR * p2) / (1 + (OR - 1) * p2);
+
+    if (p1 <= 0 || p1 >= 1) {
+        resultEl.innerText = 'Error: the combination of OR and p₂ produces a p₁ outside the range (0, 1). Check the values.';
+        return;
+    }
+
+    const alpha = 1 - confidence;
+    const z = jStat.normal.inv(1 - alpha / 2, 0, 1);
+    const varianceTerm = 1 / (p1 * (1 - p1)) + 1 / (p2 * (1 - p2));
+    const n = Math.ceil(z * z * varianceTerm / (eLog * eLog));
+    const confPct = Math.round(confidence * 100);
+    const ciRatio = Math.exp(2 * eLog);
+
+    resultEl.innerText =
+        `Derived p₁ = ${p1.toFixed(4)}  |  p₂ = ${p2.toFixed(4)}  |  OR = ${OR}\n` +
+        `Minimum n per group: ${n}  |  Total: ${2 * n} observations (${confPct}% confidence)\n` +
+        `Z = ${z.toFixed(4)}  |  E_log = ${eLog}  |  U/L ratio of the CI = e^(2·E_log) = ${ciRatio.toFixed(3)}\n` +
+        `CI for OR ≈ [${(OR * Math.exp(-eLog)).toFixed(3)}, ${(OR * Math.exp(eLog)).toFixed(3)}]`;
+}
+
+document.getElementById('orCalculateBtn').addEventListener('click', calculateORSampleSize);
+calculateORSampleSize();
+</script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>

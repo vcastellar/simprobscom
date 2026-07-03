@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../intervalo-confianza-diferencia-medias.html">
+<head>
+    <meta charset="UTF-8">
+    <title>CI for the difference of means | ProbLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Confidence interval calculator for the difference of two independent means. Equal or unequal variances. Formula, chart and examples.">
+    <meta name="keywords" content="confidence interval difference of means, CI two independent means, calculate CI difference of means, confidence interval compare means, ProbLab, online statistics, statistics calculator">
+    <link rel="canonical" href="https://problabtools.com/en/intervalo-confianza-diferencia-medias.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="CI for the difference of means | ProbLab">
+    <meta property="og:description" content="Confidence interval calculator for the difference of two independent means. Equal or unequal variances. Formula, chart and examples.">
+    <meta property="og:url" content="https://problabtools.com/en/intervalo-confianza-diferencia-medias.html">
+    <meta property="og:site_name" content="ProbLab">
+    <meta property="og:image" content="https://problabtools.com/og-image.png">
+    <meta property="og:locale" content="en_US">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Vicente Castellar">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="alternate" hreflang="en" href="https://problabtools.com/en/intervalo-confianza-diferencia-medias.html">
+    <link rel="alternate" hreflang="es" href="https://problabtools.com/intervalo-confianza-diferencia-medias.html">
+    <link rel="alternate" hreflang="x-default" href="https://problabtools.com/intervalo-confianza-diferencia-medias.html">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CI for the difference of means | ProbLab">
+    <meta name="twitter:description" content="Confidence interval calculator for the difference of two independent means. Equal or unequal variances. Formula, chart and examples.">
+    <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+            {"@type": "ListItem", "position": 2, "name": "Confidence intervals", "item": "https://problabtools.com/en/intervalos-confianza/"},
+            {"@type": "ListItem", "position": 3, "name": "CI difference of means", "item": "https://problabtools.com/en/intervalo-confianza-diferencia-medias.html"}
+          ]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "Confidence interval for the difference of means",
+          "applicationCategory": "EducationalApplication",
+          "operatingSystem": "Web",
+          "url": "https://problabtools.com/en/intervalo-confianza-diferencia-medias.html",
+          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+        }
+      ]
+    }
+    </script>
+    <link rel="stylesheet" href="../style_new.css?v=20260624">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "When does the CI indicate a significant difference?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "When the value 0 falls outside the interval [L, U]."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is Welch always valid?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, for independent samples with an approximately normal distribution. For very small samples or highly skewed distributions, consider alternative intervals such as bootstrap for the difference of means, a CI for the difference of medians, or the Hodges-Lehmann estimator if you're interested in a location shift."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does it mean if the CI includes 0?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "That at the chosen confidence level you cannot rule out that both means are equal."
+      }
+    }
+  ]
+}
+    </script>
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="distribuciones/">Distributions</a></li>
+            <li><a href="tablas-estadisticas/">Tables</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="tamano-muestral/">Sample size</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="ab-testing/">A/B testing</a></li>
+            <li><a href="simulaciones/">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../intervalo-confianza-diferencia-medias.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><span aria-current="page">Difference of means</span></li>
+        </ol>
+    </nav>
+    <header class="hero">
+        <p class="eyebrow">Confidence intervals</p>
+        <h1>Confidence interval for the difference of means</h1>
+        <p class="hero-subtitle">Estimate the difference between two independent population means, with equal or unequal variances.</p>
+        <p class="hero-links"><a class="hero-link-button" href="intervalos-confianza/">See all confidence intervals</a></p>
+    </header>
+
+    <main>
+        <section class="card sample-size-panel">
+            <div class="panel-heading">
+                <h2>Calculator</h2>
+                <p>Enter the statistics for each group to get the confidence interval for μ₁ − μ₂.</p>
+            </div>
+
+            <div class="form-grid sample-grid">
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="xbar1">Sample mean group 1 (x̄₁)</label>
+                        <input type="number" id="xbar1" value="5.2" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="xbar2">Sample mean group 2 (x̄₂)</label>
+                        <input type="number" id="xbar2" value="4.7" step="0.01">
+                    </div>
+                </div>
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="s1">Standard deviation group 1 (s₁)</label>
+                        <input type="number" id="s1" value="1.4" step="0.001" min="0.0001">
+                    </div>
+                    <div class="form-group">
+                        <label for="s2">Standard deviation group 2 (s₂)</label>
+                        <input type="number" id="s2" value="1.6" step="0.001" min="0.0001">
+                    </div>
+                </div>
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="n1">Sample size group 1 (n₁)</label>
+                        <input type="number" id="n1" value="20" step="1" min="2">
+                    </div>
+                    <div class="form-group">
+                        <label for="n2">Sample size group 2 (n₂)</label>
+                        <input type="number" id="n2" value="22" step="1" min="2">
+                    </div>
+                </div>
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="conf">Confidence level</label>
+                        <select id="conf">
+                            <option value="0.90">90%</option>
+                            <option value="0.95" selected>95%</option>
+                            <option value="0.99">99%</option>
+                            <option value="custom">Custom…</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="varType">Variance assumption</label>
+                        <select id="varType">
+                            <option value="welch" selected>Unequal variances (Welch)</option>
+                            <option value="pooled">Equal variances (pooled)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="inline-inputs" id="customConfRow" style="display:none">
+                    <div class="form-group">
+                        <label for="customConf">Custom confidence level (0–1)</label>
+                        <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="calcBtn">Calculate interval</button>
+            <div id="result" class="result-box">Result pending…</div>
+            <div class="chart-wrap">
+                <canvas id="ciChart" aria-label="Chart of the confidence interval for the difference of means" role="img"></canvas>
+            </div>
+        </section>
+
+        <section class="card content-card">
+            <h3>Explanation</h3>
+            <p>When comparing two independent groups (treatment A vs. B, plant 1 vs. plant 2, before vs. after with different samples), the confidence interval for the difference of means \(\mu_1 - \mu_2\) lets you quantify the magnitude of the difference and its uncertainty.</p>
+            <p>This interval is for independent samples: the observations in group 1 are not paired with specific observations in group 2. If they are the same people before/after, or the same units measured twice, you should use the <a href="intervalo-confianza-medias-apareadas.html">CI for paired means</a>, which works on the individual differences.</p>
+            <p>There are two variants depending on whether the population variances are equal or unequal. Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area of the tails; for example, for 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\). If 0 falls outside the interval, there is evidence that the means differ.</p>
+
+            <h3>Equal variances (pooled)</h3>
+            <p>The <em>pooled</em> method assumes that the two groups share the same population variance: \(\sigma_1^2=\sigma_2^2\). Since that common variance is unknown, it is estimated by combining the two sample variances into a single pooled variance \(s_p^2\).</p>
+            <p class="formula-line">\( (\bar{x}_1 - \bar{x}_2) \pm t_{\alpha/2,\, n_1+n_2-2} \cdot s_p\sqrt{\dfrac{1}{n_1} + \dfrac{1}{n_2}} \)</p>
+            <p>The pooled variance weights each variance by its degrees of freedom. The group with more observations contributes more to the common estimate:</p>
+            <p class="formula-line">\( s_p^2 = \dfrac{(n_1-1)s_1^2 + (n_2-1)s_2^2}{n_1 + n_2 - 2} \)</p>
+            <p>This method can be somewhat more efficient if the variances really are equal, but it can give unreliable intervals if the assumption doesn't hold, especially with unequal sample sizes.</p>
+
+            <h3>Unequal variances (Welch)</h3>
+            <p>The Welch method does not force the population variances to be equal. It computes the standard error by adding the uncertainty of each group separately, \(s_1^2/n_1\) and \(s_2^2/n_2\), and adjusts the degrees of freedom using the Welch–Satterthwaite approximation.</p>
+            <p class="formula-line">\( (\bar{x}_1 - \bar{x}_2) \pm t_{\alpha/2,\, \nu} \cdot \sqrt{\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}} \)</p>
+            <p>The degrees of freedom \(\nu\) are usually not integers and reflect the loss of precision caused by estimating two separate variances:</p>
+            <p class="formula-line">\( \nu = \dfrac{\left(\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}\right)^2}{\dfrac{(s_1^2/n_1)^2}{n_1-1} + \dfrac{(s_2^2/n_2)^2}{n_2-1}} \)</p>
+            <p>In practice, Welch is usually the recommended default: it works well even when the variances differ and it barely loses efficiency when the variances are similar.</p>
+
+            <h3>Worked example</h3>
+            <p>Group A (new drug): \(\bar{x}_1 = 5.2\), \(s_1 = 1.4\), \(n_1 = 20\). Group B (placebo): \(\bar{x}_2 = 4.7\), \(s_2 = 1.6\), \(n_2 = 22\). The observed difference is \(\bar{x}_1-\bar{x}_2=0.5\).</p>
+            <p>With 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\). Using Welch, the standard error is:</p>
+            <p class="formula-line">\( SE=\sqrt{\dfrac{1.4^2}{20}+\dfrac{1.6^2}{22}}\approx0.463 \)</p>
+            <p>The Welch degrees of freedom are approximately \(\nu\approx39.95\), so \(t_{0.025,\nu}\approx2.021\). The interval is:</p>
+            <p class="formula-line">\( 0.5 \pm 2.021\cdot0.463 \approx [-0.44,\;1.44] \)</p>
+            <p>Since the interval includes 0, the data do not rule out equal means at 95% confidence. If equal variances were assumed, the pooled variance would be \(s_p^2\approx2.275\), \(s_p\approx1.508\), and the pooled interval would be very similar: approximately \([-0.44,\;1.44]\). In this example the conclusions agree, but if the variances or sample sizes were very different, Welch would be safer.</p>
+        </section>
+
+
+
+        <section class="card content-card">
+            <h3>Assumptions for the difference of independent means</h3>
+            <ul>
+                <li>The two groups must be independent; if they are before/after measurements or paired units, use the <a href="intervalo-confianza-medias-apareadas.html">CI for paired means</a>.</li>
+                <li>The observations within each group must be independent and come from representative samples.</li>
+                <li>The distribution of the variable should be approximately normal in each group, especially with small sample sizes. With large samples, the central limit theorem makes the interval more robust.</li>
+                <li>For the pooled method it must be reasonable to assume equal population variances. If there is no clear evidence of equality, Welch is usually the safer option.</li>
+            </ul>
+        </section>
+
+        <section class="card content-card">
+            <h3>Equal or unequal variances?</h3>
+            <p>In practice it is recommended to use Welch by default: it is robust whether or not the variances are equal, and its loss of power when variances are equal is minimal. The equal-variances assumption should only be adopted if there is strong prior evidence that \(\sigma_1 = \sigma_2\).</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>How to interpret the result</h3>
+            <p>The interval \([L, U]\) is the range of plausible values for the difference of population means \(\mu_1 - \mu_2\) given the chosen confidence level. If the interval were repeated many times with samples of the same size, a proportion \(C\) of those intervals would contain the true difference \(\mu_1 - \mu_2\). The width depends on the variability of each group (\(s_1\), \(s_2\)), the sample sizes (\(n_1\), \(n_2\)) and the confidence level: the more observations or the lower the variability, the narrower and more precise the interval.</p>
+            <p>The key for decision-making is whether the value 0 belongs to the interval or not. If \(0 \in [L, U]\), the data are compatible with the hypothesis that both means are equal (\(\mu_1 = \mu_2\)) at the chosen confidence level; equivalently, the two-sided test \(H_0\!: \mu_1 = \mu_2\) would not be rejected at level \(\alpha = 1 - C\). If \(0 \notin [L, U]\), there is evidence that the means differ: if \(L > 0\), the mean of group 1 is significantly greater; if \(U < 0\), the mean of group 2 is significantly greater. The calculator states this explicitly in the result.</p>
+            <ul>
+                <li><strong>Direction of the effect:</strong> the sign and magnitude of the difference \(\bar{x}_1 - \bar{x}_2\) indicate how much and in which direction the groups differ. The interval translates that point estimate into a range of uncertainty.</li>
+                <li><strong>Welch vs. pooled:</strong> with Welch the degrees of freedom are fractional; this slightly shortens the CI compared to forcing equal variances when the variances are very different. The chart shows the t distribution with the effective degrees of freedom of the chosen method.</li>
+                <li><strong>Practical relevance:</strong> a significant CI that is very close to 0 can indicate a real statistical difference but of little practical importance. Always assess the magnitude of the effect together with significance.</li>
+            </ul>
+        </section>
+
+        <section id="seo-support-content" class="card content-card">
+            <section class="related-tools">
+                <h3>Related calculators</h3>
+                <ul>
+                    <li><a href="intervalo-confianza-media.html">CI for one mean (unknown σ)</a></li>
+                    <li><a href="contraste-hipotesis-dos-medias.html">Hypothesis test for two means</a></li>
+                    <li><a href="tamano-muestral-diferencia-medias.html">Sample size for difference of means</a></li>
+                    <li><a href="studentt.html">Student's t distribution</a></li>
+                </ul>
+            </section>
+            <h3>Frequently asked questions</h3>
+            <ul>
+                <li><strong>When does the CI indicate a significant difference?</strong> When the value 0 falls outside the interval [L, U].</li>
+                <li><strong>Is Welch always valid?</strong> Yes, for independent samples with an approximately normal distribution. For very small samples or highly skewed distributions, consider alternative intervals such as bootstrap for the difference of means, a CI for the difference of medians, or the Hodges-Lehmann estimator if you're interested in a location shift.</li>
+                <li><strong>What does it mean if the CI includes 0?</strong> That at the chosen confidence level you cannot rule out that both means are equal.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="legal-footer">
+        <p>
+            © 2026 problabtools.
+            <a href="../aviso-legal.html">Legal notice</a> ·
+            <a href="../privacidad.html">Privacy</a> ·
+            <a href="../cookies.html">Cookies</a> ·
+            <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+        </p>
+    </footer>
+</div>
+
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let ciChart;
+
+document.getElementById('conf').addEventListener('change', function () {
+    document.getElementById('customConfRow').style.display = this.value === 'custom' ? '' : 'none';
+});
+
+function getConfLevel() {
+    const sel = document.getElementById('conf').value;
+    if (sel === 'custom') return parseFloat(document.getElementById('customConf').value);
+    return parseFloat(sel);
+}
+
+function renderChart(tCrit, df) {
+    const ctx = document.getElementById('ciChart');
+    if (!ctx) return;
+
+    const bound = Math.max(4, Math.abs(tCrit) + 0.8);
+    const minX = -bound, maxX = bound;
+    const step = 0.02;
+
+    const curve = [], inside = [], outside = [];
+    for (let x = minX; x <= maxX; x += step) {
+        const y = jStat.studentt.pdf(x, df);
+        curve.push({ x, y });
+        if (x >= -tCrit && x <= tCrit) {
+            inside.push({ x, y });
+            outside.push({ x, y: null });
+        } else {
+            inside.push({ x, y: null });
+            outside.push({ x, y });
+        }
+    }
+
+    if (ciChart) ciChart.destroy();
+    ciChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [
+                { label: 'Confidence region', data: inside, borderColor: 'rgba(34,197,94,0)', backgroundColor: 'rgba(34,197,94,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
+                { label: 'Tails (α/2 each)', data: outside, borderColor: 'rgba(239,68,68,0)', backgroundColor: 'rgba(239,68,68,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
+                { label: `Student's t (df = ${Math.round(df * 100) / 100})`, data: curve, borderColor: '#1d4ed8', borderWidth: 2, pointRadius: 0, fill: false, parsing: false }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: { type: 'linear', min: minX, max: maxX, title: { display: true, text: `t (df ≈ ${Math.round(df * 10) / 10})` } },
+                y: { beginAtZero: true, title: { display: true, text: 'Density' } }
+            }
+        }
+    });
+}
+
+function calculate() {
+    const xbar1 = parseFloat(document.getElementById('xbar1').value);
+    const xbar2 = parseFloat(document.getElementById('xbar2').value);
+    const s1 = parseFloat(document.getElementById('s1').value);
+    const s2 = parseFloat(document.getElementById('s2').value);
+    const n1 = parseFloat(document.getElementById('n1').value);
+    const n2 = parseFloat(document.getElementById('n2').value);
+    const conf = getConfLevel();
+    const varType = document.getElementById('varType').value;
+    const resultEl = document.getElementById('result');
+
+    if (![xbar1, xbar2, s1, s2, n1, n2, conf].every(Number.isFinite) ||
+        s1 <= 0 || s2 <= 0 || n1 < 2 || n2 < 2 || conf <= 0 || conf >= 1) {
+        resultEl.innerText = 'Error: check that s₁,s₂ > 0, n₁,n₂ ≥ 2 and 0 < confidence < 1.';
+        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        return;
+    }
+
+    const alpha = 1 - conf;
+    const diff = xbar1 - xbar2;
+
+    let se, df, tCrit, label;
+
+    if (varType === 'welch') {
+        const v1 = s1 * s1 / n1;
+        const v2 = s2 * s2 / n2;
+        se = Math.sqrt(v1 + v2);
+        df = (v1 + v2) * (v1 + v2) / ((v1 * v1) / (n1 - 1) + (v2 * v2) / (n2 - 1));
+        label = `Welch (df ≈ ${df.toFixed(2)})`;
+    } else {
+        const sp2 = ((n1 - 1) * s1 * s1 + (n2 - 1) * s2 * s2) / (n1 + n2 - 2);
+        se = Math.sqrt(sp2 * (1 / n1 + 1 / n2));
+        df = n1 + n2 - 2;
+        label = `Pooled (df = ${df})`;
+    }
+
+    tCrit = jStat.studentt.inv(1 - alpha / 2, df);
+    const margin = tCrit * se;
+    const lower = diff - margin;
+    const upper = diff + margin;
+    const zeroIncluded = lower <= 0 && upper >= 0;
+
+    resultEl.innerText =
+        `Difference x̄₁ − x̄₂: ${diff.toFixed(6)}  |  Method: ${label}\n` +
+        `Critical t: ±${tCrit.toFixed(4)}  |  Standard error: ${se.toFixed(6)}  |  Margin: ±${margin.toFixed(6)}\n` +
+        `Confidence interval: [${lower.toFixed(6)}, ${upper.toFixed(6)}]\n` +
+        (zeroIncluded ? 'ℹ The interval includes 0: no evidence of a significant difference.' : '✓ The interval does not include 0: there is evidence of a significant difference.');
+
+    renderChart(tCrit, df);
+}
+
+document.getElementById('calcBtn').addEventListener('click', calculate);
+document.getElementById('conf').addEventListener('change', calculate);
+document.getElementById('varType').addEventListener('change', calculate);
+document.getElementById('customConf').addEventListener('input', calculate);
+calculate();
+</script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>

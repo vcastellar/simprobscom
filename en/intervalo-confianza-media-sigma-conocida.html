@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../intervalo-confianza-media-sigma-conocida.html">
+<head>
+    <meta charset="UTF-8">
+    <title>CI for the mean with known σ | ProbLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Online confidence interval calculator for a population mean when the population standard deviation σ is known. z formula, chart and examples.">
+    <meta name="keywords" content="confidence interval mean known sigma, CI mean known standard deviation, z confidence interval, calculate CI population mean, ProbLab, online statistics, statistics calculator">
+    <link rel="canonical" href="https://problabtools.com/en/intervalo-confianza-media-sigma-conocida.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="CI for the mean with known σ | ProbLab">
+    <meta property="og:description" content="Online confidence interval calculator for a population mean when the population standard deviation σ is known. z formula, chart and examples.">
+    <meta property="og:url" content="https://problabtools.com/en/intervalo-confianza-media-sigma-conocida.html">
+    <meta property="og:site_name" content="ProbLab">
+    <meta property="og:image" content="https://problabtools.com/og-image.png">
+    <meta property="og:locale" content="en_US">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Vicente Castellar">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="alternate" hreflang="en" href="https://problabtools.com/en/intervalo-confianza-media-sigma-conocida.html">
+    <link rel="alternate" hreflang="es" href="https://problabtools.com/intervalo-confianza-media-sigma-conocida.html">
+    <link rel="alternate" hreflang="x-default" href="https://problabtools.com/intervalo-confianza-media-sigma-conocida.html">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CI for the mean with known σ | ProbLab">
+    <meta name="twitter:description" content="Online confidence interval calculator for a population mean when the population standard deviation σ is known. z formula, chart and examples.">
+    <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+            {"@type": "ListItem", "position": 2, "name": "Confidence intervals", "item": "https://problabtools.com/en/intervalos-confianza/"},
+            {"@type": "ListItem", "position": 3, "name": "CI mean known σ", "item": "https://problabtools.com/en/intervalo-confianza-media-sigma-conocida.html"}
+          ]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "Confidence interval for one mean with known σ",
+          "applicationCategory": "EducationalApplication",
+          "operatingSystem": "Web",
+          "url": "https://problabtools.com/en/intervalo-confianza-media-sigma-conocida.html",
+          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+        }
+      ]
+    }
+    </script>
+    <link rel="stylesheet" href="../style_new.css?v=20260624">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why use z instead of t?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Because \\(\\sigma\\) is known; the distribution of the statistic \\((\\bar{x}-\\mu)/(\\sigma/\\sqrt{n})\\) is exactly standard normal."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens if the CI does not contain the reference value?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "At that confidence level you would reject the hypothesis that \\(\\mu\\) equals that value."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I cut the width in half?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Quadruple the sample size (the margin of error varies with \\(1/\\sqrt{n}\\))."
+      }
+    }
+  ]
+}
+    </script>
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="distribuciones/">Distributions</a></li>
+            <li><a href="tablas-estadisticas/">Tables</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="tamano-muestral/">Sample size</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="ab-testing/">A/B testing</a></li>
+            <li><a href="simulaciones/">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../intervalo-confianza-media-sigma-conocida.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><span aria-current="page">Mean, known σ</span></li>
+        </ol>
+    </nav>
+    <header class="hero">
+        <p class="eyebrow">Confidence intervals</p>
+        <h1>Confidence interval for one mean (known σ)</h1>
+        <p class="hero-subtitle">Calculate the plausible range for the population mean when you know the population standard deviation.</p>
+        <p class="hero-links"><a class="hero-link-button" href="intervalos-confianza/">See all confidence intervals</a></p>
+    </header>
+
+    <main>
+        <section class="card sample-size-panel">
+            <div class="panel-heading">
+                <h2>Calculator</h2>
+                <p>Enter the data to get the confidence interval and its chart.</p>
+            </div>
+
+            <div class="form-grid sample-grid">
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="xbar">Sample mean (x̄)</label>
+                        <input type="number" id="xbar" value="10.02" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="sigma">Population standard deviation (σ)</label>
+                        <input type="number" id="sigma" value="0.08" step="0.001" min="0.0001">
+                    </div>
+                </div>
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="n">Sample size (n)</label>
+                        <input type="number" id="n" value="50" step="1" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="conf">Confidence level</label>
+                        <select id="conf">
+                            <option value="0.90">90%</option>
+                            <option value="0.95" selected>95%</option>
+                            <option value="0.99">99%</option>
+                            <option value="custom">Custom…</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="inline-inputs" id="customConfRow" style="display:none">
+                    <div class="form-group">
+                        <label for="customConf">Custom confidence level (0–1)</label>
+                        <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="calcBtn">Calculate interval</button>
+            <div id="result" class="result-box">Result pending…</div>
+            <div class="chart-wrap">
+                <canvas id="ciChart" aria-label="Chart of the confidence interval over the standard normal distribution" role="img"></canvas>
+            </div>
+        </section>
+
+        <section class="card content-card">
+            <h3>Explanation</h3>
+            <p>When you know the population standard deviation \(\sigma\) (or can safely assume it is known), the confidence interval for the mean is built using the standard normal distribution. It is the simplest case and serves as a starting point for understanding the logic of confidence intervals.</p>
+            <p>In practice, \(\sigma\) is rarely known exactly. However, this interval is a good approximation when the sample size is large (n ≥ 30) and the population variance is stable and known from previous studies.</p>
+
+            <h3>Formula</h3>
+            <p>Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area outside the interval. For 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\) in each tail.</p>
+            <p class="formula-line">\( \bar{x} \pm z_{\alpha/2} \cdot \dfrac{\sigma}{\sqrt{n}} \)</p>
+            <ul>
+                <li><strong>\(\bar{x}\)</strong>: observed sample mean.</li>
+                <li><strong>\(z_{\alpha/2}\)</strong>: critical value of the standard normal for the chosen confidence level.</li>
+                <li><strong>\(\sigma\)</strong>: population standard deviation (known).</li>
+                <li><strong>\(n\)</strong>: sample size.</li>
+            </ul>
+            <p>The margin of error is \(E = z_{\alpha/2} \cdot \sigma/\sqrt{n}\), and the interval is \([\bar{x} - E,\; \bar{x} + E]\).</p>
+
+            <h3>Common critical z values</h3>
+            <ul>
+                <li>90% confidence: \(z_{0.05} = 1.645\)</li>
+                <li>95% confidence: \(z_{0.025} = 1.960\)</li>
+                <li>99% confidence: \(z_{0.005} = 2.576\)</li>
+            </ul>
+
+            <h3>Worked example</h3>
+            <p>A screw factory knows from technical specifications that \(\sigma = 0.08\) mm. A sample of 50 screws is measured, giving \(\bar{x} = 10.02\) mm. With 95% confidence (\(C=0.95\), \(\alpha=0.05\)), the interval is:</p>
+            <p class="formula-line">\( 10.02 \pm 1.960 \cdot \frac{0.08}{\sqrt{50}} \approx [9.998,\; 10.042] \text{ mm} \)</p>
+        </section>
+
+
+
+        <section class="card content-card">
+            <h3>Assumptions of the z interval</h3>
+            <ul>
+                <li>The sample must be random and the observations independent.</li>
+                <li>The population standard deviation \(\sigma\) must be known, or fixed with sufficient certainty by information external to the study.</li>
+                <li>The sample mean must be approximately normally distributed: this holds if the population is normal or if the sample size is large, by the central limit theorem.</li>
+                <li>If \(\sigma\) is estimated from the sample and \(n\) is small, use the <a href="intervalo-confianza-media.html">CI with Student's t</a> instead of the z interval.</li>
+            </ul>
+        </section>
+
+        <section class="card content-card">
+            <h3>How to interpret the result</h3>
+            <p>The interval \([L, U]\) defines the range of values of \(\mu\) compatible with the data and the chosen confidence level. The correct interpretation is frequentist: if you repeated the sampling many times and built the CI with the same procedure, a proportion \(C\) of those intervals would contain the true value of \(\mu\). For the specific interval in front of you, \(\mu\) is either inside or outside; the \(C\%\) probability refers to the method, not to the individual result.</p>
+            <p>In the chart, the green region under the standard normal curve represents the confidence zone and the red tails (each with area \(\alpha/2\)) mark the critical values \(\pm z_{\alpha/2}\). The observed z statistic, shown in yellow, indicates where the current sample falls on the standardized scale. If the z statistic falls inside the green region, the interval contains the reference value; if it falls in the red tails, it excludes it.</p>
+            <ul>
+                <li><strong>Width and precision:</strong> the total width is \(2 \cdot z_{\alpha/2} \cdot \sigma/\sqrt{n}\). To cut it in half you need to quadruple the sample size; raising the confidence from 90% to 99% increases \(z\) from 1.645 to 2.576 and widens the interval by 57%.</li>
+                <li><strong>Connection with hypothesis testing:</strong> if a reference value \(\mu_0\) falls outside \([L, U]\), the data would reject \(H_0\!: \mu = \mu_0\) at significance level \(\alpha = 1 - C\) in the equivalent two-sided z test.</li>
+                <li><strong>When known \(\sigma\) matters:</strong> using the exact \(\sigma\) (instead of estimating it with \(s\)) introduces no extra uncertainty, so the CI is narrower than the t interval for the same sample. This makes it especially useful when the process variability is very stable and known in advance.</li>
+            </ul>
+        </section>
+
+        <section id="seo-support-content" class="card content-card">
+            <h3>When to use this interval</h3>
+            <p>Use the z CI when the sample size is large (n ≥ 30) or when \(\sigma\) is determined with certainty by the process (for example, calibrated measurement equipment). For small samples with unknown \(\sigma\), use the <a href="intervalo-confianza-media.html">CI with Student's t</a>.</p>
+            <section class="related-tools">
+                <h3>Related calculators</h3>
+                <ul>
+                    <li><a href="intervalo-confianza-media.html">CI for one mean (unknown σ)</a></li>
+                    <li><a href="intervalo-confianza-proporcion.html">CI for one proportion</a></li>
+                    <li><a href="contraste-hipotesis-una-media.html">Hypothesis test for one mean</a></li>
+                    <li><a href="normal.html">Normal distribution</a></li>
+                </ul>
+            </section>
+            <h3>Frequently asked questions</h3>
+            <ul>
+                <li><strong>Why use z instead of t?</strong> Because \(\sigma\) is known; the distribution of the statistic \((\bar{x}-\mu)/(\sigma/\sqrt{n})\) is exactly standard normal.</li>
+                <li><strong>What happens if the CI does not contain the reference value?</strong> At that confidence level you would reject the hypothesis that \(\mu\) equals that value.</li>
+                <li><strong>How do I cut the width in half?</strong> Quadruple the sample size (the margin of error varies with \(1/\sqrt{n}\)).</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="legal-footer">
+        <p>
+            © 2026 problabtools.
+            <a href="../aviso-legal.html">Legal notice</a> ·
+            <a href="../privacidad.html">Privacy</a> ·
+            <a href="../cookies.html">Cookies</a> ·
+            <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+        </p>
+    </footer>
+</div>
+
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let ciChart;
+
+document.getElementById('conf').addEventListener('change', function () {
+    document.getElementById('customConfRow').style.display = this.value === 'custom' ? '' : 'none';
+});
+
+function getConfLevel() {
+    const sel = document.getElementById('conf').value;
+    if (sel === 'custom') return parseFloat(document.getElementById('customConf').value);
+    return parseFloat(sel);
+}
+
+function renderChart(zCrit, statValue) {
+    const ctx = document.getElementById('ciChart');
+    if (!ctx) return;
+
+    const bound = Math.max(4, Math.abs(zCrit) + 0.8);
+    const minX = -bound, maxX = bound;
+    const step = 0.02;
+
+    const curve = [], inside = [], outside = [];
+    for (let x = minX; x <= maxX; x += step) {
+        const y = jStat.normal.pdf(x, 0, 1);
+        curve.push({ x, y });
+        if (x >= -zCrit && x <= zCrit) {
+            inside.push({ x, y });
+            outside.push({ x, y: null });
+        } else {
+            inside.push({ x, y: null });
+            outside.push({ x, y });
+        }
+    }
+
+    const maxY = Math.max(...curve.map(p => p.y));
+    const statLine = Number.isFinite(statValue)
+        ? [{ x: statValue, y: 0 }, { x: statValue, y: maxY * 1.05 }]
+        : [];
+
+    if (ciChart) ciChart.destroy();
+    ciChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [
+                { label: 'Confidence region', data: inside, borderColor: 'rgba(34,197,94,0)', backgroundColor: 'rgba(34,197,94,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
+                { label: 'Tails (α/2 each)', data: outside, borderColor: 'rgba(239,68,68,0)', backgroundColor: 'rgba(239,68,68,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
+                { label: 'Standard Normal distribution', data: curve, borderColor: '#1d4ed8', borderWidth: 2, pointRadius: 0, fill: false, parsing: false },
+                { label: 'Observed z statistic', data: statLine, borderColor: '#f59e0b', borderWidth: 2, pointRadius: 0, fill: false, parsing: false }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: { type: 'linear', min: minX, max: maxX, title: { display: true, text: 'z' } },
+                y: { beginAtZero: true, title: { display: true, text: 'Density' } }
+            },
+            plugins: {
+                annotation: {
+                    annotations: {
+                        leftCrit: { type: 'line', xMin: -zCrit, xMax: -zCrit, borderColor: '#6366f1', borderWidth: 2, borderDash: [6, 3], label: { content: `-z${String.fromCharCode(0x03B1)}/2`, display: true, position: 'end' } },
+                        rightCrit: { type: 'line', xMin: zCrit, xMax: zCrit, borderColor: '#6366f1', borderWidth: 2, borderDash: [6, 3], label: { content: `+z${String.fromCharCode(0x03B1)}/2`, display: true, position: 'end' } }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function calculate() {
+    const xbar = parseFloat(document.getElementById('xbar').value);
+    const sigma = parseFloat(document.getElementById('sigma').value);
+    const n = parseFloat(document.getElementById('n').value);
+    const conf = getConfLevel();
+    const resultEl = document.getElementById('result');
+
+    if (![xbar, sigma, n, conf].every(Number.isFinite) || sigma <= 0 || n < 1 || conf <= 0 || conf >= 1) {
+        resultEl.innerText = 'Error: check that σ > 0, n ≥ 1 and 0 < confidence < 1.';
+        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        return;
+    }
+
+    const alpha = 1 - conf;
+    const zCrit = jStat.normal.inv(1 - alpha / 2, 0, 1);
+    const se = sigma / Math.sqrt(n);
+    const margin = zCrit * se;
+    const lower = xbar - margin;
+    const upper = xbar + margin;
+
+    resultEl.innerText =
+        `Confidence level: ${(conf * 100).toFixed(1)}%  |  Critical z: ±${zCrit.toFixed(4)}\n` +
+        `Standard error: ${se.toFixed(6)}  |  Margin of error: ±${margin.toFixed(6)}\n` +
+        `Confidence interval: [${lower.toFixed(6)}, ${upper.toFixed(6)}]`;
+
+    renderChart(zCrit, 0);
+}
+
+document.getElementById('calcBtn').addEventListener('click', calculate);
+document.getElementById('conf').addEventListener('change', calculate);
+document.getElementById('customConf').addEventListener('input', calculate);
+calculate();
+</script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>

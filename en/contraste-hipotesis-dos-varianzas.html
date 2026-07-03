@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../contraste-hipotesis-dos-varianzas.html">
+<head>
+    <meta charset="UTF-8">
+    <title>F-Test Calculator for Two Variances | ProbLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Compare two variances with Snedecor's F-test: F statistic, p-value, critical values and statistical decision.">
+    <meta name="keywords" content="F-test two variances, test for equality of variances, compare variances calculator, Snedecor F-test, F statistic calculator, p-value variances, hypothesis test variances, ProbLab, online statistics, statistics calculator">
+    <link rel="canonical" href="https://problabtools.com/en/contraste-hipotesis-dos-varianzas.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="F-Test Calculator for Two Variances | ProbLab">
+    <meta property="og:description" content="Compare two variances with Snedecor's F-test: F statistic, p-value, critical values and statistical decision.">
+    <meta property="og:url" content="https://problabtools.com/en/contraste-hipotesis-dos-varianzas.html">
+    <meta property="og:site_name" content="ProbLab">
+    <meta property="og:image" content="https://problabtools.com/og-image.png">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image:alt" content="F-test calculator for comparing two variances">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Vicente Castellar">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="alternate" hreflang="en" href="https://problabtools.com/en/contraste-hipotesis-dos-varianzas.html">
+    <link rel="alternate" hreflang="es" href="https://problabtools.com/contraste-hipotesis-dos-varianzas.html">
+    <link rel="alternate" hreflang="x-default" href="https://problabtools.com/contraste-hipotesis-dos-varianzas.html">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="F-Test Calculator for Two Variances | ProbLab">
+    <meta name="twitter:description" content="Compare two variances with Snedecor's F-test: F statistic, p-value, critical values and statistical decision.">
+    <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+    <meta name="twitter:image:alt" content="F-test calculator for comparing two variances">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+            {"@type": "ListItem", "position": 2, "name": "Hypothesis tests", "item": "https://problabtools.com/en/contrastes-hipotesis/"},
+            {"@type": "ListItem", "position": 3, "name": "Two variances (F-test)", "item": "https://problabtools.com/en/contraste-hipotesis-dos-varianzas.html"}
+          ]
+        },
+        {
+          "@type": "WebPage",
+          "name": "F-Test Calculator for Two Variances | ProbLab",
+          "url": "https://problabtools.com/en/contraste-hipotesis-dos-varianzas.html",
+          "description": "Compare two variances with Snedecor's F-test: F statistic, p-value, critical values and statistical decision.",
+          "inLanguage": "en",
+          "isPartOf": {"@type": "WebSite", "name": "ProbLab", "url": "https://problabtools.com/en/"}
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "F-test calculator for two variances",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web",
+      "url": "https://problabtools.com/en/contraste-hipotesis-dos-varianzas.html",
+      "description": "Compare two variances with Snedecor's F-test: F statistic, p-value, critical values and statistical decision.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What fundamental assumption does the F-test require?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The F-test for equality of variances assumes that the data in both groups come from normally distributed populations. It is sensitive to deviations from normality, so when this assumption is in doubt it is advisable to consider robust alternatives such as Levene's test or Bartlett's test."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it matter which variance goes in the numerator?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "In a two-tailed test it does not matter, since the p-value is calculated taking both tails into account. In one-tailed tests it does matter: if you want to test that σ₁² > σ₂², you must place group 1's variance in the numerator (F = s₁²/s₂²) and use the right tail."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "When should the F-test be used instead of Levene's test?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The F-test is appropriate when the data can be assumed normal. Levene's test is more robust against deviations from normality and is recommended when this condition cannot be verified. In practice, for small samples with confirmed normality, the F-test is the classic choice."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can the F-test be applied to more than two groups?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Not directly. The F-test for equality of variances compares exactly two groups. To compare the homogeneity of variances across more than two groups, tests such as Bartlett's test or the generalized Levene's test are used, which are designed for the case of k groups."
+          }
+        }
+      ]
+    }
+    </script>
+    <link rel="stylesheet" href="../style_new.css?v=20260624">
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="distribuciones/">Distributions</a></li>
+            <li><a href="tablas-estadisticas/">Tables</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="tamano-muestral/">Sample size</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="ab-testing/">A/B testing</a></li>
+            <li><a href="simulaciones/">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../contraste-hipotesis-dos-varianzas.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><span aria-current="page">Two variances (F-test)</span></li>
+        </ol>
+    </nav>
+    <header class="hero">
+        <p class="eyebrow">Hypothesis tests</p>
+        <h1>F-test calculator for two variances (Snedecor's F-test)</h1>
+        <p class="hero-subtitle">Test H₀: σ₁² = σ₂² by comparing the sample variances of two independent groups using Snedecor's F distribution.</p>
+        <p class="hero-links">
+            <a class="hero-link-button" href="contrastes-hipotesis/">See all hypothesis tests</a>
+        </p>
+    </header>
+
+    <main>
+
+        <section class="card sample-size-panel">
+            <div class="panel-heading">
+                <h2>Calculator</h2>
+                <p>
+                    Enter the sample variances and sample sizes of the two groups.
+                    The calculator computes the F statistic, the p-value, the critical values and the
+                    decision at the chosen significance level.
+                </p>
+            </div>
+
+            <div class="form-grid sample-grid">
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="n1">Sample size group 1 (n₁)</label>
+                        <input type="number" id="n1" value="20" step="1" min="2">
+                    </div>
+                    <div class="form-group">
+                        <label for="n2">Sample size group 2 (n₂)</label>
+                        <input type="number" id="n2" value="18" step="1" min="2">
+                    </div>
+                </div>
+
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="s1sq">Sample variance group 1 (s₁²)</label>
+                        <input type="number" id="s1sq" value="16" step="0.01" min="0.0001">
+                    </div>
+                    <div class="form-group">
+                        <label for="s2sq">Sample variance group 2 (s₂²)</label>
+                        <input type="number" id="s2sq" value="9" step="0.01" min="0.0001">
+                    </div>
+                </div>
+
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="alpha">Significance level (α)</label>
+                        <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                    </div>
+                    <div class="form-group">
+                        <label for="tail">Test type</label>
+                        <select id="tail">
+                            <option value="two">Two-tailed (σ₁² ≠ σ₂²)</option>
+                            <option value="right">Right tail (σ₁² &gt; σ₂²)</option>
+                            <option value="left">Left tail (σ₁² &lt; σ₂²)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="calcBtn">Calculate test</button>
+            <div id="dosVarianzasResult" class="result-box">Result pending…</div>
+
+            <div class="chart-wrap">
+                <canvas id="dosVarianzasChart" aria-label="Chart of acceptance and rejection regions for the F-test of two variances" role="img"></canvas>
+            </div>
+        </section>
+
+        <section class="card content-card">
+            <h3>Explanation</h3>
+
+            <p>
+                Snedecor's F-test is the classic procedure for testing whether two independent
+                populations show the same variability. Instead of comparing averages, this
+                test evaluates whether the dispersion of one group is significantly greater or smaller
+                than that of the other.
+            </p>
+
+            <p>
+                The method is common in quality control, comparative studies, and as a preliminary step
+                to other tests: for example, the choice between Student's t-test with equal variances
+                or with unequal variances depends on whether homoscedasticity can be assumed, which is
+                precisely what this test evaluates.
+            </p>
+
+            <p>
+                The F statistic is built as the ratio between the two sample variances.
+                Under the null hypothesis of equal variances, this ratio follows an
+                F distribution with \(n_1 - 1\) and \(n_2 - 1\) degrees of freedom. If the variances
+                are very different, the ratio will move away from 1 and the test will be significant.
+            </p>
+
+            <p>
+                The fundamental assumption is normality of the data in both groups. The F-test is
+                sensitive to this condition; when normality is in doubt it is advisable to consider
+                more robust alternatives such as Levene's test.
+            </p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Hypotheses and statistic</h3>
+
+            <p>The test states as the null hypothesis the equality of population variances:</p>
+
+            <p class="formula-line">\(H_0\colon \sigma_1^2 = \sigma_2^2\)</p>
+
+            <p>The alternative hypothesis depends on the type of test chosen:</p>
+
+            <ul>
+                <li>Two-tailed: \(H_1\colon \sigma_1^2 \neq \sigma_2^2\)</li>
+                <li>Right tail: \(H_1\colon \sigma_1^2 > \sigma_2^2\)</li>
+                <li>Left tail: \(H_1\colon \sigma_1^2 < \sigma_2^2\)</li>
+            </ul>
+
+            <p>The test statistic is the ratio of the sample variances:</p>
+
+            <p class="formula-line">
+                \( F = \dfrac{s_1^2}{s_2^2} \)
+            </p>
+
+            <p>
+                Under \(H_0\), this statistic follows an F distribution with degrees of
+                freedom \(df_1 = n_1 - 1\) and \(df_2 = n_2 - 1\):
+            </p>
+
+            <p class="formula-line">
+                \( F = \dfrac{s_1^2}{s_2^2} \sim F_{n_1-1,\; n_2-1} \)
+            </p>
+
+            <p>
+                \(H_0\) is rejected when the F statistic falls in the critical region determined
+                by the significance level \(\alpha\) and the selected test type.
+            </p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Quick check</h3>
+
+            <p>
+                A first read of the F statistic gives a hint of the result before looking at the p-value:
+            </p>
+
+            <ul>
+                <li>
+                    <strong>F close to 1:</strong> the sample variances are similar. Unless
+                    the samples are very large, it is likely that there is no evidence to reject \(H_0\).
+                </li>
+                <li>
+                    <strong>F clearly greater than 1:</strong> group 1 shows greater variability
+                    than group 2. The further it moves away from 1, the more evidence in favor of \(\sigma_1^2 > \sigma_2^2\).
+                </li>
+                <li>
+                    <strong>F clearly less than 1:</strong> group 2 shows greater variability
+                    than group 1. A value very close to 0 indicates strong evidence of \(\sigma_1^2 < \sigma_2^2\).
+                </li>
+            </ul>
+
+            <p>
+                In any case, the formal decision should be based on the p-value and the
+                significance level \(\alpha\), not just on the magnitude of F.
+            </p>
+
+            <p>
+                If the result is significant, it is worth investigating the source of the difference in
+                variability: different processes, instruments, measurement conditions, batches or
+                human groups may explain the observed disparity.
+            </p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Worked example</h3>
+
+            <p>
+                We want to compare the variability of two production lines of metal parts.
+                Line 1: sample variance \(s_1^2 = 16\) mm², sample size \(n_1 = 20\) parts.
+                Line 2: sample variance \(s_2^2 = 9\) mm², sample size \(n_2 = 18\) parts.
+                We test \(H_0\colon \sigma_1^2 = \sigma_2^2\) against
+                \(H_1\colon \sigma_1^2 \neq \sigma_2^2\) with \(\alpha = 0.05\), two-tailed.
+            </p>
+
+            <p><strong>Step 1 — F statistic</strong></p>
+            <p class="formula-line">
+                \( F = \dfrac{s_1^2}{s_2^2} = \dfrac{16}{9} \approx 1.7778 \)
+            </p>
+
+            <p><strong>Step 2 — Degrees of freedom</strong></p>
+            <p class="formula-line">
+                \( df_1 = n_1 - 1 = 19, \quad df_2 = n_2 - 1 = 17 \)
+            </p>
+
+            <p><strong>Step 3 — Critical values (α = 0.05, two-tailed)</strong></p>
+            <p>
+                The upper critical value is \(F_{0.025;\,19,\,17} \approx 2.63\).
+                The lower critical value is \(F_{0.975;\,19,\,17} = 1 / F_{0.025;\,17,\,19} \approx 0.38\).
+            </p>
+
+            <p><strong>Step 4 — Decision</strong></p>
+            <p>
+                Since \(0.38 < F = 1.7778 < 2.63\), the statistic does not fall in either
+                rejection region. The two-tailed p-value is \(p \approx 0.24 > 0.05\).
+            </p>
+
+            <p>
+                Conclusion: <strong>\(H_0\) is not rejected</strong>. The data do not provide
+                significant evidence that the two lines have different variances at the 5%
+                significance level. The observed variabilities are compatible with the hypothesis of equality.
+            </p>
+        </section>
+
+        <section class="card content-card">
+            <h3>How to interpret the result</h3>
+
+                <p>
+                <strong>Rejecting \(H_0\)</strong> (p-value &lt; \(\alpha\)) indicates that the ratio
+                of sample variances \(F = s^2_1 / s^2_2\) is statistically incompatible with
+                the population equality \(\sigma^2_1 = \sigma^2_2\). In practice this is relevant,
+                for example, when deciding which variant of the t-test to use (equal or unequal
+                variances) or when the homogeneity of variances is an assumption of <a href="anova.html">ANOVA</a>.
+                However, Snedecor's F-test is very sensitive to deviations from normality:
+                a significant result may be due to skewed tails rather than genuinely
+                different variances. Before acting, inspect the data visually.
+                </p>
+
+                <p>
+                <strong>Not rejecting \(H_0\)</strong> (p-value ≥ \(\alpha\)) does not prove homoscedasticity;
+                it only indicates that the data are compatible with \(\sigma^2_1 = \sigma^2_2\) at the
+                chosen level. The F-test has low power with small samples, so it may not
+                detect real differences in variance. The observed \(F\) ratio and its confidence
+                interval provide information about the relative magnitude of the variabilities.
+                </p>
+
+                <p>
+                The <strong>F statistic</strong> follows, under \(H_0\), an F distribution
+                with \((n_1-1, n_2-1)\) degrees of freedom. In the chart, the green zone is the
+                non-rejection region and the red zones are the critical tails; the amber line marks
+                the observed statistic. Since \(F \geq 0\), the distribution is right-skewed: an
+                \(F \gg 1\) suggests greater variance in group 1, while \(F \ll 1\)
+                suggests greater variance in group 2. With very large samples, moderate differences
+                in variances can turn out significant even though they have little practical impact.
+                </p>
+        </section>
+        <section id="seo-support-content" class="card content-card">
+            <section class="related-tools">
+                <h3>Related calculators</h3>
+                <ul>
+                    <li><a href="contraste-hipotesis-varianzas.html">Tests on variances — one or two variances</a></li>
+                    <li><a href="tamano-muestral-dos-varianzas.html">Sample size to compare two variances</a></li>
+                    <li><a href="centralf.html">Snedecor's F distribution</a></li>
+                    <li><a href="contrastes-hipotesis/">All hypothesis tests</a></li>
+                </ul>
+            </section>
+
+            <h3>Frequently asked questions</h3>
+
+            <ul>
+                <li>
+                    <strong>What fundamental assumption does the F-test require?</strong>
+                    The F-test assumes that the data in both groups come from normally distributed
+                    populations. It is sensitive to deviations from normality, so when this
+                    assumption is in doubt it is advisable to consider robust alternatives such as Levene's test or Bartlett's test.
+                </li>
+                <li>
+                    <strong>Does it matter which variance goes in the numerator?</strong>
+                    In a two-tailed test it does not matter, since the p-value is calculated taking
+                    both tails into account. In one-tailed tests it does matter: if you want to test that
+                    \(\sigma_1^2 > \sigma_2^2\), you must place group 1's variance in the numerator
+                    and use the right tail.
+                </li>
+                <li>
+                    <strong>When should the F-test be used instead of Levene's test?</strong>
+                    The F-test is appropriate when the data can be assumed normal. Levene's test
+                    is more robust against deviations from normality and is recommended when this condition
+                    cannot be verified. For small samples with confirmed normality, the F-test is
+                    the classic choice.
+                </li>
+                <li>
+                    <strong>Can the F-test be applied to more than two groups?</strong>
+                    Not directly. The F-test for equality of variances compares exactly two groups.
+                    To compare the homogeneity of variances across more than two groups, tests
+                    such as Bartlett's test or the generalized Levene's test are used, designed for the case
+                    of k groups.
+                </li>
+            </ul>
+            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/F-test_of_equality_of_variances" target="_blank" rel="noopener noreferrer">F-test of equality of variances</a> — Wikipedia</p>
+        </section>
+    </main>
+
+    <footer class="legal-footer">
+        <p>
+            © 2026 problabtools.
+            <a href="../aviso-legal.html">Legal notice</a> ·
+            <a href="../privacidad.html">Privacy</a> ·
+            <a href="../cookies.html">Cookies</a> ·
+            <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+        </p>
+    </footer>
+</div>
+
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+let dosVarianzasChart;
+
+function getFCriticalValues(alpha, tail, df1, df2) {
+    if (tail === 'two') {
+        return {
+            left: jStat.centralF.inv(alpha / 2, df1, df2),
+            right: jStat.centralF.inv(1 - alpha / 2, df1, df2)
+        };
+    }
+    if (tail === 'left') {
+        return {
+            left: jStat.centralF.inv(alpha, df1, df2),
+            right: Infinity
+        };
+    }
+    return {
+        left: 0,
+        right: jStat.centralF.inv(1 - alpha, df1, df2)
+    };
+}
+
+function calculatePValueF(statistic, df1, df2, tail) {
+    const cdf = jStat.centralF.cdf(statistic, df1, df2);
+    if (tail === 'two') {
+        return 2 * Math.min(cdf, 1 - cdf);
+    }
+    if (tail === 'right') {
+        return 1 - cdf;
+    }
+    return cdf;
+}
+
+function buildCurvePoints(min, max, step, pdfFn, isAcceptanceFn) {
+    const curve = [];
+    const acceptance = [];
+    const rejection = [];
+
+    for (let x = min; x <= max; x += step) {
+        const y = pdfFn(x);
+        curve.push({ x, y });
+
+        if (isAcceptanceFn(x)) {
+            acceptance.push({ x, y });
+            rejection.push({ x, y: null });
+        } else {
+            acceptance.push({ x, y: null });
+            rejection.push({ x, y });
+        }
+    }
+
+    return { curve, acceptance, rejection };
+}
+
+function renderDosVarianzasChart(statistic, alpha, tail, df1, df2) {
+    const ctx = document.getElementById('dosVarianzasChart');
+    if (!ctx) return;
+
+    const critical = getFCriticalValues(alpha, tail, df1, df2);
+    const pdfFn = (x) => jStat.centralF.pdf(x, df1, df2);
+
+    let maxX = Math.max(
+        jStat.centralF.inv(0.995, df1, df2),
+        statistic * 1.25,
+        critical.right === Infinity ? 0 : critical.right * 1.1
+    );
+    maxX = Math.min(Math.max(maxX, 4), 50);
+
+    const step = maxX / 500;
+    const isAcceptanceFn = (x) => x > critical.left && x < critical.right;
+
+    const { curve, acceptance, rejection } = buildCurvePoints(
+        0.0001,
+        maxX,
+        step,
+        pdfFn,
+        isAcceptanceFn
+    );
+
+    const maxY = Math.max(...curve.map((point) => Number.isFinite(point.y) ? point.y : 0));
+
+    const statLine = Number.isFinite(statistic)
+        ? [{ x: statistic, y: 0 }, { x: statistic, y: maxY }]
+        : [];
+
+    if (dosVarianzasChart) dosVarianzasChart.destroy();
+
+    dosVarianzasChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [
+                {
+                    label: 'Acceptance region',
+                    data: acceptance,
+                    borderColor: 'rgba(34,197,94,0)',
+                    backgroundColor: 'rgba(34,197,94,0.35)',
+                    fill: 'origin',
+                    pointRadius: 0,
+                    parsing: false
+                },
+                {
+                    label: 'Rejection region',
+                    data: rejection,
+                    borderColor: 'rgba(239,68,68,0)',
+                    backgroundColor: 'rgba(239,68,68,0.35)',
+                    fill: 'origin',
+                    pointRadius: 0,
+                    parsing: false
+                },
+                {
+                    label: 'F density function',
+                    data: curve,
+                    borderColor: '#1d4ed8',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: false,
+                    parsing: false
+                },
+                {
+                    label: 'Observed statistic',
+                    data: statLine,
+                    borderColor: '#f59e0b',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: false,
+                    parsing: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    type: 'linear',
+                    min: 0,
+                    max: maxX,
+                    title: {
+                        display: true,
+                        text: 'F statistic'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Density'
+                    }
+                }
+            }
+        }
+    });
+}
+
+function calculateDosVarianzas() {
+    const n1 = parseFloat(document.getElementById('n1').value);
+    const n2 = parseFloat(document.getElementById('n2').value);
+    const s1sq = parseFloat(document.getElementById('s1sq').value);
+    const s2sq = parseFloat(document.getElementById('s2sq').value);
+    const alpha = parseFloat(document.getElementById('alpha').value);
+    const tail = document.getElementById('tail').value;
+    const resultEl = document.getElementById('dosVarianzasResult');
+
+    if (!Number.isFinite(alpha) || alpha <= 0 || alpha >= 1) {
+        resultEl.innerText = 'Error: check that 0 < α < 1.';
+        if (dosVarianzasChart) { dosVarianzasChart.destroy(); dosVarianzasChart = null; }
+        return;
+    }
+
+    if (![n1, n2, s1sq, s2sq].every(Number.isFinite) || n1 < 2 || n2 < 2 || s1sq <= 0 || s2sq <= 0) {
+        resultEl.innerText = 'Error: check that n₁ ≥ 2, n₂ ≥ 2, s₁² > 0 and s₂² > 0.';
+        if (dosVarianzasChart) { dosVarianzasChart.destroy(); dosVarianzasChart = null; }
+        return;
+    }
+
+    const df1 = n1 - 1;
+    const df2 = n2 - 1;
+    const statistic = s1sq / s2sq;
+    let pValue = calculatePValueF(statistic, df1, df2, tail);
+    pValue = Math.min(Math.max(pValue, 0), 1);
+
+    const critical = getFCriticalValues(alpha, tail, df1, df2);
+    const decision = pValue < alpha ? 'H₀ is rejected.' : 'H₀ is not rejected.';
+
+    let criticalStr;
+    if (tail === 'two') {
+        criticalStr = `F_left = ${critical.left.toFixed(4)}, F_right = ${critical.right.toFixed(4)}`;
+    } else if (tail === 'right') {
+        criticalStr = `F_crit = ${critical.right.toFixed(4)}`;
+    } else {
+        criticalStr = `F_crit = ${critical.left.toFixed(4)}`;
+    }
+
+    resultEl.innerText =
+        `F = ${statistic.toFixed(4)} | df₁ = ${df1}, df₂ = ${df2} | ${criticalStr} | p-value = ${pValue.toFixed(6)} | ${decision}`;
+
+    renderDosVarianzasChart(statistic, alpha, tail, df1, df2);
+}
+
+document.getElementById('calcBtn').addEventListener('click', calculateDosVarianzas);
+
+calculateDosVarianzas();
+</script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>
