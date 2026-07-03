@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../intervalo-confianza-ratio-proporciones.html">
+<head>
+    <meta charset="UTF-8">
+    <title>CI for the ratio of proportions | ProbLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Confidence interval for the ratio of proportions or relative risk: logarithmic method, correction, formula and chart.">
+    <meta name="keywords" content="confidence interval ratio of proportions, CI relative risk, confidence interval risk ratio, relative risk calculator, ratio of proportions, ProbLab, online statistics">
+    <link rel="canonical" href="https://problabtools.com/en/intervalo-confianza-ratio-proporciones.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="CI for the ratio of proportions | ProbLab">
+    <meta property="og:description" content="Online calculator for the confidence interval of the ratio of proportions or relative risk. Logarithmic method and zero-cell correction.">
+    <meta property="og:url" content="https://problabtools.com/en/intervalo-confianza-ratio-proporciones.html">
+    <meta property="og:site_name" content="ProbLab">
+    <meta property="og:image" content="https://problabtools.com/og-image.png">
+    <meta property="og:locale" content="en_US">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Vicente Castellar">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="alternate" hreflang="en" href="https://problabtools.com/en/intervalo-confianza-ratio-proporciones.html">
+    <link rel="alternate" hreflang="es" href="https://problabtools.com/intervalo-confianza-ratio-proporciones.html">
+    <link rel="alternate" hreflang="x-default" href="https://problabtools.com/intervalo-confianza-ratio-proporciones.html">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CI for the ratio of proportions | ProbLab">
+    <meta name="twitter:description" content="Online calculator for the confidence interval of the ratio of proportions or relative risk. Logarithmic method and zero-cell correction.">
+    <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/index.html"},
+            {"@type": "ListItem", "position": 2, "name": "Confidence intervals", "item": "https://problabtools.com/en/intervalos-confianza/"},
+            {"@type": "ListItem", "position": 3, "name": "CI ratio of proportions", "item": "https://problabtools.com/en/intervalo-confianza-ratio-proporciones.html"}
+          ]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "Confidence interval for the ratio of proportions",
+          "applicationCategory": "EducationalApplication",
+          "operatingSystem": "Web",
+          "url": "https://problabtools.com/en/intervalo-confianza-ratio-proporciones.html",
+          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+        }
+      ]
+    }
+    </script>
+    <link rel="stylesheet" href="../style_new.css?v=20260624">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Are the ratio of proportions and relative risk the same thing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, when the proportions represent risks or cumulative incidences, the ratio of proportions is interpreted as relative risk."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What does a relative risk equal to 1 mean?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A value equal to 1 indicates that both proportions are equal. If the confidence interval includes 1, equality cannot be ruled out at the chosen level."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens if an observed proportion is 0?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The logarithm of the ratio cannot be computed directly. The calculator allows applying a 0.5 correction to the four cells of the 2x2 table."
+          }
+        }
+      ]
+    }
+    </script>
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="../distribuciones/">Distributions</a></li>
+            <li><a href="../tablas-estadisticas/">Tables</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="../tamano-muestral/">Sample size</a></li>
+            <li><a href="../contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="../ab-testing/">A/B testing</a></li>
+            <li><a href="../simulaciones/">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../intervalo-confianza-ratio-proporciones.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><span aria-current="page">Ratio of proportions</span></li>
+        </ol>
+    </nav>
+    <header class="hero">
+        <p class="eyebrow">Confidence intervals</p>
+        <h1>Confidence interval for the ratio of proportions</h1>
+        <p class="hero-subtitle">Calculate the confidence interval for the quotient of two independent proportions, also called relative risk when the proportions are risks.</p>
+        <p class="hero-links"><a class="hero-link-button" href="intervalos-confianza/">See all confidence intervals</a></p>
+    </header>
+
+    <main>
+        <section class="card sample-size-panel">
+            <div class="panel-heading">
+                <h2>Calculator</h2>
+                <p>Enter events and sample sizes for two independent groups to estimate the ratio \(p_1/p_2\).</p>
+            </div>
+
+            <div class="form-grid sample-grid">
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="x1">Events group 1 (x₁)</label>
+                        <input type="number" id="x1" value="35" step="1" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="n1">Sample size group 1 (n₁)</label>
+                        <input type="number" id="n1" value="100" step="1" min="1">
+                    </div>
+                </div>
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="x2">Events group 2 (x₂)</label>
+                        <input type="number" id="x2" value="20" step="1" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="n2">Sample size group 2 (n₂)</label>
+                        <input type="number" id="n2" value="100" step="1" min="1">
+                    </div>
+                </div>
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="conf">Confidence level</label>
+                        <select id="conf">
+                            <option value="0.90">90%</option>
+                            <option value="0.95" selected>95%</option>
+                            <option value="0.99">99%</option>
+                            <option value="custom">Custom…</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="correction">Zero cells</label>
+                        <select id="correction">
+                            <option value="auto" selected>Automatic 0.5 correction</option>
+                            <option value="always">Always apply 0.5</option>
+                            <option value="none">Do not apply correction</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="inline-inputs" id="customConfRow" style="display:none">
+                    <div class="form-group">
+                        <label for="customConf">Custom confidence level (0–1)</label>
+                        <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="calcBtn">Calculate interval</button>
+            <div id="result" class="result-box">Result pending…</div>
+            <div class="chart-wrap">
+                <canvas id="ciChart" aria-label="Chart of the confidence interval for the ratio of proportions on a logarithmic scale" role="img"></canvas>
+            </div>
+        </section>
+
+        <section class="card content-card">
+            <h3>Explanation</h3>
+            <p>The ratio of proportions compares two independent proportions using a quotient. If the proportions represent risks or cumulative incidences, the same calculation is interpreted as relative risk (RR).</p>
+            <p>For example, if the occurrence of an event is compared between exposed and unexposed groups, the 2x2 table can be written as follows:</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr>
+                            <th>Group</th>
+                            <th>With event</th>
+                            <th>Without event</th>
+                            <th>Proportion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Group 1 / exposed</th>
+                            <td>x₁ = 35</td>
+                            <td>n₁ − x₁ = 65</td>
+                            <td>p̂₁ = 35/100 = 0.35</td>
+                        </tr>
+                        <tr>
+                            <th>Group 2 / unexposed</th>
+                            <td>x₂ = 20</td>
+                            <td>n₂ − x₂ = 80</td>
+                            <td>p̂₂ = 20/100 = 0.20</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>The point estimate is the quotient of the two proportions:</p>
+            <p class="formula-line">\( \widehat{RR} = \dfrac{\hat{p}_1}{\hat{p}_2} = \dfrac{x_1/n_1}{x_2/n_2} \)</p>
+            <p>A value equal to 1 indicates equal proportions. Values greater than 1 indicate that group 1's proportion is higher; values less than 1 indicate that it is lower.</p>
+
+            <h3>Logarithmic method for the ratio of proportions</h3>
+            <p>Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area outside the interval. For 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\) in each tail.</p>
+            <p>The interval is built on a logarithmic scale because the ratio can only take positive values and its distribution is usually skewed. On the \(\log(RR)\) scale, the normal approximation is more stable for moderate or large samples.</p>
+            <p>First \(\widehat{RR} = (x_1/n_1)/(x_2/n_2)\) is computed. Then the standard error of \(\log(\widehat{RR})\) is estimated with:</p>
+            <p class="formula-line">\( SE\left[\log(\widehat{RR})\right] = \sqrt{\dfrac{1}{x_1}-\dfrac{1}{n_1}+\dfrac{1}{x_2}-\dfrac{1}{n_2}} \)</p>
+            <p>The two-sided interval on the logarithmic scale is:</p>
+            <p class="formula-line">\( \log(\widehat{RR}) \pm z_{\alpha/2}\cdot SE\left[\log(\widehat{RR})\right] \)</p>
+            <p>Finally, the exponential is applied to both limits. The final result is on the original scale of the ratio of proportions and is interpreted by comparing it with the null value 1.</p>
+
+            <h3>Zero-cell correction</h3>
+            <p>If either group has no events, \(\log(\widehat{RR})\) cannot be computed directly. The 0.5 correction option adds 0.5 to the four cells of the 2x2 table before computing proportions, ratio and interval.</p>
+
+            <h3>Worked example</h3>
+            <p>With x₁ = 35, n₁ = 100, x₂ = 20 and n₂ = 100:</p>
+            <p class="formula-line">\( \widehat{RR} = \dfrac{35/100}{20/100} = 1.75 \)</p>
+            <p>For 95% confidence, \(C=0.95\), \(\alpha=0.05\), \(\alpha/2=0.025\) and \(z_{0.025} \approx 1.960\). The standard error on the logarithmic scale is:</p>
+            <p class="formula-line">\( SE = \sqrt{\dfrac{1}{35}-\dfrac{1}{100}+\dfrac{1}{20}-\dfrac{1}{100}} \approx 0.242 \)</p>
+            <p>Since \(\log(1.75) \approx 0.560\), the interval on the logarithmic scale is:</p>
+            <p class="formula-line">\( 0.560 \pm 1.960\cdot0.242 \approx [0.085,\;1.034] \)</p>
+            <p>Transforming with the exponential:</p>
+            <p class="formula-line">\( CI_{95\%}(RR) = [e^{0.085},\;e^{1.034}] \approx [1.089,\;2.812] \)</p>
+            <p>Since the interval does not include 1, group 1's proportion is significantly higher than group 2's at 95% confidence.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Assumptions for the ratio of proportions</h3>
+            <ul>
+                <li>The two groups must be independent and have real risk or proportion denominators.</li>
+                <li>Within each group, observations must be binary and independent.</li>
+                <li>The logarithmic method needs positive events in both groups; if either group has 0 events, use the 0.5 correction and interpret with caution.</li>
+                <li>The normal approximation of \(\log(RR)\) works better with moderate or large samples and non-extreme counts.</li>
+            </ul>
+        </section>
+
+        <section class="card content-card">
+            <h3>How does it differ from the CI for odds ratio?</h3>
+            <p>Although this calculator and the <a href="intervalo-confianza-odds-ratio.html">CI for odds ratio</a> both use a logarithmic scale and compare the interval with the null value 1, they estimate different measures.</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr>
+                            <th>Measure</th>
+                            <th>What it compares</th>
+                            <th>Formula in a 2x2 table</th>
+                            <th>Typical use</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Ratio of proportions / relative risk (RR)</th>
+                            <td>Probabilities or proportions of the event in two groups.</td>
+                            <td>\( RR = \dfrac{x_1/n_1}{x_2/n_2} \)</td>
+                            <td>Cohorts, trials, A/B experiments, or studies with real risk denominators.</td>
+                        </tr>
+                        <tr>
+                            <th>Odds ratio (OR)</th>
+                            <td>Odds of the event: cases with the event divided by cases without it.</td>
+                            <td>\( OR = \dfrac{a/b}{c/d} = \dfrac{a\cdot d}{b\cdot c} \)</td>
+                            <td>Case-control studies, logistic regression, and analyses that model odds.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>With the same example data (35 events and 65 non-events in group 1; 20 events and 80 non-events in group 2), this tool computes \(RR=(35/100)/(20/100)=1.75\). The odds ratio tool would compute \(OR=(35/65)/(20/80)\approx2.154\).</p>
+            <p>RR answers "how many times greater is the probability of the event." OR answers "how many times greater are the odds of the event." If the event is rare, both values tend to be similar; if the event is common, OR can be considerably larger than RR and should not be interpreted as a relative risk.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>How to interpret the result</h3>
+            <p>The interval \([L, U]\) is the plausible range of the population ratio of proportions \(RR = p_1/p_2\) given the chosen confidence level. The null value is 1, indicating equal proportions (\(p_1 = p_2\)). In frequentist terms: if you repeated the study many times with the same sample sizes and built the CI with the same procedure, a proportion \(C\) of those intervals would contain the true ratio. As with the odds ratio, the interval is built symmetrically on the logarithmic scale and then transformed with the exponential; this produces an asymmetric CI on the original scale (the distance from \(\widehat{RR}\) to \(L\) is not equal to the distance from \(\widehat{RR}\) to \(U\)).</p>
+            <p>The interpretation follows three cases. If \(1 \in [L, U]\), the data are compatible with equal proportions at the chosen confidence level; the test \(H_0\!: p_1 = p_2\) would not be rejected at level \(\alpha = 1 - C\). If \(L > 1\), group 1's proportion is significantly higher. If \(U < 1\), group 1's proportion is significantly lower. The chart shows the approximate normal distribution of \(\log(RR)\): the green region is the confidence zone and the red tails (area \(\alpha/2\) each) delimit the critical values \(\pm z_{\alpha/2}\) on the logarithmic scale.</p>
+            <ul>
+                <li><strong>Multiplicative scale:</strong> an \(RR = 1.75\) means group 1's proportion is 75% higher than group 2's, not 75 percentage points higher. The difference between the additive scale (difference of proportions) and the multiplicative scale (ratio) matters for communicating results.</li>
+                <li><strong>Difference from odds ratio:</strong> RR compares proportions directly. OR compares odds. With the same example (35/100 versus 20/100), \(RR = 1.75\) but \(OR \approx 2.15\). If the event is rare, both converge; if the event is common, OR can be much more extreme than RR and should not be used to estimate relative risks.</li>
+                <li><strong>Width and counts:</strong> the standard error of \(\log(RR)\) grows when the event counts (\(x_1\), \(x_2\)) are small. With few events in either group, the interval will be very wide and imprecise; if either group has 0 events, applying the 0.5 correction is mandatory.</li>
+            </ul>
+        </section>
+
+        <section id="seo-support-content" class="card content-card">
+            <section class="related-tools">
+                <h3>Related calculators</h3>
+                <ul>
+                    <li><a href="intervalo-confianza-proporcion.html">CI for one proportion</a></li>
+                    <li><a href="intervalo-confianza-diferencia-proporciones.html">CI for difference of proportions</a></li>
+                    <li><a href="intervalo-confianza-odds-ratio.html">CI for odds ratio</a></li>
+                    <li><a href="../contraste-hipotesis-dos-proporciones.html">Hypothesis test for two proportions (Spanish)</a></li>
+                </ul>
+            </section>
+            <h3>Frequently asked questions</h3>
+            <ul>
+                <li><strong>What is the null value?</strong> In a ratio of proportions, the null value is 1.</li>
+                <li><strong>Is it the same as the difference of proportions?</strong> No. The difference uses an additive scale \(p_1-p_2\); the ratio uses a multiplicative scale \(p_1/p_2\).</li>
+                <li><strong>When is it interpreted as relative risk?</strong> When \(p_1\) and \(p_2\) represent risks, cumulative incidences, or event probabilities over a defined period.</li>
+            </ul>
+            <h3>References used</h3>
+            <ul>
+                <li>Katz, D., Baptista, J., Azen, S. P. and Pike, M. C. (1978). <em>Obtaining confidence intervals for the risk ratio in cohort studies</em>, Biometrics, 34, 469–474.</li>
+                <li>Agresti, A. (2013). <em>Categorical Data Analysis</em>. Wiley.</li>
+                <li>Rothman, K. J., Greenland, S. and Lash, T. L. (2008). <em>Modern Epidemiology</em>. Lippincott Williams & Wilkins.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="legal-footer">
+        <p>
+            © 2026 problabtools.
+            <a href="../aviso-legal.html">Legal notice</a> ·
+            <a href="../privacidad.html">Privacy</a> ·
+            <a href="../cookies.html">Cookies</a> ·
+            <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+        </p>
+    </footer>
+</div>
+
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let ciChart;
+
+document.getElementById('conf').addEventListener('change', function () {
+    document.getElementById('customConfRow').style.display = this.value === 'custom' ? '' : 'none';
+});
+
+function getConfLevel() {
+    const sel = document.getElementById('conf').value;
+    if (sel === 'custom') return parseFloat(document.getElementById('customConf').value);
+    return parseFloat(sel);
+}
+
+function formatNumber(value, digits = 6) {
+    if (!Number.isFinite(value)) return 'undefined';
+    if (value >= 10000 || value < 0.0001) return value.toExponential(4);
+    return value.toFixed(digits);
+}
+
+function renderChart(logRatio, lowerLog, upperLog, zCrit, seLog) {
+    const ctx = document.getElementById('ciChart');
+    if (!ctx) return;
+
+    const margin = Math.max(0.2, (zCrit + 0.8) * seLog);
+    const minX = logRatio - margin;
+    const maxX = logRatio + margin;
+    const step = (maxX - minX) / 300;
+    const curve = [], inside = [], outside = [];
+
+    for (let x = minX; x <= maxX; x += step) {
+        const y = jStat.normal.pdf(x, logRatio, seLog);
+        curve.push({ x, y });
+        if (x >= lowerLog && x <= upperLog) {
+            inside.push({ x, y });
+            outside.push({ x, y: null });
+        } else {
+            inside.push({ x, y: null });
+            outside.push({ x, y });
+        }
+    }
+
+    if (ciChart) ciChart.destroy();
+    ciChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [
+                { label: 'Confidence region', data: inside, borderColor: 'rgba(34,197,94,0)', backgroundColor: 'rgba(34,197,94,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
+                { label: 'Tails (α/2 each)', data: outside, borderColor: 'rgba(239,68,68,0)', backgroundColor: 'rgba(239,68,68,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
+                { label: 'Normal over log(ratio)', data: curve, borderColor: '#1d4ed8', borderWidth: 2, pointRadius: 0, fill: false, parsing: false }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: { type: 'linear', min: minX, max: maxX, title: { display: true, text: 'log(ratio)' } },
+                y: { beginAtZero: true, title: { display: true, text: 'Approximate density' } }
+            }
+        }
+    });
+}
+
+function calculate() {
+    const x1Raw = parseFloat(document.getElementById('x1').value);
+    const n1Raw = parseFloat(document.getElementById('n1').value);
+    const x2Raw = parseFloat(document.getElementById('x2').value);
+    const n2Raw = parseFloat(document.getElementById('n2').value);
+    const conf = getConfLevel();
+    const correction = document.getElementById('correction').value;
+    const resultEl = document.getElementById('result');
+
+    if (![x1Raw, n1Raw, x2Raw, n2Raw, conf].every(Number.isFinite) ||
+        x1Raw < 0 || x2Raw < 0 || n1Raw < 1 || n2Raw < 1 || x1Raw > n1Raw || x2Raw > n2Raw || conf <= 0 || conf >= 1) {
+        resultEl.innerText = 'Error: check that 0 ≤ x₁ ≤ n₁, 0 ≤ x₂ ≤ n₂, n₁,n₂ ≥ 1 and 0 < confidence < 1.';
+        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        return;
+    }
+
+    const rawCells = [x1Raw, n1Raw - x1Raw, x2Raw, n2Raw - x2Raw];
+    const hasZero = rawCells.some(v => v === 0);
+    const eventZero = x1Raw === 0 || x2Raw === 0;
+    const addHalf = correction === 'always' || (correction === 'auto' && hasZero);
+
+    if (eventZero && correction === 'none') {
+        resultEl.innerText = 'Error: if x₁ = 0 or x₂ = 0, log(ratio) cannot be computed. Apply the 0.5 correction.';
+        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        return;
+    }
+
+    const a = addHalf ? x1Raw + 0.5 : x1Raw;
+    const b = addHalf ? n1Raw - x1Raw + 0.5 : n1Raw - x1Raw;
+    const c = addHalf ? x2Raw + 0.5 : x2Raw;
+    const d = addHalf ? n2Raw - x2Raw + 0.5 : n2Raw - x2Raw;
+    const n1 = a + b;
+    const n2 = c + d;
+
+    if (a <= 0 || c <= 0 || n1 <= 0 || n2 <= 0) {
+        resultEl.innerText = 'Error: the events used in both groups must be positive to compute the logarithmic interval.';
+        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        return;
+    }
+
+    const p1 = a / n1;
+    const p2 = c / n2;
+    const ratio = p1 / p2;
+    const alpha = 1 - conf;
+    const zCrit = jStat.normal.inv(1 - alpha / 2, 0, 1);
+    const logRatio = Math.log(ratio);
+    const seLog = Math.sqrt(1 / a - 1 / n1 + 1 / c - 1 / n2);
+    const marginLog = zCrit * seLog;
+    const lowerLog = logRatio - marginLog;
+    const upperLog = logRatio + marginLog;
+    const lower = Math.exp(lowerLog);
+    const upper = Math.exp(upperLog);
+    const includesOne = lower <= 1 && upper >= 1;
+
+    const correctionText = addHalf
+        ? `Yes: used x₁=${formatNumber(a, 3)}, non-events₁=${formatNumber(b, 3)}, x₂=${formatNumber(c, 3)}, non-events₂=${formatNumber(d, 3)}.`
+        : 'No: the entered counts were used.';
+    const interpretation = includesOne
+        ? 'ℹ The interval includes 1: equality of proportions cannot be ruled out at the chosen confidence level.'
+        : (ratio > 1
+            ? '✓ The interval lies above 1: group 1\'s proportion is greater than group 2\'s.'
+            : '✓ The interval lies below 1: group 1\'s proportion is lower than group 2\'s.');
+    const smallCounts = [a, b, c, d].some(v => v < 5)
+        ? '\n⚠ Some of the counts used are below 5. Interpret the normal interval with caution.'
+        : '';
+
+    resultEl.innerText = [
+        `p̂₁ = ${formatNumber(p1)}  |  p̂₂ = ${formatNumber(p2)}  |  Ratio p̂₁/p̂₂ = ${formatNumber(ratio)}`,
+        `log(ratio) = ${formatNumber(logRatio)}  |  SE[log(ratio)] = ${formatNumber(seLog)}  |  Critical z: ±${zCrit.toFixed(4)}`,
+        `Confidence level: ${(conf * 100).toFixed(1)}%  |  Margin in log(ratio): ±${formatNumber(marginLog)}`,
+        `CI for the ratio of proportions: [${formatNumber(lower)}, ${formatNumber(upper)}]`,
+        `CI on the log(ratio) scale: [${formatNumber(lowerLog)}, ${formatNumber(upperLog)}]`,
+        `0.5 correction: ${correctionText}`,
+        interpretation + smallCounts
+    ].join('\n');
+
+    renderChart(logRatio, lowerLog, upperLog, zCrit, seLog);
+}
+
+document.getElementById('calcBtn').addEventListener('click', calculate);
+document.getElementById('conf').addEventListener('change', calculate);
+document.getElementById('correction').addEventListener('change', calculate);
+document.getElementById('customConf').addEventListener('input', calculate);
+calculate();
+</script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>

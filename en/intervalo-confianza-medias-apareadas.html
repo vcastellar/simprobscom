@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../intervalo-confianza-medias-apareadas.html">
+<head>
+    <meta charset="UTF-8">
+    <title>Confidence interval for paired means | ProbLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Confidence interval for paired means using individual differences and Student's t: formula, chart and interpretation.">
+    <meta name="keywords" content="confidence interval paired means, CI paired mean, confidence interval before after, paired data, paired t confidence interval, ProbLab, statistics calculator">
+    <link rel="canonical" href="https://problabtools.com/en/intervalo-confianza-medias-apareadas.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Confidence interval for paired means | ProbLab">
+    <meta property="og:description" content="Online calculator for the confidence interval for paired means. Uses individual differences and Student's t distribution.">
+    <meta property="og:url" content="https://problabtools.com/en/intervalo-confianza-medias-apareadas.html">
+    <meta property="og:site_name" content="ProbLab">
+    <meta property="og:image" content="https://problabtools.com/og-image.png">
+    <meta property="og:locale" content="en_US">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Vicente Castellar">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="alternate" hreflang="en" href="https://problabtools.com/en/intervalo-confianza-medias-apareadas.html">
+    <link rel="alternate" hreflang="es" href="https://problabtools.com/intervalo-confianza-medias-apareadas.html">
+    <link rel="alternate" hreflang="x-default" href="https://problabtools.com/intervalo-confianza-medias-apareadas.html">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Confidence interval for paired means | ProbLab">
+    <meta name="twitter:description" content="Online calculator for the confidence interval for paired means. Uses individual differences and Student's t distribution.">
+    <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/index.html"},
+            {"@type": "ListItem", "position": 2, "name": "Confidence intervals", "item": "https://problabtools.com/en/intervalos-confianza/"},
+            {"@type": "ListItem", "position": 3, "name": "CI paired means", "item": "https://problabtools.com/en/intervalo-confianza-medias-apareadas.html"}
+          ]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "Confidence interval for paired means",
+          "applicationCategory": "EducationalApplication",
+          "operatingSystem": "Web",
+          "url": "https://problabtools.com/en/intervalo-confianza-medias-apareadas.html",
+          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+        }
+      ]
+    }
+    </script>
+    <link rel="stylesheet" href="../style_new.css?v=20260624">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What does it mean for means to be paired?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It means each observation in the first set is matched with a specific observation in the second, for example before/after in the same individual."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is the interval calculated on the differences?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Because pairing turns the problem into a t interval for the mean of the individual differences d_i."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What does it mean if the interval includes 0?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "If the interval includes 0, the data are compatible with no mean change at the chosen confidence level."
+          }
+        }
+      ]
+    }
+    </script>
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="../distribuciones/">Distributions</a></li>
+            <li><a href="../tablas-estadisticas/">Tables</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="../tamano-muestral/">Sample size</a></li>
+            <li><a href="../contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="../ab-testing/">A/B testing</a></li>
+            <li><a href="../simulaciones/">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../intervalo-confianza-medias-apareadas.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><span aria-current="page">Paired means</span></li>
+        </ol>
+    </nav>
+    <header class="hero">
+        <p class="eyebrow">Confidence intervals</p>
+        <h1>Confidence interval for paired means</h1>
+        <p class="hero-subtitle">Estimate the mean change between two related measurements, such as before/after or two methods applied to the same units.</p>
+        <p class="hero-links"><a class="hero-link-button" href="intervalos-confianza/">See all confidence intervals</a></p>
+    </header>
+
+    <main>
+        <section class="card sample-size-panel">
+            <div class="panel-heading">
+                <h2>Calculator</h2>
+                <p>Enter the mean and standard deviation of the individual differences, along with the number of pairs.</p>
+            </div>
+
+            <div class="form-grid sample-grid">
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="meanDiff">Mean of the differences (d̄)</label>
+                        <input type="number" id="meanDiff" value="4.2" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="sdDiff">Standard deviation of the differences (s<sub>d</sub>)</label>
+                        <input type="number" id="sdDiff" value="6.1" step="0.001" min="0.0001">
+                    </div>
+                </div>
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="n">Number of pairs (n)</label>
+                        <input type="number" id="n" value="18" step="1" min="2">
+                    </div>
+                    <div class="form-group">
+                        <label for="conf">Confidence level</label>
+                        <select id="conf">
+                            <option value="0.90">90%</option>
+                            <option value="0.95" selected>95%</option>
+                            <option value="0.99">99%</option>
+                            <option value="custom">Custom…</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="direction">Definition of the difference</label>
+                        <select id="direction">
+                            <option value="after-before" selected>After − before</option>
+                            <option value="before-after">Before − after</option>
+                            <option value="method1-method2">Method 1 − method 2</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="inline-inputs" id="customConfRow" style="display:none">
+                    <div class="form-group">
+                        <label for="customConf">Custom confidence level (0–1)</label>
+                        <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="calcBtn">Calculate interval</button>
+            <div id="result" class="result-box">Result pending…</div>
+            <div class="chart-wrap">
+                <canvas id="ciChart" aria-label="Chart of the confidence interval for paired means" role="img"></canvas>
+            </div>
+        </section>
+
+        <section class="card content-card">
+            <h3>Explanation</h3>
+            <p>Paired means arise when each data point in one group is related to a specific data point in the other: before/after measurements on the same person, two instruments applied to the same sample, or matched twins/pairs. The unit of analysis is not two separate groups, but pairs of observations.</p>
+            <p>Paired samples are used when there is a natural unit-to-unit correspondence and that correspondence carries information: the same patient before and after a treatment, the same batch measured by two methods, or subjects matched by age, sex, or another characteristic. By contrast, the <a href="intervalo-confianza-diferencia-medias.html">CI for the difference of independent means</a> is used when the groups are distinct and there is no observation-to-observation pairing.</p>
+            <p>The key is not to treat the groups as independent. First, an individual difference is computed for each pair, for example \(d_i = \text{after}_i - \text{before}_i\). Then a t interval is built for the population mean of those differences, \(\mu_d\). This takes advantage of the correlation within each pair and removes part of the between-individual variability.</p>
+
+            <h3>Formula</h3>
+            <p>Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area outside the interval. For 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\) in each tail.</p>
+            <p class="formula-line">\( \bar{d} \pm t_{\alpha/2,\, n-1}\cdot \dfrac{s_d}{\sqrt{n}} \)</p>
+            <ul>
+                <li><strong>\(\bar{d}\)</strong>: sample mean of the individual differences.</li>
+                <li><strong>\(s_d\)</strong>: sample standard deviation of the differences.</li>
+                <li><strong>\(n\)</strong>: number of pairs observed.</li>
+                <li><strong>\(t_{\alpha/2,\,n-1}\)</strong>: critical value of Student's t with \(n-1\) degrees of freedom.</li>
+            </ul>
+            <p>The margin of error is \(E=t_{\alpha/2,\,n-1}s_d/\sqrt{n}\), and the interval is \([\bar{d}-E,\;\bar{d}+E]\).</p>
+
+            <h3>Worked example</h3>
+            <p>In 18 patients a variable is measured before and after an intervention, defining \(d=\text{after}-\text{before}\). The mean of the differences is \(\bar{d}=4.2\) and its standard deviation is \(s_d=6.1\). It's important that \(s_d\) be the standard deviation of the individual differences, not the standard deviation of the before measurements or the after measurements separately.</p>
+            <p>For 95% confidence we take \(C=0.95\), so \(\alpha=1-C=0.05\) and \(\alpha/2=0.025\). With \(n=18\), the degrees of freedom are \(df=n-1=17\), and the two-sided critical value is approximately \(t_{0.025,17}=2.110\).</p>
+            <p>The standard error of the mean of the differences is:</p>
+            <p class="formula-line">\( SE=\dfrac{s_d}{\sqrt{n}}=\dfrac{6.1}{\sqrt{18}}\approx1.438 \)</p>
+            <p>The margin of error is:</p>
+            <p class="formula-line">\( E=t\cdot SE=2.110\cdot1.438\approx3.03 \)</p>
+            <p>Therefore, the confidence interval is:</p>
+            <p class="formula-line">\( 4.2 \pm 3.03 \approx [1.17,\;7.23] \)</p>
+            <p>Since the interval does not include 0, the mean change is positive at 95% confidence under the definition \(d=\text{after}-\text{before}\). Had \(d=\text{before}-\text{after}\) been used instead, the same data would produce the interval with the opposite sign.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Assumptions for paired means</h3>
+            <ul>
+                <li>The pairs are independent of one another.</li>
+                <li>The distribution of the differences is approximately normal, especially important with few pairs.</li>
+                <li>0 is the null value: if the CI includes 0, the data are compatible with no mean change.</li>
+                <li>The sign depends on how you define the difference. If you switch from \(\text{after}-\text{before}\) to \(\text{before}-\text{after}\), the interval changes sign.</li>
+            </ul>
+        </section>
+
+        <section class="card content-card">
+            <h3>How does it differ from the CI for the difference of independent means?</h3>
+            <p>With independent samples, two distinct groups are compared and the variability depends on \(s_1\), \(s_2\), \(n_1\) and \(n_2\). With paired means, each pair is summarized into a single difference \(d_i\), and the relevant variability is \(s_d\).</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr>
+                            <th>Situation</th>
+                            <th>Data needed</th>
+                            <th>Estimated parameter</th>
+                            <th>When to use it</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Paired means</th>
+                            <td>Differences \(d_i\), or \(\bar d\), \(s_d\) and \(n\).</td>
+                            <td>Mean change: \(\mu_d\).</td>
+                            <td>Before/after, methods measured on the same units, matched pairs.</td>
+                        </tr>
+                        <tr>
+                            <th>Independent means</th>
+                            <td>\(\bar x_1\), \(\bar x_2\), \(s_1\), \(s_2\), \(n_1\), \(n_2\).</td>
+                            <td>Difference of means: \(\mu_1-\mu_2\).</td>
+                            <td>Two groups with no unit-to-unit correspondence.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Ignoring the pairing usually loses information: if the measurements within each pair are correlated, analyzing the differences can substantially reduce the standard error.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>How to interpret the result</h3>
+            <p>The interval \([L, U]\) is the plausible range for the population mean of the individual differences \(\mu_d\) at the chosen confidence level. Remember that \(\mu_d\) is not the difference of two independent means, but the mean change within each pair: the same parameter that would be measured, on average, over all possible individual changes in the population. If the experiment were repeated many times with \(n\) pairs, a proportion \(C\) of the CIs built with the same method would contain the true value of \(\mu_d\).</p>
+            <p>The reference value for this type of interval is 0, which represents no mean change. If \(0 \in [L, U]\), the data are compatible with there being no systematic change at the chosen confidence level; equivalently, the two-sided test \(H_0\!: \mu_d = 0\) would not be rejected at level \(\alpha = 1 - C\). If \(L > 0\), the mean change is positive under the chosen difference definition; if \(U < 0\), the mean change is negative. The direction of the interval depends directly on how \(d_i\) is defined: switching from "after − before" to "before − after" flips the signs of all the bounds.</p>
+            <ul>
+                <li><strong>Advantage of pairing:</strong> by working with individual differences \(d_i\), the between-individual variability that is not relevant to estimating the change is removed. The standard error \(s_d/\sqrt{n}\) is usually smaller than what would be obtained by treating the groups as independent, so the paired CI is typically narrower and more precise.</li>
+                <li><strong>Width and uncertainty:</strong> the width of the interval depends on \(s_d\) (the variability of the change between individuals), \(n\) (the number of pairs), and the confidence level. Increasing \(n\) or reducing \(s_d\) (for example, by improving the homogeneity of the pairing) reduces the margin of error.</li>
+                <li><strong>Reading the chart:</strong> the green region under the t curve is the confidence zone and the red tails (area \(\alpha/2\) each) delimit the critical values \(\pm t_{\alpha/2,\,n-1}\). The interval on the original scale \([\bar{d} - E, \bar{d} + E]\) corresponds to the values of \(\mu_d\) whose t statistic would fall inside the green region.</li>
+            </ul>
+        </section>
+
+        <section id="seo-support-content" class="card content-card">
+            <section class="related-tools">
+                <h3>Related calculators</h3>
+                <ul>
+                    <li><a href="intervalo-confianza-media.html">CI for one mean (unknown σ)</a></li>
+                    <li><a href="intervalo-confianza-diferencia-medias.html">CI for difference of independent means</a></li>
+                    <li><a href="../contraste-hipotesis-dos-medias.html">Hypothesis test for two means (Spanish)</a></li>
+                    <li><a href="../tamano-muestral-medias-apareadas.html">Sample size for paired means (Spanish)</a></li>
+                    <li><a href="../studentt.html">Student's t distribution (Spanish)</a></li>
+                </ul>
+            </section>
+            <h3>Frequently asked questions</h3>
+            <ul>
+                <li><strong>Can I use the two means separately?</strong> That's not recommended. For paired data you need the individual differences or, at least, \(\bar d\), \(s_d\) and \(n\).</li>
+                <li><strong>What happens if the CI includes 0?</strong> There is not enough evidence of mean change at the chosen confidence level.</li>
+                <li><strong>What sign will the interval have?</strong> It depends on the definition of \(d\). The calculator shows the selected definition to avoid confusion.</li>
+            </ul>
+            <h3>References used</h3>
+            <ul>
+                <li>Student (1908). <em>The probable error of a mean</em>, Biometrika, 6, 1–25.</li>
+                <li>Altman, D. G. (1991). <em>Practical Statistics for Medical Research</em>. Chapman & Hall.</li>
+                <li>Agresti, A. and Franklin, C. (2018). <em>Statistics: The Art and Science of Learning from Data</em>. Pearson.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="legal-footer">
+        <p>
+            © 2026 problabtools.
+            <a href="../aviso-legal.html">Legal notice</a> ·
+            <a href="../privacidad.html">Privacy</a> ·
+            <a href="../cookies.html">Cookies</a> ·
+            <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+        </p>
+    </footer>
+</div>
+
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let ciChart;
+
+document.getElementById('conf').addEventListener('change', function () {
+    document.getElementById('customConfRow').style.display = this.value === 'custom' ? '' : 'none';
+});
+
+function getConfLevel() {
+    const sel = document.getElementById('conf').value;
+    if (sel === 'custom') return parseFloat(document.getElementById('customConf').value);
+    return parseFloat(sel);
+}
+
+function formatNumber(value, digits = 6) {
+    if (!Number.isFinite(value)) return 'undefined';
+    return value.toFixed(digits);
+}
+
+function directionLabel(value) {
+    if (value === 'before-after') return 'before − after';
+    if (value === 'method1-method2') return 'method 1 − method 2';
+    return 'after − before';
+}
+
+function renderChart(tCrit, df) {
+    const ctx = document.getElementById('ciChart');
+    if (!ctx) return;
+
+    const bound = Math.max(4, Math.abs(tCrit) + 0.8);
+    const minX = -bound, maxX = bound;
+    const step = 0.02;
+    const curve = [], inside = [], outside = [];
+
+    for (let x = minX; x <= maxX; x += step) {
+        const y = jStat.studentt.pdf(x, df);
+        curve.push({ x, y });
+        if (x >= -tCrit && x <= tCrit) {
+            inside.push({ x, y });
+            outside.push({ x, y: null });
+        } else {
+            inside.push({ x, y: null });
+            outside.push({ x, y });
+        }
+    }
+
+    if (ciChart) ciChart.destroy();
+    ciChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [
+                { label: 'Confidence region', data: inside, borderColor: 'rgba(34,197,94,0)', backgroundColor: 'rgba(34,197,94,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
+                { label: 'Tails (α/2 each)', data: outside, borderColor: 'rgba(239,68,68,0)', backgroundColor: 'rgba(239,68,68,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
+                { label: `Student's t (df = ${df})`, data: curve, borderColor: '#1d4ed8', borderWidth: 2, pointRadius: 0, fill: false, parsing: false }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: { type: 'linear', min: minX, max: maxX, title: { display: true, text: `t (df = ${df})` } },
+                y: { beginAtZero: true, title: { display: true, text: 'Density' } }
+            }
+        }
+    });
+}
+
+function calculate() {
+    const meanDiff = parseFloat(document.getElementById('meanDiff').value);
+    const sdDiff = parseFloat(document.getElementById('sdDiff').value);
+    const n = parseFloat(document.getElementById('n').value);
+    const conf = getConfLevel();
+    const direction = document.getElementById('direction').value;
+    const resultEl = document.getElementById('result');
+
+    if (![meanDiff, sdDiff, n, conf].every(Number.isFinite) || sdDiff <= 0 || n < 2 || conf <= 0 || conf >= 1 || !Number.isInteger(n)) {
+        resultEl.innerText = 'Error: check that s_d > 0, n is an integer ≥ 2, and 0 < confidence < 1.';
+        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        return;
+    }
+
+    const alpha = 1 - conf;
+    const df = n - 1;
+    const tCrit = jStat.studentt.inv(1 - alpha / 2, df);
+    const se = sdDiff / Math.sqrt(n);
+    const margin = tCrit * se;
+    const lower = meanDiff - margin;
+    const upper = meanDiff + margin;
+    const includesZero = lower <= 0 && upper >= 0;
+    const interpretation = includesZero
+        ? 'ℹ The interval includes 0: no mean change cannot be ruled out.'
+        : (meanDiff > 0
+            ? '✓ The interval lies above 0: the mean change is positive under the chosen definition.'
+            : '✓ The interval lies below 0: the mean change is negative under the chosen definition.');
+    const normalityWarning = n < 30
+        ? '\n⚠ With fewer than 30 pairs, check that the differences don\'t deviate too far from normality.'
+        : '';
+
+    resultEl.innerText = [
+        `Difference definition: ${directionLabel(direction)}  |  d̄ = ${formatNumber(meanDiff)}  |  s_d = ${formatNumber(sdDiff)}  |  n = ${n}`,
+        `Confidence level: ${(conf * 100).toFixed(1)}%  |  df = ${df}  |  Critical t: ±${tCrit.toFixed(4)}`,
+        `Standard error: ${formatNumber(se)}  |  Margin of error: ±${formatNumber(margin)}`,
+        `Confidence interval for μ_d: [${formatNumber(lower)}, ${formatNumber(upper)}]`,
+        interpretation + normalityWarning
+    ].join('\n');
+
+    renderChart(tCrit, df);
+}
+
+document.getElementById('calcBtn').addEventListener('click', calculate);
+document.getElementById('conf').addEventListener('change', calculate);
+document.getElementById('customConf').addEventListener('input', calculate);
+document.getElementById('direction').addEventListener('change', calculate);
+calculate();
+</script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>
