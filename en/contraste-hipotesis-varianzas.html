@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../contraste-hipotesis-varianzas.html">
+<head>
+    <meta charset="UTF-8">
+    <title>Variance Hypothesis Test Calculator | ProbLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hypothesis test to evaluate whether the spread of a process stays stable against a reference value or between two conditions.">
+    <meta name="keywords" content="variance hypothesis test calculator, chi-square test for a variance calculator, F test for two variances, compare variances statistics, Levene test alternative, ProbLab, online statistics, statistics calculator">
+    <link rel="canonical" href="https://problabtools.com/en/contraste-hipotesis-varianzas.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Variance Hypothesis Test Calculator | ProbLab">
+    <meta property="og:description" content="Hypothesis test to evaluate whether the spread of a process stays stable against a reference value or between two conditions.">
+    <meta property="og:url" content="https://problabtools.com/en/contraste-hipotesis-varianzas.html">
+    <meta property="og:site_name" content="ProbLab">
+    <meta property="og:image" content="https://problabtools.com/og-image.png">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image:alt" content="Variance hypothesis test calculator">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Vicente Castellar">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="alternate" hreflang="en" href="https://problabtools.com/en/contraste-hipotesis-varianzas.html">
+    <link rel="alternate" hreflang="es" href="https://problabtools.com/contraste-hipotesis-varianzas.html">
+    <link rel="alternate" hreflang="x-default" href="https://problabtools.com/contraste-hipotesis-varianzas.html">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Variance Hypothesis Test Calculator | ProbLab">
+    <meta name="twitter:description" content="Hypothesis test to evaluate whether the spread of a process stays stable against a reference value or between two conditions.">
+    <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+    <meta name="twitter:image:alt" content="Variance hypothesis test calculator">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+            {"@type": "ListItem", "position": 2, "name": "Hypothesis tests", "item": "https://problabtools.com/en/contrastes-hipotesis/"},
+            {"@type": "ListItem", "position": 3, "name": "Variance tests", "item": "https://problabtools.com/en/contraste-hipotesis-varianzas.html"}
+          ]
+        },
+        {
+          "@type": "WebPage",
+          "name": "Variance Hypothesis Test Calculator | ProbLab",
+          "url": "https://problabtools.com/en/contraste-hipotesis-varianzas.html",
+          "description": "Hypothesis test to evaluate whether the spread of a process stays stable against a reference value or between two conditions.",
+          "inLanguage": "en",
+          "isPartOf": {"@type": "WebSite", "name": "ProbLab", "url": "https://problabtools.com/"}
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Variance hypothesis test calculator",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web",
+      "url": "https://problabtools.com/en/contraste-hipotesis-varianzas.html",
+      "description": "Hypothesis test to evaluate whether the spread of a process stays stable against a reference value or between two conditions.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <link rel="stylesheet" href="../style_new.css?v=20260624">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "When do I use the one-variance test?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "When you want to check whether the population variance is compatible with a\n                    theoretical or reference value."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When do I use the two-variance test?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "When you want to compare whether two populations or conditions have the same spread."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What assumption matters most?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The classical variance tests assume the data come from approximately normal\n                    populations."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can two processes share the same mean but differ in variance?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Two processes can have the same average and still show very different\n                    variability."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which tail should I choose?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Two-sided if you're looking for any difference; right tail if you want to check\n                    whether the variance is larger; left tail if you want to check whether the variance is smaller."
+      }
+    }
+  ]
+}
+    </script>
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="distribuciones/">Distributions</a></li>
+            <li><a href="tablas-estadisticas/">Tables</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="../tamano-muestral/">Sample size</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="../ab-testing/">A/B testing</a></li>
+            <li><a href="../simulaciones/">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../contraste-hipotesis-varianzas.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><span aria-current="page">Variance tests</span></li>
+        </ol>
+    </nav>
+    <header class="hero">
+        <p class="eyebrow">Hypothesis tests</p>
+        <h1>Variance Hypothesis Test Calculator</h1>
+        <p class="hero-subtitle">Test stability and variability in one or two groups.</p>
+        <p class="hero-links">
+            <a class="hero-link-button" href="contrastes-hipotesis/">See all hypothesis tests</a>
+        </p>
+    </header>
+
+    <main>
+        <!-- Section order: 1) Calculator, 2) Explanation, 3) Quick test, 4) Worked example, 5) Interpretation, 6) FAQ -->
+
+        <section class="card sample-size-panel">
+            <div class="panel-heading">
+                <h2>Calculator</h2>
+                <p>
+                    Online calculator that computes the statistic, the p-value and the decision for
+                    tests on one variance or on two variances.
+                </p>
+            </div>
+
+            <div class="form-grid sample-grid">
+                <div class="form-group">
+                    <label for="testType">Test type</label>
+                    <select id="testType">
+                        <option value="one">One variance vs. a reference value</option>
+                        <option value="two">Comparison of two variances</option>
+                    </select>
+                </div>
+
+                <div id="oneVarianceInputs">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="n">Sample size (n)</label>
+                            <input type="number" id="n" value="25" step="1" min="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="sampleVariance">Sample variance (s²)</label>
+                            <input type="number" id="sampleVariance" value="14" step="0.01" min="0.0001">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sigma0Squared">Hypothesized variance (σ₀²)</label>
+                        <input type="number" id="sigma0Squared" value="10" step="0.01" min="0.0001">
+                    </div>
+                </div>
+
+                <div id="twoVarianceInputs" style="display: none;">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="n1">Sample size group 1 (n₁)</label>
+                            <input type="number" id="n1" value="20" step="1" min="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="n2">Sample size group 2 (n₂)</label>
+                            <input type="number" id="n2" value="18" step="1" min="2">
+                        </div>
+                    </div>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="sampleVariance1">Sample variance group 1 (s₁²)</label>
+                            <input type="number" id="sampleVariance1" value="16" step="0.01" min="0.0001">
+                        </div>
+                        <div class="form-group">
+                            <label for="sampleVariance2">Sample variance group 2 (s₂²)</label>
+                            <input type="number" id="sampleVariance2" value="9" step="0.01" min="0.0001">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="alpha">Significance level (α)</label>
+                        <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tail">Alternative hypothesis</label>
+                        <select id="tail">
+                            <option value="two">Two-sided (≠)</option>
+                            <option value="right">Right tail (&gt;)</option>
+                            <option value="left">Left tail (&lt;)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <button class="calculate-btn" id="calcVarianceBtn">Calculate test</button>
+            <div id="varianceResult" class="result-box">Result pending…</div>
+
+            <div class="chart-wrap">
+                <canvas id="varianceTestChart" aria-label="Chart of acceptance and rejection regions for the variance test" role="img"></canvas>
+            </div>
+        </section>
+
+        <section class="card content-card">
+            <h3>Explanation</h3>
+
+            <p>
+                The variance test is used to check whether the variability of a population
+                is compatible with a theoretical or reference value. Unlike tests on
+                the mean, this test doesn't analyze whether the data are higher or lower on average,
+                but whether they are more or less spread out than expected.
+            </p>
+
+            <p>
+                In industry, laboratory work and quality control, the average isn't the only thing that matters: variance
+                defines risk, consistency and stability. A process can have a correct mean and
+                still be too irregular.
+            </p>
+
+            <p>
+                For example, a machine may fill bottles with the correct average amount of liquid,
+                but do so with too much variability. Even if the average is right, an excessive
+                variance would mean some bottles are overfilled and others underfilled.
+                The variance test lets you check whether the spread observed in a sample is
+                compatible with the variability considered acceptable.
+            </p>
+
+            <p>
+                For a single variance, a test based on the chi-square distribution is used.
+                To compare two variances, a test based on the F distribution is typically used.
+                In both cases, the classical tests assume the data come from populations that are
+                approximately normal.
+            </p>
+
+            <h3>Hypotheses and statistic</h3>
+            <p class="formula-line">\(H_0: \sigma^2 = \sigma_0^2\)</p>
+            <p class="formula-line">\( \chi^2 = \frac{(n-1)s^2}{\sigma_0^2} \)</p>
+            <p class="formula-line">\(H_0: \sigma_1^2 = \sigma_2^2\)</p>
+            <p class="formula-line">\( F = \frac{s_1^2}{s_2^2} \)</p>
+            <ul>
+                <li><strong>\(s^2\)</strong>: observed sample variance (chi-square test).</li>
+                <li><strong>\(\sigma_0^2\)</strong>: reference variance under \(H_0\) (chi-square test).</li>
+                <li><strong>\(n\)</strong>: sample size; \(df = n-1\) degrees of freedom (chi-square test).</li>
+                <li><strong>\(s_1^2, s_2^2\)</strong>: sample variances of the two groups (F test).</li>
+                <li><strong>\(n_1, n_2\)</strong>: sizes of the two groups; \(df_1 = n_1-1\), \(df_2 = n_2-1\) (F test).</li>
+            </ul>
+        </section>
+
+
+
+        <section class="card content-card">
+            <h3>Quick test</h3>
+
+            <p>
+                In the one-variance test, the statistic compares the sample variance \(s^2\)
+                with a reference variance \(\sigma_0^2\). Under \(H_0\), the statistic follows
+                a chi-square distribution with \(n-1\) degrees of freedom:
+            </p>
+
+            <p class="formula-line">
+                \( \chi^2 = \frac{(n-1)s^2}{\sigma_0^2} \sim \chi^2_{n-1} \)
+            </p>
+
+            <p>
+                In the comparison of two variances, the statistic compares the ratio between the
+                two sample variances. Under \(H_0\), it follows an F distribution:
+            </p>
+
+            <p class="formula-line">
+                \( F = \frac{s_1^2}{s_2^2} \sim F_{n_1-1,\;n_2-1} \)
+            </p>
+
+            <p>
+                If the result is significant, it's worth reviewing possible sources of variation:
+                batches, shifts, instrumentation, supplier changes, measurement conditions or
+                differences between groups.
+            </p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Worked example</h3>
+            <p>Suppose you want to compare the variability of two screw-manufacturing processes. Process A: sample variance \(s_1^2 = 25\) mm², \(n_1 = 21\) units. Process B: sample variance \(s_2^2 = 16\) mm², \(n_2 = 16\) units. We test \(H_0\colon \sigma_1^2 = \sigma_2^2\) against \(H_1\colon \sigma_1^2 \neq \sigma_2^2\) with \(\alpha = 0.05\), two-sided, using Snedecor's F test.</p>
+            <p>The F statistic is computed as the ratio of variances (larger over smaller):</p>
+            <p class="formula-line">\( F = \dfrac{s_1^2}{s_2^2} = \dfrac{25}{16} = 1.5625 \)</p>
+            <p>The degrees of freedom are \(df_1 = n_1 - 1 = 20\) and \(df_2 = n_2 - 1 = 15\). For a two-sided test with \(\alpha = 0.05\), the upper critical value is \(F_{0.025;\,20,\,15} \approx 2.76\). The lower critical value is \(F_{0.975;\,20,\,15} \approx 1/F_{0.025;\,15,\,20} \approx 0.39\).</p>
+            <p>Since \(0.39 < F = 1.5625 < 2.76\), the statistic doesn't fall in either rejection tail. The two-sided p-value is \(p \approx 0.38 > 0.05\).</p>
+            <p>Conclusion: <strong>fail to reject \(H_0\)</strong>. The data don't provide significant evidence that the two processes have different variances. Both processes show comparable spread at the 5% significance level.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>How to interpret the result</h3>
+
+                <p>
+                <strong>Rejecting \(H_0\)</strong> (p-value &lt; \(\alpha\)) means the sample variance
+                \(s^2\) is statistically incompatible with the hypothesized value \(\sigma^2_0\).
+                In practical terms, there's evidence that the variability of the process or population
+                differs from the reference. However, the chi-square test for one variance
+                is notably sensitive to departures from normality: a rejection can reflect
+                a skewed or heavy-tailed distribution rather than a genuinely
+                different variance. Always complement it with a plot of the data (histogram, Q-Q plot) and
+                consider the context of the problem.
+                </p>
+
+                <p>
+                <strong>Failing to reject \(H_0\)</strong> (p-value ≥ \(\alpha\)) doesn't prove that
+                \(\sigma^2 = \sigma^2_0\); it only indicates that the data are compatible with that value
+                at the chosen level. With small samples, the power to detect changes in variance
+                is generally low. The confidence interval for \(\sigma^2\) — based on
+                percentiles of the chi-square distribution with \(n-1\) degrees of freedom — offers
+                a more complete picture of the range of plausible values.
+                </p>
+
+                <p>
+                The <strong>chi-square statistic</strong> \(\chi^2 = (n-1)s^2/\sigma^2_0\) measures
+                how far the sample variance is from the hypothesized one. In the chart, the
+                green region represents the non-rejection zone and the red zones the critical
+                regions (one-sided or two-sided depending on the chosen alternative); the amber
+                line marks the observed statistic. Unlike mean tests, the
+                chi-square distribution isn't symmetric, so the critical values differ between the two
+                tails even for the same \(\alpha\).
+                </p>
+        </section>
+        <section id="seo-support-content" class="card content-card">
+            <section class="related-tools">
+                <h3>Related calculators</h3>
+                <ul>
+                    <li><a href="chisquare.html">Chi-square distribution</a></li>
+                    <li><a href="centralf.html">F distribution</a></li>
+                    <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+                </ul>
+            </section>
+
+            <h3>Frequently asked questions</h3>
+
+            <ul>
+                <li>
+                    <strong>When do I use the one-variance test?</strong>
+                    When you want to check whether the population variance is compatible with a
+                    theoretical or reference value.
+                </li>
+                <li>
+                    <strong>When do I use the two-variance test?</strong>
+                    When you want to compare whether two populations or conditions have the same spread.
+                </li>
+                <li>
+                    <strong>What assumption matters most?</strong>
+                    The classical variance tests assume the data come from approximately normal
+                    populations.
+                </li>
+                <li>
+                    <strong>Can two processes share the same mean but differ in variance?</strong>
+                    Yes. Two processes can have the same average and still show very different
+                    variability.
+                </li>
+                <li>
+                    <strong>Which tail should I choose?</strong>
+                    Two-sided if you're looking for any difference; right tail if you want to check
+                    whether the variance is larger; left tail if you want to check whether the variance is smaller.
+                </li>
+            </ul>
+            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/F-test_of_equality_of_variances" target="_blank" rel="noopener noreferrer">F-test of equality of variances</a> — Wikipedia</p>
+        </section>
+    </main>
+
+    <footer class="legal-footer">
+        <p>
+            © 2026 problabtools.
+            <a href="../aviso-legal.html">Legal notice</a> ·
+            <a href="../privacidad.html">Privacy</a> ·
+            <a href="../cookies.html">Cookies</a> ·
+            <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+        </p>
+    </footer>
+</div>
+
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+let varianceTestChart;
+
+function buildCurvePoints(min, max, step, pdfFn, isAcceptanceFn) {
+    const curve = [];
+    const acceptance = [];
+    const rejection = [];
+
+    for (let x = min; x <= max; x += step) {
+        const y = pdfFn(x);
+        curve.push({ x, y });
+
+        if (isAcceptanceFn(x)) {
+            acceptance.push({ x, y });
+            rejection.push({ x, y: null });
+        } else {
+            acceptance.push({ x, y: null });
+            rejection.push({ x, y });
+        }
+    }
+
+    return { curve, acceptance, rejection };
+}
+
+function getChiSquareCriticalValues(alpha, tail, df) {
+    if (tail === 'two') {
+        return {
+            left: jStat.chisquare.inv(alpha / 2, df),
+            right: jStat.chisquare.inv(1 - alpha / 2, df)
+        };
+    }
+
+    if (tail === 'left') {
+        return {
+            left: jStat.chisquare.inv(alpha, df),
+            right: Infinity
+        };
+    }
+
+    return {
+        left: 0,
+        right: jStat.chisquare.inv(1 - alpha, df)
+    };
+}
+
+function getFCriticalValues(alpha, tail, df1, df2) {
+    if (tail === 'two') {
+        return {
+            left: jStat.centralF.inv(alpha / 2, df1, df2),
+            right: jStat.centralF.inv(1 - alpha / 2, df1, df2)
+        };
+    }
+
+    if (tail === 'left') {
+        return {
+            left: jStat.centralF.inv(alpha, df1, df2),
+            right: Infinity
+        };
+    }
+
+    return {
+        left: 0,
+        right: jStat.centralF.inv(1 - alpha, df1, df2)
+    };
+}
+
+function calculatePValueChiSquare(statistic, df, tail) {
+    const cdf = jStat.chisquare.cdf(statistic, df);
+
+    if (tail === 'two') {
+        return 2 * Math.min(cdf, 1 - cdf);
+    }
+
+    if (tail === 'right') {
+        return 1 - cdf;
+    }
+
+    return cdf;
+}
+
+function calculatePValueF(statistic, df1, df2, tail) {
+    const cdf = jStat.centralF.cdf(statistic, df1, df2);
+
+    if (tail === 'two') {
+        return 2 * Math.min(cdf, 1 - cdf);
+    }
+
+    if (tail === 'right') {
+        return 1 - cdf;
+    }
+
+    return cdf;
+}
+
+function renderVarianceTestChart(config) {
+    const ctx = document.getElementById('varianceTestChart');
+    if (!ctx) return;
+
+    const {
+        distribution,
+        statistic,
+        alpha,
+        tail,
+        df,
+        df1,
+        df2
+    } = config;
+
+    let critical;
+    let pdfFn;
+    let xLabel;
+    let maxX;
+
+    if (distribution === 'chisquare') {
+        critical = getChiSquareCriticalValues(alpha, tail, df);
+        pdfFn = (x) => jStat.chisquare.pdf(x, df);
+        xLabel = 'χ² statistic';
+        maxX = Math.max(
+            jStat.chisquare.inv(0.995, df),
+            statistic * 1.25,
+            critical.right === Infinity ? 0 : critical.right * 1.1
+        );
+    } else {
+        critical = getFCriticalValues(alpha, tail, df1, df2);
+        pdfFn = (x) => jStat.centralF.pdf(x, df1, df2);
+        xLabel = 'F statistic';
+        maxX = Math.max(
+            jStat.centralF.inv(0.995, df1, df2),
+            statistic * 1.25,
+            critical.right === Infinity ? 0 : critical.right * 1.1
+        );
+    }
+
+    maxX = Math.min(Math.max(maxX, 4), 50);
+    const step = maxX / 500;
+
+    const isAcceptanceFn = (x) => x > critical.left && x < critical.right;
+
+    const { curve, acceptance, rejection } = buildCurvePoints(
+        0.0001,
+        maxX,
+        step,
+        pdfFn,
+        isAcceptanceFn
+    );
+
+    const maxY = Math.max(...curve.map((point) => Number.isFinite(point.y) ? point.y : 0));
+
+    const statLine = Number.isFinite(statistic)
+        ? [{ x: statistic, y: 0 }, { x: statistic, y: maxY }]
+        : [];
+
+    if (varianceTestChart) varianceTestChart.destroy();
+
+    varianceTestChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [
+                {
+                    label: 'Acceptance region',
+                    data: acceptance,
+                    borderColor: 'rgba(34,197,94,0)',
+                    backgroundColor: 'rgba(34,197,94,0.35)',
+                    fill: 'origin',
+                    pointRadius: 0,
+                    parsing: false
+                },
+                {
+                    label: 'Rejection region',
+                    data: rejection,
+                    borderColor: 'rgba(239,68,68,0)',
+                    backgroundColor: 'rgba(239,68,68,0.35)',
+                    fill: 'origin',
+                    pointRadius: 0,
+                    parsing: false
+                },
+                {
+                    label: distribution === 'chisquare'
+                        ? 'χ² density function'
+                        : 'F density function',
+                    data: curve,
+                    borderColor: '#1d4ed8',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: false,
+                    parsing: false
+                },
+                {
+                    label: 'Observed statistic',
+                    data: statLine,
+                    borderColor: '#f59e0b',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: false,
+                    parsing: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    type: 'linear',
+                    min: 0,
+                    max: maxX,
+                    title: {
+                        display: true,
+                        text: xLabel
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Density'
+                    }
+                }
+            }
+        }
+    });
+}
+
+function updateVarianceInputVisibility() {
+    const testType = document.getElementById('testType').value;
+    const oneVarianceInputs = document.getElementById('oneVarianceInputs');
+    const twoVarianceInputs = document.getElementById('twoVarianceInputs');
+
+    if (testType === 'one') {
+        oneVarianceInputs.style.display = '';
+        twoVarianceInputs.style.display = 'none';
+    } else {
+        oneVarianceInputs.style.display = 'none';
+        twoVarianceInputs.style.display = '';
+    }
+}
+
+function calculateVarianceTest() {
+    const testType = document.getElementById('testType').value;
+    const alpha = parseFloat(document.getElementById('alpha').value);
+    const tail = document.getElementById('tail').value;
+    const resultEl = document.getElementById('varianceResult');
+
+    if (!Number.isFinite(alpha) || alpha <= 0 || alpha >= 1) {
+        resultEl.innerText = 'Error: check that 0 < α < 1.';
+        if (varianceTestChart) {
+            varianceTestChart.destroy();
+            varianceTestChart = null;
+        }
+        return;
+    }
+
+    if (testType === 'one') {
+        const n = parseFloat(document.getElementById('n').value);
+        const sampleVariance = parseFloat(document.getElementById('sampleVariance').value);
+        const sigma0Squared = parseFloat(document.getElementById('sigma0Squared').value);
+
+        if (![n, sampleVariance, sigma0Squared].every(Number.isFinite) || n < 2 || sampleVariance <= 0 || sigma0Squared <= 0) {
+            resultEl.innerText = 'Error: check that n ≥ 2, s² > 0 and σ₀² > 0.';
+            if (varianceTestChart) {
+                varianceTestChart.destroy();
+                varianceTestChart = null;
+            }
+            return;
+        }
+
+        const df = n - 1;
+        const statistic = ((n - 1) * sampleVariance) / sigma0Squared;
+        let pValue = calculatePValueChiSquare(statistic, df, tail);
+        pValue = Math.min(Math.max(pValue, 0), 1);
+
+        const decision = pValue < alpha ? 'Reject H₀.' : 'Fail to reject H₀.';
+
+        resultEl.innerText =
+            `χ² = ${statistic.toFixed(4)} | df = ${df} | p-value = ${pValue.toFixed(6)} | ${decision}`;
+
+        renderVarianceTestChart({
+            distribution: 'chisquare',
+            statistic,
+            alpha,
+            tail,
+            df
+        });
+
+    } else {
+        const n1 = parseFloat(document.getElementById('n1').value);
+        const n2 = parseFloat(document.getElementById('n2').value);
+        const sampleVariance1 = parseFloat(document.getElementById('sampleVariance1').value);
+        const sampleVariance2 = parseFloat(document.getElementById('sampleVariance2').value);
+
+        if (![n1, n2, sampleVariance1, sampleVariance2].every(Number.isFinite) || n1 < 2 || n2 < 2 || sampleVariance1 <= 0 || sampleVariance2 <= 0) {
+            resultEl.innerText = 'Error: check that n₁ ≥ 2, n₂ ≥ 2, s₁² > 0 and s₂² > 0.';
+            if (varianceTestChart) {
+                varianceTestChart.destroy();
+                varianceTestChart = null;
+            }
+            return;
+        }
+
+        const df1 = n1 - 1;
+        const df2 = n2 - 1;
+        const statistic = sampleVariance1 / sampleVariance2;
+        let pValue = calculatePValueF(statistic, df1, df2, tail);
+        pValue = Math.min(Math.max(pValue, 0), 1);
+
+        const decision = pValue < alpha ? 'Reject H₀.' : 'Fail to reject H₀.';
+
+        resultEl.innerText =
+            `F = ${statistic.toFixed(4)} | df₁ = ${df1}, df₂ = ${df2} | p-value = ${pValue.toFixed(6)} | ${decision}`;
+
+        renderVarianceTestChart({
+            distribution: 'f',
+            statistic,
+            alpha,
+            tail,
+            df1,
+            df2
+        });
+    }
+}
+
+document.getElementById('testType').addEventListener('change', () => {
+    updateVarianceInputVisibility();
+    calculateVarianceTest();
+});
+
+document.getElementById('calcVarianceBtn').addEventListener('click', calculateVarianceTest);
+
+updateVarianceInputVisibility();
+calculateVarianceTest();
+</script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>
