@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en" data-alt-lang="es" data-alt-lang-url="../ab-testing-potencia.html">
+<head>
+  <meta charset="UTF-8">
+  <title>A/B Test Power, MDE & Sample Size Calculator | ProbLab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sample size, statistical power, and minimum detectable effect (MDE) calculator for A/B tests with conversion metrics.">
+    <meta name="keywords" content="A/B test power calculator, calculate A/B test power, type II error A/B testing, sample size power A/B, A/B test experiment design, ProbLab, online statistics, statistics calculator">
+  <link rel="canonical" href="https://problabtools.com/en/ab-testing-potencia.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="A/B Test Power, MDE & Sample Size Calculator | ProbLab">
+  <meta property="og:description" content="Sample size, statistical power, and minimum detectable effect (MDE) calculator for A/B tests with conversion metrics.">
+  <meta property="og:url" content="https://problabtools.com/en/ab-testing-potencia.html">
+  <meta property="og:site_name" content="ProbLab">
+  <meta property="og:image" content="https://problabtools.com/og-image.png">
+  <meta property="og:locale" content="en_US">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="author" content="Vicente Castellar">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="alternate" hreflang="en" href="https://problabtools.com/en/ab-testing-potencia.html">
+  <link rel="alternate" hreflang="es" href="https://problabtools.com/ab-testing-potencia.html">
+  <link rel="alternate" hreflang="x-default" href="https://problabtools.com/ab-testing-potencia.html">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A/B Test Power, MDE & Sample Size Calculator | ProbLab">
+  <meta name="twitter:description" content="Sample size, statistical power, and minimum detectable effect (MDE) calculator for A/B tests with conversion metrics.">
+  <meta name="twitter:image" content="https://problabtools.com/og-image.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://problabtools.com/en/"},
+          {"@type": "ListItem", "position": 2, "name": "A/B testing", "item": "https://problabtools.com/en/ab-testing/"},
+          {"@type": "ListItem", "position": 3, "name": "MDE, Power & Sample Size for A/B", "item": "https://problabtools.com/en/ab-testing-potencia.html"}
+        ]
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "A/B Test Power, MDE & Sample Size Calculator",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Web",
+        "url": "https://problabtools.com/en/ab-testing-potencia.html",
+        "description": "Sample size, power and MDE calculator for A/B experiments.",
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+      }
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="../style_new.css?v=20260624">
+  <style>
+    .mode-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .mode-tab {
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: 1px solid #dbe3f1;
+      background: #f8fafc;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      color: #334155;
+    }
+    .mode-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .mode-section { display: none; }
+    .mode-section.active { display: block; }
+  </style>
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does the sample size calculation assume 1:1 allocation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The formula implemented maximizes power with balanced allocation. For unequal allocation, use the general two-proportion sample size calculator."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between a two-tailed and a one-tailed test?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The two-tailed test detects effects in both directions (p_B greater or smaller than p_A) and is the most commonly used. The one-tailed test only detects effects in one direction and needs a smaller sample, but is valid only if you know in advance that the variant can only improve, never worsen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the MDE the effect I expect, or the minimum effect that matters?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The MDE is the minimum effect detectable with the given sample. You should size the experiment so that its MDE is equal to or smaller than the minimum effect that would have practical relevance for your business."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does the chart show relative lifts instead of the exact effect I entered?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The chart illustrates how power varies with n for three reference scenarios (+5%, +10%, +20% relative to p_A). Your specific calculation is shown in the results box; the chart provides visual context to understand the general sensitivity of the experiment."
+      }
+    }
+  ]
+}
+    </script>
+    <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+</head>
+<body>
+<nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav-inner">
+        <a class="site-brand" href="index.html">ProbLab</a>
+        <ul class="site-nav-links">
+            <li><a href="distribuciones/">Distributions</a></li>
+            <li><a href="tablas-estadisticas/">Tables</a></li>
+            <li><a href="intervalos-confianza/">Confidence intervals</a></li>
+            <li><a href="tamano-muestral/">Sample size</a></li>
+            <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+            <li><a href="ab-testing/">A/B testing</a></li>
+            <li><a href="../simulaciones/">Simulations</a></li>
+            <li id="nav-lang-li" style="display:flex;align-items:center">
+                <a class="lang-btn" href="../ab-testing-potencia.html" hreflang="es" aria-label="Ver en español">ES</a>
+            </li>
+            <li id="nav-theme-li" style="display:flex;align-items:center">
+                <button class="theme-btn" type="button" aria-label="Toggle theme" title="Toggle light/dark theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="page-wrap">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="ab-testing/">A/B testing</a></li>
+            <li><span aria-current="page">A/B power</span></li>
+        </ol>
+    </nav>
+  <header class="hero">
+    <p class="eyebrow">A/B testing</p>
+    <h1>MDE, power & sample size — A/B testing</h1>
+    <p class="hero-subtitle">Plan your experiment: calculate how many users you need, what power you'll have with your resources, or the smallest effect you'll be able to detect.</p>
+    <p class="hero-links"><a class="hero-link-button" href="ab-testing/">See all A/B testing tools</a></p>
+  </header>
+
+  <main>
+    <section class="card sample-size-panel">
+      <div class="panel-heading">
+        <h2>Calculator</h2>
+        <p>Select the mode based on what you want to calculate and enter the remaining parameters.</p>
+      </div>
+
+      <div class="mode-tabs" role="tablist" aria-label="Calculation mode">
+        <button class="mode-tab active" data-target="modeN" role="tab" aria-selected="true">Sample size</button>
+        <button class="mode-tab" data-target="modePower" role="tab" aria-selected="false">Power</button>
+        <button class="mode-tab" data-target="modeMDE" role="tab" aria-selected="false">MDE</button>
+      </div>
+
+      <!-- MODE: Sample size -->
+      <div id="modeN" class="mode-section active">
+        <div class="form-grid sample-grid">
+          <div class="inline-inputs">
+            <div class="form-group">
+              <label for="nPA">Group A baseline rate (p<sub>A</sub>)</label>
+              <input type="number" id="nPA" value="0.12" step="0.001" min="0.001" max="0.999">
+            </div>
+            <div class="form-group">
+              <label for="nPB">Expected group B rate (p<sub>B</sub>)</label>
+              <input type="number" id="nPB" value="0.138" step="0.001" min="0.001" max="0.999">
+            </div>
+          </div>
+          <div class="inline-inputs">
+            <div class="form-group">
+              <label for="nAlpha">Significance level (α)</label>
+              <input type="number" id="nAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+            </div>
+            <div class="form-group">
+              <label for="nPower">Desired power (1−β)</label>
+              <input type="number" id="nPower" value="0.8" step="0.01" min="0.5" max="0.999">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="nTail">Test type</label>
+            <select id="nTail">
+              <option value="two" selected>Two-tailed</option>
+              <option value="one">One-tailed</option>
+            </select>
+          </div>
+        </div>
+        <button class="calculate-btn" id="calcNBtn">Calculate sample size</button>
+        <div id="nResult" class="result-box" style="line-height:1.9;">Result pending…</div>
+      </div>
+
+      <!-- MODE: Power -->
+      <div id="modePower" class="mode-section">
+        <div class="form-grid sample-grid">
+          <div class="inline-inputs">
+            <div class="form-group">
+              <label for="pwPA">Group A baseline rate (p<sub>A</sub>)</label>
+              <input type="number" id="pwPA" value="0.12" step="0.001" min="0.001" max="0.999">
+            </div>
+            <div class="form-group">
+              <label for="pwPB">Group B rate (p<sub>B</sub>)</label>
+              <input type="number" id="pwPB" value="0.138" step="0.001" min="0.001" max="0.999">
+            </div>
+          </div>
+          <div class="inline-inputs">
+            <div class="form-group">
+              <label for="pwN">Sample size per group (n)</label>
+              <input type="number" id="pwN" value="1500" step="1" min="1">
+            </div>
+            <div class="form-group">
+              <label for="pwAlpha">Significance level (α)</label>
+              <input type="number" id="pwAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="pwTail">Test type</label>
+            <select id="pwTail">
+              <option value="two" selected>Two-tailed</option>
+              <option value="one">One-tailed</option>
+            </select>
+          </div>
+        </div>
+        <button class="calculate-btn" id="calcPwBtn">Calculate power</button>
+        <div id="pwResult" class="result-box" style="line-height:1.9;">Result pending…</div>
+      </div>
+
+      <!-- MODE: MDE -->
+      <div id="modeMDE" class="mode-section">
+        <div class="form-grid sample-grid">
+          <div class="inline-inputs">
+            <div class="form-group">
+              <label for="mPA">Group A baseline rate (p<sub>A</sub>)</label>
+              <input type="number" id="mPA" value="0.12" step="0.001" min="0.001" max="0.999">
+            </div>
+            <div class="form-group">
+              <label for="mN">Sample size per group (n)</label>
+              <input type="number" id="mN" value="1500" step="1" min="1">
+            </div>
+          </div>
+          <div class="inline-inputs">
+            <div class="form-group">
+              <label for="mAlpha">Significance level (α)</label>
+              <input type="number" id="mAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+            </div>
+            <div class="form-group">
+              <label for="mPower">Target power (1−β)</label>
+              <input type="number" id="mPower" value="0.8" step="0.01" min="0.5" max="0.999">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="mTail">Test type</label>
+            <select id="mTail">
+              <option value="two" selected>Two-tailed</option>
+              <option value="one">One-tailed</option>
+            </select>
+          </div>
+        </div>
+        <button class="calculate-btn" id="calcMDEBtn">Calculate MDE</button>
+        <div id="mdeResult" class="result-box" style="line-height:1.9;">Result pending…</div>
+      </div>
+
+      <div class="chart-wrap" style="margin-top:24px;">
+        <canvas id="powerChart" aria-label="Power curve as a function of sample size" role="img"></canvas>
+      </div>
+
+      <div style="margin-top:20px;">
+        <h3 style="margin-top:0;">How to read the chart</h3>
+        <p>The chart shows the <strong>power curve</strong>: how the probability of detecting the effect varies as the sample size per group increases.</p>
+        <ul>
+          <li><strong>X axis (horizontal)</strong> — sample size per group (n). The further right, the more users per variant.</li>
+          <li><strong>Y axis (vertical)</strong> — power (1−β), between 0 and 1. The usual target is at least 0.80.</li>
+          <li><strong>Each colored line</strong> represents a different effect size expressed as a relative lift over p_A (+5%, +10%, +20%). Larger effects (yellow line) are detected with smaller samples; small effects (blue line) require many more users.</li>
+          <li><strong>Dashed vertical line</strong> — appears when you calculate with a fixed n (Power and MDE modes) and marks exactly where your current sample sits on the curves.</li>
+        </ul>
+        <p><strong>How to use it in practice:</strong> if your n falls on the steep part of the curve, adding more users noticeably improves power. If you're already in the flat zone (top part), adding more sample barely helps. If the curves for the effect you care about are all below 0.80 at your current n, the experiment is too small to be reliable.</p>
+      </div>
+
+    </section>
+
+        <section class="card content-card">
+      <h3>Key concepts before you start</h3>
+      <p>These three parameters control the balance between risk, resources, and sensitivity of the experiment. Understanding them is essential to interpreting any result.</p>
+
+      <h3>Significance level α — risk of a false positive</h3>
+      <p>This is the probability of concluding that B is better than A when in reality <em>there is no difference</em>. With α = 0.05, one in every 20 experiments where no real effect exists will produce a "statistically significant" result by pure chance. <strong>Lowering α</strong> reduces false positives, but requires a larger sample to maintain power.</p>
+
+      <h3>Statistical power 1−β — ability to detect a real effect</h3>
+      <p>This is the probability of <em>actually</em> detecting the difference when it truly exists. With power = 80% and a real effect equal to the one you specified, the experiment will correctly detect it 8 out of 10 times. The remaining 20% are <strong>false negatives</strong> (β): the effect exists but the test doesn't see it. For critical decisions, it's worth raising power to 90% or more.</p>
+
+      <h3>MDE — minimum detectable effect</h3>
+      <p>This is the smallest absolute difference between p_A and p_B that the experiment can detect at the configured power and α. If the true effect is smaller than the MDE, the test will probably not detect it, even if it exists. The MDE depends directly on n: <strong>the larger the sample, the smaller the MDE</strong>, and therefore the greater the sensitivity.</p>
+
+      <h3>Baseline rate p_A and expected rate p_B</h3>
+      <p>p_A is the current conversion rate of the control group (for example, 12% clicks → 0.12). p_B is the rate you expect, or the minimum improvement you would care to detect in the variant. The difference \(\Delta = p_B - p_A\) is the effect of the experiment.</p>
+
+      <h3>Formulas used</h3>
+      <p>For a comparison of two proportions with 1:1 allocation, the required sample size per group is:</p>
+      <p class="formula-line">\( n = \left\lceil \dfrac{\left(z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})} + z_\beta\sqrt{p_A(1-p_A)+p_B(1-p_B)}\right)^2}{(p_A - p_B)^2} \right\rceil \)</p>
+      <p>where \(\bar{p} = (p_A + p_B)/2\), \(z_{\alpha/2}\) is the normal quantile for the two-tailed significance level (or \(z_{\alpha}\) for one-tailed) and \(z_{1-\beta}\) is the quantile for the desired power.</p>
+      <p>The power given n is obtained with the equivalent normal approximation; for a two-tailed test both rejection tails are added:</p>
+      <p class="formula-line">\( 1-\beta \approx P\!\left(\hat{p}_B-\hat{p}_A > z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})/n}\right) + P\!\left(\hat{p}_B-\hat{p}_A < -z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})/n}\right) \)</p>
+      <p>The <strong>MDE</strong> is obtained by binary search over the effect that achieves the target power with the available n.</p>
+    </section>
+
+
+
+        <section class="card content-card">
+            <h3>Worked example</h3>
+            <p>An e-commerce team wants to test a new, simplified checkout flow (variant B) against the current flow (variant A). The current conversion rate is <strong>12%</strong>, and the team feels the change is only worth implementing if it improves conversion by at least 2 percentage points, i.e., the target rate for B is <strong>14%</strong>. The experiment is designed with two-tailed α = 0.05 and 80% power (β = 0.20).</p>
+            <p>The auxiliary parameters are calculated. The weighted average of both rates is \( \bar{p} = (0.12 + 0.14)/2 = 0.13 \). The required quantiles are \( z_{\alpha/2} = z_{0.025} = 1.960 \) and \( z_{1-\beta} = z_{0.80} = 0.842 \). The sample size formula per group is:</p>
+            <p class="formula-line">\( n = \left\lceil \dfrac{\left(z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})} + z_\beta\sqrt{p_A(1-p_A)+p_B(1-p_B)}\right)^2}{(p_A - p_B)^2} \right\rceil \)</p>
+            <p>Substituting the values:</p>
+            <p class="formula-line">\( n = \left\lceil \dfrac{\left(1.960\,\sqrt{2 \times 0.13 \times 0.87} + 0.842\,\sqrt{0.12 \times 0.88 + 0.14 \times 0.86}\right)^2}{(0.12 - 0.14)^2} \right\rceil \)</p>
+            <p class="formula-line">\( = \left\lceil \dfrac{\left(1.960 \times 0.4757 + 0.842 \times 0.4754\right)^2}{0.0004} \right\rceil = \left\lceil \dfrac{(0.9324 + 0.4003)^2}{0.0004} \right\rceil = \left\lceil \dfrac{(1.3327)^2}{0.0004} \right\rceil \approx \mathbf{4{,}438} \text{ per group} \)</p>
+            <p>The experiment requires approximately <strong>4,438 users per group</strong> (8,876 in total). If the site receives 3,000 visits per day and 50% is allocated to the experiment, it would take about 6 days to accumulate the necessary traffic. With a real conversion rate for B of 14%, the probability of detecting the improvement is 80%; if the real improvement is larger (e.g., 15%), the effective power would exceed 95%.</p>
+        </section>
+
+    <section class="card content-card">
+      <h3>How to interpret the result</h3>
+      <p>Depending on the selected mode, the calculator returns one of the three key metrics of experimental design. Each answers a different question and must be read differently.</p>
+
+      <h3>Mode: Sample size</h3>
+      <p>The calculator returns the minimum number of users <em>per group</em> needed for the experiment to have the desired power. For example, if you get n = 2,000, you need 2,000 users in group A and another 2,000 in group B, i.e., 4,000 in total. If you launch the experiment with fewer users, the probability of detecting the real effect drops below the threshold you set, and false negatives increase.</p>
+      <p>The result also shows the absolute effect Δ (difference in percentage points between p_A and p_B) and the relative lift (how much the rate increases in percentage terms relative to the baseline). These two numbers help you judge whether the effect you're designing to detect is realistic for your business.</p>
+
+      <h3>Mode: Power</h3>
+      <p>With a fixed sample (because you already have the data or know how much traffic you'll receive), power tells you the probability you have of detecting the specified difference. A power of 55%, for example, means that even if the variant is truly better by the stated amount, half the time the test won't detect it. If power is low, you should consider: (a) waiting longer to accumulate more sample, or (b) accepting that you'll only detect larger effects.</p>
+      <p>The result also includes how many users you would need to reach 80% power, giving you a reference for how far off you are.</p>
+
+      <h3>Mode: MDE</h3>
+      <p>Given the available sample, the MDE tells you the minimum difference you can reliably detect. If your MDE is ±3pp and the real improvement of your variant is 1pp, the experiment won't see it at the target power. Before launching, compare the MDE with the minimum effect that would have real business impact: if the MDE is larger, the test isn't useful for that decision.</p>
+      <p>The result also shows the specific p_B values that correspond to the MDE in the upward and downward directions, so you can reason in absolute terms of conversion rate.</p>
+
+      <h3>Practical recommendations</h3>
+      <ul>
+        <li><strong>Power ≥ 0.80</strong> is the recommended minimum; use 0.90 for critical decisions or when the cost of a false negative is high.</li>
+        <li><strong>α = 0.05</strong> is the standard; consider α = 0.01 if the cost of a false positive is high (launching a variant that doesn't actually improve anything).</li>
+        <li>Fix the sample size <em>before</em> launching the experiment. Stopping it early or continuing until you see significance inflates the type I error rate.</li>
+        <li>The relative MDE is usually more relevant than the absolute one: a 10% MDE over a 5% baseline rate corresponds to p_B = 0.055, a difference of only 0.5pp.</li>
+        <li>With limited traffic, accept detecting only larger effects (higher MDE) or extend the duration of the experiment instead of lowering α to compensate.</li>
+      </ul>
+    </section>
+
+    <section id="seo-support-content" class="card content-card">
+      <section class="related-tools">
+        <h3>Related calculators</h3>
+        <ul>
+          <li><a href="ab-testing-z-test.html">Z-test for conversion (frequentist)</a></li>
+          <li><a href="ab-testing-bayesiano.html">Bayesian A/B test (Beta-Binomial)</a></li>
+          <li><a href="ab-testing-simulacion.html">Monte Carlo simulation of A/B experiments</a></li>
+          <li><a href="tamano-muestral-dos-proporciones.html">Sample size for two proportions</a></li>
+        </ul>
+      </section>
+
+      <h3>Frequently asked questions</h3>
+      <ul>
+        <li><strong>Does the sample size calculation assume 1:1 allocation?</strong> Yes. The formula implemented maximizes power with balanced allocation. For unequal allocation, use the general two-proportion sample size calculator.</li>
+        <li><strong>What is the difference between a two-tailed and a one-tailed test?</strong> The two-tailed test detects effects in both directions (p_B greater or smaller than p_A) and is the most commonly used. The one-tailed test only detects effects in one direction and needs a smaller sample, but is valid only if you know in advance that the variant can only improve, never worsen.</li>
+        <li><strong>Is the MDE the effect I expect, or the minimum effect that matters?</strong> The MDE is the minimum effect detectable with the given sample. You should size the experiment so that its MDE is equal to or smaller than the minimum effect that would have practical relevance for your business.</li>
+        <li><strong>Why does the chart show relative lifts instead of the exact effect I entered?</strong> The chart illustrates how power varies with n for three reference scenarios (+5%, +10%, +20% relative to p_A). Your specific calculation is shown in the results box; the chart provides visual context to understand the general sensitivity of the experiment.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="legal-footer">
+    <p>
+      © 2026 problabtools.
+      <a href="../aviso-legal.html">Legal notice</a> ·
+      <a href="../privacidad.html">Privacy</a> ·
+      <a href="../cookies.html">Cookies</a> ·
+      <a href="mailto:vic.sebastia@gmail.com">Contact</a>
+    </p>
+  </footer>
+</div>
+
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let powerChart;
+
+function getZAlpha(alpha, tail) {
+  return tail === 'two'
+    ? jStat.normal.inv(1 - alpha / 2, 0, 1)
+    : jStat.normal.inv(1 - alpha, 0, 1);
+}
+
+function computePower(pA, pB, n, alpha, tail) {
+  const pBar = (pA + pB) / 2;
+  const effect = pB - pA;
+  const nullScale = Math.sqrt(2 * pBar * (1 - pBar));
+  const altScale = Math.sqrt(pA * (1 - pA) + pB * (1 - pB));
+  if (altScale === 0) return 0;
+
+  if (tail === 'two') {
+    const zAlpha = getZAlpha(alpha, tail);
+    const upper = 1 - jStat.normal.cdf((zAlpha * nullScale - effect * Math.sqrt(n)) / altScale, 0, 1);
+    const lower = jStat.normal.cdf((-zAlpha * nullScale - effect * Math.sqrt(n)) / altScale, 0, 1);
+    return Math.min(1, Math.max(0, upper + lower));
+  }
+
+  const zAlpha = getZAlpha(alpha, tail);
+  const plannedEffect = Math.abs(effect);
+  return 1 - jStat.normal.cdf((zAlpha * nullScale - plannedEffect * Math.sqrt(n)) / altScale, 0, 1);
+}
+
+function computeSampleSize(pA, pB, alpha, power, tail) {
+  const pBar = (pA + pB) / 2;
+  const diff = Math.abs(pA - pB);
+  if (diff === 0) return Infinity;
+  const zAlpha = getZAlpha(alpha, tail);
+  const zBeta = jStat.normal.inv(power, 0, 1);
+  const num = Math.pow(
+    zAlpha * Math.sqrt(2 * pBar * (1 - pBar)) + zBeta * Math.sqrt(pA * (1 - pA) + pB * (1 - pB)),
+    2
+  );
+  return Math.ceil(num / (diff * diff));
+}
+
+function computeMDE(pA, n, alpha, power, tail) {
+  let lo = 0, hi = Math.min(pA, 1 - pA);
+  for (let i = 0; i < 80; i++) {
+    const mid = (lo + hi) / 2;
+    const pB = pA + mid;
+    if (pB >= 1 || pB <= 0) { hi = mid; continue; }
+    const pw = computePower(pA, pB, n, alpha, tail);
+    if (pw >= power) hi = mid;
+    else lo = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+function renderPowerChart(pA, alpha, tail, nFixed) {
+  const ctx = document.getElementById('powerChart');
+  if (!ctx) return;
+
+  const startN = 50;
+  const endN = Math.max(nFixed ? nFixed * 3 : 5000, 2000);
+  const steps = 80;
+  const stepSize = Math.ceil((endN - startN) / steps);
+  const effectSizes = [0.05, 0.1, 0.2].map(rel => pA * rel).filter(d => d > 0 && pA + d < 1 && d > 0.001);
+  const colors = ['#2563eb', '#059669', '#f59e0b'];
+  const datasets = effectSizes.map((d, i) => {
+    const pB = pA + d;
+    const points = [];
+    for (let n = startN; n <= endN; n += stepSize) {
+      points.push({ x: n, y: computePower(pA, pB, n, alpha, tail) });
+    }
+    return {
+      label: `Δ = +${(d * 100).toFixed(1)}pp (lift ${(d / pA * 100).toFixed(0)}%)`,
+      data: points,
+      borderColor: colors[i],
+      backgroundColor: 'transparent',
+      borderWidth: 2,
+      pointRadius: 0,
+      parsing: false
+    };
+  });
+
+  const refLine = nFixed ? [{
+    label: 'current n',
+    data: [{ x: nFixed, y: 0 }, { x: nFixed, y: 1 }],
+    borderColor: '#94a3b8',
+    borderDash: [5, 4],
+    borderWidth: 1.5,
+    pointRadius: 0,
+    parsing: false
+  }] : [];
+
+  if (powerChart) powerChart.destroy();
+  powerChart = new Chart(ctx, {
+    type: 'line',
+    data: { datasets: [...datasets, ...refLine] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: {
+        x: { type: 'linear', min: startN, max: endN, title: { display: true, text: 'n per group' } },
+        y: { min: 0, max: 1, title: { display: true, text: 'Power (1−β)' } }
+      },
+      plugins: { legend: { display: true, position: 'top' } }
+    }
+  });
+}
+
+function validateProp(val, name) {
+  if (!Number.isFinite(val) || val <= 0 || val >= 1) throw new Error(`${name} must be between 0 and 1.`);
+}
+function validateAlpha(val) {
+  if (!Number.isFinite(val) || val <= 0 || val >= 1) throw new Error('α must be between 0 and 1.');
+}
+
+function calcSampleSize() {
+  const resultEl = document.getElementById('nResult');
+  try {
+    const pA = parseFloat(document.getElementById('nPA').value);
+    const pB = parseFloat(document.getElementById('nPB').value);
+    const alpha = parseFloat(document.getElementById('nAlpha').value);
+    const power = parseFloat(document.getElementById('nPower').value);
+    const tail = document.getElementById('nTail').value;
+    validateProp(pA, 'p_A'); validateProp(pB, 'p_B'); validateAlpha(alpha);
+    if (!Number.isFinite(power) || power <= 0 || power >= 1) throw new Error('Power must be between 0 and 1.');
+    if (Math.abs(pA - pB) < 1e-9) throw new Error('p_A and p_B cannot be equal.');
+
+    const n = computeSampleSize(pA, pB, alpha, power, tail);
+    const diff = pB - pA;
+    const lift = (diff / pA * 100);
+
+    resultEl.innerHTML =
+      `<strong>Sample size per group:</strong> ${n.toLocaleString()}<br>` +
+      `<strong>Total (both groups):</strong> ${(2 * n).toLocaleString()}<br>` +
+      `<strong>Absolute effect Δ:</strong> ${diff >= 0 ? '+' : ''}${(diff * 100).toFixed(3)} pp<br>` +
+      `<strong>Relative lift:</strong> ${lift >= 0 ? '+' : ''}${lift.toFixed(2)}%<br>` +
+      `<strong>Target power:</strong> ${(power * 100).toFixed(0)}% &nbsp;|&nbsp; <strong>α:</strong> ${alpha} &nbsp;|&nbsp; <strong>Test:</strong> ${tail === 'two' ? 'two-tailed' : 'one-tailed'}`;
+
+    renderPowerChart(pA, alpha, tail, n);
+  } catch (e) {
+    resultEl.innerHTML = 'Error: ' + e.message;
+  }
+}
+
+function calcPower() {
+  const resultEl = document.getElementById('pwResult');
+  try {
+    const pA = parseFloat(document.getElementById('pwPA').value);
+    const pB = parseFloat(document.getElementById('pwPB').value);
+    const n = parseFloat(document.getElementById('pwN').value);
+    const alpha = parseFloat(document.getElementById('pwAlpha').value);
+    const tail = document.getElementById('pwTail').value;
+    validateProp(pA, 'p_A'); validateProp(pB, 'p_B'); validateAlpha(alpha);
+    if (!Number.isInteger(n) || n <= 0) throw new Error('n must be a positive integer.');
+    if (Math.abs(pA - pB) < 1e-9) throw new Error('p_A and p_B cannot be equal.');
+
+    const pw = computePower(pA, pB, n, alpha, tail);
+    const nNeeded = computeSampleSize(pA, pB, alpha, 0.8, tail);
+    const diff = pB - pA;
+
+    resultEl.innerHTML =
+      `<strong>Power (1−β):</strong> ${(pw * 100).toFixed(2)}%<br>` +
+      `<strong>Effect Δ:</strong> ${diff >= 0 ? '+' : ''}${(diff * 100).toFixed(3)} pp (lift ${(diff / pA * 100).toFixed(1)}%)<br>` +
+      `<strong>n per group:</strong> ${Math.round(n).toLocaleString()} &nbsp;|&nbsp; <strong>α:</strong> ${alpha}<br>` +
+      `<em>To reach ≥80% power, ${nNeeded.toLocaleString()} users per group would be needed.</em>`;
+
+    renderPowerChart(pA, alpha, tail, Math.round(n));
+  } catch (e) {
+    resultEl.innerHTML = 'Error: ' + e.message;
+  }
+}
+
+function calcMDE() {
+  const resultEl = document.getElementById('mdeResult');
+  try {
+    const pA = parseFloat(document.getElementById('mPA').value);
+    const n = parseFloat(document.getElementById('mN').value);
+    const alpha = parseFloat(document.getElementById('mAlpha').value);
+    const power = parseFloat(document.getElementById('mPower').value);
+    const tail = document.getElementById('mTail').value;
+    validateProp(pA, 'p_A'); validateAlpha(alpha);
+    if (!Number.isInteger(n) || n <= 0) throw new Error('n must be a positive integer.');
+    if (!Number.isFinite(power) || power <= 0 || power >= 1) throw new Error('Power must be between 0 and 1.');
+
+    const mde = computeMDE(pA, n, alpha, power, tail);
+    const pBup = pA + mde;
+    const pBdown = pA - mde;
+
+    resultEl.innerHTML =
+      `<strong>Absolute MDE:</strong> ±${(mde * 100).toFixed(4)} pp<br>` +
+      `<strong>Relative MDE:</strong> ±${(mde / pA * 100).toFixed(2)}%<br>` +
+      `<strong>Detectable p_B:</strong> ${pBup.toFixed(4)} (up) or ${Math.max(0, pBdown).toFixed(4)} (down)<br>` +
+      `<strong>n per group:</strong> ${Math.round(n).toLocaleString()} &nbsp;|&nbsp; <strong>α:</strong> ${alpha} &nbsp;|&nbsp; <strong>Power:</strong> ${(power * 100).toFixed(0)}%`;
+
+    renderPowerChart(pA, alpha, tail, Math.round(n));
+  } catch (e) {
+    resultEl.innerHTML = 'Error: ' + e.message;
+  }
+}
+
+document.querySelectorAll('.mode-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.mode-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+    document.querySelectorAll('.mode-section').forEach(s => s.classList.remove('active'));
+    tab.classList.add('active');
+    tab.setAttribute('aria-selected', 'true');
+    document.getElementById(tab.dataset.target).classList.add('active');
+  });
+});
+
+document.getElementById('calcNBtn').addEventListener('click', calcSampleSize);
+document.getElementById('calcPwBtn').addEventListener('click', calcPower);
+document.getElementById('calcMDEBtn').addEventListener('click', calcMDE);
+
+calcSampleSize();
+</script>
+<script src="../theme.js?v=20260624" defer></script>
+<script src="../lang-suggest.js?v=20260624" defer></script>
+</body>
+</html>
