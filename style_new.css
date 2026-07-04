@@ -1547,44 +1547,78 @@ body.search-open {
     outline: none;
 }
 
-.lang-suggest-banner {
+#nav-lang-li,
+.lang-switcher {
+    position: relative;
+}
+
+.lang-switch-btn {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 12px;
-    flex-wrap: wrap;
-    padding: 10px 16px;
-    background: #eff6ff;
-    border-bottom: 1px solid rgba(37, 99, 235, 0.18);
-    font-size: 0.88rem;
-    color: #1e3a8a;
-    text-align: center;
+    gap: 4px;
 }
 
-.lang-suggest-banner a {
-    color: #1d4ed8;
+.lang-switch-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    min-width: 130px;
+    background: #fff;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+    z-index: 40;
+}
+
+.lang-switch-menu[hidden] {
+    display: none;
+}
+
+.lang-switch-menu a,
+.lang-switch-current {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 0.86rem;
+    text-decoration: none;
+    color: #1f2937;
+}
+
+.lang-switch-menu a:hover,
+.lang-switch-menu a:focus-visible {
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--accent);
+    outline: none;
+}
+
+.lang-switch-current {
+    color: #94a3b8;
     font-weight: 700;
-    text-decoration: underline;
+    cursor: default;
 }
 
-.lang-suggest-banner button {
-    border: none;
-    background: transparent;
-    color: #64748b;
-    font-size: 1rem;
-    line-height: 1;
-    cursor: pointer;
-    padding: 2px 6px;
+html.dark-mode .lang-switch-menu {
+    background: #111c33;
+    border-color: rgba(148, 163, 184, 0.2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
-html.dark-mode .lang-suggest-banner {
-    background: #0f1f3d;
-    border-bottom-color: rgba(96, 165, 250, 0.25);
-    color: #bfdbfe;
+html.dark-mode .lang-switch-menu a,
+html.dark-mode .lang-switch-current {
+    color: #e2e8f0;
 }
 
-html.dark-mode .lang-suggest-banner a {
+html.dark-mode .lang-switch-menu a:hover,
+html.dark-mode .lang-switch-menu a:focus-visible {
+    background: rgba(59, 130, 246, 0.12);
     color: #93c5fd;
+}
+
+html.dark-mode .lang-switch-current {
+    color: #64748b;
 }
 
 /* ── Dark mode ───────────────────────────────────────────────────────────── */
