@@ -503,6 +503,135 @@
             font-size: 0.92rem;
         }
 
+        /* Featured tools + collapsible full lists */
+        .featured-tools {
+            margin-top: 4px;
+        }
+
+        .tools-details {
+            margin-top: 14px;
+        }
+
+        .tools-details > summary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            color: #1d4ed8;
+            font-weight: 700;
+            font-size: 0.92rem;
+            cursor: pointer;
+            list-style: none;
+            user-select: none;
+            transition: background 0.15s ease;
+        }
+
+        .tools-details > summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .tools-details > summary::after {
+            content: "▾";
+            font-size: 0.85em;
+            transition: transform 0.15s ease;
+        }
+
+        .tools-details[open] > summary::after {
+            transform: rotate(180deg);
+        }
+
+        .tools-details > summary:hover {
+            background: rgba(37, 99, 235, 0.07);
+        }
+
+        .tools-details > .hypothesis-category-grid,
+        .tools-details > .sample-objective-title {
+            margin-top: 16px;
+        }
+
+        html.dark-mode .tools-details > summary {
+            color: #93c5fd;
+            border-color: rgba(147, 197, 253, 0.4);
+        }
+
+        html.dark-mode .tools-details > summary:hover {
+            background: rgba(147, 197, 253, 0.1);
+        }
+
+        /* Skip link */
+        .skip-link {
+            position: absolute;
+            left: -9999px;
+            top: 0;
+            z-index: 200;
+            padding: 10px 16px;
+            background: #1d4ed8;
+            color: #ffffff;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 0 0 10px 0;
+        }
+
+        .skip-link:focus {
+            left: 0;
+        }
+
+        /* Mobile nav toggle */
+        .nav-toggle {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid rgba(15, 23, 42, 0.12);
+            background: transparent;
+            color: #334155;
+            cursor: pointer;
+        }
+
+        html.dark-mode .nav-toggle {
+            color: #e2e8f0;
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        @media (max-width: 900px) {
+            .site-nav-inner {
+                flex-direction: row !important;
+                align-items: center !important;
+                flex-wrap: wrap;
+            }
+
+            .nav-toggle {
+                display: inline-flex;
+            }
+
+            .site-nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 2px;
+                padding: 10px 0 14px;
+            }
+
+            .site-nav.nav-open .site-nav-links {
+                display: flex;
+            }
+
+            .site-nav-links a {
+                padding: 10px 12px !important;
+                font-size: 0.95rem !important;
+                border-radius: 10px;
+            }
+
+            .site-nav-links li[id] {
+                padding-top: 8px;
+            }
+        }
+
         /* Intro and FAQ content */
         .intro-seo-card {
             margin: 0 0 18px;
@@ -594,10 +723,15 @@
 </head>
 <body>
 
+<a class="skip-link" href="#main-content">Saltar al contenido</a>
+
 <nav class="site-nav" aria-label="Navegación principal">
     <div class="site-nav-inner">
         <a class="site-brand" href="index.html">ProbLab</a>
-        <ul class="site-nav-links">
+        <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="site-menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <ul class="site-nav-links" id="site-menu">
             <li><a href="distribuciones/">Distribuciones</a></li>
             <li><a href="tablas-estadisticas/">Tablas</a></li>
             <li><a href="intervalos-confianza/">Intervalos de confianza</a></li>
@@ -654,7 +788,7 @@
         <div class="stat-item"><span class="stat-number">100%</span><span class="stat-label">Gratis</span></div>
     </div>
 
-    <main>
+    <main id="main-content">
         <section class="card content-card guided-section" aria-labelledby="guided-title">
             <p class="guided-eyebrow">Áreas principales</p>
             <h2 id="guided-title">Tipos de herramientas estadísticas disponibles</h2>
@@ -717,7 +851,17 @@
             </div>
             <p>Calcula probabilidades exactas, acumuladas, de cola y percentiles para 16 distribuciones de probabilidad continuas y discretas. Cada calculadora ofrece gráfica interactiva, tabla de valores y la fórmula aplicada. Incluye distribuciones clásicas como la normal, binomial y Poisson, y distribuciones avanzadas como la gamma, beta, lognormal y Weibull, con opciones para calcular la función de densidad (PDF), distribución acumulada (CDF), cuantiles e intervalos de probabilidad.</p>
             <p><a class="hero-link-button" href="distribuciones/">Explorar distribuciones</a></p>
-            <div class="hypothesis-category-grid" aria-label="Calculadoras de distribuciones organizadas por tipo">
+            <ul class="tools-grid featured-tools" aria-label="Distribuciones más utilizadas">
+                <li><a href="normal.html">Normal</a></li>
+                <li><a href="binomial.html">Binomial</a></li>
+                <li><a href="poisson.html">Poisson</a></li>
+                <li><a href="studentt.html">t de Student</a></li>
+                <li><a href="chisquare.html">Chi-cuadrado</a></li>
+                <li><a href="exponential.html">Exponencial</a></li>
+            </ul>
+            <details class="tools-details">
+                <summary>Ver las 16 distribuciones</summary>
+                <div class="hypothesis-category-grid" aria-label="Calculadoras de distribuciones organizadas por tipo">
                 <section class="hypothesis-category-card" aria-labelledby="home-dist-continuas">
                     <h3 id="home-dist-continuas">Continuas</h3>
                     <ul class="tools-grid hypothesis-tools-grid">
@@ -744,7 +888,8 @@
                         <li><a href="poisson.html">Poisson</a></li>
                     </ul>
                 </section>
-            </div>
+                </div>
+            </details>
         </section>
 
         <section id="tablas" class="card content-card section-tables" aria-labelledby="tables-title">
@@ -798,6 +943,16 @@
             </div>
             <p>Calcula cuántas observaciones necesita tu estudio o encuesta para garantizar resultados estadísticamente fiables. Introduce el nivel de confianza, el margen de error y, si la prueba lo requiere, la potencia estadística deseada. Cubre los casos más habituales: una proporción o una media, comparación de dos grupos, poblaciones finitas con factor de corrección, y diseños con muestras apareadas.</p>
             <p><a class="hero-link-button" href="tamano-muestral/">Explorar tamaño muestral</a></p>
+            <ul class="tools-grid featured-tools" aria-label="Calculadoras de tamaño muestral más utilizadas">
+                <li><a href="tamano-muestral-una-proporcion.html">Una proporción (encuestas)</a></li>
+                <li><a href="tamano-muestral-una-media.html">Una media</a></li>
+                <li><a href="tamano-muestral-dos-proporciones.html">Dos proporciones</a></li>
+                <li><a href="tamano-muestral-proporcion-poblacion-finita.html">Proporción (población finita)</a></li>
+                <li><a href="tamano-muestral-contraste-una-media.html">Contraste de una media</a></li>
+                <li><a href="tamano-muestral-anova.html">ANOVA (k grupos)</a></li>
+            </ul>
+            <details class="tools-details">
+                <summary>Ver las 25 calculadoras de tamaño muestral</summary>
             <h3 class="sample-objective-title">Para intervalos de confianza</h3>
             <div class="hypothesis-category-grid" aria-label="Tamaños muestrales para estimación, por temática">
                 <section class="hypothesis-category-card" aria-labelledby="home-tm-ic-medias">
@@ -865,6 +1020,7 @@
                     </ul>
                 </section>
             </div>
+            </details>
         </section>
 
         <section id="intervalos" class="card content-card section-ci" aria-labelledby="ci-title">
@@ -881,7 +1037,15 @@
             </div>
             <p>Obtén el rango de valores plausibles para un parámetro poblacional —media, media apareada, proporción, diferencia de medias, diferencia de proporciones, ratio de proporciones, odds ratio o varianza— a partir de tus datos muestrales. Elige el nivel de confianza (90 %, 95 %, 99 % u otro), introduce tus datos y la calculadora proporciona los límites del intervalo, el margen de error y una representación gráfica de la distribución muestral y la región de confianza.</p>
             <p><a class="hero-link-button" href="intervalos-confianza/">Explorar intervalos de confianza</a></p>
-            <div class="hypothesis-category-grid" aria-label="Calculadoras de intervalos de confianza organizadas por temática">
+            <ul class="tools-grid featured-tools" aria-label="Intervalos de confianza más utilizados">
+                <li><a href="intervalo-confianza-media.html">Una media (σ desconocida)</a></li>
+                <li><a href="intervalo-confianza-proporcion.html">Una proporción</a></li>
+                <li><a href="intervalo-confianza-diferencia-medias.html">Diferencia de medias</a></li>
+                <li><a href="intervalo-confianza-varianza.html">Una varianza</a></li>
+            </ul>
+            <details class="tools-details">
+                <summary>Ver las 11 calculadoras de intervalos</summary>
+                <div class="hypothesis-category-grid" aria-label="Calculadoras de intervalos de confianza organizadas por temática">
                 <section class="hypothesis-category-card" aria-labelledby="home-ic-medias">
                     <h3 id="home-ic-medias">Medias</h3>
                     <ul class="tools-grid hypothesis-tools-grid">
@@ -908,7 +1072,8 @@
                         <li><a href="intervalo-confianza-odds-ratio.html">Odds ratio</a></li>
                     </ul>
                 </section>
-            </div>
+                </div>
+            </details>
         </section>
 
         <section id="contrastes" class="card content-card section-hyp" aria-labelledby="hyp-title">
@@ -924,7 +1089,17 @@
             </div>
             <p>Realiza pruebas de hipótesis para medias, proporciones, varianzas y tablas de contingencia. La calculadora muestra el estadístico de prueba, el p-valor, la región crítica y una interpretación del resultado al nivel de significación elegido. Incluye ANOVA de un factor para comparar múltiples grupos, chi-cuadrado de independencia y bondad de ajuste, test exacto de Fisher, y pruebas de normalidad como Kolmogorov-Smirnov y Shapiro-Wilk.</p>
             <p><a class="hero-link-button" href="contrastes-hipotesis/">Explorar contrastes</a></p>
-            <div class="hypothesis-category-grid" aria-label="Calculadoras de contrastes organizadas por tipo de problema">
+            <ul class="tools-grid featured-tools" aria-label="Contrastes de hipótesis más utilizados">
+                <li><a href="contraste-hipotesis-una-media.html">Una media</a></li>
+                <li><a href="contraste-hipotesis-dos-medias.html">Dos medias independientes</a></li>
+                <li><a href="contraste-hipotesis-una-proporcion.html">Una proporción</a></li>
+                <li><a href="contraste-hipotesis-dos-proporciones.html">Dos proporciones</a></li>
+                <li><a href="anova.html">ANOVA de un factor</a></li>
+                <li><a href="contraste-independencia-chi-cuadrado.html">Chi-cuadrado de independencia</a></li>
+            </ul>
+            <details class="tools-details">
+                <summary>Ver los 17 contrastes de hipótesis</summary>
+                <div class="hypothesis-category-grid" aria-label="Calculadoras de contrastes organizadas por tipo de problema">
                 <section class="hypothesis-category-card" aria-labelledby="home-ch-medias">
                     <h3 id="home-ch-medias">Medias y comparación de grupos</h3>
                     <ul class="tools-grid hypothesis-tools-grid">
@@ -962,7 +1137,8 @@
                         <li><a href="shapiro-wilk-normalidad.html">Shapiro–Wilk de normalidad</a></li>
                     </ul>
                 </section>
-            </div>
+                </div>
+            </details>
         </section>
         <section id="ab-testing" class="card content-card section-ab" aria-labelledby="ab-title">
             <div class="section-heading">
@@ -1087,6 +1263,14 @@
     }
     delegate('.hero-cta-search', '.site-nav-links .search-btn');
     delegate('.hero-cta-wizard', '.site-nav-links .wz-nav-btn');
+
+    var navToggle = document.querySelector('.nav-toggle');
+    if (navToggle) navToggle.addEventListener('click', function () {
+        var nav = document.querySelector('.site-nav');
+        var open = nav.classList.toggle('nav-open');
+        navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        navToggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    });
 })();
 </script>
 </body>
