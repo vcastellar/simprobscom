@@ -15,7 +15,12 @@ RewriteRule ^en/index\.html$ /en/ [R=301,L]
 RewriteCond %{QUERY_STRING} ^q=
 RewriteRule ^$ /? [R=301,L]
 
-# 4. Cache
+# 4. Bloquear ficheros internos (scripts y documentación del repositorio)
+<FilesMatch "\.(?:py|md)$">
+  Require all denied
+</FilesMatch>
+
+# 5. Cache
 <IfModule mod_headers.c>
   <FilesMatch "\.(?:html?|xml)$">
     Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
