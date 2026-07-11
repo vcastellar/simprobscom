@@ -3,20 +3,22 @@
 
   var CLARITY_PROJECT_ID = 'xkb2cubnwc';
   var STORAGE_KEY = 'problab-clarity-consent';
+  var inMemoryConsent = null;
 
   function getStoredConsent() {
     try {
-      return localStorage.getItem(STORAGE_KEY);
+      return sessionStorage.getItem(STORAGE_KEY);
     } catch (e) {
-      return null;
+      return inMemoryConsent;
     }
   }
 
   function setStoredConsent(value) {
     try {
-      localStorage.setItem(STORAGE_KEY, value);
+      sessionStorage.setItem(STORAGE_KEY, value);
     } catch (e) {
-      // If localStorage is unavailable, keep the user's choice for this page load only.
+      inMemoryConsent = value;
+      // If sessionStorage is unavailable, keep the user's choice for this page load only.
     }
   }
 
@@ -37,14 +39,14 @@
     var isEnglish = document.documentElement.lang && document.documentElement.lang.toLowerCase().indexOf('en') === 0;
     return isEnglish ? {
       title: 'Analytics cookies',
-      body: 'We use Microsoft Clarity to understand how the site is used and improve it. It may use cookies and similar technologies. You can accept or reject analytics cookies.',
+      body: 'We use Microsoft Clarity to understand how the site is used and improve it. It may use cookies and similar technologies. You can accept or reject analytics cookies for this session.',
       accept: 'Accept analytics',
       reject: 'Reject',
       privacy: 'Privacy policy',
       cookies: 'Cookie policy'
     } : {
       title: 'Cookies analíticas',
-      body: 'Usamos Microsoft Clarity para entender cómo se utiliza la web y mejorarla. Puede utilizar cookies y tecnologías similares. Puedes aceptar o rechazar las cookies analíticas.',
+      body: 'Usamos Microsoft Clarity para entender cómo se utiliza la web y mejorarla. Puede utilizar cookies y tecnologías similares. Puedes aceptar o rechazar las cookies analíticas durante esta sesión.',
       accept: 'Aceptar analítica',
       reject: 'Rechazar',
       privacy: 'Política de privacidad',
