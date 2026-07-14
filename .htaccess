@@ -1,8 +1,9 @@
 RewriteEngine On
 
-# 1. Forzar HTTPS y sin-www
+# 1. Forzar HTTPS, sin-www y dominio canónico (.es redirige página a página)
 RewriteCond %{HTTPS} off [OR]
-RewriteCond %{HTTP_HOST} ^www\.problabtools\.com$ [NC]
+RewriteCond %{HTTP_HOST} ^www\.problabtools\.com$ [NC,OR]
+RewriteCond %{HTTP_HOST} ^(www\.)?problabtools\.es$ [NC]
 RewriteRule ^(.*)$ https://problabtools.com/$1 [L,R=301]
 
 # 2. Redirigir index.html a /
