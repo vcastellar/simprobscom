@@ -383,23 +383,25 @@
         <h2 class="panel-heading">Parámetros</h2>
 
         <div class="form-group">
-          <label for="testType">Tipo de contraste</label>
+          <label for="testType">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
           <select id="testType">
             <option value="right" selected>Unilateral derecho (H₁: μ &gt; μ₀)</option>
             <option value="two">Bilateral (H₁: μ ≠ μ₀)</option>
           </select>
+          <p class="field-hint" hidden>El unilateral derecho detecta solo efectos positivos (H₁: μ &gt; μ₀); el bilateral detecta desviaciones en cualquier dirección (H₁: μ ≠ μ₀). El tipo elegido cambia dónde se sitúa la región de rechazo.</p>
         </div>
 
         <div class="form-group">
-          <label for="effectSize">Tamaño del efecto <em>d</em></label>
+          <label for="effectSize">Tamaño del efecto <em>d</em> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
           <div class="slider-row">
             <input type="range" id="effectSize" min="0" max="3" step="0.05" value="0.5">
             <span class="slider-val" id="effectSizeVal">d = 0.50</span>
           </div>
+          <p class="field-hint" hidden>Diferencia real entre medias en unidades de desviación típica (d de Cohen). <strong>d = 0,2</strong> se considera un efecto pequeño, <strong>d = 0,5</strong> mediano y <strong>d = 0,8</strong> grande.</p>
         </div>
 
         <div class="form-group">
-          <label for="sampleSize">Tamaño de muestra <em>n</em></label>
+          <label for="sampleSize">Tamaño de muestra <em>n</em> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
           <select id="sampleSize">
             <option value="10">10</option>
             <option value="20">20</option>
@@ -408,14 +410,16 @@
             <option value="100">100</option>
             <option value="200">200</option>
           </select>
+          <p class="field-hint" hidden>Número de observaciones. Al aumentar n, las distribuciones bajo H₀ y H₁ se separan más (δ = d × √n crece) y aumenta la potencia.</p>
         </div>
 
         <div class="form-group">
-          <label for="alpha">Nivel de significación α</label>
+          <label for="alpha">Nivel de significación α <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
           <div class="slider-row">
             <input type="range" id="alpha" min="0.005" max="0.25" step="0.005" value="0.05">
             <span class="slider-val" id="alphaVal">α = 0.050</span>
           </div>
+          <p class="field-hint" hidden>Probabilidad de cometer un error tipo I (falso positivo). Aumentar α desplaza el umbral de decisión y aumenta la potencia, pero también los falsos positivos.</p>
         </div>
       </aside>
 
@@ -916,6 +920,7 @@ document.getElementById('sampleSize').addEventListener('change', update);
 initChart();
 update();
 </script>
+<script src="../field-hints.js?v=20260709-1"></script>
 <script src="../search.js?v=20260709-1"></script>
 <script src="../wizard.js?v=20260709-1"></script>
 <script src="../theme.js?v=20260709-1"></script>

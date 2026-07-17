@@ -196,41 +196,47 @@
       <div class="form-grid sample-grid">
         <div class="inline-inputs">
           <div class="form-group">
-            <label for="simPA">Tasa verdadera grupo A (p<sub>A</sub>)</label>
+            <label for="simPA">Tasa verdadera grupo A (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <input type="number" id="simPA" value="0.12" step="0.001" min="0.001" max="0.999">
+            <p class="field-hint" hidden>La tasa de conversión real que usa la simulación para generar los datos del grupo A en cada réplica.</p>
           </div>
           <div class="form-group">
-            <label for="simPB">Tasa verdadera grupo B (p<sub>B</sub>)</label>
+            <label for="simPB">Tasa verdadera grupo B (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <input type="number" id="simPB" value="0.138" step="0.001" min="0.001" max="0.999">
+            <p class="field-hint" hidden>La tasa de conversión real del grupo B. La diferencia p<sub>B</sub> − p<sub>A</sub> es el efecto que la simulación intenta detectar; usa el mismo valor que p<sub>A</sub> para comprobar el error de tipo I.</p>
           </div>
         </div>
         <div class="inline-inputs">
           <div class="form-group">
-            <label for="simN">Visitantes por grupo (n)</label>
+            <label for="simN">Visitantes por grupo (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <input type="number" id="simN" value="1500" step="10" min="10" max="50000">
+            <p class="field-hint" hidden>Número de visitantes (observaciones) simulados en cada grupo, en cada réplica.</p>
           </div>
           <div class="form-group">
-            <label for="simReps">Número de réplicas</label>
+            <label for="simReps">Número de réplicas <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <select id="simReps">
               <option value="1000">1 000</option>
               <option value="3000">3 000</option>
               <option value="5000" selected>5 000</option>
               <option value="10000">10 000</option>
             </select>
+            <p class="field-hint" hidden>Número de experimentos independientes que se simulan. Con más réplicas la potencia empírica se estima con más precisión; con 5 000 réplicas el error estándar de la proporción simulada es de aproximadamente ±0,006.</p>
           </div>
         </div>
         <div class="inline-inputs">
           <div class="form-group">
-            <label for="simAlpha">Nivel de significación (α)</label>
+            <label for="simAlpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <input type="number" id="simAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+            <p class="field-hint" hidden>Riesgo de falso positivo que se acepta en cada réplica al decidir el rechazo de H₀. El valor estándar habitual es <strong>0,05</strong>.</p>
           </div>
           <div class="form-group">
-            <label for="simTail">Tipo de contraste</label>
+            <label for="simTail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <select id="simTail">
               <option value="two" selected>Bilateral</option>
               <option value="right">Cola derecha (B &gt; A)</option>
               <option value="left">Cola izquierda (B &lt; A)</option>
             </select>
+            <p class="field-hint" hidden>Bilateral detecta diferencias en cualquier dirección; unilateral (cola derecha o izquierda) solo detecta el efecto en la dirección indicada.</p>
           </div>
         </div>
       </div>
@@ -271,11 +277,13 @@
       </div>
 
       <div id="chartZ" class="sim-chart-panel active">
+        <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> histograma del estadístico z obtenido en cada réplica simulada, con la zona de rechazo (en rojo) determinada por α y el tipo de contraste. Sirve para ver la distribución empírica de z y cuántas réplicas caen en la región de rechazo.</p>
         <div class="chart-wrap">
           <canvas id="histZCanvas" aria-label="Histograma del estadístico z en las réplicas simuladas" role="img"></canvas>
         </div>
       </div>
       <div id="chartP" class="sim-chart-panel">
+        <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> distribución de los p-valores obtenidos en las réplicas. Bajo H₀ debería aproximarse a una Uniforme(0,1); bajo H₁ se concentra cerca de 0, y la proporción con p-valor por debajo de α es la potencia empírica.</p>
         <div class="chart-wrap">
           <canvas id="histPCanvas" aria-label="Distribución de p-valores en las réplicas simuladas" role="img"></canvas>
         </div>
@@ -579,6 +587,7 @@ document.querySelectorAll('.sim-tab').forEach(tab => {
 
 document.getElementById('simRunBtn').addEventListener('click', runSimulation);
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

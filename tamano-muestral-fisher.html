@@ -161,43 +161,49 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="fisherP1">Proporción esperada grupo 1 (p₁)</label>
+                        <label for="fisherP1">Proporción esperada grupo 1 (p₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="fisherP1" value="0.40" step="0.01" min="0.0001" max="0.9999">
+                        <p class="field-hint" hidden>Proporción de éxito que esperas en el grupo 1 bajo la hipótesis alternativa.</p>
                     </div>
                     <div class="form-group">
-                        <label for="fisherP2">Proporción esperada grupo 2 (p₂)</label>
+                        <label for="fisherP2">Proporción esperada grupo 2 (p₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="fisherP2" value="0.20" step="0.01" min="0.0001" max="0.9999">
+                        <p class="field-hint" hidden>Proporción de éxito que esperas en el grupo 2. La diferencia |p₁ − p₂| es el efecto a detectar: cuanto mayor, menos muestra hace falta.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="fisherAlpha">Alfa (α)</label>
+                        <label for="fisherAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="fisherAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>Riesgo de falso positivo que aceptas. <strong>0,05</strong> es el estándar habitual; usa 0,01 para controlar más el error tipo I.</p>
                     </div>
                     <div class="form-group">
-                        <label for="fisherPower">Potencia (1-β)</label>
+                        <label for="fisherPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="fisherPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                        <p class="field-hint" hidden>Probabilidad de detectar la diferencia si realmente existe. <strong>0,80</strong> es el mínimo habitual; usa 0,90 o 0,95 en estudios confirmatorios o de alta relevancia clínica.</p>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="fisherRatio">Tamaño relativo del grupo 2 (r = n₂/n₁)</label>
+                    <label for="fisherRatio">Tamaño relativo del grupo 2 (r = n₂/n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                     <select id="fisherRatio">
                         <option value="1" selected>r = 1 (grupos iguales)</option>
                         <option value="2">r = 2 (grupo 2 doble que grupo 1)</option>
                         <option value="3">r = 3 (grupo 2 triple que grupo 1)</option>
                         <option value="4">r = 4 (grupo 2 cuádruple que grupo 1)</option>
                     </select>
+                    <p class="field-hint" hidden>Cuántas veces mayor es el grupo 2 respecto al grupo 1. Ajústalo si los grupos son naturalmente desiguales (p. ej., casos y controles); <strong>r = 1</strong> es lo más eficiente por participante total.</p>
                 </div>
 
                 <div class="form-group">
-                    <label for="fisherTail">Tipo de contraste</label>
+                    <label for="fisherTail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                     <select id="fisherTail">
                         <option value="two" selected>Bilateral (p₁ ≠ p₂)</option>
                         <option value="right">Cola derecha (p₁ &gt; p₂)</option>
                         <option value="left">Cola izquierda (p₁ &lt; p₂)</option>
                     </select>
+                    <p class="field-hint" hidden><strong>Bilateral</strong> detecta diferencias en cualquier dirección. <strong>Unilateral</strong> requiere menos muestra pero solo es válido si tienes una hipótesis direccional justificada a priori.</p>
                 </div>
             </div>
 
@@ -357,6 +363,7 @@ function calculateFisherSampleSize() {
 document.getElementById('fisherCalculateBtn').addEventListener('click', calculateFisherSampleSize);
 calculateFisherSampleSize();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

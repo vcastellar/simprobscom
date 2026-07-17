@@ -172,38 +172,44 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="dbar">Media de diferencias (d̄)</label>
+                        <label for="dbar">Media de diferencias (d̄) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="dbar" value="2.5" step="0.01">
+                        <p class="field-hint" hidden>Media muestral de las diferencias \(d_i = x_{i1} - x_{i2}\) entre las dos mediciones de cada par. Ej.: 2,5 mmHg de reducción media de presión arterial.</p>
                     </div>
                     <div class="form-group">
-                        <label for="sd">Desv. típica de diferencias (s_d)</label>
+                        <label for="sd">Desv. típica de diferencias (s_d) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="sd" value="8" step="0.01" min="0.0001">
+                        <p class="field-hint" hidden>Desviación estándar muestral de las diferencias \(d_i\) entre pares; cuanto mayor sea, más dispersas están las diferencias individuales respecto a la media.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="n">Número de pares (n)</label>
+                        <label for="n">Número de pares (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="n" value="25" step="1" min="2">
+                        <p class="field-hint" hidden>Número de pares de observaciones (por ejemplo, número de sujetos medidos antes y después del tratamiento).</p>
                     </div>
                     <div class="form-group">
-                        <label for="mud0">Valor nulo (μ_d0)</label>
+                        <label for="mud0">Valor nulo (μ_d0) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="mud0" value="0" step="0.01">
+                        <p class="field-hint" hidden>Valor de la diferencia media poblacional bajo \(H_0\). Habitualmente se deja en <strong>0</strong> para contrastar si existe algún efecto.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="tail">Tipo de contraste</label>
+                        <label for="tail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="tail">
                             <option value="two">Bilateral (≠)</option>
                             <option value="right">Cola derecha (&gt;)</option>
                             <option value="left">Cola izquierda (&lt;)</option>
                         </select>
+                        <p class="field-hint" hidden>Elige <strong>bilateral</strong> si solo te interesa detectar cualquier diferencia respecto a μ_d0, o una cola si esperas el cambio en una dirección concreta.</p>
                     </div>
                     <div class="form-group">
-                        <label for="alpha">Nivel de significación (α)</label>
+                        <label for="alpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>Riesgo de rechazar \(H_0\) por error que aceptas. El valor habitual es <strong>0,05</strong>.</p>
                     </div>
                 </div>
             </div>
@@ -424,6 +430,7 @@ function calculate() {
 document.getElementById('calcBtn').addEventListener('click', calculate);
 calculate();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

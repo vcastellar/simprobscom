@@ -161,22 +161,26 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="swGamma1">Asimetría esperada bajo H₁ (γ₁)</label>
+                        <label for="swGamma1">Asimetría esperada bajo H₁ (γ₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="swGamma1" value="2.0" step="0.1" min="-10" max="10">
+                        <p class="field-hint" hidden>Asimetría de la distribución alternativa: <strong>0</strong> es simétrica; cuanto mayor sea |γ₁| (p. ej. &gt; 1,5), más fácil es detectarla con muestras pequeñas.</p>
                     </div>
                     <div class="form-group">
-                        <label for="swGamma2">Curtosis en exceso bajo H₁ (γ₂)</label>
+                        <label for="swGamma2">Curtosis en exceso bajo H₁ (γ₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="swGamma2" value="6.0" step="0.1" min="-2" max="200">
+                        <p class="field-hint" hidden>Pesadez de las colas respecto a la normal: <strong>0</strong> corresponde a la normal. Detectar solo curtosis (con γ₁ = 0) requiere muestras considerablemente mayores que detectar asimetría.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="swAlpha">Alfa (α)</label>
+                        <label for="swAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="swAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>Riesgo de falso positivo que aceptas. El valor estándar es <strong>0,05</strong>.</p>
                     </div>
                     <div class="form-group">
-                        <label for="swPower">Potencia (1-β)</label>
+                        <label for="swPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="swPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                        <p class="field-hint" hidden>Probabilidad de detectar la desviación de la normalidad si realmente existe. El mínimo habitual es <strong>0,80</strong>; usa 0,90 si el incumplimiento de normalidad tiene consecuencias graves.</p>
                     </div>
                 </div>
             </div>
@@ -409,6 +413,7 @@ function calculateSWsampleSize() {
 document.getElementById('swCalculateBtn').addEventListener('click', calculateSWsampleSize);
 calculateSWsampleSize();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

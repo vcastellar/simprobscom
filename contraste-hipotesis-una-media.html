@@ -177,45 +177,52 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="mu0">Media hipotética (μ₀)</label>
+                        <label for="mu0">Media hipotética (μ₀) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="mu0" value="50" step="0.01">
+                        <p class="field-hint" hidden>Valor de referencia que quieres contrastar frente a la muestra: el que aparece en \(H_0: \mu = \mu_0\).</p>
                     </div>
                     <div class="form-group">
-                        <label for="xbar">Media muestral (x̄)</label>
+                        <label for="xbar">Media muestral (x̄) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="xbar" value="52" step="0.01">
+                        <p class="field-hint" hidden>Media que has calculado a partir de tus datos observados.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="s" id="dispersionLabel">Desviación típica poblacional (σ)</label>
+                        <label for="s"><span id="dispersionLabel">Desviación típica poblacional (σ)</span> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="s" value="10" step="0.01" min="0.0001">
+                        <p class="field-hint" hidden>Medida de dispersión de tus datos: la desviación típica poblacional σ si la conoces (contraste z), o la desviación muestral s si la estimas a partir de la muestra (contraste t). Elige cuál en el campo "Tipo de desviación".</p>
                     </div>
                     <div class="form-group">
-                        <label for="n">Tamaño muestral (n)</label>
+                        <label for="n">Tamaño muestral (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="n" value="30" step="1" min="2">
+                        <p class="field-hint" hidden>Número de observaciones de tu muestra.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="dispersionType">Tipo de desviación</label>
+                        <label for="dispersionType">Tipo de desviación <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="dispersionType">
                             <option value="population">Conozco σ poblacional (test z)</option>
                             <option value="sample">Solo conozco s muestral (test t)</option>
                         </select>
+                        <p class="field-hint" hidden>Usa <strong>z</strong> si conoces la desviación típica poblacional σ; usa <strong>t</strong> (lo más habitual) si solo dispones de la desviación muestral s calculada a partir de tus datos.</p>
                     </div>
                     <div class="form-group">
-                        <label for="tail">Tipo de contraste</label>
+                        <label for="tail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="tail">
                             <option value="two">Bilateral (≠)</option>
                             <option value="right">Cola derecha (>)</option>
                             <option value="left">Cola izquierda (&lt;)</option>
                         </select>
+                        <p class="field-hint" hidden>El <strong>bilateral</strong> detecta que μ es distinto de μ₀ en cualquier sentido. Las opciones de <strong>una cola</strong> solo detectan un sentido concreto (μ mayor o menor); úsalas solo si conoces de antemano la dirección esperada.</p>
                     </div>
                     <div class="form-group">
-                        <label for="alpha">Nivel de significación (α)</label>
+                        <label for="alpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>Probabilidad de rechazar \(H_0\) por error cuando en realidad es cierta. En muchos análisis se usa <strong>0,05</strong>; en contextos críticos puede preferirse 0,01.</p>
                     </div>
                 </div>
             </div>
@@ -441,11 +448,13 @@ function updateDispersionLabel() {
     label.textContent = dispersionType === 'sample' ? 'Desviación estándar muestral (s)' : 'Desviación típica poblacional (σ)';
 }
 
+
 document.getElementById('dispersionType').addEventListener('change', () => { updateDispersionLabel(); calculateMeanTest(); });
 document.getElementById('calcMeanBtn').addEventListener('click', calculateMeanTest);
 updateDispersionLabel();
 calculateMeanTest();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

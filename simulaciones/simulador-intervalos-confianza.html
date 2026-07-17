@@ -339,17 +339,20 @@
 
       <!-- Panel: Media -->
       <div class="mode-panel active" id="panelMedia" role="tabpanel" aria-labelledby="tabMedia">
+        <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> simula repetidamente intervalos de confianza para la media de una población normal con σ conocida, y muestra qué fracción cubre realmente la μ verdadera. Elige este modo para comprobar que la cobertura real coincide con el nivel nominal para cualquier n.</p>
         <div class="form-grid-ci">
           <div class="form-group">
-            <label for="trueMu">Verdadera μ (media poblacional)</label>
+            <label for="trueMu">Verdadera μ (media poblacional) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <input type="number" id="trueMu" value="50" step="1" min="0" max="1000">
+            <p class="field-hint" hidden>Valor real (desconocido en la práctica) de la media poblacional que el simulador usa para generar las muestras y comprobar si cada IC lo cubre.</p>
           </div>
           <div class="form-group">
-            <label for="trueSigma">Verdadera σ (desviación típica poblacional)</label>
+            <label for="trueSigma">Verdadera σ (desviación típica poblacional) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <input type="number" id="trueSigma" value="10" step="0.1" min="0.1" max="1000">
+            <p class="field-hint" hidden>Desviación típica poblacional, asumida conocida en este modo. Determina la anchura de cada intervalo simulado.</p>
           </div>
           <div class="form-group">
-            <label for="nMedia">Tamaño muestral n</label>
+            <label for="nMedia">Tamaño muestral n <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <select id="nMedia">
               <option value="5">5</option>
               <option value="10">10</option>
@@ -358,36 +361,41 @@
               <option value="50">50</option>
               <option value="100">100</option>
             </select>
+            <p class="field-hint" hidden>Número de observaciones de cada muestra simulada. La anchura del IC es proporcional a 1/√n; la cobertura no cambia con n.</p>
           </div>
           <div class="form-group">
-            <label for="confMedia">Nivel de confianza</label>
+            <label for="confMedia">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <select id="confMedia">
               <option value="0.90">90%</option>
               <option value="0.95" selected>95%</option>
               <option value="0.99">99%</option>
             </select>
+            <p class="field-hint" hidden>Nivel nominal con el que se construye cada intervalo. Es también la fracción esperada de intervalos que cubrirán la μ verdadera a largo plazo.</p>
           </div>
           <div class="form-group">
-            <label for="numIntMedia">Número de intervalos</label>
+            <label for="numIntMedia">Número de intervalos <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <select id="numIntMedia">
               <option value="20">20</option>
               <option value="50">50</option>
               <option value="100" selected>100</option>
               <option value="200">200</option>
             </select>
+            <p class="field-hint" hidden>Cuántas repeticiones del experimento se simulan. Con más intervalos, la cobertura empírica converge más cerca del nivel nominal.</p>
           </div>
         </div>
       </div>
 
       <!-- Panel: Proporción -->
       <div class="mode-panel" id="panelProp" role="tabpanel" aria-labelledby="tabProp">
+        <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> simula repetidamente intervalos de confianza para una proporción, comparando el método de Wald con el de Wilson, y muestra qué fracción cubre realmente la p verdadera. Elige este modo para ver cómo la discretización de la binomial afecta a la cobertura real, especialmente con n pequeño o p cerca de 0 o 1.</p>
         <div class="form-grid-ci">
           <div class="form-group">
-            <label for="trueP">Verdadera p (proporción poblacional)</label>
+            <label for="trueP">Verdadera p (proporción poblacional) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <input type="number" id="trueP" value="0.5" step="0.01" min="0.01" max="0.99">
+            <p class="field-hint" hidden>Valor real (desconocido en la práctica) de la proporción poblacional que el simulador usa para generar las muestras binomiales.</p>
           </div>
           <div class="form-group">
-            <label for="nProp">Tamaño muestral n</label>
+            <label for="nProp">Tamaño muestral n <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <select id="nProp">
               <option value="10">10</option>
               <option value="20">20</option>
@@ -396,30 +404,34 @@
               <option value="100">100</option>
               <option value="200">200</option>
             </select>
+            <p class="field-hint" hidden>Número de observaciones de cada muestra simulada. Con n pequeño o p cerca de los extremos, el método Wald tiende a dar peor cobertura que Wilson.</p>
           </div>
           <div class="form-group">
-            <label for="confProp">Nivel de confianza</label>
+            <label for="confProp">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <select id="confProp">
               <option value="0.90">90%</option>
               <option value="0.95" selected>95%</option>
               <option value="0.99">99%</option>
             </select>
+            <p class="field-hint" hidden>Nivel nominal con el que se construye cada intervalo. Es también la fracción esperada de intervalos que cubrirán la p verdadera a largo plazo.</p>
           </div>
           <div class="form-group">
-            <label for="numIntProp">Número de intervalos</label>
+            <label for="numIntProp">Número de intervalos <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <select id="numIntProp">
               <option value="20">20</option>
               <option value="50">50</option>
               <option value="100" selected>100</option>
               <option value="200">200</option>
             </select>
+            <p class="field-hint" hidden>Cuántas repeticiones del experimento se simulan. Con más intervalos, la cobertura empírica converge más cerca del nivel nominal.</p>
           </div>
           <div class="form-group">
-            <label for="methodProp">Método para el IC</label>
+            <label for="methodProp">Método para el IC <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <select id="methodProp">
               <option value="wald">Wald (normal)</option>
               <option value="wilson" selected>Wilson (recomendado)</option>
             </select>
+            <p class="field-hint" hidden><strong>Wilson</strong> invierte el test de score de Pearson y suele dar cobertura más próxima al nivel nominal; <strong>Wald</strong> usa la aproximación normal directa y se deteriora con n pequeño o p cerca de 0 o 1.</p>
           </div>
         </div>
       </div>
@@ -950,6 +962,7 @@ window.addEventListener('resize', () => {
   }, 150);
 });
 </script>
+<script src="../field-hints.js?v=20260709-1"></script>
 <script src="../search.js?v=20260709-1"></script>
 <script src="../wizard.js?v=20260709-1"></script>
 <script src="../theme.js?v=20260709-1"></script>

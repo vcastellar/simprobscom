@@ -161,16 +161,18 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="varR">Cociente máximo U/L del IC (R)</label>
+                        <label for="varR">Cociente máximo U/L del IC (R) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="varR" value="2.5" step="0.1" min="1.001">
+                        <p class="field-hint" hidden>Cociente máximo tolerable entre el límite superior y el inferior del IC de la varianza. Cuanto más cercano a 1, más estrecho (preciso) el intervalo, pero más muestra hace falta. <strong>R entre 2 y 4</strong> es habitual en control de calidad.</p>
                     </div>
                     <div class="form-group">
-                        <label for="varConfidence">Nivel de confianza</label>
+                        <label for="varConfidence">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="varConfidence">
                             <option value="0.90">90%</option>
                             <option value="0.95" selected>95%</option>
                             <option value="0.99">99%</option>
                         </select>
+                        <p class="field-hint" hidden>Probabilidad de que el intervalo resultante contenga la varianza real. 95 % es el estándar; con 99 % se necesita más muestra para el mismo cociente R.</p>
                     </div>
                 </div>
             </div>
@@ -316,6 +318,7 @@ function calculateVarianceSampleSize() {
 document.getElementById('varCalculateBtn').addEventListener('click', calculateVarianceSampleSize);
 calculateVarianceSampleSize();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

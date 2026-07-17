@@ -166,27 +166,31 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="finiteMeanSigma">Desviación estándar (σ)</label>
+                        <label for="finiteMeanSigma">Desviación estándar (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="finiteMeanSigma" value="12" step="0.1" min="0.0001">
+                        <p class="field-hint" hidden>La desviación estándar esperada de la variable, obtenida de datos históricos, un piloto o la literatura. Si no la tienes, usa rango/4 como estimación conservadora.</p>
                     </div>
                     <div class="form-group">
-                        <label for="finiteMeanE">Margen de error (E)</label>
+                        <label for="finiteMeanE">Margen de error (E) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="finiteMeanE" value="2" step="0.1" min="0.0001">
+                        <p class="field-hint" hidden>Error máximo tolerable respecto al valor real, en las mismas unidades que σ. Define a partir de qué diferencia cambiaría tu decisión.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="finiteMeanN">Tamaño poblacional (N)</label>
+                        <label for="finiteMeanN">Tamaño poblacional (N) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="finiteMeanN" value="1200" step="1" min="2">
+                        <p class="field-hint" hidden>El recuento exacto y conocido de la población objetivo antes del muestreo. Es lo que activa la corrección por población finita.</p>
                     </div>
                     <div class="form-group">
-                        <label for="finiteMeanConfidence">Nivel de confianza</label>
+                        <label for="finiteMeanConfidence">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="finiteMeanConfidence">
                             <option value="0.90">90%</option>
                             <option value="0.95" selected>95%</option>
                             <option value="0.99">99%</option>
                         </select>
+                        <p class="field-hint" hidden>El porcentaje de veces que el procedimiento capturaría el valor poblacional verdadero. <strong>95 %</strong> es el estándar; usa 99 % para decisiones críticas.</p>
                     </div>
                 </div>
             </div>
@@ -306,6 +310,7 @@ function calculateFiniteMeanSampleSize() {
 document.getElementById('finiteMeanCalculateBtn').addEventListener('click', calculateFiniteMeanSampleSize);
 calculateFiniteMeanSampleSize();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

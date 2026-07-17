@@ -166,31 +166,36 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="onePropH0">Hipótesis nula (p0)</label>
+                        <label for="onePropH0">Hipótesis nula (p0) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="onePropH0" value="0.3" step="0.01" min="0.001" max="0.999">
+                        <p class="field-hint" hidden>Valor de referencia que quieres contrastar: la proporción bajo la hipótesis nula H₀.</p>
                     </div>
                     <div class="form-group">
-                        <label for="onePropDelta">Diferencia mínima detectable |p−p0| (Δ)</label>
+                        <label for="onePropDelta">Diferencia mínima detectable |p−p0| (Δ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="onePropDelta" value="0.1" step="0.001" min="0.0001" max="0.9999">
+                        <p class="field-hint" hidden>Diferencia mínima entre p y p0 que quieres poder detectar con la potencia elegida, fijada por relevancia práctica antes de ver los datos.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="onePropAlpha">Alfa (α)</label>
+                        <label for="onePropAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="onePropAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>Riesgo de falso positivo que aceptas (rechazar H₀ cuando en realidad p = p0). El valor típico es <strong>0,05</strong>.</p>
                     </div>
                     <div class="form-group">
-                        <label for="onePropPower">Potencia (1-β)</label>
+                        <label for="onePropPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="onePropPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                        <p class="field-hint" hidden>Probabilidad de detectar la diferencia Δ si realmente existe. Usa <strong>0,80</strong> o <strong>0,90</strong> según la exigencia del estudio.</p>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="onePropAlternative">Hipótesis alternativa</label>
+                    <label for="onePropAlternative">Hipótesis alternativa <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                     <select id="onePropAlternative">
                         <option value="two-sided">Ha: p ≠ p0</option>
                         <option value="greater">Ha: p ≥ p0</option>
                         <option value="less">Ha: p ≤ p0</option>
                     </select>
+                    <p class="field-hint" hidden>Usa <strong>bilateral</strong> (≠) si no tienes dirección previa; usa <strong>unilateral</strong> (≥ o ≤) solo si te interesa detectar el cambio en un único sentido — requiere menor muestra, pero exige poder justificarlo a priori.</p>
                 </div>
             </div>
 
@@ -312,6 +317,7 @@ function calculateOnePropSampleSize() {
 document.getElementById("onePropCalculateBtn").addEventListener("click", calculateOnePropSampleSize);
 calculateOnePropSampleSize();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>
