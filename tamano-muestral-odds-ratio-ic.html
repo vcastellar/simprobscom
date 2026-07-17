@@ -161,26 +161,30 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="orOR">Odds ratio esperada (OR)</label>
+                        <label for="orOR">Odds ratio esperada (OR) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="orOR" value="2.0" step="0.1" min="0.0001">
+                        <p class="field-hint" hidden>La OR que esperas encontrar, basada en estudios previos o en la mínima asociación que consideras relevante.</p>
                     </div>
                     <div class="form-group">
-                        <label for="orP2">Proporción del evento en grupo de referencia (p₂)</label>
+                        <label for="orP2">Proporción del evento en grupo de referencia (p₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="orP2" value="0.20" step="0.01" min="0.0001" max="0.9999">
+                        <p class="field-hint" hidden>Frecuencia esperada del evento en la población no expuesta (grupo de referencia). Es, junto con la OR, el parámetro que más influye en el n necesario.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="orElog">Semi-amplitud del IC en escala log(OR) (E<sub>log</sub>)</label>
+                        <label for="orElog">Semi-amplitud del IC en escala log(OR) (E<sub>log</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="orElog" value="0.5" step="0.05" min="0.0001">
+                        <p class="field-hint" hidden>Precisión deseada en escala logarítmica. El IC final para OR va de OR·e⁻ᴱ a OR·e⁺ᴱ. Valores entre <strong>0,3 y 0,7</strong> son habituales; a menor E_log, más sujetos necesitas.</p>
                     </div>
                     <div class="form-group">
-                        <label for="orConfidence">Nivel de confianza</label>
+                        <label for="orConfidence">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="orConfidence">
                             <option value="0.90">90%</option>
                             <option value="0.95" selected>95%</option>
                             <option value="0.99">99%</option>
                         </select>
+                        <p class="field-hint" hidden>Probabilidad de que el IC contenga la OR real. <strong>95 %</strong> es el estándar; usa 99 % en decisiones regulatorias o de alto impacto.</p>
                     </div>
                 </div>
             </div>
@@ -334,6 +338,7 @@ function calculateORSampleSize() {
 document.getElementById('orCalculateBtn').addEventListener('click', calculateORSampleSize);
 calculateORSampleSize();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

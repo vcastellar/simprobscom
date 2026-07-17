@@ -133,34 +133,39 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="anovaK">Número de grupos (k)</label>
+                        <label for="anovaK">Número de grupos (k) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="anovaK" value="3" step="1" min="2" max="50">
+                        <p class="field-hint" hidden>Número de grupos que se comparan (k ≥ 2). Incluye todos los grupos del diseño, aunque alguno sea de control.</p>
                     </div>
                     <div class="form-group">
-                        <label for="anovaF">Tamaño del efecto de Cohen (f)</label>
+                        <label for="anovaF">Tamaño del efecto de Cohen (f) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="anovaF" value="0.25" step="0.01" min="0.01" max="5">
+                        <p class="field-hint" hidden>Cociente entre la desviación estándar de las medias grupales y la desviación estándar dentro de los grupos. Referencia: <strong>0,10</strong> pequeño, <strong>0,25</strong> mediano, <strong>0,40</strong> grande.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="anovaAlpha">Alfa (α)</label>
+                        <label for="anovaAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="anovaAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>Nivel de significación del contraste F global. El valor estándar es <strong>0,05</strong>; usa 0,01 en estudios confirmatorios.</p>
                     </div>
                     <div class="form-group">
-                        <label for="anovaPower">Potencia (1-β)</label>
+                        <label for="anovaPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="anovaPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                        <p class="field-hint" hidden>Probabilidad de detectar el efecto si realmente existe. <strong>0,80</strong> es el mínimo habitual; usa 0,90 si las comparaciones post-hoc son el objetivo principal.</p>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="anovaPreset">Referencia rápida de f</label>
+                    <label for="anovaPreset">Referencia rápida de f <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                     <select id="anovaPreset">
                         <option value="">— Seleccionar —</option>
                         <option value="0.10">Pequeño (f = 0,10)</option>
                         <option value="0.25">Mediano (f = 0,25)</option>
                         <option value="0.40">Grande (f = 0,40)</option>
                     </select>
+                    <p class="field-hint" hidden>Atajo para rellenar el campo f con un valor de referencia según los criterios de Cohen, si no dispones de una estimación propia.</p>
                 </div>
             </div>
 
@@ -332,6 +337,7 @@ document.getElementById("anovaPreset").addEventListener("change", function () {
 document.getElementById("anovaCalculateBtn").addEventListener("click", calculateAnovaSampleSize);
 calculateAnovaSampleSize();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

@@ -138,47 +138,54 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="a">Expuestos con evento (a)</label>
+                        <label for="a">Expuestos con evento (a) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="a" value="35" step="1" min="0">
+                        <p class="field-hint" hidden>Número de sujetos expuestos al factor de interés que presentaron el evento.</p>
                     </div>
                     <div class="form-group">
-                        <label for="b">Expuestos sin evento (b)</label>
+                        <label for="b">Expuestos sin evento (b) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="b" value="65" step="1" min="0">
+                        <p class="field-hint" hidden>Número de sujetos expuestos al factor de interés que NO presentaron el evento.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="c">No expuestos con evento (c)</label>
+                        <label for="c">No expuestos con evento (c) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="c" value="20" step="1" min="0">
+                        <p class="field-hint" hidden>Número de sujetos no expuestos que presentaron el evento.</p>
                     </div>
                     <div class="form-group">
-                        <label for="d">No expuestos sin evento (d)</label>
+                        <label for="d">No expuestos sin evento (d) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="d" value="80" step="1" min="0">
+                        <p class="field-hint" hidden>Número de sujetos no expuestos que NO presentaron el evento.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="conf">Nivel de confianza</label>
+                        <label for="conf">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="conf">
                             <option value="0.90">90 %</option>
                             <option value="0.95" selected>95 %</option>
                             <option value="0.99">99 %</option>
                             <option value="custom">Personalizado…</option>
                         </select>
+                        <p class="field-hint" hidden>Probabilidad de que el intervalo contenga la odds ratio real. <strong>95 %</strong> es el estándar habitual.</p>
                     </div>
                     <div class="form-group">
-                        <label for="correction">Celdas cero</label>
+                        <label for="correction">Celdas cero <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="correction">
                             <option value="auto" selected>Corrección 0,5 automática</option>
                             <option value="always">Aplicar siempre 0,5</option>
                             <option value="none">No aplicar corrección</option>
                         </select>
+                        <p class="field-hint" hidden>La corrección de Haldane-Anscombe suma <strong>0,5</strong> a las cuatro celdas cuando alguna vale 0, para poder calcular el logaritmo del OR y su error estándar.</p>
                     </div>
                 </div>
                 <div class="inline-inputs" id="customConfRow" style="display:none">
                     <div class="form-group">
-                        <label for="customConf">Nivel de confianza personalizado (0–1)</label>
+                        <label for="customConf">Nivel de confianza personalizado (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
+                        <p class="field-hint" hidden>Introduce un nivel de confianza entre 0 y 1, por ejemplo <strong>0,95</strong> para un 95 %.</p>
                     </div>
                 </div>
             </div>
@@ -477,6 +484,7 @@ document.getElementById('correction').addEventListener('change', calculate);
 document.getElementById('customConf').addEventListener('input', calculate);
 calculate();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

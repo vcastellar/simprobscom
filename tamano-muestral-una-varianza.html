@@ -161,26 +161,30 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="varR">Razón R = σ₁/σ₀</label>
+                        <label for="varR">Razón R = σ₁/σ₀ <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="varR" value="1.5" step="0.05" min="0.01">
+                        <p class="field-hint" hidden>Cociente entre la desviación estándar real bajo H₁ y la hipotética bajo H₀ que quieres poder detectar. <strong>R = 1,5</strong> (incremento del 50 %) es un efecto moderado; R = 2 se detecta con muestras más pequeñas.</p>
                     </div>
                     <div class="form-group">
-                        <label for="varAlternative">Hipótesis alternativa</label>
+                        <label for="varAlternative">Hipótesis alternativa <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="varAlternative">
                             <option value="two-sided">Ha: σ ≠ σ0</option>
                             <option value="greater">Ha: σ ≥ σ0</option>
                             <option value="less">Ha: σ ≤ σ0</option>
                         </select>
+                        <p class="field-hint" hidden>Bilateral si no tienes dirección previa; unilateral superior es habitual en control de calidad para detectar solo incrementos de variabilidad.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="varAlpha">Alfa (α)</label>
+                        <label for="varAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="varAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>Riesgo de rechazar H₀ siendo cierta. <strong>0,05</strong> es el estándar; usa 0,01 para decisiones con consecuencias críticas.</p>
                     </div>
                     <div class="form-group">
-                        <label for="varPower">Potencia (1-β)</label>
+                        <label for="varPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="varPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                        <p class="field-hint" hidden>Probabilidad de detectar la desviación de varianza si es real. <strong>0,80</strong> es el mínimo habitual; usa 0,90 si los falsos negativos son costosos.</p>
                     </div>
                 </div>
             </div>
@@ -319,6 +323,7 @@ function calculateOneVarianceSampleSize() {
 document.getElementById('varCalculateBtn').addEventListener('click', calculateOneVarianceSampleSize);
 calculateOneVarianceSampleSize();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

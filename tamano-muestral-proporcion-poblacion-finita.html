@@ -166,26 +166,30 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="finitePropP">Proporción esperada (p)</label>
+                        <label for="finitePropP">Proporción esperada (p) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="finitePropP" value="0.5" step="0.01" min="0.0001" max="0.9999">
+                        <p class="field-hint" hidden>Estimación previa del valor que buscas (entre 0 y 1). Si no tienes datos previos, deja <strong>0,5</strong>: es el escenario conservador que da la muestra más grande posible.</p>
                     </div>
                     <div class="form-group">
-                        <label for="finitePropE">Margen de error (E)</label>
+                        <label for="finitePropE">Margen de error (E) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="finitePropE" value="0.05" step="0.001" min="0.0001" max="0.9999">
+                        <p class="field-hint" hidden>Precisión máxima tolerada respecto al valor real, en puntos porcentuales absolutos. <strong>0,05</strong> (±5 %) es habitual en encuestas organizacionales.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="finitePropN">Tamaño poblacional (N)</label>
+                        <label for="finitePropN">Tamaño poblacional (N) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="finitePropN" value="2000" step="1" min="2">
+                        <p class="field-hint" hidden>Tamaño total y conocido del universo del que procede la muestra (ej.: número de empleados, clientes activos). Debe ser un recuento real, no una estimación.</p>
                     </div>
                     <div class="form-group">
-                        <label for="finitePropConfidence">Nivel de confianza</label>
+                        <label for="finitePropConfidence">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="finitePropConfidence">
                             <option value="0.90">90%</option>
                             <option value="0.95" selected>95%</option>
                             <option value="0.99">99%</option>
                         </select>
+                        <p class="field-hint" hidden>Probabilidad de que el intervalo resultante contenga el valor real. <strong>95 %</strong> es el estándar habitual.</p>
                     </div>
                 </div>
             </div>
@@ -307,6 +311,7 @@ function calculateFinitePropSampleSize() {
 document.getElementById('finitePropCalculateBtn').addEventListener('click', calculateFinitePropSampleSize);
 calculateFinitePropSampleSize();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

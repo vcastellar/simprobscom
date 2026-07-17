@@ -172,26 +172,30 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="bVal">Pares discordantes b (cond. 1 sí, cond. 2 no)</label>
+                        <label for="bVal">Pares discordantes b (cond. 1 sí, cond. 2 no) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="bVal" value="18" step="1" min="0">
+                        <p class="field-hint" hidden>Número de sujetos que tuvieron éxito en la condición 1 pero no en la condición 2. Junto con c, es el único dato que usa el test de McNemar.</p>
                     </div>
                     <div class="form-group">
-                        <label for="cVal">Pares discordantes c (cond. 1 no, cond. 2 sí)</label>
+                        <label for="cVal">Pares discordantes c (cond. 1 no, cond. 2 sí) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="cVal" value="8" step="1" min="0">
+                        <p class="field-hint" hidden>Número de sujetos que tuvieron éxito en la condición 2 pero no en la condición 1. Los pares concordantes (a y d) no se incluyen porque no aportan información sobre la diferencia.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="correction">Corrección de continuidad</label>
+                        <label for="correction">Corrección de continuidad <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="correction">
                             <option value="yes">Con corrección de continuidad</option>
                             <option value="no">Sin corrección de continuidad</option>
                         </select>
+                        <p class="field-hint" hidden>La corrección de Edwards ajusta el estadístico discreto hacia la distribución continua χ², reduciendo el error de tipo I cuando b+c es pequeño. Es la opción recomendada por defecto; omítela solo si b+c &gt; 100.</p>
                     </div>
                     <div class="form-group">
-                        <label for="alpha">Nivel de significación (α)</label>
+                        <label for="alpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>Riesgo de falso positivo que aceptas (rechazar H₀ cuando en realidad las proporciones marginales son iguales). El valor habitual es 0,05.</p>
                     </div>
                 </div>
             </div>
@@ -389,6 +393,7 @@ function calculate() {
 document.getElementById('calcBtn').addEventListener('click', calculate);
 calculate();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

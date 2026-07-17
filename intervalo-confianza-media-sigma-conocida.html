@@ -138,33 +138,38 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="xbar">Media muestral (x̄)</label>
+                        <label for="xbar">Media muestral (x̄) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="xbar" value="10.02" step="0.01">
+                        <p class="field-hint" hidden>El promedio observado en tu muestra. Es el centro del intervalo de confianza.</p>
                     </div>
                     <div class="form-group">
-                        <label for="sigma">Desviación típica poblacional (σ)</label>
+                        <label for="sigma">Desviación típica poblacional (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="sigma" value="0.08" step="0.001" min="0.0001">
+                        <p class="field-hint" hidden>La desviación típica de la población, conocida de antemano (por ejemplo, por especificaciones técnicas o estudios anteriores), no estimada a partir de tu muestra.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="n">Tamaño muestral (n)</label>
+                        <label for="n">Tamaño muestral (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="n" value="50" step="1" min="1">
+                        <p class="field-hint" hidden>Número de observaciones de la muestra. El margen de error se reduce con 1/√n, así que cuadruplicar n reduce a la mitad la amplitud del intervalo.</p>
                     </div>
                     <div class="form-group">
-                        <label for="conf">Nivel de confianza</label>
+                        <label for="conf">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="conf">
                             <option value="0.90">90 %</option>
                             <option value="0.95" selected>95 %</option>
                             <option value="0.99">99 %</option>
                             <option value="custom">Personalizado…</option>
                         </select>
+                        <p class="field-hint" hidden>Probabilidad de que el procedimiento produzca un intervalo que contenga la media real. <strong>95 %</strong> es el estándar habitual.</p>
                     </div>
                 </div>
                 <div class="inline-inputs" id="customConfRow" style="display:none">
                     <div class="form-group">
-                        <label for="customConf">Nivel de confianza personalizado (0–1)</label>
+                        <label for="customConf">Nivel de confianza personalizado (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
+                        <p class="field-hint" hidden>Nivel de confianza a medida, en escala 0–1 (por ejemplo 0,98 para un 98 %), solo se usa si eliges «Personalizado…» arriba.</p>
                     </div>
                 </div>
             </div>
@@ -367,6 +372,7 @@ document.getElementById('conf').addEventListener('change', calculate);
 document.getElementById('customConf').addEventListener('input', calculate);
 calculate();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

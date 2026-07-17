@@ -138,37 +138,42 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="x">Número de éxitos (x)</label>
+                        <label for="x">Número de éxitos (x) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="x" value="134" step="1" min="0">
+                        <p class="field-hint" hidden>Número de observaciones que cumplen la característica de interés (p. ej., clientes satisfechos). Junto con n forma la proporción muestral \(\hat{p} = x/n\).</p>
                     </div>
                     <div class="form-group">
-                        <label for="n">Tamaño muestral (n)</label>
+                        <label for="n">Tamaño muestral (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="n" value="200" step="1" min="1">
+                        <p class="field-hint" hidden>Número total de observaciones de la muestra.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="conf">Nivel de confianza</label>
+                        <label for="conf">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="conf">
                             <option value="0.90">90 %</option>
                             <option value="0.95" selected>95 %</option>
                             <option value="0.99">99 %</option>
                             <option value="custom">Personalizado…</option>
                         </select>
+                        <p class="field-hint" hidden>Probabilidad de que el intervalo resultante contenga el valor real de p. <strong>95 %</strong> es el estándar habitual en encuestas y estudios de salud.</p>
                     </div>
                     <div class="form-group">
-                        <label for="method">Método</label>
+                        <label for="method">Método <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="method">
                             <option value="both" selected>Ambos (Wald + Wilson)</option>
                             <option value="wald">Solo Wald</option>
                             <option value="wilson">Solo Wilson</option>
                         </select>
+                        <p class="field-hint" hidden><strong>Wilson</strong> es el método recomendado por defecto: mantiene mejor la cobertura real con muestras pequeñas o proporciones extremas. <strong>Wald</strong> es más simple pero puede fallar cuando hay pocos éxitos o fracasos.</p>
                     </div>
                 </div>
                 <div class="inline-inputs" id="customConfRow" style="display:none">
                     <div class="form-group">
-                        <label for="customConf">Nivel de confianza personalizado (0–1)</label>
+                        <label for="customConf">Nivel de confianza personalizado (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
+                        <p class="field-hint" hidden>Introduce el nivel de confianza deseado como valor decimal entre 0 y 1 (ej.: 0,975 para un 97,5 %).</p>
                     </div>
                 </div>
             </div>
@@ -423,6 +428,7 @@ document.getElementById('method').addEventListener('change', calculate);
 document.getElementById('customConf').addEventListener('input', calculate);
 calculate();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

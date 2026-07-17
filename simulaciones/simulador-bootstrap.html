@@ -341,24 +341,26 @@
       <h2 class="panel-heading" id="params-heading">Parámetros de simulación</h2>
       <div class="sim-form-grid">
         <div class="form-group">
-          <label for="popDist">Distribución poblacional</label>
+          <label for="popDist">Distribución poblacional <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
           <select id="popDist">
             <option value="normal">Normal (μ=5, σ=2)</option>
             <option value="exponential">Exponencial (λ=0,5)</option>
             <option value="uniform">Uniforme (a=0, b=10)</option>
             <option value="lognormal">Log-normal (μ<sub>log</sub>=1, σ<sub>log</sub>=0,5)</option>
           </select>
+          <p class="field-hint" hidden>La distribución de la que se genera la muestra original. Prueba con la log-normal o la exponencial para ver cómo se comporta el bootstrap con datos asimétricos.</p>
         </div>
         <div class="form-group">
-          <label for="statistic">Estadístico</label>
+          <label for="statistic">Estadístico <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
           <select id="statistic">
             <option value="mean" selected>Media (x̄)</option>
             <option value="median">Mediana</option>
             <option value="sd">Desviación típica (s)</option>
           </select>
+          <p class="field-hint" hidden>El estadístico cuya distribución bootstrap quieres estimar. La mediana y la desviación típica no siempre tienen una fórmula analítica sencilla de error estándar, por lo que el bootstrap es especialmente útil ahí.</p>
         </div>
         <div class="form-group">
-          <label for="sampleN">Tamaño de muestra <em>n</em></label>
+          <label for="sampleN">Tamaño de muestra <em>n</em> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
           <select id="sampleN">
             <option value="10">n = 10</option>
             <option value="20">n = 20</option>
@@ -366,23 +368,26 @@
             <option value="50">n = 50</option>
             <option value="100">n = 100</option>
           </select>
+          <p class="field-hint" hidden>Número de observaciones de la muestra original que se remuestrea. El bootstrap funciona razonablemente bien desde n ≈ 15–20.</p>
         </div>
         <div class="form-group">
-          <label for="numBoot">Réplicas bootstrap <em>B</em></label>
+          <label for="numBoot">Réplicas bootstrap <em>B</em> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
           <select id="numBoot">
             <option value="200">B = 200</option>
             <option value="500">B = 500</option>
             <option value="1000" selected>B = 1000</option>
             <option value="5000">B = 5000</option>
           </select>
+          <p class="field-hint" hidden>Número de remuestreos con reemplazamiento. Para el error estándar basta con B = 200–500; para intervalos de confianza percentiles al 95 % se recomienda <strong>B ≥ 1000</strong>.</p>
         </div>
         <div class="form-group">
-          <label for="confLevel">Nivel de confianza</label>
+          <label for="confLevel">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
           <select id="confLevel">
             <option value="0.90">90 %</option>
             <option value="0.95" selected>95 %</option>
             <option value="0.99">99 %</option>
           </select>
+          <p class="field-hint" hidden>El nivel usado para construir el IC bootstrap por el método percentil (y el IC normal, cuando el estadístico es la media). <strong>95 %</strong> es el estándar habitual.</p>
         </div>
       </div>
       <div class="btn-row">
@@ -1168,6 +1173,7 @@
     runAll();
   });
 </script>
+<script src="../field-hints.js?v=20260709-1"></script>
 <script src="../search.js?v=20260709-1"></script>
 <script src="../wizard.js?v=20260709-1"></script>
 <script src="../theme.js?v=20260709-1"></script>

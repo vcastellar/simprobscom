@@ -369,6 +369,7 @@
 
     <!-- ═══════════════════════════════ 1D ═══════════════════════════════ -->
     <div id="panel-1d" class="mode-section active" role="tabpanel" aria-labelledby="tab-1d">
+      <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> simula uno o varios paseos aleatorios en una dimensión, donde la partícula avanza +1 o retrocede −1 en cada paso. Sirve para ver cómo la dispersión crece como √n y el efecto de una posible deriva cuando p ≠ 0,5.</p>
       <div class="sim-layout">
 
         <!-- Control panel -->
@@ -376,7 +377,7 @@
           <h2 class="panel-heading">Parámetros</h2>
 
           <div class="form-group">
-            <label for="p1d">Probabilidad de +1 (p)</label>
+            <label for="p1d">Probabilidad de +1 (p) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <select id="p1d">
               <option value="0.3">0,30 — deriva negativa</option>
               <option value="0.4">0,40 — ligera deriva negativa</option>
@@ -384,10 +385,11 @@
               <option value="0.6">0,60 — ligera deriva positiva</option>
               <option value="0.7">0,70 — deriva positiva</option>
             </select>
+            <p class="field-hint" hidden>Probabilidad de que cada paso sea +1 en vez de −1. Con <strong>p = 0,5</strong> el paseo es simétrico (sin deriva); si p ≠ 0,5 aparece una deriva sistemática en esa dirección.</p>
           </div>
 
           <div class="form-group">
-            <label for="n1d">Número de pasos (n)</label>
+            <label for="n1d">Número de pasos (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <select id="n1d">
               <option value="50">50</option>
               <option value="100">100</option>
@@ -396,10 +398,11 @@
               <option value="1000">1 000</option>
               <option value="2000">2 000</option>
             </select>
+            <p class="field-hint" hidden>Longitud de cada trayectoria simulada. La desviación típica de la posición final crece como √n, así que trayectorias más largas se dispersan más (pero de forma sublineal).</p>
           </div>
 
           <div class="form-group">
-            <label for="paths1d">Número de trayectorias</label>
+            <label for="paths1d">Número de trayectorias <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <select id="paths1d">
               <option value="1">1</option>
               <option value="5">5</option>
@@ -407,16 +410,19 @@
               <option value="20">20</option>
               <option value="50">50</option>
             </select>
+            <p class="field-hint" hidden>Cuántas simulaciones independientes se dibujan a la vez, para comparar su variabilidad en el mismo gráfico.</p>
           </div>
 
           <div class="form-group checkbox-group">
             <input type="checkbox" id="bands1d" checked>
-            <label for="bands1d">Mostrar bandas teóricas ±2σ</label>
+            <label for="bands1d">Mostrar bandas teóricas ±2σ <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+            <p class="field-hint" hidden>Muestra la banda E[X<sub>n</sub>] ± 2σ dentro de la cual debería caer, aproximadamente, el 95 % de las trayectorias.</p>
           </div>
 
           <div class="form-group checkbox-group">
             <input type="checkbox" id="meanline1d" checked>
-            <label for="meanline1d">Mostrar media esperada</label>
+            <label for="meanline1d">Mostrar media esperada <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+            <p class="field-hint" hidden>Dibuja la línea de la posición media teórica E[X<sub>n</sub>] = n(2p−1), útil para ver la deriva cuando p ≠ 0,5.</p>
           </div>
 
           <button class="calculate-btn" id="btn1d" type="button">Simular</button>
@@ -467,6 +473,7 @@
 
     <!-- ═══════════════════════════════ 2D ═══════════════════════════════ -->
     <div id="panel-2d" class="mode-section" role="tabpanel" aria-labelledby="tab-2d" style="display:none;">
+      <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> simula uno o varios paseos aleatorios en el plano, con igual probabilidad de moverse en cada uno de los cuatro ejes. Sirve para visualizar la recurrencia del paseo 2D y comprobar que la distancia al origen crece como √n.</p>
       <div class="sim-layout">
 
         <!-- Control panel -->
@@ -474,7 +481,7 @@
           <h2 class="panel-heading">Parámetros</h2>
 
           <div class="form-group">
-            <label for="n2d">Número de pasos (n)</label>
+            <label for="n2d">Número de pasos (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <select id="n2d">
               <option value="100">100</option>
               <option value="500">500</option>
@@ -482,10 +489,11 @@
               <option value="5000">5 000</option>
               <option value="10000">10 000</option>
             </select>
+            <p class="field-hint" hidden>Longitud de cada trayectoria simulada. La distancia esperada al origen crece como √n; con más pasos, activa muchos pasos y una sola trayectoria para observar la recurrencia del paseo.</p>
           </div>
 
           <div class="form-group">
-            <label for="paths2d">Número de trayectorias</label>
+            <label for="paths2d">Número de trayectorias <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <select id="paths2d">
               <option value="1">1</option>
               <option value="3">3</option>
@@ -493,11 +501,13 @@
               <option value="10">10</option>
               <option value="20">20</option>
             </select>
+            <p class="field-hint" hidden>Cuántas simulaciones independientes se dibujan a la vez. Usa 1 trayectoria para contar los pasos en los que la partícula regresa al origen.</p>
           </div>
 
           <div class="form-group checkbox-group">
             <input type="checkbox" id="circle2d" checked>
-            <label for="circle2d">Mostrar círculo de difusión √n</label>
+            <label for="circle2d">Mostrar círculo de difusión √n <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+            <p class="field-hint" hidden>Dibuja el círculo de radio √n, que corresponde a la distancia cuadrática media esperada r<sub>RMS</sub> = √n tras n pasos.</p>
           </div>
 
           <button class="calculate-btn" id="btn2d" type="button">Simular</button>
@@ -1137,6 +1147,7 @@ function simulate2D() {
 
 document.getElementById('btn2d').addEventListener('click', simulate2D);
 </script>
+<script src="../field-hints.js?v=20260709-1"></script>
 <script src="../search.js?v=20260709-1"></script>
 <script src="../wizard.js?v=20260709-1"></script>
 <script src="../theme.js?v=20260709-1"></script>

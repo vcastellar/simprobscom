@@ -179,34 +179,40 @@
 
       <!-- MODE: Potencia -->
       <div id="modePower" class="mode-section active">
+        <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> calcula la potencia (1−β) y el error de tipo II (β) para un tamaño muestral ya fijado. Elige este modo cuando quieras saber si un estudio existente o planificado con un n concreto tiene suficiente capacidad para detectar el efecto que te interesa.</p>
         <div class="form-grid sample-grid">
           <div class="inline-inputs">
             <div class="form-group">
-              <label for="pwP0">Proporción bajo H₀ (p₀)</label>
+              <label for="pwP0">Proporción bajo H₀ (p₀) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
               <input type="number" id="pwP0" value="0.30" step="0.01" min="0.001" max="0.999">
+              <p class="field-hint" hidden>Proporción de referencia bajo la hipótesis nula, con la que se compara el resultado observado.</p>
             </div>
             <div class="form-group">
-              <label for="pwP1">Proporción bajo H₁ (p₁)</label>
+              <label for="pwP1">Proporción bajo H₁ (p₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
               <input type="number" id="pwP1" value="0.40" step="0.01" min="0.001" max="0.999">
+              <p class="field-hint" hidden>Proporción real que esperas o quieres poder detectar. Cuanto mayor sea |p₁ − p₀|, más fácil es detectar el efecto.</p>
             </div>
           </div>
           <div class="inline-inputs">
             <div class="form-group">
-              <label for="pwN">Tamaño muestral (n)</label>
+              <label for="pwN">Tamaño muestral (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
               <input type="number" id="pwN" value="172" step="1" min="1">
+              <p class="field-hint" hidden>Número de observaciones planeado o ya utilizado en el estudio. A mayor n, mayor potencia para el mismo efecto.</p>
             </div>
             <div class="form-group">
-              <label for="pwAlpha">Nivel de significación (α)</label>
+              <label for="pwAlpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
               <input type="number" id="pwAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+              <p class="field-hint" hidden>Riesgo de rechazar H₀ siendo cierta. El valor habitual es <strong>0,05</strong>.</p>
             </div>
           </div>
           <div class="form-group">
-            <label for="pwAlternative">Hipótesis alternativa</label>
+            <label for="pwAlternative">Hipótesis alternativa <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <select id="pwAlternative">
               <option value="two-sided">Bilateral — Hₐ: p ≠ p₀</option>
               <option value="greater">Unilateral superior — Hₐ: p &gt; p₀</option>
               <option value="less">Unilateral inferior — Hₐ: p &lt; p₀</option>
             </select>
+            <p class="field-hint" hidden>Usa bilateral si no tienes una dirección esperada a priori. El unilateral tiene más potencia pero solo detecta cambios en esa dirección.</p>
           </div>
         </div>
         <button class="calculate-btn" id="calcPwBtn">Calcular potencia</button>
@@ -215,34 +221,40 @@
 
       <!-- MODE: Tamaño muestral -->
       <div id="modeN" class="mode-section">
+        <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> calcula el tamaño muestral mínimo necesario para alcanzar una potencia objetivo dada. Elige este modo cuando estés planificando un estudio y quieras saber cuántas observaciones recoger antes de empezar.</p>
         <div class="form-grid sample-grid">
           <div class="inline-inputs">
             <div class="form-group">
-              <label for="nP0">Proporción bajo H₀ (p₀)</label>
+              <label for="nP0">Proporción bajo H₀ (p₀) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
               <input type="number" id="nP0" value="0.30" step="0.01" min="0.001" max="0.999">
+              <p class="field-hint" hidden>Proporción de referencia bajo la hipótesis nula, con la que se compara el resultado observado.</p>
             </div>
             <div class="form-group">
-              <label for="nP1">Proporción bajo H₁ (p₁)</label>
+              <label for="nP1">Proporción bajo H₁ (p₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
               <input type="number" id="nP1" value="0.40" step="0.01" min="0.001" max="0.999">
+              <p class="field-hint" hidden>Proporción real que quieres poder detectar. Cuanto mayor sea |p₁ − p₀|, menor será el n necesario.</p>
             </div>
           </div>
           <div class="inline-inputs">
             <div class="form-group">
-              <label for="nAlpha">Nivel de significación (α)</label>
+              <label for="nAlpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
               <input type="number" id="nAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+              <p class="field-hint" hidden>Riesgo de rechazar H₀ siendo cierta. El valor habitual es <strong>0,05</strong>.</p>
             </div>
             <div class="form-group">
-              <label for="nPower">Potencia objetivo (1−β)</label>
+              <label for="nPower">Potencia objetivo (1−β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
               <input type="number" id="nPower" value="0.80" step="0.01" min="0.5" max="0.999">
+              <p class="field-hint" hidden>Probabilidad deseada de detectar el efecto si es real. En estudios confirmatorios se recomienda al menos <strong>0,80</strong>; si el coste de un falso negativo es alto, usa 0,90.</p>
             </div>
           </div>
           <div class="form-group">
-            <label for="nAlternative">Hipótesis alternativa</label>
+            <label for="nAlternative">Hipótesis alternativa <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <select id="nAlternative">
               <option value="two-sided">Bilateral — Hₐ: p ≠ p₀</option>
               <option value="greater">Unilateral superior — Hₐ: p &gt; p₀</option>
               <option value="less">Unilateral inferior — Hₐ: p &lt; p₀</option>
             </select>
+            <p class="field-hint" hidden>Usa bilateral si no tienes una dirección esperada a priori. El unilateral necesita menos muestra pero solo detecta cambios en esa dirección.</p>
           </div>
         </div>
         <button class="calculate-btn" id="calcNBtn">Calcular tamaño muestral</button>
@@ -633,6 +645,7 @@ document.getElementById('calcPwBtn').addEventListener('click', doPower);
 document.getElementById('calcNBtn').addEventListener('click', doN);
 doPower();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

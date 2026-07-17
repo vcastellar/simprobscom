@@ -172,34 +172,39 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="r">Correlación muestral (r)</label>
+                        <label for="r">Correlación muestral (r) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="r" value="0.45" step="0.01" min="-0.9999" max="0.9999">
+                        <p class="field-hint" hidden>Coeficiente de correlación de Pearson calculado sobre tu muestra, entre <strong>-1 y 1</strong>.</p>
                     </div>
                     <div class="form-group">
-                        <label for="n">Tamaño muestral (n)</label>
+                        <label for="n">Tamaño muestral (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="n" value="30" step="1" min="4">
+                        <p class="field-hint" hidden>Número de pares de observaciones (x, y) utilizados para calcular r. Se requiere <strong>n ≥ 4</strong>.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="rho0">Valor nulo (ρ₀)</label>
+                        <label for="rho0">Valor nulo (ρ₀) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="rho0" value="0" step="0.01" min="-0.9999" max="0.9999">
+                        <p class="field-hint" hidden>Valor de correlación poblacional bajo H₀. Lo habitual es <strong>0</strong> (sin correlación), lo que activa el test t; con cualquier otro valor se usa la transformación z de Fisher.</p>
                     </div>
                     <div class="form-group">
-                        <label for="alpha">Nivel de significación (α)</label>
+                        <label for="alpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>Riesgo de rechazar H₀ siendo cierta. El valor habitual es <strong>0,05</strong>, equivalente a un IC del 95 % para ρ.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="tail">Tipo de contraste</label>
+                        <label for="tail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="tail">
                             <option value="two">Bilateral (≠)</option>
                             <option value="right">Cola derecha (&gt;)</option>
                             <option value="left">Cola izquierda (&lt;)</option>
                         </select>
+                        <p class="field-hint" hidden>Bilateral contrasta ρ ≠ ρ₀; las opciones de una cola contrastan si ρ es específicamente mayor o menor que ρ₀.</p>
                     </div>
                 </div>
             </div>
@@ -441,6 +446,7 @@ function calculate() {
 document.getElementById('calcBtn').addEventListener('click', calculate);
 calculate();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

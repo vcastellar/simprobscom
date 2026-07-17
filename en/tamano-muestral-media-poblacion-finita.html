@@ -185,6 +185,14 @@
                         </select>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label style="display:flex;align-items:center;gap:8px;font-weight:600;font-size:0.82rem;margin-bottom:0;">
+                        <input type="checkbox" id="finiteMeanApplyFPC" checked style="width:auto;margin:0;">
+                        Apply finite population correction
+                    </label>
+                    <small>Reduces the sample size when the sample represents an appreciable fraction of N (rule of thumb: n₀/N &gt; 5%). Uncheck to see the standard sample size, as if the population were infinite.</small>
+                </div>
             </div>
 
             <button class="calculate-btn" id="finiteMeanCalculateBtn">Calculate sample size</button>
@@ -211,6 +219,7 @@
                 <li><strong>N:</strong> must be the exact, known count of the target population before sampling.</li>
                 <li><strong>E:</strong> define the error in the same units as σ — at what difference would your decision change?</li>
                 <li><strong>Confidence level:</strong> 95% is the standard; 99% for critical decisions.</li>
+                <li><strong>Finite population correction:</strong> keep it on (default) when N is exact and known; turn it off to see the standard sample size, as if the population were infinite, and compare the savings the correction provides.</li>
             </ul>
             <h3>Worked example</h3>
             <p>The HR department of an industrial plant wants to estimate the average time operators spend on a specific assembly task. The plant has <strong>N = 1,200 workers</strong> on staff, an exactly known number, which makes the finite population correction mandatory.</p>
@@ -286,6 +295,7 @@ function calculateFiniteMeanSampleSize() {
  const e=parseFloat(document.getElementById('finiteMeanE').value);
  const nPop=parseFloat(document.getElementById('finiteMeanN').value);
  const conf=parseFloat(document.getElementById('finiteMeanConfidence').value);
+ const applyFPC=document.getElementById('finiteMeanApplyFPC').checked;
  const resultEl=document.getElementById('finiteMeanResult');
 
  if(!Number.isFinite(sigma)||sigma<=0) return resultEl.innerText='Error: σ must be greater than 0.';
@@ -295,8 +305,15 @@ function calculateFiniteMeanSampleSize() {
 
  const z=jStat.normal.inv(1-((1-conf)/2),0,1);
  const n0=Math.pow((z*sigma)/e,2);
+ const n0Rounded=Math.ceil(n0);
+
+ if(!applyFPC){
+  resultEl.innerText=`Recommended n (without finite population correction): ${n0Rounded}.`;
+  return;
+ }
+
  const n=Math.ceil(n0/(1+((n0-1)/nPop)));
- resultEl.innerText=`Recommended corrected n: ${n} (infinite n≈${Math.ceil(n0)}).`;
+ resultEl.innerText=`Recommended corrected n: ${n} (infinite n≈${n0Rounded}).`;
 }
 
 document.getElementById('finiteMeanCalculateBtn').addEventListener('click', calculateFiniteMeanSampleSize);

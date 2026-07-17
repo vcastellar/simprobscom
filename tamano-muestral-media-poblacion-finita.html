@@ -166,28 +166,41 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="finiteMeanSigma">Desviación estándar (σ)</label>
+                        <label for="finiteMeanSigma">Desviación estándar (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="finiteMeanSigma" value="12" step="0.1" min="0.0001">
+                        <p class="field-hint" hidden>La desviación estándar esperada de la variable, obtenida de datos históricos, un piloto o la literatura. Si no la tienes, usa rango/4 como estimación conservadora.</p>
                     </div>
                     <div class="form-group">
-                        <label for="finiteMeanE">Margen de error (E)</label>
+                        <label for="finiteMeanE">Margen de error (E) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="finiteMeanE" value="2" step="0.1" min="0.0001">
+                        <p class="field-hint" hidden>Error máximo tolerable respecto al valor real, en las mismas unidades que σ. Define a partir de qué diferencia cambiaría tu decisión.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="finiteMeanN">Tamaño poblacional (N)</label>
+                        <label for="finiteMeanN">Tamaño poblacional (N) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="finiteMeanN" value="1200" step="1" min="2">
+                        <p class="field-hint" hidden>El recuento exacto y conocido de la población objetivo antes del muestreo. Es lo que activa la corrección por población finita.</p>
                     </div>
                     <div class="form-group">
-                        <label for="finiteMeanConfidence">Nivel de confianza</label>
+                        <label for="finiteMeanConfidence">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="finiteMeanConfidence">
                             <option value="0.90">90%</option>
                             <option value="0.95" selected>95%</option>
                             <option value="0.99">99%</option>
                         </select>
+                        <p class="field-hint" hidden>El porcentaje de veces que el procedimiento capturaría el valor poblacional verdadero. <strong>95 %</strong> es el estándar; usa 99 % para decisiones críticas.</p>
                     </div>
+                </div>
+
+                <div class="form-group">
+                    <label style="display:flex;align-items:center;gap:8px;font-weight:600;font-size:0.82rem;margin-bottom:0;">
+                        <input type="checkbox" id="finiteMeanApplyFPC" checked style="width:auto;margin:0;">
+                        Aplicar corrección por población finita
+                        <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button>
+                    </label>
+                    <p class="field-hint" hidden>Reduce el tamaño muestral cuando la muestra representa una fracción apreciable de N (regla práctica: n₀/N &gt; 5 %). Desactívala para ver el tamaño muestral estándar, como si la población fuera infinita.</p>
                 </div>
             </div>
 
@@ -215,6 +228,7 @@
                 <li><strong>N:</strong> debe ser el recuento exacto y conocido de la población objetivo antes del muestreo.</li>
                 <li><strong>E:</strong> define el error en las mismas unidades que σ — ¿a partir de qué diferencia cambia tu decisión?</li>
                 <li><strong>Nivel de confianza:</strong> 95 % es el estándar; 99 % para decisiones críticas.</li>
+                <li><strong>Corrección por población finita:</strong> actívala (por defecto) cuando N sea exacto y conocido; desactívala para ver el tamaño muestral estándar, como si la población fuera infinita, y comparar el ahorro que aporta la corrección.</li>
             </ul>
             <h3>Ejemplo resuelto</h3>
             <p>El departamento de recursos humanos de una planta industrial quiere estimar el tiempo medio que los operarios dedican a una tarea de ensamblaje concreta. La planta cuenta con <strong>N = 1 200 trabajadores</strong> en plantilla, un número exactamente conocido, lo que hace obligatoria la corrección por población finita.</p>
@@ -290,6 +304,7 @@ function calculateFiniteMeanSampleSize() {
  const e=parseFloat(document.getElementById('finiteMeanE').value);
  const nPop=parseFloat(document.getElementById('finiteMeanN').value);
  const conf=parseFloat(document.getElementById('finiteMeanConfidence').value);
+ const applyFPC=document.getElementById('finiteMeanApplyFPC').checked;
  const resultEl=document.getElementById('finiteMeanResult');
 
  if(!Number.isFinite(sigma)||sigma<=0) return resultEl.innerText='Error: σ debe ser mayor que 0.';
@@ -299,13 +314,21 @@ function calculateFiniteMeanSampleSize() {
 
  const z=jStat.normal.inv(1-((1-conf)/2),0,1);
  const n0=Math.pow((z*sigma)/e,2);
+ const n0Rounded=Math.ceil(n0);
+
+ if(!applyFPC){
+  resultEl.innerText=`n recomendado (sin corrección por población finita): ${n0Rounded}.`;
+  return;
+ }
+
  const n=Math.ceil(n0/(1+((n0-1)/nPop)));
- resultEl.innerText=`n corregido recomendado: ${n} (n infinito≈${Math.ceil(n0)}).`;
+ resultEl.innerText=`n corregido recomendado: ${n} (n infinito≈${n0Rounded}).`;
 }
 
 document.getElementById('finiteMeanCalculateBtn').addEventListener('click', calculateFiniteMeanSampleSize);
 calculateFiniteMeanSampleSize();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

@@ -138,47 +138,54 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="x1">Éxitos grupo 1 (x₁)</label>
+                        <label for="x1">Éxitos grupo 1 (x₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="x1" value="84" step="1" min="0">
+                        <p class="field-hint" hidden>Número de éxitos observados en el grupo 1 (numerador de p̂₁ = x₁/n₁).</p>
                     </div>
                     <div class="form-group">
-                        <label for="n1">Tamaño muestral grupo 1 (n₁)</label>
+                        <label for="n1">Tamaño muestral grupo 1 (n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="n1" value="120" step="1" min="1">
+                        <p class="field-hint" hidden>Número total de observaciones del grupo 1.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="x2">Éxitos grupo 2 (x₂)</label>
+                        <label for="x2">Éxitos grupo 2 (x₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="x2" value="57" step="1" min="0">
+                        <p class="field-hint" hidden>Número de éxitos observados en el grupo 2 (numerador de p̂₂ = x₂/n₂).</p>
                     </div>
                     <div class="form-group">
-                        <label for="n2">Tamaño muestral grupo 2 (n₂)</label>
+                        <label for="n2">Tamaño muestral grupo 2 (n₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="n2" value="110" step="1" min="1">
+                        <p class="field-hint" hidden>Número total de observaciones del grupo 2.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="conf">Nivel de confianza</label>
+                        <label for="conf">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="conf">
                             <option value="0.90">90 %</option>
                             <option value="0.95" selected>95 %</option>
                             <option value="0.99">99 %</option>
                             <option value="custom">Personalizado…</option>
                         </select>
+                        <p class="field-hint" hidden>Probabilidad de que el intervalo resultante contenga la diferencia real p₁ − p₂. 95 % es el estándar habitual.</p>
                     </div>
                     <div class="form-group">
-                        <label for="method">Método</label>
+                        <label for="method">Método <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="method">
                             <option value="both" selected>Ambos (Wald + Newcombe-Wilson)</option>
                             <option value="wald">Solo Wald</option>
                             <option value="newcombe">Solo Newcombe-Wilson</option>
                         </select>
+                        <p class="field-hint" hidden><strong>Wald</strong> es el método clásico, adecuado con suficientes éxitos y fracasos en ambos grupos. <strong>Newcombe-Wilson</strong> es recomendable cuando las muestras son pequeñas o las proporciones están cerca de 0 o 1.</p>
                     </div>
                 </div>
                 <div class="inline-inputs" id="customConfRow" style="display:none">
                     <div class="form-group">
-                        <label for="customConf">Nivel de confianza personalizado (0–1)</label>
+                        <label for="customConf">Nivel de confianza personalizado (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
+                        <p class="field-hint" hidden>Nivel de confianza como valor entre 0 y 1 (ej.: 0,975 para un 97,5 %). Solo se usa cuando eliges "Personalizado…" arriba.</p>
                     </div>
                 </div>
             </div>
@@ -420,6 +427,7 @@ document.getElementById('method').addEventListener('change', calculate);
 document.getElementById('customConf').addEventListener('input', calculate);
 calculate();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

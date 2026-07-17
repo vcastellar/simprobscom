@@ -178,68 +178,78 @@
 
             <div class="form-grid sample-grid">
                 <div class="form-group">
-                    <label for="testType">Tipo de contraste</label>
+                    <label for="testType">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                     <select id="testType">
                         <option value="one">Una varianza frente a un valor de referencia</option>
                         <option value="two">Comparación de dos varianzas</option>
                     </select>
+                    <p class="field-hint" hidden>Elige "una varianza" si quieres comprobar si la varianza poblacional es compatible con un valor teórico o de referencia, o "dos varianzas" si quieres comparar la dispersión entre dos poblaciones o condiciones.</p>
                 </div>
 
                 <div id="oneVarianceInputs">
                     <div class="inline-inputs">
                         <div class="form-group">
-                            <label for="n">Tamaño muestral (n)</label>
+                            <label for="n">Tamaño muestral (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                             <input type="number" id="n" value="25" step="1" min="2">
+                            <p class="field-hint" hidden>Número de observaciones de la muestra usada para calcular s². Determina los grados de libertad del test: gl = n − 1.</p>
                         </div>
                         <div class="form-group">
-                            <label for="sampleVariance">Varianza muestral (s²)</label>
+                            <label for="sampleVariance">Varianza muestral (s²) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                             <input type="number" id="sampleVariance" value="14" step="0.01" min="0.0001">
+                            <p class="field-hint" hidden>Varianza observada en tu muestra, la que quieres comparar con el valor de referencia σ₀².</p>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="sigma0Squared">Varianza hipotética (σ₀²)</label>
+                        <label for="sigma0Squared">Varianza hipotética (σ₀²) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="sigma0Squared" value="10" step="0.01" min="0.0001">
+                        <p class="field-hint" hidden>Valor de referencia o teórico con el que se compara la varianza muestral bajo \(H_0: \sigma^2 = \sigma_0^2\).</p>
                     </div>
                 </div>
 
                 <div id="twoVarianceInputs" style="display: none;">
                     <div class="inline-inputs">
                         <div class="form-group">
-                            <label for="n1">Tamaño muestral grupo 1 (n₁)</label>
+                            <label for="n1">Tamaño muestral grupo 1 (n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                             <input type="number" id="n1" value="20" step="1" min="2">
+                            <p class="field-hint" hidden>Número de observaciones del grupo 1; determina el primer grado de libertad del test F: gl₁ = n₁ − 1.</p>
                         </div>
                         <div class="form-group">
-                            <label for="n2">Tamaño muestral grupo 2 (n₂)</label>
+                            <label for="n2">Tamaño muestral grupo 2 (n₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                             <input type="number" id="n2" value="18" step="1" min="2">
+                            <p class="field-hint" hidden>Número de observaciones del grupo 2; determina el segundo grado de libertad del test F: gl₂ = n₂ − 1.</p>
                         </div>
                     </div>
 
                     <div class="inline-inputs">
                         <div class="form-group">
-                            <label for="sampleVariance1">Varianza muestral grupo 1 (s₁²)</label>
+                            <label for="sampleVariance1">Varianza muestral grupo 1 (s₁²) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                             <input type="number" id="sampleVariance1" value="16" step="0.01" min="0.0001">
+                            <p class="field-hint" hidden>Varianza observada en la muestra del grupo 1.</p>
                         </div>
                         <div class="form-group">
-                            <label for="sampleVariance2">Varianza muestral grupo 2 (s₂²)</label>
+                            <label for="sampleVariance2">Varianza muestral grupo 2 (s₂²) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                             <input type="number" id="sampleVariance2" value="9" step="0.01" min="0.0001">
+                            <p class="field-hint" hidden>Varianza observada en la muestra del grupo 2. El estadístico F se calcula como \(F = s_1^2/s_2^2\).</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="alpha">Nivel de significación (α)</label>
+                        <label for="alpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>Riesgo de rechazar \(H_0\) por error que aceptas. El valor habitual es <strong>0,05</strong>.</p>
                     </div>
 
                     <div class="form-group">
-                        <label for="tail">Tipo de contraste</label>
+                        <label for="tail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <select id="tail">
                             <option value="two">Bilateral (≠)</option>
                             <option value="right">Cola derecha (&gt;)</option>
                             <option value="left">Cola izquierda (&lt;)</option>
                         </select>
+                        <p class="field-hint" hidden>Bilateral si buscas cualquier diferencia; cola derecha si quieres comprobar si la varianza es mayor; cola izquierda si quieres comprobar si es menor.</p>
                     </div>
                 </div>
             </div>
@@ -762,6 +772,7 @@ document.getElementById('calcVarianceBtn').addEventListener('click', calculateVa
 updateVarianceInputVisibility();
 calculateVarianceTest();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

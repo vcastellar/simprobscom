@@ -187,19 +187,22 @@
 
             <div class="form-grid sample-grid">
                 <div class="form-group">
-                    <label for="observed">Frecuencias observadas</label>
+                    <label for="observed">Frecuencias observadas <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                     <input type="text" id="observed" value="25, 30, 20, 15, 10">
+                    <p class="field-hint" hidden>Recuentos observados en cada categoría, separados por comas. El total de todas las frecuencias es el tamaño muestral n.</p>
                 </div>
 
                 <div class="form-group">
-                    <label for="probabilities">Probabilidades teóricas (opcional)</label>
+                    <label for="probabilities">Probabilidades teóricas (opcional) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                     <input type="text" id="probabilities" placeholder="Ej: 0.2, 0.2, 0.2, 0.2, 0.2 (o vacío para uniforme)">
+                    <p class="field-hint" hidden>Probabilidad teórica de cada categoría bajo H₀, en el mismo orden que las frecuencias observadas. Deben sumar 1; si dejas el campo vacío, se asume distribución uniforme (misma probabilidad para todas las categorías).</p>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="alpha">Nivel de significación (α)</label>
+                        <label for="alpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>Riesgo de rechazar H₀ (que la distribución observada coincide con la teórica) siendo cierta. El valor habitual es <strong>0,05</strong>.</p>
                     </div>
                 </div>
             </div>
@@ -572,6 +575,7 @@ document.getElementById('calcChiBtn').addEventListener('click',()=>{
 document.getElementById('calcChiBtn').click();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

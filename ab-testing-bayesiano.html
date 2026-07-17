@@ -147,41 +147,48 @@
       <div class="form-grid sample-grid">
         <div class="inline-inputs">
           <div class="form-group">
-            <label for="bxA">Conversiones grupo A (x<sub>A</sub>)</label>
+            <label for="bxA">Conversiones grupo A (x<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <input type="number" id="bxA" value="120" step="1" min="0">
+            <p class="field-hint" hidden>Número de conversiones (éxitos) observadas en el grupo A durante el experimento.</p>
           </div>
           <div class="form-group">
-            <label for="bnA">Visitantes grupo A (n<sub>A</sub>)</label>
+            <label for="bnA">Visitantes grupo A (n<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <input type="number" id="bnA" value="1000" step="1" min="1">
+            <p class="field-hint" hidden>Número total de visitantes (tamaño muestral) del grupo A.</p>
           </div>
         </div>
         <div class="inline-inputs">
           <div class="form-group">
-            <label for="bxB">Conversiones grupo B (x<sub>B</sub>)</label>
+            <label for="bxB">Conversiones grupo B (x<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <input type="number" id="bxB" value="145" step="1" min="0">
+            <p class="field-hint" hidden>Número de conversiones (éxitos) observadas en el grupo B durante el experimento.</p>
           </div>
           <div class="form-group">
-            <label for="bnB">Visitantes grupo B (n<sub>B</sub>)</label>
+            <label for="bnB">Visitantes grupo B (n<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <input type="number" id="bnB" value="1000" step="1" min="1">
+            <p class="field-hint" hidden>Número total de visitantes (tamaño muestral) del grupo B.</p>
           </div>
         </div>
         <div class="inline-inputs">
           <div class="form-group">
-            <label for="priorAlpha">Prior α₀ (éxitos previos)</label>
+            <label for="priorAlpha">Prior α₀ (éxitos previos) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <input type="number" id="priorAlpha" value="1" step="0.5" min="0.01">
+            <p class="field-hint" hidden>"Éxitos" previos que resumen tu conocimiento antes de ver los datos. Con <strong>α₀ = 1</strong> (junto a β₀ = 1) obtienes la prior uniforme Beta(1,1), que expresa ignorancia total.</p>
           </div>
           <div class="form-group">
-            <label for="priorBeta">Prior β₀ (fracasos previos)</label>
+            <label for="priorBeta">Prior β₀ (fracasos previos) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
             <input type="number" id="priorBeta" value="1" step="0.5" min="0.01">
+            <p class="field-hint" hidden>"Fracasos" previos que resumen tu conocimiento antes de ver los datos. Si no tienes datos históricos, deja <strong>β₀ = 1</strong> junto con α₀ = 1 (prior uniforme).</p>
           </div>
         </div>
         <div class="form-group">
-          <label for="credLevel">Nivel del intervalo de credibilidad</label>
+          <label for="credLevel">Nivel del intervalo de credibilidad <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
           <select id="credLevel">
             <option value="0.90">90%</option>
             <option value="0.95" selected>95%</option>
             <option value="0.99">99%</option>
           </select>
+          <p class="field-hint" hidden>Probabilidad de que la tasa de conversión real esté dentro del intervalo mostrado. Con 95 %, "hay un 95 % de probabilidad de que la tasa real esté entre estos dos valores".</p>
         </div>
       </div>
 
@@ -400,6 +407,7 @@ function calculateBayes() {
 document.getElementById('calcBayesBtn').addEventListener('click', calculateBayes);
 calculateBayes();
 </script>
+<script src="field-hints.js?v=20260709-1" defer></script>
 <script src="search.js?v=20260709-1" defer></script>
 <script src="wizard.js?v=20260709-1" defer></script>
 <script src="theme.js?v=20260709-1" defer></script>

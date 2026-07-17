@@ -301,6 +301,7 @@
 
     <!-- MODE 1: Trayectoria -->
     <div id="panel-trayectoria" class="mode-section active" role="tabpanel" aria-labelledby="tab-trayectoria">
+      <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> dibuja cómo crece el número de eventos N(t) a medida que pasa el tiempo, para una o varias simulaciones a la vez. Sirve para ver visualmente cómo se acumulan los eventos y comparar la variabilidad entre trayectorias distintas.</p>
       <div class="sim-layout">
         <!-- Panel de control -->
         <aside class="card sim-panel sample-size-panel" aria-label="Parámetros de simulación">
@@ -309,21 +310,24 @@
 
           <div class="form-grid">
             <div class="form-group">
-              <label for="lambda-t">λ (tasa de eventos por unidad de tiempo)</label>
+              <label for="lambda-t">λ (tasa de eventos por unidad de tiempo) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
               <input type="number" id="lambda-t" value="3" min="0.1" max="50" step="0.1" aria-label="Tasa lambda">
+              <p class="field-hint" hidden>Número medio de eventos que ocurren por unidad de tiempo. Ej.: λ = 3 significa 3 eventos de media por cada unidad de tiempo (hora, día...).</p>
             </div>
             <div class="form-group">
-              <label for="horizon-t">T (horizonte temporal)</label>
+              <label for="horizon-t">T (horizonte temporal) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
               <input type="number" id="horizon-t" value="5" min="0.5" max="100" step="0.5" aria-label="Horizonte temporal T">
+              <p class="field-hint" hidden>Duración de la ventana de tiempo que quieres simular, en las mismas unidades que λ.</p>
             </div>
             <div class="form-group ctrl-trayectoria" style="display:block;">
-              <label for="num-traj">Número de trayectorias a mostrar</label>
+              <label for="num-traj">Número de trayectorias a mostrar <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
               <select id="num-traj" aria-label="Número de trayectorias">
                 <option value="1">1</option>
                 <option value="3">3</option>
                 <option value="5" selected>5</option>
                 <option value="10">10</option>
               </select>
+              <p class="field-hint" hidden>Cuántas simulaciones independientes se dibujan a la vez, para comparar su variabilidad en el mismo gráfico.</p>
             </div>
           </div>
 
@@ -354,6 +358,7 @@
 
     <!-- MODE 2: Distribución N(T) -->
     <div id="panel-distribucion" class="mode-section" role="tabpanel" aria-labelledby="tab-distribucion">
+      <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> repite la simulación miles de veces y compara, en un histograma, cuántos eventos se observan en el instante T frente a lo que predice la distribución de Poisson teórica. Sirve para comprobar visualmente que N(T) sigue una Poisson(λT).</p>
       <div class="sim-layout">
         <aside class="card sim-panel sample-size-panel" aria-label="Parámetros de simulación">
           <h2 style="margin:0 0 4px; font-size:1.1rem;">Panel de control</h2>
@@ -361,15 +366,17 @@
 
           <div class="form-grid">
             <div class="form-group">
-              <label for="lambda-d">λ (tasa de eventos por unidad de tiempo)</label>
+              <label for="lambda-d">λ (tasa de eventos por unidad de tiempo) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
               <input type="number" id="lambda-d" value="3" min="0.1" max="50" step="0.1" aria-label="Tasa lambda">
+              <p class="field-hint" hidden>Número medio de eventos que ocurren por unidad de tiempo. Ej.: λ = 3 significa 3 eventos de media por cada unidad de tiempo.</p>
             </div>
             <div class="form-group">
-              <label for="horizon-d">T (horizonte temporal)</label>
+              <label for="horizon-d">T (horizonte temporal) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
               <input type="number" id="horizon-d" value="5" min="0.5" max="100" step="0.5" aria-label="Horizonte temporal T">
+              <p class="field-hint" hidden>Duración de la ventana de tiempo en la que cuentas eventos. El número esperado de eventos es λT.</p>
             </div>
             <div class="form-group ctrl-distribucion" style="display:block;">
-              <label for="num-sims-d">Número de simulaciones</label>
+              <label for="num-sims-d">Número de simulaciones <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
               <select id="num-sims-d" aria-label="Número de simulaciones">
                 <option value="100">100</option>
                 <option value="500">500</option>
@@ -377,6 +384,7 @@
                 <option value="5000">5000</option>
                 <option value="10000">10000</option>
               </select>
+              <p class="field-hint" hidden>Cuántas veces se repite la simulación para construir el histograma. Más simulaciones dan un ajuste más fino a la curva teórica.</p>
             </div>
           </div>
 
@@ -405,6 +413,7 @@
 
     <!-- MODE 3: Tiempos entre llegadas -->
     <div id="panel-tiempos" class="mode-section" role="tabpanel" aria-labelledby="tab-tiempos">
+      <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> mide el tiempo que transcurre entre eventos consecutivos en miles de simulaciones y compara esa distribución empírica con la exponencial teórica. Sirve para ver la propiedad de "falta de memoria" del proceso de Poisson.</p>
       <div class="sim-layout">
         <aside class="card sim-panel sample-size-panel" aria-label="Parámetros de simulación">
           <h2 style="margin:0 0 4px; font-size:1.1rem;">Panel de control</h2>
@@ -412,15 +421,17 @@
 
           <div class="form-grid">
             <div class="form-group">
-              <label for="lambda-e">λ (tasa de eventos por unidad de tiempo)</label>
+              <label for="lambda-e">λ (tasa de eventos por unidad de tiempo) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
               <input type="number" id="lambda-e" value="3" min="0.1" max="50" step="0.1" aria-label="Tasa lambda">
+              <p class="field-hint" hidden>Número medio de eventos por unidad de tiempo. Cuanto mayor sea λ, más cortos serán los tiempos entre eventos (media 1/λ).</p>
             </div>
             <div class="form-group">
-              <label for="horizon-e">T (horizonte temporal)</label>
+              <label for="horizon-e">T (horizonte temporal) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
               <input type="number" id="horizon-e" value="5" min="0.5" max="100" step="0.5" aria-label="Horizonte temporal T">
+              <p class="field-hint" hidden>Duración de cada trayectoria simulada. Trayectorias más largas producen más tiempos entre llegadas para el histograma.</p>
             </div>
             <div class="form-group ctrl-tiempos" style="display:block;">
-              <label for="num-sims-e">Número de simulaciones</label>
+              <label for="num-sims-e">Número de simulaciones <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
               <select id="num-sims-e" aria-label="Número de simulaciones">
                 <option value="100">100</option>
                 <option value="500">500</option>
@@ -428,6 +439,7 @@
                 <option value="5000">5000</option>
                 <option value="10000">10000</option>
               </select>
+              <p class="field-hint" hidden>Cuántas trayectorias se simulan para recopilar tiempos entre eventos. Más simulaciones dan un histograma más suave.</p>
             </div>
           </div>
 
@@ -1096,6 +1108,7 @@ function simulateTiempos() {
   document.getElementById('results-e').style.display = 'block';
 }
 </script>
+<script src="../field-hints.js?v=20260709-1"></script>
 <script src="../search.js?v=20260709-1"></script>
 <script src="../wizard.js?v=20260709-1"></script>
 <script src="../theme.js?v=20260709-1"></script>
