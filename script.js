@@ -518,14 +518,14 @@ function loadParameters() {
     if (dist === "normal") {
         container.innerHTML = `
             <div class="form-group">
-                <label>Media (μ)</label>
+                <label>Media (μ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param1" value="0">
-                <p class="field-hint">Centro de la distribución: el valor alrededor del cual se acumulan los datos. Puede ser cualquier número.</p>
+                <p class="field-hint" hidden>Centro de la distribución: el valor alrededor del cual se acumulan los datos. Puede ser cualquier número.</p>
             </div>
             <div class="form-group">
-                <label>Desviación estándar (σ)</label>
+                <label>Desviación estándar (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param2" value="1" min="0.0001">
-                <p class="field-hint">Dispersión de los datos alrededor de la media. Cuanto mayor, más "aplanada" y ancha es la campana. Debe ser mayor que 0.</p>
+                <p class="field-hint" hidden>Dispersión de los datos alrededor de la media. Cuanto mayor, más "aplanada" y ancha es la campana. Debe ser mayor que 0.</p>
             </div>
         `;
     }
@@ -533,14 +533,14 @@ function loadParameters() {
     if (dist === "binomial") {
         container.innerHTML = `
             <div class="form-group">
-                <label>n</label>
+                <label>n <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param1" value="10" min="1">
-                <p class="field-hint">Número de ensayos independientes que realizas (ej.: número de lanzamientos de moneda).</p>
+                <p class="field-hint" hidden>Número de ensayos independientes que realizas (ej.: número de lanzamientos de moneda).</p>
             </div>
             <div class="form-group">
-                <label>p (entre 0 y 1)</label>
+                <label>p (entre 0 y 1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param2" value="0.5" step="0.01" min="0" max="1">
-                <p class="field-hint">Probabilidad de éxito en cada ensayo individual.</p>
+                <p class="field-hint" hidden>Probabilidad de éxito en cada ensayo individual.</p>
             </div>
         `;
     }
@@ -548,9 +548,9 @@ function loadParameters() {
     if (dist === "poisson") {
         container.innerHTML = `
             <div class="form-group">
-                <label>λ</label>
+                <label>λ <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param1" value="4" min="0.0001">
-                <p class="field-hint">Número medio de eventos que esperas en el intervalo (también es la media y la varianza de la distribución).</p>
+                <p class="field-hint" hidden>Número medio de eventos que esperas en el intervalo (también es la media y la varianza de la distribución).</p>
             </div>
         `;
     }
@@ -558,9 +558,9 @@ function loadParameters() {
     if (dist === "studentt") {
         container.innerHTML = `
             <div class="form-group">
-                <label>Grados de libertad (ν)</label>
+                <label>Grados de libertad (ν) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param1" value="10" min="1" step="1">
-                <p class="field-hint">Normalmente el tamaño de muestra menos 1. Cuanto menor sea ν, más pesadas son las colas; con ν grande, la t se aproxima a la normal.</p>
+                <p class="field-hint" hidden>Normalmente el tamaño de muestra menos 1. Cuanto menor sea ν, más pesadas son las colas; con ν grande, la t se aproxima a la normal.</p>
             </div>
         `;
     }
@@ -568,9 +568,9 @@ function loadParameters() {
     if (dist === "chisquare") {
         container.innerHTML = `
             <div class="form-group">
-                <label>Grados de libertad (k)</label>
+                <label>Grados de libertad (k) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param1" value="8" min="1" step="1">
-                <p class="field-hint">Determina la forma de la distribución; suele coincidir con el número de categorías o parámetros libres del contraste.</p>
+                <p class="field-hint" hidden>Determina la forma de la distribución; suele coincidir con el número de categorías o parámetros libres del contraste.</p>
             </div>
         `;
     }
@@ -578,14 +578,14 @@ function loadParameters() {
     if (dist === "centralf") {
         container.innerHTML = `
             <div class="form-group">
-                <label>Grados de libertad (d1)</label>
+                <label>Grados de libertad (d1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param1" value="5" min="1" step="1">
-                <p class="field-hint">Grados de libertad del numerador (asociados a la varianza del grupo que se compara).</p>
+                <p class="field-hint" hidden>Grados de libertad del numerador (asociados a la varianza del grupo que se compara).</p>
             </div>
             <div class="form-group">
-                <label>Grados de libertad (d2)</label>
+                <label>Grados de libertad (d2) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param2" value="10" min="1" step="1">
-                <p class="field-hint">Grados de libertad del denominador (asociados a la varianza de referencia).</p>
+                <p class="field-hint" hidden>Grados de libertad del denominador (asociados a la varianza de referencia).</p>
             </div>
         `;
     }
@@ -593,9 +593,9 @@ function loadParameters() {
     if (dist === "exponential") {
         container.innerHTML = `
             <div class="form-group">
-                <label>Tasa (λ)</label>
+                <label>Tasa (λ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param1" value="1" min="0.0001" step="0.1">
-                <p class="field-hint">Número medio de eventos por unidad de tiempo. El tiempo medio de espera hasta el siguiente evento es 1/λ.</p>
+                <p class="field-hint" hidden>Número medio de eventos por unidad de tiempo. El tiempo medio de espera hasta el siguiente evento es 1/λ.</p>
             </div>
         `;
     }
@@ -603,14 +603,14 @@ function loadParameters() {
     if (dist === "negbin") {
         container.innerHTML = `
             <div class="form-group">
-                <label>r (éxitos objetivo)</label>
+                <label>r (éxitos objetivo) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param1" value="5" min="1" step="1">
-                <p class="field-hint">Número de éxitos que quieres alcanzar antes de detenerte.</p>
+                <p class="field-hint" hidden>Número de éxitos que quieres alcanzar antes de detenerte.</p>
             </div>
             <div class="form-group">
-                <label>p (entre 0 y 1)</label>
+                <label>p (entre 0 y 1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param2" value="0.4" step="0.01" min="0.0001" max="0.9999">
-                <p class="field-hint">Probabilidad de éxito en cada ensayo individual.</p>
+                <p class="field-hint" hidden>Probabilidad de éxito en cada ensayo individual.</p>
             </div>
         `;
     }
@@ -618,9 +618,9 @@ function loadParameters() {
     if (dist === "geometric") {
         container.innerHTML = `
             <div class="form-group">
-                <label>p (entre 0 y 1)</label>
+                <label>p (entre 0 y 1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param1" value="0.3" step="0.01" min="0.0001" max="0.9999">
-                <p class="field-hint">Probabilidad de éxito en cada ensayo. Con p pequeña, se necesitan de media más intentos hasta el primer éxito.</p>
+                <p class="field-hint" hidden>Probabilidad de éxito en cada ensayo. Con p pequeña, se necesitan de media más intentos hasta el primer éxito.</p>
             </div>
         `;
     }
@@ -628,14 +628,14 @@ function loadParameters() {
     if (dist === "uniform") {
         container.innerHTML = `
             <div class="form-group">
-                <label>a (mínimo)</label>
+                <label>a (mínimo) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param1" value="0">
-                <p class="field-hint">Límite inferior del intervalo: el valor más pequeño que puede tomar la variable.</p>
+                <p class="field-hint" hidden>Límite inferior del intervalo: el valor más pequeño que puede tomar la variable.</p>
             </div>
             <div class="form-group">
-                <label>b (máximo)</label>
+                <label>b (máximo) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param2" value="1">
-                <p class="field-hint">Límite superior del intervalo: el valor más grande que puede tomar la variable. Debe ser mayor que a.</p>
+                <p class="field-hint" hidden>Límite superior del intervalo: el valor más grande que puede tomar la variable. Debe ser mayor que a.</p>
             </div>
         `;
     }
@@ -643,14 +643,14 @@ function loadParameters() {
     if (dist === "gamma") {
         container.innerHTML = `
             <div class="form-group">
-                <label>Forma (k)</label>
+                <label>Forma (k) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param1" value="2" min="0.0001" step="0.1">
-                <p class="field-hint">Controla la forma de la curva: con k = 1 es una exponencial; valores mayores la hacen más simétrica y campaniforme.</p>
+                <p class="field-hint" hidden>Controla la forma de la curva: con k = 1 es una exponencial; valores mayores la hacen más simétrica y campaniforme.</p>
             </div>
             <div class="form-group">
-                <label>Escala (θ)</label>
+                <label>Escala (θ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param2" value="2" min="0.0001" step="0.1">
-                <p class="field-hint">Controla la dispersión: a mayor escala, valores más grandes y más repartidos.</p>
+                <p class="field-hint" hidden>Controla la dispersión: a mayor escala, valores más grandes y más repartidos.</p>
             </div>
         `;
     }
@@ -658,14 +658,14 @@ function loadParameters() {
     if (dist === "beta") {
         container.innerHTML = `
             <div class="form-group">
-                <label>α (alfa)</label>
+                <label>α (alfa) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param1" value="2" min="0.0001" step="0.1">
-                <p class="field-hint">Cuanto mayor sea α respecto a β, más se concentra la masa de probabilidad cerca de 1.</p>
+                <p class="field-hint" hidden>Cuanto mayor sea α respecto a β, más se concentra la masa de probabilidad cerca de 1.</p>
             </div>
             <div class="form-group">
-                <label>β (beta)</label>
+                <label>β (beta) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param2" value="5" min="0.0001" step="0.1">
-                <p class="field-hint">Cuanto mayor sea β respecto a α, más se concentra la masa de probabilidad cerca de 0.</p>
+                <p class="field-hint" hidden>Cuanto mayor sea β respecto a α, más se concentra la masa de probabilidad cerca de 0.</p>
             </div>
         `;
     }
@@ -673,14 +673,14 @@ function loadParameters() {
     if (dist === "lognormal") {
         container.innerHTML = `
             <div class="form-group">
-                <label>μ (media log)</label>
+                <label>μ (media log) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param1" value="0" step="0.1">
-                <p class="field-hint">Media de log(X), no la media de X. Si tus datos originales tienen media m, esto no es m directamente.</p>
+                <p class="field-hint" hidden>Media de log(X), no la media de X. Si tus datos originales tienen media m, esto no es m directamente.</p>
             </div>
             <div class="form-group">
-                <label>σ (desv. log)</label>
+                <label>σ (desv. log) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param2" value="0.5" min="0.0001" step="0.1">
-                <p class="field-hint">Desviación típica de log(X). Cuanto mayor, más asimétrica y con cola más larga es la distribución de X.</p>
+                <p class="field-hint" hidden>Desviación típica de log(X). Cuanto mayor, más asimétrica y con cola más larga es la distribución de X.</p>
             </div>
         `;
     }
@@ -688,14 +688,14 @@ function loadParameters() {
     if (dist === "weibull") {
         container.innerHTML = `
             <div class="form-group">
-                <label>Forma (k)</label>
+                <label>Forma (k) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param1" value="1.5" min="0.0001" step="0.1">
-                <p class="field-hint">k &lt; 1: la tasa de fallo decrece con el tiempo; k = 1: constante (equivale a la exponencial); k &gt; 1: crece con el tiempo.</p>
+                <p class="field-hint" hidden>k &lt; 1: la tasa de fallo decrece con el tiempo; k = 1: constante (equivale a la exponencial); k &gt; 1: crece con el tiempo.</p>
             </div>
             <div class="form-group">
-                <label>Escala (λ)</label>
+                <label>Escala (λ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param2" value="1" min="0.0001" step="0.1">
-                <p class="field-hint">Define la escala temporal típica: valores mayores desplazan la distribución hacia tiempos más largos.</p>
+                <p class="field-hint" hidden>Define la escala temporal típica: valores mayores desplazan la distribución hacia tiempos más largos.</p>
             </div>
         `;
     }
@@ -703,19 +703,19 @@ function loadParameters() {
     if (dist === "hypergeometric") {
         container.innerHTML = `
             <div class="form-group">
-                <label>N (población)</label>
+                <label>N (población) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param1" value="50" min="1" step="1">
-                <p class="field-hint">Tamaño total de la población de la que extraes la muestra.</p>
+                <p class="field-hint" hidden>Tamaño total de la población de la que extraes la muestra.</p>
             </div>
             <div class="form-group">
-                <label>K (éxitos en población)</label>
+                <label>K (éxitos en población) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param2" value="15" min="0" step="1">
-                <p class="field-hint">Número de elementos "de éxito" dentro de toda la población N (ej.: bolas rojas en una urna).</p>
+                <p class="field-hint" hidden>Número de elementos "de éxito" dentro de toda la población N (ej.: bolas rojas en una urna).</p>
             </div>
             <div class="form-group">
-                <label>n (tamaño de muestra)</label>
+                <label>n (tamaño de muestra) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param3" value="10" min="0" step="1">
-                <p class="field-hint">Cuántos elementos extraes de la población, sin reemplazo.</p>
+                <p class="field-hint" hidden>Cuántos elementos extraes de la población, sin reemplazo.</p>
             </div>
         `;
     }
@@ -723,9 +723,9 @@ function loadParameters() {
     if (dist === "bernoulli") {
         container.innerHTML = `
             <div class="form-group">
-                <label>p (éxito = 1)</label>
+                <label>p (éxito = 1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="param1" value="0.5" step="0.01" min="0.0001" max="0.9999">
-                <p class="field-hint">Probabilidad de que el resultado del único ensayo sea "éxito" (X = 1).</p>
+                <p class="field-hint" hidden>Probabilidad de que el resultado del único ensayo sea "éxito" (X = 1).</p>
             </div>
         `;
     }
