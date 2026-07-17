@@ -149,20 +149,24 @@
           <div class="form-group">
             <label for="xA">Conversiones grupo A (x<sub>A</sub>)</label>
             <input type="number" id="xA" value="120" step="1" min="0">
+            <p class="field-hint">Número de conversiones (éxitos) observadas en el grupo A, la variante de control.</p>
           </div>
           <div class="form-group">
             <label for="nA">Visitantes grupo A (n<sub>A</sub>)</label>
             <input type="number" id="nA" value="1000" step="1" min="1">
+            <p class="field-hint">Número total de visitantes o usuarios que vieron la variante A.</p>
           </div>
         </div>
         <div class="inline-inputs">
           <div class="form-group">
             <label for="xB">Conversiones grupo B (x<sub>B</sub>)</label>
             <input type="number" id="xB" value="145" step="1" min="0">
+            <p class="field-hint">Número de conversiones (éxitos) observadas en el grupo B, la variante que quieres probar.</p>
           </div>
           <div class="form-group">
             <label for="nB">Visitantes grupo B (n<sub>B</sub>)</label>
             <input type="number" id="nB" value="1000" step="1" min="1">
+            <p class="field-hint">Número total de visitantes o usuarios que vieron la variante B.</p>
           </div>
         </div>
         <div class="inline-inputs">
@@ -173,19 +177,24 @@
               <option value="right">Cola derecha — B &gt; A</option>
               <option value="left">Cola izquierda — B &lt; A</option>
             </select>
+            <p class="field-hint">Usa <strong>bilateral</strong> si solo quieres saber si hay diferencia, en cualquier dirección. Usa <strong>unilateral</strong> únicamente si fijaste de antemano que B debía ser mejor (o peor) que A.</p>
           </div>
           <div class="form-group">
             <label for="alpha">Nivel de significación (α)</label>
             <input type="number" id="alpha" value="0.05" step="0.001" min="0.001" max="0.2">
+            <p class="field-hint">Riesgo de falso positivo que aceptas. 0,05 es el estándar habitual (5 %).</p>
           </div>
         </div>
         <div class="form-group">
-          <label style="display:flex;align-items:center;gap:8px;font-weight:600;font-size:0.82rem;color:#334155;margin-bottom:0;">
+          <label style="display:flex;align-items:center;gap:8px;font-weight:600;font-size:0.82rem;margin-bottom:0;">
             <input type="checkbox" id="correction" style="width:auto;margin:0;">
             Aplicar corrección por continuidad de Yates
           </label>
+          <p class="field-hint">Ajusta el test para que sea más fiable con muestras pequeñas (n &lt; 50 por grupo) o proporciones cercanas a 0 o 1. Con muestras grandes apenas cambia el resultado; ver "Cuándo usar la corrección de Yates" más abajo.</p>
         </div>
       </div>
+
+      <p class="example-hint"><strong>Ejemplo con los valores por defecto:</strong> A = 1.000 visitantes con 120 conversiones (12,0 %), B = 1.000 visitantes con 145 conversiones (14,5 %), contraste bilateral y α = 0,05. Comprueba si esa diferencia de 2,5 puntos es estadísticamente significativa o podría deberse al azar.</p>
 
       <button class="calculate-btn" id="calcZBtn">Calcular test Z</button>
       <div id="zResult" class="result-box" style="line-height:1.9;">Resultado pendiente…</div>
