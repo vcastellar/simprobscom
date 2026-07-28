@@ -193,7 +193,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra P(X ≤ x) para los grados de libertad seleccionados. La fila indica la parte entera y el primer decimal; la columna añade el segundo decimal.
+                    <strong>Cómo leer la tabla:</strong> cada celda muestra P(X ≤ x) para los grados de libertad seleccionados. La fila indica la parte entera de x; la columna añade el primer decimal (×0.1).
                 </div>
                 <div class="df-control">
                     <label for="df-cdf">Grados de libertad (ν):</label>
@@ -305,7 +305,7 @@
     function buildChiTable(tableId, type, df) {
         const el = document.getElementById(tableId);
         let html = '<thead><tr><th>x</th>';
-        COL_DECS.forEach(c => { html += `<th>.0${c}</th>`; });
+        COL_DECS.forEach(c => { html += `<th>.${c}</th>`; });
         html += '</tr></thead><tbody>';
 
         for (let r = 0; r <= 30; r++) {
