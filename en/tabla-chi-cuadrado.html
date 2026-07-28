@@ -189,7 +189,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows P(X ≤ x) for the selected degrees of freedom. The row gives the integer part and first decimal; the column adds the second decimal.
+                    <strong>How to read the table:</strong> each cell shows P(X ≤ x) for the selected degrees of freedom. The row gives the integer part of x; the column adds the first decimal (×0.1).
                 </div>
                 <div class="df-control">
                     <label for="df-cdf">Degrees of freedom (ν):</label>
@@ -301,7 +301,7 @@
     function buildChiTable(tableId, type, df) {
         const el = document.getElementById(tableId);
         let html = '<thead><tr><th>x</th>';
-        COL_DECS.forEach(c => { html += `<th>.0${c}</th>`; });
+        COL_DECS.forEach(c => { html += `<th>.${c}</th>`; });
         html += '</tr></thead><tbody>';
 
         for (let r = 0; r <= 30; r++) {
