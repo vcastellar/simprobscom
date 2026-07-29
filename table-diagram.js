@@ -4,15 +4,20 @@
  * valores críticos, cuantiles…). Bajo cada tabla se dibuja la densidad (o las
  * barras de la PMF) resaltando lo que representa el valor de la tabla.
  *
- * Mejora progresiva: usa jStat para las densidades; si jStat no está disponible
- * (p. ej. el CDN falla), las figuras se ocultan y las tablas siguen intactas.
+ * Reacciona a dos cosas:
+ *   · clic en una celda  → toma el punto y los parámetros de esa celda.
+ *   · cambio de un selector de parámetro (df, n, α, β…) → actualiza el
+ *     parámetro y RECALCULA con jStat el valor para el nuevo parámetro.
  *
- * Configuración por atributos data-* en cada <figure class="dist-diagram" ...>:
- *   data-dist  : normal | student | chisquare | centralF | beta | gamma | poisson | binomial
- *   data-mode  : left-x | left-val | pdf-point | crit-two | crit-right | bars-pmf | bars-cdf
- *   data-tables: ids de las tablas cuyos clics actualizan la figura
- *   data-*     : "celda virtual" con el estado inicial (mismos atributos que las
- *                celdas reales de esa tabla)
+ * Mejora progresiva: usa jStat; si no está disponible, las figuras se ocultan
+ * y las tablas siguen intactas.
+ *
+ * Config por atributos data-* en cada <figure class="dist-diagram" ...>:
+ *   data-dist   : normal|student|chisquare|centralF|beta|gamma|poisson|binomial
+ *   data-mode   : left-x|left-val|pdf-point|crit-two|crit-right|bars-pmf|bars-cdf
+ *   data-tables : ids de tablas cuyos clics actualizan la figura
+ *   data-params : "selectorId:attr …" selectores de parámetro que la actualizan
+ *   data-*      : "celda virtual" con el estado inicial
  */
 (function () {
     "use strict";
@@ -23,7 +28,6 @@
         return;
     }
 
-    // ── Geometría ─────────────────────────────────────────────────────────
     var W = 480, H = 220, padL = 24, padR = 14, padTop = 16, padBottom = 30;
     var plotW = W - padL - padR, baseline = H - padBottom, topY = padTop;
 
@@ -42,16 +46,17 @@
     function safeInv(fn, fallback) {
         try { var v = fn(); return isFinite(v) && v > 0 ? v : fallback; } catch (e) { return fallback; }
     }
+    function copyDs(ds) { var o = {}, k; for (k in ds) o[k] = ds[k]; return o; }
 
-    // ── Densidades continuas ──────────────────────────────────────────────
-    function densOf(dist, ds) {
+    // ── Estadística continua (pdf / cdf / inv) ────────────────────────────
+    function statOf(dist, ds) {
         switch (dist) {
-            case "normal": return { f: function (v) { return jStat.normal.pdf(v, 0, 1); }, kind: "sym", params: "" };
-            case "student": var df = +ds.df; return { f: function (v) { return jStat.studentt.pdf(v, df); }, kind: "sym", params: "ν = " + df };
-            case "chisquare": var c = +ds.df; return { f: function (v) { return jStat.chisquare.pdf(v, c); }, kind: "pos", params: "ν = " + c, inv: function (p) { return jStat.chisquare.inv(p, c); } };
-            case "centralF": var d1 = +ds.df1, d2 = +ds.df2; return { f: function (v) { return jStat.centralF.pdf(v, d1, d2); }, kind: "pos", params: "gl " + d1 + ", " + d2, inv: function (p) { return jStat.centralF.inv(p, d1, d2); } };
-            case "beta": var ba = +ds.alpha, bb = +ds.beta; return { f: function (v) { return jStat.beta.pdf(v, ba, bb); }, kind: "unit", params: "α = " + ba + ", β = " + bb };
-            case "gamma": var ga = +ds.alpha, gb = +ds.beta; return { f: function (v) { return jStat.gamma.pdf(v, ga, gb); }, kind: "pos", params: "α = " + ga + ", β = " + gb, inv: function (p) { return jStat.gamma.inv(p, ga, gb); } };
+            case "normal": return { pdf: function (v) { return jStat.normal.pdf(v, 0, 1); }, cdf: function (v) { return jStat.normal.cdf(v, 0, 1); }, inv: function (p) { return jStat.normal.inv(p, 0, 1); }, kind: "sym", params: "" };
+            case "student": var df = +ds.df; return { pdf: function (v) { return jStat.studentt.pdf(v, df); }, cdf: function (v) { return jStat.studentt.cdf(v, df); }, inv: function (p) { return jStat.studentt.inv(p, df); }, kind: "sym", params: "ν = " + df };
+            case "chisquare": var c = +ds.df; return { pdf: function (v) { return jStat.chisquare.pdf(v, c); }, cdf: function (v) { return jStat.chisquare.cdf(v, c); }, inv: function (p) { return jStat.chisquare.inv(p, c); }, kind: "pos", params: "ν = " + c };
+            case "centralF": var d1 = +ds.df1, d2 = +ds.df2; return { pdf: function (v) { return jStat.centralF.pdf(v, d1, d2); }, cdf: function (v) { return jStat.centralF.cdf(v, d1, d2); }, inv: function (p) { return jStat.centralF.inv(p, d1, d2); }, kind: "pos", params: "gl " + d1 + ", " + d2 };
+            case "beta": var ba = +ds.alpha, bb = +ds.beta; return { pdf: function (v) { return jStat.beta.pdf(v, ba, bb); }, cdf: function (v) { return jStat.beta.cdf(v, ba, bb); }, inv: function (p) { return jStat.beta.inv(p, ba, bb); }, kind: "unit", params: "α = " + ba + ", β = " + bb };
+            case "gamma": var ga = +ds.alpha, gb = +ds.beta; return { pdf: function (v) { return jStat.gamma.pdf(v, ga, gb); }, cdf: function (v) { return jStat.gamma.cdf(v, ga, gb); }, inv: function (p) { return jStat.gamma.inv(p, ga, gb); }, kind: "pos", params: "α = " + ga + ", β = " + gb };
         }
         return null;
     }
@@ -61,10 +66,10 @@
         return [0, Math.max((x || 1) * 1.6, safeInv(function () { return d.inv(0.997); }, (x || 1) * 2 || 8))];
     }
 
-    // ── PMF discretas ─────────────────────────────────────────────────────
+    // ── PMF discreta (pmf / cdf) ──────────────────────────────────────────
     function pmfOf(dist, ds) {
-        if (dist === "poisson") { var l = +ds.lam; return { f: function (k) { return jStat.poisson.pdf(k, l); }, kmax: Math.max(10, Math.ceil(l + 4 * Math.sqrt(l))), params: "λ = " + l }; }
-        if (dist === "binomial") { var n = +ds.n, p = +ds.p; return { f: function (k) { return jStat.binomial.pdf(k, n, p); }, kmax: n, params: "n = " + n + ", p = " + p }; }
+        if (dist === "poisson") { var l = +ds.lam; return { f: function (k) { return jStat.poisson.pdf(k, l); }, cdf: function (k) { return jStat.poisson.cdf(k, l); }, kmax: Math.max(10, Math.ceil(l + 4 * Math.sqrt(l))), params: "λ = " + l }; }
+        if (dist === "binomial") { var n = +ds.n, p = +ds.p; return { f: function (k) { return jStat.binomial.pdf(k, n, p); }, cdf: function (k) { return jStat.binomial.cdf(k, n, p); }, kmax: n, params: "n = " + n + ", p = " + p }; }
         return null;
     }
 
@@ -76,16 +81,12 @@
         for (v = start; v <= hi + 1e-9; v += step) t.push(Math.round(v * 100) / 100);
         return t;
     }
-    function axisLine() {
-        return '<line class="dg-axis" x1="' + padL + '" y1="' + baseline + '" x2="' + (W - padR) + '" y2="' + baseline + '"/>';
-    }
-    function vline(x, y) {
-        return '<line class="dg-zline" x1="' + x.toFixed(1) + '" y1="' + baseline + '" x2="' + x.toFixed(1) + '" y2="' + y.toFixed(1) + '"/>';
-    }
+    function axisLine() { return '<line class="dg-axis" x1="' + padL + '" y1="' + baseline + '" x2="' + (W - padR) + '" y2="' + baseline + '"/>'; }
+    function vline(x, y) { return '<line class="dg-zline" x1="' + x.toFixed(1) + '" y1="' + baseline + '" x2="' + x.toFixed(1) + '" y2="' + y.toFixed(1) + '"/>'; }
 
     function drawCont(body, caption, d, x, spec, label) {
         var dom = domainOf(d, x), lo = dom[0], hi = dom[1], N = 200, i, v, dv, dmax = 0, pts = [];
-        for (i = 0; i <= N; i++) { v = lo + (hi - lo) * i / N; dv = d.f(v); if (isFinite(dv)) { pts.push([v, dv]); if (dv > dmax) dmax = dv; } }
+        for (i = 0; i <= N; i++) { v = lo + (hi - lo) * i / N; dv = d.pdf(v); if (isFinite(dv)) { pts.push([v, dv]); if (dv > dmax) dmax = dv; } }
         if (dmax <= 0) dmax = 1;
         var px = function (t) { return padL + (t - lo) / (hi - lo) * plotW; };
         var py = function (val) { return baseline - (val / (dmax * 1.12)) * (baseline - topY); };
@@ -100,19 +101,16 @@
         }
 
         var shade = "", marks = "";
-        if (spec.mode === "left") { shade = area(lo, x); marks = vline(px(x), py(d.f(x))); }
-        else if (spec.mode === "right") { shade = area(x, hi); marks = vline(px(x), py(d.f(x))); }
-        else if (spec.mode === "twotail") { shade = area(lo, -x) + area(x, hi); marks = vline(px(-x), py(d.f(-x))) + vline(px(x), py(d.f(x))); }
-        else if (spec.mode === "point") {
-            marks = vline(px(x), py(d.f(x))) +
-                '<circle cx="' + px(x).toFixed(1) + '" cy="' + py(d.f(x)).toFixed(1) + '" r="4" fill="var(--accent)"/>';
-        }
+        if (spec.mode === "left") { shade = area(lo, x); marks = vline(px(x), py(d.pdf(x))); }
+        else if (spec.mode === "right") { shade = area(x, hi); marks = vline(px(x), py(d.pdf(x))); }
+        else if (spec.mode === "twotail") { shade = area(lo, -x) + area(x, hi); marks = vline(px(-x), py(d.pdf(-x))) + vline(px(x), py(d.pdf(x))); }
+        else if (spec.mode === "point") { marks = vline(px(x), py(d.pdf(x))) + '<circle cx="' + px(x).toFixed(1) + '" cy="' + py(d.pdf(x)).toFixed(1) + '" r="4" fill="var(--accent)"/>'; }
 
         var ticks = "", tk = niceTicks(lo, hi);
         for (i = 0; i < tk.length; i++) ticks += '<text class="dg-tick" x="' + px(tk[i]).toFixed(1) + '" y="' + (baseline + 15) + '" text-anchor="middle">' + tk[i] + "</text>";
 
         body.innerHTML = shade + axisLine() + ticks + '<path class="dg-curve" d="' + curve + '"/>' + marks;
-        if (caption) caption.innerHTML = label + '. <span class="dg-hint">Haz clic en una celda para cambiarlo.</span>';
+        if (caption) caption.innerHTML = label + '. <span class="dg-hint">Cambia una celda o un parámetro para verlo.</span>';
     }
 
     function drawDisc(body, caption, pf, k, type, label) {
@@ -130,10 +128,26 @@
             if (i % labelEvery === 0) bars += '<text class="dg-tick" x="' + (bx + bw / 2).toFixed(1) + '" y="' + (baseline + 15) + '" text-anchor="middle">' + i + "</text>";
         }
         body.innerHTML = axisLine() + bars;
-        if (caption) caption.innerHTML = label + '. <span class="dg-hint">Haz clic en una celda para cambiarlo.</span>';
+        if (caption) caption.innerHTML = label + '. <span class="dg-hint">Cambia una celda o un parámetro para verlo.</span>';
     }
 
-    // ── Motor por figura ──────────────────────────────────────────────────
+    // ── Recalcula el valor dependiente cuando cambia un parámetro ─────────
+    function recompute(fig, s) {
+        var dist = fig.dataset.dist, mode = fig.dataset.mode;
+        if (dist === "poisson" || dist === "binomial") {
+            var pf = pmfOf(dist, s), k = +s.k;
+            if (k > pf.kmax) { k = pf.kmax; s.k = k; }
+            s.val = (mode === "bars-cdf" ? pf.cdf(k) : pf.f(k)).toFixed(4);
+            return;
+        }
+        var st = statOf(dist, s);
+        if (mode === "left-x") { s.val = st.cdf(num(s.t, s.x, s.f, s.z)).toFixed(4); }
+        else if (mode === "pdf-point") { s.val = st.pdf(num(s.t, s.x, s.z)).toFixed(4); }
+        else if (mode === "left-val") { s.val = fmt(st.inv(+s.p)); }
+        // crit-two / crit-right: sus tablas no tienen selectores de parámetro
+    }
+
+    // ── Render de una figura a partir de un estado ────────────────────────
     function render(fig, ds) {
         var body = fig.querySelector("[data-dg-body]"), caption = fig.querySelector(".dg-caption");
         if (!body) return;
@@ -149,40 +163,51 @@
             return;
         }
 
-        var d = densOf(dist, ds); if (!d) return;
+        var d = statOf(dist, ds); if (!d) return;
         var par = d.params ? " · " + d.params : "";
         if (mode === "left-x") {
             var x = num(ds.t, ds.x, ds.f, ds.z);
-            drawCont(body, caption, d, x, { mode: "left" },
-                "área a la izquierda = <strong>P(X ≤ " + fmt(x) + ") = " + ds.val + "</strong>" + par);
+            drawCont(body, caption, d, x, { mode: "left" }, "área a la izquierda = <strong>P(X ≤ " + fmt(x) + ") = " + ds.val + "</strong>" + par);
         } else if (mode === "left-val") {
-            var xv = +ds.val, p = ds.p;
-            drawCont(body, caption, d, xv, { mode: "left" },
-                "área a la izquierda = <strong>P(X ≤ " + fmt(xv) + ") = " + fmt(p) + "</strong>" + par);
+            var xv = +ds.val;
+            drawCont(body, caption, d, xv, { mode: "left" }, "área a la izquierda = <strong>P(X ≤ " + fmt(xv) + ") = " + fmt(ds.p) + "</strong>" + par);
         } else if (mode === "pdf-point") {
             var xp = num(ds.t, ds.x, ds.z);
-            drawCont(body, caption, d, xp, { mode: "point" },
-                "altura de la curva = <strong>f(" + fmt(xp) + ") = " + ds.val + "</strong>" + par);
+            drawCont(body, caption, d, xp, { mode: "point" }, "altura de la curva = <strong>f(" + fmt(xp) + ") = " + ds.val + "</strong>" + par);
         } else if (mode === "crit-two") {
-            var xt = Math.abs(+ds.val), a1 = ds.a1, a2 = ds.a2;
-            drawCont(body, caption, d, xt, { mode: "twotail" },
-                "t = " + xt.toFixed(3) + par + ": cada cola tiene α = <strong>" + fmt(a1) +
-                "</strong> (una cola); las dos juntas, α = <strong>" + fmt(a2) + "</strong> (dos colas)");
+            var xt = Math.abs(+ds.val);
+            drawCont(body, caption, d, xt, { mode: "twotail" }, "t = " + xt.toFixed(3) + par + ": cada cola tiene α = <strong>" + fmt(ds.a1) + "</strong> (una cola); las dos juntas, α = <strong>" + fmt(ds.a2) + "</strong> (dos colas)");
         } else if (mode === "crit-right") {
-            var xr = +ds.val, al = ds.alpha;
-            drawCont(body, caption, d, xr, { mode: "right" },
-                "cola derecha (área) = <strong>α = " + fmt(al) + "</strong> · valor crítico = " + xr.toFixed(3) + par);
+            var xr = +ds.val;
+            drawCont(body, caption, d, xr, { mode: "right" }, "cola derecha (área) = <strong>α = " + fmt(ds.alpha) + "</strong> · valor crítico = " + xr.toFixed(3) + par);
         }
     }
 
+    // ── Enganche por figura ───────────────────────────────────────────────
     figs.forEach(function (fig) {
-        render(fig, fig.dataset); // estado inicial desde la "celda virtual"
+        var state = copyDs(fig.dataset);
+        function draw() { render(fig, state); }
+        draw();
+
+        // Clic en celda: toma punto + parámetros de la celda
         (fig.dataset.tables || "").split(/\s+/).forEach(function (id) {
             var t = document.getElementById(id);
             if (!t) return;
             t.addEventListener("click", function (e) {
                 var td = e.target.closest("td[data-val]");
-                if (td) render(fig, td.dataset);
+                if (td) { state = copyDs(td.dataset); draw(); }
+            });
+        });
+
+        // Cambio de selector de parámetro: actualiza el parámetro y recalcula
+        (fig.dataset.params || "").split(/\s+/).forEach(function (pair) {
+            if (!pair) return;
+            var kv = pair.split(":"), sel = document.getElementById(kv[0]), attr = kv[1];
+            if (!sel || !attr) return;
+            sel.addEventListener("change", function () {
+                state[attr] = sel.value;
+                recompute(fig, state);
+                draw();
             });
         });
     });
