@@ -247,6 +247,23 @@
             .dist-table { font-size: 0.72rem; }
             .dist-table thead th, .dist-table tbody td { padding: 4px 7px; }
         }
+
+        /* Diagrama explicativo de la tabla */
+        .dist-diagram {
+            margin: 4px 0 18px;
+            padding: 14px 14px 8px;
+            border: 1px solid var(--surface-border);
+            border-radius: 12px;
+            background: var(--bg-soft);
+        }
+        .dist-diagram svg { display: block; width: 100%; height: auto; max-width: 480px; margin: 0 auto; }
+        .dist-diagram .dg-curve { fill: none; stroke: var(--accent); stroke-width: 2; }
+        .dist-diagram .dg-area { fill: var(--accent); fill-opacity: 0.18; stroke: none; }
+        .dist-diagram .dg-axis { stroke: var(--surface-border); stroke-width: 1; }
+        .dist-diagram .dg-zline { stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 3 3; }
+        .dist-diagram .dg-tick { fill: var(--text-muted); font-size: 11px; }
+        .dist-diagram .dg-caption { margin: 6px 2px 0; font-size: 0.85rem; color: var(--text-muted); text-align: center; }
+        .dist-diagram .dg-caption strong { color: var(--accent); font-weight: 700; }
     </style>
 
     <script type="application/ld+json">
@@ -355,6 +372,14 @@
                     <button class="sign-btn"        onclick="switchSign('cdf','neg',this)">z &lt; 0</button>
                 </div>
                 <div id="lookup-cdf" class="lookup-result"><span>Haz clic en una celda para leer el valor.</span></div>
+                <figure class="dist-diagram" id="normal-diagram">
+                    <svg viewBox="0 0 480 220" role="img" aria-labelledby="dg-title dg-desc" preserveAspectRatio="xMidYMid meet">
+                        <title id="dg-title">Distribución Normal estándar</title>
+                        <desc id="dg-desc">Curva de campana con el área bajo la curva a la izquierda de z sombreada, que representa Φ(z) = P(Z ≤ z).</desc>
+                        <g id="dg-body"></g>
+                    </svg>
+                    <figcaption class="dg-caption" id="dg-caption" aria-live="polite"></figcaption>
+                </figure>
                 <div id="cdf-pos-wrap">
                     <p class="table-section-title">Φ(z) para z de 0.00 a 3.49</p>
                     <div class="dist-table-wrap"><table id="tbl-cdf-pos" class="dist-table">
@@ -635,6 +660,64 @@
     buildNormalTable('tbl-cdf-pos', 'cdf',  1);
     buildNormalTable('tbl-cdf-neg', 'cdf', -1);
     buildNormalTable('tbl-pdf-pos', 'pdf',  1);
+</script>
+<script>
+    // ── Diagrama explicativo: campana con el área Φ(z) sombreada ───────────────
+    (function () {
+        const body = document.getElementById('dg-body');
+        const caption = document.getElementById('dg-caption');
+        if (!body) return;
+
+        const W = 480, H = 220, padL = 14, padR = 14, padTop = 14, padBottom = 30;
+        const plotW = W - padL - padR, baseline = H - padBottom;
+        const zMin = -3.6, zMax = 3.6, dMax = 0.42;
+        const pdf = z => Math.exp(-z * z / 2) / Math.sqrt(2 * Math.PI);
+        const xs = z => padL + (z - zMin) / (zMax - zMin) * plotW;
+        const ys = d => baseline - (d / dMax) * (baseline - padTop);
+
+        // Puntos de la curva (fijos)
+        const pts = [];
+        for (let z = zMin; z <= zMax + 1e-9; z += 0.05) pts.push([xs(z), ys(pdf(z))]);
+        const curvePath = 'M' + pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' L');
+
+        // Ejes / marcas
+        let ticks = `<line class="dg-axis" x1="${padL}" y1="${baseline}" x2="${W - padR}" y2="${baseline}"/>`;
+        for (let z = -3; z <= 3; z++) {
+            ticks += `<text class="dg-tick" x="${xs(z).toFixed(1)}" y="${baseline + 15}" text-anchor="middle">${z}</text>`;
+        }
+
+        function draw(z, phi) {
+            z = Math.max(zMin, Math.min(zMax, z));
+            // Área a la izquierda de z
+            const area = [];
+            for (let t = zMin; t <= z + 1e-9; t += 0.05) area.push([xs(t), ys(pdf(t))]);
+            area.push([xs(z), ys(pdf(z))]);
+            const areaPath = `M${xs(zMin).toFixed(1)},${baseline} L`
+                + area.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' L')
+                + ` L${xs(z).toFixed(1)},${baseline} Z`;
+            const zx = xs(z).toFixed(1);
+            body.innerHTML =
+                `<path class="dg-area" d="${areaPath}"/>` +
+                ticks +
+                `<path class="dg-curve" d="${curvePath}"/>` +
+                `<line class="dg-zline" x1="${zx}" y1="${baseline}" x2="${zx}" y2="${ys(pdf(z)).toFixed(1)}"/>` +
+                `<text class="dg-tick" x="${zx}" y="${padTop + 2}" text-anchor="middle" style="fill:var(--accent);font-weight:700">z=${z.toFixed(2)}</text>`;
+            if (caption) caption.innerHTML =
+                `El valor de la tabla es el <strong>área sombreada</strong>: Φ(z) = P(Z ≤ ${z.toFixed(2)}) = <strong>${phi}</strong>. Haz clic en una celda para cambiar z.`;
+        }
+
+        // Estado por defecto
+        draw(1.00, '0.8413');
+
+        // Al hacer clic en una celda de las tablas Φ(z), actualiza el diagrama
+        ['tbl-cdf-pos', 'tbl-cdf-neg'].forEach(id => {
+            const t = document.getElementById(id);
+            if (t) t.addEventListener('click', e => {
+                const td = e.target.closest('td[data-z]');
+                if (td && td.dataset.type === 'cdf') draw(parseFloat(td.dataset.z), td.dataset.val);
+            });
+        });
+    })();
 </script>
 <script src="table-actions.js?v=20260709-1"></script>
 <script src="search.js?v=20260709-1" defer></script>
