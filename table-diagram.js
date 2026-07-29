@@ -28,6 +28,31 @@
         return;
     }
 
+    // ── Textos (ES / EN) ──────────────────────────────────────────────────
+    var STR = {
+        es: {
+            hint: "Cambia una celda o un parámetro para verlo.",
+            leftArea: function (x, v, par) { return "área a la izquierda = <strong>P(X ≤ " + x + ") = " + v + "</strong>" + par; },
+            height: function (x, v, par) { return "altura de la curva = <strong>f(" + x + ") = " + v + "</strong>" + par; },
+            twoTail: function (x, a1, a2, par) { return "t = " + x + par + ": cada cola tiene α = <strong>" + a1 + "</strong> (una cola); las dos juntas, α = <strong>" + a2 + "</strong> (dos colas)"; },
+            rightTail: function (x, al, par) { return "cola derecha (área) = <strong>α = " + al + "</strong> · valor crítico = " + x + par; },
+            barPmf: function (k, v, par) { return "barra resaltada = <strong>P(X = " + k + ") = " + v + "</strong> · " + par; },
+            barCdf: function (k, v, par) { return "suma de barras hasta k = <strong>P(X ≤ " + k + ") = " + v + "</strong> · " + par; },
+            fdf: function (d1, d2) { return "gl " + d1 + ", " + d2; }
+        },
+        en: {
+            hint: "Click a cell or change a parameter to see it.",
+            leftArea: function (x, v, par) { return "area to the left = <strong>P(X ≤ " + x + ") = " + v + "</strong>" + par; },
+            height: function (x, v, par) { return "curve height = <strong>f(" + x + ") = " + v + "</strong>" + par; },
+            twoTail: function (x, a1, a2, par) { return "t = " + x + par + ": each tail has α = <strong>" + a1 + "</strong> (one tail); both together, α = <strong>" + a2 + "</strong> (two tails)"; },
+            rightTail: function (x, al, par) { return "right tail (area) = <strong>α = " + al + "</strong> · critical value = " + x + par; },
+            barPmf: function (k, v, par) { return "highlighted bar = <strong>P(X = " + k + ") = " + v + "</strong> · " + par; },
+            barCdf: function (k, v, par) { return "sum of bars up to k = <strong>P(X ≤ " + k + ") = " + v + "</strong> · " + par; },
+            fdf: function (d1, d2) { return "df " + d1 + ", " + d2; }
+        }
+    };
+    var L = STR[(document.documentElement.lang || "es").slice(0, 2) === "en" ? "en" : "es"];
+
     var W = 480, H = 220, padL = 24, padR = 14, padTop = 16, padBottom = 30;
     var plotW = W - padL - padR, baseline = H - padBottom, topY = padTop;
 
@@ -54,7 +79,7 @@
             case "normal": return { pdf: function (v) { return jStat.normal.pdf(v, 0, 1); }, cdf: function (v) { return jStat.normal.cdf(v, 0, 1); }, inv: function (p) { return jStat.normal.inv(p, 0, 1); }, kind: "sym", params: "" };
             case "student": var df = +ds.df; return { pdf: function (v) { return jStat.studentt.pdf(v, df); }, cdf: function (v) { return jStat.studentt.cdf(v, df); }, inv: function (p) { return jStat.studentt.inv(p, df); }, kind: "sym", params: "ν = " + df };
             case "chisquare": var c = +ds.df; return { pdf: function (v) { return jStat.chisquare.pdf(v, c); }, cdf: function (v) { return jStat.chisquare.cdf(v, c); }, inv: function (p) { return jStat.chisquare.inv(p, c); }, kind: "pos", params: "ν = " + c };
-            case "centralF": var d1 = +ds.df1, d2 = +ds.df2; return { pdf: function (v) { return jStat.centralF.pdf(v, d1, d2); }, cdf: function (v) { return jStat.centralF.cdf(v, d1, d2); }, inv: function (p) { return jStat.centralF.inv(p, d1, d2); }, kind: "pos", params: "gl " + d1 + ", " + d2 };
+            case "centralF": var d1 = +ds.df1, d2 = +ds.df2; return { pdf: function (v) { return jStat.centralF.pdf(v, d1, d2); }, cdf: function (v) { return jStat.centralF.cdf(v, d1, d2); }, inv: function (p) { return jStat.centralF.inv(p, d1, d2); }, kind: "pos", params: L.fdf(d1, d2) };
             case "beta": var ba = +ds.alpha, bb = +ds.beta; return { pdf: function (v) { return jStat.beta.pdf(v, ba, bb); }, cdf: function (v) { return jStat.beta.cdf(v, ba, bb); }, inv: function (p) { return jStat.beta.inv(p, ba, bb); }, kind: "unit", params: "α = " + ba + ", β = " + bb };
             case "gamma": var ga = +ds.alpha, gb = +ds.beta; return { pdf: function (v) { return jStat.gamma.pdf(v, ga, gb); }, cdf: function (v) { return jStat.gamma.cdf(v, ga, gb); }, inv: function (p) { return jStat.gamma.inv(p, ga, gb); }, kind: "pos", params: "α = " + ga + ", β = " + gb };
         }
@@ -110,7 +135,7 @@
         for (i = 0; i < tk.length; i++) ticks += '<text class="dg-tick" x="' + px(tk[i]).toFixed(1) + '" y="' + (baseline + 15) + '" text-anchor="middle">' + tk[i] + "</text>";
 
         body.innerHTML = shade + axisLine() + ticks + '<path class="dg-curve" d="' + curve + '"/>' + marks;
-        if (caption) caption.innerHTML = label + '. <span class="dg-hint">Cambia una celda o un parámetro para verlo.</span>';
+        if (caption) caption.innerHTML = label + '. <span class="dg-hint">' + L.hint + '</span>';
     }
 
     function drawDisc(body, caption, pf, k, type, label) {
@@ -128,7 +153,7 @@
             if (i % labelEvery === 0) bars += '<text class="dg-tick" x="' + (bx + bw / 2).toFixed(1) + '" y="' + (baseline + 15) + '" text-anchor="middle">' + i + "</text>";
         }
         body.innerHTML = axisLine() + bars;
-        if (caption) caption.innerHTML = label + '. <span class="dg-hint">Cambia una celda o un parámetro para verlo.</span>';
+        if (caption) caption.innerHTML = label + '. <span class="dg-hint">' + L.hint + '</span>';
     }
 
     // ── Recalcula el valor dependiente cuando cambia un parámetro ─────────
@@ -156,9 +181,7 @@
         if (dist === "poisson" || dist === "binomial") {
             var pf = pmfOf(dist, ds); if (!pf) return;
             var k = +ds.k, type = mode === "bars-cdf" ? "cdf" : "pmf", val = ds.val;
-            var lbl = type === "cdf"
-                ? "suma de barras hasta k = <strong>P(X ≤ " + k + ") = " + val + "</strong> · " + pf.params
-                : "barra resaltada = <strong>P(X = " + k + ") = " + val + "</strong> · " + pf.params;
+            var lbl = type === "cdf" ? L.barCdf(k, val, pf.params) : L.barPmf(k, val, pf.params);
             drawDisc(body, caption, pf, k, type, lbl);
             return;
         }
@@ -167,19 +190,19 @@
         var par = d.params ? " · " + d.params : "";
         if (mode === "left-x") {
             var x = num(ds.t, ds.x, ds.f, ds.z);
-            drawCont(body, caption, d, x, { mode: "left" }, "área a la izquierda = <strong>P(X ≤ " + fmt(x) + ") = " + ds.val + "</strong>" + par);
+            drawCont(body, caption, d, x, { mode: "left" }, L.leftArea(fmt(x), ds.val, par));
         } else if (mode === "left-val") {
             var xv = +ds.val;
-            drawCont(body, caption, d, xv, { mode: "left" }, "área a la izquierda = <strong>P(X ≤ " + fmt(xv) + ") = " + fmt(ds.p) + "</strong>" + par);
+            drawCont(body, caption, d, xv, { mode: "left" }, L.leftArea(fmt(xv), fmt(ds.p), par));
         } else if (mode === "pdf-point") {
             var xp = num(ds.t, ds.x, ds.z);
-            drawCont(body, caption, d, xp, { mode: "point" }, "altura de la curva = <strong>f(" + fmt(xp) + ") = " + ds.val + "</strong>" + par);
+            drawCont(body, caption, d, xp, { mode: "point" }, L.height(fmt(xp), ds.val, par));
         } else if (mode === "crit-two") {
             var xt = Math.abs(+ds.val);
-            drawCont(body, caption, d, xt, { mode: "twotail" }, "t = " + xt.toFixed(3) + par + ": cada cola tiene α = <strong>" + fmt(ds.a1) + "</strong> (una cola); las dos juntas, α = <strong>" + fmt(ds.a2) + "</strong> (dos colas)");
+            drawCont(body, caption, d, xt, { mode: "twotail" }, L.twoTail(xt.toFixed(3), fmt(ds.a1), fmt(ds.a2), par));
         } else if (mode === "crit-right") {
             var xr = +ds.val;
-            drawCont(body, caption, d, xr, { mode: "right" }, "cola derecha (área) = <strong>α = " + fmt(ds.alpha) + "</strong> · valor crítico = " + xr.toFixed(3) + par);
+            drawCont(body, caption, d, xr, { mode: "right" }, L.rightTail(xr.toFixed(3), fmt(ds.alpha), par));
         }
     }
 
