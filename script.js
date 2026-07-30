@@ -162,23 +162,25 @@ function initializeDistributionPage() {
     if (shouldLockDistribution) {
         const lockedDistribution = distributionSelect.value;
 
+        // Un desplegable deshabilitado parece un error. Ocultamos el <select>
+        // (lo mantenemos en el DOM para que su valor siga siendo legible por el
+        // resto de la calculadora) y mostramos la distribución como un título
+        // estático en su lugar.
+        distributionSelect.hidden = true;
+        distributionSelect.setAttribute("aria-hidden", "true");
+        distributionSelect.tabIndex = -1;
+
         if (hasOwn(distributionLabels, lockedDistribution)) {
-            distributionSelect.innerHTML = "";
-
-            const fixedOption = document.createElement("option");
-            fixedOption.value = lockedDistribution;
-            fixedOption.textContent = distributionLabels[lockedDistribution];
-            distributionSelect.appendChild(fixedOption);
-            distributionSelect.value = lockedDistribution;
+            const fixedTitle = document.createElement("p");
+            fixedTitle.className = "distribution-fixed";
+            fixedTitle.textContent = distributionLabels[lockedDistribution];
+            distributionSelect.insertAdjacentElement("afterend", fixedTitle);
         }
-
-        distributionSelect.disabled = true;
-        distributionSelect.setAttribute("aria-disabled", "true");
 
         const distInfoEl = document.getElementById("distributionPageInfo");
 
-        if (distInfoEl && hasOwn(distributionLabels, distributionSelect.value)) {
-            distInfoEl.innerText = `Calculadora específica para ${distributionLabels[distributionSelect.value]}.`;
+        if (distInfoEl && hasOwn(distributionLabels, lockedDistribution)) {
+            distInfoEl.innerText = `Calculadora específica para ${distributionLabels[lockedDistribution]}.`;
         }
     }
 
