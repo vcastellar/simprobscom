@@ -150,23 +150,24 @@ function initializeDistributionPage() {
     if (shouldLockDistribution) {
         const lockedDistribution = distributionSelect.value;
 
+        // A disabled dropdown reads as broken. Hide the <select> (keeping it in
+        // the DOM so its value stays readable by the rest of the calculator)
+        // and show the distribution as a static title instead.
+        distributionSelect.hidden = true;
+        distributionSelect.setAttribute("aria-hidden", "true");
+        distributionSelect.tabIndex = -1;
+
         if (hasOwn(distributionLabels, lockedDistribution)) {
-            distributionSelect.innerHTML = "";
-
-            const fixedOption = document.createElement("option");
-            fixedOption.value = lockedDistribution;
-            fixedOption.textContent = distributionLabels[lockedDistribution];
-            distributionSelect.appendChild(fixedOption);
-            distributionSelect.value = lockedDistribution;
+            const fixedTitle = document.createElement("p");
+            fixedTitle.className = "distribution-fixed";
+            fixedTitle.textContent = distributionLabels[lockedDistribution];
+            distributionSelect.insertAdjacentElement("afterend", fixedTitle);
         }
-
-        distributionSelect.disabled = true;
-        distributionSelect.setAttribute("aria-disabled", "true");
 
         const distInfoEl = document.getElementById("distributionPageInfo");
 
-        if (distInfoEl && hasOwn(distributionLabels, distributionSelect.value)) {
-            distInfoEl.innerText = `Specific calculator for ${distributionLabels[distributionSelect.value]}.`;
+        if (distInfoEl && hasOwn(distributionLabels, lockedDistribution)) {
+            distInfoEl.innerText = `Specific calculator for ${distributionLabels[lockedDistribution]}.`;
         }
     }
 
