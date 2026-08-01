@@ -339,10 +339,16 @@
         <div class="form-group">
           <label for="popDist">Population distribution</label>
           <select id="popDist">
-            <option value="normal">Normal (μ=5, σ=2)</option>
-            <option value="exponential">Exponential (λ=0.5)</option>
-            <option value="uniform">Uniform (a=0, b=10)</option>
-            <option value="lognormal">Log-normal (μ<sub>log</sub>=1, σ<sub>log</sub>=0.5)</option>
+            <optgroup label="Continuous">
+              <option value="normal">Normal (μ=5, σ=2)</option>
+              <option value="exponential">Exponential (λ=0.5)</option>
+              <option value="uniform">Uniform (a=0, b=10)</option>
+              <option value="lognormal">Log-normal (μ<sub>log</sub>=1, σ<sub>log</sub>=0.5)</option>
+            </optgroup>
+            <optgroup label="Discrete">
+              <option value="binomial">Binomial (n=10, p=0.5)</option>
+              <option value="poisson">Poisson (λ=5)</option>
+            </optgroup>
           </select>
         </div>
         <div class="form-group">
@@ -361,6 +367,8 @@
             <option value="30" selected>n = 30</option>
             <option value="50">n = 50</option>
             <option value="100">n = 100</option>
+            <option value="500">n = 500</option>
+            <option value="1000">n = 1000</option>
           </select>
         </div>
         <div class="form-group">
@@ -414,7 +422,7 @@
     <!-- Legend -->
     <div class="legend-dots" id="legendArea" style="display:none;">
       <span class="legend-dot"><span class="dot-bar" style="background:rgba(79,70,229,0.5); border:1px solid rgba(79,70,229,0.8);"></span> Relative frequency (sample)</span>
-      <span class="legend-dot"><span style="background:#dc2626;"></span> Theoretical density</span>
+      <span class="legend-dot"><span style="background:#dc2626;"></span> Theoretical density (or PMF, if discrete)</span>
       <span class="legend-dot"><span class="dot-bar" style="background:rgba(22,163,74,0.55); border:1px solid rgba(22,163,74,0.8);"></span> Bootstrap (inside CI)</span>
       <span class="legend-dot"><span class="dot-bar" style="background:rgba(148,163,184,0.55); border:1px solid rgba(148,163,184,0.8);"></span> Bootstrap (outside CI)</span>
       <span class="legend-dot"><span style="background:#0891b2;"></span> CI bounds</span>
@@ -581,6 +589,22 @@
       </details>
 
       <details class="faq-item">
+        <summary>Does the bootstrap work with discrete distributions (binomial, Poisson)?</summary>
+        <p>
+          Yes. The bootstrap is a <strong>non-parametric</strong> method that assumes no particular form
+          for the data-generating distribution, so it works equally well with continuous and discrete
+          data. By resampling with replacement from the original sample —made up, for instance, of integer
+          counts from a binomial or a Poisson— and recomputing the statistic on each replicate, you obtain
+          its approximate sampling distribution without needing analytical formulas. The only practical
+          difference is visual: for discrete data the population is described by a
+          <em>probability mass function</em> (PMF) at the integer values, rather than a continuous density
+          curve. Note that the bootstrap distribution of highly discrete statistics (such as the median of
+          a small count sample) can concentrate on just a few values, which makes the percentile CI
+          "jump".
+        </p>
+      </details>
+
+      <details class="faq-item">
         <summary>What is the BCa method?</summary>
         <p>
           The <strong>BCa</strong> method (<em>Bias-Corrected and Accelerated</em>), also proposed by Efron,
@@ -655,7 +679,9 @@
     normal:      { mean: 5,      median: 5,      sd: 2       },
     exponential: { mean: 2,      median: 1.3863, sd: 2       },
     uniform:     { mean: 5,      median: 5,      sd: 2.8868  },
-    lognormal:   { mean: 3.0802, median: 2.7183, sd: 1.6416  }
+    lognormal:   { mean: 3.0802, median: 2.7183, sd: 1.6416  },
+    binomial:    { mean: 5,      median: 5,      sd: 1.5811  },
+    poisson:     { mean: 5,      median: 5,      sd: 2.2361  }
   };
 
   // Theoretical SE formulas for the mean (others are hard/unknown analytically)
@@ -693,6 +719,42 @@
     return null;
   }
 
+  // ─── Discrete distributions ──────────────────────────────────────────────────
+  const DISCRETE_DISTS = new Set(['binomial', 'poisson']);
+  const isDiscrete = dist => DISCRETE_DISTS.has(dist);
+
+  function sampleBinomial(size, p) {
+    let k = 0;
+    for (let i = 0; i < size; i++) if (Math.random() < p) k++;
+    return k;
+  }
+  function samplePoisson(lambda) {
+    // Knuth's algorithm
+    const L = Math.exp(-lambda);
+    let k = 0, prod = 1;
+    do { k++; prod *= Math.random(); } while (prod > L);
+    return k - 1;
+  }
+  function factorial(k) {
+    let f = 1;
+    for (let i = 2; i <= k; i++) f *= i;
+    return f;
+  }
+  function binomCoef(n, k) {
+    if (k < 0 || k > n) return 0;
+    let c = 1;
+    for (let i = 0; i < k; i++) c = c * (n - i) / (i + 1);
+    return c;
+  }
+  function binomialPmf(k, size, p) {
+    if (k < 0 || k > size || !Number.isInteger(k)) return 0;
+    return binomCoef(size, k) * Math.pow(p, k) * Math.pow(1 - p, size - k);
+  }
+  function poissonPmf(k, lambda) {
+    if (k < 0 || !Number.isInteger(k)) return 0;
+    return Math.exp(-lambda) * Math.pow(lambda, k) / factorial(k);
+  }
+
   // ─── Samplers ─────────────────────────────────────────────────────────────────
   function generateSample(dist, n) {
     const arr = [];
@@ -702,6 +764,8 @@
         case 'exponential': arr.push(jStat.exponential.sample(0.5));      break;
         case 'uniform':     arr.push(jStat.uniform.sample(0, 10));        break;
         case 'lognormal':   arr.push(jStat.lognormal.sample(1, 0.5));     break;
+        case 'binomial':    arr.push(sampleBinomial(10, 0.5));            break;
+        case 'poisson':     arr.push(samplePoisson(5));                   break;
       }
     }
     return arr;
@@ -732,6 +796,8 @@
       case 'exponential': return x >= 0 ? 0.5 * Math.exp(-0.5 * x) : 0;
       case 'uniform':     return (x >= 0 && x <= 10) ? 0.1 : 0;
       case 'lognormal':   return x > 0 ? jStat.lognormal.pdf(x, 1, 0.5) : 0;
+      case 'binomial':    return binomialPmf(Math.round(x), 10, 0.5);
+      case 'poisson':     return poissonPmf(Math.round(x), 5);
       default: return 0;
     }
   }
@@ -754,6 +820,19 @@
       counts[bin]++;
     });
     return { centers, counts, binWidth, min: minV, max: maxV };
+  }
+
+  // ─── Discrete histogram (one bin per integer value, width 1) ──────────────────
+  function makeDiscreteHistogram(values) {
+    const minV = Math.min(...values);
+    const maxV = Math.max(...values);
+    const centers = [];
+    const counts = [];
+    for (let k = minV; k <= maxV; k++) { centers.push(k); counts.push(0); }
+    values.forEach(v => { counts[Math.round(v) - minV]++; });
+    // With binWidth = 1 the "density" equals the relative frequency, so it is
+    // directly comparable to the theoretical PMF.
+    return { centers, counts, binWidth: 1, min: minV, max: maxV };
   }
 
   // ─── Build PDF curve points ───────────────────────────────────────────────────
@@ -812,15 +891,48 @@
   // ─── Render sample chart ──────────────────────────────────────────────────────
   function renderSampleChart(sample, dist) {
     const n = sample.length;
+    const discrete = isDiscrete(dist);
     const numBins = Math.max(5, Math.ceil(Math.log2(n) + 1));
-    const hist = makeHistogram(sample, numBins);
+    const hist = discrete ? makeDiscreteHistogram(sample) : makeHistogram(sample, numBins);
     const total = hist.counts.reduce((a, b) => a + b, 0);
     const densities = hist.counts.map(c => c / (total * hist.binWidth));
     const barData = hist.centers.map((x, i) => ({ x, y: densities[i] }));
 
-    // PDF overlay
-    const pad = (hist.max - hist.min) * 0.15 || 1;
-    const pdfPoints = buildPdfPoints(x => theoreticalPdf(dist, x), hist.min - pad, hist.max + pad);
+    // Theoretical overlay: continuous PDF curve, or discrete PMF as points
+    let overlayDataset;
+    if (discrete) {
+      const pmfPoints = [];
+      for (let k = hist.min; k <= hist.max; k++) {
+        pmfPoints.push({ x: k, y: theoreticalPdf(dist, k) });
+      }
+      overlayDataset = {
+        type: 'line',
+        label: 'Theoretical prob. (PMF)',
+        data: pmfPoints,
+        borderColor: '#dc2626',
+        backgroundColor: '#dc2626',
+        showLine: false,
+        pointRadius: 4,
+        pointHoverRadius: 5,
+        parsing: false,
+        order: 0
+      };
+    } else {
+      const pad = (hist.max - hist.min) * 0.15 || 1;
+      const pdfPoints = buildPdfPoints(x => theoreticalPdf(dist, x), hist.min - pad, hist.max + pad);
+      overlayDataset = {
+        type: 'line',
+        label: 'Theoretical density',
+        data: pdfPoints,
+        borderColor: '#dc2626',
+        borderWidth: 2,
+        pointRadius: 0,
+        tension: 0.3,
+        fill: false,
+        parsing: false,
+        order: 1
+      };
+    }
 
     const ctx = document.getElementById('sampleChart').getContext('2d');
     return new Chart(ctx, {
@@ -834,23 +946,12 @@
             backgroundColor: 'rgba(79,70,229,0.45)',
             borderColor: 'rgba(79,70,229,0.75)',
             borderWidth: 1,
-            barPercentage: 1.0,
+            barPercentage: discrete ? 0.9 : 1.0,
             categoryPercentage: 1.0,
             parsing: false,
             order: 2
           },
-          {
-            type: 'line',
-            label: 'Theoretical density',
-            data: pdfPoints,
-            borderColor: '#dc2626',
-            borderWidth: 2,
-            pointRadius: 0,
-            tension: 0.3,
-            fill: false,
-            parsing: false,
-            order: 1
-          }
+          overlayDataset
         ]
       },
       options: {
@@ -865,7 +966,7 @@
             grid: { color: 'rgba(148,163,184,0.15)' }
           },
           y: {
-            title: { display: true, text: 'Density', font: { size: 11 } },
+            title: { display: true, text: discrete ? 'Probability' : 'Density', font: { size: 11 } },
             ticks: { font: { size: 10 } },
             grid: { color: 'rgba(148,163,184,0.15)' },
             beginAtZero: true
@@ -1000,7 +1101,9 @@
     normal:      'Normal (μ=5, σ=2)',
     exponential: 'Exponential (λ=0.5)',
     uniform:     'Uniform (a=0, b=10)',
-    lognormal:   'Log-normal (μlog=1, σlog=0.5)'
+    lognormal:   'Log-normal (μlog=1, σlog=0.5)',
+    binomial:    'Binomial (n=10, p=0.5)',
+    poisson:     'Poisson (λ=5)'
   };
 
   // ─── Run full simulation (new sample + bootstrap) ─────────────────────────────
