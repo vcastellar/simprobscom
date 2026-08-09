@@ -103,6 +103,14 @@
         "@type": "Answer",
         "text": "Por el teorema central del límite: la suma o media de muchas observaciones independientes tiende a distribuirse de forma aproximadamente normal, sea cual sea la distribución original. Por eso sirve además de aproximación para la binomial o la Poisson con parámetros grandes."
       }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué diferencia hay entre la normal estándar y una normal general?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "La normal estándar N(0, 1) es el caso particular con media 0 y desviación típica 1. Cualquier normal N(μ, σ) puede transformarse en ella mediante la puntuación z, lo que permite usar una única tabla de referencia para todos los casos."
+      }
     }
   ]
 }
@@ -260,6 +268,22 @@
         \[ x = \mu + z_{0{,}95} \cdot \sigma = 170 + 1{,}6449 \times 8 \approx 183{,}16 \text{ cm} \]
         Solo el 5 % de la población supera los <strong>183,16 cm</strong>.</p>
         <p><strong>Interpretación:</strong> La media de 170 cm es el punto de máxima densidad; la regla empírica indica que el 68 % de personas mide entre 162 y 178 cm (\(\mu \pm \sigma\)). El percentil 95 sirve, por ejemplo, para dimensionar puertas o equipamiento ergonómico que cubra al 95 % de la población.</p>
+        <h3>Supuestos del modelo</h3>
+        <ul>
+            <li>La variable es continua y puede tomar, en principio, cualquier valor real, aunque en la práctica esté acotada por límites físicos.</li>
+            <li>Hay una razón estructural para esperar simetría en torno a un valor central: el fenómeno surge como suma o promedio de muchos factores pequeños, independientes y de magnitud comparable (el Teorema Central del Límite respalda entonces la aproximación normal aunque los datos originales no lo sean), o existe un argumento físico/biológico equivalente. No basta con que un histograma "parezca" acampanado.</li>
+            <li>No existe una cota natural cercana a los datos observados (por ejemplo, un mínimo en 0) que trunque la distribución y genere asimetría sistemática.</li>
+            <li>La dispersión de los datos no depende fuertemente de su magnitud: la variabilidad es similar en la parte baja y en la parte alta del rango observado (ausencia de heterocedasticidad marcada).</li>
+            <li>Si estas condiciones no se cumplen —por ejemplo, la variable no puede ser negativa o los datos son muy asimétricos—, valora otras distribuciones como la <a href="lognormal.html">log-normal</a>, la <a href="gamma.html">gamma</a> o la <a href="weibull.html">Weibull</a>.</li>
+        </ul>
+        <h3>Usos frecuentes</h3>
+        <ul>
+            <li>Modelar mediciones físicas: alturas, pesos, tiempos de reacción o errores de instrumentos de medida.</li>
+            <li>Control estadístico de calidad y procesos de fabricación, definiendo límites de especificación y cartas de control.</li>
+            <li>Aproximar la distribución <a href="binomial.html">binomial</a> o de <a href="poisson.html">Poisson</a> cuando el número de ensayos o la media son grandes.</li>
+            <li>Fundamento de los <a href="intervalo-confianza-media.html">intervalos de confianza</a> y <a href="contraste-hipotesis-una-media.html">contrastes de hipótesis</a> para medias muestrales, gracias al Teorema Central del Límite.</li>
+            <li>Modelos de riesgo financiero y rendimientos de activos, aunque con matices: las colas reales del mercado suelen ser más pesadas que las de una normal teórica.</li>
+        </ul>
         </article>
         <section class="card content-card">
             <h3>Cómo interpretar el resultado</h3>
@@ -278,13 +302,20 @@
                 <li><a href="intervalo-confianza-media.html">Intervalo de confianza para una media</a></li>
               </ul>
             </section>
+            <h3>Referencias y lecturas adicionales</h3>
+            <ul>
+                <li>Wikipedia: <a href="https://es.wikipedia.org/wiki/Distribuci%C3%B3n_normal" target="_blank" rel="noopener noreferrer">Distribución normal</a> — definición, propiedades y demostraciones.</li>
+                <li>Wikipedia (en): <a href="https://en.wikipedia.org/wiki/Normal_distribution" target="_blank" rel="noopener">Normal distribution</a> — versión ampliada en inglés, con derivaciones adicionales.</li>
+                <li>Wikipedia (en): <a href="https://en.wikipedia.org/wiki/Central_limit_theorem" target="_blank" rel="noopener">Central limit theorem</a> — por qué la normal aparece de forma tan recurrente.</li>
+                <li>Casella, G. y Berger, R. L. (2002). <em>Statistical Inference</em> (2.ª ed.). Duxbury. — tratamiento formal de la distribución normal y sus propiedades.</li>
+            </ul>
             <h3>Preguntas frecuentes</h3>
             <ul>
                 <li><strong>¿Cómo convierto un valor x en una puntuación z?</strong> Restando la media y dividiendo entre la desviación típica: z = (x − μ)/σ. La puntuación z indica a cuántas desviaciones típicas está x por encima o por debajo de la media, y permite trabajar con la normal estándar N(0, 1).</li>
                 <li><strong>¿Qué dice la regla 68-95-99,7?</strong> En toda distribución normal, aproximadamente el 68 % de los valores cae dentro de ±1σ de la media, el 95 % dentro de ±2σ y el 99,7 % dentro de ±3σ. Es una referencia rápida para juzgar si un valor es habitual o extremo.</li>
                 <li><strong>¿Por qué aparece la normal en tantos problemas?</strong> Por el teorema central del límite: la suma o media de muchas observaciones independientes tiende a distribuirse de forma aproximadamente normal, sea cual sea la distribución original. Por eso sirve además de aproximación para la binomial o la Poisson con parámetros grandes.</li>
+                <li><strong>¿Qué diferencia hay entre la normal estándar y una normal general?</strong> La normal estándar N(0, 1) es el caso particular con media 0 y desviación típica 1. Cualquier normal N(μ, σ) puede transformarse en ella mediante la puntuación z, lo que permite usar una única tabla de referencia para todos los casos.</li>
             </ul>
-            <p class="external-ref">Referencia: <a href="https://es.wikipedia.org/wiki/Distribuci%C3%B3n_normal" target="_blank" rel="noopener noreferrer">Distribución normal</a> — Wikipedia</p>
         </section>
 
     </main>
