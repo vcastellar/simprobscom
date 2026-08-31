@@ -179,31 +179,36 @@
         <div class="form-grid sample-grid">
           <div class="inline-inputs">
             <div class="form-group">
-              <label for="pwP0">Proportion under H₀ (p₀)</label>
+              <label for="pwP0">Proportion under H₀ (p₀) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="pwP0" value="0.30" step="0.01" min="0.001" max="0.999">
+                <p class="field-hint" hidden>Reference proportion under the null hypothesis, which the observed result is compared with.</p>
             </div>
             <div class="form-group">
-              <label for="pwP1">Proportion under H₁ (p₁)</label>
+              <label for="pwP1">Proportion under H₁ (p₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="pwP1" value="0.40" step="0.01" min="0.001" max="0.999">
+                <p class="field-hint" hidden>True proportion you expect or want to be able to detect. The larger |p₁ − p₀| is, the easier the effect is to detect.</p>
             </div>
           </div>
           <div class="inline-inputs">
             <div class="form-group">
-              <label for="pwN">Sample size (n)</label>
+              <label for="pwN">Sample size (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="pwN" value="172" step="1" min="1">
+                <p class="field-hint" hidden>Number of observations planned or already used in the study. The larger n is, the greater the power for the same effect.</p>
             </div>
             <div class="form-group">
-              <label for="pwAlpha">Significance level (α)</label>
+              <label for="pwAlpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="pwAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+                <p class="field-hint" hidden>Risk of rejecting H₀ when it is true. The usual value is <strong>0.05</strong>.</p>
             </div>
           </div>
           <div class="form-group">
-            <label for="pwAlternative">Alternative hypothesis</label>
+            <label for="pwAlternative">Alternative hypothesis <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
             <select id="pwAlternative">
               <option value="two-sided">Two-tailed — Hₐ: p ≠ p₀</option>
               <option value="greater">Upper one-tailed — Hₐ: p &gt; p₀</option>
               <option value="less">Lower one-tailed — Hₐ: p &lt; p₀</option>
             </select>
+              <p class="field-hint" hidden>Use two-tailed if you have no expected direction a priori. The one-tailed test has more power but only detects changes in that direction.</p>
           </div>
         </div>
         <button class="calculate-btn" id="calcPwBtn">Calculate power</button>
@@ -215,31 +220,36 @@
         <div class="form-grid sample-grid">
           <div class="inline-inputs">
             <div class="form-group">
-              <label for="nP0">Proportion under H₀ (p₀)</label>
+              <label for="nP0">Proportion under H₀ (p₀) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="nP0" value="0.30" step="0.01" min="0.001" max="0.999">
+                <p class="field-hint" hidden>Reference proportion under the null hypothesis, which the observed result is compared with.</p>
             </div>
             <div class="form-group">
-              <label for="nP1">Proportion under H₁ (p₁)</label>
+              <label for="nP1">Proportion under H₁ (p₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="nP1" value="0.40" step="0.01" min="0.001" max="0.999">
+                <p class="field-hint" hidden>True proportion you want to be able to detect. The larger |p₁ − p₀| is, the smaller the required n.</p>
             </div>
           </div>
           <div class="inline-inputs">
             <div class="form-group">
-              <label for="nAlpha">Significance level (α)</label>
+              <label for="nAlpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="nAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+                <p class="field-hint" hidden>Risk of rejecting H₀ when it is true. The usual value is <strong>0.05</strong>.</p>
             </div>
             <div class="form-group">
-              <label for="nPower">Target power (1−β)</label>
+              <label for="nPower">Target power (1−β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="nPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                <p class="field-hint" hidden>Desired probability of detecting the effect if it is real. In confirmatory studies at least <strong>0.80</strong> is recommended; if the cost of a false negative is high, use 0.90.</p>
             </div>
           </div>
           <div class="form-group">
-            <label for="nAlternative">Alternative hypothesis</label>
+            <label for="nAlternative">Alternative hypothesis <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
             <select id="nAlternative">
               <option value="two-sided">Two-tailed — Hₐ: p ≠ p₀</option>
               <option value="greater">Upper one-tailed — Hₐ: p &gt; p₀</option>
               <option value="less">Lower one-tailed — Hₐ: p &lt; p₀</option>
             </select>
+              <p class="field-hint" hidden>Use two-tailed if you have no expected direction a priori. The one-tailed test needs a smaller sample but only detects changes in that direction.</p>
           </div>
         </div>
         <button class="calculate-btn" id="calcNBtn">Calculate sample size</button>
@@ -630,6 +640,7 @@ document.getElementById('calcPwBtn').addEventListener('click', doPower);
 document.getElementById('calcNBtn').addEventListener('click', doN);
 doPower();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

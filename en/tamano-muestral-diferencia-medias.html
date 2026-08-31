@@ -163,43 +163,50 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="twoMeanSigma1">Standard deviation of group 1 (σ1)</label>
+                        <label for="twoMeanSigma1">Standard deviation of group 1 (σ1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="twoMeanSigma1" value="10" step="0.1" min="0.0001">
+                        <p class="field-hint" hidden>Expected variability in group 1, taken from historical data, a pilot or the literature. If you assume equal variances, use the same σ in both fields.</p>
                     </div>
                     <div class="form-group">
-                        <label for="twoMeanSigma2">Standard deviation of group 2 (σ2)</label>
+                        <label for="twoMeanSigma2">Standard deviation of group 2 (σ2) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="twoMeanSigma2" value="10" step="0.1" min="0.0001">
+                        <p class="field-hint" hidden>Expected variability in group 2. If it is very different from σ1, also consider a Welch test when analyzing the data.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="twoMeanDelta">Minimum detectable difference (Δ)</label>
+                        <label for="twoMeanDelta">Minimum detectable difference (Δ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="twoMeanDelta" value="5" step="0.1" min="0.0001">
+                        <p class="field-hint" hidden>The minimum difference between means you consider practically or clinically relevant, set <strong>before</strong> seeing the data — not the difference you expect to find.</p>
                     </div>
                     <div class="form-group">
-                        <label for="twoMeanAlpha">Alpha (α)</label>
+                        <label for="twoMeanAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="twoMeanAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>Significance level of the two-tailed test. The standard value is <strong>0.05</strong>; use 0.01 for confirmatory studies.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="twoMeanPower">Power (1-β)</label>
+                        <label for="twoMeanPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="twoMeanPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                        <p class="field-hint" hidden>Probability of detecting the difference Δ if it really exists. <strong>0.80</strong> is the accepted minimum; use 0.90 in pivotal studies.</p>
                     </div>
                     <div class="form-group">
-                        <label for="twoMeanAllocation">Allocation between groups</label>
+                        <label for="twoMeanAllocation">Allocation between groups <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <select id="twoMeanAllocation">
                             <option value="equal" selected>Equal (1:1)</option>
                             <option value="custom">Unequal (custom n2/n1)</option>
                         </select>
+                        <p class="field-hint" hidden>A 1:1 allocation is always the most efficient when the cost per subject is similar in both groups. Use a custom ratio if one group is more expensive or harder to recruit.</p>
                     </div>
                 </div>
 
                 <div class="form-group" id="twoMeanRatioGroup" hidden>
-                    <label for="twoMeanRatio">Ratio n2/n1 (k)</label>
+                    <label for="twoMeanRatio">Ratio n2/n1 (k) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                     <input type="number" id="twoMeanRatio" value="1.5" step="0.1" min="0.1">
+                    <p class="field-hint" hidden>How many times larger group 2 will be than group 1 (n2 = k·n1). It is only used if you choose unequal allocation above.</p>
                 </div>
             </div>
 
@@ -368,6 +375,7 @@ document.getElementById("twoMeanCalculateBtn").addEventListener("click", calcula
 updateTwoMeanControls();
 calculateTwoMeanSampleSize();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

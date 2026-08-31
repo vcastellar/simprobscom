@@ -338,15 +338,17 @@
       <div class="mode-panel active" id="panelMedia" role="tabpanel" aria-labelledby="tabMedia">
         <div class="form-grid-ci">
           <div class="form-group">
-            <label for="trueMu">True μ (population mean)</label>
+            <label for="trueMu">True μ (population mean) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
             <input type="number" id="trueMu" value="50" step="1" min="0" max="1000">
+              <p class="field-hint" hidden>True value (unknown in practice) of the population mean that the simulator uses to generate the samples and check whether each CI covers it.</p>
           </div>
           <div class="form-group">
-            <label for="trueSigma">True σ (population standard deviation)</label>
+            <label for="trueSigma">True σ (population standard deviation) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
             <input type="number" id="trueSigma" value="10" step="0.1" min="0.1" max="1000">
+              <p class="field-hint" hidden>Population standard deviation, assumed known in this mode. It determines the width of each simulated interval.</p>
           </div>
           <div class="form-group">
-            <label for="nMedia">Sample size n</label>
+            <label for="nMedia">Sample size n <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
             <select id="nMedia">
               <option value="5">5</option>
               <option value="10">10</option>
@@ -355,23 +357,26 @@
               <option value="50">50</option>
               <option value="100">100</option>
             </select>
+              <p class="field-hint" hidden>Number of observations in each simulated sample. The width of the CI is proportional to 1/√n; coverage does not change with n.</p>
           </div>
           <div class="form-group">
-            <label for="confMedia">Confidence level</label>
+            <label for="confMedia">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
             <select id="confMedia">
               <option value="0.90">90%</option>
               <option value="0.95" selected>95%</option>
               <option value="0.99">99%</option>
             </select>
+              <p class="field-hint" hidden>Nominal level each interval is built with. It is also the expected fraction of intervals that will cover the true μ in the long run.</p>
           </div>
           <div class="form-group">
-            <label for="numIntMedia">Number of intervals</label>
+            <label for="numIntMedia">Number of intervals <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
             <select id="numIntMedia">
               <option value="20">20</option>
               <option value="50">50</option>
               <option value="100" selected>100</option>
               <option value="200">200</option>
             </select>
+              <p class="field-hint" hidden>How many repetitions of the experiment are simulated. With more intervals, empirical coverage converges closer to the nominal level.</p>
           </div>
         </div>
       </div>
@@ -380,11 +385,12 @@
       <div class="mode-panel" id="panelProp" role="tabpanel" aria-labelledby="tabProp">
         <div class="form-grid-ci">
           <div class="form-group">
-            <label for="trueP">True p (population proportion)</label>
+            <label for="trueP">True p (population proportion) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
             <input type="number" id="trueP" value="0.5" step="0.01" min="0.01" max="0.99">
+              <p class="field-hint" hidden>True value (unknown in practice) of the population proportion that the simulator uses to generate the binomial samples.</p>
           </div>
           <div class="form-group">
-            <label for="nProp">Sample size n</label>
+            <label for="nProp">Sample size n <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
             <select id="nProp">
               <option value="10">10</option>
               <option value="20">20</option>
@@ -393,30 +399,34 @@
               <option value="100">100</option>
               <option value="200">200</option>
             </select>
+              <p class="field-hint" hidden>Number of observations in each simulated sample. With small n or p near the extremes, the Wald method tends to give worse coverage than Wilson.</p>
           </div>
           <div class="form-group">
-            <label for="confProp">Confidence level</label>
+            <label for="confProp">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
             <select id="confProp">
               <option value="0.90">90%</option>
               <option value="0.95" selected>95%</option>
               <option value="0.99">99%</option>
             </select>
+              <p class="field-hint" hidden>Nominal level each interval is built with. It is also the expected fraction of intervals that will cover the true p in the long run.</p>
           </div>
           <div class="form-group">
-            <label for="numIntProp">Number of intervals</label>
+            <label for="numIntProp">Number of intervals <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
             <select id="numIntProp">
               <option value="20">20</option>
               <option value="50">50</option>
               <option value="100" selected>100</option>
               <option value="200">200</option>
             </select>
+              <p class="field-hint" hidden>How many repetitions of the experiment are simulated. With more intervals, empirical coverage converges closer to the nominal level.</p>
           </div>
           <div class="form-group">
-            <label for="methodProp">Method for the CI</label>
+            <label for="methodProp">Method for the CI <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
             <select id="methodProp">
               <option value="wald">Wald (normal)</option>
               <option value="wilson" selected>Wilson (recommended)</option>
             </select>
+              <p class="field-hint" hidden><strong>Wilson</strong> inverts Pearson's score test and usually gives coverage closer to the nominal level; <strong>Wald</strong> uses the direct normal approximation and degrades with small n or p near 0 or 1.</p>
           </div>
         </div>
       </div>
@@ -947,6 +957,7 @@ window.addEventListener('resize', () => {
   }, 150);
 });
 </script>
+<script src="../../field-hints.js?v=20260730-1"></script>
 <script src="../../theme.js?v=20260730-1"></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

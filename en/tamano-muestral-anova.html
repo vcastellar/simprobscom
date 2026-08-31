@@ -130,34 +130,39 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="anovaK">Number of groups (k)</label>
+                        <label for="anovaK">Number of groups (k) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="anovaK" value="3" step="1" min="2" max="50">
+                        <p class="field-hint" hidden>Number of groups being compared (k ≥ 2). Include every group in the design, even a control group.</p>
                     </div>
                     <div class="form-group">
-                        <label for="anovaF">Cohen's effect size (f)</label>
+                        <label for="anovaF">Cohen's effect size (f) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="anovaF" value="0.25" step="0.01" min="0.01" max="5">
+                        <p class="field-hint" hidden>Ratio between the standard deviation of the group means and the standard deviation within groups. Reference: <strong>0.10</strong> small, <strong>0.25</strong> medium, <strong>0.40</strong> large.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="anovaAlpha">Alpha (α)</label>
+                        <label for="anovaAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="anovaAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>Significance level of the overall F test. The standard value is <strong>0.05</strong>; use 0.01 in confirmatory studies.</p>
                     </div>
                     <div class="form-group">
-                        <label for="anovaPower">Power (1-β)</label>
+                        <label for="anovaPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="anovaPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                        <p class="field-hint" hidden>Probability of detecting the effect if it really exists. <strong>0.80</strong> is the usual minimum; use 0.90 if post-hoc comparisons are the main goal.</p>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="anovaPreset">Quick reference for f</label>
+                    <label for="anovaPreset">Quick reference for f <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                     <select id="anovaPreset">
                         <option value="">— Select —</option>
                         <option value="0.10">Small (f = 0.10)</option>
                         <option value="0.25">Medium (f = 0.25)</option>
                         <option value="0.40">Large (f = 0.40)</option>
                     </select>
+                    <p class="field-hint" hidden>Shortcut to fill in the f field with a reference value based on Cohen's criteria, if you do not have an estimate of your own.</p>
                 </div>
             </div>
 
@@ -329,6 +334,7 @@ document.getElementById("anovaPreset").addEventListener("change", function () {
 document.getElementById("anovaCalculateBtn").addEventListener("click", calculateAnovaSampleSize);
 calculateAnovaSampleSize();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

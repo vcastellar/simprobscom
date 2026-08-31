@@ -163,36 +163,40 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="finiteMeanSigma">Standard deviation (σ)</label>
+                        <label for="finiteMeanSigma">Standard deviation (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="finiteMeanSigma" value="12" step="0.1" min="0.0001">
+                        <p class="field-hint" hidden>The expected standard deviation of the variable, taken from historical data, a pilot or the literature. If you do not have it, use range/4 as a conservative estimate.</p>
                     </div>
                     <div class="form-group">
-                        <label for="finiteMeanE">Margin of error (E)</label>
+                        <label for="finiteMeanE">Margin of error (E) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="finiteMeanE" value="2" step="0.1" min="0.0001">
+                        <p class="field-hint" hidden>Maximum tolerable error relative to the true value, in the same units as σ. Define it by the difference at which your decision would change.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="finiteMeanN">Population size (N)</label>
+                        <label for="finiteMeanN">Population size (N) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="finiteMeanN" value="1200" step="1" min="2">
+                        <p class="field-hint" hidden>The exact, known count of the target population before sampling. This is what activates the finite population correction.</p>
                     </div>
                     <div class="form-group">
-                        <label for="finiteMeanConfidence">Confidence level</label>
+                        <label for="finiteMeanConfidence">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <select id="finiteMeanConfidence">
                             <option value="0.90">90%</option>
                             <option value="0.95" selected>95%</option>
                             <option value="0.99">99%</option>
                         </select>
+                        <p class="field-hint" hidden>The percentage of times the procedure would capture the true population value. <strong>95%</strong> is the standard; use 99% for critical decisions.</p>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label style="display:flex;align-items:center;gap:8px;font-weight:600;font-size:0.82rem;margin-bottom:0;">
                         <input type="checkbox" id="finiteMeanApplyFPC" checked style="width:auto;margin:0;">
-                        Apply finite population correction
+                        Apply finite population correction <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button>
                     </label>
-                    <small>Reduces the sample size when the sample represents an appreciable fraction of N (rule of thumb: n₀/N &gt; 5%). Uncheck to see the standard sample size, as if the population were infinite.</small>
+                    <p class="field-hint" hidden>Reduces the sample size when the sample is an appreciable fraction of N (rule of thumb: n₀/N &gt; 5%). Turn it off to see the standard sample size, as if the population were infinite.</p>
                 </div>
             </div>
 
@@ -320,6 +324,7 @@ function calculateFiniteMeanSampleSize() {
 document.getElementById('finiteMeanCalculateBtn').addEventListener('click', calculateFiniteMeanSampleSize);
 calculateFiniteMeanSampleSize();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

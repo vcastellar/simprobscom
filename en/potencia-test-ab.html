@@ -179,30 +179,35 @@
         <div class="form-grid sample-grid">
           <div class="inline-inputs">
             <div class="form-group">
-              <label for="pwPA">Group A conversion rate (p<sub>A</sub>)</label>
+              <label for="pwPA">Group A conversion rate (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="pwPA" value="0.12" step="0.001" min="0.001" max="0.999">
+                <p class="field-hint" hidden>Current conversion rate of the control group (A), as a proportion between 0 and 1. E.g. 0.12 is equivalent to 12%.</p>
             </div>
             <div class="form-group">
-              <label for="pwPB">Expected group B conversion rate (p<sub>B</sub>)</label>
+              <label for="pwPB">Expected group B conversion rate (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="pwPB" value="0.138" step="0.001" min="0.001" max="0.999">
+                <p class="field-hint" hidden>Conversion rate you expect or want to be able to detect in variant B. The difference p_B − p_A is the effect Δ being evaluated.</p>
             </div>
           </div>
           <div class="inline-inputs">
             <div class="form-group">
-              <label for="pwN">Sample size per group (n)</label>
+              <label for="pwN">Sample size per group (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="pwN" value="1500" step="1" min="1">
+                <p class="field-hint" hidden>Number of users each group (A and B) will have in the experiment. The larger n is, the greater the power to detect the same difference.</p>
             </div>
             <div class="form-group">
-              <label for="pwAlpha">Significance level (α)</label>
+              <label for="pwAlpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="pwAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+                <p class="field-hint" hidden>False-positive risk you accept (rejecting H₀ when there is in fact no difference). The standard value is 0.05.</p>
             </div>
           </div>
           <div class="form-group">
-            <label for="pwTail">Test type</label>
+            <label for="pwTail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
             <select id="pwTail">
               <option value="two-sided" selected>Two-tailed — H₀: pA = pB</option>
               <option value="greater">One-tailed — H₀: pB ≤ pA (detects improvements only)</option>
             </select>
+              <p class="field-hint" hidden>The <strong>two-tailed</strong> test is recommended in A/B testing because B may be better or worse than A. The <strong>one-tailed</strong> test is only valid if you can guarantee a priori that B never worsens the metric.</p>
           </div>
         </div>
         <button class="calculate-btn" id="calcPwBtn">Calculate power</button>
@@ -214,30 +219,35 @@
         <div class="form-grid sample-grid">
           <div class="inline-inputs">
             <div class="form-group">
-              <label for="nPA">Group A conversion rate (p<sub>A</sub>)</label>
+              <label for="nPA">Group A conversion rate (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="nPA" value="0.12" step="0.001" min="0.001" max="0.999">
+                <p class="field-hint" hidden>Current conversion rate of the control group (A), as a proportion between 0 and 1. E.g. 0.12 is equivalent to 12%.</p>
             </div>
             <div class="form-group">
-              <label for="nPB">Expected group B conversion rate (p<sub>B</sub>)</label>
+              <label for="nPB">Expected group B conversion rate (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="nPB" value="0.138" step="0.001" min="0.001" max="0.999">
+                <p class="field-hint" hidden>Minimum conversion rate you want to be able to detect in variant B. The difference p_B − p_A is the effect Δ to size the experiment for.</p>
             </div>
           </div>
           <div class="inline-inputs">
             <div class="form-group">
-              <label for="nAlpha">Significance level (α)</label>
+              <label for="nAlpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="nAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+                <p class="field-hint" hidden>False-positive risk you accept (rejecting H₀ when there is in fact no difference). The standard value is 0.05.</p>
             </div>
             <div class="form-group">
-              <label for="nTargetPower">Target power (1−β)</label>
+              <label for="nTargetPower">Target power (1−β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="nTargetPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                <p class="field-hint" hidden>Minimum probability you want of detecting the difference if it really exists. 80% is the usual standard; below 70% the experiment runs a high risk of missing real effects.</p>
             </div>
           </div>
           <div class="form-group">
-            <label for="nTail">Test type</label>
+            <label for="nTail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
             <select id="nTail">
               <option value="two-sided" selected>Two-tailed</option>
               <option value="greater">One-tailed</option>
             </select>
+              <p class="field-hint" hidden>The <strong>two-tailed</strong> test is recommended in A/B testing because B may be better or worse than A. The <strong>one-tailed</strong> test is only valid if you can guarantee a priori that B never worsens the metric.</p>
           </div>
         </div>
         <button class="calculate-btn" id="calcNBtn">Calculate sample size</button>
@@ -628,6 +638,7 @@ document.getElementById('calcPwBtn').addEventListener('click', doPower);
 document.getElementById('calcNBtn').addEventListener('click', doN);
 doPower();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

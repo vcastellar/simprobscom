@@ -130,37 +130,42 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="corrRho">Minimum correlation to detect (ρ)</label>
+                        <label for="corrRho">Minimum correlation to detect (ρ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="corrRho" value="0.30" step="0.01" min="-0.9999" max="0.9999">
+                        <p class="field-hint" hidden>Smallest Pearson correlation you consider worth detecting. Reference values (Cohen, 1988): <strong>0.10</strong> (small), <strong>0.30</strong> (moderate), <strong>0.50</strong> (large).</p>
                     </div>
                     <div class="form-group">
-                        <label for="corrAlpha">Alpha (α)</label>
+                        <label for="corrAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="corrAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>False-positive risk you accept. <strong>0.05</strong> is the usual value.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="corrPower">Power (1−β)</label>
+                        <label for="corrPower">Power (1−β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="corrPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                        <p class="field-hint" hidden>Probability of detecting the correlation if it really exists. <strong>0.80</strong> is the usual minimum; use 0.90 for confirmatory studies or psychometric validation.</p>
                     </div>
                     <div class="form-group">
-                        <label for="corrTail">Test type</label>
+                        <label for="corrTail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <select id="corrTail">
                             <option value="two" selected>Two-tailed (H1: ρ ≠ 0)</option>
                             <option value="one">One-tailed (H1: ρ &gt; 0 or ρ &lt; 0)</option>
                         </select>
+                        <p class="field-hint" hidden>The <strong>two-tailed</strong> test is used when you have no prior directional hypothesis. The <strong>one-tailed</strong> test reduces n but is only valid if you have solid reasons to expect the correlation in one specific direction.</p>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="corrPreset">Quick reference for ρ</label>
+                    <label for="corrPreset">Quick reference for ρ <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                     <select id="corrPreset">
                         <option value="">— Select —</option>
                         <option value="0.10">Small (ρ = 0.10)</option>
                         <option value="0.30">Moderate (ρ = 0.30)</option>
                         <option value="0.50">Large (ρ = 0.50)</option>
                     </select>
+                    <p class="field-hint" hidden>Shortcut to fill in the ρ field with a common reference value (Cohen, 1988) according to the expected effect size.</p>
                 </div>
             </div>
 
@@ -304,6 +309,7 @@ document.getElementById("corrPreset").addEventListener("change", function () {
 document.getElementById("corrCalculateBtn").addEventListener("click", calculateCorrSampleSize);
 calculateCorrSampleSize();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

@@ -338,7 +338,7 @@
       <h2 class="panel-heading" id="params-heading">Simulation parameters</h2>
       <div class="sim-form-grid">
         <div class="form-group">
-          <label for="popDist">Population distribution</label>
+          <label for="popDist">Population distribution <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
           <select id="popDist">
             <optgroup label="Continuous">
               <option value="normal">Normal (μ=5, σ=2)</option>
@@ -351,17 +351,19 @@
               <option value="poisson">Poisson (λ=5)</option>
             </optgroup>
           </select>
+            <p class="field-hint" hidden>The distribution the original sample is generated from. The bootstrap does not require continuous distributions: it also works with discrete data such as the binomial or the Poisson. Try the log-normal or the exponential to see how it behaves with skewed data.</p>
         </div>
         <div class="form-group">
-          <label for="statistic">Statistic</label>
+          <label for="statistic">Statistic <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
           <select id="statistic">
             <option value="mean" selected>Mean (x̄)</option>
             <option value="median">Median</option>
             <option value="sd">Standard deviation (s)</option>
           </select>
+            <p class="field-hint" hidden>The statistic whose bootstrap distribution you want to estimate. The median and the standard deviation do not always have a simple analytic formula for the standard error, which is where the bootstrap is especially useful.</p>
         </div>
         <div class="form-group">
-          <label for="sampleN">Sample size <em>n</em></label>
+          <label for="sampleN">Sample size <em>n</em> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
           <select id="sampleN">
             <option value="10">n = 10</option>
             <option value="20">n = 20</option>
@@ -371,23 +373,26 @@
             <option value="500">n = 500</option>
             <option value="1000">n = 1000</option>
           </select>
+            <p class="field-hint" hidden>Number of observations in the original sample that is resampled. The bootstrap works reasonably well from n ≈ 15–20 onwards; with n = 500 or n = 1000 the bootstrap distribution is very smooth and the CI very narrow.</p>
         </div>
         <div class="form-group">
-          <label for="numBoot">Bootstrap replicates <em>B</em></label>
+          <label for="numBoot">Bootstrap replicates <em>B</em> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
           <select id="numBoot">
             <option value="200">B = 200</option>
             <option value="500">B = 500</option>
             <option value="1000" selected>B = 1000</option>
             <option value="5000">B = 5000</option>
           </select>
+            <p class="field-hint" hidden>Number of resamples with replacement. For the standard error B = 200–500 is enough; for 95% percentile confidence intervals <strong>B ≥ 1000</strong> is recommended.</p>
         </div>
         <div class="form-group">
-          <label for="confLevel">Confidence level</label>
+          <label for="confLevel">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
           <select id="confLevel">
             <option value="0.90">90%</option>
             <option value="0.95" selected>95%</option>
             <option value="0.99">99%</option>
           </select>
+            <p class="field-hint" hidden>The level used to build the bootstrap CI with the percentile method (and the normal CI, when the statistic is the mean). <strong>95%</strong> is the usual standard.</p>
         </div>
       </div>
       <div class="btn-row">
@@ -1268,6 +1273,7 @@
     runAll();
   });
 </script>
+<script src="../../field-hints.js?v=20260730-1"></script>
 <script src="../../theme.js?v=20260730-1"></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

@@ -175,68 +175,78 @@
 
             <div class="form-grid sample-grid">
                 <div class="form-group">
-                    <label for="testType">Test type</label>
+                    <label for="testType">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                     <select id="testType">
                         <option value="one">One variance vs. a reference value</option>
                         <option value="two">Comparison of two variances</option>
                     </select>
+                    <p class="field-hint" hidden>Choose "one variance" if you want to check whether the population variance is compatible with a theoretical or reference value, or "two variances" if you want to compare the spread between two populations or conditions.</p>
                 </div>
 
                 <div id="oneVarianceInputs">
                     <div class="inline-inputs">
                         <div class="form-group">
-                            <label for="n">Sample size (n)</label>
+                            <label for="n">Sample size (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                             <input type="number" id="n" value="25" step="1" min="2">
+                            <p class="field-hint" hidden>Number of observations in the sample used to calculate s². It determines the degrees of freedom of the test: df = n − 1.</p>
                         </div>
                         <div class="form-group">
-                            <label for="sampleVariance">Sample variance (s²)</label>
+                            <label for="sampleVariance">Sample variance (s²) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                             <input type="number" id="sampleVariance" value="14" step="0.01" min="0.0001">
+                            <p class="field-hint" hidden>Variance observed in your sample, the one you want to compare with the reference value σ₀².</p>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="sigma0Squared">Hypothesized variance (σ₀²)</label>
+                        <label for="sigma0Squared">Hypothesized variance (σ₀²) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="sigma0Squared" value="10" step="0.01" min="0.0001">
+                        <p class="field-hint" hidden>Reference or theoretical value the sample variance is compared with under \(H_0: \sigma^2 = \sigma_0^2\).</p>
                     </div>
                 </div>
 
                 <div id="twoVarianceInputs" style="display: none;">
                     <div class="inline-inputs">
                         <div class="form-group">
-                            <label for="n1">Sample size group 1 (n₁)</label>
+                            <label for="n1">Sample size group 1 (n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                             <input type="number" id="n1" value="20" step="1" min="2">
+                            <p class="field-hint" hidden>Number of observations in group 1; it determines the first degrees of freedom of the F test: df₁ = n₁ − 1.</p>
                         </div>
                         <div class="form-group">
-                            <label for="n2">Sample size group 2 (n₂)</label>
+                            <label for="n2">Sample size group 2 (n₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                             <input type="number" id="n2" value="18" step="1" min="2">
+                            <p class="field-hint" hidden>Number of observations in group 2; it determines the second degrees of freedom of the F test: df₂ = n₂ − 1.</p>
                         </div>
                     </div>
 
                     <div class="inline-inputs">
                         <div class="form-group">
-                            <label for="sampleVariance1">Sample variance group 1 (s₁²)</label>
+                            <label for="sampleVariance1">Sample variance group 1 (s₁²) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                             <input type="number" id="sampleVariance1" value="16" step="0.01" min="0.0001">
+                            <p class="field-hint" hidden>Variance observed in the sample from group 1.</p>
                         </div>
                         <div class="form-group">
-                            <label for="sampleVariance2">Sample variance group 2 (s₂²)</label>
+                            <label for="sampleVariance2">Sample variance group 2 (s₂²) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                             <input type="number" id="sampleVariance2" value="9" step="0.01" min="0.0001">
+                            <p class="field-hint" hidden>Variance observed in the sample from group 2. The F statistic is calculated as \(F = s_1^2/s_2^2\).</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="alpha">Significance level (α)</label>
+                        <label for="alpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>Risk of wrongly rejecting \(H_0\) that you accept. The usual value is <strong>0.05</strong>.</p>
                     </div>
 
                     <div class="form-group">
-                        <label for="tail">Alternative hypothesis</label>
+                        <label for="tail">Alternative hypothesis <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <select id="tail">
                             <option value="two">Two-sided (≠)</option>
                             <option value="right">Right tail (&gt;)</option>
                             <option value="left">Left tail (&lt;)</option>
                         </select>
+                        <p class="field-hint" hidden>Two-tailed if you are looking for any difference; right-tailed if you want to check whether the variance is larger; left-tailed if you want to check whether it is smaller.</p>
                     </div>
                 </div>
             </div>
@@ -759,6 +769,7 @@ document.getElementById('calcVarianceBtn').addEventListener('click', calculateVa
 updateVarianceInputVisibility();
 calculateVarianceTest();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

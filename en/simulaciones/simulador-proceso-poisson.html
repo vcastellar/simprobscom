@@ -306,21 +306,24 @@
 
           <div class="form-grid">
             <div class="form-group">
-              <label for="lambda-t">λ (event rate per unit of time)</label>
+              <label for="lambda-t">λ (event rate per unit of time) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="lambda-t" value="3" min="0.1" max="50" step="0.1" aria-label="Rate lambda">
+                <p class="field-hint" hidden>Average number of events occurring per unit of time. E.g. λ = 3 means 3 events on average per unit of time (hour, day…).</p>
             </div>
             <div class="form-group">
-              <label for="horizon-t">T (time horizon)</label>
+              <label for="horizon-t">T (time horizon) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="horizon-t" value="5" min="0.5" max="100" step="0.5" aria-label="Time horizon T">
+                <p class="field-hint" hidden>Length of the time window you want to simulate, in the same units as λ.</p>
             </div>
             <div class="form-group ctrl-trayectoria" style="display:block;">
-              <label for="num-traj">Number of sample paths to display</label>
+              <label for="num-traj">Number of sample paths to display <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <select id="num-traj" aria-label="Number of sample paths">
                 <option value="1">1</option>
                 <option value="3">3</option>
                 <option value="5" selected>5</option>
                 <option value="10">10</option>
               </select>
+                <p class="field-hint" hidden>How many independent simulations are drawn at once, so you can compare their variability on the same chart.</p>
             </div>
           </div>
 
@@ -358,15 +361,17 @@
 
           <div class="form-grid">
             <div class="form-group">
-              <label for="lambda-d">λ (event rate per unit of time)</label>
+              <label for="lambda-d">λ (event rate per unit of time) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="lambda-d" value="3" min="0.1" max="50" step="0.1" aria-label="Rate lambda">
+                <p class="field-hint" hidden>Average number of events occurring per unit of time. E.g. λ = 3 means 3 events on average per unit of time.</p>
             </div>
             <div class="form-group">
-              <label for="horizon-d">T (time horizon)</label>
+              <label for="horizon-d">T (time horizon) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="horizon-d" value="5" min="0.5" max="100" step="0.5" aria-label="Time horizon T">
+                <p class="field-hint" hidden>Length of the time window over which you count events. The expected number of events is λT.</p>
             </div>
             <div class="form-group ctrl-distribucion" style="display:block;">
-              <label for="num-sims-d">Number of simulations</label>
+              <label for="num-sims-d">Number of simulations <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <select id="num-sims-d" aria-label="Number of simulations">
                 <option value="100">100</option>
                 <option value="500">500</option>
@@ -374,6 +379,7 @@
                 <option value="5000">5000</option>
                 <option value="10000">10000</option>
               </select>
+                <p class="field-hint" hidden>How many times the simulation is repeated to build the histogram. More simulations give a finer fit to the theoretical curve.</p>
             </div>
           </div>
 
@@ -409,15 +415,17 @@
 
           <div class="form-grid">
             <div class="form-group">
-              <label for="lambda-e">λ (event rate per unit of time)</label>
+              <label for="lambda-e">λ (event rate per unit of time) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="lambda-e" value="3" min="0.1" max="50" step="0.1" aria-label="Rate lambda">
+                <p class="field-hint" hidden>Average number of events per unit of time. The larger λ is, the shorter the times between events (mean 1/λ).</p>
             </div>
             <div class="form-group">
-              <label for="horizon-e">T (time horizon)</label>
+              <label for="horizon-e">T (time horizon) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <input type="number" id="horizon-e" value="5" min="0.5" max="100" step="0.5" aria-label="Time horizon T">
+                <p class="field-hint" hidden>Length of each simulated path. Longer paths produce more inter-arrival times for the histogram.</p>
             </div>
             <div class="form-group ctrl-tiempos" style="display:block;">
-              <label for="num-sims-e">Number of simulations</label>
+              <label for="num-sims-e">Number of simulations <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
               <select id="num-sims-e" aria-label="Number of simulations">
                 <option value="100">100</option>
                 <option value="500">500</option>
@@ -425,6 +433,7 @@
                 <option value="5000">5000</option>
                 <option value="10000">10000</option>
               </select>
+                <p class="field-hint" hidden>How many paths are simulated to collect times between events. More simulations give a smoother histogram.</p>
             </div>
           </div>
 
@@ -1093,6 +1102,7 @@ function simulateTiempos() {
   document.getElementById('results-e').style.display = 'block';
 }
 </script>
+<script src="../../field-hints.js?v=20260730-1"></script>
 <script src="../../theme.js?v=20260730-1"></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

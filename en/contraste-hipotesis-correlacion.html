@@ -169,34 +169,39 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="r">Sample correlation (r)</label>
+                        <label for="r">Sample correlation (r) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="r" value="0.45" step="0.01" min="-0.9999" max="0.9999">
+                        <p class="field-hint" hidden>Pearson correlation coefficient calculated on your sample, between <strong>-1 and 1</strong>.</p>
                     </div>
                     <div class="form-group">
-                        <label for="n">Sample size (n)</label>
+                        <label for="n">Sample size (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="n" value="30" step="1" min="4">
+                        <p class="field-hint" hidden>Number of pairs of observations (x, y) used to calculate r. <strong>n ≥ 4</strong> is required.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="rho0">Null value (ρ₀)</label>
+                        <label for="rho0">Null value (ρ₀) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="rho0" value="0" step="0.01" min="-0.9999" max="0.9999">
+                        <p class="field-hint" hidden>Population correlation value under H₀. The usual choice is <strong>0</strong> (no correlation), which activates the t test; with any other value Fisher's z transformation is used.</p>
                     </div>
                     <div class="form-group">
-                        <label for="alpha">Significance level (α)</label>
+                        <label for="alpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>Risk of rejecting H₀ when it is true. The usual value is <strong>0.05</strong>, equivalent to a 95% CI for ρ.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="tail">Test type</label>
+                        <label for="tail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <select id="tail">
                             <option value="two">Two-tailed (≠)</option>
                             <option value="right">Right tail (&gt;)</option>
                             <option value="left">Left tail (&lt;)</option>
                         </select>
+                        <p class="field-hint" hidden>Two-tailed tests ρ ≠ ρ₀; the one-tailed options test whether ρ is specifically greater or smaller than ρ₀.</p>
                     </div>
                 </div>
             </div>
@@ -438,6 +443,7 @@ function calculate() {
 document.getElementById('calcBtn').addEventListener('click', calculate);
 calculate();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

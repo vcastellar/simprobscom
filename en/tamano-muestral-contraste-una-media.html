@@ -163,36 +163,42 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="oneMeanSigma">Standard deviation (σ)</label>
+                        <label for="oneMeanSigma">Standard deviation (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="oneMeanSigma" value="10" step="0.1" min="0.0001">
+                        <p class="field-hint" hidden>Expected standard deviation of the variable, in its original units. Use historical data, a pilot study or the literature.</p>
                     </div>
                     <div class="form-group">
-                        <label for="oneMeanDelta">Minimum detectable difference |μ−μ0| (Δ)</label>
+                        <label for="oneMeanDelta">Minimum detectable difference |μ−μ0| (Δ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="oneMeanDelta" value="2" step="0.1" min="0.0001">
+                        <p class="field-hint" hidden>The smallest difference between μ and μ0 you want to be able to detect with the stated power, in the original units of the variable.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="oneMeanAlpha">Alpha (α)</label>
+                        <label for="oneMeanAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="oneMeanAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>Risk of rejecting H₀ when it is true. <strong>0.05</strong> is usual; use 0.01 in confirmatory scenarios.</p>
                     </div>
                     <div class="form-group">
-                        <label for="oneMeanPower">Power (1-β)</label>
+                        <label for="oneMeanPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="oneMeanPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                        <p class="field-hint" hidden>Probability of detecting a real effect. <strong>0.80</strong> is the common minimum; use 0.90 when you want to reduce false negatives.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="oneMeanH0">Null hypothesis (μ0)</label>
+                        <label for="oneMeanH0">Null hypothesis (μ0) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="oneMeanH0" value="0" step="0.1">
+                        <p class="field-hint" hidden>Reference value of the mean under H₀ (for example, the nominal or historical value it is compared with).</p>
                     </div>
                     <div class="form-group">
-                        <label for="oneMeanAlternative">Alternative hypothesis</label>
+                        <label for="oneMeanAlternative">Alternative hypothesis <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <select id="oneMeanAlternative">
                             <option value="two-sided">Ha: μ ≠ μ0</option>
                             <option value="greater">Ha: μ ≥ μ0</option>
                             <option value="less">Ha: μ ≤ μ0</option>
                         </select>
+                        <p class="field-hint" hidden>Use two-tailed if you have no prior direction, and one-tailed if you only care about detecting a change in one specific direction.</p>
                     </div>
                 </div>
             </div>
@@ -304,6 +310,7 @@ function calculateOneMeanSampleSize() {
 document.getElementById("oneMeanCalculateBtn").addEventListener("click", calculateOneMeanSampleSize);
 calculateOneMeanSampleSize();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

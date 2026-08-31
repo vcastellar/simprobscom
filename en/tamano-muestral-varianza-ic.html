@@ -158,16 +158,18 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="varR">Maximum U/L ratio of the CI (R)</label>
+                        <label for="varR">Maximum U/L ratio of the CI (R) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="varR" value="2.5" step="0.1" min="1.001">
+                        <p class="field-hint" hidden>Maximum tolerable ratio between the upper and lower bounds of the CI for the variance. The closer to 1, the narrower (more precise) the interval, but the larger the sample needed. <strong>R between 2 and 4</strong> is common in quality control.</p>
                     </div>
                     <div class="form-group">
-                        <label for="varConfidence">Confidence level</label>
+                        <label for="varConfidence">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <select id="varConfidence">
                             <option value="0.90">90%</option>
                             <option value="0.95" selected>95%</option>
                             <option value="0.99">99%</option>
                         </select>
+                        <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true variance. 95% is the standard; with 99% a larger sample is needed for the same ratio R.</p>
                     </div>
                 </div>
             </div>
@@ -313,6 +315,7 @@ function calculateVarianceSampleSize() {
 document.getElementById('varCalculateBtn').addEventListener('click', calculateVarianceSampleSize);
 calculateVarianceSampleSize();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

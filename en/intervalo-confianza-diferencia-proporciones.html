@@ -135,47 +135,54 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="x1">Successes group 1 (x₁)</label>
+                        <label for="x1">Successes group 1 (x₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="x1" value="84" step="1" min="0">
+                        <p class="field-hint" hidden>Number of successes observed in group 1 (numerator of p̂₁ = x₁/n₁).</p>
                     </div>
                     <div class="form-group">
-                        <label for="n1">Sample size group 1 (n₁)</label>
+                        <label for="n1">Sample size group 1 (n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="n1" value="120" step="1" min="1">
+                        <p class="field-hint" hidden>Total number of observations in group 1.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="x2">Successes group 2 (x₂)</label>
+                        <label for="x2">Successes group 2 (x₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="x2" value="57" step="1" min="0">
+                        <p class="field-hint" hidden>Number of successes observed in group 2 (numerator of p̂₂ = x₂/n₂).</p>
                     </div>
                     <div class="form-group">
-                        <label for="n2">Sample size group 2 (n₂)</label>
+                        <label for="n2">Sample size group 2 (n₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="n2" value="110" step="1" min="1">
+                        <p class="field-hint" hidden>Total number of observations in group 2.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="conf">Confidence level</label>
+                        <label for="conf">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <select id="conf">
                             <option value="0.90">90%</option>
                             <option value="0.95" selected>95%</option>
                             <option value="0.99">99%</option>
                             <option value="custom">Custom…</option>
                         </select>
+                        <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true difference p₁ − p₂. 95% is the usual standard.</p>
                     </div>
                     <div class="form-group">
-                        <label for="method">Method</label>
+                        <label for="method">Method <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <select id="method">
                             <option value="both" selected>Both (Wald + Newcombe-Wilson)</option>
                             <option value="wald">Wald only</option>
                             <option value="newcombe">Newcombe-Wilson only</option>
                         </select>
+                        <p class="field-hint" hidden><strong>Wald</strong> is the classic method, suitable when there are enough successes and failures in both groups. <strong>Newcombe-Wilson</strong> is preferable when the samples are small or the proportions are close to 0 or 1.</p>
                     </div>
                 </div>
                 <div class="inline-inputs" id="customConfRow" style="display:none">
                     <div class="form-group">
-                        <label for="customConf">Custom confidence level (0–1)</label>
+                        <label for="customConf">Custom confidence level (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
+                        <p class="field-hint" hidden>Confidence level as a value between 0 and 1 (e.g. 0.975 for 97.5%). It is only used when you pick “Custom…” above.</p>
                     </div>
                 </div>
             </div>
@@ -417,6 +424,7 @@ document.getElementById('method').addEventListener('change', calculate);
 document.getElementById('customConf').addEventListener('input', calculate);
 calculate();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

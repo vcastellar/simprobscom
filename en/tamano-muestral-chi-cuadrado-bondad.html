@@ -158,22 +158,26 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="bondadW">Effect size, Cohen's w</label>
+                        <label for="bondadW">Effect size, Cohen's w <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="bondadW" value="0.3" step="0.01" min="0.001" max="5">
+                        <p class="field-hint" hidden>How far the expected distribution departs from the theoretical one: <strong>0.1</strong> (small), <strong>0.3</strong> (medium), <strong>0.5</strong> (large) according to Cohen. Use the helper below if you know the expected proportions.</p>
                     </div>
                     <div class="form-group">
-                        <label for="bondadK">Number of categories (k)</label>
+                        <label for="bondadK">Number of categories (k) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="bondadK" value="5" step="1" min="2">
+                        <p class="field-hint" hidden>Total number of categories of the variable. The degrees of freedom of the test are <strong>df = k − 1</strong> (with no estimated parameters).</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="bondadAlpha">Alpha (α)</label>
+                        <label for="bondadAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="bondadAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>False-positive risk you accept. The usual value is <strong>0.05</strong>.</p>
                     </div>
                     <div class="form-group">
-                        <label for="bondadPower">Power (1-β)</label>
+                        <label for="bondadPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="bondadPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                        <p class="field-hint" hidden>Probability of detecting the departure from the theoretical distribution if it really exists. The usual value is <strong>0.80</strong> (80%).</p>
                     </div>
                 </div>
             </div>
@@ -186,12 +190,14 @@
                 <div style="margin-top:1rem;">
                     <p style="font-size:0.9rem; color:var(--text-muted);">Enter the proportions under H1 (expected observed) and under H0 (theoretical), separated by commas. The number of values must equal k.</p>
                     <div class="form-group">
-                        <label for="bondadPObs">H1 proportions (p_obs) — comma separated</label>
+                        <label for="bondadPObs">H1 proportions (p_obs) — comma separated <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="text" id="bondadPObs" value="0.30, 0.25, 0.20, 0.15, 0.10" style="width:100%;">
+                        <p class="field-hint" hidden>Proportions you expect to observe in each category under the alternative hypothesis; there must be as many values as categories k.</p>
                     </div>
                     <div class="form-group" style="margin-top:0.5rem;">
-                        <label for="bondadPTeo">H0 proportions (p_teo) — comma separated</label>
+                        <label for="bondadPTeo">H0 proportions (p_teo) — comma separated <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="text" id="bondadPTeo" value="0.20, 0.20, 0.20, 0.20, 0.20" style="width:100%;">
+                        <p class="field-hint" hidden>Theoretical reference proportions under H0 for each category (e.g. 0.20 in each of 5 categories if you expect a uniform distribution).</p>
                     </div>
                     <button class="calculate-btn" id="bondadWBtn" style="margin-top:0.5rem;">Calculate w and update</button>
                     <div id="bondadWResult" style="margin-top:0.5rem; font-size:0.9rem;"></div>
@@ -356,6 +362,7 @@ document.getElementById('bondadCalculateBtn').addEventListener('click', calculat
 document.getElementById('bondadWBtn').addEventListener('click', calculateWFromCategories);
 calculateBondadSampleSize();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

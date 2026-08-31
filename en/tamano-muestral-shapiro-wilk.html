@@ -158,22 +158,26 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="swGamma1">Expected skewness under H₁ (γ₁)</label>
+                        <label for="swGamma1">Expected skewness under H₁ (γ₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="swGamma1" value="2.0" step="0.1" min="-10" max="10">
+                        <p class="field-hint" hidden>Skewness of the alternative distribution: <strong>0</strong> is symmetric; the larger |γ₁| is (e.g. &gt; 1.5), the easier it is to detect with small samples.</p>
                     </div>
                     <div class="form-group">
-                        <label for="swGamma2">Expected excess kurtosis under H₁ (γ₂)</label>
+                        <label for="swGamma2">Expected excess kurtosis under H₁ (γ₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="swGamma2" value="6.0" step="0.1" min="-2" max="200">
+                        <p class="field-hint" hidden>Heaviness of the tails relative to the normal: <strong>0</strong> corresponds to the normal. Detecting kurtosis alone (with γ₁ = 0) requires considerably larger samples than detecting skewness.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="swAlpha">Alpha (α)</label>
+                        <label for="swAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="swAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>False-positive risk you accept. The standard value is <strong>0.05</strong>.</p>
                     </div>
                     <div class="form-group">
-                        <label for="swPower">Power (1-β)</label>
+                        <label for="swPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="swPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                        <p class="field-hint" hidden>Probability of detecting the departure from normality if it really exists. The usual minimum is <strong>0.80</strong>; use 0.90 if a failure of normality has serious consequences.</p>
                     </div>
                 </div>
             </div>
@@ -406,6 +410,7 @@ function calculateSWsampleSize() {
 document.getElementById('swCalculateBtn').addEventListener('click', calculateSWsampleSize);
 calculateSWsampleSize();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
