@@ -158,26 +158,30 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="varR">Ratio R = σ₁/σ₀</label>
+                        <label for="varR">Ratio R = σ₁/σ₀ <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="varR" value="1.5" step="0.05" min="0.01">
+                        <p class="field-hint" hidden>Ratio between the true standard deviation under H₁ and the hypothesized one under H₀ that you want to be able to detect. <strong>R = 1.5</strong> (a 50% increase) is a moderate effect; R = 2 is detected with smaller samples.</p>
                     </div>
                     <div class="form-group">
-                        <label for="varAlternative">Alternative hypothesis</label>
+                        <label for="varAlternative">Alternative hypothesis <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <select id="varAlternative">
                             <option value="two-sided">Ha: σ ≠ σ0</option>
                             <option value="greater">Ha: σ ≥ σ0</option>
                             <option value="less">Ha: σ ≤ σ0</option>
                         </select>
+                        <p class="field-hint" hidden>Two-tailed if you have no prior direction; upper one-tailed is common in quality control to detect only increases in variability.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="varAlpha">Alpha (α)</label>
+                        <label for="varAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="varAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>Risk of rejecting H₀ when it is true. <strong>0.05</strong> is the standard; use 0.01 for decisions with critical consequences.</p>
                     </div>
                     <div class="form-group">
-                        <label for="varPower">Power (1-β)</label>
+                        <label for="varPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="varPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                        <p class="field-hint" hidden>Probability of detecting the departure in variance if it is real. <strong>0.80</strong> is the usual minimum; use 0.90 if false negatives are costly.</p>
                     </div>
                 </div>
             </div>
@@ -316,6 +320,7 @@ function calculateOneVarianceSampleSize() {
 document.getElementById('varCalculateBtn').addEventListener('click', calculateOneVarianceSampleSize);
 calculateOneVarianceSampleSize();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

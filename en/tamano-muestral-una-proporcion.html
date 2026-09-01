@@ -163,22 +163,25 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="onePropP">Expected proportion (p)</label>
+                        <label for="onePropP">Expected proportion (p) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="onePropP" value="0.5" step="0.01" min="0.0001" max="0.9999">
+                        <p class="field-hint" hidden>Prior estimate of the value you are after (between 0 and 1). If you have no prior data, leave <strong>0.5</strong>: it is the conservative scenario that gives the largest possible sample.</p>
                     </div>
                     <div class="form-group">
-                        <label for="onePropE">Margin of error (E)</label>
+                        <label for="onePropE">Margin of error (E) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="onePropE" value="0.05" step="0.001" min="0.0001" max="0.9999">
+                        <p class="field-hint" hidden>Precision you want for your estimate, in percentage points. E.g. 0.05 means ±5 points. The smaller it is, the larger the sample needed.</p>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="onePropConfidence">Confidence level</label>
+                    <label for="onePropConfidence">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                     <select id="onePropConfidence">
                         <option value="0.90">90%</option>
                         <option value="0.95" selected>95%</option>
                         <option value="0.99">99%</option>
                     </select>
+                    <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true value. 95% is the usual standard in surveys and health studies.</p>
                 </div>
             </div>
 
@@ -322,6 +325,7 @@ function calculateOnePropSampleSize() {
 document.getElementById("onePropCalculateBtn").addEventListener("click", calculateOnePropSampleSize);
 calculateOnePropSampleSize();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

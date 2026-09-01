@@ -176,52 +176,60 @@
 
             <div class="form-grid sample-grid">
                 <div class="form-group">
-                    <label for="sampleData">Sample data</label>
+                    <label for="sampleData">Sample data <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                     <input type="text" id="sampleData" value="165, 170, 172, 168, 175, 160, 180, 163, 171, 169">
+                    <p class="field-hint" hidden>Individual sample values, separated by commas. The test compares their empirical distribution with the theoretical distribution chosen below.</p>
                 </div>
 
                 <div class="form-group">
-                    <label for="distType">Theoretical distribution</label>
+                    <label for="distType">Theoretical distribution <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                     <select id="distType">
                         <option value="normal">Normal</option>
                         <option value="uniform">Uniform</option>
                         <option value="exponential">Exponential</option>
                     </select>
+                    <p class="field-hint" hidden>Theoretical distribution \(F_0\) under \(H_0\) that the sample is compared with. Its parameters must be known in advance, not estimated from the same data.</p>
                 </div>
 
                 <div id="paramsNormal" class="inline-inputs">
                     <div class="form-group">
-                        <label for="paramMu">Mean (μ)</label>
+                        <label for="paramMu">Mean (μ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="paramMu" value="170" step="any">
+                        <p class="field-hint" hidden>Mean of the theoretical Normal distribution under \(H_0\).</p>
                     </div>
                     <div class="form-group">
-                        <label for="paramSigma">Standard deviation (σ)</label>
+                        <label for="paramSigma">Standard deviation (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="paramSigma" value="7" min="0.001" step="any">
+                        <p class="field-hint" hidden>Standard deviation of the theoretical Normal distribution under \(H_0\); it must be greater than 0.</p>
                     </div>
                 </div>
 
                 <div id="paramsUniform" class="inline-inputs" style="display:none">
                     <div class="form-group">
-                        <label for="paramA">Minimum (a)</label>
+                        <label for="paramA">Minimum (a) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="paramA" value="0" step="any">
+                        <p class="field-hint" hidden>Lower bound of the interval of the theoretical Uniform distribution.</p>
                     </div>
                     <div class="form-group">
-                        <label for="paramB">Maximum (b)</label>
+                        <label for="paramB">Maximum (b) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="paramB" value="1" step="any">
+                        <p class="field-hint" hidden>Upper bound of the interval of the theoretical Uniform distribution; it must be greater than the minimum (a).</p>
                     </div>
                 </div>
 
                 <div id="paramsExp" class="inline-inputs" style="display:none">
                     <div class="form-group">
-                        <label for="paramLambda">Rate (λ)</label>
+                        <label for="paramLambda">Rate (λ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="paramLambda" value="1" min="0.001" step="any">
+                        <p class="field-hint" hidden>Rate of the theoretical Exponential distribution; it must be greater than 0.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="alpha">Significance level (α)</label>
+                        <label for="alpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>Risk of rejecting H₀ (that the sample follows the theoretical distribution) when it is true. The usual value is <strong>0.05</strong>.</p>
                     </div>
                 </div>
             </div>
@@ -663,6 +671,7 @@ document.getElementById('calcKsBtn').addEventListener('click', () => {
 document.getElementById('calcKsBtn').click();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

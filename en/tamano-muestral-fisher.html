@@ -158,43 +158,49 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="fisherP1">Expected proportion group 1 (p₁)</label>
+                        <label for="fisherP1">Expected proportion group 1 (p₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="fisherP1" value="0.40" step="0.01" min="0.0001" max="0.9999">
+                        <p class="field-hint" hidden>Success proportion you expect in group 1 under the alternative hypothesis.</p>
                     </div>
                     <div class="form-group">
-                        <label for="fisherP2">Expected proportion group 2 (p₂)</label>
+                        <label for="fisherP2">Expected proportion group 2 (p₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="fisherP2" value="0.20" step="0.01" min="0.0001" max="0.9999">
+                        <p class="field-hint" hidden>Success proportion you expect in group 2. The difference |p₁ − p₂| is the effect to detect: the larger it is, the smaller the sample needed.</p>
                     </div>
                 </div>
 
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="fisherAlpha">Alpha (α)</label>
+                        <label for="fisherAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="fisherAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>False-positive risk you accept. <strong>0.05</strong> is the usual standard; use 0.01 to control the type I error more tightly.</p>
                     </div>
                     <div class="form-group">
-                        <label for="fisherPower">Power (1-β)</label>
+                        <label for="fisherPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="fisherPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                        <p class="field-hint" hidden>Probability of detecting the difference if it really exists. <strong>0.80</strong> is the usual minimum; use 0.90 or 0.95 in confirmatory or highly clinically relevant studies.</p>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="fisherRatio">Relative size of group 2 (r = n₂/n₁)</label>
+                    <label for="fisherRatio">Relative size of group 2 (r = n₂/n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                     <select id="fisherRatio">
                         <option value="1" selected>r = 1 (equal groups)</option>
                         <option value="2">r = 2 (group 2 double group 1)</option>
                         <option value="3">r = 3 (group 2 triple group 1)</option>
                         <option value="4">r = 4 (group 2 quadruple group 1)</option>
                     </select>
+                    <p class="field-hint" hidden>How many times larger group 2 is than group 1. Adjust it if the groups are naturally unequal (e.g. cases and controls); <strong>r = 1</strong> is the most efficient per total participant.</p>
                 </div>
 
                 <div class="form-group">
-                    <label for="fisherTail">Test type</label>
+                    <label for="fisherTail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                     <select id="fisherTail">
                         <option value="two" selected>Two-tailed (p₁ ≠ p₂)</option>
                         <option value="right">Right tail (p₁ &gt; p₂)</option>
                         <option value="left">Left tail (p₁ &lt; p₂)</option>
                     </select>
+                    <p class="field-hint" hidden><strong>Two-tailed</strong> detects differences in either direction. <strong>One-tailed</strong> requires a smaller sample but is only valid if you have a directional hypothesis justified a priori.</p>
                 </div>
             </div>
 
@@ -354,6 +360,7 @@ function calculateFisherSampleSize() {
 document.getElementById('fisherCalculateBtn').addEventListener('click', calculateFisherSampleSize);
 calculateFisherSampleSize();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

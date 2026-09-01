@@ -135,37 +135,42 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="x">Number of successes (x)</label>
+                        <label for="x">Number of successes (x) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="x" value="134" step="1" min="0">
+                        <p class="field-hint" hidden>Number of observations that have the characteristic of interest (e.g. satisfied customers). Together with n it forms the sample proportion \(\hat{p} = x/n\).</p>
                     </div>
                     <div class="form-group">
-                        <label for="n">Sample size (n)</label>
+                        <label for="n">Sample size (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="n" value="200" step="1" min="1">
+                        <p class="field-hint" hidden>Total number of observations in the sample.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="conf">Confidence level</label>
+                        <label for="conf">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <select id="conf">
                             <option value="0.90">90%</option>
                             <option value="0.95" selected>95%</option>
                             <option value="0.99">99%</option>
                             <option value="custom">Custom…</option>
                         </select>
+                        <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true value of p. <strong>95%</strong> is the usual standard in surveys and health studies.</p>
                     </div>
                     <div class="form-group">
-                        <label for="method">Method</label>
+                        <label for="method">Method <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <select id="method">
                             <option value="both" selected>Both (Wald + Wilson)</option>
                             <option value="wald">Wald only</option>
                             <option value="wilson">Wilson only</option>
                         </select>
+                        <p class="field-hint" hidden><strong>Wilson</strong> is the recommended default: it keeps actual coverage closer to the nominal level with small samples or extreme proportions. <strong>Wald</strong> is simpler but can fail when there are few successes or failures.</p>
                     </div>
                 </div>
                 <div class="inline-inputs" id="customConfRow" style="display:none">
                     <div class="form-group">
-                        <label for="customConf">Custom confidence level (0–1)</label>
+                        <label for="customConf">Custom confidence level (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
+                        <p class="field-hint" hidden>Enter the confidence level you want as a decimal value between 0 and 1 (e.g. 0.975 for 97.5%).</p>
                     </div>
                 </div>
             </div>
@@ -420,6 +425,7 @@ document.getElementById('method').addEventListener('change', calculate);
 document.getElementById('customConf').addEventListener('input', calculate);
 calculate();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

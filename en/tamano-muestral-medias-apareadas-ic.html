@@ -162,22 +162,25 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="pairedSigmaD">Standard deviation of the differences (σ<sub>d</sub>)</label>
+                        <label for="pairedSigmaD">Standard deviation of the differences (σ<sub>d</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="pairedSigmaD" value="8" step="0.1" min="0.0001">
+                        <p class="field-hint" hidden>Standard deviation of the individual differences \(d_i\) = after − before (not that of each group separately). Estimate it from pilot data on 10–20 pairs or from the literature.</p>
                     </div>
                     <div class="form-group">
-                        <label for="pairedE">Margin of error (E)</label>
+                        <label for="pairedE">Margin of error (E) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="pairedE" value="2" step="0.1" min="0.0001">
+                        <p class="field-hint" hidden>Maximum tolerable deviation between the estimated mean difference and the true one, in the same units as the differences. E.g. 2 mmHg.</p>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="pairedConfidence">Confidence level</label>
+                    <label for="pairedConfidence">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                     <select id="pairedConfidence">
                         <option value="0.90">90%</option>
                         <option value="0.95" selected>95%</option>
                         <option value="0.99">99%</option>
                     </select>
+                    <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true mean difference. <strong>95%</strong> is the usual standard.</p>
                 </div>
             </div>
 
@@ -312,6 +315,7 @@ function calculatePairedMeansSampleSize() {
 document.getElementById('pairedCalculateBtn').addEventListener('click', calculatePairedMeansSampleSize);
 calculatePairedMeansSampleSize();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

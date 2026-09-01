@@ -380,23 +380,25 @@
         <h2 class="panel-heading">Parameters</h2>
 
         <div class="form-group">
-          <label for="testType">Test type</label>
+          <label for="testType">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
           <select id="testType">
             <option value="right" selected>Right-tailed (H₁: μ &gt; μ₀)</option>
             <option value="two">Two-tailed (H₁: μ ≠ μ₀)</option>
           </select>
+            <p class="field-hint" hidden>The right-tailed test only detects positive effects (H₁: μ &gt; μ₀); the two-tailed test detects deviations in either direction (H₁: μ ≠ μ₀). The type you choose changes where the rejection region sits.</p>
         </div>
 
         <div class="form-group">
-          <label for="effectSize">Effect size <em>d</em></label>
+          <label for="effectSize">Effect size <em>d</em> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
           <div class="slider-row">
             <input type="range" id="effectSize" min="0" max="3" step="0.05" value="0.5">
             <span class="slider-val" id="effectSizeVal">d = 0.50</span>
           </div>
+            <p class="field-hint" hidden>True difference between means in standard deviation units (Cohen's d). <strong>d = 0.2</strong> is considered a small effect, <strong>d = 0.5</strong> medium and <strong>d = 0.8</strong> large.</p>
         </div>
 
         <div class="form-group">
-          <label for="sampleSize">Sample size <em>n</em></label>
+          <label for="sampleSize">Sample size <em>n</em> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
           <select id="sampleSize">
             <option value="10">10</option>
             <option value="20">20</option>
@@ -405,14 +407,16 @@
             <option value="100">100</option>
             <option value="200">200</option>
           </select>
+            <p class="field-hint" hidden>Number of observations. As n grows, the distributions under H₀ and H₁ separate further (δ = d × √n increases) and power rises.</p>
         </div>
 
         <div class="form-group">
-          <label for="alpha">Significance level α</label>
+          <label for="alpha">Significance level α <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
           <div class="slider-row">
             <input type="range" id="alpha" min="0.005" max="0.25" step="0.005" value="0.05">
             <span class="slider-val" id="alphaVal">α = 0.050</span>
           </div>
+            <p class="field-hint" hidden>Probability of committing a type I error (false positive). Raising α shifts the decision threshold and increases power, but also false positives.</p>
         </div>
       </aside>
 
@@ -913,6 +917,7 @@ document.getElementById('sampleSize').addEventListener('change', update);
 initChart();
 update();
 </script>
+<script src="../../field-hints.js?v=20260730-1"></script>
 <script src="../../theme.js?v=20260730-1"></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

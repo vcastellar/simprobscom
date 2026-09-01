@@ -117,6 +117,18 @@ function formatAxisValue(value) {
     return Number(normalizedValue.toFixed(4)).toString();
 }
 
+const calculationDescriptions = {
+    pdf: "Gives the density (continuous variable) or the point probability (discrete variable) at the value x. For continuous variables it is not a probability as such: you have to integrate over an interval to get one.",
+    cdf: "Gives the cumulative probability up to x, from x onwards, or over an interval [a, b], depending on the mode you pick just below.",
+    quantile: "Inverse calculation: given a probability p (between 0 and 1), it returns the value x such that P(X \u2264 x) = p."
+};
+
+const cdfModeDescriptions = {
+    left: "Probability that the variable is less than or equal to x: P(X \u2264 x).",
+    right: "Probability that the variable is greater than or equal to x: P(X \u2265 x).",
+    interval: "Probability that the variable falls between two values: P(a \u2264 X \u2264 b)."
+};
+
 const distributionSelect = document.getElementById("distribution");
 const calculationSelect = document.getElementById("calculation");
 const cdfModeSelect = document.getElementById("cdfMode");
@@ -184,8 +196,14 @@ function updateCdfControls() {
     const cdfMode = document.getElementById("cdfMode");
     const xValueLabel = document.getElementById("xValueLabel");
     const bValueGroup = document.getElementById("bValueGroup");
+    const calculationDescriptionEl = document.getElementById("calculationDescription");
+    const cdfModeDescriptionEl = document.getElementById("cdfModeDescription");
 
     const isCdf = calc === "cdf";
+
+    if (calculationDescriptionEl) {
+        calculationDescriptionEl.textContent = calculationDescriptions[calc] || "";
+    }
 
     cdfModeGroup.hidden = !isCdf;
 
@@ -193,6 +211,10 @@ function updateCdfControls() {
         bValueGroup.hidden = true;
         xValueLabel.innerText = calc === "quantile" ? "Probability (between 0 and 1)" : "value of x";
         return;
+    }
+
+    if (cdfModeDescriptionEl) {
+        cdfModeDescriptionEl.textContent = cdfModeDescriptions[cdfMode.value] || "";
     }
 
     if (cdfMode.value === "interval") {

@@ -186,21 +186,23 @@
                     <div id="parameters" class="dynamic-parameters"></div>
 
                     <div class="form-group">
-                        <label>Calculation type</label>
+                        <label>Calculation type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <select id="calculation">
                             <option value="pdf">Density / probability function</option>
                             <option value="cdf">Cumulative probability</option>
                             <option value="quantile">Percentile / quantile</option>
                         </select>
+                        <p id="calculationDescription" class="field-hint" hidden></p>
                     </div>
 
                     <div class="form-group" id="cdfModeGroup" hidden>
-                        <label>Cumulative probability type</label>
+                        <label>Cumulative probability type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <select id="cdfMode">
                             <option value="left">P(X ≤ x)</option>
                             <option value="right">P(X ≥ x)</option>
                             <option value="interval">P(a ≤ X ≤ b)</option>
                         </select>
+                        <p id="cdfModeDescription" class="field-hint" hidden></p>
                     </div>
 
                     <div class="inline-inputs">
@@ -255,6 +257,22 @@
         \[ x = \mu + z_{0.95} \cdot \sigma = 170 + 1.6449 \times 8 \approx 183.16 \text{ cm} \]
         Only 5% of the population exceeds <strong>183.16 cm</strong>.</p>
         <p><strong>Interpretation:</strong> The mean of 170 cm is the point of maximum density; the empirical rule indicates that 68% of people are between 162 and 178 cm (\(\mu \pm \sigma\)). The 95th percentile is useful, for example, for sizing doors or ergonomic equipment that should accommodate 95% of the population.</p>
+        <h3>Model assumptions</h3>
+        <ul>
+            <li>The variable is continuous and can, in principle, take any real value, even if in practice it is bounded by physical limits.</li>
+            <li>There is a structural reason to expect symmetry around a central value: the phenomenon arises as the sum or average of many small, independent factors of comparable magnitude (the Central Limit Theorem then supports the normal approximation even if the original data are not normal), or an equivalent physical/biological argument exists. It is not enough for a histogram to merely "look" bell-shaped.</li>
+            <li>There is no natural bound close to the observed data (for example, a minimum at 0) that truncates the distribution and produces systematic skewness.</li>
+            <li>The spread of the data does not depend strongly on their magnitude: variability is similar at the low and the high end of the observed range (no marked heteroscedasticity).</li>
+            <li>If these conditions do not hold — for example, the variable cannot be negative or the data are strongly skewed — consider other distributions such as the <a href="lognormal.html">log-normal</a>, the <a href="gamma.html">gamma</a> or the <a href="weibull.html">Weibull</a>.</li>
+        </ul>
+        <h3>Common uses</h3>
+        <ul>
+            <li>Modeling physical measurements: heights, weights, reaction times or measurement-instrument errors.</li>
+            <li>Statistical quality control and manufacturing processes, defining specification limits and control charts.</li>
+            <li>Approximating the <a href="binomial.html">binomial</a> or <a href="poisson.html">Poisson</a> distribution when the number of trials or the mean is large.</li>
+            <li>The foundation of <a href="intervalo-confianza-media.html">confidence intervals</a> and <a href="contraste-hipotesis-una-media.html">hypothesis tests</a> for sample means, thanks to the Central Limit Theorem.</li>
+            <li>Financial risk models and asset returns, though with caveats: real market tails are usually heavier than those of a theoretical normal.</li>
+        </ul>
         </article>
         <section class="card content-card">
             <h3>How to interpret the result</h3>
@@ -273,6 +291,13 @@
                 <li><a href="intervalo-confianza-media.html">Confidence interval for one mean</a></li>
               </ul>
             </section>
+            <h3>References and further reading</h3>
+            <ul>
+                <li>Wikipedia: <a href="https://en.wikipedia.org/wiki/Normal_distribution" target="_blank" rel="noopener noreferrer">Normal distribution</a> — definition, properties and proofs.</li>
+                <li>Wikipedia: <a href="https://en.wikipedia.org/wiki/Central_limit_theorem" target="_blank" rel="noopener noreferrer">Central limit theorem</a> — why the normal appears so recurrently.</li>
+                <li>Wikipedia: <a href="https://en.wikipedia.org/wiki/68%E2%80%9395%E2%80%9399.7_rule" target="_blank" rel="noopener noreferrer">68–95–99.7 rule</a> — the empirical rule and its usual applications.</li>
+                <li>Casella, G. and Berger, R. L. (2002). <em>Statistical Inference</em> (2nd ed.). Duxbury. — formal treatment of the normal distribution and its properties.</li>
+            </ul>
             <h3>Frequently asked questions</h3>
             <ul>
                 <li><strong>How do I convert a value x into a z-score?</strong> Subtract the mean and divide by the standard deviation: z = (x − μ)/σ. The z-score tells you how many standard deviations x lies above or below the mean, which lets you work with the standard normal N(0, 1).</li>
@@ -306,6 +331,7 @@ window.MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="script.js?v=20260730-1" defer></script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

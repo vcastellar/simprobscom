@@ -163,31 +163,36 @@
             <div class="form-grid sample-grid">
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="onePropH0">Null hypothesis (p0)</label>
+                        <label for="onePropH0">Null hypothesis (p0) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="onePropH0" value="0.3" step="0.01" min="0.001" max="0.999">
+                        <p class="field-hint" hidden>Reference value you want to test against: the proportion under the null hypothesis H₀.</p>
                     </div>
                     <div class="form-group">
-                        <label for="onePropDelta">Minimum detectable difference |p−p0| (Δ)</label>
+                        <label for="onePropDelta">Minimum detectable difference |p−p0| (Δ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="onePropDelta" value="0.1" step="0.001" min="0.0001" max="0.9999">
+                        <p class="field-hint" hidden>Minimum difference between p and p0 you want to be able to detect with the chosen power, set by practical relevance before seeing the data.</p>
                     </div>
                 </div>
                 <div class="inline-inputs">
                     <div class="form-group">
-                        <label for="onePropAlpha">Alpha (α)</label>
+                        <label for="onePropAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="onePropAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                        <p class="field-hint" hidden>False-positive risk you accept (rejecting H₀ when p = p0 in fact). The typical value is <strong>0.05</strong>.</p>
                     </div>
                     <div class="form-group">
-                        <label for="onePropPower">Power (1-β)</label>
+                        <label for="onePropPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="onePropPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                        <p class="field-hint" hidden>Probability of detecting the difference Δ if it really exists. Use <strong>0.80</strong> or <strong>0.90</strong> depending on how demanding the study is.</p>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="onePropAlternative">Alternative hypothesis</label>
+                    <label for="onePropAlternative">Alternative hypothesis <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                     <select id="onePropAlternative">
                         <option value="two-sided">Ha: p ≠ p0</option>
                         <option value="greater">Ha: p ≥ p0</option>
                         <option value="less">Ha: p ≤ p0</option>
                     </select>
+                    <p class="field-hint" hidden>Use <strong>two-tailed</strong> (≠) if you have no prior direction; use <strong>one-tailed</strong> (≥ or ≤) only if you care about detecting the change in a single direction — it requires a smaller sample, but you must be able to justify it a priori.</p>
                 </div>
             </div>
 
@@ -309,6 +314,7 @@ function calculateOnePropSampleSize() {
 document.getElementById("onePropCalculateBtn").addEventListener("click", calculateOnePropSampleSize);
 calculateOnePropSampleSize();
 </script>
+<script src="../field-hints.js?v=20260730-1" defer></script>
 <script src="../theme.js?v=20260730-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
