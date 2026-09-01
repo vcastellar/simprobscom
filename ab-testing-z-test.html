@@ -221,7 +221,12 @@
 
     <section class="card content-card">
         <h3>Ejemplo resuelto: test Z en A/B testing</h3>
-            <p>Con A = 10.000 visitas y 420 conversiones, B = 10.000 visitas y 480 conversiones, la herramienta compara dos proporciones independientes. Usa contraste bilateral si solo quieres detectar diferencia, o unilateral únicamente si la hipótesis de mejora se fijó antes de ver los datos.</p>
+            <p>La versión A obtiene 420 conversiones de 10.000 visitas (\(\hat{p}_A = 0{,}042\)) y la versión B obtiene 480 de 10.000 (\(\hat{p}_B = 0{,}048\)). Se contrasta \(H_0\colon p_A = p_B\) frente a \(H_1\colon p_A \neq p_B\) con \(\alpha = 0{,}05\) bilateral.</p>
+            <p>Bajo \(H_0\) se usa la proporción combinada \(\hat{p} = (420+480)/(10000+10000) = 0{,}045\), con la que se obtienen el error estándar y el estadístico z:</p>
+            <p class="formula-line">\( SE = \sqrt{\hat{p}(1-\hat{p})\left(\dfrac{1}{n_A} + \dfrac{1}{n_B}\right)} = \sqrt{0{,}045 \cdot 0{,}955 \cdot \dfrac{2}{10000}} \approx 0{,}002932 \)</p>
+            <p class="formula-line">\( z = \dfrac{\hat{p}_B - \hat{p}_A}{SE} = \dfrac{0{,}048 - 0{,}042}{0{,}002932} \approx 2{,}05 \)</p>
+            <p>El p-valor bilateral es \(p \approx 0{,}041 &lt; 0{,}05\), de modo que <strong>se rechaza \(H_0\)</strong>: B convierte significativamente mejor que A. El intervalo de confianza Wald al 95 % para \(\Delta = p_B - p_A = 0{,}6\) puntos porcentuales ronda \([0{,}03\,\%,\ 1{,}17\,\%]\); como no incluye el 0, es coherente con el rechazo.</p>
+            <p>Con 10.000 visitas por variante el test detecta incluso una mejora pequeña, así que revisa siempre la magnitud del efecto además de la significación. Usa contraste bilateral si solo quieres detectar una diferencia, o unilateral únicamente si la hipótesis de mejora se fijó antes de ver los datos.</p>
     </section>
 <section class="card content-card">
         <h3>Cuándo usar la corrección de Yates</h3>
