@@ -242,7 +242,7 @@
             <!-- PMF TAB -->
             <div id="tab-pmf" class="tab-content active">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra P(X = k) = C(n,k)·p^k·(1−p)^(n−k). Las filas son los valores de k (0, 1, …, n); las columnas son los valores de p. Usa el selector n para cambiar el número de ensayos y el botón para cambiar el rango de p.
+                    <strong>Cómo leer la tabla:</strong> cada celda muestra P(X = k) = C(n,k)·p^k·(1−p)^(n−k). El parámetro n es el número de ensayos y puedes elegirlo en el desplegable. Las filas son los valores de k (0, 1, …, n); las columnas son los valores de p. Usa los botones para cambiar el rango de p.
                 </div>
                 <div class="df-control">
                     <label for="n-pmf">n (ensayos):</label>
@@ -272,7 +272,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra P(X ≤ k) = Σᵢ₌₀ᵏ C(n,i)·p^i·(1−p)^(n−i). Para calcular P(X &gt; k) usa el complemento: 1 − P(X ≤ k).
+                    <strong>Cómo leer la tabla:</strong> cada celda muestra P(X ≤ k) = Σᵢ₌₀ᵏ C(n,i)·p^i·(1−p)^(n−i). El parámetro n es el número de ensayos y puedes elegirlo en el desplegable; las filas indican k y las columnas, p. Para calcular P(X &gt; k) usa el complemento: 1 − P(X ≤ k).
                 </div>
                 <div class="df-control">
                     <label for="n-cdf">n (ensayos):</label>
@@ -302,6 +302,16 @@
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
             <h3>Cómo usar estas tablas</h3>
+            <p>Antes de consultar un valor, identifica los tres datos del problema: el número de ensayos n, la probabilidad de éxito p en cada ensayo y el número de éxitos k.</p>
+            <ol>
+                <li><strong>Elige n</strong> en el desplegable &laquo;n (ensayos)&raquo;. La tabla se actualizará y mostrará las filas desde k = 0 hasta k = n.</li>
+                <li><strong>Selecciona la pestaña adecuada:</strong> usa P(X = k) para la probabilidad de exactamente k éxitos o P(X ≤ k) para la probabilidad de obtener como máximo k éxitos.</li>
+                <li><strong>Escoge el rango de p</strong> con los botones p ≤ 0.50 o p &gt; 0.50 y localiza la columna correspondiente a la probabilidad de éxito.</li>
+                <li><strong>Busca la fila k</strong>. La intersección de esa fila con la columna p es la probabilidad solicitada; también puedes hacer clic en la celda para verla identificada.</li>
+                <li><strong>Combina valores si es necesario:</strong> para P(X &gt; k), resta la acumulada de 1; para un intervalo P(a ≤ X ≤ b), resta P(X ≤ a − 1) de P(X ≤ b).</li>
+            </ol>
+            <p><strong>Ejemplo:</strong> si se realizan 10 ensayos con p = 0.30 y se quiere la probabilidad de exactamente 4 éxitos, elige n = 10, abre P(X = k) y cruza la fila k = 4 con la columna p = 0.30.</p>
+
             <h3>Distribución Binomial</h3>
             <p>Un experimento binomial consiste en n ensayos independientes, cada uno con probabilidad p de éxito. El número de éxitos X sigue una distribución B(n, p) con función de masa:</p>
             <p class="formula-line">\( P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}, \quad k = 0, 1, \ldots, n \)</p>
