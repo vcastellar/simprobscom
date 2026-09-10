@@ -238,7 +238,7 @@
             <!-- PMF TAB -->
             <div id="tab-pmf" class="tab-content active">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows P(X = k) = C(n,k)·p^k·(1−p)^(n−k). Rows are the values of k (0, 1, …, n); columns are the values of p. Use the n selector to change the number of trials and the button to change the range of p.
+                    <strong>How to read the table:</strong> each cell shows P(X = k) = C(n,k)·p^k·(1−p)^(n−k). The parameter n is the number of trials, and you can choose it from the dropdown. Rows are the values of k (0, 1, …, n); columns are the values of p. Use the buttons to change the range of p.
                 </div>
                 <div class="df-control">
                     <label for="n-pmf">n (trials):</label>
@@ -268,7 +268,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows P(X ≤ k) = Σᵢ₌₀ᵏ C(n,i)·p^i·(1−p)^(n−i). To calculate P(X &gt; k) use the complement: 1 − P(X ≤ k).
+                    <strong>How to read the table:</strong> each cell shows P(X ≤ k) = Σᵢ₌₀ᵏ C(n,i)·p^i·(1−p)^(n−i). The parameter n is the number of trials, and you can choose it from the dropdown; rows indicate k and columns indicate p. To calculate P(X &gt; k) use the complement: 1 − P(X ≤ k).
                 </div>
                 <div class="df-control">
                     <label for="n-cdf">n (trials):</label>
@@ -298,6 +298,16 @@
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
             <h3>How to use these tables</h3>
+            <p>Before looking up a value, identify the three pieces of information in the problem: the number of trials n, the probability of success p on each trial, and the number of successes k.</p>
+            <ol>
+                <li><strong>Choose n</strong> from the &ldquo;n (trials)&rdquo; dropdown. The table will update and display rows from k = 0 through k = n.</li>
+                <li><strong>Select the appropriate tab:</strong> use P(X = k) for the probability of exactly k successes or P(X ≤ k) for the probability of at most k successes.</li>
+                <li><strong>Choose the p range</strong> with the p ≤ 0.50 or p &gt; 0.50 buttons, then find the column for the probability of success.</li>
+                <li><strong>Find row k.</strong> Its intersection with column p is the requested probability; you can also click the cell to see the value identified.</li>
+                <li><strong>Combine values when needed:</strong> for P(X &gt; k), subtract the cumulative probability from 1; for an interval P(a ≤ X ≤ b), subtract P(X ≤ a − 1) from P(X ≤ b).</li>
+            </ol>
+            <p><strong>Example:</strong> for 10 trials with p = 0.30, to find the probability of exactly 4 successes, choose n = 10, open P(X = k), and use the cell where row k = 4 meets column p = 0.30.</p>
+
             <h3>Binomial Distribution</h3>
             <p>A binomial experiment consists of n independent trials, each with probability p of success. The number of successes X follows a B(n, p) distribution with probability mass function:</p>
             <p class="formula-line">\( P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}, \quad k = 0, 1, \ldots, n \)</p>
