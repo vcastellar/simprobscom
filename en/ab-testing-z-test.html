@@ -215,7 +215,12 @@
 
     <section class="card content-card">
         <h3>Worked example: z-test in A/B testing</h3>
-            <p>With A = 10,000 visits and 420 conversions, and B = 10,000 visits and 480 conversions, the tool compares two independent proportions. Use a two-tailed test if you only want to detect a difference, or a one-tailed test only if the improvement hypothesis was fixed before seeing the data.</p>
+            <p>Version A gets 420 conversions out of 10,000 visits (\(\hat{p}_A = 0.042\)) and version B gets 480 out of 10,000 (\(\hat{p}_B = 0.048\)). We test \(H_0\colon p_A = p_B\) against \(H_1\colon p_A \neq p_B\) with \(\alpha = 0.05\), two-sided.</p>
+            <p>Under \(H_0\) we use the pooled proportion \(\hat{p} = (420+480)/(10000+10000) = 0.045\), which gives the standard error and the z statistic:</p>
+            <p class="formula-line">\( SE = \sqrt{\hat{p}(1-\hat{p})\left(\dfrac{1}{n_A} + \dfrac{1}{n_B}\right)} = \sqrt{0.045 \cdot 0.955 \cdot \dfrac{2}{10000}} \approx 0.002932 \)</p>
+            <p class="formula-line">\( z = \dfrac{\hat{p}_B - \hat{p}_A}{SE} = \dfrac{0.048 - 0.042}{0.002932} \approx 2.05 \)</p>
+            <p>The two-sided p-value is \(p \approx 0.041 &lt; 0.05\), so <strong>\(H_0\) is rejected</strong>: B converts significantly better than A. The 95% Wald confidence interval for \(\Delta = p_B - p_A = 0.6\) percentage points is roughly \([0.03\,\%,\ 1.17\,\%]\); since it excludes 0, it is consistent with rejecting \(H_0\).</p>
+            <p>With 10,000 visits per variant the test detects even a small improvement, so always check the effect size alongside significance. Use a two-tailed test if you only want to detect a difference, or a one-tailed test only if the improvement hypothesis was fixed before seeing the data.</p>
     </section>
 <section class="card content-card">
         <h3>When to use Yates' correction</h3>
