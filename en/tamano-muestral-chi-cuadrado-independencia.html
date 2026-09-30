@@ -103,6 +103,22 @@
     }
     </script>
     <link rel="stylesheet" href="../style_new.css?v=20260730-1">
+    <style>
+        .theory-table-wrap { margin: 10px 0 16px; overflow-x: auto; border-radius: 12px; border: 1px solid rgba(79, 70, 229, 0.18); }
+        .theory-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; line-height: 1.5; font-variant-numeric: tabular-nums; }
+        .theory-table th, .theory-table td { padding: 8px 12px; text-align: left; border-bottom: 1px solid rgba(79, 70, 229, 0.12); white-space: nowrap; }
+        .theory-table th { background: rgba(79, 70, 229, 0.10); color: #1e1b4b; font-weight: 700; }
+        .theory-table td { color: #334155; }
+        .theory-table th.num, .theory-table td.num { text-align: right; }
+        .theory-table tbody tr:last-child td { border-bottom: 0; }
+        .theory-table tr.is-highlight td { background: rgba(79, 70, 229, 0.08); font-weight: 600; color: #312e81; }
+        html.dark-mode .theory-table-wrap { border-color: rgba(99, 102, 241, 0.3); }
+        html.dark-mode .theory-table th { background: rgba(99, 102, 241, 0.16); color: #c7d2fe; }
+        html.dark-mode .theory-table td { color: #cbd5e1; border-bottom-color: rgba(148, 163, 184, 0.15); }
+        html.dark-mode .theory-table tr.is-highlight td { background: rgba(99, 102, 241, 0.14); color: #e0e7ff; }
+        .content-card ol { margin: 0 0 8px; padding-left: 22px; }
+        .content-card ol li { margin-bottom: 4px; }
+    </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -207,41 +223,106 @@
             </details>
         </section>
 
-                <section class="card content-card">
+        <section class="card content-card">
             <h3>Explanation</h3>
-            <p>The chi-square test of independence checks whether two categorical variables are independent in an \(r \times c\) contingency table. Under \(H_0\) the \(\chi^2\) statistic follows a chi-square distribution with \(df = (r-1)(c-1)\) degrees of freedom.</p>
-            <p>Under the alternative, \(\chi^2\) follows a <em>noncentral</em> chi-square distribution with noncentrality parameter \(\lambda = N \cdot w^2\), where \(N\) is the total sample size and \(w\) is Cohen's \(w\).</p>
-            <h3>Noncentrality parameter and power</h3>
-            <p class="formula-line">\( \lambda = N \cdot w^2 \)</p>
-            <p class="formula-line">\( \text{Power} = 1 - F_{\chi^2_{df,\,\lambda}}\!\left(\chi^2_{1-\alpha,\,df}\right) \)</p>
-            <p>The noncentral chi-square distribution is evaluated exactly via the Poisson mixture of central chi-squares:</p>
-            <p class="formula-line">\( F_{\chi^2_{df,\lambda}}(x) = \sum_{k=0}^{\infty} \frac{e^{-\lambda/2}(\lambda/2)^k}{k!} \cdot F_{\chi^2_{df+2k}}(x) \)</p>
-            <h3>Cohen's w for 2×2 tables</h3>
-            <p>With \(p_1\) and \(p_2\) the proportions in the two groups and \(\bar{p} = (p_1+p_2)/2\):</p>
-            <p class="formula-line">\( w = \frac{|p_1 - p_2|}{2\sqrt{\bar{p}(1-\bar{p})}} \)</p>
-            <p>Rough benchmarks according to Cohen (1988): \(w = 0.1\) (small effect), \(w = 0.3\) (medium), \(w = 0.5\) (large).</p>
+            <p>The chi-square test of independence answers this question: <strong>is the distribution of one categorical variable the same across all categories of another?</strong> The data are arranged in a contingency table with \(r\) rows and \(c\) columns, and each observation falls into exactly one cell. The null hypothesis \(H_0\) is that the two variables are independent: knowing an observation's row does not change the probability of each column (for example, that product preference is split the same way among men and women). The alternative \(H_1\) is that some association exists.</p>
+            <p>If the variables were independent, the expected proportion in cell \((i, j)\) would be the product of the marginal proportions, \(p_{0,ij} = p_{i\cdot} \cdot p_{\cdot j}\), and the expected frequency is obtained from the row and column totals. The statistic compares each observed frequency \(O_{ij}\) with the expected one \(E_{ij}\):</p>
+            <p class="formula-line">\( \chi^2 = \sum_{i=1}^{r}\sum_{j=1}^{c} \frac{(O_{ij} - E_{ij})^2}{E_{ij}}, \qquad E_{ij} = \frac{(\text{row } i \text{ total})\,(\text{column } j \text{ total})}{N} \)</p>
+            <p>Each term measures one cell's departure from independence: the difference is squared so that deviations in both directions accumulate, and it is divided by \(E_{ij}\) to weight it by the size of the cell. Under \(H_0\) the statistic follows a chi-square distribution with \(df = (r-1)(c-1)\) degrees of freedom. The reason: once the row and column totals are fixed, only \((r-1)(c-1)\) cells can vary freely; the rest are determined by subtraction. In a \(2 \times 2\) table, for instance, knowing one cell is enough to reconstruct the other three, which is why \(df = 1\).</p>
+
+            <h3>The logic of the power calculation</h3>
+            <p>Before collecting the data we do not know what value \(\chi^2\) will take, but we can reason about the two possible scenarios:</p>
+            <ul>
+                <li><strong>If \(H_0\) is true</strong>, the statistic follows the central chi-square distribution with \(df\) degrees of freedom. We fix the significance level \(\alpha\) and with it the <strong>critical value</strong> \(\chi^2_{1-\alpha,\,df}\): the point that the central chi-square exceeds with probability \(\alpha\) only. We will reject \(H_0\) if the statistic lands above it. With \(df = 2\) and \(\alpha = 0.05\), that value is \(5.99\); with \(df = 1\), \(3.84\).</li>
+                <li><strong>If \(H_1\) is true</strong> (the variables are associated), the observed frequencies drift systematically away from those expected under independence and the statistic tends to be larger. The <strong>power</strong> is the probability that, in this scenario, the statistic exceeds the critical value and we therefore detect the association.</li>
+            </ul>
+            <p>The critical value depends only on \(\alpha\) and \(df\); it does not change with the sample size. What does change with \(N\) is how far the statistic shifts to the right when \(H_1\) is true. To compute the power we therefore need to describe the distribution of the statistic under \(H_1\). We do this in three steps: measure the strength of the association (\(w\)), translate it into a shift of the distribution (\(\lambda\)), and compute the area that lies to the right of the critical value.</p>
+
+            <h3>Step 1: measuring the association with Cohen's \(w\)</h3>
+            <p>We need a number that says how far from independence the real proportions of the table are, and that does not depend on \(N\). Cohen's \(w\) applies the recipe of the statistic to the cell proportions: it compares the proportions you expect under \(H_1\), \(p_{1,ij}\), with those an independent table with the same margins would have, \(p_{0,ij} = p_{i\cdot} \cdot p_{\cdot j}\):</p>
+            <p class="formula-line">\( w = \sqrt{\sum_{i=1}^{r}\sum_{j=1}^{c} \frac{(p_{1,ij} - p_{0,ij})^2}{p_{0,ij}}} \)</p>
+            <p>If a sample of \(N\) observations reproduced the proportions \(p_{1,ij}\) exactly, its chi-square statistic would be exactly \(N \cdot w^2\). That is why it helps to think of \(w^2\) as <strong>the chi-square statistic per observation</strong> or, equivalently, \(w = \sqrt{\chi^2 / N}\): it is a property of the table of proportions, not of the sample. In \(2 \times 2\) tables, \(w\) coincides with the \(\phi\) coefficient, the correlation between the two binary variables. Cohen's (1988) benchmarks: \(w = 0.1\) (weak association), \(0.3\) (medium), \(0.5\) (strong).</p>
+            <p><strong>Special case: a \(2 \times 2\) table with two groups of equal size.</strong> This is the most common situation (treatment versus control, with success proportions \(p_1\) and \(p_2\)) and the one the wizard solves. If each group contributes half of the sample, the proportions of the four cells under \(H_1\) are \(p_1/2\), \((1-p_1)/2\), \(p_2/2\) and \((1-p_2)/2\); under independence, both rows share the average proportion \(\bar{p} = (p_1 + p_2)/2\). Substituting into the general formula and simplifying (the four terms pair up two by two) gives:</p>
+            <p class="formula-line">\( w = \frac{|p_1 - p_2|}{2\sqrt{\bar{p}\,(1-\bar{p})}}, \qquad \bar{p} = \frac{p_1 + p_2}{2} \)</p>
+            <p>Read it as "half the difference between the two groups, measured in standard deviations of the average proportion", since \(\sqrt{\bar{p}(1-\bar{p})}\) is the standard deviation of a 0/1 variable with probability \(\bar{p}\). If the groups will not be of equal size, compute \(w\) with the general formula using the real row proportions.</p>
+
+            <h3>Step 2: from effect to shift, \(\lambda = N \cdot w^2\)</h3>
+            <p>When \(H_1\) is true, the statistic no longer follows the central chi-square. It follows a <strong>noncentral chi-square</strong>: the same family of distributions, but shifted to the right and more spread out. The size of the shift is governed by the <strong>noncentrality parameter</strong> \(\lambda\), which for this test is:</p>
+            <p class="formula-line">\( \lambda = N \cdot w^2 \qquad\text{and therefore}\qquad E\!\left[\chi^2 \mid H_1\right] = df + \lambda \)</p>
+            <p>A useful way to see it is to decompose the expected value of the statistic under \(H_1\), which is \(df + \lambda\). The term \(df\) is the "noise" part: what the statistic is worth on average even when \(H_0\) is true, purely from sampling chance. The term \(\lambda\) is the "signal" part: what the real association contributes. And that signal grows in proportion to \(N\), because with twice as many observations the systematic distance between observed and expected doubles, while the critical value stays where it is. This is exactly the mechanism by which a larger sample gives more power: the distribution under \(H_1\) moves away from the critical value and more and more area is left to its right.</p>
+            <p>This also yields the most important practical rule: for a given power, the required \(\lambda\) is nearly constant, so \(N \approx \lambda / w^2\). The sample size is <strong>inversely proportional to the square of the effect</strong>: detecting an association half as strong requires four times as many observations.</p>
+
+            <h3>Step 3: power as the area to the right of the critical value</h3>
+            <p class="formula-line">\( \text{Power} = P\!\left(\chi^2 > \chi^2_{1-\alpha,\,df} \mid H_1\right) = 1 - F_{\chi^2_{df,\,\lambda}}\!\left(\chi^2_{1-\alpha,\,df}\right) \)</p>
+            <p>Reading from right to left: \(F_{\chi^2_{df,\lambda}}\) is the cumulative distribution function of the noncentral chi-square with \(df\) degrees of freedom and noncentrality \(\lambda\). Evaluated at the critical value, it gives the probability that the statistic does <em>not</em> exceed it even though \(H_1\) is true, i.e. the probability of a type II error, \(\beta\). The power is its complement, \(1 - \beta\).</p>
+
+            <h3>How the noncentral chi-square is computed</h3>
+            <p>The noncentral chi-square has no simple closed-form formula, but it does have a representation that the calculator exploits: it is a <strong>mixture of central chi-squares with Poisson weights</strong>. Imagine first drawing an integer \(J\) from a Poisson distribution with mean \(\lambda/2\), and then generating a central chi-square with \(df + 2J\) degrees of freedom. The resulting variable is exactly a noncentral chi-square with parameters \(df\) and \(\lambda\). Its cumulative distribution function is therefore the weighted average of central cumulative distribution functions:</p>
+            <p class="formula-line">\( F_{\chi^2_{df,\lambda}}(x) = \sum_{j=0}^{\infty} \underbrace{\frac{e^{-\lambda/2}(\lambda/2)^j}{j!}}_{\text{Poisson weight}} \cdot \underbrace{F_{\chi^2_{df+2j}}(x)}_{\text{central chi-square}} \)</p>
+            <p>Each term combines two familiar ingredients: the Poisson probability that \(J = j\) and the cumulative distribution function of a central chi-square with \(df + 2j\) degrees of freedom. With \(df = 2\) and \(\lambda = 9.72\) (the values in the example below), the largest weights belong to \(j = 4\) and \(j = 5\) (\(0.18\) and \(0.17\)), i.e. to central chi-squares with 10 and 12 degrees of freedom, which exceed the critical value \(5.99\) easily; the weights become negligible from \(j \approx 15\) onwards. The calculator adds terms until the weight drops below \(10^{-14}\), which gives a result that is exact for all practical purposes without resorting to normal approximations.</p>
+
+            <h3>How the calculator finds the sample size</h3>
+            <p>There is no formula that solves for \(N\) directly, because \(N\) sits inside the noncentral distribution. The calculator runs a search:</p>
+            <ol>
+                <li>It obtains the critical value \(\chi^2_{1-\alpha,\,df}\) from \(\alpha\) and the table's degrees of freedom.</li>
+                <li>It starts with \(N = 2\), computes \(\lambda = N \cdot w^2\) and, with the Poisson mixture, the corresponding power.</li>
+                <li>If the power does not reach the target, it tries \(N + 1\) and repeats.</li>
+                <li>It stops at the first \(N\) whose power equals or exceeds the target. That is why the result is the <strong>minimum integer \(N\)</strong> and the "achieved power" is slightly above the requested one.</li>
+            </ol>
+            <p>The following table, computed with this same procedure for \(\alpha = 0.05\) and power \(0.80\), shows the two regularities worth remembering: \(N\) roughly quadruples every time \(w\) is halved, and for the same \(w\) more observations are needed the larger the table (the critical value is larger and the distribution more spread out).</p>
+            <div class="theory-table-wrap"><table class="theory-table">
+                <thead><tr><th>Degrees of freedom</th><th class="num">w = 0.1</th><th class="num">w = 0.2</th><th class="num">w = 0.3</th><th class="num">w = 0.5</th><th class="num">Required λ</th></tr></thead>
+                <tbody>
+                    <tr><td>df = 1 (2×2 table)</td><td class="num">785</td><td class="num">197</td><td class="num">88</td><td class="num">32</td><td class="num">≈ 7.9</td></tr>
+                    <tr><td>df = 2 (2×3 table)</td><td class="num">964</td><td class="num">241</td><td class="num">108</td><td class="num">39</td><td class="num">≈ 9.6</td></tr>
+                    <tr><td>df = 4 (3×3 or 2×5 table)</td><td class="num">1194</td><td class="num">299</td><td class="num">133</td><td class="num">48</td><td class="num">≈ 11.9</td></tr>
+                </tbody>
+            </table></div>
+
             <h3>Quick setup</h3>
             <ul>
-                <li><strong>w:</strong> 0.1 for subtle effects, 0.3 for moderate effects (the most common), 0.5 for large effects. For 2×2 tables use the wizard.</li>
-                <li><strong>df:</strong> (number of rows − 1) × (number of columns − 1). For 2×2 tables, df=1.</li>
-                <li><strong>α:</strong> 0.05 is the standard.</li>
-                <li><strong>Power:</strong> 0.80 as a common minimum; 0.90 for confirmatory studies.</li>
+                <li><strong>w:</strong> 0.1 for subtle associations, 0.3 for moderate associations (the most common value), 0.5 for strong associations. For 2×2 tables with equal-sized groups, use the wizard.</li>
+                <li><strong>df:</strong> (number of rows − 1) × (number of columns − 1). For 2×2 tables, df = 1; for 2×3, df = 2; for 3×3, df = 4.</li>
+                <li><strong>α:</strong> 0.05 is the standard. Lowering it to 0.01 raises the critical value and demands more observations.</li>
+                <li><strong>Power:</strong> 0.80 as the usual minimum; 0.90 in confirmatory studies.</li>
+                <li><strong>Expected frequencies:</strong> check that \(N \cdot p_{0,ij} \ge 5\) in every cell, or at least in 80% of them with none below 1.</li>
             </ul>
-            <h3>Worked example</h3>
-            <p>A researcher wants to study whether there is an association between gender (2 categories) and preference for three types of product (3 categories), i.e., a 2×3 table. They expect a medium effect (\(w = 0.3\)) with \(\alpha = 0.05\) and 80% power. The degrees of freedom are \(df = (2-1)(3-1) = 2\).</p>
-            <p>The calculator returns approximately <strong>\(N = 107\) total observations</strong>. With that sample, if the real association has an effect size \(w \geq 0.3\), the test will detect it 80% of the time.</p>
-            <p><strong>2×2 table with the wizard:</strong> if p₁ = 0.40 and p₂ = 0.60, then \(\bar{p} = 0.50\) and \(w = |0.40-0.60|/(2\sqrt{0.5 \times 0.5}) = 0.20/1.00 = 0.20\). With df=1, α=0.05 and power=0.80, N ≈ 197 observations are needed.</p>
+
+            <h3>Worked example, step by step</h3>
+            <p><strong>Example 1: a 2×3 table.</strong> A researcher wants to study whether there is an association between gender (2 categories) and preference for three types of product (3 categories). They have no prior data, so they plan for a medium effect, \(w = 0.3\), with \(\alpha = 0.05\) and 80% power.</p>
+            <p><strong>Step 1: the effect.</strong> \(w = 0.3\), hence \(w^2 = 0.09\): each observation contributes on average 0.09 units of "signal" to the statistic.</p>
+            <p><strong>Step 2: the critical value.</strong> \(df = (2-1)(3-1) = 2\). For \(\alpha = 0.05\), the critical value is \(\chi^2_{0.95;\,2} = 5.99\).</p>
+            <p><strong>Step 3: search for \(N\).</strong> For each candidate \(N\), \(\lambda = N \cdot 0.09\), and the power is the area of the noncentral chi-square that lies above \(5.99\):</p>
+            <div class="theory-table-wrap"><table class="theory-table">
+                <thead><tr><th class="num">N</th><th class="num">λ = N·w²</th><th class="num">Mean under \(H_1\) (df + λ)</th><th class="num">Power</th></tr></thead>
+                <tbody>
+                    <tr><td class="num">30</td><td class="num">2.70</td><td class="num">4.70</td><td class="num">29.3%</td></tr>
+                    <tr><td class="num">50</td><td class="num">4.50</td><td class="num">6.50</td><td class="num">46.0%</td></tr>
+                    <tr><td class="num">70</td><td class="num">6.30</td><td class="num">8.30</td><td class="num">60.6%</td></tr>
+                    <tr><td class="num">90</td><td class="num">8.10</td><td class="num">10.10</td><td class="num">72.3%</td></tr>
+                    <tr><td class="num">107</td><td class="num">9.63</td><td class="num">11.63</td><td class="num">79.98%</td></tr>
+                    <tr class="is-highlight"><td class="num">108</td><td class="num">9.72</td><td class="num">11.72</td><td class="num">80.37%</td></tr>
+                    <tr><td class="num">130</td><td class="num">11.70</td><td class="num">13.70</td><td class="num">87.5%</td></tr>
+                </tbody>
+            </table></div>
+            <p>With 30 observations, the mean of the statistic under \(H_1\) (4.70) does not even reach the critical value. With 107 the power stays at 79.98%, just below the target, and with 108 it exceeds it. The calculator therefore returns <strong>N = 108 observations in total</strong> (achieved power: 80.37%). With that sample, if the real association has an effect size \(w \ge 0.3\), the test will detect it at least 80% of the time. For reference, 90% power would require \(N = 141\), and \(\alpha = 0.01\) (critical value \(9.21\)) would require \(N = 155\).</p>
+            <p><strong>Check:</strong> with 6 cells, the average expected frequency is \(108/6 = 18\). The smallest cell depends on the margins: if one of the product categories attracts only 10% of the answers, its smaller cell would have about \(108 \times 0.5 \times 0.10 \approx 5.4\) expected observations, right at the limit of the rule of 5.</p>
+            <p><strong>Example 2: a 2×2 table with the wizard.</strong> Two groups of equal size are compared, with expected success proportions \(p_1 = 0.40\) and \(p_2 = 0.60\). With the wizard's formula, \(\bar{p} = 0.50\) and \(w = |0.40 - 0.60| / (2\sqrt{0.5 \times 0.5}) = 0.20 / 1.00 = 0.20\). You can check that the general formula gives the same: the four cells under \(H_1\) have proportions 0.20, 0.30, 0.30 and 0.20; under independence, all four are 0.25; each term is \((0.05)^2 / 0.25 = 0.01\) and \(w^2 = 4 \times 0.01 = 0.04\), hence \(w = 0.20\). With \(df = 1\), critical value \(3.84\), \(\alpha = 0.05\) and power 0.80, the search stops at <strong>N = 197</strong> (\(\lambda = 7.88\); with 196 the power is 79.96% and with 197 it is 80.16%). Split between the two groups, that is 99 subjects per group, rounding up.</p>
+
             <h3>Model assumptions</h3>
             <ul>
                 <li>Random sample of independent observations.</li>
                 <li>Two categorical variables crossed in a contingency table; each unit contributes to a single cell.</li>
-                <li>Expected frequencies \(\ge 5\) in most cells.</li>
+                <li>Expected frequencies \(\ge 5\) in most cells, so that the chi-square distribution is a good approximation.</li>
+                <li>The proportions under \(H_1\) used to compute \(w\) are a working hypothesis: if the true association is weaker, the real power will be lower than planned.</li>
                 <li>Effect measured with Cohen's \(w\) and \((\text{rows}-1)(\text{columns}-1)\) degrees of freedom on the noncentral chi-square.</li>
             </ul>
+
             <h3>How to interpret the result</h3>
-                <p>The value \(N\) is the <strong>total number of observations</strong> (sum of all cells in the contingency table) needed for the chi-square test of independence to detect the specified association with the desired power and significance level. Always round up. In a design where the size of each row is fixed (e.g., treatment and control groups), divide \(N\) by the number of rows to get the size of each group; in unrestricted sampling, \(N\) is simply the total number of subjects. Add a margin for dropout by dividing by \((1 - \text{dropout rate})\).</p>
-                <p>Cohen's effect size \(w\) is calculated from the expected frequencies under \(H_1\): \(w = \sqrt{\sum_{ij}(p_{1,ij} - p_{0,ij})^2 / p_{0,ij}}\), where \(p_{0,ij} = p_{i\cdot} \times p_{\cdot j}\) are the proportions under independence. Reference values are \(w = 0.10\) (small effect), \(w = 0.30\) (medium) and \(w = 0.50\) (large). The most important applicability condition is that the expected frequencies in each cell under \(H_0\) — computed as \(N \times p_{0,ij}\) — are all \(\geq 5\); otherwise, the chi-square statistic may not follow the chi-square distribution and the p-value would be unreliable. When several cells have low expected frequencies, merge substantively meaningful categories and reduce the degrees of freedom \((r-1)(c-1)\) of the test.</p>
-                <p>If the resulting \(N\) is impractical, check whether the specified effect size is realistic: a very weak association may require thousands of observations. Consider whether the range of variation of one of the categorical variables could be widened, or whether some categories could be merged to concentrate the effect. When the table is \(2 \times 2\) and \(N\) is small, Fisher's exact test is more appropriate than chi-square; in that case, use the <a href="tamano-muestral-fisher.html">sample size calculator for Fisher's exact test</a>. Once the data has been collected, run the analysis with the <a href="contraste-independencia-chi-cuadrado.html">chi-square test of independence calculator</a> and interpret the standardized residuals of each cell to locate the source of the association.</p>
+            <p>The value \(N\) is the <strong>total number of observations</strong> (sum of all cells in the contingency table) needed for the chi-square test of independence to detect the specified association with the desired power and significance level. Always round up. In a design where the size of each row is fixed (e.g. treatment and control groups), divide \(N\) by the number of rows to get the size of each group; in unrestricted sampling, \(N\) is simply the total number of subjects. Add a margin for dropout by dividing by \((1 - \text{dropout rate})\).</p>
+            <p>Check the expected frequencies: the most important applicability condition is that the expected frequencies in each cell under \(H_0\), computed as \(N \cdot p_{0,ij}\), are \(\ge 5\). If this is not met, the statistic may not follow the chi-square distribution and the p-value would be unreliable. When several cells have low expected frequencies, merge substantively meaningful categories and recompute \(w\) and the degrees of freedom \((r-1)(c-1)\).</p>
+            <p>Keep in mind that the sensitivity of \(N\) to \(w\) is quadratic: if the real association is 30% weaker than you assumed, \(N\) should be roughly double \((1/0.7^2 \approx 2.04)\). A very weak association (\(w = 0.1\)) may require close to a thousand observations, so it is worth checking whether the effect you are planning for is realistic.</p>
+            <p>If the resulting \(N\) is impractical, consider whether the range of variation of one of the variables could be widened, or whether some categories could be merged to concentrate the effect. When the table is \(2 \times 2\) and \(N\) is small, Fisher's exact test is more appropriate than chi-square; in that case, use the <a href="tamano-muestral-fisher.html">sample size calculator for Fisher's exact test</a>. Once the data have been collected, run the analysis with the <a href="contraste-independencia-chi-cuadrado.html">chi-square test of independence calculator</a> and interpret the standardised residuals of each cell to locate the source of the association.</p>
         </section>
 
         <section id="seo-support-content" class="card content-card">

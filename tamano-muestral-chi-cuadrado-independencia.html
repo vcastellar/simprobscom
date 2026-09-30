@@ -103,6 +103,22 @@
     }
     </script>
     <link rel="stylesheet" href="style_new.css?v=20260730-1">
+    <style>
+        .theory-table-wrap { margin: 10px 0 16px; overflow-x: auto; border-radius: 12px; border: 1px solid rgba(79, 70, 229, 0.18); }
+        .theory-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; line-height: 1.5; font-variant-numeric: tabular-nums; }
+        .theory-table th, .theory-table td { padding: 8px 12px; text-align: left; border-bottom: 1px solid rgba(79, 70, 229, 0.12); white-space: nowrap; }
+        .theory-table th { background: rgba(79, 70, 229, 0.10); color: #1e1b4b; font-weight: 700; }
+        .theory-table td { color: #334155; }
+        .theory-table th.num, .theory-table td.num { text-align: right; }
+        .theory-table tbody tr:last-child td { border-bottom: 0; }
+        .theory-table tr.is-highlight td { background: rgba(79, 70, 229, 0.08); font-weight: 600; color: #312e81; }
+        html.dark-mode .theory-table-wrap { border-color: rgba(99, 102, 241, 0.3); }
+        html.dark-mode .theory-table th { background: rgba(99, 102, 241, 0.16); color: #c7d2fe; }
+        html.dark-mode .theory-table td { color: #cbd5e1; border-bottom-color: rgba(148, 163, 184, 0.15); }
+        html.dark-mode .theory-table tr.is-highlight td { background: rgba(99, 102, 241, 0.14); color: #e0e7ff; }
+        .content-card ol { margin: 0 0 8px; padding-left: 22px; }
+        .content-card ol li { margin-bottom: 4px; }
+    </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -211,41 +227,106 @@
             </details>
         </section>
 
-                <section class="card content-card">
+        <section class="card content-card">
             <h3>Explicación</h3>
-            <p>El test chi-cuadrado de independencia contrasta si dos variables categóricas son independientes en una tabla de contingencia \(r \times c\). Bajo \(H_0\) el estadístico \(\chi^2\) sigue una distribución chi-cuadrado con \(df = (r-1)(c-1)\) grados de libertad.</p>
-            <p>Bajo la alternativa, \(\chi^2\) sigue una distribución chi-cuadrado <em>no central</em> con parámetro de no centralidad \(\lambda = N \cdot w^2\), donde \(N\) es el tamaño total de la muestra y \(w\) es la \(w\) de Cohen.</p>
-            <h3>Parámetro de no centralidad y potencia</h3>
-            <p class="formula-line">\( \lambda = N \cdot w^2 \)</p>
-            <p class="formula-line">\( \text{Potencia} = 1 - F_{\chi^2_{df,\,\lambda}}\!\left(\chi^2_{1-\alpha,\,df}\right) \)</p>
-            <p>La distribución chi-cuadrado no central se evalúa exactamente mediante la mezcla de Poisson de chi-cuadrados centrales:</p>
-            <p class="formula-line">\( F_{\chi^2_{df,\lambda}}(x) = \sum_{k=0}^{\infty} \frac{e^{-\lambda/2}(\lambda/2)^k}{k!} \cdot F_{\chi^2_{df+2k}}(x) \)</p>
-            <h3>W de Cohen para tablas 2×2</h3>
-            <p>Con \(p_1\) y \(p_2\) las proporciones en los dos grupos y \(\bar{p} = (p_1+p_2)/2\):</p>
-            <p class="formula-line">\( w = \frac{|p_1 - p_2|}{2\sqrt{\bar{p}(1-\bar{p})}} \)</p>
-            <p>Valores orientativos según Cohen (1988): \(w = 0{,}1\) (efecto pequeño), \(w = 0{,}3\) (mediano), \(w = 0{,}5\) (grande).</p>
+            <p>El test chi-cuadrado de independencia responde a esta pregunta: <strong>¿la distribución de una variable categórica es la misma en todas las categorías de otra?</strong> Los datos se organizan en una tabla de contingencia con \(r\) filas y \(c\) columnas, y cada observación cae en una sola celda. La hipótesis nula \(H_0\) es que las dos variables son independientes: conocer la fila de una observación no cambia la probabilidad de cada columna (por ejemplo, que la preferencia por un producto se reparta igual entre hombres y mujeres). La alternativa \(H_1\) es que existe alguna asociación.</p>
+            <p>Si las variables fueran independientes, la proporción esperada en la celda \((i, j)\) sería el producto de las proporciones marginales, \(p_{0,ij} = p_{i\cdot} \cdot p_{\cdot j}\), y la frecuencia esperada se obtiene a partir de los totales de fila y de columna. El estadístico compara cada frecuencia observada \(O_{ij}\) con la esperada \(E_{ij}\):</p>
+            <p class="formula-line">\( \chi^2 = \sum_{i=1}^{r}\sum_{j=1}^{c} \frac{(O_{ij} - E_{ij})^2}{E_{ij}}, \qquad E_{ij} = \frac{(\text{total fila } i)\,(\text{total columna } j)}{N} \)</p>
+            <p>Cada sumando mide la desviación de una celda respecto a la independencia: la diferencia se eleva al cuadrado para que las desviaciones en ambos sentidos se acumulen, y se divide entre \(E_{ij}\) para ponderarla según el tamaño de la celda. Bajo \(H_0\) el estadístico sigue una distribución chi-cuadrado con \(df = (r-1)(c-1)\) grados de libertad. El motivo: una vez fijados los totales de fila y de columna, solo \((r-1)(c-1)\) celdas pueden variar libremente; el resto queda determinado por diferencia. En una tabla \(2 \times 2\), por ejemplo, basta conocer una celda para reconstruir las otras tres, y por eso \(df = 1\).</p>
+
+            <h3>La lógica del cálculo de potencia</h3>
+            <p>Antes de recoger los datos no sabemos qué valor tomará \(\chi^2\), pero sí podemos razonar sobre los dos escenarios posibles:</p>
+            <ul>
+                <li><strong>Si \(H_0\) es cierta</strong>, el estadístico sigue la chi-cuadrado central con \(df\) grados de libertad. Fijamos el nivel de significación \(\alpha\) y con él el <strong>valor crítico</strong> \(\chi^2_{1-\alpha,\,df}\): el punto que la chi-cuadrado central solo supera con probabilidad \(\alpha\). Rechazaremos \(H_0\) si el estadístico queda por encima. Con \(df = 2\) y \(\alpha = 0{,}05\), ese valor es \(5{,}99\); con \(df = 1\), \(3{,}84\).</li>
+                <li><strong>Si \(H_1\) es cierta</strong> (las variables están asociadas), las frecuencias observadas se alejan de forma sistemática de las esperadas bajo independencia y el estadístico tiende a ser mayor. La <strong>potencia</strong> es la probabilidad de que, en ese escenario, el estadístico supere el valor crítico y por tanto detectemos la asociación.</li>
+            </ul>
+            <p>El valor crítico depende solo de \(\alpha\) y de \(df\); no cambia con el tamaño de la muestra. Lo que sí cambia con \(N\) es cuánto se desplaza el estadístico hacia la derecha cuando \(H_1\) es cierta. Para calcular la potencia necesitamos, por tanto, describir la distribución del estadístico bajo \(H_1\). Lo haremos en tres pasos: medir la fuerza de la asociación (\(w\)), traducirla a un desplazamiento de la distribución (\(\lambda\)) y calcular el área que queda a la derecha del valor crítico.</p>
+
+            <h3>Paso 1: medir la asociación con la \(w\) de Cohen</h3>
+            <p>Necesitamos un número que diga cuán lejos de la independencia están las proporciones reales de la tabla y que no dependa de \(N\). La \(w\) de Cohen aplica la receta del estadístico a las proporciones de las celdas: compara las proporciones que esperas bajo \(H_1\), \(p_{1,ij}\), con las que tendría una tabla independiente con los mismos márgenes, \(p_{0,ij} = p_{i\cdot} \cdot p_{\cdot j}\):</p>
+            <p class="formula-line">\( w = \sqrt{\sum_{i=1}^{r}\sum_{j=1}^{c} \frac{(p_{1,ij} - p_{0,ij})^2}{p_{0,ij}}} \)</p>
+            <p>Si una muestra de \(N\) observaciones reprodujera exactamente las proporciones \(p_{1,ij}\), su estadístico chi-cuadrado valdría exactamente \(N \cdot w^2\). Por eso conviene pensar en \(w^2\) como <strong>el estadístico chi-cuadrado por observación</strong> o, de forma equivalente, \(w = \sqrt{\chi^2 / N}\): es una propiedad de la tabla de proporciones, no de la muestra. En tablas \(2 \times 2\), \(w\) coincide con el coeficiente \(\phi\), la correlación entre las dos variables binarias. Referencias de Cohen (1988): \(w = 0{,}1\) (asociación débil), \(0{,}3\) (mediana), \(0{,}5\) (fuerte).</p>
+            <p><strong>Caso particular: tabla \(2 \times 2\) con dos grupos del mismo tamaño.</strong> Es la situación más común (grupo tratado frente a control, con proporciones de éxito \(p_1\) y \(p_2\)) y la que resuelve el asistente. Si cada grupo aporta la mitad de la muestra, las proporciones de las cuatro celdas bajo \(H_1\) son \(p_1/2\), \((1-p_1)/2\), \(p_2/2\) y \((1-p_2)/2\); bajo independencia, ambas filas comparten la proporción media \(\bar{p} = (p_1 + p_2)/2\). Sustituyendo en la fórmula general y simplificando (los cuatro sumandos se agrupan de dos en dos) se obtiene:</p>
+            <p class="formula-line">\( w = \frac{|p_1 - p_2|}{2\sqrt{\bar{p}\,(1-\bar{p})}}, \qquad \bar{p} = \frac{p_1 + p_2}{2} \)</p>
+            <p>Léela como «la mitad de la diferencia entre los dos grupos, medida en desviaciones típicas de la proporción media», ya que \(\sqrt{\bar{p}(1-\bar{p})}\) es la desviación típica de una variable 0/1 con probabilidad \(\bar{p}\). Si los grupos no van a tener el mismo tamaño, calcula \(w\) con la fórmula general usando las proporciones de fila reales.</p>
+
+            <h3>Paso 2: del efecto al desplazamiento, \(\lambda = N \cdot w^2\)</h3>
+            <p>Cuando \(H_1\) es cierta, el estadístico ya no sigue la chi-cuadrado central. Sigue una <strong>chi-cuadrado no central</strong>: la misma familia de distribuciones, pero desplazada hacia la derecha y más dispersa. El tamaño del desplazamiento lo controla el <strong>parámetro de no centralidad</strong> \(\lambda\), que en este test vale:</p>
+            <p class="formula-line">\( \lambda = N \cdot w^2 \qquad\text{y, en consecuencia,}\qquad E\!\left[\chi^2 \mid H_1\right] = df + \lambda \)</p>
+            <p>Una forma útil de verlo es descomponer el valor esperado del estadístico bajo \(H_1\), que es \(df + \lambda\). El término \(df\) es la parte «de ruido»: lo que el estadístico vale de media aunque \(H_0\) sea cierta, solo por el azar del muestreo. El término \(\lambda\) es la parte «de señal»: lo que aporta la asociación real. Y esa señal crece de forma proporcional a \(N\), porque con el doble de observaciones la distancia sistemática entre lo observado y lo esperado se duplica, mientras que el valor crítico sigue en el mismo sitio. Ese es exactamente el mecanismo por el que una muestra mayor da más potencia: la distribución bajo \(H_1\) se aleja del valor crítico y cada vez queda más área a su derecha.</p>
+            <p>De aquí sale también la regla práctica más importante: para una potencia dada, la \(\lambda\) necesaria es casi constante, así que \(N \approx \lambda / w^2\). El tamaño muestral es <strong>inversamente proporcional al cuadrado del efecto</strong>: detectar una asociación la mitad de fuerte requiere cuatro veces más observaciones.</p>
+
+            <h3>Paso 3: la potencia como área a la derecha del valor crítico</h3>
+            <p class="formula-line">\( \text{Potencia} = P\!\left(\chi^2 > \chi^2_{1-\alpha,\,df} \mid H_1\right) = 1 - F_{\chi^2_{df,\,\lambda}}\!\left(\chi^2_{1-\alpha,\,df}\right) \)</p>
+            <p>Leída de derecha a izquierda: \(F_{\chi^2_{df,\lambda}}\) es la función de distribución de la chi-cuadrado no central con \(df\) grados de libertad y no centralidad \(\lambda\). Evaluada en el valor crítico, da la probabilidad de que el estadístico <em>no</em> lo supere aunque \(H_1\) sea cierta, es decir, la probabilidad de error de tipo II, \(\beta\). La potencia es su complementario, \(1 - \beta\).</p>
+
+            <h3>Cómo se calcula la chi-cuadrado no central</h3>
+            <p>La chi-cuadrado no central no tiene una fórmula cerrada sencilla, pero sí una representación que la calculadora aprovecha: es una <strong>mezcla de chi-cuadrados centrales con pesos de Poisson</strong>. Imagina que primero se sortea un número entero \(J\) con distribución de Poisson de media \(\lambda/2\), y después se genera una chi-cuadrado central con \(df + 2J\) grados de libertad. La variable resultante es exactamente una chi-cuadrado no central con parámetros \(df\) y \(\lambda\). Su función de distribución es, por tanto, la media ponderada de funciones de distribución centrales:</p>
+            <p class="formula-line">\( F_{\chi^2_{df,\lambda}}(x) = \sum_{j=0}^{\infty} \underbrace{\frac{e^{-\lambda/2}(\lambda/2)^j}{j!}}_{\text{peso de Poisson}} \cdot \underbrace{F_{\chi^2_{df+2j}}(x)}_{\text{chi-cuadrado central}} \)</p>
+            <p>Cada sumando combina dos ingredientes conocidos: la probabilidad de Poisson de que \(J = j\) y la función de distribución de una chi-cuadrado central con \(df + 2j\) grados de libertad. Con \(df = 2\) y \(\lambda = 9{,}72\) (los valores del ejemplo de más abajo), los pesos mayores corresponden a \(j = 4\) y \(j = 5\) (\(0{,}18\) y \(0{,}17\)), es decir, a chi-cuadrados centrales con 10 y 12 grados de libertad, que superan el valor crítico \(5{,}99\) con facilidad; los pesos se vuelven despreciables a partir de \(j \approx 15\). La calculadora suma términos hasta que el peso cae por debajo de \(10^{-14}\), lo que da un resultado exacto a efectos prácticos sin recurrir a aproximaciones normales.</p>
+
+            <h3>Cómo encuentra la calculadora el tamaño muestral</h3>
+            <p>No existe una fórmula que despeje \(N\) directamente, porque \(N\) aparece dentro de la distribución no central. La calculadora hace una búsqueda:</p>
+            <ol>
+                <li>Obtiene el valor crítico \(\chi^2_{1-\alpha,\,df}\) a partir de \(\alpha\) y de los grados de libertad de la tabla.</li>
+                <li>Empieza con \(N = 2\), calcula \(\lambda = N \cdot w^2\) y, con la mezcla de Poisson, la potencia correspondiente.</li>
+                <li>Si la potencia no llega al objetivo, prueba con \(N + 1\) y repite.</li>
+                <li>Se detiene en el primer \(N\) cuya potencia iguala o supera el objetivo. Por eso el resultado es el <strong>mínimo \(N\) entero</strong> y la «potencia alcanzada» queda ligeramente por encima de la pedida.</li>
+            </ol>
+            <p>La siguiente tabla, calculada con este mismo procedimiento para \(\alpha = 0{,}05\) y potencia \(0{,}80\), muestra las dos regularidades que conviene recordar: \(N\) se multiplica aproximadamente por cuatro cada vez que \(w\) se reduce a la mitad, y para un mismo \(w\) hacen falta más observaciones cuanto mayor es la tabla (el valor crítico es mayor y la distribución más dispersa).</p>
+            <div class="theory-table-wrap"><table class="theory-table">
+                <thead><tr><th>Grados de libertad</th><th class="num">w = 0,1</th><th class="num">w = 0,2</th><th class="num">w = 0,3</th><th class="num">w = 0,5</th><th class="num">λ necesaria</th></tr></thead>
+                <tbody>
+                    <tr><td>df = 1 (tabla 2×2)</td><td class="num">785</td><td class="num">197</td><td class="num">88</td><td class="num">32</td><td class="num">≈ 7,9</td></tr>
+                    <tr><td>df = 2 (tabla 2×3)</td><td class="num">964</td><td class="num">241</td><td class="num">108</td><td class="num">39</td><td class="num">≈ 9,6</td></tr>
+                    <tr><td>df = 4 (tabla 3×3 o 2×5)</td><td class="num">1194</td><td class="num">299</td><td class="num">133</td><td class="num">48</td><td class="num">≈ 11,9</td></tr>
+                </tbody>
+            </table></div>
+
             <h3>Configuración rápida</h3>
             <ul>
-                <li><strong>w:</strong> 0,1 para efectos sutiles, 0,3 para efectos moderados (el más habitual), 0,5 para efectos grandes. Para tablas 2×2 usa el asistente.</li>
-                <li><strong>df:</strong> (número de filas − 1) × (número de columnas − 1). Para tablas 2×2, df=1.</li>
-                <li><strong>α:</strong> 0,05 es el estándar.</li>
-                <li><strong>Potencia:</strong> 0,80 como mínimo frecuente; 0,90 para estudios confirmatorios.</li>
+                <li><strong>w:</strong> 0,1 para asociaciones sutiles, 0,3 para asociaciones moderadas (el valor más habitual), 0,5 para asociaciones fuertes. Para tablas 2×2 con grupos del mismo tamaño, usa el asistente.</li>
+                <li><strong>df:</strong> (número de filas − 1) × (número de columnas − 1). Para tablas 2×2, df = 1; para 2×3, df = 2; para 3×3, df = 4.</li>
+                <li><strong>α:</strong> 0,05 es el estándar. Bajarlo a 0,01 sube el valor crítico y exige más observaciones.</li>
+                <li><strong>Potencia:</strong> 0,80 como mínimo habitual; 0,90 en estudios confirmatorios.</li>
+                <li><strong>Frecuencias esperadas:</strong> comprueba que \(N \cdot p_{0,ij} \ge 5\) en todas las celdas, o al menos en el 80 % de ellas y ninguna por debajo de 1.</li>
             </ul>
-            <h3>Ejemplo resuelto</h3>
-            <p>Un investigador quiere estudiar si existe asociación entre el género (2 categorías) y la preferencia por tres tipos de producto (3 categorías), es decir, una tabla 2×3. Espera un efecto mediano (\(w = 0{,}3\)) con \(\alpha = 0{,}05\) y potencia del 80 %. Los grados de libertad son \(df = (2-1)(3-1) = 2\).</p>
-            <p>La calculadora devuelve aproximadamente <strong>\(N = 107\) observaciones en total</strong>. Con esa muestra, si la asociación real tiene un tamaño de efecto \(w \geq 0{,}3\), el test la detectará el 80 % de las veces.</p>
-            <p><strong>Tabla 2×2 con asistente:</strong> si p₁ = 0,40 y p₂ = 0,60, la \(\bar{p} = 0{,}50\) y \(w = |0{,}40-0{,}60|/(2\sqrt{0{,}5 \times 0{,}5}) = 0{,}20/1{,}00 = 0{,}20\). Con df=1, α=0,05 y potencia=0,80 se necesitan N ≈ 197 observaciones.</p>
+
+            <h3>Ejemplo resuelto paso a paso</h3>
+            <p><strong>Ejemplo 1: tabla 2×3.</strong> Un investigador quiere estudiar si existe asociación entre el género (2 categorías) y la preferencia por tres tipos de producto (3 categorías). No dispone de datos previos, así que planifica para un efecto mediano, \(w = 0{,}3\), con \(\alpha = 0{,}05\) y potencia del 80 %.</p>
+            <p><strong>Paso 1: el efecto.</strong> \(w = 0{,}3\), luego \(w^2 = 0{,}09\): cada observación aporta de media 0,09 unidades de «señal» al estadístico.</p>
+            <p><strong>Paso 2: el valor crítico.</strong> \(df = (2-1)(3-1) = 2\). Para \(\alpha = 0{,}05\), el valor crítico es \(\chi^2_{0{,}95;\,2} = 5{,}99\).</p>
+            <p><strong>Paso 3: buscar el \(N\).</strong> Para cada \(N\) candidato, \(\lambda = N \cdot 0{,}09\), y la potencia es el área de la chi-cuadrado no central que queda por encima de \(5{,}99\):</p>
+            <div class="theory-table-wrap"><table class="theory-table">
+                <thead><tr><th class="num">N</th><th class="num">λ = N·w²</th><th class="num">Media bajo \(H_1\) (df + λ)</th><th class="num">Potencia</th></tr></thead>
+                <tbody>
+                    <tr><td class="num">30</td><td class="num">2,70</td><td class="num">4,70</td><td class="num">29,3 %</td></tr>
+                    <tr><td class="num">50</td><td class="num">4,50</td><td class="num">6,50</td><td class="num">46,0 %</td></tr>
+                    <tr><td class="num">70</td><td class="num">6,30</td><td class="num">8,30</td><td class="num">60,6 %</td></tr>
+                    <tr><td class="num">90</td><td class="num">8,10</td><td class="num">10,10</td><td class="num">72,3 %</td></tr>
+                    <tr><td class="num">107</td><td class="num">9,63</td><td class="num">11,63</td><td class="num">79,98 %</td></tr>
+                    <tr class="is-highlight"><td class="num">108</td><td class="num">9,72</td><td class="num">11,72</td><td class="num">80,37 %</td></tr>
+                    <tr><td class="num">130</td><td class="num">11,70</td><td class="num">13,70</td><td class="num">87,5 %</td></tr>
+                </tbody>
+            </table></div>
+            <p>Con 30 observaciones, la media del estadístico bajo \(H_1\) (4,70) ni siquiera alcanza el valor crítico. Con 107 la potencia se queda en el 79,98 %, apenas por debajo del objetivo, y con 108 lo supera. La calculadora devuelve por tanto <strong>N = 108 observaciones en total</strong> (potencia alcanzada: 80,37 %). Con esa muestra, si la asociación real tiene un tamaño de efecto \(w \ge 0{,}3\), el test la detectará al menos el 80 % de las veces. Como referencia, con potencia del 90 % harían falta \(N = 141\), y con \(\alpha = 0{,}01\) (valor crítico \(9{,}21\)), \(N = 155\).</p>
+            <p><strong>Comprobación:</strong> con 6 celdas, la frecuencia media esperada es \(108/6 = 18\). La celda más pequeña depende de los márgenes: si una de las categorías de producto solo atrae al 10 % de las respuestas, su celda menor tendría unas \(108 \times 0{,}5 \times 0{,}10 \approx 5{,}4\) observaciones esperadas, justo en el límite de la regla de 5.</p>
+            <p><strong>Ejemplo 2: tabla 2×2 con el asistente.</strong> Se comparan dos grupos del mismo tamaño en los que se espera una proporción de éxito \(p_1 = 0{,}40\) y \(p_2 = 0{,}60\). Con la fórmula del asistente, \(\bar{p} = 0{,}50\) y \(w = |0{,}40 - 0{,}60| / (2\sqrt{0{,}5 \times 0{,}5}) = 0{,}20 / 1{,}00 = 0{,}20\). Puedes comprobar que la fórmula general da lo mismo: las cuatro celdas bajo \(H_1\) tienen proporciones 0,20, 0,30, 0,30 y 0,20; bajo independencia, las cuatro valen 0,25; cada sumando es \((0{,}05)^2 / 0{,}25 = 0{,}01\) y \(w^2 = 4 \times 0{,}01 = 0{,}04\), luego \(w = 0{,}20\). Con \(df = 1\), valor crítico \(3{,}84\), \(\alpha = 0{,}05\) y potencia 0,80, la búsqueda se detiene en <strong>N = 197</strong> (\(\lambda = 7{,}88\); con 196 la potencia es del 79,96 % y con 197 del 80,16 %). Repartido entre los dos grupos, son 99 sujetos por grupo redondeando hacia arriba.</p>
+
             <h3>Supuestos del modelo</h3>
             <ul>
                 <li>Muestra aleatoria de observaciones independientes.</li>
                 <li>Dos variables categóricas cruzadas en una tabla de contingencia; cada unidad contribuye a una sola celda.</li>
-                <li>Frecuencias esperadas \(\ge 5\) en la mayoría de las celdas.</li>
+                <li>Frecuencias esperadas \(\ge 5\) en la mayoría de las celdas, para que la distribución chi-cuadrado sea una buena aproximación.</li>
+                <li>Las proporciones bajo \(H_1\) con las que calculas \(w\) son una hipótesis de trabajo: si la asociación verdadera es más débil, la potencia real será menor que la planificada.</li>
                 <li>Efecto medido con la \(w\) de Cohen y \((\text{filas}-1)(\text{columnas}-1)\) grados de libertad sobre la chi-cuadrado no central.</li>
             </ul>
+
             <h3>Cómo interpretar el resultado</h3>
-                <p>El valor \(N\) es el <strong>número total de observaciones</strong> (suma de todas las celdas de la tabla de contingencia) para que el test chi-cuadrado de independencia detecte la asociación especificada con la potencia y el nivel de significación deseados. Redondea siempre hacia arriba. En un diseño donde se fija el tamaño de cada fila (p. ej., grupos de estudio y control), divide \(N\) entre el número de filas para obtener el tamaño de cada grupo; en un muestreo irrestricto, \(N\) es simplemente el total de sujetos. Añade un margen por pérdidas dividiendo entre \((1 - \text{tasa de pérdida})\).</p>
-                <p>El tamaño del efecto \(w\) de Cohen se calcula a partir de las frecuencias esperadas bajo \(H_1\): \(w = \sqrt{\sum_{ij}(p_{1,ij} - p_{0,ij})^2 / p_{0,ij}}\), donde \(p_{0,ij} = p_{i\cdot} \times p_{\cdot j}\) son las proporciones bajo independencia. Los valores de referencia son \(w = 0{,}10\) (efecto pequeño), \(w = 0{,}30\) (mediano) y \(w = 0{,}50\) (grande). La condición de aplicabilidad más importante es que las frecuencias esperadas en cada celda bajo \(H_0\) —calculadas como \(N \times p_{0,ij}\)— sean todas \(\geq 5\); si no, el estadístico chi-cuadrado puede no seguir la distribución chi-cuadrado y el p-valor sería poco fiable. Cuando varias celdas tengan frecuencias esperadas bajas, fusiona categorías con sentido sustantivo y reduce los grados de libertad \((r-1)(c-1)\) del test.</p>
-                <p>Si el \(N\) resultante es inviable, revisa si el tamaño del efecto especificado es realista: una asociación muy débil puede requerir miles de observaciones. Considera si puede ampliarse el rango de variación de alguna de las variables categóricas o si algunas categorías pueden fusionarse para concentrar el efecto. Cuando la tabla es \(2 \times 2\) y el \(N\) es pequeño, el test exacto de Fisher es más apropiado que el chi-cuadrado; en ese caso, usa la <a href="tamano-muestral-fisher.html">calculadora de tamaño muestral para el test de Fisher</a>. Con los datos recogidos, realiza el análisis con la <a href="contraste-independencia-chi-cuadrado.html">calculadora de chi-cuadrado de independencia</a> e interpreta los residuos tipificados de cada celda para localizar la fuente de la asociación.</p>
+            <p>El valor \(N\) es el <strong>número total de observaciones</strong> (suma de todas las celdas de la tabla de contingencia) necesario para que el test chi-cuadrado de independencia detecte la asociación especificada con la potencia y el nivel de significación deseados. Redondea siempre hacia arriba. En un diseño donde se fija el tamaño de cada fila (por ejemplo, grupos de estudio y control), divide \(N\) entre el número de filas para obtener el tamaño de cada grupo; en un muestreo irrestricto, \(N\) es simplemente el total de sujetos. Añade un margen por pérdidas dividiendo entre \((1 - \text{tasa de pérdida})\).</p>
+            <p>Comprueba las frecuencias esperadas: la condición de aplicabilidad más importante es que las frecuencias esperadas de cada celda bajo \(H_0\), calculadas como \(N \cdot p_{0,ij}\), sean \(\ge 5\). Si no se cumple, el estadístico puede no seguir la distribución chi-cuadrado y el p-valor sería poco fiable. Cuando varias celdas tengan frecuencias esperadas bajas, fusiona categorías con sentido sustantivo y recalcula \(w\) y los grados de libertad \((r-1)(c-1)\).</p>
+            <p>Ten presente que la sensibilidad de \(N\) a \(w\) es cuadrática: si la asociación real es un 30 % más débil de lo que has supuesto, \(N\) debería ser aproximadamente el doble \((1/0{,}7^2 \approx 2{,}04)\). Una asociación muy débil (\(w = 0{,}1\)) puede requerir cerca de mil observaciones, así que conviene revisar si el efecto que planificas es realista.</p>
+            <p>Si el \(N\) resultante es inviable, considera si puede ampliarse el rango de variación de alguna de las variables o si algunas categorías pueden fusionarse para concentrar el efecto. Cuando la tabla es \(2 \times 2\) y el \(N\) es pequeño, el test exacto de Fisher es más apropiado que el chi-cuadrado; en ese caso, usa la <a href="tamano-muestral-fisher.html">calculadora de tamaño muestral para el test de Fisher</a>. Con los datos recogidos, realiza el análisis con la <a href="contraste-independencia-chi-cuadrado.html">calculadora de chi-cuadrado de independencia</a> e interpreta los residuos tipificados de cada celda para localizar la fuente de la asociación.</p>
         </section>
 
         <section id="seo-support-content" class="card content-card">
