@@ -103,6 +103,22 @@
     }
     </script>
     <link rel="stylesheet" href="../style_new.css?v=20260730-1">
+    <style>
+        .theory-table-wrap { margin: 10px 0 16px; overflow-x: auto; border-radius: 12px; border: 1px solid rgba(79, 70, 229, 0.18); }
+        .theory-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; line-height: 1.5; font-variant-numeric: tabular-nums; }
+        .theory-table th, .theory-table td { padding: 8px 12px; text-align: left; border-bottom: 1px solid rgba(79, 70, 229, 0.12); white-space: nowrap; }
+        .theory-table th { background: rgba(79, 70, 229, 0.10); color: #1e1b4b; font-weight: 700; }
+        .theory-table td { color: #334155; }
+        .theory-table th.num, .theory-table td.num { text-align: right; }
+        .theory-table tbody tr:last-child td { border-bottom: 0; }
+        .theory-table tr.is-highlight td { background: rgba(79, 70, 229, 0.08); font-weight: 600; color: #312e81; }
+        html.dark-mode .theory-table-wrap { border-color: rgba(99, 102, 241, 0.3); }
+        html.dark-mode .theory-table th { background: rgba(99, 102, 241, 0.16); color: #c7d2fe; }
+        html.dark-mode .theory-table td { color: #cbd5e1; border-bottom-color: rgba(148, 163, 184, 0.15); }
+        html.dark-mode .theory-table tr.is-highlight td { background: rgba(99, 102, 241, 0.14); color: #e0e7ff; }
+        .content-card ol { margin: 0 0 8px; padding-left: 22px; }
+        .content-card ol li { margin-bottom: 4px; }
+    </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -205,39 +221,118 @@
             </details>
         </section>
 
-                <section class="card content-card">
+        <section class="card content-card">
             <h3>Explanation</h3>
-            <p>The chi-square goodness-of-fit test checks whether the observed distribution of a categorical variable matches a specified theoretical distribution \(H_0\). With \(k\) categories, the statistic has \(df = k-1\) degrees of freedom under \(H_0\) (assuming the parameters of the theoretical distribution are known).</p>
-            <p>Under the alternative, the statistic follows a noncentral chi-square distribution with noncentrality parameter \(\lambda = N \cdot w^2\), where \(N\) is the sample size and \(w\) is Cohen's \(w\).</p>
-            <h3>Noncentrality parameter and power</h3>
-            <p class="formula-line">\( \lambda = N \cdot w^2 \)</p>
-            <p class="formula-line">\( w = \sqrt{\sum_{i=1}^k \frac{(p_{\text{obs},i} - p_{\text{teo},i})^2}{p_{\text{teo},i}}} \)</p>
-            <p class="formula-line">\( \text{Power} = 1 - F_{\chi^2_{df,\,\lambda}}\!\left(\chi^2_{1-\alpha,\,df}\right) \quad \text{with } df = k-1 \)</p>
-            <p>The noncentral chi-square distribution is evaluated exactly via the Poisson mixture of central chi-squares:</p>
-            <p class="formula-line">\( F_{\chi^2_{df,\lambda}}(x) = \sum_{k=0}^{\infty} \frac{e^{-\lambda/2}(\lambda/2)^k}{k!} \cdot F_{\chi^2_{df+2k}}(x) \)</p>
+            <p>The chi-square goodness-of-fit test answers a simple question: <strong>is the frequency of each category in my data compatible with the proportions predicted by a theoretical distribution?</strong> That theoretical distribution is the null hypothesis \(H_0\): it assigns to each of the \(k\) categories a proportion \(p_{0,i}\) (for example, \(0.20\) to each of five colours if the hypothesis is that all of them are equally frequent). The alternative hypothesis \(H_1\) simply says that at least one of those proportions is different.</p>
+            <p>To test it, the procedure compares the observed frequencies \(O_i\) with the frequencies expected under \(H_0\), which are obtained by splitting the \(N\) observations according to the theoretical proportions: \(E_i = N \cdot p_{0,i}\). The discrepancy is summarised in a single number, the chi-square statistic:</p>
+            <p class="formula-line">\( \chi^2 = \sum_{i=1}^{k} \frac{(O_i - E_i)^2}{E_i}, \qquad E_i = N \cdot p_{0,i} \)</p>
+            <p>Each term measures how far one category departs from what was expected: the difference is squared so that excesses and shortfalls do not cancel out, and it is divided by \(E_i\) so that a difference of 10 observations weighs more in a category where 20 were expected than in one where 200 were expected. If \(H_0\) is true, the deviations are due to sampling chance alone and the statistic follows a chi-square distribution with \(df = k - 1\) degrees of freedom. It is \(k - 1\) rather than \(k\) because the observed frequencies always add up to \(N\): once \(k - 1\) of them are known, the last one is determined. If, in addition, \(p\) parameters of the theoretical distribution have to be estimated from the data, one degree of freedom is lost for each (\(df = k - 1 - p\)); we come back to this below.</p>
+
+            <h3>The logic of the power calculation</h3>
+            <p>Before collecting the data we do not know what value \(\chi^2\) will take, but we can reason about the two possible scenarios:</p>
+            <ul>
+                <li><strong>If \(H_0\) is true</strong>, the statistic follows the central chi-square distribution with \(df\) degrees of freedom. We fix the significance level \(\alpha\) and with it the <strong>critical value</strong> \(\chi^2_{1-\alpha,\,df}\): the point that the central chi-square exceeds with probability \(\alpha\) only. We will reject \(H_0\) if the statistic lands above it. With \(df = 4\) and \(\alpha = 0.05\), that value is \(9.49\).</li>
+                <li><strong>If \(H_1\) is true</strong> (the real proportions are different, \(p_{1,i}\)), the observed frequencies drift systematically away from those expected under \(H_0\) and the statistic tends to be larger. The <strong>power</strong> is the probability that, in this scenario, the statistic exceeds the critical value and we therefore detect the departure.</li>
+            </ul>
+            <p>The critical value depends only on \(\alpha\) and \(df\); it does not change with the sample size. What does change with \(N\) is how far the statistic shifts to the right when \(H_1\) is true. To compute the power we therefore need to describe the distribution of the statistic under \(H_1\). We do this in three steps: measure the size of the departure (\(w\)), translate it into a shift of the distribution (\(\lambda\)), and compute the area that lies to the right of the critical value.</p>
+
+            <h3>Step 1: measuring the departure with Cohen's \(w\)</h3>
+            <p>We need a number that says how far the real proportions \(p_{1,i}\) are from the theoretical ones \(p_{0,i}\), and that does not depend on the sample size. Cohen's \(w\) is built with the same recipe as the statistic, but on proportions instead of frequencies:</p>
+            <p class="formula-line">\( w = \sqrt{\sum_{i=1}^{k} \frac{(p_{1,i} - p_{0,i})^2}{p_{0,i}}} \)</p>
+            <p>In the calculator's wizard, \(p_{1,i}\) are the "H1 proportions" (\(p_{\text{obs}}\)) and \(p_{0,i}\) the "H0 proportions" (\(p_{\text{teo}}\)). The interpretation is direct: if a sample of \(N\) observations reproduced the proportions \(p_{1,i}\) exactly, its chi-square statistic against \(H_0\) would be exactly \(N \cdot w^2\). That is why it helps to think of \(w^2\) as <strong>the chi-square statistic per observation</strong>: it is a property of the two distributions being compared, not of the sample. Cohen proposed \(w = 0.1\) (small departure), \(0.3\) (medium) and \(0.5\) (large) as benchmarks, although it is always better to compute it from the proportions you actually expect.</p>
+
+            <h3>Step 2: from effect to shift, \(\lambda = N \cdot w^2\)</h3>
+            <p>When \(H_1\) is true, the statistic no longer follows the central chi-square. It follows a <strong>noncentral chi-square</strong>: the same family of distributions, but shifted to the right and more spread out. The size of the shift is governed by the <strong>noncentrality parameter</strong> \(\lambda\), which for this test is:</p>
+            <p class="formula-line">\( \lambda = N \cdot w^2 \qquad\text{and therefore}\qquad E\!\left[\chi^2 \mid H_1\right] = df + \lambda \)</p>
+            <p>A useful way to see it is to decompose the expected value of the statistic under \(H_1\), which is \(df + \lambda\). The term \(df\) is the "noise" part: what the statistic is worth on average even when \(H_0\) is true, purely from sampling chance. The term \(\lambda\) is the "signal" part: what the real departure contributes. And that signal grows in proportion to \(N\), because with twice as many observations the systematic distance between observed and expected doubles, while the critical value stays where it is. This is exactly the mechanism by which a larger sample gives more power: the distribution under \(H_1\) moves away from the critical value and more and more area is left to its right.</p>
+            <p>This also yields the most important practical rule: for a given power, the required \(\lambda\) is nearly constant, so \(N \approx \lambda / w^2\). The sample size is <strong>inversely proportional to the square of the effect</strong>: detecting a departure half as large requires four times as many observations.</p>
+
+            <h3>Step 3: power as the area to the right of the critical value</h3>
+            <p class="formula-line">\( \text{Power} = P\!\left(\chi^2 > \chi^2_{1-\alpha,\,df} \mid H_1\right) = 1 - F_{\chi^2_{df,\,\lambda}}\!\left(\chi^2_{1-\alpha,\,df}\right) \)</p>
+            <p>Reading from right to left: \(F_{\chi^2_{df,\lambda}}\) is the cumulative distribution function of the noncentral chi-square with \(df\) degrees of freedom and noncentrality \(\lambda\). Evaluated at the critical value, it gives the probability that the statistic does <em>not</em> exceed it even though \(H_1\) is true, i.e. the probability of a type II error, \(\beta\). The power is its complement, \(1 - \beta\).</p>
+
+            <h3>How the noncentral chi-square is computed</h3>
+            <p>The noncentral chi-square has no simple closed-form formula, but it does have a representation that the calculator exploits: it is a <strong>mixture of central chi-squares with Poisson weights</strong>. Imagine first drawing an integer \(J\) from a Poisson distribution with mean \(\lambda/2\), and then generating a central chi-square with \(df + 2J\) degrees of freedom. The resulting variable is exactly a noncentral chi-square with parameters \(df\) and \(\lambda\). Its cumulative distribution function is therefore the weighted average of central cumulative distribution functions:</p>
+            <p class="formula-line">\( F_{\chi^2_{df,\lambda}}(x) = \sum_{j=0}^{\infty} \underbrace{\frac{e^{-\lambda/2}(\lambda/2)^j}{j!}}_{\text{Poisson weight}} \cdot \underbrace{F_{\chi^2_{df+2j}}(x)}_{\text{central chi-square}} \)</p>
+            <p>Each term combines two familiar ingredients: the Poisson probability that \(J = j\) and the cumulative distribution function of a central chi-square with \(df + 2j\) degrees of freedom. With \(\lambda = 12\) (the value in the example below), the largest weights belong to \(j = 5\) and \(j = 6\) (\(0.16\) each), i.e. to central chi-squares with 14 and 16 degrees of freedom, which exceed the critical value \(9.49\) easily; the weights become negligible from \(j \approx 20\) onwards. The calculator adds terms until the weight drops below \(10^{-14}\), which gives a result that is exact for all practical purposes without resorting to normal approximations.</p>
+
+            <h3>How the calculator finds the sample size</h3>
+            <p>There is no formula that solves for \(N\) directly, because \(N\) sits inside the noncentral distribution. The calculator runs a search:</p>
+            <ol>
+                <li>It obtains the critical value \(\chi^2_{1-\alpha,\,df}\) from \(\alpha\) and \(df = k - 1\).</li>
+                <li>It starts with \(N = 2\), computes \(\lambda = N \cdot w^2\) and, with the Poisson mixture, the corresponding power.</li>
+                <li>If the power does not reach the target, it tries \(N + 1\) and repeats.</li>
+                <li>It stops at the first \(N\) whose power equals or exceeds the target. That is why the result is the <strong>minimum integer \(N\)</strong> and the "achieved power" is slightly above the requested one.</li>
+            </ol>
+            <p>The following table, computed with this same procedure for \(\alpha = 0.05\) and power \(0.80\), shows the two regularities worth remembering: \(N\) roughly quadruples every time \(w\) is halved, and for the same \(w\) more observations are needed the more degrees of freedom the test has (the critical value is larger and the distribution more spread out).</p>
+            <div class="theory-table-wrap"><table class="theory-table">
+                <thead><tr><th>Degrees of freedom</th><th class="num">w = 0.1</th><th class="num">w = 0.2</th><th class="num">w = 0.3</th><th class="num">w = 0.5</th><th class="num">Required λ</th></tr></thead>
+                <tbody>
+                    <tr><td>df = 1 (k = 2)</td><td class="num">785</td><td class="num">197</td><td class="num">88</td><td class="num">32</td><td class="num">≈ 7.9</td></tr>
+                    <tr><td>df = 2 (k = 3)</td><td class="num">964</td><td class="num">241</td><td class="num">108</td><td class="num">39</td><td class="num">≈ 9.6</td></tr>
+                    <tr><td>df = 4 (k = 5)</td><td class="num">1194</td><td class="num">299</td><td class="num">133</td><td class="num">48</td><td class="num">≈ 11.9</td></tr>
+                </tbody>
+            </table></div>
+
+            <h3>Degrees of freedom when parameters are estimated</h3>
+            <p>The calculator uses \(df = k - 1\), which assumes that the theoretical distribution is fully specified in advance. If you are going to estimate \(p\) parameters from the data themselves (for example, the mean of a Poisson before checking whether the counts are Poisson), the test has \(df = k - 1 - p\) degrees of freedom. To reflect this, enter \(k - p\) in the "Number of categories" field: \(w\) does not change and the degrees of freedom will be correct. Do, however, carry out the minimum-frequency-per-cell check with the real \(k\), dividing \(N\) by the true number of categories.</p>
+
             <h3>Quick setup</h3>
             <ul>
-                <li><strong>w:</strong> 0.1 (small), 0.3 (medium), 0.5 (large) according to Cohen. Use the wizard if you have the expected proportions.</li>
-                <li><strong>k:</strong> total number of categories. The degrees of freedom are df = k−1 (no estimated parameters).</li>
-                <li><strong>Expected frequencies:</strong> check that N/k ≥ 5 so the chi-square approximation is valid.</li>
-                <li><strong>Estimated parameters:</strong> if you estimate p parameters from the data, subtract p from df: df = k−1−p.</li>
+                <li><strong>w:</strong> 0.1 (small), 0.3 (medium), 0.5 (large) according to Cohen. If you know the proportions you expect, use the wizard: the computed value is always better than a generic benchmark.</li>
+                <li><strong>k:</strong> total number of categories. The degrees of freedom are df = k − 1 (no estimated parameters).</li>
+                <li><strong>α:</strong> 0.05 is the standard. Lowering it to 0.01 raises the critical value and demands more observations.</li>
+                <li><strong>Power:</strong> 0.80 as the usual minimum; 0.90 in confirmatory studies.</li>
+                <li><strong>Expected frequencies:</strong> check that \(N \cdot p_{0,i} \ge 5\) in every category (and, at the very least, that \(N/k \ge 5\)) so that the chi-square approximation is valid.</li>
             </ul>
-            <h3>Worked example</h3>
-            <p>A biologist wants to test whether the color of certain insects (5 categories: yellow, red, green, blue, black) follows a uniform distribution (\(p_0 = 0.20\) for each category). Based on prior data, they expect the real distribution to be (0.30, 0.25, 0.20, 0.15, 0.10).</p>
-            <p>Using the wizard: \(w = \sqrt{(0.30-0.20)^2/0.20 + (0.25-0.20)^2/0.20 + 0 + (0.15-0.20)^2/0.20 + (0.10-0.20)^2/0.20} = \sqrt{0.05+0.0125+0+0.0125+0.05} = \sqrt{0.125} \approx 0.354\).</p>
-            <p>With \(w = 0.354\), \(df = 4\), \(\alpha = 0.05\) and 80% power, approximately <strong>N = 69 insects</strong> are needed. With that sample, the test will detect the deviation from the uniform distribution 80% of the time.</p>
-            <p><strong>Check:</strong> N/k = 69/5 = 13.8 ≥ 5. The chi-square approximation is adequate.</p>
+
+            <h3>Worked example, step by step</h3>
+            <p>A biologist wants to test whether the colour of certain insects (5 categories: yellow, red, green, blue and black) follows a uniform distribution, i.e. \(p_{0,i} = 0.20\) for each colour. Based on prior data, they believe the real distribution is (0.30, 0.25, 0.20, 0.15, 0.10). They want \(\alpha = 0.05\) and 80% power.</p>
+            <p><strong>Step 1: compute \(w\).</strong> Evaluate each term of the sum and take the square root of the total:</p>
+            <div class="theory-table-wrap"><table class="theory-table">
+                <thead><tr><th>Colour</th><th class="num">\(p_{1,i}\) (real)</th><th class="num">\(p_{0,i}\) (under \(H_0\))</th><th class="num">\(p_{1,i} - p_{0,i}\)</th><th class="num">\((p_{1,i} - p_{0,i})^2 / p_{0,i}\)</th></tr></thead>
+                <tbody>
+                    <tr><td>Yellow</td><td class="num">0.30</td><td class="num">0.20</td><td class="num">+0.10</td><td class="num">0.0500</td></tr>
+                    <tr><td>Red</td><td class="num">0.25</td><td class="num">0.20</td><td class="num">+0.05</td><td class="num">0.0125</td></tr>
+                    <tr><td>Green</td><td class="num">0.20</td><td class="num">0.20</td><td class="num">0</td><td class="num">0</td></tr>
+                    <tr><td>Blue</td><td class="num">0.15</td><td class="num">0.20</td><td class="num">−0.05</td><td class="num">0.0125</td></tr>
+                    <tr><td>Black</td><td class="num">0.10</td><td class="num">0.20</td><td class="num">−0.10</td><td class="num">0.0500</td></tr>
+                    <tr class="is-highlight"><td>Sum</td><td class="num">1.00</td><td class="num">1.00</td><td class="num">0</td><td class="num">\(w^2 = 0.125\)</td></tr>
+                </tbody>
+            </table></div>
+            <p>Therefore \(w = \sqrt{0.125} \approx 0.354\), an effect between medium and large. Notice that the two categories that deviate most (yellow and black) contribute 80% of \(w^2\): this is typical, a few categories concentrate almost all of the signal.</p>
+            <p><strong>Step 2: fix the critical value.</strong> With \(k = 5\) categories, \(df = 4\). For \(\alpha = 0.05\), the critical value is \(\chi^2_{0.95;\,4} = 9.49\): if \(H_0\) were true, only 5% of samples would give a larger statistic.</p>
+            <p><strong>Step 3: search for the \(N\) that places the distribution under \(H_1\) far enough to the right.</strong> For each candidate \(N\), \(\lambda = N \cdot 0.125\), and the power is the area of the noncentral chi-square that lies above \(9.49\):</p>
+            <div class="theory-table-wrap"><table class="theory-table">
+                <thead><tr><th class="num">N</th><th class="num">λ = N·w²</th><th class="num">Mean under \(H_1\) (df + λ)</th><th class="num">Power</th></tr></thead>
+                <tbody>
+                    <tr><td class="num">30</td><td class="num">3.75</td><td class="num">7.75</td><td class="num">30.1%</td></tr>
+                    <tr><td class="num">50</td><td class="num">6.25</td><td class="num">10.25</td><td class="num">48.8%</td></tr>
+                    <tr><td class="num">69</td><td class="num">8.63</td><td class="num">12.63</td><td class="num">64.2%</td></tr>
+                    <tr><td class="num">80</td><td class="num">10.00</td><td class="num">14.00</td><td class="num">71.6%</td></tr>
+                    <tr><td class="num">95</td><td class="num">11.88</td><td class="num">15.88</td><td class="num">79.78%</td></tr>
+                    <tr class="is-highlight"><td class="num">96</td><td class="num">12.00</td><td class="num">16.00</td><td class="num">80.25%</td></tr>
+                    <tr><td class="num">120</td><td class="num">15.00</td><td class="num">19.00</td><td class="num">89.1%</td></tr>
+                </tbody>
+            </table></div>
+            <p>With 30 insects, the mean of the statistic under \(H_1\) (7.75) does not even reach the critical value, and the departure would be detected only 30% of the time. With 95 the power stays at 79.78%, a hair below the target, and with 96 it exceeds it. The calculator therefore returns <strong>N = 96 insects</strong> (achieved power: 80.25%). You can reproduce this by entering the two lists of proportions in the wizard, clicking "Calculate w and update" and then "Calculate sample size".</p>
+            <p><strong>Check:</strong> \(N/k = 96/5 = 19.2 \ge 5\), so the expected frequencies per cell (all equal to 19.2 under \(H_0\)) are sufficient for the chi-square approximation.</p>
+            <p><strong>Variants:</strong> if the biologist wanted 90% power, they would need \(N = 124\); if they kept 80% but lowered \(\alpha\) to \(0.01\) (critical value \(13.28\)), they would need \(N = 134\). In both cases the requirement goes up, and \(\lambda\), and with it \(N\), must grow to compensate.</p>
+
             <h3>Model assumptions</h3>
             <ul>
                 <li>Random sample of independent observations.</li>
                 <li>Categorical variable with \(k\) mutually exclusive and exhaustive categories.</li>
-                <li>Sufficiently large expected frequencies (usual rule: \(E_i \ge 5\)).</li>
+                <li>Sufficiently large expected frequencies (usual rule: \(E_i \ge 5\)) so that the chi-square distribution is a good approximation.</li>
+                <li>The proportions under \(H_1\) used to compute \(w\) are a working hypothesis: if the true effect is smaller, the real power will be lower than planned.</li>
                 <li>The effect size is expressed with Cohen's \(w\) and power is calculated using the noncentral chi-square distribution.</li>
             </ul>
+
             <h3>How to interpret the result</h3>
-                <p>The value \(N\) is the <strong>total number of observations needed</strong> (sum across all categories) for the chi-square goodness-of-fit test to have the specified power and significance level. Always round up. If you expect some records to be discarded due to errors or missing values, divide \(N\) by \((1 - \text{dropout rate})\) to get the actual number to collect. The expected number of observations in each category \(i\) under \(H_0\) is \(N \times p_{0i}\); verify that all these expected frequencies are \(\geq 5\) so the chi-square approximation is valid.</p>
-                <p>Cohen's effect size \(w\) quantifies how far the real distribution (\(p_{1i}\)) departs from the theoretical distribution (\(p_{0i}\)): \(w = \sqrt{\sum_i (p_{1i} - p_{0i})^2 / p_{0i}}\). A value \(w = 0.10\) is small, \(w = 0.30\) is medium, and \(w = 0.50\) is large. The sensitivity of \(N\) to \(w\) is quadratic: if the real effect is 30% smaller than specified, \(N\) increases by roughly 100% \((1/0.7^2 \approx 2.04)\). If any theoretical proportion \(p_{0i}\) is very small, that category may have very few expected observations; in that case, merge categories with theoretical justification until expected frequencies of \(\geq 5\) are reached and recompute the degrees of freedom of the test.</p>
-                <p>When the calculated \(N\) turns out to be impractical, the available levers are: (1) accept a larger \(w\) (detect only bigger effects), (2) reduce the power, or (3) reduce the number of categories by merging the smallest ones. If any expected frequency falls below 5 even with the calculated \(N\), fall back on exact multinomial tests. Once the data has been collected, run the test with the <a href="chi-cuadrado-bondad-ajuste.html">chi-square goodness-of-fit test calculator</a> and compare the standardized residuals per category to identify where the differences from the theoretical distribution are concentrated.</p>
+            <p>The value \(N\) is the <strong>total number of observations needed</strong> (sum across all categories) for the chi-square goodness-of-fit test to have the specified power and significance level. Always round up. If you expect some records to be discarded due to errors or missing values, divide \(N\) by \((1 - \text{dropout rate})\) to get the number you actually need to collect.</p>
+            <p>Check the expected frequencies: the expected number of observations in each category \(i\) under \(H_0\) is \(N \cdot p_{0,i}\), and all of them should be \(\ge 5\). If any theoretical proportion is very small, that category may fall short even when \(N/k\) is comfortable; in that case, merge categories with theoretical justification until expected frequencies of \(\ge 5\) are reached and recompute \(k\), \(w\) and the degrees of freedom.</p>
+            <p>Keep in mind that the sensitivity of \(N\) to \(w\) is quadratic: if the real effect is 30% smaller than you assumed, \(N\) should be roughly double \((1/0.7^2 \approx 2.04)\). That is why it pays to compute \(w\) from realistic proportions and, when in doubt, to plan with a somewhat conservative value.</p>
+            <p>When the calculated \(N\) turns out to be impractical, there are three levers: (1) accept a larger \(w\), i.e. settle for detecting only larger departures; (2) reduce the target power; or (3) reduce the number of categories by merging the smallest ones, which lowers \(df\) and the required \(\lambda\) (recompute \(w\), because it changes too). If any expected frequency is still below 5 even with the calculated \(N\), fall back on an exact multinomial test. Once the data have been collected, run the test with the <a href="chi-cuadrado-bondad-ajuste.html">chi-square goodness-of-fit test calculator</a> and examine the standardised residuals per category to locate where the differences from the theoretical distribution are concentrated.</p>
         </section>
 
         <section id="seo-support-content" class="card content-card">
