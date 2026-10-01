@@ -232,7 +232,7 @@
           "name": "How do you read the Student's t table?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Pick the row for the degrees of freedom ν and the column for the significance level α: the cell is the critical value t. Use the “1 tail” row for one-tailed tests and the “2 tails” row for two-tailed ones."
+            "text": "Find the row of your degrees of freedom ν and the column of your significance level α. The cell is the critical value t. In the header, read \"1 tail\" for one-tailed tests and \"2 tails\" for two-tailed tests and confidence intervals."
           }
         },
         {
@@ -240,7 +240,7 @@
           "name": "When do you use the t table instead of the normal table?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "With small samples and unknown population variance you use the Student's t table; as the degrees of freedom grow, the t approaches the standard normal table."
+            "text": "When the population standard deviation is unknown and is estimated from the sample, especially with small samples. As the degrees of freedom grow the t approaches the Normal, and from ν ≈ 30 onwards the difference is already small."
           }
         },
         {
@@ -248,7 +248,15 @@
           "name": "What is the difference between one tail and two tails?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "One tail leaves the whole area α on one side (P(T > t) = α); two tails split it between both ends (P(|T| > t) = α), which makes the critical value larger."
+            "text": "In a one-tailed test the whole area α sits at one end, P(T > t) = α. In a two-tailed test the area is split between both ends, P(|T| > t) = α, so each tail gets α/2 and the critical value is larger."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What if my degrees of freedom are not in the table?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use the closest row below, which gives a slightly larger critical value and therefore a conservative decision, or compute the exact value with the Student's t calculator."
           }
         }
       ]
@@ -296,7 +304,7 @@
     <header class="hero">
         <p class="eyebrow">Statistical tables</p>
         <h1>Student's t Table (Critical Values)</h1>
-        <p class="hero-subtitle">The Student's t table with the critical values t for every degrees of freedom and the most commonly used significance levels, plus the density f(t,ν) and the cumulative distribution P(T ≤ t). Click a cell to read the value.</p>
+        <p class="hero-subtitle">Critical values t<sub>α,ν</sub> for one-tailed and two-tailed tests, plus the cumulative distribution P(T ≤ t) and the density f(t,ν) for the degrees of freedom you choose. Click a cell to read the value.</p>
         <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">See all tables</a></p>
     </header>
 
@@ -311,12 +319,12 @@
             <!-- CRITICAL VALUES TAB -->
             <div id="tab-crit" class="tab-content active">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each column is a significance level α and each row a degrees of freedom ν. The same critical t value works for two cases depending on the test:
+                    <strong>How to read the table:</strong> each row is a number of degrees of freedom ν and each column a significance level α. The header of each column shows two values of α because the same critical value serves two situations:
                     <ul style="margin:8px 0 0;padding-left:20px">
-                        <li><strong>One-tailed test</strong>: leaves an area α in the <em>right</em> tail, P(T &gt; t) = α. Use the <em>"1 tail"</em> row.</li>
-                        <li><strong>Two-tailed test</strong>: leaves an area α split between <em>both</em> tails, P(|T| &gt; t) = α. Use the <em>"2 tails"</em> row.</li>
+                        <li><strong>"1 tail"</strong> (one-tailed test): the value t leaves an area α in the right tail, P(T &gt; t) = α.</li>
+                        <li><strong>"2 tails"</strong> (two-tailed test): the same t leaves an area α split between both tails, P(|T| &gt; t) = α.</li>
                     </ul>
-                    Since the two tails split the area, always <em>α (2 tails) = 2 × α (1 tail)</em>. Example: with ν = 10, for a two-tailed test at 5% (column "2 tails: 0.05" ↔ "1 tail: 0.025") the critical value is t = 2.228.
+                    Because the area is split, α (2 tails) = 2 × α (1 tail). Example: for a two-tailed test at 5% with ν = 10, use the column "2 tails: 0.05" (the same as "1 tail: 0.025") → t = 2.228.
                 </div>
                 <div id="lookup-crit" class="lookup-result"><span>Click a cell to read the critical value.</span></div>
                 <figure class="dist-diagram" data-dist="student" data-mode="crit-two" data-tables="tbl-crit" data-df="10" data-a1="0.025" data-a2="0.05" data-val="2.228">
@@ -333,7 +341,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows P(T ≤ t) for the selected degrees of freedom. For negative t: P(T ≤ −t) = 1 − P(T ≤ t), or switch the sign with the button.
+                    <strong>How to read the table:</strong> choose ν from the dropdown. The row gives the integer part and first decimal of t; the column gives the second decimal. The cell is P(T ≤ t), the area to the left of t. For negative t use the t &lt; 0 button or the symmetry P(T ≤ −t) = 1 − P(T ≤ t).
                 </div>
                 <div class="df-control">
                     <label for="df-cdf">Degrees of freedom (ν):</label>
@@ -363,7 +371,7 @@
             <!-- PDF TAB -->
             <div id="tab-pdf" class="tab-content">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows the density f(t, ν). The function is symmetric: f(−t, ν) = f(t, ν). As ν increases the curve approaches the standard Normal.
+                    <strong>How to read the table:</strong> the cell is the height of the curve at t for the chosen degrees of freedom, f(t, ν), not a probability. The density is symmetric, f(−t, ν) = f(t, ν), and approaches the standard Normal as ν grows.
                 </div>
                 <div class="df-control">
                     <label for="df-pdf">Degrees of freedom (ν):</label>
@@ -382,21 +390,40 @@
         </section>
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
-            <h3>How to use these tables</h3>
-            <h3>Student's t Distribution</h3>
-            <p>Student's t distribution with ν degrees of freedom has density function:</p>
+            <h3>How to use this table</h3>
+            <p>The Student's t table has three tabs, and each answers a different question:</p>
+            <ul>
+                <li><strong>Critical values t<sub>α,ν</sub></strong>: the one used in hypothesis tests and confidence intervals. Given a significance level α and degrees of freedom ν, it returns the value t that leaves an area α in the tail.</li>
+                <li><strong>P(T ≤ t)</strong>: for a specific t, it returns the probability accumulated up to it. Use it to compute p-values.</li>
+                <li><strong>f(t,ν)</strong>: the height of the curve at t, useful for plotting or theoretical work.</li>
+            </ul>
+            <p>To read a critical value:</p>
+            <ol>
+                <li><strong>Work out the degrees of freedom</strong> of the problem (for example, ν = n − 1 in a test on one mean) and find its row.</li>
+                <li><strong>Decide whether the test is one-tailed or two-tailed</strong> and find your α in the matching header: "1 tail" for one-tailed tests, "2 tails" for two-tailed tests and confidence intervals.</li>
+                <li><strong>Read the cell</strong> where they meet. Click it and the diagram shades the area the critical value leaves in the tail.</li>
+            </ol>
+            <p>If your ν is not in the table, use the next row down (it gives a slightly larger critical value, so the decision is conservative) or the calculator linked below. For very large ν the values match those of the standard Normal.</p>
+
+            <h3>Worked example</h3>
+            <p>You want to test whether a population mean differs from a reference value using a sample of n = 11 observations, at α = 0.05. The test is two-tailed and ν = n − 1 = 10, so look up row 10 and column "2 tails: 0.05": the critical value is <strong>t = 2.228</strong>. Reject H₀ if the observed statistic satisfies |t| &gt; 2.228.</p>
+            <p>If the test were one-tailed (for example, H₁: μ &gt; μ₀) at the same α, you would use column "1 tail: 0.05" and the critical value would be <strong>t = 1.812</strong>, smaller because the whole area α sits in a single tail.</p>
+            <p>To get a p-value, switch to the P(T ≤ t) tab. With ν = 10 and a statistic t = 2.00, the table gives P(T ≤ 2.00) = 0.9633, so the two-tailed p-value is 2 × (1 − 0.9633) = 0.0734: H₀ is not rejected at 5%, consistent with 2.00 &lt; 2.228.</p>
+
+            <h3>What the Student's t distribution is</h3>
+            <p>When you estimate the mean of a Normal population and the standard deviation σ is unknown, you replace it with the sample standard deviation s. That substitution adds uncertainty, so the statistic (x̄ − μ)/(s/√n) no longer follows a Normal but a Student's t with ν = n − 1 degrees of freedom. Its density is:</p>
             <p class="formula-line">\( f(t,\nu) = \dfrac{\Gamma\!\left(\tfrac{\nu+1}{2}\right)}{\sqrt{\nu\pi}\;\Gamma\!\left(\tfrac{\nu}{2}\right)} \left(1+\dfrac{t^2}{\nu}\right)^{-\frac{\nu+1}{2}} \)</p>
-            <p>As ν → ∞ the distribution converges to the standard Normal N(0,1).</p>
+            <p>It is bell-shaped and centred at 0, like the Normal, but with heavier tails: extreme values are more likely, which is why its critical values are larger. As ν grows the difference shrinks and, for ν → ∞, the t coincides with the standard Normal N(0, 1).</p>
 
             <h3>Critical values table</h3>
-            <p>Shows the quantiles t<sub>α,ν</sub> such that P(T &gt; t<sub>α,ν</sub>) = α (one-tailed test). For a two-tailed test at level α₂, use column α₁ = α₂/2.</p>
+            <p>Each cell is the quantile t<sub>α,ν</sub> such that P(T &gt; t<sub>α,ν</sub>) = α. Because the distribution is symmetric, the same value serves for the left tail (−t<sub>α,ν</sub>) and for a two-tailed test at level 2α.</p>
             <ul>
-                <li><strong>Example:</strong> two-tailed test α = 0.05, ν = 20 → column α₁ = 0.025 → t = 2.086.</li>
-                <li>When ν = ∞ the values match the quantiles of the standard Normal.</li>
+                <li><strong>Example:</strong> two-tailed test with α = 0.05 and ν = 20 → column "2 tails: 0.05" → t = 2.086.</li>
+                <li>In the last row, ν = ∞, the values match the quantiles of the standard Normal (1.645, 1.960, 2.576…).</li>
             </ul>
 
             <h3>Cumulative distribution table</h3>
-            <p>Each cell shows P(T ≤ t) for the selected number of degrees of freedom. To compute two-tailed p-values: p = 2 · P(T &gt; |t<sub>obs</sub>|) = 2 · (1 − P(T ≤ |t<sub>obs</sub>|)).</p>
+            <p>Each cell is P(T ≤ t) for the selected degrees of freedom. For a two-tailed p-value from the observed statistic t<sub>obs</sub>: p = 2 · P(T &gt; |t<sub>obs</sub>|) = 2 · (1 − P(T ≤ |t<sub>obs</sub>|)). For a one-tailed p-value, use the area of the relevant tail directly.</p>
 
             <h3>Related tables and calculators</h3>
             <ul class="distribution-links">
@@ -412,15 +439,19 @@
             <ul>
                 <li>
                     <strong>How do you read the Student's t table?</strong>
-                    Pick the row for the degrees of freedom ν and the column for the significance level α: the cell is the critical value t. Use the “1 tail” row for one-tailed tests and the “2 tails” row for two-tailed ones.
+                    Find the row of your degrees of freedom ν and the column of your significance level α. The cell is the critical value t. In the header, read "1 tail" for one-tailed tests and "2 tails" for two-tailed tests and confidence intervals.
                 </li>
                 <li>
                     <strong>When do you use the t table instead of the normal table?</strong>
-                    With small samples and unknown population variance you use the Student's t table; as the degrees of freedom grow, the t approaches the standard normal table.
+                    When the population standard deviation is unknown and is estimated from the sample, especially with small samples. As the degrees of freedom grow the t approaches the Normal, and from ν ≈ 30 onwards the difference is already small.
                 </li>
                 <li>
                     <strong>What is the difference between one tail and two tails?</strong>
-                    One tail leaves the whole area α on one side (P(T > t) = α); two tails split it between both ends (P(|T| > t) = α), which makes the critical value larger.
+                    In a one-tailed test the whole area α sits at one end, P(T &gt; t) = α. In a two-tailed test the area is split between both ends, P(|T| &gt; t) = α, so each tail gets α/2 and the critical value is larger.
+                </li>
+                <li>
+                    <strong>What if my degrees of freedom are not in the table?</strong>
+                    Use the closest row below, which gives a slightly larger critical value and therefore a conservative decision, or compute the exact value with the Student's t calculator.
                 </li>
             </ul>
         </section>

@@ -327,7 +327,7 @@
           "name": "¿Cómo se lee la tabla normal estándar?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Localiza el valor de z: la parte entera y el primer decimal en la fila, y el segundo decimal en la columna. La celda es Φ(z) = P(Z ≤ z), la probabilidad acumulada."
+            "text": "Descompón z: la fila da la parte entera y el primer decimal, y la columna el segundo decimal. La celda donde se cruzan es Φ(z) = P(Z ≤ z), la probabilidad acumulada hasta z."
           }
         },
         {
@@ -335,7 +335,15 @@
           "name": "¿Qué es Φ(z) en la tabla de la distribución normal?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Es la función de distribución acumulada: el área bajo la curva normal a la izquierda de z, es decir la probabilidad P(Z ≤ z)."
+            "text": "Es la función de distribución acumulada de la Normal estándar: el área bajo la campana a la izquierda de z, es decir, la probabilidad P(Z ≤ z)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo se usa la tabla con z negativo?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Puedes activar la tabla z < 0 o usar la simetría de la curva: Φ(−z) = 1 − Φ(z). Por ejemplo, Φ(−1.96) = 1 − 0.9750 = 0.0250."
           }
         },
         {
@@ -343,7 +351,7 @@
           "name": "¿Cómo hallar el valor z a partir de una probabilidad?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Busca la probabilidad dentro de la tabla normal y lee el z de su fila y columna. Por ejemplo, a 0,975 le corresponde z ≈ 1,96, el valor usado en intervalos al 95 %."
+            "text": "Busca la probabilidad en el cuerpo de la tabla Φ(z) y lee z en su fila y su columna. Por ejemplo, 0.9750 está en la fila 1.9 y la columna .06, así que z = 1.96, el valor crítico de los intervalos al 95 %."
           }
         }
       ]
@@ -395,7 +403,7 @@
     <header class="hero">
         <p class="eyebrow">Tablas estadísticas</p>
         <h1>Tabla de la distribución Normal estándar (Z)</h1>
-        <p class="hero-subtitle">La tabla normal estándar —o tabla de la distribución normal— con μ = 0 y σ = 1. Haz clic en cualquier celda para leer el valor exacto de f(z) o Φ(z) = P(Z ≤ z).</p>
+        <p class="hero-subtitle">Valores de Φ(z) = P(Z ≤ z) y de la densidad f(z) para z entre −3.49 y 3.49, con μ = 0 y σ = 1. Haz clic en cualquier celda para ver el valor exacto y el área que representa.</p>
         <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">Ver todas las tablas</a></p>
     </header>
 
@@ -409,7 +417,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content active">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra Φ(z) = P(Z ≤ z). Por ejemplo, para z = 1.96 busca la fila <em>1.9</em> y la columna <em>.06</em> → Φ(1.96) = 0.9750. Para z negativo: Φ(−z) = 1 − Φ(z).
+                    <strong>Cómo leer la tabla:</strong> la fila da la parte entera y el primer decimal de z; la columna, el segundo decimal. La celda es Φ(z) = P(Z ≤ z), el área a la izquierda de z. Ejemplo: para z = 1.96 cruza la fila <em>1.9</em> con la columna <em>.06</em> → Φ(1.96) = 0.9750. Para z negativo usa el botón z &lt; 0 o la simetría Φ(−z) = 1 − Φ(z).
                 </div>
                 <div class="sign-toggle">
                     <button class="sign-btn active" onclick="switchSign('cdf','pos',this)">z ≥ 0</button>
@@ -513,7 +521,7 @@
             <!-- PDF TAB -->
             <div id="tab-pdf" class="tab-content">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra f(z) = φ(z) = (1/√(2π)) · e<sup>−z²/2</sup>. La función de densidad es simétrica: f(−z) = f(z). El máximo es f(0) = 0.3989.
+                    <strong>Cómo leer la tabla:</strong> la celda es la altura de la campana en z, f(z) = φ(z) = (1/√(2π)) · e<sup>−z²/2</sup>, no una probabilidad. La curva es simétrica, f(−z) = f(z), y su máximo está en el centro: f(0) = 0.3989.
                 </div>
                 <div id="lookup-pdf" class="lookup-result"><span>Haz clic en una celda para leer el valor.</span></div>
                 <figure class="dist-diagram" data-dist="normal" data-mode="pdf-point" data-tables="tbl-pdf-pos" data-z="1.00" data-val="0.2420">
@@ -567,39 +575,50 @@
         </section>
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
-            <h3>Cómo usar estas tablas</h3>
-            <h3>Distribución Normal Estándar</h3>
-            <p>La distribución Normal estándar tiene media μ = 0 y varianza σ² = 1. Su función de densidad es:</p>
-            <p class="formula-line">\( f(z) = \dfrac{1}{\sqrt{2\pi}}\,e^{-z^2/2} \)</p>
-            <p>Y su función de distribución acumulada Φ(z) = P(Z ≤ z) no tiene expresión cerrada, por lo que se consulta en tablas.</p>
+            <h3>Cómo usar esta tabla</h3>
+            <p>La tabla responde a una pregunta: dado un valor z, ¿qué probabilidad acumula la Normal estándar hasta ese punto? Para consultarla sigue estos pasos:</p>
+            <ol>
+                <li><strong>Elige la pestaña.</strong> <strong>Φ(z)</strong> da la probabilidad acumulada P(Z ≤ z), que es lo que necesitas en casi todos los problemas. <strong>f(z)</strong> da la altura de la curva en z y se usa sobre todo para dibujarla o en cálculos teóricos.</li>
+                <li><strong>Elige el signo de z</strong> con los botones <strong>z ≥ 0</strong> y <strong>z &lt; 0</strong>. Si solo dispones de la tabla positiva, recuerda que Φ(−z) = 1 − Φ(z).</li>
+                <li><strong>Descompón z en dos partes.</strong> La primera columna recoge la parte entera y el primer decimal (por ejemplo, 1.9); la cabecera superior aporta el segundo decimal (.06).</li>
+                <li><strong>Lee la celda donde se cruzan</strong> fila y columna. Si haces clic en ella, la página muestra el z completo con su probabilidad y el diagrama sombrea el área correspondiente.</li>
+            </ol>
+            <p>Si el problema te da la probabilidad y pide z, haz el camino inverso: busca en el cuerpo de la tabla Φ(z) el valor más cercano a esa probabilidad y reconstruye z uniendo la etiqueta de su fila con la de su columna.</p>
 
-            <h3>Cómo leer una fila y una columna</h3>
-            <p>Primero elige la pestaña según el resultado que necesites: <strong>Φ(z)</strong> para una probabilidad acumulada o <strong>f(z)</strong> para la altura de la densidad. Después selecciona <strong>z ≥ 0</strong> o <strong>z &lt; 0</strong>. En ambas tablas, la primera columna contiene la parte entera y el primer decimal de z, mientras que la cabecera superior aporta el segundo decimal. La celda donde se cruzan ambos valores es el resultado.</p>
-            <p>Por ejemplo, para leer <strong>z = 1.96</strong>, busca la fila <strong>1.9</strong> y la columna <strong>.06</strong>. En la tabla acumulada, su intersección muestra <strong>Φ(1.96) = 0.9750</strong>: el 97,50 % del área queda a la izquierda de 1.96. Para <strong>z = −1.96</strong>, activa la tabla negativa y cruza la fila <strong>−1.9</strong> con la columna <strong>.06</strong>; obtendrás <strong>Φ(−1.96) = 0.0250</strong>.</p>
-            <p>En la pestaña <strong>f(z)</strong> se combinan la fila y la columna del mismo modo, pero la celda representa una densidad, no un área ni una probabilidad. Puedes hacer clic en cualquier celda para que la página confirme el z completo y su valor. Si partes de una probabilidad y buscas z, localiza en el cuerpo de la tabla Φ(z) el valor más cercano y reconstruye z uniendo la etiqueta de su fila con la de su columna.</p>
-
-            <h3>Tabla Φ(z) — Distribución acumulada</h3>
-            <p>Cada celda muestra la probabilidad de que una variable Normal estándar sea <strong>menor o igual</strong> que z. Para z negativo, recuerda que Φ(−z) = 1 − Φ(z), o consulta directamente la pestaña z &lt; 0.</p>
+            <h3>Ejemplo resuelto</h3>
+            <p>Supón que necesitas P(Z ≤ 1.96). Busca la fila <strong>1.9</strong>, desplázate hasta la columna <strong>.06</strong> y lee <strong>Φ(1.96) = 0.9750</strong>: el 97.5 % del área queda a la izquierda de 1.96. Para P(Z ≤ −1.96), activa z &lt; 0 y cruza la fila −1.9 con la columna .06: <strong>Φ(−1.96) = 0.0250</strong>, justo el complemento del anterior.</p>
+            <p>A partir de ahí salen las probabilidades habituales:</p>
             <ul>
-                <li><strong>Φ(0) = 0.5000</strong> (la media divide la distribución en dos mitades iguales).</li>
-                <li><strong>Φ(1.96) ≈ 0.9750</strong> → el 95 % de los valores caen entre −1.96 y 1.96.</li>
-                <li><strong>Φ(2.576) ≈ 0.9950</strong> → el 99 % caen entre −2.576 y 2.576.</li>
+                <li><strong>Cola derecha:</strong> P(Z &gt; 1.96) = 1 − 0.9750 = 0.0250.</li>
+                <li><strong>Intervalo central:</strong> P(−1.96 ≤ Z ≤ 1.96) = 0.9750 − 0.0250 = 0.9500. Por eso 1.96 es el valor crítico de los intervalos de confianza al 95 %.</li>
+                <li><strong>Camino inverso:</strong> si necesitas el z que acumula el 99 %, busca 0.9900 en el cuerpo de la tabla. El valor más próximo es 0.9901, en la fila 2.3 y la columna .03, así que z ≈ 2.33.</li>
             </ul>
 
-            <h3>Tabla f(z) — Función de densidad</h3>
-            <p>Cada celda muestra el valor de la densidad en el punto z. Recuerda que la densidad <em>no es</em> una probabilidad puntual; se integra para obtener probabilidades. Es simétrica: f(−z) = f(z).</p>
+            <h3>Qué es la distribución Normal estándar</h3>
+            <p>Cualquier variable Normal X ~ N(μ, σ²) se convierte en una Normal estándar mediante la tipificación Z = (X − μ)/σ. Gracias a esa transformación una sola tabla, la de μ = 0 y σ = 1, sirve para todas las distribuciones normales. Su función de densidad es:</p>
+            <p class="formula-line">\( f(z) = \dfrac{1}{\sqrt{2\pi}}\,e^{-z^2/2} \)</p>
+            <p>Su función de distribución acumulada Φ(z) = P(Z ≤ z) es el área bajo la curva a la izquierda de z. No tiene expresión cerrada, de modo que se obtiene por integración numérica, y por eso tradicionalmente se consulta en tablas como esta.</p>
+
+            <h3>Tabla Φ(z): distribución acumulada</h3>
+            <p>Cada celda es la probabilidad de que una Normal estándar sea <strong>menor o igual</strong> que z. Tres valores que conviene reconocer a simple vista:</p>
+            <ul>
+                <li><strong>Φ(0) = 0.5000</strong>: la media deja la mitad del área a cada lado.</li>
+                <li><strong>Φ(1.96) = 0.9750</strong>: el 95 % de los valores están entre −1.96 y 1.96.</li>
+                <li><strong>Φ(2.576) ≈ 0.9950</strong>: el 99 % de los valores están entre −2.576 y 2.576.</li>
+            </ul>
+
+            <h3>Tabla f(z): función de densidad</h3>
+            <p>Cada celda es la altura de la campana en el punto z, no una probabilidad. Las probabilidades son áreas y se obtienen integrando la densidad, es decir, con la tabla Φ(z). La densidad es simétrica, f(−z) = f(z), y alcanza su máximo en el centro: f(0) = 0.3989.</p>
 
             <h3>Percentiles clave de la Normal estándar</h3>
             <ul>
                 <li>z₀.₉₀ = 1.282 &nbsp;→&nbsp; P(Z ≤ 1.282) = 0.90</li>
-                <li>z₀.₉₅ = 1.645 &nbsp;→&nbsp; P(Z ≤ 1.645) = 0.95</li>
+                <li>z₀.₉₅ = 1.645 &nbsp;→&nbsp; P(Z ≤ 1.645) = 0.95 &nbsp;(unilateral 5 %)</li>
                 <li>z₀.₉₇₅ = 1.960 &nbsp;→&nbsp; P(Z ≤ 1.960) = 0.975 &nbsp;(bilateral 95 %)</li>
-                <li>z₀.₉₉ = 2.326 &nbsp;→&nbsp; P(Z ≤ 2.326) = 0.99</li>
+                <li>z₀.₉₉ = 2.326 &nbsp;→&nbsp; P(Z ≤ 2.326) = 0.99 &nbsp;(unilateral 1 %)</li>
                 <li>z₀.₉₉₅ = 2.576 &nbsp;→&nbsp; P(Z ≤ 2.576) = 0.995 &nbsp;(bilateral 99 %)</li>
             </ul>
 
-            <h3>Ejemplo resuelto: buscar un valor crítico Z</h3>
-            <p>Para construir un intervalo bilateral del 95% necesitas el valor que deja 97,5% acumulado en la normal estándar. En la tabla normal, Φ(z)=0,975 corresponde aproximadamente a z=1,96; para 99%, el acumulado 0,995 corresponde aproximadamente a z=2,576.</p>
             <h3>Tablas y calculadoras relacionadas</h3>
             <ul class="distribution-links">
                 <li><a href="normal.html">Calculadora Normal</a></li>
@@ -613,18 +632,19 @@
             <ul>
                 <li>
                     <strong>¿Cómo se lee la tabla normal estándar?</strong>
-                    Localiza el valor de z: la parte entera y el primer decimal en la fila, y el segundo
-                    decimal en la columna. La celda es Φ(z) = P(Z ≤ z), la probabilidad acumulada.
+                    Descompón z: la fila da la parte entera y el primer decimal, y la columna el segundo decimal. La celda donde se cruzan es Φ(z) = P(Z ≤ z), la probabilidad acumulada hasta z.
                 </li>
                 <li>
                     <strong>¿Qué es Φ(z) en la tabla de la distribución normal?</strong>
-                    Es la función de distribución acumulada: el área bajo la curva normal a la izquierda de z,
-                    es decir la probabilidad P(Z ≤ z).
+                    Es la función de distribución acumulada de la Normal estándar: el área bajo la campana a la izquierda de z, es decir, la probabilidad P(Z ≤ z).
+                </li>
+                <li>
+                    <strong>¿Cómo se usa la tabla con z negativo?</strong>
+                    Puedes activar la tabla z &lt; 0 o usar la simetría de la curva: Φ(−z) = 1 − Φ(z). Por ejemplo, Φ(−1.96) = 1 − 0.9750 = 0.0250.
                 </li>
                 <li>
                     <strong>¿Cómo hallar el valor z a partir de una probabilidad?</strong>
-                    Busca la probabilidad dentro de la tabla normal y lee el z de su fila y columna. Por
-                    ejemplo, a 0,975 le corresponde z ≈ 1,96, el valor usado en intervalos al 95 %.
+                    Busca la probabilidad en el cuerpo de la tabla Φ(z) y lee z en su fila y su columna. Por ejemplo, 0.9750 está en la fila 1.9 y la columna .06, así que z = 1.96, el valor crítico de los intervalos al 95 %.
                 </li>
             </ul>
         </section>

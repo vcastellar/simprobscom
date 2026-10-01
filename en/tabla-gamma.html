@@ -134,6 +134,43 @@
         "name": "ProbLab",
         "url": "https://problabtools.com/en/"
       }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do you read the Gamma distribution table?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Select the shape α and the scale β. In the P(X ≤ x) tab, the row gives the integer part of x and the column the first decimal; the cell is the cumulative probability. In Quantiles, the row is α, the column is the probability p and the cell is the value x that accumulates it."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between scale and rate?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "They are two ways of writing the same parameter: the rate is λ = 1/β. With the scale the mean is αβ; with the rate, α/λ. If your problem or your software uses the rate, convert it before using the table."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is the Gamma related to the Exponential and the chi-square?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Exponential with mean β is the Gamma with α = 1, and the chi-square with ν degrees of freedom is the Gamma with α = ν/2 and β = 2."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What if my parameters are not in the table?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use the Gamma calculator to get the exact value for any α and β."
+          }
+        }
+      ]
     }
   ]
 }
@@ -178,7 +215,7 @@
     <header class="hero">
         <p class="eyebrow">Statistical tables</p>
         <h1>Gamma Distribution Table</h1>
-        <p class="hero-subtitle">Table of the Gamma distribution Γ(α, β): cumulative distribution P(X ≤ x), density f(x) and quantiles for different shape parameters α and scale parameters β. Click a cell to read the value.</p>
+        <p class="hero-subtitle">Cumulative distribution P(X ≤ x), density f(x) and quantiles of the Gamma distribution Γ(α, β) for different values of the shape α and scale β. Click a cell to see the exact value and the area it represents.</p>
         <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">See all tables</a></p>
     </header>
 
@@ -193,7 +230,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content active">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows P(X ≤ x) for the selected shape parameter α and scale parameter β. The row gives the integer part of x; the column adds the first decimal (×0.1).
+                    <strong>How to read the table:</strong> choose the shape α and the scale β from the dropdowns. The row gives the integer part of x and the column the first decimal. The cell is P(X ≤ x), the area to the left of x.
                 </div>
                 <div class="df-control">
                     <label for="alpha-cdf">α (shape):</label>
@@ -215,7 +252,7 @@
             <!-- PDF TAB -->
             <div id="tab-pdf" class="tab-content">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows f(x) = x^(α−1) · e^(−x/β) / (β^α · Γ(α)) for the selected parameters. The density is 0 for x ≤ 0.
+                    <strong>How to read the table:</strong> the cell is the height of the curve at x for the chosen parameters, f(x) = x<sup>α−1</sup> · e<sup>−x/β</sup> / (β<sup>α</sup> · Γ(α)), not a probability. The density is 0 for x ≤ 0.
                 </div>
                 <div class="df-control">
                     <label for="alpha-pdf">α (shape):</label>
@@ -237,7 +274,7 @@
             <!-- QUANTILES TAB -->
             <div id="tab-quant" class="tab-content">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows the quantile x such that P(X ≤ x) = p. Rows: different values of α (shape). Columns: cumulative probabilities p. Select β (scale) with the selector.
+                    <strong>How to read the table:</strong> choose the scale β from the dropdown. Each row is a value of the shape α and each column a cumulative probability p. The cell is the quantile x such that P(X ≤ x) = p, that is, the value that leaves a probability p to its left.
                 </div>
                 <div class="df-control">
                     <label for="beta-quant">β (scale):</label>
@@ -256,27 +293,68 @@
         </section>
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
-            <h3>How to use these tables</h3>
-            <h3>Gamma Distribution</h3>
-            <p>The Gamma distribution Γ(α, β) generalizes the Exponential distribution. Its density function is:</p>
+            <h3>How to use this table</h3>
+            <p>The three tabs answer different questions:</p>
+            <ul>
+                <li><strong>P(X ≤ x)</strong>: given a value x, how much probability does the distribution accumulate up to it? This is the usual tab for computing probabilities.</li>
+                <li><strong>f(x)</strong>: the height of the curve at x, useful for plotting or comparing shapes.</li>
+                <li><strong>Quantiles</strong>: the reverse lookup. Given a probability p, which value x accumulates it? This is the tab for percentiles and critical values.</li>
+            </ul>
+            <p>To look up a probability:</p>
+            <ol>
+                <li><strong>Identify the parameters.</strong> This table uses the shape α and the scale β, with mean αβ. If your problem gives the rate λ, convert it: β = 1/λ.</li>
+                <li><strong>Select α and β</strong> from the dropdowns; the table is rebuilt with those values.</li>
+                <li><strong>Split x:</strong> the row gives the integer part and the column the first decimal. Read the cell or click it to see the shaded area.</li>
+            </ol>
+
+            <h3>Worked example</h3>
+            <p>The time until a machine suffers two breakdowns, when breakdowns arrive at a rate of one per hour, follows a Gamma with α = 2 and β = 1 (the sum of two Exponentials with mean 1).</p>
+            <ul>
+                <li><strong>Probability that both breakdowns happen within 3 hours:</strong> P(X ≤ x) tab, α = 2, β = 1, row 3 and column .0 → <strong>P(X ≤ 3.0) = 0.8009</strong>.</li>
+                <li><strong>Probability of taking more than 3 hours:</strong> 1 − 0.8009 = <strong>0.1991</strong>.</li>
+                <li><strong>Time exceeded only 5% of the time:</strong> Quantiles tab, β = 1, row α = 2, column p = 0.95 → <strong>x = 4.7439</strong> hours.</li>
+            </ul>
+
+            <h3>What the Gamma distribution is</h3>
+            <p>The Gamma distribution Γ(α, β) models positive, skewed quantities, especially waiting times: if events arrive at a constant rate, the time until the α-th event follows a Gamma. It generalises the Exponential (which is the case α = 1) and its density is:</p>
             <p class="formula-line">\( f(x;\alpha,\beta) = \dfrac{x^{\alpha-1}\,e^{-x/\beta}}{\beta^\alpha\,\Gamma(\alpha)}, \quad x > 0, \;\alpha > 0,\; \beta > 0 \)</p>
-            <p>The mean is μ = αβ and the variance σ² = αβ². The parameter α controls the shape and β the scale.</p>
+            <p>The parameter α controls the <strong>shape</strong>: with α ≤ 1 the density decreases from the origin; with α &gt; 1 it peaks at x = (α − 1)β and becomes more symmetric as α grows. The parameter β is the <strong>scale</strong>: it stretches the distribution without changing its shape. The mean is μ = αβ and the variance σ² = αβ².</p>
 
             <h3>Special cases</h3>
             <ul>
-                <li><strong>Γ(1, β):</strong> coincides with the Exponential distribution with mean β.</li>
-                <li><strong>Γ(ν/2, 2):</strong> coincides with the Chi-square distribution with ν degrees of freedom.</li>
-                <li><strong>Γ(k, 1) with integer k:</strong> sum of k independent Exponentials with mean 1 (Erlang distribution).</li>
+                <li><strong>Γ(1, β):</strong> Exponential distribution with mean β.</li>
+                <li><strong>Γ(ν/2, 2):</strong> chi-square distribution with ν degrees of freedom.</li>
+                <li><strong>Γ(k, β) with integer k:</strong> sum of k independent Exponentials with mean β (Erlang distribution).</li>
             </ul>
 
             <h3>Parameterization</h3>
-            <p>This table uses the (α, β) parameterization where β is the <em>scale</em> and 1/β is the <em>rate</em>. Check the parameterization used by your software before comparing values.</p>
+            <p>This table uses the pair (α, β) with β as the <em>scale</em>. Many programs and textbooks use the <em>rate</em> λ = 1/β instead, and others call the shape and scale k and θ. Before comparing values, check which convention your software uses: with the rate, the mean is α/λ rather than αβ.</p>
 
-            <h3>Related calculators</h3>
+            <h3>Related tables and calculators</h3>
             <ul class="distribution-links">
                 <li><a href="gamma.html">Gamma calculator</a></li>
                 <li><a href="tabla-chi-cuadrado.html">Chi-square table</a></li>
                 <li><a href="tabla-beta.html">Beta table</a></li>
+            </ul>
+
+            <h3>Frequently asked questions</h3>
+            <ul>
+                <li>
+                    <strong>How do you read the Gamma distribution table?</strong>
+                    Select the shape α and the scale β. In the P(X ≤ x) tab, the row gives the integer part of x and the column the first decimal; the cell is the cumulative probability. In Quantiles, the row is α, the column is the probability p and the cell is the value x that accumulates it.
+                </li>
+                <li>
+                    <strong>What is the difference between scale and rate?</strong>
+                    They are two ways of writing the same parameter: the rate is λ = 1/β. With the scale the mean is αβ; with the rate, α/λ. If your problem or your software uses the rate, convert it before using the table.
+                </li>
+                <li>
+                    <strong>How is the Gamma related to the Exponential and the chi-square?</strong>
+                    The Exponential with mean β is the Gamma with α = 1, and the chi-square with ν degrees of freedom is the Gamma with α = ν/2 and β = 2.
+                </li>
+                <li>
+                    <strong>What if my parameters are not in the table?</strong>
+                    Use the Gamma calculator to get the exact value for any α and β.
+                </li>
             </ul>
         </section>
     </main>

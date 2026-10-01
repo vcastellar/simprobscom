@@ -155,7 +155,7 @@
           "name": "¿Cómo se lee la tabla de Poisson?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Elige el valor de la media λ; la fila es el número de sucesos k. Cada celda da P(X = k) o la acumulada P(X ≤ k) según la pestaña seleccionada."
+            "text": "Localiza la columna de la media λ y la fila del número de sucesos k. La celda es P(X = k) o la acumulada P(X ≤ k), según la pestaña seleccionada."
           }
         },
         {
@@ -163,7 +163,15 @@
           "name": "¿Qué representa λ en la distribución de Poisson?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Es el número medio de sucesos esperados en el intervalo considerado; también es la varianza de la distribución."
+            "text": "El número medio de sucesos en el intervalo considerado. También es la varianza de la distribución. Si cambias la longitud del intervalo, λ se multiplica en la misma proporción."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo calculo «más de k sucesos» con la tabla?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Con el complemento de la acumulada: P(X > k) = 1 − P(X ≤ k). Por ejemplo, con λ = 2, P(X > 3) = 1 − 0.8571 = 0.1429."
           }
         },
         {
@@ -171,7 +179,7 @@
           "name": "¿Cuándo aproxima la Poisson a la binomial?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Cuando n es grande y p pequeño, la binomial B(n, p) se aproxima por una Poisson con λ = n·p, lo que simplifica el cálculo con muchos ensayos."
+            "text": "Cuando n es grande y p pequeño, B(n, p) se aproxima bien por Po(λ = np). Es útil para contar sucesos raros en muchos ensayos, como defectos en una producción grande."
           }
         }
       ]
@@ -223,7 +231,7 @@
     <header class="hero">
         <p class="eyebrow">Tablas estadísticas</p>
         <h1>Tabla de la distribución de Poisson</h1>
-        <p class="hero-subtitle">La tabla de Poisson (tabla de la distribución de Poisson Po(λ)): función de masa P(X = k) y acumulada P(X ≤ k) para distintos valores de λ. Haz clic en cualquier celda para leer el valor exacto.</p>
+        <p class="hero-subtitle">Probabilidades de la distribución de Poisson Po(λ): función de masa P(X = k) y acumulada P(X ≤ k) para λ entre 0.5 y 10. Haz clic en cualquier celda para ver el valor exacto y su representación.</p>
         <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">Ver todas las tablas</a></p>
     </header>
 
@@ -237,7 +245,7 @@
             <!-- PMF TAB -->
             <div id="tab-pmf" class="tab-content active">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra P(X = k) = e<sup>−λ</sup>·λ<sup>k</sup>/k! Filas: valores de k. Columnas: valores de λ. Para k muy grande respecto a λ las probabilidades son prácticamente 0 (se muestran como 0.0000).
+                    <strong>Cómo leer la tabla:</strong> cada fila es un número de sucesos k y cada columna un valor de la media λ. La celda es P(X = k) = e<sup>−λ</sup> · λ<sup>k</sup> / k!, la probabilidad de observar <em>exactamente</em> k sucesos. Con el desplegable puedes ampliar el número de filas; cuando k es mucho mayor que λ la probabilidad es prácticamente nula y aparece como 0.0000.
                 </div>
                 <div class="df-control">
                     <label for="kmax-pmf">k máximo:</label>
@@ -261,7 +269,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra P(X ≤ k) = Σᵢ₌₀ᵏ e<sup>−λ</sup>·λ<sup>i</sup>/i! Para P(X &gt; k) usa el complemento: 1 − P(X ≤ k). Para P(a ≤ X ≤ b) = P(X ≤ b) − P(X ≤ a − 1).
+                    <strong>Cómo leer la tabla:</strong> cada fila es un número de sucesos k y cada columna un valor de λ. La celda es P(X ≤ k), la probabilidad de observar <em>como máximo</em> k sucesos. Para «más de k» usa 1 − P(X ≤ k); para «entre a y b», P(X ≤ b) − P(X ≤ a − 1).
                 </div>
                 <div class="df-control">
                     <label for="kmax-cdf">k máximo:</label>
@@ -284,17 +292,35 @@
         </section>
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
-            <h3>Cómo usar estas tablas</h3>
-            <h3>Distribución de Poisson</h3>
-            <p>La distribución de Poisson modela el número de eventos que ocurren en un intervalo de tiempo o espacio, cuando los eventos ocurren con tasa media λ de forma independiente. Su función de masa es:</p>
+            <h3>Cómo usar esta tabla</h3>
+            <p>Solo necesitas dos datos: la media λ, es decir, el número de sucesos que se espera en el intervalo considerado, y el número de sucesos k por el que se pregunta.</p>
+            <ol>
+                <li><strong>Elige la pestaña:</strong> <strong>P(X = k)</strong> para «exactamente k sucesos» y <strong>P(X ≤ k)</strong> para «como máximo k sucesos».</li>
+                <li><strong>Localiza la columna de λ.</strong> Si tu media no aparece, usa la calculadora enlazada más abajo; interpolar entre columnas solo da una aproximación.</li>
+                <li><strong>Localiza la fila de k</strong> y lee la celda. Haz clic en ella para verla identificada y representada en el diagrama. Si necesitas valores de k mayores, amplía la tabla con el desplegable «k máximo».</li>
+                <li><strong>Combina valores cuando la pregunta lo pida:</strong> «más de k» es 1 − P(X ≤ k); «al menos k» es 1 − P(X ≤ k − 1); «entre a y b» es P(X ≤ b) − P(X ≤ a − 1).</li>
+            </ol>
+            <p>Ajusta λ a la longitud del intervalo del problema: si una centralita recibe 2 llamadas por minuto de media, en 2 minutos la media es λ = 4.</p>
+
+            <h3>Ejemplo resuelto</h3>
+            <p>Una centralita recibe una media de 2 llamadas por minuto. Con λ = 2:</p>
+            <ul>
+                <li><strong>Exactamente 3 llamadas en un minuto:</strong> pestaña P(X = k), fila k = 3, columna λ = 2 → <strong>0.1804</strong>.</li>
+                <li><strong>Como máximo 3 llamadas:</strong> pestaña P(X ≤ k), misma fila y columna → <strong>0.8571</strong>.</li>
+                <li><strong>Más de 3 llamadas:</strong> 1 − 0.8571 = <strong>0.1429</strong>.</li>
+                <li><strong>Como máximo 5 llamadas en dos minutos:</strong> ahora λ = 4; la fila k = 5 de la columna λ = 4 da P(X ≤ 5) = <strong>0.7851</strong>.</li>
+            </ul>
+
+            <h3>Qué es la distribución de Poisson</h3>
+            <p>La distribución de Poisson describe el número de sucesos que ocurren en un intervalo fijo de tiempo o de espacio cuando los sucesos son independientes entre sí y se producen a un ritmo medio constante λ: llamadas que llegan a una centralita, defectos por metro de cable o clientes que entran en una tienda cada hora. Su función de masa es:</p>
             <p class="formula-line">\( P(X = k) = \dfrac{e^{-\lambda}\,\lambda^k}{k!}, \quad k = 0, 1, 2, \ldots \)</p>
-            <p>La media y la varianza coinciden: E[X] = Var[X] = λ.</p>
+            <p>Tiene un solo parámetro, λ, que es a la vez su media y su varianza: E[X] = Var[X] = λ. Para λ pequeño la distribución se concentra en los valores bajos y es muy asimétrica; al crecer λ se va haciendo más simétrica.</p>
 
             <h3>Propiedades útiles</h3>
             <ul>
-                <li><strong>Suma de Poissons:</strong> si X ~ Po(λ₁) e Y ~ Po(λ₂) son independientes, entonces X + Y ~ Po(λ₁ + λ₂).</li>
-                <li><strong>Aproximación a la binomial:</strong> B(n, p) ≈ Po(np) cuando n es grande y p es pequeño (np ≤ 5 como guía).</li>
-                <li><strong>Aproximación normal:</strong> para λ grande, Po(λ) ≈ N(λ, λ).</li>
+                <li><strong>Suma de Poissons:</strong> si X ~ Po(λ₁) e Y ~ Po(λ₂) son independientes, X + Y ~ Po(λ₁ + λ₂). Por eso basta con reescalar λ al cambiar la longitud del intervalo.</li>
+                <li><strong>Aproximación a la binomial:</strong> B(n, p) ≈ Po(np) cuando n es grande y p pequeño (como guía, n ≥ 20 y p ≤ 0.05).</li>
+                <li><strong>Aproximación Normal:</strong> para λ grande (a partir de 10 o 20), Po(λ) ≈ N(λ, λ).</li>
             </ul>
 
             <h3>Tablas y calculadoras relacionadas</h3>
@@ -308,18 +334,19 @@
             <ul>
                 <li>
                     <strong>¿Cómo se lee la tabla de Poisson?</strong>
-                    Elige el valor de la media λ; la fila es el número de sucesos k. Cada celda da
-                    P(X = k) o la acumulada P(X ≤ k) según la pestaña seleccionada.
+                    Localiza la columna de la media λ y la fila del número de sucesos k. La celda es P(X = k) o la acumulada P(X ≤ k), según la pestaña seleccionada.
                 </li>
                 <li>
                     <strong>¿Qué representa λ en la distribución de Poisson?</strong>
-                    Es el número medio de sucesos esperados en el intervalo considerado; también es la
-                    varianza de la distribución.
+                    El número medio de sucesos en el intervalo considerado. También es la varianza de la distribución. Si cambias la longitud del intervalo, λ se multiplica en la misma proporción.
+                </li>
+                <li>
+                    <strong>¿Cómo calculo «más de k sucesos» con la tabla?</strong>
+                    Con el complemento de la acumulada: P(X &gt; k) = 1 − P(X ≤ k). Por ejemplo, con λ = 2, P(X &gt; 3) = 1 − 0.8571 = 0.1429.
                 </li>
                 <li>
                     <strong>¿Cuándo aproxima la Poisson a la binomial?</strong>
-                    Cuando n es grande y p pequeño, la binomial B(n, p) se aproxima por una Poisson con
-                    λ = n·p, lo que simplifica el cálculo con muchos ensayos.
+                    Cuando n es grande y p pequeño, B(n, p) se aproxima bien por Po(λ = np). Es útil para contar sucesos raros en muchos ensayos, como defectos en una producción grande.
                 </li>
             </ul>
         </section>

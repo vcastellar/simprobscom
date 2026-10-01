@@ -134,6 +134,43 @@
         "name": "ProbLab",
         "url": "https://problabtools.com/en/"
       }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do you read the Beta distribution table?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Select α and β. In the P(X ≤ x) tab, the row gives the first decimal of x and the column the second; the cell is the cumulative probability. In Quantiles, the row is α, the column is the probability p and the cell is the value x that accumulates it."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the Beta distribution used for?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "For modelling proportions and unknown probabilities, such as the conversion rate in an A/B test or the success probability of a process. In Bayesian statistics it is the conjugate prior of the binomial."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What do α and β mean?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "They control the shape of the distribution and can be read as the number of successes and failures observed (plus one). If α > β the distribution shifts towards 1; if α < β, towards 0; if they are equal, it is symmetric around 0.5."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why can the density be greater than 1?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Because f(x) is a height, not a probability. Since the support is only 1 unit wide, the curve must exceed 1 somewhere for the total area to be 1. Probabilities are read in the P(X ≤ x) tab."
+          }
+        }
+      ]
     }
   ]
 }
@@ -178,7 +215,7 @@
     <header class="hero">
         <p class="eyebrow">Statistical tables</p>
         <h1>Beta Distribution Table</h1>
-        <p class="hero-subtitle">Table of the Beta distribution Be(α, β): cumulative distribution P(X ≤ x), density f(x) and quantiles for different α and β parameters. The support is x ∈ (0, 1). Click a cell to read the value.</p>
+        <p class="hero-subtitle">Cumulative distribution P(X ≤ x), density f(x) and quantiles of the Beta distribution Be(α, β) for different values of α and β, with x between 0 and 1. Click a cell to see the exact value and the area it represents.</p>
         <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">See all tables</a></p>
     </header>
 
@@ -193,7 +230,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content active">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows P(X ≤ x) for the selected parameters α and β. The row gives the first decimal digit of x; the column adds the second (×0.01). The range is x ∈ [0.00, 0.99].
+                    <strong>How to read the table:</strong> choose α and β from the dropdowns. The row gives the first decimal of x and the column the second. The cell is P(X ≤ x), the area to the left of x, for x between 0.00 and 0.99.
                 </div>
                 <div class="df-control">
                     <label for="alpha-cdf">α:</label>
@@ -215,7 +252,7 @@
             <!-- PDF TAB -->
             <div id="tab-pdf" class="tab-content">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows f(x) = x^(α−1) · (1−x)^(β−1) / B(α,β). For α &lt; 1 or β &lt; 1 the density may diverge at the endpoints (very large values are shown as "∞").
+                    <strong>How to read the table:</strong> the cell is the height of the curve at x for the chosen parameters, f(x) = x<sup>α−1</sup> · (1−x)<sup>β−1</sup> / B(α,β), not a probability, so it can be greater than 1. If α &lt; 1 or β &lt; 1 the density grows without bound at the endpoints, and very large values are shown as "∞".
                 </div>
                 <div class="df-control">
                     <label for="alpha-pdf">α:</label>
@@ -237,7 +274,7 @@
             <!-- QUANTILES TAB -->
             <div id="tab-quant" class="tab-content">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows the quantile x such that P(X ≤ x) = p. Rows: different values of α. Columns: cumulative probabilities p. Select β with the selector.
+                    <strong>How to read the table:</strong> choose β from the dropdown. Each row is a value of α and each column a cumulative probability p. The cell is the quantile x such that P(X ≤ x) = p.
                 </div>
                 <div class="df-control">
                     <label for="beta-quant">β:</label>
@@ -256,30 +293,71 @@
         </section>
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
-            <h3>How to use these tables</h3>
-            <h3>Beta Distribution</h3>
-            <p>The Beta distribution Be(α, β) has support on [0, 1] and is very flexible for modeling proportions and probabilities. Its density function is:</p>
+            <h3>How to use this table</h3>
+            <p>The three tabs answer different questions:</p>
+            <ul>
+                <li><strong>P(X ≤ x)</strong>: given a value x between 0 and 1, how much probability does the distribution accumulate up to it?</li>
+                <li><strong>f(x)</strong>: the height of the curve at x, useful for seeing the shape the distribution takes with each pair of parameters.</li>
+                <li><strong>Quantiles</strong>: the reverse lookup. Given a probability p, which value x accumulates it? This is the tab for percentiles and for Bayesian credible intervals.</li>
+            </ul>
+            <p>To look up a probability:</p>
+            <ol>
+                <li><strong>Select α and β</strong> from the dropdowns; the table is rebuilt with those values.</li>
+                <li><strong>Split x:</strong> the row gives the first decimal and the column the second (for x = 0.40, row 0.4 and column .00).</li>
+                <li><strong>Read the cell</strong> or click it to see the shaded area in the diagram.</li>
+            </ol>
+
+            <h3>Worked example</h3>
+            <p>In a Bayesian analysis of a proportion you start from a uniform prior and observe 1 success and 1 failure. The posterior distribution is Be(2, 2).</p>
+            <ul>
+                <li><strong>Probability that the proportion is below 0.40:</strong> P(X ≤ x) tab, α = 2, β = 2, row 0.4 and column .00 → <strong>P(X ≤ 0.40) = 0.3520</strong>.</li>
+                <li><strong>Probability that it lies between 0.25 and 0.75:</strong> P(X ≤ 0.75) − P(X ≤ 0.25) = 0.8438 − 0.1563 = <strong>0.6875</strong>.</li>
+                <li><strong>Median of a Be(3, 1):</strong> Quantiles tab, β = 1, row α = 3, column p = 0.5 → <strong>x = 0.7937</strong>.</li>
+            </ul>
+
+            <h3>What the Beta distribution is</h3>
+            <p>The Beta distribution Be(α, β) takes values in the interval [0, 1], which makes it the natural choice for modelling proportions, percentages and unknown probabilities. In Bayesian inference it is the conjugate prior of the binomial: starting from Be(α, β) and observing s successes and f failures, the posterior is Be(α + s, β + f). Its density is:</p>
             <p class="formula-line">\( f(x;\alpha,\beta) = \dfrac{x^{\alpha-1}(1-x)^{\beta-1}}{B(\alpha,\beta)}, \quad x \in (0,1) \)</p>
-            <p>where B(α, β) = Γ(α)Γ(β)/Γ(α+β) is the beta function. The mean is μ = α/(α+β) and the variance σ² = αβ / [(α+β)²(α+β+1)].</p>
+            <p>where B(α, β) = Γ(α)Γ(β)/Γ(α+β) is the beta function, which makes the total area equal to 1. The mean is μ = α/(α+β) and the variance σ² = αβ / [(α+β)²(α+β+1)]. Intuitively, α counts "successes" and β "failures": the larger both are, the more concentrated the distribution is around its mean.</p>
 
             <h3>Shapes of the distribution</h3>
             <ul>
-                <li><strong>α = β = 1:</strong> Uniform(0,1) distribution.</li>
-                <li><strong>α = β &gt; 1:</strong> unimodal and symmetric around 0.5.</li>
-                <li><strong>α &gt; β:</strong> left-skewed (mean &gt; 0.5).</li>
-                <li><strong>α &lt; β:</strong> right-skewed (mean &lt; 0.5).</li>
-                <li><strong>α &lt; 1 or β &lt; 1:</strong> U-shaped (bimodal at the endpoints).</li>
+                <li><strong>α = β = 1:</strong> Uniform(0, 1) distribution: every value is equally likely.</li>
+                <li><strong>α = β &gt; 1:</strong> symmetric bell around 0.5, narrower as the parameters grow.</li>
+                <li><strong>α &gt; β:</strong> the mass concentrates near 1 and the tail points to the left (mean &gt; 0.5).</li>
+                <li><strong>α &lt; β:</strong> the mass concentrates near 0 and the tail points to the right (mean &lt; 0.5).</li>
+                <li><strong>α &lt; 1 or β &lt; 1:</strong> the density shoots up at one or both endpoints; with both parameters below 1 it is U-shaped.</li>
             </ul>
 
-            <h3>Relationship with F and t</h3>
-            <p>If F ~ F(2α, 2β) then X = αF/(β + αF) ~ Be(α, β). The regularized incomplete beta function is also the CDF of the F distribution and of Student's t distribution.</p>
+            <h3>Relationship with the F and the t</h3>
+            <p>If F ~ F(2α, 2β), then X = αF/(β + αF) ~ Be(α, β). The regularized incomplete beta function, which defines the cumulative distribution in this table, is also what computes the distribution functions of Snedecor's F and Student's t.</p>
 
-            <h3>Related calculators</h3>
+            <h3>Related tables and calculators</h3>
             <ul class="distribution-links">
                 <li><a href="beta.html">Beta calculator</a></li>
                 <li><a href="tabla-gamma.html">Gamma table</a></li>
                 <li><a href="tabla-f-snedecor.html">F (Snedecor) table</a></li>
                 <li><a href="tabla-t-student.html">Student's t table</a></li>
+            </ul>
+
+            <h3>Frequently asked questions</h3>
+            <ul>
+                <li>
+                    <strong>How do you read the Beta distribution table?</strong>
+                    Select α and β. In the P(X ≤ x) tab, the row gives the first decimal of x and the column the second; the cell is the cumulative probability. In Quantiles, the row is α, the column is the probability p and the cell is the value x that accumulates it.
+                </li>
+                <li>
+                    <strong>What is the Beta distribution used for?</strong>
+                    For modelling proportions and unknown probabilities, such as the conversion rate in an A/B test or the success probability of a process. In Bayesian statistics it is the conjugate prior of the binomial.
+                </li>
+                <li>
+                    <strong>What do α and β mean?</strong>
+                    They control the shape of the distribution and can be read as the number of successes and failures observed (plus one). If α &gt; β the distribution shifts towards 1; if α &lt; β, towards 0; if they are equal, it is symmetric around 0.5.
+                </li>
+                <li>
+                    <strong>Why can the density be greater than 1?</strong>
+                    Because f(x) is a height, not a probability. Since the support is only 1 unit wide, the curve must exceed 1 somewhere for the total area to be 1. Probabilities are read in the P(X ≤ x) tab.
+                </li>
             </ul>
         </section>
     </main>

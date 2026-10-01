@@ -155,7 +155,7 @@
           "name": "How do you read the Poisson table?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Choose the value of the mean λ; the row is the number of events k. Each cell gives P(X = k) or the cumulative P(X ≤ k), depending on the tab selected."
+            "text": "Find the column for the mean λ and the row for the number of events k. The cell is P(X = k) or the cumulative P(X ≤ k), depending on the selected tab."
           }
         },
         {
@@ -163,7 +163,15 @@
           "name": "What does λ represent in the Poisson distribution?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "It is the mean number of events expected in the interval considered; it is also the variance of the distribution."
+            "text": "The mean number of events in the interval under study. It is also the variance of the distribution. If you change the length of the interval, λ scales in the same proportion."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I compute \"more than k events\" with the table?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "With the complement of the cumulative probability: P(X > k) = 1 − P(X ≤ k). For example, with λ = 2, P(X > 3) = 1 − 0.8571 = 0.1429."
           }
         },
         {
@@ -171,7 +179,7 @@
           "name": "When does the Poisson approximate the binomial?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "When n is large and p is small, the binomial B(n, p) is approximated by a Poisson with λ = n·p, which simplifies the calculation with many trials."
+            "text": "When n is large and p is small, B(n, p) is well approximated by Po(λ = np). It is useful for counting rare events over many trials, such as defects in a large production run."
           }
         }
       ]
@@ -219,7 +227,7 @@
     <header class="hero">
         <p class="eyebrow">Statistical tables</p>
         <h1>Poisson Distribution Table</h1>
-        <p class="hero-subtitle">The Poisson table (table of the Poisson distribution Po(λ)): probability mass function P(X = k) and cumulative P(X ≤ k) for various values of λ. Click any cell to read the exact value.</p>
+        <p class="hero-subtitle">Probabilities of the Poisson distribution Po(λ): probability mass function P(X = k) and cumulative P(X ≤ k) for λ between 0.5 and 10. Click any cell to see the exact value and its chart.</p>
         <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">See all tables</a></p>
     </header>
 
@@ -233,7 +241,7 @@
             <!-- PMF TAB -->
             <div id="tab-pmf" class="tab-content active">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows P(X = k) = e<sup>−λ</sup>·λ<sup>k</sup>/k! Rows: values of k. Columns: values of λ. For k much larger than λ the probabilities are practically 0 (shown as 0.0000).
+                    <strong>How to read the table:</strong> each row is a number of events k and each column a value of the mean λ. The cell is P(X = k) = e<sup>−λ</sup> · λ<sup>k</sup> / k!, the probability of observing <em>exactly</em> k events. The dropdown adds more rows; when k is much larger than λ the probability is practically zero and shows as 0.0000.
                 </div>
                 <div class="df-control">
                     <label for="kmax-pmf">Maximum k:</label>
@@ -257,7 +265,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows P(X ≤ k) = Σᵢ₌₀ᵏ e<sup>−λ</sup>·λ<sup>i</sup>/i! For P(X &gt; k) use the complement: 1 − P(X ≤ k). For P(a ≤ X ≤ b) = P(X ≤ b) − P(X ≤ a − 1).
+                    <strong>How to read the table:</strong> each row is a number of events k and each column a value of λ. The cell is P(X ≤ k), the probability of observing <em>at most</em> k events. For "more than k" use 1 − P(X ≤ k); for "between a and b", P(X ≤ b) − P(X ≤ a − 1).
                 </div>
                 <div class="df-control">
                     <label for="kmax-cdf">Maximum k:</label>
@@ -280,17 +288,35 @@
         </section>
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
-            <h3>How to use these tables</h3>
-            <h3>Poisson Distribution</h3>
-            <p>The Poisson distribution models the number of events occurring in an interval of time or space, when the events occur independently at a mean rate λ. Its probability mass function is:</p>
+            <h3>How to use this table</h3>
+            <p>You only need two pieces of information: the mean λ, that is, the number of events expected in the interval under study, and the number of events k the question asks about.</p>
+            <ol>
+                <li><strong>Choose the tab:</strong> <strong>P(X = k)</strong> for "exactly k events" and <strong>P(X ≤ k)</strong> for "at most k events".</li>
+                <li><strong>Find the column for λ.</strong> If your mean is not listed, use the calculator linked below; interpolating between columns only gives an approximation.</li>
+                <li><strong>Find the row for k</strong> and read the cell. Click it to see it highlighted and drawn in the diagram. If you need larger values of k, extend the table with the "Maximum k" dropdown.</li>
+                <li><strong>Combine values when the question calls for it:</strong> "more than k" is 1 − P(X ≤ k); "at least k" is 1 − P(X ≤ k − 1); "between a and b" is P(X ≤ b) − P(X ≤ a − 1).</li>
+            </ol>
+            <p>Scale λ to the length of the interval in the problem: if a call centre receives 2 calls per minute on average, over 2 minutes the mean is λ = 4.</p>
+
+            <h3>Worked example</h3>
+            <p>A call centre receives an average of 2 calls per minute. With λ = 2:</p>
+            <ul>
+                <li><strong>Exactly 3 calls in one minute:</strong> P(X = k) tab, row k = 3, column λ = 2 → <strong>0.1804</strong>.</li>
+                <li><strong>At most 3 calls:</strong> P(X ≤ k) tab, same row and column → <strong>0.8571</strong>.</li>
+                <li><strong>More than 3 calls:</strong> 1 − 0.8571 = <strong>0.1429</strong>.</li>
+                <li><strong>At most 5 calls in two minutes:</strong> now λ = 4; row k = 5 of column λ = 4 gives P(X ≤ 5) = <strong>0.7851</strong>.</li>
+            </ul>
+
+            <h3>What the Poisson distribution is</h3>
+            <p>The Poisson distribution describes the number of events occurring in a fixed interval of time or space when the events are independent of each other and happen at a constant average rate λ: calls arriving at a call centre, defects per metre of cable, or customers entering a shop each hour. Its probability mass function is:</p>
             <p class="formula-line">\( P(X = k) = \dfrac{e^{-\lambda}\,\lambda^k}{k!}, \quad k = 0, 1, 2, \ldots \)</p>
-            <p>The mean and variance coincide: E[X] = Var[X] = λ.</p>
+            <p>It has a single parameter, λ, which is both its mean and its variance: E[X] = Var[X] = λ. For small λ the distribution is concentrated on low values and strongly skewed; as λ grows it becomes more symmetric.</p>
 
             <h3>Useful properties</h3>
             <ul>
-                <li><strong>Sum of Poissons:</strong> if X ~ Po(λ₁) and Y ~ Po(λ₂) are independent, then X + Y ~ Po(λ₁ + λ₂).</li>
-                <li><strong>Approximation to the binomial:</strong> B(n, p) ≈ Po(np) when n is large and p is small (np ≤ 5 as a guideline).</li>
-                <li><strong>Normal approximation:</strong> for large λ, Po(λ) ≈ N(λ, λ).</li>
+                <li><strong>Sum of Poissons:</strong> if X ~ Po(λ₁) and Y ~ Po(λ₂) are independent, X + Y ~ Po(λ₁ + λ₂). That is why rescaling λ is all it takes when the interval length changes.</li>
+                <li><strong>Approximation to the binomial:</strong> B(n, p) ≈ Po(np) when n is large and p is small (as a guide, n ≥ 20 and p ≤ 0.05).</li>
+                <li><strong>Normal approximation:</strong> for large λ (from about 10 or 20), Po(λ) ≈ N(λ, λ).</li>
             </ul>
 
             <h3>Related tables and calculators</h3>
@@ -304,15 +330,19 @@
             <ul>
                 <li>
                     <strong>How do you read the Poisson table?</strong>
-                    Choose the value of the mean λ; the row is the number of events k. Each cell gives P(X = k) or the cumulative P(X ≤ k), depending on the tab selected.
+                    Find the column for the mean λ and the row for the number of events k. The cell is P(X = k) or the cumulative P(X ≤ k), depending on the selected tab.
                 </li>
                 <li>
                     <strong>What does λ represent in the Poisson distribution?</strong>
-                    It is the mean number of events expected in the interval considered; it is also the variance of the distribution.
+                    The mean number of events in the interval under study. It is also the variance of the distribution. If you change the length of the interval, λ scales in the same proportion.
+                </li>
+                <li>
+                    <strong>How do I compute "more than k events" with the table?</strong>
+                    With the complement of the cumulative probability: P(X &gt; k) = 1 − P(X ≤ k). For example, with λ = 2, P(X &gt; 3) = 1 − 0.8571 = 0.1429.
                 </li>
                 <li>
                     <strong>When does the Poisson approximate the binomial?</strong>
-                    When n is large and p is small, the binomial B(n, p) is approximated by a Poisson with λ = n·p, which simplifies the calculation with many trials.
+                    When n is large and p is small, B(n, p) is well approximated by Po(λ = np). It is useful for counting rare events over many trials, such as defects in a large production run.
                 </li>
             </ul>
         </section>

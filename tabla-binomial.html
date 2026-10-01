@@ -160,7 +160,7 @@
           "name": "¿Cómo se usa la tabla de la distribución binomial?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Fija n y p; la fila es el número de éxitos k. Cada celda da P(X = k) o la acumulada P(X ≤ k) según la pestaña seleccionada."
+            "text": "Elige n en el desplegable, la pestaña P(X = k) o P(X ≤ k) según la pregunta y la columna de tu p. La fila es el número de éxitos k y la celda, la probabilidad buscada."
           }
         },
         {
@@ -168,15 +168,23 @@
           "name": "¿Qué diferencia hay entre P(X = k) y P(X ≤ k)?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "P(X = k) es la probabilidad de exactamente k éxitos; P(X ≤ k) es la acumulada, la suma de las probabilidades desde 0 hasta k."
+            "text": "P(X = k) es la probabilidad de exactamente k éxitos. P(X ≤ k) es la acumulada: la suma de P(X = 0) hasta P(X = k), es decir, la probabilidad de como máximo k éxitos."
           }
         },
         {
           "@type": "Question",
-          "name": "¿Cuándo aproximar la tabla binomial por la normal o la de Poisson?",
+          "name": "¿Cómo calculo «al menos k éxitos» con la tabla?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Con n grande y p moderado, la binomial se aproxima por la tabla normal; con n grande y p pequeño (λ = n·p moderado), por la de Poisson."
+            "text": "Con el complemento de la acumulada: P(X ≥ k) = 1 − P(X ≤ k − 1). Por ejemplo, con n = 10 y p = 0.30, P(X ≥ 5) = 1 − P(X ≤ 4) = 1 − 0.8497 = 0.1503."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuándo aproximar la binomial por la Normal o por la Poisson?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Con n grande y p moderado (np ≥ 5 y n(1 − p) ≥ 5), por la Normal N(np, np(1 − p)). Con n grande y p pequeño, por la Poisson de media λ = np."
           }
         }
       ]
@@ -228,7 +236,7 @@
     <header class="hero">
         <p class="eyebrow">Tablas estadísticas</p>
         <h1>Tabla de la distribución Binomial</h1>
-        <p class="hero-subtitle">La tabla binomial (tabla de la distribución binomial B(n, p)): función de masa P(X = k) y función de distribución acumulada P(X ≤ k). Selecciona n y el rango de p. Haz clic en cualquier celda para leer el valor exacto.</p>
+        <p class="hero-subtitle">Probabilidades de la distribución binomial B(n, p): función de masa P(X = k) y acumulada P(X ≤ k) para n de 1 a 30 y p de 0.05 a 0.95. Elige n, selecciona el rango de p y haz clic en cualquier celda para ver el valor exacto.</p>
         <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">Ver todas las tablas</a></p>
     </header>
 
@@ -242,7 +250,7 @@
             <!-- PMF TAB -->
             <div id="tab-pmf" class="tab-content active">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra P(X = k) = C(n,k)·p^k·(1−p)^(n−k). El parámetro n es el número de ensayos y puedes elegirlo en el desplegable. Las filas son los valores de k (0, 1, …, n); las columnas son los valores de p. Usa los botones para cambiar el rango de p.
+                    <strong>Cómo leer la tabla:</strong> elige n (número de ensayos) en el desplegable. Cada fila es un número de éxitos k y cada columna una probabilidad de éxito p. La celda es P(X = k) = C(n,k) · p<sup>k</sup> · (1−p)<sup>n−k</sup>, la probabilidad de obtener <em>exactamente</em> k éxitos. Usa los botones para pasar de p ≤ 0.50 a p &gt; 0.50.
                 </div>
                 <div class="df-control">
                     <label for="n-pmf">n (ensayos):</label>
@@ -272,7 +280,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra P(X ≤ k) = Σᵢ₌₀ᵏ C(n,i)·p^i·(1−p)^(n−i). El parámetro n es el número de ensayos y puedes elegirlo en el desplegable; las filas indican k y las columnas, p. Para calcular P(X &gt; k) usa el complemento: 1 − P(X ≤ k).
+                    <strong>Cómo leer la tabla:</strong> elige n en el desplegable. Cada fila es un número de éxitos k y cada columna una probabilidad de éxito p. La celda es P(X ≤ k), la probabilidad de obtener <em>como máximo</em> k éxitos. Para «más de k» usa el complemento, P(X &gt; k) = 1 − P(X ≤ k); para «al menos k», P(X ≥ k) = 1 − P(X ≤ k − 1).
                 </div>
                 <div class="df-control">
                     <label for="n-cdf">n (ensayos):</label>
@@ -301,29 +309,37 @@
         </section>
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
-            <h3>Cómo usar estas tablas</h3>
-            <p>Antes de consultar un valor, identifica los tres datos del problema: el número de ensayos n, la probabilidad de éxito p en cada ensayo y el número de éxitos k.</p>
+            <h3>Cómo usar esta tabla</h3>
+            <p>Antes de buscar, identifica los tres datos del problema: el número de ensayos n, la probabilidad de éxito p en cada ensayo y el número de éxitos k por el que se pregunta. Después:</p>
             <ol>
-                <li><strong>Elige n</strong> en el desplegable &laquo;n (ensayos)&raquo;. La tabla se actualizará y mostrará las filas desde k = 0 hasta k = n.</li>
-                <li><strong>Selecciona la pestaña adecuada:</strong> usa P(X = k) para la probabilidad de exactamente k éxitos o P(X ≤ k) para la probabilidad de obtener como máximo k éxitos.</li>
-                <li><strong>Escoge el rango de p</strong> con los botones p ≤ 0.50 o p &gt; 0.50 y localiza la columna correspondiente a la probabilidad de éxito.</li>
-                <li><strong>Busca la fila k</strong>. La intersección de esa fila con la columna p es la probabilidad solicitada; también puedes hacer clic en la celda para verla identificada.</li>
-                <li><strong>Combina valores si es necesario:</strong> para P(X &gt; k), resta la acumulada de 1; para un intervalo P(a ≤ X ≤ b), resta P(X ≤ a − 1) de P(X ≤ b).</li>
+                <li><strong>Elige n</strong> en el desplegable «n (ensayos)». La tabla se reconstruye con las filas k = 0, 1, …, n.</li>
+                <li><strong>Elige la pestaña</strong> según la pregunta: <strong>P(X = k)</strong> para «exactamente k éxitos» y <strong>P(X ≤ k)</strong> para «como máximo k éxitos».</li>
+                <li><strong>Elige el rango de p</strong> con los botones p ≤ 0.50 y p &gt; 0.50 y localiza la columna de tu probabilidad de éxito.</li>
+                <li><strong>Lee la celda</strong> donde se cruzan la fila k y la columna p. Haz clic en ella para verla identificada y representada en el diagrama.</li>
+                <li><strong>Combina valores cuando la pregunta lo pida:</strong> «más de k» es 1 − P(X ≤ k); «al menos k» es 1 − P(X ≤ k − 1); «entre a y b» es P(X ≤ b) − P(X ≤ a − 1).</li>
             </ol>
-            <p><strong>Ejemplo:</strong> si se realizan 10 ensayos con p = 0.30 y se quiere la probabilidad de exactamente 4 éxitos, elige n = 10, abre P(X = k) y cruza la fila k = 4 con la columna p = 0.30.</p>
 
-            <h3>Distribución Binomial</h3>
-            <p>Un experimento binomial consiste en n ensayos independientes, cada uno con probabilidad p de éxito. El número de éxitos X sigue una distribución B(n, p) con función de masa:</p>
+            <h3>Ejemplo resuelto</h3>
+            <p>Un examen tipo test tiene 10 preguntas y un alumno responde todas al azar; cada pregunta se acierta con probabilidad p = 0.30. Elige n = 10 en el desplegable.</p>
+            <ul>
+                <li><strong>Exactamente 4 aciertos:</strong> pestaña P(X = k), fila k = 4, columna p = 0.30 → <strong>0.2001</strong>.</li>
+                <li><strong>Como máximo 4 aciertos:</strong> pestaña P(X ≤ k), misma fila y columna → <strong>0.8497</strong>.</li>
+                <li><strong>Al menos 5 aciertos:</strong> 1 − P(X ≤ 4) = 1 − 0.8497 = <strong>0.1503</strong>.</li>
+                <li><strong>Entre 2 y 4 aciertos:</strong> P(X ≤ 4) − P(X ≤ 1) = 0.8497 − 0.1493 = <strong>0.7004</strong>.</li>
+            </ul>
+
+            <h3>Qué es la distribución binomial</h3>
+            <p>Un experimento binomial repite n veces el mismo ensayo con solo dos resultados posibles (éxito o fracaso), de forma independiente y con la misma probabilidad de éxito p en cada repetición. El número total de éxitos X sigue una distribución B(n, p) con función de masa:</p>
             <p class="formula-line">\( P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}, \quad k = 0, 1, \ldots, n \)</p>
-            <p>La media es μ = np y la varianza σ² = np(1 − p).</p>
+            <p>El coeficiente C(n, k) cuenta de cuántas maneras pueden repartirse los k éxitos entre los n ensayos, y p<sup>k</sup>(1 − p)<sup>n−k</sup> es la probabilidad de cada una de esas maneras. La media es μ = np y la varianza σ² = np(1 − p).</p>
 
             <h3>Propiedades útiles</h3>
             <ul>
-                <li><strong>Simetría:</strong> P(X = k; n, p) = P(X = n − k; n, 1 − p). Usa esto para p &gt; 0.5 mirando la columna equivalente con p' = 1 − p.</li>
-                <li><strong>Complemento:</strong> P(X &gt; k) = 1 − P(X ≤ k).</li>
+                <li><strong>Simetría:</strong> P(X = k; n, p) = P(X = n − k; n, 1 − p). Por ejemplo, 6 éxitos con p = 0.70 tienen la misma probabilidad que 4 éxitos con p = 0.30: 0.2001.</li>
+                <li><strong>Complemento:</strong> P(X &gt; k) = 1 − P(X ≤ k) y P(X ≥ k) = 1 − P(X ≤ k − 1).</li>
                 <li><strong>Intervalo:</strong> P(a ≤ X ≤ b) = P(X ≤ b) − P(X ≤ a − 1).</li>
-                <li>Para n grande y p pequeño, la binomial se aproxima a una Poisson con λ = np.</li>
-                <li>Para n grande, la binomial se aproxima a una Normal N(np, np(1−p)).</li>
+                <li><strong>Aproximación de Poisson:</strong> con n grande y p pequeño, B(n, p) ≈ Po(λ = np).</li>
+                <li><strong>Aproximación Normal:</strong> con n grande y p no muy cercano a 0 ni a 1 (como regla, np ≥ 5 y n(1 − p) ≥ 5), B(n, p) ≈ N(np, np(1 − p)).</li>
             </ul>
 
             <h3>Tablas y calculadoras relacionadas</h3>
@@ -338,18 +354,19 @@
             <ul>
                 <li>
                     <strong>¿Cómo se usa la tabla de la distribución binomial?</strong>
-                    Fija n y p; la fila es el número de éxitos k. Cada celda da P(X = k) o la acumulada
-                    P(X ≤ k) según la pestaña seleccionada.
+                    Elige n en el desplegable, la pestaña P(X = k) o P(X ≤ k) según la pregunta y la columna de tu p. La fila es el número de éxitos k y la celda, la probabilidad buscada.
                 </li>
                 <li>
                     <strong>¿Qué diferencia hay entre P(X = k) y P(X ≤ k)?</strong>
-                    P(X = k) es la probabilidad de exactamente k éxitos; P(X ≤ k) es la acumulada, la suma
-                    de las probabilidades desde 0 hasta k.
+                    P(X = k) es la probabilidad de exactamente k éxitos. P(X ≤ k) es la acumulada: la suma de P(X = 0) hasta P(X = k), es decir, la probabilidad de como máximo k éxitos.
                 </li>
                 <li>
-                    <strong>¿Cuándo aproximar la tabla binomial por la normal o la de Poisson?</strong>
-                    Con n grande y p moderado, la binomial se aproxima por la tabla normal; con n grande y
-                    p pequeño (λ = n·p moderado), por la de Poisson.
+                    <strong>¿Cómo calculo «al menos k éxitos» con la tabla?</strong>
+                    Con el complemento de la acumulada: P(X ≥ k) = 1 − P(X ≤ k − 1). Por ejemplo, con n = 10 y p = 0.30, P(X ≥ 5) = 1 − P(X ≤ 4) = 1 − 0.8497 = 0.1503.
+                </li>
+                <li>
+                    <strong>¿Cuándo aproximar la binomial por la Normal o por la Poisson?</strong>
+                    Con n grande y p moderado (np ≥ 5 y n(1 − p) ≥ 5), por la Normal N(np, np(1 − p)). Con n grande y p pequeño, por la Poisson de media λ = np.
                 </li>
             </ul>
         </section>

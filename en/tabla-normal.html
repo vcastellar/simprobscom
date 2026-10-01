@@ -325,7 +325,7 @@
           "name": "How do you read the standard normal table?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Find the value of z: the integer part and first decimal in the row, and the second decimal in the column. The cell is Φ(z) = P(Z ≤ z), the cumulative probability."
+            "text": "Split z: the row gives the integer part and first decimal, and the column gives the second decimal. The cell where they meet is Φ(z) = P(Z ≤ z), the cumulative probability up to z."
           }
         },
         {
@@ -333,7 +333,15 @@
           "name": "What is Φ(z) in the normal distribution table?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "It is the cumulative distribution function: the area under the normal curve to the left of z, that is, the probability P(Z ≤ z)."
+            "text": "It is the cumulative distribution function of the standard Normal: the area under the bell curve to the left of z, that is, the probability P(Z ≤ z)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do you use the table with negative z?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Switch to the z < 0 table or use the symmetry of the curve: Φ(−z) = 1 − Φ(z). For example, Φ(−1.96) = 1 − 0.9750 = 0.0250."
           }
         },
         {
@@ -341,7 +349,7 @@
           "name": "How do you find the z value from a probability?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Look for the probability inside the normal table and read the z from its row and column. For example, 0.975 corresponds to z ≈ 1.96, the value used in 95% intervals."
+            "text": "Search for the probability in the body of the Φ(z) table and read z from its row and column. For example, 0.9750 sits in row 1.9 and column .06, so z = 1.96, the critical value of 95% intervals."
           }
         }
       ]
@@ -389,7 +397,7 @@
     <header class="hero">
         <p class="eyebrow">Statistical tables</p>
         <h1>Standard Normal Distribution Table (Z)</h1>
-        <p class="hero-subtitle">The standard normal table — or normal distribution table — with μ = 0 and σ = 1. Click any cell to read the exact value of f(z) or Φ(z) = P(Z ≤ z).</p>
+        <p class="hero-subtitle">Values of Φ(z) = P(Z ≤ z) and of the density f(z) for z between −3.49 and 3.49, with μ = 0 and σ = 1. Click any cell to see the exact value and the area it represents.</p>
         <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">See all tables</a></p>
     </header>
 
@@ -403,7 +411,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content active">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows Φ(z) = P(Z ≤ z). For example, for z = 1.96 look up row <em>1.9</em> and column <em>.06</em> → Φ(1.96) = 0.9750. For negative z: Φ(−z) = 1 − Φ(z).
+                    <strong>How to read the table:</strong> the row gives the integer part and first decimal of z; the column gives the second decimal. The cell is Φ(z) = P(Z ≤ z), the area to the left of z. Example: for z = 1.96 cross row <em>1.9</em> with column <em>.06</em> → Φ(1.96) = 0.9750. For negative z use the z &lt; 0 button or the symmetry Φ(−z) = 1 − Φ(z).
                 </div>
                 <div class="sign-toggle">
                     <button class="sign-btn active" onclick="switchSign('cdf','pos',this)">z ≥ 0</button>
@@ -429,7 +437,7 @@
             <!-- PDF TAB -->
             <div id="tab-pdf" class="tab-content">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows f(z) = φ(z) = (1/√(2π)) · e<sup>−z²/2</sup>. The density function is symmetric: f(−z) = f(z). The maximum is f(0) = 0.3989.
+                    <strong>How to read the table:</strong> the cell is the height of the bell curve at z, f(z) = φ(z) = (1/√(2π)) · e<sup>−z²/2</sup>, not a probability. The curve is symmetric, f(−z) = f(z), and peaks at the centre: f(0) = 0.3989.
                 </div>
                 <div id="lookup-pdf" class="lookup-result"><span>Click a cell to read the value.</span></div>
                 <figure class="dist-diagram" data-dist="normal" data-mode="pdf-point" data-tables="tbl-pdf-pos" data-z="1.00" data-val="0.2420">
@@ -444,39 +452,50 @@
         </section>
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
-            <h3>How to use these tables</h3>
-            <h3>Standard Normal Distribution</h3>
-            <p>The standard Normal distribution has mean μ = 0 and variance σ² = 1. Its density function is:</p>
-            <p class="formula-line">\( f(z) = \dfrac{1}{\sqrt{2\pi}}\,e^{-z^2/2} \)</p>
-            <p>And its cumulative distribution function Φ(z) = P(Z ≤ z) has no closed-form expression, so it is looked up in tables.</p>
+            <h3>How to use this table</h3>
+            <p>The table answers one question: given a value z, how much probability does the standard Normal accumulate up to that point? To look it up:</p>
+            <ol>
+                <li><strong>Choose the tab.</strong> <strong>Φ(z)</strong> gives the cumulative probability P(Z ≤ z), which is what almost every problem needs. <strong>f(z)</strong> gives the height of the curve at z and is mainly used for plotting or theoretical work.</li>
+                <li><strong>Choose the sign of z</strong> with the <strong>z ≥ 0</strong> and <strong>z &lt; 0</strong> buttons. If you only have the positive table, remember that Φ(−z) = 1 − Φ(z).</li>
+                <li><strong>Split z into two parts.</strong> The first column holds the integer part and first decimal (for example, 1.9); the top header adds the second decimal (.06).</li>
+                <li><strong>Read the cell where they meet.</strong> If you click it, the page shows the full z with its probability and the diagram shades the corresponding area.</li>
+            </ol>
+            <p>If the problem gives you a probability and asks for z, go the other way: find the closest value in the body of the Φ(z) table and rebuild z by joining its row label with its column header.</p>
 
-            <h3>How to read a row and column</h3>
-            <p>First choose the tab for the result you need: <strong>Φ(z)</strong> for a cumulative probability or <strong>f(z)</strong> for the height of the density. Then select <strong>z ≥ 0</strong> or <strong>z &lt; 0</strong>. In both tables, the first column gives the integer part and first decimal place of z, while the top header gives its second decimal place. The cell where the two meet is the result.</p>
-            <p>For example, to read <strong>z = 1.96</strong>, find row <strong>1.9</strong> and column <strong>.06</strong>. In the cumulative table, their intersection shows <strong>Φ(1.96) = 0.9750</strong>: 97.50% of the area lies to the left of 1.96. For <strong>z = −1.96</strong>, select the negative table and cross row <strong>−1.9</strong> with column <strong>.06</strong>; the result is <strong>Φ(−1.96) = 0.0250</strong>.</p>
-            <p>In the <strong>f(z)</strong> tab, combine the row and column in the same way, but the cell represents a density rather than an area or probability. You can click any cell and the page will confirm the complete z and its value. If you start with a probability and need z, find the closest value in the body of the Φ(z) table and reconstruct z by combining its row label with its column header.</p>
-
-            <h3>Φ(z) table — Cumulative distribution</h3>
-            <p>Each cell shows the probability that a standard Normal variable is <strong>less than or equal to</strong> z. For negative z, remember that Φ(−z) = 1 − Φ(z), or look up the z &lt; 0 tab directly.</p>
+            <h3>Worked example</h3>
+            <p>Suppose you need P(Z ≤ 1.96). Find row <strong>1.9</strong>, move along to column <strong>.06</strong> and read <strong>Φ(1.96) = 0.9750</strong>: 97.5% of the area lies to the left of 1.96. For P(Z ≤ −1.96), switch to z &lt; 0 and cross row −1.9 with column .06: <strong>Φ(−1.96) = 0.0250</strong>, exactly the complement of the previous value.</p>
+            <p>The usual probabilities follow from there:</p>
             <ul>
-                <li><strong>Φ(0) = 0.5000</strong> (the mean splits the distribution into two equal halves).</li>
-                <li><strong>Φ(1.96) ≈ 0.9750</strong> → 95% of values fall between −1.96 and 1.96.</li>
-                <li><strong>Φ(2.576) ≈ 0.9950</strong> → 99% fall between −2.576 and 2.576.</li>
+                <li><strong>Right tail:</strong> P(Z &gt; 1.96) = 1 − 0.9750 = 0.0250.</li>
+                <li><strong>Central interval:</strong> P(−1.96 ≤ Z ≤ 1.96) = 0.9750 − 0.0250 = 0.9500. That is why 1.96 is the critical value of 95% confidence intervals.</li>
+                <li><strong>Reverse lookup:</strong> if you need the z that accumulates 99%, search the body of the table for 0.9900. The closest value is 0.9901, in row 2.3 and column .03, so z ≈ 2.33.</li>
             </ul>
 
-            <h3>f(z) table — Density function</h3>
-            <p>Each cell shows the value of the density at the point z. Remember that density <em>is not</em> a point probability; it must be integrated to obtain probabilities. It is symmetric: f(−z) = f(z).</p>
+            <h3>What the standard Normal distribution is</h3>
+            <p>Any Normal variable X ~ N(μ, σ²) becomes a standard Normal through standardisation, Z = (X − μ)/σ. Thanks to that transformation a single table, the one with μ = 0 and σ = 1, serves every Normal distribution. Its density function is:</p>
+            <p class="formula-line">\( f(z) = \dfrac{1}{\sqrt{2\pi}}\,e^{-z^2/2} \)</p>
+            <p>Its cumulative distribution function Φ(z) = P(Z ≤ z) is the area under the curve to the left of z. It has no closed-form expression, so it is computed by numerical integration, which is why it has traditionally been looked up in tables like this one.</p>
+
+            <h3>Φ(z) table: cumulative distribution</h3>
+            <p>Each cell is the probability that a standard Normal variable is <strong>less than or equal to</strong> z. Three values worth recognising at a glance:</p>
+            <ul>
+                <li><strong>Φ(0) = 0.5000</strong>: the mean leaves half of the area on each side.</li>
+                <li><strong>Φ(1.96) = 0.9750</strong>: 95% of the values lie between −1.96 and 1.96.</li>
+                <li><strong>Φ(2.576) ≈ 0.9950</strong>: 99% of the values lie between −2.576 and 2.576.</li>
+            </ul>
+
+            <h3>f(z) table: density function</h3>
+            <p>Each cell is the height of the bell curve at the point z, not a probability. Probabilities are areas and come from integrating the density, that is, from the Φ(z) table. The density is symmetric, f(−z) = f(z), and peaks at the centre: f(0) = 0.3989.</p>
 
             <h3>Key percentiles of the standard Normal</h3>
             <ul>
                 <li>z₀.₉₀ = 1.282 &nbsp;→&nbsp; P(Z ≤ 1.282) = 0.90</li>
-                <li>z₀.₉₅ = 1.645 &nbsp;→&nbsp; P(Z ≤ 1.645) = 0.95</li>
+                <li>z₀.₉₅ = 1.645 &nbsp;→&nbsp; P(Z ≤ 1.645) = 0.95 &nbsp;(one-sided 5%)</li>
                 <li>z₀.₉₇₅ = 1.960 &nbsp;→&nbsp; P(Z ≤ 1.960) = 0.975 &nbsp;(two-sided 95%)</li>
-                <li>z₀.₉₉ = 2.326 &nbsp;→&nbsp; P(Z ≤ 2.326) = 0.99</li>
+                <li>z₀.₉₉ = 2.326 &nbsp;→&nbsp; P(Z ≤ 2.326) = 0.99 &nbsp;(one-sided 1%)</li>
                 <li>z₀.₉₉₅ = 2.576 &nbsp;→&nbsp; P(Z ≤ 2.576) = 0.995 &nbsp;(two-sided 99%)</li>
             </ul>
 
-            <h3>Worked example: finding a critical Z value</h3>
-            <p>To build a two-sided 95% interval you need the value that leaves 97.5% accumulated in the standard normal. In the normal table, Φ(z)=0.975 corresponds approximately to z=1.96; for 99%, the cumulative 0.995 corresponds approximately to z=2.576.</p>
             <h3>Related tables and calculators</h3>
             <ul class="distribution-links">
                 <li><a href="tabla-binomial.html">Binomial table</a></li>
@@ -490,15 +509,19 @@
             <ul>
                 <li>
                     <strong>How do you read the standard normal table?</strong>
-                    Find the value of z: the integer part and first decimal in the row, and the second decimal in the column. The cell is Φ(z) = P(Z ≤ z), the cumulative probability.
+                    Split z: the row gives the integer part and first decimal, and the column gives the second decimal. The cell where they meet is Φ(z) = P(Z ≤ z), the cumulative probability up to z.
                 </li>
                 <li>
                     <strong>What is Φ(z) in the normal distribution table?</strong>
-                    It is the cumulative distribution function: the area under the normal curve to the left of z, that is, the probability P(Z ≤ z).
+                    It is the cumulative distribution function of the standard Normal: the area under the bell curve to the left of z, that is, the probability P(Z ≤ z).
+                </li>
+                <li>
+                    <strong>How do you use the table with negative z?</strong>
+                    Switch to the z &lt; 0 table or use the symmetry of the curve: Φ(−z) = 1 − Φ(z). For example, Φ(−1.96) = 1 − 0.9750 = 0.0250.
                 </li>
                 <li>
                     <strong>How do you find the z value from a probability?</strong>
-                    Look for the probability inside the normal table and read the z from its row and column. For example, 0.975 corresponds to z ≈ 1.96, the value used in 95% intervals.
+                    Search for the probability in the body of the Φ(z) table and read z from its row and column. For example, 0.9750 sits in row 1.9 and column .06, so z = 1.96, the critical value of 95% intervals.
                 </li>
             </ul>
         </section>

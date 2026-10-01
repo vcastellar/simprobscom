@@ -155,7 +155,7 @@
           "name": "How do you read the Snedecor F table?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Fix the significance level α; cross the numerator degrees of freedom (ν₁, in columns) with the denominator ones (ν₂, in rows). The cell is the critical value F(α, ν₁, ν₂)."
+            "text": "Choose the tab for your significance level α and cross the column of the numerator degrees of freedom (ν₁) with the row of the denominator degrees of freedom (ν₂). The cell is the critical value F(α, ν₁, ν₂), which leaves an area α in the right tail."
           }
         },
         {
@@ -163,7 +163,7 @@
           "name": "What is the F distribution used for?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "To compare two variances and in ANOVA, where the F statistic is the ratio of two variances (between groups versus within groups)."
+            "text": "For comparing variances. In ANOVA the F statistic is the ratio of the between-group variance to the within-group variance; in the two-variance test it is the ratio of the two sample variances. It also appears in regression tests."
           }
         },
         {
@@ -172,6 +172,14 @@
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Because the order of the degrees of freedom matters: F(α, ν₁, ν₂) is not equal to F(α, ν₂, ν₁). For the left tail the relation F(1−α, ν₁, ν₂) = 1 / F(α, ν₂, ν₁) is used."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which table do I use for a two-sided variance test at 5%?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The α = 0.025 table, because the 5% is split between the two tails. For ANOVA, which always rejects in the right tail, use the α = 0.05 table directly."
           }
         }
       ]
@@ -219,7 +227,7 @@
     <header class="hero">
         <p class="eyebrow">Statistical tables</p>
         <h1>F Distribution Table (Snedecor)</h1>
-        <p class="hero-subtitle">The F distribution table (Snedecor's F table) with the critical values F(α, ν₁, ν₂) for the most commonly used significance levels. Rows are the denominator degrees of freedom (ν₂) and columns the numerator degrees of freedom (ν₁). Click a cell to see the value.</p>
+        <p class="hero-subtitle">Critical values F(α, ν₁, ν₂) for α = 0.10, 0.05, 0.025 and 0.01, plus the cumulative distribution P(F ≤ f). Columns are the numerator degrees of freedom (ν₁) and rows the denominator degrees of freedom (ν₂). Click a cell to read the value.</p>
         <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">See all tables</a></p>
     </header>
 
@@ -236,7 +244,7 @@
             <!-- ALPHA = 0.10 -->
             <div id="tab-a10" class="tab-content active">
                 <div class="info-box">
-                    <strong>Table for α = 0.10:</strong> each cell shows F such that P(F &gt; f) = 0.10. Rows: ν₂ (denominator). Columns: ν₁ (numerator). The symbol ∞ represents a very large degrees of freedom (≈ 10,000).
+                    <strong>Table for α = 0.10:</strong> each cell is the value F that leaves a 10% area in the right tail, P(F &gt; f) = 0.10. Columns: ν₁ (numerator). Rows: ν₂ (denominator). The symbol ∞ stands for very large degrees of freedom (≈ 10,000).
                 </div>
                 <div id="lookup-a10" class="lookup-result"><span>Click a cell to see the critical value.</span></div>
                 <figure class="dist-diagram" data-dist="centralF" data-mode="crit-right" data-tables="tbl-a10" data-df1="3" data-df2="20" data-alpha="0.1" data-val="2.380">
@@ -252,7 +260,7 @@
             <!-- ALPHA = 0.05 -->
             <div id="tab-a05" class="tab-content">
                 <div class="info-box">
-                    <strong>Table for α = 0.05:</strong> each cell shows F such that P(F &gt; f) = 0.05. This is the most commonly used table in ANOVA and equality-of-variances tests.
+                    <strong>Table for α = 0.05:</strong> each cell is the value F that leaves a 5% area in the right tail, P(F &gt; f) = 0.05. This is the most used table: the one for ANOVA and for one-sided equality-of-variances tests at 5%.
                 </div>
                 <div id="lookup-a05" class="lookup-result"><span>Click a cell to see the critical value.</span></div>
                 <figure class="dist-diagram" data-dist="centralF" data-mode="crit-right" data-tables="tbl-a05" data-df1="3" data-df2="20" data-alpha="0.05" data-val="3.098">
@@ -268,7 +276,7 @@
             <!-- ALPHA = 0.025 -->
             <div id="tab-a025" class="tab-content">
                 <div class="info-box">
-                    <strong>Table for α = 0.025:</strong> each cell shows F such that P(F &gt; f) = 0.025. Used in two-sided tests at the 5% level on variance ratios.
+                    <strong>Table for α = 0.025:</strong> each cell is the value F that leaves a 2.5% area in the right tail, P(F &gt; f) = 0.025. It is the one used in two-sided tests at 5% on the ratio of two variances and in their 95% confidence intervals.
                 </div>
                 <div id="lookup-a025" class="lookup-result"><span>Click a cell to see the critical value.</span></div>
                 <figure class="dist-diagram" data-dist="centralF" data-mode="crit-right" data-tables="tbl-a025" data-df1="3" data-df2="20" data-alpha="0.025" data-val="3.859">
@@ -284,7 +292,7 @@
             <!-- ALPHA = 0.01 -->
             <div id="tab-a01" class="tab-content">
                 <div class="info-box">
-                    <strong>Table for α = 0.01:</strong> each cell shows F such that P(F &gt; f) = 0.01. Used in highly significant tests.
+                    <strong>Table for α = 0.01:</strong> each cell is the value F that leaves a 1% area in the right tail, P(F &gt; f) = 0.01. Use it when a stricter significance level is required.
                 </div>
                 <div id="lookup-a01" class="lookup-result"><span>Click a cell to see the critical value.</span></div>
                 <figure class="dist-diagram" data-dist="centralF" data-mode="crit-right" data-tables="tbl-a01" data-df1="3" data-df2="20" data-alpha="0.01" data-val="4.938">
@@ -300,7 +308,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows P(F ≤ f) for the selected numerator (ν₁) and denominator (ν₂) degrees of freedom. The row gives the integer part, the column the first decimal.
+                    <strong>How to read the table:</strong> choose ν₁ and ν₂ from the dropdowns. The row gives the integer part of f and the column the first decimal. The cell is P(F ≤ f), the area to the left of f; the p-value of an ANOVA is 1 − P(F ≤ f<sub>obs</sub>).
                 </div>
                 <div class="df-control">
                     <label for="df1-cdf">ν₁ (numerator):</label>
@@ -321,17 +329,31 @@
         </section>
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
-            <h3>How to use these tables</h3>
-            <h3>F Distribution (Snedecor)</h3>
-            <p>If X₁ ~ χ²(ν₁) and X₂ ~ χ²(ν₂) are independent, then F = (X₁/ν₁) / (X₂/ν₂) follows an F distribution with ν₁ and ν₂ degrees of freedom. Its density function is:</p>
-            <p class="formula-line">\( f(f;\nu_1,\nu_2) = \dfrac{\sqrt{\dfrac{(\nu_1 f)^{\nu_1}\,\nu_2^{\nu_2}}{(\nu_1 f+\nu_2)^{\nu_1+\nu_2}}}}{f\,B\!\left(\tfrac{\nu_1}{2},\tfrac{\nu_2}{2}\right)}, \quad f > 0 \)</p>
-            <p>The mean is ν₂/(ν₂ − 2) for ν₂ &gt; 2. It has positive skew.</p>
+            <h3>How to use this table</h3>
+            <p>Unlike other tables, the F depends on two degrees of freedom, so there is a separate table for each significance level α. To read a critical value:</p>
+            <ol>
+                <li><strong>Choose the tab for your α.</strong> For an ANOVA or a one-sided test at 5% use α = 0.05. For a two-sided test of two variances at 5% use α = 0.025, because each tail gets half of the level.</li>
+                <li><strong>Find the column for ν₁</strong>, the numerator degrees of freedom (in ANOVA, number of groups − 1).</li>
+                <li><strong>Find the row for ν₂</strong>, the denominator degrees of freedom (in ANOVA, total number of observations − number of groups).</li>
+                <li><strong>Read the cell.</strong> It is the value F(α, ν₁, ν₂) that leaves an area α in the right tail: reject H₀ if the observed statistic exceeds it. Click the cell to see the shaded area in the diagram.</li>
+            </ol>
+            <p>Order matters: F(α, ν₁, ν₂) is not the same as F(α, ν₂, ν₁). If your degrees of freedom are not listed, use the closest row or column below (a conservative decision) or the calculator linked below.</p>
 
-            <h3>Critical values</h3>
-            <p>The cell in row ν₂ and column ν₁ shows the quantile F such that P(F &gt; f) = α. For an ANOVA at the 5% level with ν₁ = 3 groups and ν₂ = 20 residuals, look up the α = 0.05 table → F = 3.098.</p>
+            <h3>Worked example</h3>
+            <p>An ANOVA compares 4 groups with 24 observations in total, at 5%. The degrees of freedom are ν₁ = 4 − 1 = 3 and ν₂ = 24 − 4 = 20. In the α = 0.05 tab, column 3 and row 20 give <strong>F = 3.098</strong>: if the ANOVA F statistic exceeds 3.098, at least one mean differs from the others.</p>
+            <p>To get the p-value, switch to the P(F ≤ f) tab, select ν₁ = 3 and ν₂ = 20 and look up the statistic. With F<sub>obs</sub> = 2.4, the cell gives P(F ≤ 2.4) = 0.9020, so p = 1 − 0.9020 = 0.0980: not significant at 5%, consistent with 2.4 &lt; 3.098.</p>
+            <p>For a two-sided test of equality of two variances at 5% with ν₁ = 10 and ν₂ = 12, use the α = 0.025 tab: F(0.025, 10, 12) = 3.374. The lower limit comes from swapping the degrees of freedom and inverting: 1 / F(0.025, 12, 10) = 1 / 3.621 = 0.276. Reject H₀ if the ratio s₁²/s₂² falls outside the interval (0.276, 3.374).</p>
+
+            <h3>What the F distribution is</h3>
+            <p>If X₁ ~ χ²(ν₁) and X₂ ~ χ²(ν₂) are independent, the ratio F = (X₁/ν₁) / (X₂/ν₂) follows an F distribution with ν₁ and ν₂ degrees of freedom. Since sample variances from Normal populations are rescaled chi-squares, the ratio of two variances follows an F; hence its role in ANOVA and in comparing variances. Its density is:</p>
+            <p class="formula-line">\( f(f;\nu_1,\nu_2) = \dfrac{\sqrt{\dfrac{(\nu_1 f)^{\nu_1}\,\nu_2^{\nu_2}}{(\nu_1 f+\nu_2)^{\nu_1+\nu_2}}}}{f\,B\!\left(\tfrac{\nu_1}{2},\tfrac{\nu_2}{2}\right)}, \quad f > 0 \)</p>
+            <p>It only takes positive values and is skewed to the right. Its mean is ν₂/(ν₂ − 2) for ν₂ &gt; 2, slightly above 1. As both degrees of freedom grow, the distribution concentrates around 1, the expected value of the ratio when the two variances are equal.</p>
+
+            <h3>Critical values tables</h3>
+            <p>The cell in row ν₂ and column ν₁ is the quantile F(α, ν₁, ν₂) such that P(F &gt; f) = α. Two useful rules:</p>
             <ul>
-                <li>For equality-of-variances tests (two-sided), use α/2 in the table and reject if F &gt; F(α/2) or F &lt; 1/F(α/2).</li>
-                <li>As ν₁ → ∞ and ν₂ → ∞, the F distribution tends to 1.</li>
+                <li><strong>Two-sided test of two variances:</strong> at level α, use the α/2 table and reject if F &gt; F(α/2, ν₁, ν₂) or F &lt; 1 / F(α/2, ν₂, ν₁). A common trick is to put the larger variance in the numerator, so that only the right tail needs checking.</li>
+                <li><strong>Left tail:</strong> the tables only cover the right tail, but F<sub>1−α</sub>(ν₁, ν₂) = 1 / F<sub>α</sub>(ν₂, ν₁); just swap the degrees of freedom and invert the value.</li>
             </ul>
 
             <h3>Related tables and calculators</h3>
@@ -346,15 +368,19 @@
             <ul>
                 <li>
                     <strong>How do you read the Snedecor F table?</strong>
-                    Fix the significance level α; cross the numerator degrees of freedom (ν₁, in columns) with the denominator ones (ν₂, in rows). The cell is the critical value F(α, ν₁, ν₂).
+                    Choose the tab for your significance level α and cross the column of the numerator degrees of freedom (ν₁) with the row of the denominator degrees of freedom (ν₂). The cell is the critical value F(α, ν₁, ν₂), which leaves an area α in the right tail.
                 </li>
                 <li>
                     <strong>What is the F distribution used for?</strong>
-                    To compare two variances and in ANOVA, where the F statistic is the ratio of two variances (between groups versus within groups).
+                    For comparing variances. In ANOVA the F statistic is the ratio of the between-group variance to the within-group variance; in the two-variance test it is the ratio of the two sample variances. It also appears in regression tests.
                 </li>
                 <li>
                     <strong>Why is the F table not symmetric?</strong>
                     Because the order of the degrees of freedom matters: F(α, ν₁, ν₂) is not equal to F(α, ν₂, ν₁). For the left tail the relation F(1−α, ν₁, ν₂) = 1 / F(α, ν₂, ν₁) is used.
+                </li>
+                <li>
+                    <strong>Which table do I use for a two-sided variance test at 5%?</strong>
+                    The α = 0.025 table, because the 5% is split between the two tails. For ANOVA, which always rejects in the right tail, use the α = 0.05 table directly.
                 </li>
             </ul>
         </section>

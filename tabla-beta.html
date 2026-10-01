@@ -133,6 +133,43 @@
         "name": "ProbLab",
         "url": "https://problabtools.com/"
       }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Cómo se lee la tabla de la distribución Beta?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Selecciona α y β. En la pestaña P(X ≤ x), la fila da el primer decimal de x y la columna el segundo; la celda es la probabilidad acumulada. En Cuantiles, la fila es α, la columna la probabilidad p y la celda el valor x que la acumula."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Para qué se usa la distribución Beta?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Para modelar proporciones y probabilidades desconocidas, como la tasa de conversión de un test A/B o la probabilidad de éxito de un proceso. En estadística bayesiana es la distribución a priori conjugada de la binomial."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué significan α y β?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Controlan la forma de la distribución y pueden interpretarse como el número de éxitos y de fracasos observados (más uno). Si α > β la distribución se desplaza hacia 1; si α < β, hacia 0; si son iguales, es simétrica en torno a 0.5."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Por qué la densidad puede ser mayor que 1?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Porque f(x) es una altura, no una probabilidad. Como el soporte mide solo 1 unidad, la curva debe superar 1 en algún tramo para que el área total sea 1. Las probabilidades se leen en la pestaña P(X ≤ x)."
+          }
+        }
+      ]
     }
   ]
 }
@@ -181,7 +218,7 @@
     <header class="hero">
         <p class="eyebrow">Tablas estadísticas</p>
         <h1>Tabla de la distribución Beta</h1>
-        <p class="hero-subtitle">Tabla de la distribución Beta Be(α, β): distribución acumulada P(X ≤ x), densidad f(x) y cuantiles para distintos parámetros α y β. El soporte es x ∈ (0, 1). Haz clic en una celda para leer el valor.</p>
+        <p class="hero-subtitle">Distribución acumulada P(X ≤ x), densidad f(x) y cuantiles de la distribución Beta Be(α, β) para distintos valores de α y β, con x entre 0 y 1. Haz clic en una celda para ver el valor exacto y el área que representa.</p>
         <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">Ver todas las tablas</a></p>
     </header>
 
@@ -196,7 +233,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content active">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra P(X ≤ x) para los parámetros α y β seleccionados. La fila indica la primera cifra decimal de x; la columna añade la segunda (×0.01). El rango es x ∈ [0.00, 0.99].
+                    <strong>Cómo leer la tabla:</strong> elige α y β en los desplegables. La fila da el primer decimal de x y la columna el segundo. La celda es P(X ≤ x), el área a la izquierda de x, para x entre 0.00 y 0.99.
                 </div>
                 <div class="df-control">
                     <label for="alpha-cdf">α:</label>
@@ -218,7 +255,7 @@
             <!-- PDF TAB -->
             <div id="tab-pdf" class="tab-content">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra f(x) = x^(α−1) · (1−x)^(β−1) / B(α,β). Para α &lt; 1 o β &lt; 1 la densidad puede divergir en los extremos (valores muy grandes se muestran como "∞").
+                    <strong>Cómo leer la tabla:</strong> la celda es la altura de la curva en x para los parámetros elegidos, f(x) = x<sup>α−1</sup> · (1−x)<sup>β−1</sup> / B(α,β), no una probabilidad, así que puede ser mayor que 1. Si α &lt; 1 o β &lt; 1 la densidad crece sin límite en los extremos, y los valores muy grandes se muestran como «∞».
                 </div>
                 <div class="df-control">
                     <label for="alpha-pdf">α:</label>
@@ -240,7 +277,7 @@
             <!-- QUANTILES TAB -->
             <div id="tab-quant" class="tab-content">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra el cuantil x tal que P(X ≤ x) = p. Filas: distintos valores de α. Columnas: probabilidades acumuladas p. Selecciona β con el selector.
+                    <strong>Cómo leer la tabla:</strong> elige β en el desplegable. Cada fila es un valor de α y cada columna una probabilidad acumulada p. La celda es el cuantil x que cumple P(X ≤ x) = p.
                 </div>
                 <div class="df-control">
                     <label for="beta-quant">β:</label>
@@ -259,30 +296,71 @@
         </section>
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
-            <h3>Cómo usar estas tablas</h3>
-            <h3>Distribución Beta</h3>
-            <p>La distribución Beta Be(α, β) tiene soporte en [0, 1] y es muy flexible para modelar proporciones y probabilidades. Su función de densidad es:</p>
+            <h3>Cómo usar esta tabla</h3>
+            <p>Las tres pestañas responden a preguntas distintas:</p>
+            <ul>
+                <li><strong>P(X ≤ x)</strong>: dado un valor x entre 0 y 1, ¿qué probabilidad acumula la distribución hasta él?</li>
+                <li><strong>f(x)</strong>: la altura de la curva en x, útil para ver la forma que toma la distribución con cada pareja de parámetros.</li>
+                <li><strong>Cuantiles</strong>: el camino inverso. Dada una probabilidad p, ¿qué valor x la acumula? Es la pestaña para percentiles y para los intervalos de credibilidad bayesianos.</li>
+            </ul>
+            <p>Para consultar una probabilidad:</p>
+            <ol>
+                <li><strong>Selecciona α y β</strong> en los desplegables; la tabla se reconstruye con esos valores.</li>
+                <li><strong>Descompón x:</strong> la fila da el primer decimal y la columna el segundo (para x = 0.40, fila 0.4 y columna .00).</li>
+                <li><strong>Lee la celda</strong> o haz clic en ella para ver el área sombreada en el diagrama.</li>
+            </ol>
+
+            <h3>Ejemplo resuelto</h3>
+            <p>En un análisis bayesiano de una proporción se parte de una distribución a priori uniforme y se observan 1 éxito y 1 fracaso. La distribución a posteriori es Be(2, 2).</p>
+            <ul>
+                <li><strong>Probabilidad de que la proporción sea menor que 0.40:</strong> pestaña P(X ≤ x), α = 2, β = 2, fila 0.4 y columna .00 → <strong>P(X ≤ 0.40) = 0.3520</strong>.</li>
+                <li><strong>Probabilidad de que esté entre 0.25 y 0.75:</strong> P(X ≤ 0.75) − P(X ≤ 0.25) = 0.8438 − 0.1563 = <strong>0.6875</strong>.</li>
+                <li><strong>Mediana de una Be(3, 1):</strong> pestaña Cuantiles, β = 1, fila α = 3, columna p = 0.5 → <strong>x = 0.7937</strong>.</li>
+            </ul>
+
+            <h3>Qué es la distribución Beta</h3>
+            <p>La distribución Beta Be(α, β) toma valores en el intervalo [0, 1], por lo que es la elección natural para modelar proporciones, porcentajes y probabilidades desconocidas. En inferencia bayesiana es la distribución a priori conjugada de la binomial: si se parte de Be(α, β) y se observan s éxitos y f fracasos, la distribución a posteriori es Be(α + s, β + f). Su densidad es:</p>
             <p class="formula-line">\( f(x;\alpha,\beta) = \dfrac{x^{\alpha-1}(1-x)^{\beta-1}}{B(\alpha,\beta)}, \quad x \in (0,1) \)</p>
-            <p>donde B(α, β) = Γ(α)Γ(β)/Γ(α+β) es la función beta. La media es μ = α/(α+β) y la varianza σ² = αβ / [(α+β)²(α+β+1)].</p>
+            <p>donde B(α, β) = Γ(α)Γ(β)/Γ(α+β) es la función beta, que garantiza que el área total sea 1. La media es μ = α/(α+β) y la varianza σ² = αβ / [(α+β)²(α+β+1)]. Intuitivamente, α cuenta «éxitos» y β «fracasos»: cuanto mayores son ambos, más concentrada está la distribución alrededor de su media.</p>
 
             <h3>Formas de la distribución</h3>
             <ul>
-                <li><strong>α = β = 1:</strong> distribución Uniforme(0,1).</li>
-                <li><strong>α = β &gt; 1:</strong> unimodal y simétrica en torno a 0.5.</li>
-                <li><strong>α &gt; β:</strong> sesgada a la izquierda (media &gt; 0.5).</li>
-                <li><strong>α &lt; β:</strong> sesgada a la derecha (media &lt; 0.5).</li>
-                <li><strong>α &lt; 1 o β &lt; 1:</strong> forma en U (bimodal en los extremos).</li>
+                <li><strong>α = β = 1:</strong> distribución Uniforme(0, 1): todos los valores son igual de probables.</li>
+                <li><strong>α = β &gt; 1:</strong> campana simétrica en torno a 0.5, cada vez más estrecha al crecer los parámetros.</li>
+                <li><strong>α &gt; β:</strong> la masa se concentra cerca de 1 y la cola apunta hacia la izquierda (media &gt; 0.5).</li>
+                <li><strong>α &lt; β:</strong> la masa se concentra cerca de 0 y la cola apunta hacia la derecha (media &lt; 0.5).</li>
+                <li><strong>α &lt; 1 o β &lt; 1:</strong> la densidad se dispara en uno o en ambos extremos; con los dos parámetros menores que 1 tiene forma de U.</li>
             </ul>
 
             <h3>Relación con la F y la t</h3>
-            <p>Si F ~ F(2α, 2β) entonces X = αF/(β + αF) ~ Be(α, β). La función beta incompleta regularizada es también la CDF de la distribución F y de la t de Student.</p>
+            <p>Si F ~ F(2α, 2β), entonces X = αF/(β + αF) ~ Be(α, β). La función beta incompleta regularizada, que define la acumulada de esta tabla, es también la que permite calcular las funciones de distribución de la F de Snedecor y de la t de Student.</p>
 
-            <h3>Calculadoras relacionadas</h3>
+            <h3>Tablas y calculadoras relacionadas</h3>
             <ul class="distribution-links">
                 <li><a href="beta.html">Calculadora Beta</a></li>
                 <li><a href="tabla-gamma.html">Tabla Gamma</a></li>
                 <li><a href="tabla-f-snedecor.html">Tabla F de Snedecor</a></li>
                 <li><a href="tabla-t-student.html">Tabla t de Student</a></li>
+            </ul>
+
+            <h3>Preguntas frecuentes</h3>
+            <ul>
+                <li>
+                    <strong>¿Cómo se lee la tabla de la distribución Beta?</strong>
+                    Selecciona α y β. En la pestaña P(X ≤ x), la fila da el primer decimal de x y la columna el segundo; la celda es la probabilidad acumulada. En Cuantiles, la fila es α, la columna la probabilidad p y la celda el valor x que la acumula.
+                </li>
+                <li>
+                    <strong>¿Para qué se usa la distribución Beta?</strong>
+                    Para modelar proporciones y probabilidades desconocidas, como la tasa de conversión de un test A/B o la probabilidad de éxito de un proceso. En estadística bayesiana es la distribución a priori conjugada de la binomial.
+                </li>
+                <li>
+                    <strong>¿Qué significan α y β?</strong>
+                    Controlan la forma de la distribución y pueden interpretarse como el número de éxitos y de fracasos observados (más uno). Si α &gt; β la distribución se desplaza hacia 1; si α &lt; β, hacia 0; si son iguales, es simétrica en torno a 0.5.
+                </li>
+                <li>
+                    <strong>¿Por qué la densidad puede ser mayor que 1?</strong>
+                    Porque f(x) es una altura, no una probabilidad. Como el soporte mide solo 1 unidad, la curva debe superar 1 en algún tramo para que el área total sea 1. Las probabilidades se leen en la pestaña P(X ≤ x).
+                </li>
             </ul>
         </section>
     </main>

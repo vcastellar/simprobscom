@@ -133,6 +133,43 @@
         "name": "ProbLab",
         "url": "https://problabtools.com/"
       }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Cómo se lee la tabla chi-cuadrado?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Localiza la fila de tus grados de libertad ν y la columna de la probabilidad acumulada p. La celda es el cuantil χ²(p,ν). Para un contraste al nivel α con rechazo en la cola derecha, usa la columna p = 1 − α."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo se calculan los grados de libertad?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "En bondad de ajuste, k − 1 con k categorías (menos un grado por cada parámetro estimado); en independencia, (filas − 1) · (columnas − 1); en un intervalo para la varianza, n − 1."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Por qué la tabla tiene columnas con p pequeño?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Porque algunos problemas necesitan la cola izquierda: un intervalo de confianza para la varianza usa χ²(α/2, ν) y χ²(1 − α/2, ν), y un contraste bilateral sobre σ² rechaza en ambas colas."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué pasa si mis grados de libertad no están en la tabla?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Usa la calculadora chi-cuadrado para obtener el valor exacto o, si ν es grande, la aproximación Normal N(ν, 2ν)."
+          }
+        }
+      ]
     }
   ]
 }
@@ -181,7 +218,7 @@
     <header class="hero">
         <p class="eyebrow">Tablas estadísticas</p>
         <h1>Tabla de Chi-cuadrado (χ²)</h1>
-        <p class="hero-subtitle">Tabla de valores críticos χ²(p,ν), distribución acumulada P(X ≤ x) y densidad f(x,ν) para cualquier grado de libertad. Haz clic en una celda para leer el valor exacto.</p>
+        <p class="hero-subtitle">Valores críticos χ²(p,ν), distribución acumulada P(X ≤ x) y densidad f(x,ν) para los grados de libertad que elijas. Haz clic en una celda para ver el valor exacto y el área que representa.</p>
         <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">Ver todas las tablas</a></p>
     </header>
 
@@ -196,7 +233,7 @@
             <!-- CRITICAL VALUES TAB -->
             <div id="tab-crit" class="tab-content active">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra el cuantil χ²(p,ν) tal que P(X ≤ χ²) = p. Para un contraste de bondad de ajuste al 5 % con ν = 10 grados de libertad, busca la columna <em>p = 0.950</em> → χ² = 18.307.
+                    <strong>Cómo leer la tabla:</strong> cada fila es un número de grados de libertad ν y cada columna una probabilidad acumulada p. La celda es el cuantil χ²(p,ν) que cumple P(X ≤ χ²) = p. Para un contraste al nivel α con rechazo en la cola derecha usa la columna p = 1 − α. Ejemplo: contraste al 5 % con ν = 10 → columna <em>p = 0.95</em> → χ² = 18.307.
                 </div>
                 <div id="lookup-crit" class="lookup-result"><span>Haz clic en una celda para leer el valor crítico.</span></div>
                 <figure class="dist-diagram" data-dist="chisquare" data-mode="left-val" data-tables="tbl-crit" data-df="5" data-val="11.070" data-p="0.95">
@@ -214,7 +251,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra P(X ≤ x) para los grados de libertad seleccionados. La fila indica la parte entera de x; la columna añade el primer decimal (×0.1).
+                    <strong>Cómo leer la tabla:</strong> elige ν en el desplegable. La fila da la parte entera de x y la columna el primer decimal. La celda es P(X ≤ x), el área a la izquierda de x; para la cola derecha calcula 1 − P(X ≤ x).
                 </div>
                 <div class="df-control">
                     <label for="df-cdf">Grados de libertad (ν):</label>
@@ -234,7 +271,7 @@
             <!-- PDF TAB -->
             <div id="tab-pdf" class="tab-content">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra la densidad f(x, ν). La distribución χ² está definida para x ≥ 0. Al aumentar ν la curva se vuelve más simétrica y se desplaza hacia la derecha.
+                    <strong>Cómo leer la tabla:</strong> la celda es la altura de la curva en x para los grados de libertad elegidos, f(x, ν), no una probabilidad. La distribución solo toma valores x ≥ 0; con ν pequeño es muy asimétrica y, al aumentar ν, se desplaza hacia la derecha y se vuelve más simétrica.
                 </div>
                 <div class="df-control">
                     <label for="df-pdf">Grados de libertad (ν):</label>
@@ -253,33 +290,70 @@
         </section>
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
-            <h3>Cómo usar estas tablas</h3>
-            <h3>Distribución Chi-cuadrado</h3>
-            <p>Si Z₁, Z₂, …, Zᵥ son variables normales estándar independientes, entonces X = Z₁² + … + Zᵥ² sigue una distribución chi-cuadrado con ν grados de libertad. Su función de densidad es:</p>
+            <h3>Cómo usar esta tabla</h3>
+            <p>Las tres pestañas responden a preguntas distintas:</p>
+            <ul>
+                <li><strong>Valores críticos χ²(p,ν)</strong>: la tabla clásica. Dado un nivel de significación y unos grados de libertad, devuelve el valor que separa la región de aceptación de la de rechazo.</li>
+                <li><strong>P(X ≤ x)</strong>: dado un estadístico x, devuelve su probabilidad acumulada. Sirve para calcular p-valores.</li>
+                <li><strong>f(x,ν)</strong>: la altura de la curva en x, útil para representarla.</li>
+            </ul>
+            <p>Para leer un valor crítico:</p>
+            <ol>
+                <li><strong>Calcula los grados de libertad:</strong> k − 1 en un contraste de bondad de ajuste con k categorías, (filas − 1) · (columnas − 1) en un contraste de independencia y n − 1 en un intervalo para la varianza.</li>
+                <li><strong>Convierte α en p.</strong> Los contrastes chi-cuadrado suelen rechazar en la cola derecha, así que la columna que buscas es p = 1 − α (para α = 0.05, p = 0.95). Las columnas con p pequeño (de 0.005 a 0.1) dan los cuantiles de la cola izquierda, necesarios en los intervalos de confianza para la varianza.</li>
+                <li><strong>Lee la celda</strong> donde se cruzan fila y columna. Si haces clic en ella, el diagrama sombrea el área que deja el valor crítico.</li>
+            </ol>
+
+            <h3>Ejemplo resuelto</h3>
+            <p>Se lanza un dado 60 veces para comprobar si está equilibrado. Hay k = 6 categorías, así que ν = 5. Para un contraste al 5 % se busca la fila 5 y la columna p = 0.95: el valor crítico es <strong>χ² = 11.070</strong>. Si el estadístico observado supera 11.070, se rechaza que el dado esté equilibrado.</p>
+            <p>Supón que el estadístico observado es 7.8. En la pestaña P(X ≤ x), con ν = 5, la celda de la fila 7 y la columna .8 da P(X ≤ 7.8) = 0.8324, así que el p-valor es 1 − 0.8324 = 0.1676: el resultado no es significativo al 5 %, en coherencia con que 7.8 &lt; 11.070.</p>
+            <p>Para un intervalo de confianza al 95 % para la varianza con n = 10 (ν = 9) hacen falta los dos cuantiles de la fila 9: χ²(0.025, 9) = 2.700 y χ²(0.975, 9) = 19.023.</p>
+
+            <h3>Qué es la distribución chi-cuadrado</h3>
+            <p>Si Z₁, Z₂, …, Z<sub>ν</sub> son variables Normales estándar independientes, la suma de sus cuadrados X = Z₁² + … + Z<sub>ν</sub>² sigue una distribución chi-cuadrado con ν grados de libertad. Por eso aparece siempre que se suman desviaciones al cuadrado: en la varianza muestral y en estadísticos de la forma Σ (observado − esperado)² / esperado. Su densidad es:</p>
             <p class="formula-line">\( f(x,\nu) = \dfrac{x^{\nu/2-1}\,e^{-x/2}}{2^{\nu/2}\,\Gamma(\nu/2)}, \quad x \geq 0 \)</p>
-            <p>La media es ν y la varianza es 2ν.</p>
+            <p>Solo toma valores positivos, tiene media ν y varianza 2ν, y es asimétrica hacia la derecha. Al crecer ν se vuelve más simétrica y se aproxima a una Normal N(ν, 2ν).</p>
 
             <h3>Tabla de valores críticos</h3>
-            <p>Muestra los cuantiles χ²(p, ν) tales que P(X ≤ χ²) = p. Para un contraste al nivel α (cola derecha) con ν grados de libertad, usa la columna p = 1 − α.</p>
+            <p>Cada celda es el cuantil χ²(p, ν) que cumple P(X ≤ χ²) = p. Para un contraste al nivel α con rechazo en la cola derecha, usa la columna p = 1 − α.</p>
             <ul>
-                <li><strong>Ejemplo:</strong> contraste al 5 %, ν = 5 → p = 0.95 → χ² = 11.070.</li>
-                <li>Las columnas con p &lt; 0.5 corresponden a la cola izquierda (valores pequeños de χ²).</li>
+                <li><strong>Ejemplo:</strong> contraste al 5 % con ν = 5 → p = 0.95 → χ² = 11.070.</li>
+                <li>Las columnas con p &lt; 0.5 corresponden a la cola izquierda (valores pequeños de χ²) y se usan en los intervalos de confianza para σ² y en los contrastes bilaterales sobre la varianza.</li>
             </ul>
 
-            <h3>Usos principales</h3>
+            <h3>Para qué se usa</h3>
             <ul>
-                <li>Contraste de bondad de ajuste (goodness-of-fit)</li>
-                <li>Contraste de independencia en tablas de contingencia</li>
-                <li>Estimación de varianzas e intervalos de confianza para σ²</li>
-                <li>Contrastes de homogeneidad</li>
+                <li><strong>Bondad de ajuste:</strong> comprobar si unas frecuencias observadas se ajustan a una distribución teórica.</li>
+                <li><strong>Independencia y homogeneidad:</strong> analizar si dos variables cualitativas están relacionadas en una tabla de contingencia.</li>
+                <li><strong>Varianza de una población Normal:</strong> contrastes e intervalos de confianza para σ².</li>
             </ul>
 
-            <h3>Calculadoras relacionadas</h3>
+            <h3>Tablas y calculadoras relacionadas</h3>
             <ul class="distribution-links">
                 <li><a href="chisquare.html">Calculadora Chi-cuadrado</a></li>
                 <li><a href="tabla-t-student.html">Tabla t de Student</a></li>
                 <li><a href="tabla-f-snedecor.html">Tabla F de Snedecor</a></li>
                 <li><a href="tabla-normal.html">Tabla Normal estándar</a></li>
+            </ul>
+
+            <h3>Preguntas frecuentes</h3>
+            <ul>
+                <li>
+                    <strong>¿Cómo se lee la tabla chi-cuadrado?</strong>
+                    Localiza la fila de tus grados de libertad ν y la columna de la probabilidad acumulada p. La celda es el cuantil χ²(p,ν). Para un contraste al nivel α con rechazo en la cola derecha, usa la columna p = 1 − α.
+                </li>
+                <li>
+                    <strong>¿Cómo se calculan los grados de libertad?</strong>
+                    En bondad de ajuste, k − 1 con k categorías (menos un grado por cada parámetro estimado); en independencia, (filas − 1) · (columnas − 1); en un intervalo para la varianza, n − 1.
+                </li>
+                <li>
+                    <strong>¿Por qué la tabla tiene columnas con p pequeño?</strong>
+                    Porque algunos problemas necesitan la cola izquierda: un intervalo de confianza para la varianza usa χ²(α/2, ν) y χ²(1 − α/2, ν), y un contraste bilateral sobre σ² rechaza en ambas colas.
+                </li>
+                <li>
+                    <strong>¿Qué pasa si mis grados de libertad no están en la tabla?</strong>
+                    Usa la calculadora chi-cuadrado para obtener el valor exacto o, si ν es grande, la aproximación Normal N(ν, 2ν).
+                </li>
             </ul>
         </section>
     </main>
