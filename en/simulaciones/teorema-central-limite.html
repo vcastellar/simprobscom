@@ -314,7 +314,7 @@
             <option value="poisson">Poisson (λ=3)</option>
             <option value="chisquare">Chi-square (k=3)</option>
           </select>
-            <p class="field-hint" hidden>Distribution the individual observations are generated from. The CLT guarantees that the sample mean approaches a normal distribution regardless of this starting distribution.</p>
+            <p class="field-hint" hidden>Distribution the individual observations are drawn from before being averaged. Its parameters are fixed (for example, Exponential with λ=1) and determine the mean μ and variance σ² shown in the "Theoretical" column. The CLT guarantees that the sample mean approaches a normal distribution whatever this starting distribution is, but the speed of convergence depends on its skewness: try a symmetric one (Uniform) and a skewed one (Exponential, Chi-square) with the same n.</p>
         </div>
         <div class="form-group">
           <label for="sampleSize">Sample size <em>n</em> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
@@ -327,7 +327,7 @@
             <option value="50">n = 50</option>
             <option value="100">n = 100</option>
           </select>
-            <p class="field-hint" hidden>Number of observations averaged in each simulation. The larger n is, the faster the distribution of the mean converges to the normal and the narrower the bell.</p>
+            <p class="field-hint" hidden>Number of independent observations drawn and averaged to obtain each sample mean. With n = 1 there is no averaging and the two histograms coincide; as n grows, the right-hand histogram becomes more symmetric (the CLT effect) and narrower, because the standard deviation of the mean is σ/√n.</p>
         </div>
         <div class="form-group">
           <label for="numSims">Number of simulations <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
@@ -338,7 +338,7 @@
             <option value="5000">5000</option>
             <option value="10000">10000</option>
           </select>
-            <p class="field-hint" hidden>How many times the sampling is repeated to build the histogram of sample means. More simulations give a smoother, more stable histogram.</p>
+            <p class="field-hint" hidden>How many times the process "draw n observations and compute their mean" is repeated. Each repetition contributes one point to the right-hand histogram. More simulations do not change the shape of the distribution of the mean (that depends on n), but they make the histogram smoother and the figures in the "Empirical" column more stable. In total, n × simulations individual observations are generated.</p>
         </div>
       </div>
       <button class="calculate-btn" id="simBtn" type="button">Simulate</button>
@@ -348,7 +348,7 @@
     <div class="charts-grid" id="chartsSection">
       <div class="chart-panel">
         <h3>Original distribution</h3>
-        <p class="chart-sub">Histogram of the base distribution with theoretical density curve</p>
+        <p class="chart-sub" id="origSub">Histogram of many individual observations drawn from the chosen distribution (bars) together with its theoretical density (red line). It shows the starting shape: symmetric, skewed, bounded or discrete.</p>
         <div class="chart-wrap" id="origWrap">
           <div class="sim-placeholder" id="origPlaceholder">
             <span>Click "Simulate" to get started</span>
@@ -358,7 +358,7 @@
       </div>
       <div class="chart-panel">
         <h3>Sampling distribution of the mean</h3>
-        <p class="chart-sub">Histogram of the sample means with theoretical normal curve N(μ, σ²/n)</p>
+        <p class="chart-sub" id="meansSub">Histogram of the sample means obtained in the simulations (bars). The red line is the normal N(μ, σ²/n) predicted by the CLT; the dashed green line is the normal fitted to the simulated means. The closer the bars follow the curves, the better the normal approximation works.</p>
         <div class="chart-wrap" id="meansWrap">
           <div class="sim-placeholder" id="meansPlaceholder">
             <span>Click "Simulate" to get started</span>
@@ -370,9 +370,9 @@
 
     <!-- Legend -->
     <div class="legend-dots" id="legendArea" style="display:none;">
-      <span class="legend-dot"><span class="dot-bar" style="background:rgba(79,70,229,0.5); border:1px solid rgba(79,70,229,0.8);"></span> Relative frequency (density)</span>
-      <span class="legend-dot"><span style="background:#dc2626;"></span> Theoretical density</span>
-      <span class="legend-dot"><span style="background:#16a34a; border-top: 2px dashed #16a34a; height:0; width:24px;"></span> Normal fitted to the sample</span>
+      <span class="legend-dot"><span class="dot-bar" style="background:rgba(79,70,229,0.5); border:1px solid rgba(79,70,229,0.8);"></span> Bars: relative frequency of the simulated values, on a density scale (total area = 1)</span>
+      <span class="legend-dot"><span style="background:#dc2626;"></span> Red line: theoretical density (left, that of the base distribution; right, the normal N(μ, σ²/n) predicted by the CLT)</span>
+      <span class="legend-dot"><span style="background:#16a34a; border-top: 2px dashed #16a34a; height:0; width:24px;"></span> Dashed green line: normal fitted to the simulated means (empirical mean and standard deviation)</span>
     </div>
 
     <!-- Stats table -->
@@ -402,6 +402,11 @@
             <td class="val-empirico" id="statEmpVar">—</td>
           </tr>
           <tr>
+            <td>Skewness of the sample mean (γ₁/√n)</td>
+            <td class="val-teorico" id="statTeoSkew">—</td>
+            <td class="val-empirico" id="statEmpSkew">—</td>
+          </tr>
+          <tr>
             <td>Number of sample means</td>
             <td class="val-teorico" id="statTeoN">—</td>
             <td class="val-empirico" id="statEmpN">—</td>
@@ -412,6 +417,114 @@
 
     <!-- Interpretation -->
     <div id="interpretation" class="result-box" style="display:none;" role="status" aria-live="polite"></div>
+
+    <!-- How the simulation works -->
+    <section class="card content-card" aria-labelledby="how-sim-heading">
+      <h2 id="how-sim-heading">How the samples are generated and how to read the charts</h2>
+      <p>
+        Every time you click "Simulate", the browser runs a Monte Carlo experiment with the chosen parameters.
+        The random numbers are generated on your own device, so each click produces a different simulation.
+        The procedure is as follows:
+      </p>
+      <ol>
+        <li>
+          <strong>A sample is drawn</strong> of \(n\) independent observations from the chosen base distribution.
+          For example, with <em>Exponential (λ=1)</em> and \(n = 30\), 30 random waiting times
+          \(x_1, x_2, \ldots, x_{30}\) are generated.
+        </li>
+        <li>
+          <strong>The mean is computed</strong> from those \(n\) observations,
+          \(\bar{x} = (x_1 + \cdots + x_n)/n\). That single number is one <em>sample mean</em>.
+        </li>
+        <li>
+          <strong>Steps 1 and 2 are repeated</strong> as many times as "Number of simulations" indicates.
+          With 1000 simulations you get 1000 sample means, which amounts to \(1000 \times n\) individual observations
+          in total. Those 1000 means are the data behind the right-hand chart and the "Empirical" column.
+        </li>
+        <li>
+          <strong>For the left-hand chart</strong>, a separate, large sample of individual observations (up to 50,000) is also
+          drawn from the same base distribution. These are not the observations used to compute the means, but they come from
+          the same distribution and serve to display its shape clearly.
+        </li>
+      </ol>
+
+      <h3>Left-hand chart: original distribution</h3>
+      <p>
+        The <strong>bars</strong> are the histogram of the individual observations. Their height is on a density scale,
+        meaning that each bar's height is the proportion of observations falling in that interval divided by the interval width,
+        so the total area of the bars equals 1 and can be compared directly with a density function.
+        The <strong>red line</strong> is the theoretical density \(f(x)\) of the base distribution: if the bars follow it, the sample
+        is representative of that distribution. For the discrete distributions (Bernoulli and Poisson) no curve is drawn:
+        the bars show the relative frequency of each integer value and the gaps between them are expected.
+        The purpose of this chart is to see <em>what shape you start from</em>: a bell (Normal), a plateau (Uniform), a long
+        right tail (Exponential, Chi-square) or just two values (Bernoulli). The less it looks like a bell, the more striking
+        the right-hand chart becomes.
+      </p>
+
+      <h3>Right-hand chart: sampling distribution of the mean</h3>
+      <p>
+        The <strong>bars</strong> are the histogram of the sample means, one per simulation, also on a density scale:
+        each bar's height shows what proportion of the simulations produced a mean within that interval.
+        The number of bins grows with the number of simulations so that the histogram is finer when there is more data.
+        Two normal curves are overlaid on the bars:
+      </p>
+      <ul>
+        <li>
+          <strong>Solid red line, theoretical normal \(\mathcal{N}(\mu, \sigma^2/n)\):</strong> this is the distribution the CLT
+          predicts for the sample mean. It is computed from the known mean \(\mu\) and variance \(\sigma^2\) of the base
+          distribution and the chosen \(n\); <em>it does not use the simulated data</em>. It is the "prediction" being tested.
+        </li>
+        <li>
+          <strong>Dashed green line, empirical normal:</strong> the normal whose mean and standard deviation are those of the
+          simulated means. It represents the best bell curve that can be fitted to the data obtained.
+        </li>
+      </ul>
+      <p>To interpret this chart, look at three things:</p>
+      <ul>
+        <li>
+          <strong>Do the bars follow the red curve?</strong> If so, the normal approximation is already good for that \(n\).
+          If the bars show a longer tail on one side than the other while the curve is symmetric, convergence has not yet
+          been reached: increase \(n\) and watch the skewness disappear.
+        </li>
+        <li>
+          <strong>Do the red and green curves coincide?</strong> Almost always yes, even for small \(n\). This is because the mean
+          of \(\bar{X}_n\) is exactly \(\mu\) and its standard deviation exactly \(\sigma/\sqrt{n}\) for <em>any</em> \(n\);
+          what the CLT adds is that the <em>shape</em> also becomes normal. A small gap between the two curves is just Monte
+          Carlo noise and shrinks as the number of simulations increases.
+        </li>
+        <li>
+          <strong>How wide is the histogram?</strong> Compare the horizontal axis scale with that of the left-hand chart:
+          the one for the means is much narrower, because averaging reduces the spread by a factor of \(\sqrt{n}\).
+        </li>
+      </ul>
+      <p>
+        With discrete distributions and small \(n\), the histogram of the means can look like a "comb" with gaps. This is not an error:
+        the mean of \(n\) Bernoulli values can only take the \(n + 1\) values \(0, 1/n, 2/n, \ldots, 1\), and the mean of \(n\)
+        Poisson values only multiples of \(1/n\). As \(n\) grows, the possible values multiply and the histogram fills in.
+      </p>
+
+      <h3>Theoretical vs. empirical table</h3>
+      <p>
+        The <strong>Theoretical</strong> column is computed from formulas, without using the simulated data: the mean \(\mu\) of the
+        base distribution, the standard error \(\sigma/\sqrt{n}\), the variance \(\sigma^2/n\) and the skewness
+        \(\gamma_1/\sqrt{n}\), where \(\gamma_1\) is the skewness coefficient of the base distribution. The <strong>Empirical</strong>
+        column is obtained from the simulated means: their average, their sample standard deviation, its square and their skewness
+        coefficient. Mean and standard deviation should match the theoretical values for any \(n\), up to simulation noise.
+        The <strong>skewness</strong> row is the one that measures convergence to the normal: a normal distribution has skewness 0, so the
+        closer this value is to 0, the more normal the distribution of the mean. Since the theoretical skewness is divided by
+        \(\sqrt{n}\), it becomes clear why highly skewed distributions (Exponential, Chi-square) need a larger \(n\) than symmetric
+        ones (Normal, Uniform), whose skewness is already 0 to begin with.
+      </p>
+
+      <h3>Suggested experiments</h3>
+      <ul>
+        <li><strong>Exponential with n = 1, 2, 5, 30:</strong> the long right tail shrinks until it forms a bell.</li>
+        <li><strong>Uniform with n = 2:</strong> the plateau becomes a triangle; with n = 5 it is already almost a bell.</li>
+        <li><strong>Bernoulli with n = 5 and n = 100:</strong> from a histogram of a few separate bars to a continuous bell.</li>
+        <li><strong>Chi-square with n = 10 and n = 100:</strong> compare the skewness row of the table in both cases.</li>
+        <li><strong>100 vs. 10,000 simulations with the same n:</strong> the shape does not change, only the histogram noise.</li>
+      </ul>
+    </section>
 
     <!-- Educational content -->
     <section class="card content-card" aria-labelledby="tcl-def-heading">
@@ -587,12 +700,14 @@
 <script>
   // ─── Distribution parameters ──────────────────────────────────────────────
   const DIST_PARAMS = {
-    normal:      { mu: 0,   variance: 1,     name: 'Normal (μ=0, σ=1)' },
-    uniform:     { mu: 0.5, variance: 1/12,  name: 'Uniform (a=0, b=1)' },
-    exponential: { mu: 1,   variance: 1,     name: 'Exponential (λ=1)' },
-    bernoulli:   { mu: 0.3, variance: 0.3*0.7, name: 'Bernoulli (p=0.3)' },
-    poisson:     { mu: 3,   variance: 3,     name: 'Poisson (λ=3)' },
-    chisquare:   { mu: 3,   variance: 6,     name: 'Chi-square (k=3)' }
+    // skewness = skewness coefficient γ₁ of the base distribution;
+    // the skewness of the sample mean is γ₁/√n.
+    normal:      { mu: 0,   variance: 1,       skewness: 0,                         name: 'Normal (μ=0, σ=1)' },
+    uniform:     { mu: 0.5, variance: 1/12,    skewness: 0,                         name: 'Uniform (a=0, b=1)' },
+    exponential: { mu: 1,   variance: 1,       skewness: 2,                         name: 'Exponential (λ=1)' },
+    bernoulli:   { mu: 0.3, variance: 0.3*0.7, skewness: (1 - 0.6) / Math.sqrt(0.21), name: 'Bernoulli (p=0.3)' },
+    poisson:     { mu: 3,   variance: 3,       skewness: 1 / Math.sqrt(3),          name: 'Poisson (λ=3)' },
+    chisquare:   { mu: 3,   variance: 6,       skewness: Math.sqrt(8 / 3),          name: 'Chi-square (k=3)' }
   };
 
   // ─── Theoretical PDF functions ────────────────────────────────────────────
@@ -640,6 +755,21 @@
 
   function stdDev(arr) {
     return Math.sqrt(variance(arr));
+  }
+
+  // Sample skewness coefficient (third standardized moment, population form)
+  function skewness(arr) {
+    const m = mean(arr);
+    const N = arr.length;
+    let m2 = 0, m3 = 0;
+    for (const v of arr) {
+      const d = v - m;
+      m2 += d * d;
+      m3 += d * d * d;
+    }
+    m2 /= N;
+    m3 /= N;
+    return m2 > 0 ? m3 / Math.pow(m2, 1.5) : 0;
   }
 
   // ─── Histogram builder ────────────────────────────────────────────────────
@@ -823,6 +953,7 @@
     const empMean = mean(sampleMeans);
     const empSd   = stdDev(sampleMeans);
     const empVar  = empSd * empSd;
+    const empSkew = skewness(sampleMeans);
 
     // ── Build histograms ───────────────────────────────────────────────────
     const origBins  = (dist === 'bernoulli') ? 3 : (dist === 'poisson' ? 20 : 40);
@@ -895,27 +1026,74 @@
     document.getElementById('statEmpSd').textContent   = fmt(empSd, 4);
     document.getElementById('statTeoVar').textContent  = fmt(trueVar / n, 6);
     document.getElementById('statEmpVar').textContent  = fmt(empVar, 6);
+    document.getElementById('statTeoSkew').textContent = fmt(params.skewness / Math.sqrt(n), 4);
+    document.getElementById('statEmpSkew').textContent = fmt(empSkew, 4);
     document.getElementById('statTeoN').textContent    = numSims.toString();
     document.getElementById('statEmpN').textContent    = sampleMeans.length.toString();
 
     document.getElementById('statsSection').style.display = 'block';
     document.getElementById('legendArea').style.display   = 'flex';
 
+    // ── Update chart subtitles with the actual numbers of this run ────────
+    const origSubEl  = document.getElementById('origSub');
+    const meansSubEl = document.getElementById('meansSub');
+    if (origSubEl) {
+      origSubEl.textContent = (dist === 'bernoulli' || dist === 'poisson')
+        ? `Histogram of ${origSize.toLocaleString('en-US')} individual observations from ${params.name}. Since the distribution is discrete, each bar is the relative frequency of an integer value and no density curve is drawn.`
+        : `Histogram of ${origSize.toLocaleString('en-US')} individual observations from ${params.name} (bars, density scale) with its theoretical density overlaid (red line).`;
+    }
+    if (meansSubEl) {
+      meansSubEl.textContent = `Histogram of ${numSims.toLocaleString('en-US')} sample means, each computed from n = ${n} observations. Red line: theoretical normal N(${fmt(trueMu, 3)}, ${fmt(trueVar / n, 4)}) predicted by the CLT. Dashed green line: normal fitted to the simulated means.`;
+    }
+
     // ── Interpretation ─────────────────────────────────────────────────────
     const distName = params.name;
-    let msg = '';
+    const isDiscrete = (dist === 'bernoulli' || dist === 'poisson');
+    const isSymmetric = (params.skewness === 0);
+    const totalDraws = numSims * n;
+
+    // Paragraph 1: what was generated
+    let p1 = `<strong>${numSims.toLocaleString('en-US')}</strong> samples of <strong>n = ${n}</strong> observations were drawn from the <em>${distName}</em> distribution (${totalDraws.toLocaleString('en-US')} individual observations in total) and the mean of each sample was computed. The left-hand chart shows ${origSize.toLocaleString('en-US')} individual observations from that same distribution; the right-hand chart shows the ${numSims.toLocaleString('en-US')} means obtained.`;
+
+    // Paragraph 2: shape of the distribution of the mean
+    let p2 = '';
     if (n === 1) {
-      msg = `With <strong>n = 1</strong>, you are looking at the original distribution (${distName}). There is no averaging yet: each "sample mean" is simply a single value, so both histograms are identical.`;
+      p2 = `With <strong>n = 1</strong> there is no averaging: each "sample mean" is a single individual value, so the right-hand histogram reproduces the shape of the original distribution and the red normal curve does not fit the bars (unless the base distribution is already normal). This is the starting point of the experiment.`;
     } else if (n <= 5) {
-      msg = `With <strong>n = ${n}</strong>, the distribution of the mean is already starting to smooth out relative to the original (${distName}), but skewness or irregularities are still visible. The CLT effect is just beginning.`;
+      if (isSymmetric) {
+        p2 = `With <strong>n = ${n}</strong> and a symmetric starting distribution, the histogram of the means already looks fairly bell-shaped: averaging symmetric values creates no dominant tail. Notice that the bars cluster around μ and that the horizontal scale is narrower than on the left.`;
+      } else {
+        p2 = `With <strong>n = ${n}</strong> the histogram of the means is already smoother and more concentrated than the original distribution, but it keeps its skewness: the longer tail is still on the same side as in the left-hand chart, and the bars rise above the red curve on one side and fall below it on the other. The CLT effect is only just beginning.`;
+      }
+      if (isDiscrete) {
+        p2 += ` Because the distribution is discrete, the means can only take values spaced 1/n = ${fmt(1 / n, 3)} apart; that is why the histogram looks like a "comb" with gaps between bars.`;
+      }
     } else if (n <= 15) {
-      msg = `With <strong>n = ${n}</strong>, the distribution of the sample mean is noticeably closer to normal. For symmetric distributions like the Normal or Uniform, convergence is already very good. For skewed distributions like the Exponential or Chi-square, deviations may still be visible.`;
+      if (isSymmetric) {
+        p2 = `With <strong>n = ${n}</strong> the distribution of the sample mean is practically normal: the bars closely follow the red curve and the two normals (theoretical and empirical) overlap. For a symmetric starting distribution, convergence is very fast.`;
+      } else {
+        p2 = `With <strong>n = ${n}</strong> the distribution of the mean is clearly approaching the normal, although a slight residual skewness may still be visible: check whether the right tail of the histogram is somewhat longer than the left one and whether the peak is slightly shifted relative to that of the red curve. Increasing n makes that difference disappear.`;
+      }
     } else {
-      msg = `With <strong>n = ${n}</strong>, the CLT operates at full strength: the distribution of the sample mean is practically normal, regardless of the original distribution (<em>${distName}</em>). The empirical mean (${fmt(empMean, 4)}) is very close to the theoretical value (${fmt(trueMu, 4)}), and the empirical standard deviation (${fmt(empSd, 4)}) approaches the theoretical standard error σ/√n = ${fmt(trueSd / Math.sqrt(n), 4)}.`;
+      p2 = `With <strong>n = ${n}</strong> the CLT operates at full strength: the distribution of the sample mean is practically normal even though the original distribution (<em>${distName}</em>) ${isSymmetric ? 'was already symmetric' : 'is skewed'}. The bars follow the red curve and the theoretical and empirical normals are almost indistinguishable. Compare the width of the two histograms: averaging ${n} values has reduced the spread by a factor of √${n} ≈ ${fmt(Math.sqrt(n), 2)}.`;
+    }
+
+    // Paragraph 3: numbers
+    const teoSe = trueSd / Math.sqrt(n);
+    const teoSkew = params.skewness / Math.sqrt(n);
+    let p3 = `In the table, the empirical mean of the means (${fmt(empMean, 4)}) matches μ = ${fmt(trueMu, 4)} and their standard deviation (${fmt(empSd, 4)}) matches the standard error σ/√n = ${fmt(teoSe, 4)}, up to simulation noise; these two equalities hold for any n. The empirical skewness of the means is ${fmt(empSkew, 3)} versus a theoretical ${fmt(teoSkew, 3)}`;
+    if (isSymmetric) {
+      p3 += `: the starting distribution is already symmetric, so the skewness is 0 for any n and only sampling noise remains.`;
+    } else if (Math.abs(teoSkew) < 0.15) {
+      p3 += `, a value already very close to 0, which is the skewness of a normal. That is why the histogram is barely distinguishable from the bell curve.`;
+    } else if (Math.abs(teoSkew) < 0.5) {
+      p3 += `. Since it is not yet 0 (the skewness of a normal), a slight residual skewness may be noticeable in the histogram; with a larger n this value is divided by √n and approaches 0.`;
+    } else {
+      p3 += `, far from 0 (the skewness of a normal). This confirms what the chart shows: the sample mean is not yet normal. Try n = 30 or larger.`;
     }
 
     const box = document.getElementById('interpretation');
-    box.innerHTML = `<p>${msg}</p>`;
+    box.innerHTML = `<p>${p1}</p><p>${p2}</p><p>${p3}</p>`;
     box.style.display = 'block';
 
     // Re-typeset MathJax if present
