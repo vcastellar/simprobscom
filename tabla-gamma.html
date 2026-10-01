@@ -133,6 +133,43 @@
         "name": "ProbLab",
         "url": "https://problabtools.com/"
       }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Cómo se lee la tabla de la distribución Gamma?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Selecciona la forma α y la escala β. En la pestaña P(X ≤ x), la fila da la parte entera de x y la columna el primer decimal; la celda es la probabilidad acumulada. En Cuantiles, la fila es α, la columna la probabilidad p y la celda el valor x que la acumula."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué diferencia hay entre escala y tasa?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Son dos formas de escribir el mismo parámetro: la tasa es λ = 1/β. Con la escala la media es αβ; con la tasa, α/λ. Si tu problema o tu software usa la tasa, conviértela antes de consultar la tabla."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué relación tiene la Gamma con la Exponencial y la chi-cuadrado?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La Exponencial de media β es la Gamma con α = 1, y la chi-cuadrado con ν grados de libertad es la Gamma con α = ν/2 y β = 2."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué pasa si mis parámetros no están en la tabla?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Usa la calculadora Gamma para obtener el valor exacto con cualquier α y β."
+          }
+        }
+      ]
     }
   ]
 }
@@ -181,7 +218,7 @@
     <header class="hero">
         <p class="eyebrow">Tablas estadísticas</p>
         <h1>Tabla de la distribución Gamma</h1>
-        <p class="hero-subtitle">Tabla de la distribución Gamma Γ(α, β): distribución acumulada P(X ≤ x), densidad f(x) y cuantiles para distintos parámetros de forma α y escala β. Haz clic en una celda para leer el valor.</p>
+        <p class="hero-subtitle">Distribución acumulada P(X ≤ x), densidad f(x) y cuantiles de la distribución Gamma Γ(α, β) para distintos valores de forma α y escala β. Haz clic en una celda para ver el valor exacto y el área que representa.</p>
         <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">Ver todas las tablas</a></p>
     </header>
 
@@ -196,7 +233,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content active">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra P(X ≤ x) para los parámetros α (forma) y β (escala) seleccionados. La fila indica la parte entera de x; la columna añade el primer decimal (×0.1).
+                    <strong>Cómo leer la tabla:</strong> elige la forma α y la escala β en los desplegables. La fila da la parte entera de x y la columna el primer decimal. La celda es P(X ≤ x), el área a la izquierda de x.
                 </div>
                 <div class="df-control">
                     <label for="alpha-cdf">α (forma):</label>
@@ -218,7 +255,7 @@
             <!-- PDF TAB -->
             <div id="tab-pdf" class="tab-content">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra f(x) = x^(α−1) · e^(−x/β) / (β^α · Γ(α)) para los parámetros seleccionados. La densidad es 0 para x ≤ 0.
+                    <strong>Cómo leer la tabla:</strong> la celda es la altura de la curva en x para los parámetros elegidos, f(x) = x<sup>α−1</sup> · e<sup>−x/β</sup> / (β<sup>α</sup> · Γ(α)), no una probabilidad. La densidad vale 0 para x ≤ 0.
                 </div>
                 <div class="df-control">
                     <label for="alpha-pdf">α (forma):</label>
@@ -240,7 +277,7 @@
             <!-- QUANTILES TAB -->
             <div id="tab-quant" class="tab-content">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra el cuantil x tal que P(X ≤ x) = p. Filas: diferentes valores de α (forma). Columnas: probabilidades acumuladas p. Selecciona β (escala) con el selector.
+                    <strong>Cómo leer la tabla:</strong> elige la escala β en el desplegable. Cada fila es un valor de la forma α y cada columna una probabilidad acumulada p. La celda es el cuantil x que cumple P(X ≤ x) = p, es decir, el valor que deja una probabilidad p a su izquierda.
                 </div>
                 <div class="df-control">
                     <label for="beta-quant">β (escala):</label>
@@ -259,27 +296,68 @@
         </section>
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
-            <h3>Cómo usar estas tablas</h3>
-            <h3>Distribución Gamma</h3>
-            <p>La distribución Gamma Γ(α, β) generaliza la distribución exponencial. Su función de densidad es:</p>
+            <h3>Cómo usar esta tabla</h3>
+            <p>Las tres pestañas responden a preguntas distintas:</p>
+            <ul>
+                <li><strong>P(X ≤ x)</strong>: dado un valor x, ¿qué probabilidad acumula la distribución hasta él? Es la pestaña habitual para calcular probabilidades.</li>
+                <li><strong>f(x)</strong>: la altura de la curva en x, útil para representarla o comparar formas.</li>
+                <li><strong>Cuantiles</strong>: el camino inverso. Dada una probabilidad p, ¿qué valor x la acumula? Es la pestaña para percentiles y valores críticos.</li>
+            </ul>
+            <p>Para consultar una probabilidad:</p>
+            <ol>
+                <li><strong>Identifica los parámetros.</strong> Esta tabla usa la forma α y la escala β, con media αβ. Si tu problema da la tasa λ, conviértela: β = 1/λ.</li>
+                <li><strong>Selecciona α y β</strong> en los desplegables; la tabla se reconstruye con esos valores.</li>
+                <li><strong>Descompón x:</strong> la fila da la parte entera y la columna el primer decimal. Lee la celda o haz clic en ella para ver el área sombreada.</li>
+            </ol>
+
+            <h3>Ejemplo resuelto</h3>
+            <p>El tiempo hasta que una máquina sufre dos averías, cuando las averías llegan a razón de una por hora, sigue una Gamma con α = 2 y β = 1 (la suma de dos Exponenciales de media 1).</p>
+            <ul>
+                <li><strong>Probabilidad de que las dos averías ocurran antes de 3 horas:</strong> pestaña P(X ≤ x), α = 2, β = 1, fila 3 y columna .0 → <strong>P(X ≤ 3.0) = 0.8009</strong>.</li>
+                <li><strong>Probabilidad de tardar más de 3 horas:</strong> 1 − 0.8009 = <strong>0.1991</strong>.</li>
+                <li><strong>Tiempo que solo se supera el 5 % de las veces:</strong> pestaña Cuantiles, β = 1, fila α = 2, columna p = 0.95 → <strong>x = 4.7439</strong> horas.</li>
+            </ul>
+
+            <h3>Qué es la distribución Gamma</h3>
+            <p>La distribución Gamma Γ(α, β) modela cantidades positivas y asimétricas, en especial tiempos de espera: si los sucesos llegan a un ritmo constante, el tiempo hasta el α-ésimo suceso sigue una Gamma. Generaliza la Exponencial (que es el caso α = 1) y su densidad es:</p>
             <p class="formula-line">\( f(x;\alpha,\beta) = \dfrac{x^{\alpha-1}\,e^{-x/\beta}}{\beta^\alpha\,\Gamma(\alpha)}, \quad x > 0, \;\alpha > 0,\; \beta > 0 \)</p>
-            <p>La media es μ = αβ y la varianza σ² = αβ². El parámetro α controla la forma y β la escala.</p>
+            <p>El parámetro α controla la <strong>forma</strong>: con α ≤ 1 la densidad es decreciente desde el origen; con α &gt; 1 tiene un máximo en x = (α − 1)β y se va haciendo más simétrica a medida que α crece. El parámetro β es la <strong>escala</strong>: estira la distribución sin cambiar su forma. La media es μ = αβ y la varianza σ² = αβ².</p>
 
             <h3>Casos particulares</h3>
             <ul>
-                <li><strong>Γ(1, β):</strong> coincide con la distribución Exponencial de media β.</li>
-                <li><strong>Γ(ν/2, 2):</strong> coincide con la distribución Chi-cuadrado con ν grados de libertad.</li>
-                <li><strong>Γ(k, 1) con k entero:</strong> suma de k exponenciales independientes de media 1 (distribución de Erlang).</li>
+                <li><strong>Γ(1, β):</strong> distribución Exponencial de media β.</li>
+                <li><strong>Γ(ν/2, 2):</strong> distribución chi-cuadrado con ν grados de libertad.</li>
+                <li><strong>Γ(k, β) con k entero:</strong> suma de k Exponenciales independientes de media β (distribución de Erlang).</li>
             </ul>
 
-            <h3>Parameterización</h3>
-            <p>Esta tabla usa la parameterización (α, β) donde β es la <em>escala</em> (scale) y 1/β es la <em>tasa</em> (rate). Verifica la parametrización que usa tu software antes de comparar valores.</p>
+            <h3>Parametrización</h3>
+            <p>Esta tabla usa la pareja (α, β) con β como <em>escala</em>. Muchos programas y libros usan en su lugar la <em>tasa</em> λ = 1/β, y otros llaman k y θ a la forma y la escala. Antes de comparar valores, comprueba qué convención usa tu software: con la tasa, la media es α/λ en lugar de αβ.</p>
 
-            <h3>Calculadoras relacionadas</h3>
+            <h3>Tablas y calculadoras relacionadas</h3>
             <ul class="distribution-links">
                 <li><a href="gamma.html">Calculadora Gamma</a></li>
                 <li><a href="tabla-chi-cuadrado.html">Tabla Chi-cuadrado</a></li>
                 <li><a href="tabla-beta.html">Tabla Beta</a></li>
+            </ul>
+
+            <h3>Preguntas frecuentes</h3>
+            <ul>
+                <li>
+                    <strong>¿Cómo se lee la tabla de la distribución Gamma?</strong>
+                    Selecciona la forma α y la escala β. En la pestaña P(X ≤ x), la fila da la parte entera de x y la columna el primer decimal; la celda es la probabilidad acumulada. En Cuantiles, la fila es α, la columna la probabilidad p y la celda el valor x que la acumula.
+                </li>
+                <li>
+                    <strong>¿Qué diferencia hay entre escala y tasa?</strong>
+                    Son dos formas de escribir el mismo parámetro: la tasa es λ = 1/β. Con la escala la media es αβ; con la tasa, α/λ. Si tu problema o tu software usa la tasa, conviértela antes de consultar la tabla.
+                </li>
+                <li>
+                    <strong>¿Qué relación tiene la Gamma con la Exponencial y la chi-cuadrado?</strong>
+                    La Exponencial de media β es la Gamma con α = 1, y la chi-cuadrado con ν grados de libertad es la Gamma con α = ν/2 y β = 2.
+                </li>
+                <li>
+                    <strong>¿Qué pasa si mis parámetros no están en la tabla?</strong>
+                    Usa la calculadora Gamma para obtener el valor exacto con cualquier α y β.
+                </li>
             </ul>
         </section>
     </main>

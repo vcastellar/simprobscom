@@ -231,7 +231,7 @@
           "name": "¿Cómo se lee la tabla t de Student?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Elige la fila del grado de libertad ν y la columna del nivel de significación α: la celda es el valor crítico t. Usa la fila «1 cola» para tests unilaterales y la de «2 colas» para bilaterales."
+            "text": "Localiza la fila de tus grados de libertad ν y la columna de tu nivel de significación α. La celda es el valor crítico t. En la cabecera, lee «1 cola» para contrastes unilaterales y «2 colas» para bilaterales e intervalos de confianza."
           }
         },
         {
@@ -239,7 +239,7 @@
           "name": "¿Cuándo se usa la tabla t en lugar de la tabla normal?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Con muestras pequeñas y varianza poblacional desconocida se usa la tabla t de Student; al crecer los grados de libertad, la t se aproxima a la tabla normal estándar."
+            "text": "Cuando la desviación típica de la población es desconocida y se estima con la muestra, sobre todo si la muestra es pequeña. Al crecer los grados de libertad la t se acerca a la Normal, y a partir de ν ≈ 30 la diferencia es ya pequeña."
           }
         },
         {
@@ -247,7 +247,15 @@
           "name": "¿Qué diferencia hay entre una cola y dos colas?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Una cola deja toda el área α a un lado (P(T > t) = α); dos colas la reparten entre ambos extremos (P(|T| > t) = α), por lo que el valor crítico es mayor."
+            "text": "En un contraste de una cola toda el área α queda en un extremo, P(T > t) = α. En uno de dos colas el área se reparte entre ambos extremos, P(|T| > t) = α, así que cada cola recibe α/2 y el valor crítico es mayor."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué hago si mis grados de libertad no están en la tabla?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Usa la fila inferior más cercana, que da un valor crítico ligeramente mayor y por tanto una decisión conservadora, o calcula el valor exacto con la calculadora t de Student."
           }
         }
       ]
@@ -299,7 +307,7 @@
     <header class="hero">
         <p class="eyebrow">Tablas estadísticas</p>
         <h1>Tabla t de Student (valores críticos)</h1>
-        <p class="hero-subtitle">La tabla t de Student con los valores críticos t<sub>α,ν</sub>, la función de densidad f(t,ν) y la distribución acumulada P(T ≤ t) para cualquier grado de libertad. Haz clic en una celda para leer el valor.</p>
+        <p class="hero-subtitle">Valores críticos t<sub>α,ν</sub> para contrastes de una y dos colas, además de la distribución acumulada P(T ≤ t) y la densidad f(t,ν) para los grados de libertad que elijas. Haz clic en una celda para leer el valor.</p>
         <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">Ver todas las tablas</a></p>
     </header>
 
@@ -314,12 +322,12 @@
             <!-- CRITICAL VALUES TAB -->
             <div id="tab-crit" class="tab-content active">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada columna es un nivel de significación α y cada fila un grado de libertad ν. El mismo valor crítico t sirve para dos casos según el tipo de test:
+                    <strong>Cómo leer la tabla:</strong> cada fila es un número de grados de libertad ν y cada columna un nivel de significación α. La cabecera de cada columna muestra dos valores de α porque el mismo valor crítico sirve para dos situaciones:
                     <ul style="margin:8px 0 0;padding-left:20px">
-                        <li><strong>Test de una cola</strong> (unilateral): deja un área α a la <em>derecha</em>, P(T &gt; t) = α. Usa la fila <em>«1 cola»</em>.</li>
-                        <li><strong>Test de dos colas</strong> (bilateral): deja un área α repartida entre <em>ambas</em> colas, P(|T| &gt; t) = α. Usa la fila <em>«2 colas»</em>.</li>
+                        <li><strong>«1 cola»</strong> (contraste unilateral): el valor t deja un área α en la cola derecha, P(T &gt; t) = α.</li>
+                        <li><strong>«2 colas»</strong> (contraste bilateral): el mismo t deja un área α repartida entre las dos colas, P(|T| &gt; t) = α.</li>
                     </ul>
-                    Como las dos colas reparten el área, siempre <em>α (2 colas) = 2 × α (1 cola)</em>. Ejemplo: con ν = 10, para un test bilateral al 5 % (columna «2 colas: 0.05» ↔ «1 cola: 0.025») el valor crítico es t = 2.228.
+                    Como el área se reparte, α (2 colas) = 2 × α (1 cola). Ejemplo: para un contraste bilateral al 5 % con ν = 10, usa la columna «2 colas: 0.05» (que coincide con «1 cola: 0.025») → t = 2.228.
                 </div>
                 <div id="lookup-crit" class="lookup-result"><span>Haz clic en una celda para leer el valor crítico.</span></div>
                 <figure class="dist-diagram" data-dist="student" data-mode="crit-two" data-tables="tbl-crit" data-df="10" data-a1="0.025" data-a2="0.05" data-val="2.228">
@@ -336,7 +344,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra P(T ≤ t) para los grados de libertad seleccionados. Para t negativo: P(T ≤ −t) = 1 − P(T ≤ t), o cambia el signo con el botón.
+                    <strong>Cómo leer la tabla:</strong> elige ν en el desplegable. La fila da la parte entera y el primer decimal de t; la columna, el segundo decimal. La celda es P(T ≤ t), el área a la izquierda de t. Para t negativo usa el botón t &lt; 0 o la simetría P(T ≤ −t) = 1 − P(T ≤ t).
                 </div>
                 <div class="df-control">
                     <label for="df-cdf">Grados de libertad (ν):</label>
@@ -366,7 +374,7 @@
             <!-- PDF TAB -->
             <div id="tab-pdf" class="tab-content">
                 <div class="info-box">
-                    <strong>Cómo leer la tabla:</strong> cada celda muestra la densidad f(t, ν). La función es simétrica: f(−t, ν) = f(t, ν). Al aumentar ν la curva se aproxima a la Normal estándar.
+                    <strong>Cómo leer la tabla:</strong> la celda es la altura de la curva en t para los grados de libertad elegidos, f(t, ν), no una probabilidad. La densidad es simétrica, f(−t, ν) = f(t, ν), y a medida que ν crece se acerca a la Normal estándar.
                 </div>
                 <div class="df-control">
                     <label for="df-pdf">Grados de libertad (ν):</label>
@@ -385,21 +393,40 @@
         </section>
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
-            <h3>Cómo usar estas tablas</h3>
-            <h3>Distribución t de Student</h3>
-            <p>La distribución t de Student con ν grados de libertad tiene función de densidad:</p>
+            <h3>Cómo usar esta tabla</h3>
+            <p>La tabla t de Student tiene tres pestañas y cada una responde a una pregunta distinta:</p>
+            <ul>
+                <li><strong>Valores críticos t<sub>α,ν</sub></strong>: la que se usa en contrastes e intervalos de confianza. Dado un nivel de significación α y unos grados de libertad ν, devuelve el valor t que deja un área α en la cola.</li>
+                <li><strong>P(T ≤ t)</strong>: para un t concreto, devuelve la probabilidad acumulada hasta él. Sirve para calcular p-valores.</li>
+                <li><strong>f(t,ν)</strong>: devuelve la altura de la curva en t, útil para representarla o para cálculos teóricos.</li>
+            </ul>
+            <p>Para leer un valor crítico:</p>
+            <ol>
+                <li><strong>Calcula los grados de libertad</strong> del problema (por ejemplo, ν = n − 1 en un contraste sobre una media) y localiza su fila.</li>
+                <li><strong>Decide si el contraste es de una o de dos colas</strong> y busca tu α en la cabecera correspondiente: «1 cola» para contrastes unilaterales, «2 colas» para bilaterales e intervalos de confianza.</li>
+                <li><strong>Lee la celda</strong> donde se cruzan. Haz clic en ella para que el diagrama sombree el área que deja el valor crítico.</li>
+            </ol>
+            <p>Si tu ν no aparece en la tabla, usa la fila inmediatamente inferior (da un valor crítico algo mayor y, por tanto, una decisión conservadora) o la calculadora enlazada más abajo. Para ν muy grandes los valores coinciden con los de la Normal estándar.</p>
+
+            <h3>Ejemplo resuelto</h3>
+            <p>Se quiere contrastar si la media de una población difiere de un valor de referencia con una muestra de n = 11 observaciones, al nivel α = 0.05. El contraste es bilateral y ν = n − 1 = 10, así que se busca la fila 10 y la columna «2 colas: 0.05»: el valor crítico es <strong>t = 2.228</strong>. Se rechaza H₀ si el estadístico observado cumple |t| &gt; 2.228.</p>
+            <p>Si el contraste fuera unilateral (por ejemplo, H₁: μ &gt; μ₀) con el mismo α, se usaría la columna «1 cola: 0.05» y el valor crítico sería <strong>t = 1.812</strong>, más pequeño porque toda el área α se concentra en una sola cola.</p>
+            <p>Para obtener un p-valor, pasa a la pestaña P(T ≤ t). Con ν = 10 y un estadístico t = 2.00, la tabla da P(T ≤ 2.00) = 0.9633, así que el p-valor bilateral es 2 × (1 − 0.9633) = 0.0734: no se rechaza H₀ al 5 %, en coherencia con que 2.00 &lt; 2.228.</p>
+
+            <h3>Qué es la distribución t de Student</h3>
+            <p>Cuando se estima la media de una población Normal y la desviación típica σ es desconocida, se sustituye por la de la muestra, s. Esa sustitución añade incertidumbre y hace que el estadístico (x̄ − μ)/(s/√n) ya no siga una Normal, sino una t de Student con ν = n − 1 grados de libertad. Su densidad es:</p>
             <p class="formula-line">\( f(t,\nu) = \dfrac{\Gamma\!\left(\tfrac{\nu+1}{2}\right)}{\sqrt{\nu\pi}\;\Gamma\!\left(\tfrac{\nu}{2}\right)} \left(1+\dfrac{t^2}{\nu}\right)^{-\frac{\nu+1}{2}} \)</p>
-            <p>Conforme ν → ∞ la distribución converge a la Normal estándar N(0,1).</p>
+            <p>Tiene forma de campana centrada en 0, como la Normal, pero con colas más pesadas: los valores extremos son más probables y, por eso, sus valores críticos son mayores. A medida que ν crece la diferencia se reduce y, para ν → ∞, la t coincide con la Normal estándar N(0, 1).</p>
 
             <h3>Tabla de valores críticos</h3>
-            <p>Muestra los cuantiles t<sub>α,ν</sub> tales que P(T &gt; t<sub>α,ν</sub>) = α (contraste unilateral). Para contraste bilateral al nivel α₂, usa la columna α₁ = α₂/2.</p>
+            <p>Cada celda es el cuantil t<sub>α,ν</sub> que cumple P(T &gt; t<sub>α,ν</sub>) = α. Como la distribución es simétrica, el mismo valor sirve para la cola izquierda (−t<sub>α,ν</sub>) y para un contraste bilateral al nivel 2α.</p>
             <ul>
-                <li><strong>Ejemplo:</strong> contraste bilateral α = 0.05, ν = 20 → columna α₁ = 0.025 → t = 2.086.</li>
-                <li>Cuando ν = ∞ los valores coinciden con los cuantiles de la Normal estándar.</li>
+                <li><strong>Ejemplo:</strong> contraste bilateral con α = 0.05 y ν = 20 → columna «2 colas: 0.05» → t = 2.086.</li>
+                <li>En la última fila, ν = ∞, los valores coinciden con los cuantiles de la Normal estándar (1.645, 1.960, 2.576…).</li>
             </ul>
 
             <h3>Tabla de distribución acumulada</h3>
-            <p>Cada celda muestra P(T ≤ t) para el número de grados de libertad seleccionado. Para calcular p-valores bilaterales: p = 2 · P(T &gt; |t<sub>obs</sub>|) = 2 · (1 − P(T ≤ |t<sub>obs</sub>|)).</p>
+            <p>Cada celda es P(T ≤ t) para los grados de libertad seleccionados. Para un p-valor bilateral a partir del estadístico observado t<sub>obs</sub>: p = 2 · P(T &gt; |t<sub>obs</sub>|) = 2 · (1 − P(T ≤ |t<sub>obs</sub>|)). Para un p-valor unilateral, usa directamente el área de la cola que corresponda.</p>
 
             <h3>Tablas y calculadoras relacionadas</h3>
             <ul class="distribution-links">
@@ -415,19 +442,19 @@
             <ul>
                 <li>
                     <strong>¿Cómo se lee la tabla t de Student?</strong>
-                    Elige la fila del grado de libertad ν y la columna del nivel de significación α:
-                    la celda es el valor crítico t. Usa la fila «1 cola» para tests unilaterales y la de
-                    «2 colas» para bilaterales.
+                    Localiza la fila de tus grados de libertad ν y la columna de tu nivel de significación α. La celda es el valor crítico t. En la cabecera, lee «1 cola» para contrastes unilaterales y «2 colas» para bilaterales e intervalos de confianza.
                 </li>
                 <li>
                     <strong>¿Cuándo se usa la tabla t en lugar de la tabla normal?</strong>
-                    Con muestras pequeñas y varianza poblacional desconocida se usa la tabla t de Student;
-                    al crecer los grados de libertad, la t se aproxima a la tabla normal estándar.
+                    Cuando la desviación típica de la población es desconocida y se estima con la muestra, sobre todo si la muestra es pequeña. Al crecer los grados de libertad la t se acerca a la Normal, y a partir de ν ≈ 30 la diferencia es ya pequeña.
                 </li>
                 <li>
                     <strong>¿Qué diferencia hay entre una cola y dos colas?</strong>
-                    Una cola deja toda el área α a un lado (P(T &gt; t) = α); dos colas la reparten entre
-                    ambos extremos (P(|T| &gt; t) = α), por lo que el valor crítico es mayor.
+                    En un contraste de una cola toda el área α queda en un extremo, P(T &gt; t) = α. En uno de dos colas el área se reparte entre ambos extremos, P(|T| &gt; t) = α, así que cada cola recibe α/2 y el valor crítico es mayor.
+                </li>
+                <li>
+                    <strong>¿Qué hago si mis grados de libertad no están en la tabla?</strong>
+                    Usa la fila inferior más cercana, que da un valor crítico ligeramente mayor y por tanto una decisión conservadora, o calcula el valor exacto con la calculadora t de Student.
                 </li>
             </ul>
         </section>

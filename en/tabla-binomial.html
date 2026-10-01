@@ -160,7 +160,7 @@
           "name": "How do you use the binomial distribution table?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Fix n and p; the row is the number of successes k. Each cell gives P(X = k) or the cumulative P(X ≤ k), depending on the tab selected."
+            "text": "Choose n from the dropdown, the P(X = k) or P(X ≤ k) tab depending on the question, and the column for your p. The row is the number of successes k and the cell is the probability you need."
           }
         },
         {
@@ -168,15 +168,23 @@
           "name": "What is the difference between P(X = k) and P(X ≤ k)?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "P(X = k) is the probability of exactly k successes; P(X ≤ k) is the cumulative one, the sum of the probabilities from 0 up to k."
+            "text": "P(X = k) is the probability of exactly k successes. P(X ≤ k) is the cumulative one: the sum of P(X = 0) up to P(X = k), that is, the probability of at most k successes."
           }
         },
         {
           "@type": "Question",
-          "name": "When should you approximate the binomial table by the normal or the Poisson?",
+          "name": "How do I compute \"at least k successes\" with the table?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "With large n and moderate p, the binomial is approximated by the normal table; with large n and small p (λ = n·p moderate), by the Poisson table."
+            "text": "With the complement of the cumulative probability: P(X ≥ k) = 1 − P(X ≤ k − 1). For example, with n = 10 and p = 0.30, P(X ≥ 5) = 1 − P(X ≤ 4) = 1 − 0.8497 = 0.1503."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "When should you approximate the binomial by the Normal or the Poisson?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "With large n and moderate p (np ≥ 5 and n(1 − p) ≥ 5), by the Normal N(np, np(1 − p)). With large n and small p, by the Poisson with mean λ = np."
           }
         }
       ]
@@ -224,7 +232,7 @@
     <header class="hero">
         <p class="eyebrow">Statistical tables</p>
         <h1>Binomial Distribution Table</h1>
-        <p class="hero-subtitle">The binomial table (table of the binomial distribution B(n, p)): probability mass function P(X = k) and cumulative distribution function P(X ≤ k). Select n and the range of p. Click any cell to read the exact value.</p>
+        <p class="hero-subtitle">Probabilities of the binomial distribution B(n, p): probability mass function P(X = k) and cumulative P(X ≤ k) for n from 1 to 30 and p from 0.05 to 0.95. Choose n, select the range of p and click any cell to see the exact value.</p>
         <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">See all tables</a></p>
     </header>
 
@@ -238,7 +246,7 @@
             <!-- PMF TAB -->
             <div id="tab-pmf" class="tab-content active">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows P(X = k) = C(n,k)·p^k·(1−p)^(n−k). The parameter n is the number of trials, and you can choose it from the dropdown. Rows are the values of k (0, 1, …, n); columns are the values of p. Use the buttons to change the range of p.
+                    <strong>How to read the table:</strong> choose n (number of trials) from the dropdown. Each row is a number of successes k and each column a probability of success p. The cell is P(X = k) = C(n,k) · p<sup>k</sup> · (1−p)<sup>n−k</sup>, the probability of getting <em>exactly</em> k successes. Use the buttons to switch between p ≤ 0.50 and p &gt; 0.50.
                 </div>
                 <div class="df-control">
                     <label for="n-pmf">n (trials):</label>
@@ -268,7 +276,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows P(X ≤ k) = Σᵢ₌₀ᵏ C(n,i)·p^i·(1−p)^(n−i). The parameter n is the number of trials, and you can choose it from the dropdown; rows indicate k and columns indicate p. To calculate P(X &gt; k) use the complement: 1 − P(X ≤ k).
+                    <strong>How to read the table:</strong> choose n from the dropdown. Each row is a number of successes k and each column a probability of success p. The cell is P(X ≤ k), the probability of getting <em>at most</em> k successes. For "more than k" use the complement, P(X &gt; k) = 1 − P(X ≤ k); for "at least k", P(X ≥ k) = 1 − P(X ≤ k − 1).
                 </div>
                 <div class="df-control">
                     <label for="n-cdf">n (trials):</label>
@@ -297,29 +305,37 @@
         </section>
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
-            <h3>How to use these tables</h3>
-            <p>Before looking up a value, identify the three pieces of information in the problem: the number of trials n, the probability of success p on each trial, and the number of successes k.</p>
+            <h3>How to use this table</h3>
+            <p>Before looking anything up, identify the three pieces of information in the problem: the number of trials n, the probability of success p on each trial, and the number of successes k the question asks about. Then:</p>
             <ol>
-                <li><strong>Choose n</strong> from the &ldquo;n (trials)&rdquo; dropdown. The table will update and display rows from k = 0 through k = n.</li>
-                <li><strong>Select the appropriate tab:</strong> use P(X = k) for the probability of exactly k successes or P(X ≤ k) for the probability of at most k successes.</li>
-                <li><strong>Choose the p range</strong> with the p ≤ 0.50 or p &gt; 0.50 buttons, then find the column for the probability of success.</li>
-                <li><strong>Find row k.</strong> Its intersection with column p is the requested probability; you can also click the cell to see the value identified.</li>
-                <li><strong>Combine values when needed:</strong> for P(X &gt; k), subtract the cumulative probability from 1; for an interval P(a ≤ X ≤ b), subtract P(X ≤ a − 1) from P(X ≤ b).</li>
+                <li><strong>Choose n</strong> from the "n (trials)" dropdown. The table is rebuilt with rows k = 0, 1, …, n.</li>
+                <li><strong>Choose the tab</strong> that matches the question: <strong>P(X = k)</strong> for "exactly k successes" and <strong>P(X ≤ k)</strong> for "at most k successes".</li>
+                <li><strong>Choose the range of p</strong> with the p ≤ 0.50 and p &gt; 0.50 buttons and find the column for your probability of success.</li>
+                <li><strong>Read the cell</strong> where row k and column p meet. Click it to see it highlighted and drawn in the diagram.</li>
+                <li><strong>Combine values when the question calls for it:</strong> "more than k" is 1 − P(X ≤ k); "at least k" is 1 − P(X ≤ k − 1); "between a and b" is P(X ≤ b) − P(X ≤ a − 1).</li>
             </ol>
-            <p><strong>Example:</strong> for 10 trials with p = 0.30, to find the probability of exactly 4 successes, choose n = 10, open P(X = k), and use the cell where row k = 4 meets column p = 0.30.</p>
 
-            <h3>Binomial Distribution</h3>
-            <p>A binomial experiment consists of n independent trials, each with probability p of success. The number of successes X follows a B(n, p) distribution with probability mass function:</p>
+            <h3>Worked example</h3>
+            <p>A multiple-choice exam has 10 questions and a student answers all of them at random; each question is answered correctly with probability p = 0.30. Choose n = 10 from the dropdown.</p>
+            <ul>
+                <li><strong>Exactly 4 correct:</strong> P(X = k) tab, row k = 4, column p = 0.30 → <strong>0.2001</strong>.</li>
+                <li><strong>At most 4 correct:</strong> P(X ≤ k) tab, same row and column → <strong>0.8497</strong>.</li>
+                <li><strong>At least 5 correct:</strong> 1 − P(X ≤ 4) = 1 − 0.8497 = <strong>0.1503</strong>.</li>
+                <li><strong>Between 2 and 4 correct:</strong> P(X ≤ 4) − P(X ≤ 1) = 0.8497 − 0.1493 = <strong>0.7004</strong>.</li>
+            </ul>
+
+            <h3>What the binomial distribution is</h3>
+            <p>A binomial experiment repeats the same trial n times, with only two possible outcomes (success or failure), independently and with the same probability of success p on every repetition. The total number of successes X follows a B(n, p) distribution with probability mass function:</p>
             <p class="formula-line">\( P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}, \quad k = 0, 1, \ldots, n \)</p>
-            <p>The mean is μ = np and the variance σ² = np(1 − p).</p>
+            <p>The coefficient C(n, k) counts the ways in which the k successes can be spread over the n trials, and p<sup>k</sup>(1 − p)<sup>n−k</sup> is the probability of each of those arrangements. The mean is μ = np and the variance σ² = np(1 − p).</p>
 
             <h3>Useful properties</h3>
             <ul>
-                <li><strong>Symmetry:</strong> P(X = k; n, p) = P(X = n − k; n, 1 − p). Use this for p &gt; 0.5 by looking at the equivalent column with p' = 1 − p.</li>
-                <li><strong>Complement:</strong> P(X &gt; k) = 1 − P(X ≤ k).</li>
+                <li><strong>Symmetry:</strong> P(X = k; n, p) = P(X = n − k; n, 1 − p). For example, 6 successes with p = 0.70 are exactly as likely as 4 successes with p = 0.30: 0.2001.</li>
+                <li><strong>Complement:</strong> P(X &gt; k) = 1 − P(X ≤ k) and P(X ≥ k) = 1 − P(X ≤ k − 1).</li>
                 <li><strong>Interval:</strong> P(a ≤ X ≤ b) = P(X ≤ b) − P(X ≤ a − 1).</li>
-                <li>For large n and small p, the binomial is well approximated by a Poisson distribution with λ = np.</li>
-                <li>For large n, the binomial is well approximated by a Normal distribution N(np, np(1−p)).</li>
+                <li><strong>Poisson approximation:</strong> with large n and small p, B(n, p) ≈ Po(λ = np).</li>
+                <li><strong>Normal approximation:</strong> with large n and p not too close to 0 or 1 (as a rule, np ≥ 5 and n(1 − p) ≥ 5), B(n, p) ≈ N(np, np(1 − p)).</li>
             </ul>
 
             <h3>Related tables and calculators</h3>
@@ -334,15 +350,19 @@
             <ul>
                 <li>
                     <strong>How do you use the binomial distribution table?</strong>
-                    Fix n and p; the row is the number of successes k. Each cell gives P(X = k) or the cumulative P(X ≤ k), depending on the tab selected.
+                    Choose n from the dropdown, the P(X = k) or P(X ≤ k) tab depending on the question, and the column for your p. The row is the number of successes k and the cell is the probability you need.
                 </li>
                 <li>
                     <strong>What is the difference between P(X = k) and P(X ≤ k)?</strong>
-                    P(X = k) is the probability of exactly k successes; P(X ≤ k) is the cumulative one, the sum of the probabilities from 0 up to k.
+                    P(X = k) is the probability of exactly k successes. P(X ≤ k) is the cumulative one: the sum of P(X = 0) up to P(X = k), that is, the probability of at most k successes.
                 </li>
                 <li>
-                    <strong>When should you approximate the binomial table by the normal or the Poisson?</strong>
-                    With large n and moderate p, the binomial is approximated by the normal table; with large n and small p (λ = n·p moderate), by the Poisson table.
+                    <strong>How do I compute "at least k successes" with the table?</strong>
+                    With the complement of the cumulative probability: P(X ≥ k) = 1 − P(X ≤ k − 1). For example, with n = 10 and p = 0.30, P(X ≥ 5) = 1 − P(X ≤ 4) = 1 − 0.8497 = 0.1503.
+                </li>
+                <li>
+                    <strong>When should you approximate the binomial by the Normal or the Poisson?</strong>
+                    With large n and moderate p (np ≥ 5 and n(1 − p) ≥ 5), by the Normal N(np, np(1 − p)). With large n and small p, by the Poisson with mean λ = np.
                 </li>
             </ul>
         </section>

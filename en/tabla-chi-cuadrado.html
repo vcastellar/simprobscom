@@ -133,6 +133,43 @@
         "name": "ProbLab",
         "url": "https://problabtools.com/en/"
       }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do you read the chi-square table?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Find the row of your degrees of freedom ν and the column of the cumulative probability p. The cell is the quantile χ²(p,ν). For a test at level α that rejects in the right tail, use column p = 1 − α."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How are the degrees of freedom calculated?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "In goodness of fit, k − 1 with k categories (minus one for each estimated parameter); in independence, (rows − 1) · (columns − 1); in an interval for the variance, n − 1."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does the table have columns with small p?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Because some problems need the left tail: a confidence interval for the variance uses χ²(α/2, ν) and χ²(1 − α/2, ν), and a two-sided test on σ² rejects in both tails."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What if my degrees of freedom are not in the table?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use the chi-square calculator for the exact value or, if ν is large, the Normal approximation N(ν, 2ν)."
+          }
+        }
+      ]
     }
   ]
 }
@@ -177,7 +214,7 @@
     <header class="hero">
         <p class="eyebrow">Statistical tables</p>
         <h1>Chi-Square Table (Critical Values χ²)</h1>
-        <p class="hero-subtitle">Table of critical values χ²(p,ν), cumulative distribution P(X ≤ x) and density f(x,ν) for any degrees of freedom. Click a cell to see the exact value.</p>
+        <p class="hero-subtitle">Critical values χ²(p,ν), cumulative distribution P(X ≤ x) and density f(x,ν) for the degrees of freedom you choose. Click a cell to see the exact value and the area it represents.</p>
         <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">See all tables</a></p>
     </header>
 
@@ -192,7 +229,7 @@
             <!-- CRITICAL VALUES TAB -->
             <div id="tab-crit" class="tab-content active">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows the quantile χ²(p,ν) such that P(X ≤ χ²) = p. For a goodness-of-fit test at the 5% level with ν = 10 degrees of freedom, look up the column <em>p = 0.950</em> → χ² = 18.307.
+                    <strong>How to read the table:</strong> each row is a number of degrees of freedom ν and each column a cumulative probability p. The cell is the quantile χ²(p,ν) such that P(X ≤ χ²) = p. For a test at level α that rejects in the right tail, use column p = 1 − α. Example: test at 5% with ν = 10 → column <em>p = 0.95</em> → χ² = 18.307.
                 </div>
                 <div id="lookup-crit" class="lookup-result"><span>Click a cell to see the critical value.</span></div>
                 <figure class="dist-diagram" data-dist="chisquare" data-mode="left-val" data-tables="tbl-crit" data-df="5" data-val="11.070" data-p="0.95">
@@ -210,7 +247,7 @@
             <!-- CDF TAB -->
             <div id="tab-cdf" class="tab-content">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows P(X ≤ x) for the selected degrees of freedom. The row gives the integer part of x; the column adds the first decimal (×0.1).
+                    <strong>How to read the table:</strong> choose ν from the dropdown. The row gives the integer part of x and the column the first decimal. The cell is P(X ≤ x), the area to the left of x; for the right tail compute 1 − P(X ≤ x).
                 </div>
                 <div class="df-control">
                     <label for="df-cdf">Degrees of freedom (ν):</label>
@@ -230,7 +267,7 @@
             <!-- PDF TAB -->
             <div id="tab-pdf" class="tab-content">
                 <div class="info-box">
-                    <strong>How to read the table:</strong> each cell shows the density f(x, ν). The χ² distribution is defined for x ≥ 0. As ν increases, the curve becomes more symmetric and shifts to the right.
+                    <strong>How to read the table:</strong> the cell is the height of the curve at x for the chosen degrees of freedom, f(x, ν), not a probability. The distribution only takes values x ≥ 0; with small ν it is strongly skewed and, as ν grows, it shifts to the right and becomes more symmetric.
                 </div>
                 <div class="df-control">
                     <label for="df-pdf">Degrees of freedom (ν):</label>
@@ -249,33 +286,70 @@
         </section>
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
-            <h3>How to use these tables</h3>
-            <h3>Chi-Square Distribution</h3>
-            <p>If Z₁, Z₂, …, Zᵥ are independent standard normal variables, then X = Z₁² + … + Zᵥ² follows a chi-square distribution with ν degrees of freedom. Its density function is:</p>
+            <h3>How to use this table</h3>
+            <p>The three tabs answer different questions:</p>
+            <ul>
+                <li><strong>Critical values χ²(p,ν)</strong>: the classic table. Given a significance level and degrees of freedom, it returns the value that separates the acceptance region from the rejection region.</li>
+                <li><strong>P(X ≤ x)</strong>: given a statistic x, it returns its cumulative probability. Use it to compute p-values.</li>
+                <li><strong>f(x,ν)</strong>: the height of the curve at x, useful for plotting.</li>
+            </ul>
+            <p>To read a critical value:</p>
+            <ol>
+                <li><strong>Work out the degrees of freedom:</strong> k − 1 in a goodness-of-fit test with k categories, (rows − 1) · (columns − 1) in a test of independence, and n − 1 in an interval for the variance.</li>
+                <li><strong>Convert α into p.</strong> Chi-square tests usually reject in the right tail, so the column you need is p = 1 − α (for α = 0.05, p = 0.95). The columns with small p (0.005 to 0.1) give the left-tail quantiles needed in confidence intervals for the variance.</li>
+                <li><strong>Read the cell</strong> where row and column meet. If you click it, the diagram shades the area the critical value leaves in the tail.</li>
+            </ol>
+
+            <h3>Worked example</h3>
+            <p>A die is rolled 60 times to check whether it is fair. There are k = 6 categories, so ν = 5. For a test at 5%, look up row 5 and column p = 0.95: the critical value is <strong>χ² = 11.070</strong>. If the observed statistic exceeds 11.070, the hypothesis that the die is fair is rejected.</p>
+            <p>Suppose the observed statistic is 7.8. In the P(X ≤ x) tab, with ν = 5, the cell in row 7 and column .8 gives P(X ≤ 7.8) = 0.8324, so the p-value is 1 − 0.8324 = 0.1676: not significant at 5%, consistent with 7.8 &lt; 11.070.</p>
+            <p>For a 95% confidence interval for the variance with n = 10 (ν = 9) you need both quantiles from row 9: χ²(0.025, 9) = 2.700 and χ²(0.975, 9) = 19.023.</p>
+
+            <h3>What the chi-square distribution is</h3>
+            <p>If Z₁, Z₂, …, Z<sub>ν</sub> are independent standard Normal variables, the sum of their squares X = Z₁² + … + Z<sub>ν</sub>² follows a chi-square distribution with ν degrees of freedom. That is why it appears whenever squared deviations are added up: in the sample variance and in statistics of the form Σ (observed − expected)² / expected. Its density is:</p>
             <p class="formula-line">\( f(x,\nu) = \dfrac{x^{\nu/2-1}\,e^{-x/2}}{2^{\nu/2}\,\Gamma(\nu/2)}, \quad x \geq 0 \)</p>
-            <p>The mean is ν and the variance is 2ν.</p>
+            <p>It only takes positive values, has mean ν and variance 2ν, and is skewed to the right. As ν grows it becomes more symmetric and approaches a Normal N(ν, 2ν).</p>
 
             <h3>Critical values table</h3>
-            <p>Shows the quantiles χ²(p, ν) such that P(X ≤ χ²) = p. For a test at significance level α (right tail) with ν degrees of freedom, use the column p = 1 − α.</p>
+            <p>Each cell is the quantile χ²(p, ν) such that P(X ≤ χ²) = p. For a test at level α that rejects in the right tail, use column p = 1 − α.</p>
             <ul>
-                <li><strong>Example:</strong> test at 5%, ν = 5 → p = 0.95 → χ² = 11.070.</li>
-                <li>Columns with p &lt; 0.5 correspond to the left tail (small values of χ²).</li>
+                <li><strong>Example:</strong> test at 5% with ν = 5 → p = 0.95 → χ² = 11.070.</li>
+                <li>Columns with p &lt; 0.5 correspond to the left tail (small values of χ²) and are used in confidence intervals for σ² and in two-sided tests on the variance.</li>
             </ul>
 
-            <h3>Main uses</h3>
+            <h3>What it is used for</h3>
             <ul>
-                <li>Goodness-of-fit test</li>
-                <li>Test of independence in contingency tables</li>
-                <li>Variance estimation and confidence intervals for σ²</li>
-                <li>Homogeneity tests</li>
+                <li><strong>Goodness of fit:</strong> checking whether observed frequencies match a theoretical distribution.</li>
+                <li><strong>Independence and homogeneity:</strong> testing whether two categorical variables are related in a contingency table.</li>
+                <li><strong>Variance of a Normal population:</strong> tests and confidence intervals for σ².</li>
             </ul>
 
-            <h3>Related calculators</h3>
+            <h3>Related tables and calculators</h3>
             <ul class="distribution-links">
                 <li><a href="chisquare.html">Chi-Square Calculator</a></li>
                 <li><a href="tabla-t-student.html">Student's t Table</a></li>
                 <li><a href="tabla-f-snedecor.html">F Snedecor Table</a></li>
                 <li><a href="tabla-normal.html">Standard Normal Table</a></li>
+            </ul>
+
+            <h3>Frequently asked questions</h3>
+            <ul>
+                <li>
+                    <strong>How do you read the chi-square table?</strong>
+                    Find the row of your degrees of freedom ν and the column of the cumulative probability p. The cell is the quantile χ²(p,ν). For a test at level α that rejects in the right tail, use column p = 1 − α.
+                </li>
+                <li>
+                    <strong>How are the degrees of freedom calculated?</strong>
+                    In goodness of fit, k − 1 with k categories (minus one for each estimated parameter); in independence, (rows − 1) · (columns − 1); in an interval for the variance, n − 1.
+                </li>
+                <li>
+                    <strong>Why does the table have columns with small p?</strong>
+                    Because some problems need the left tail: a confidence interval for the variance uses χ²(α/2, ν) and χ²(1 − α/2, ν), and a two-sided test on σ² rejects in both tails.
+                </li>
+                <li>
+                    <strong>What if my degrees of freedom are not in the table?</strong>
+                    Use the chi-square calculator for the exact value or, if ν is large, the Normal approximation N(ν, 2ν).
+                </li>
             </ul>
         </section>
     </main>
