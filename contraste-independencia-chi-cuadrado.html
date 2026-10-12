@@ -2,32 +2,32 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Calculadora de chi-cuadrado de independencia | ProbLab</title>
+    <title>Chi-cuadrado de independencia: tablas de contingencia | ProbLab</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Contraste chi-cuadrado de independencia para analizar si dos variables categóricas están asociadas.">
-    <meta name="keywords" content="test independencia chi cuadrado, prueba independencia chi-cuadrado, chi cuadrado independencia calculadora, tabla de contingencia chi cuadrado, asociación entre variables categóricas, ProbLab, estadística online, calculadora estadística">
+    <meta name="description" content="Test chi-cuadrado de independencia para tablas de contingencia r×c: introduce los recuentos y obtén χ², p-valor, frecuencias esperadas, residuos y V de Cramér.">
+    <meta name="keywords" content="test independencia chi cuadrado, prueba independencia chi-cuadrado, chi cuadrado independencia calculadora, tabla de contingencia chi cuadrado, tabla de doble entrada, asociación entre variables categóricas, V de Cramér, residuos ajustados, ProbLab, estadística online, calculadora estadística">
     <link rel="canonical" href="https://problabtools.com/contraste-independencia-chi-cuadrado.html">
     <link rel="alternate" hreflang="es" href="https://problabtools.com/contraste-independencia-chi-cuadrado.html">
     <link rel="alternate" hreflang="en" href="https://problabtools.com/en/contraste-independencia-chi-cuadrado.html">
     <link rel="alternate" hreflang="x-default" href="https://problabtools.com/contraste-independencia-chi-cuadrado.html">
 
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Calculadora de chi-cuadrado de independencia | ProbLab">
-    <meta property="og:description" content="Contraste chi-cuadrado de independencia para analizar si dos variables categóricas están asociadas.">
+    <meta property="og:title" content="Chi-cuadrado de independencia: tablas de contingencia | ProbLab">
+    <meta property="og:description" content="Test chi-cuadrado de independencia para tablas de contingencia r×c: introduce los recuentos y obtén χ², p-valor, frecuencias esperadas, residuos y V de Cramér.">
     <meta property="og:url" content="https://problabtools.com/contraste-independencia-chi-cuadrado.html">
     <meta property="og:site_name" content="ProbLab">
     <meta property="og:image" content="https://problabtools.com/og-image.png">
     <meta property="og:locale" content="es_ES">
-    <meta property="og:image:alt" content="Calculadora de chi-cuadrado de independencia">
+    <meta property="og:image:alt" content="Calculadora de chi-cuadrado de independencia para tablas de contingencia">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="author" content="Vicente Castellar">
     <meta name="theme-color" content="#4f46e5">
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Calculadora de chi-cuadrado de independencia | ProbLab">
-    <meta name="twitter:description" content="Contraste chi-cuadrado de independencia para analizar si dos variables categóricas están asociadas.">
+    <meta name="twitter:title" content="Chi-cuadrado de independencia: tablas de contingencia | ProbLab">
+    <meta name="twitter:description" content="Test chi-cuadrado de independencia para tablas de contingencia r×c: introduce los recuentos y obtén χ², p-valor, frecuencias esperadas, residuos y V de Cramér.">
     <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-    <meta name="twitter:image:alt" content="Calculadora de chi-cuadrado de independencia">
+    <meta name="twitter:image:alt" content="Calculadora de chi-cuadrado de independencia para tablas de contingencia">
 
     <script type="application/ld+json">
     {
@@ -49,12 +49,142 @@
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web",
       "url": "https://problabtools.com/contraste-independencia-chi-cuadrado.html",
-      "description": "Herramienta para contrastar independencia entre variables categóricas a partir de una tabla de contingencia.",
+      "description": "Contraste chi-cuadrado de independencia para tablas de contingencia r×c: frecuencias esperadas, estadístico χ², p-valor, residuos ajustados y V de Cramér.",
       "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}
     }
     </script>
 
     <link rel="stylesheet" href="style_new.css?v=20260730-1">
+    <style>
+        .ct-wrap {
+            overflow-x: auto;
+            margin: 2px 0 10px;
+        }
+        .ct-grid {
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.92rem;
+            font-variant-numeric: tabular-nums;
+        }
+        .ct-grid th,
+        .ct-grid td {
+            padding: 6px;
+            text-align: center;
+            vertical-align: middle;
+            border-bottom: 1px solid rgba(79, 70, 229, 0.14);
+            border-right: 1px solid rgba(79, 70, 229, 0.10);
+        }
+        .ct-grid thead th,
+        .ct-grid tbody th {
+            background: rgba(79, 70, 229, 0.07);
+        }
+        .ct-grid .ct-corner {
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        .ct-grid .ct-total {
+            min-width: 64px;
+            font-weight: 700;
+            color: #1e1b4b;
+            background: rgba(15, 23, 42, 0.04);
+        }
+        .ct-grid input {
+            width: 84px;
+            padding: 7px 8px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.92rem;
+        }
+        .ct-grid input.ct-label {
+            width: 116px;
+            font-weight: 600;
+        }
+        .ct-grid input[aria-invalid="true"] {
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.18);
+        }
+        .ct-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .ct-action-btn {
+            border: 1px solid rgba(79, 70, 229, 0.28);
+            background: rgba(79, 70, 229, 0.06);
+            color: #3730a3;
+            border-radius: 10px;
+            padding: 7px 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .ct-action-btn:hover {
+            background: rgba(79, 70, 229, 0.12);
+        }
+        .ct-notice {
+            margin: 8px 0 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .ct-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0;
+        }
+        .ct-check input {
+            width: auto;
+            margin: 0;
+        }
+        .result-box td.ct-pos {
+            background: rgba(37, 99, 235, 0.16);
+            font-weight: 700;
+        }
+        .result-box td.ct-neg {
+            background: rgba(220, 38, 38, 0.14);
+            font-weight: 700;
+        }
+        .result-box .ct-warn {
+            color: #b45309;
+        }
+        .chart-caption {
+            margin-top: 0.75rem;
+            font-size: 0.88rem;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+        html.dark-mode .ct-grid th,
+        html.dark-mode .ct-grid td {
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+        html.dark-mode .ct-grid thead th,
+        html.dark-mode .ct-grid tbody th {
+            background: rgba(99, 102, 241, 0.12);
+        }
+        html.dark-mode .ct-grid .ct-total {
+            color: #e2e8f0;
+            background: rgba(255, 255, 255, 0.04);
+        }
+        html.dark-mode .ct-action-btn {
+            background: rgba(99, 102, 241, 0.18);
+            border-color: rgba(99, 102, 241, 0.40);
+            color: #a5b4fc;
+        }
+        html.dark-mode .result-box td.ct-pos {
+            background: rgba(59, 130, 246, 0.25);
+        }
+        html.dark-mode .result-box td.ct-neg {
+            background: rgba(239, 68, 68, 0.22);
+        }
+        html.dark-mode .result-box .ct-warn {
+            color: #fbbf24;
+        }
+        html.dark-mode .chart-caption {
+            color: #94a3b8;
+        }
+    </style>
 
     <script type="application/ld+json">
 {
@@ -66,7 +196,15 @@
       "name": "¿Cuándo se usa el contraste chi-cuadrado de independencia?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Cuando se quiere saber si dos variables categóricas están asociadas a partir\n                    de los recuentos de una tabla de contingencia."
+        "text": "Cuando se quiere saber si dos variables categóricas están asociadas a partir de los recuentos de una tabla de contingencia (tabla de doble entrada) con r categorías en filas y c categorías en columnas."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo introduzco la tabla de contingencia en la calculadora?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Elige el número de categorías de filas y de columnas (de 2 a 8), escribe sus nombres en las cabeceras y el número de observaciones de cada celda. También puedes copiar un bloque de recuentos de una hoja de cálculo y pegarlo en cualquier celda: la tabla se amplía automáticamente."
       }
     },
     {
@@ -74,7 +212,7 @@
       "name": "¿Cuántos grados de libertad tiene el estadístico?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Los grados de libertad son \\((r-1)(c-1)\\), donde \\(r\\) es el número de\n                    filas y \\(c\\) el número de columnas de la tabla."
+        "text": "Los grados de libertad son (r−1)(c−1), donde r es el número de filas y c el número de columnas de la tabla. Una tabla 2×2 tiene 1 grado de libertad y una 3×4 tiene 6."
       }
     },
     {
@@ -82,7 +220,23 @@
       "name": "¿Qué condición deben cumplir las frecuencias esperadas?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "La aproximación es adecuada cuando la mayoría de las frecuencias esperadas\n                    son ≥ 5. Si hay celdas con frecuencias esperadas muy bajas, conviene usar\n                    el test exacto de Fisher o agrupar categorías."
+        "text": "Según la regla de Cochran, la aproximación es adecuada cuando no más del 20 % de las celdas tienen una frecuencia esperada menor que 5 y ninguna es menor que 1. Si no se cumple, conviene agrupar categorías o, en tablas 2×2, usar el test exacto de Fisher."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cuándo debo aplicar la corrección de Yates?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Solo tiene sentido en tablas 2×2. Resta 0,5 a cada diferencia |O − E| para compensar que los recuentos son discretos y hace el contraste más conservador. Con muestras grandes apenas cambia el resultado; con muestras pequeñas es preferible el test exacto de Fisher."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué son los residuos estandarizados ajustados?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Miden, celda a celda, cuánto se aleja el recuento observado del esperado en unidades de error típico. Bajo independencia siguen aproximadamente una normal estándar, así que valores con |r| > 1,96 señalan las celdas donde se concentra la asociación: positivos si hay más casos de los esperados y negativos si hay menos."
       }
     },
     {
@@ -90,7 +244,7 @@
       "name": "¿Qué diferencia hay con el chi-cuadrado de bondad de ajuste?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "El de bondad de ajuste contrasta si una variable sigue una distribución\n                    teórica concreta. El de independencia contrasta si dos variables están\n                    asociadas entre sí, sin asumir ninguna distribución específica."
+        "text": "El de bondad de ajuste contrasta si una variable sigue una distribución teórica concreta. El de independencia contrasta si dos variables están asociadas entre sí, sin asumir ninguna distribución específica."
       }
     },
     {
@@ -98,7 +252,7 @@
       "name": "¿Puede haber asociación sin causalidad?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Sí. El contraste detecta asociación estadística, pero no permite concluir\n                    que una variable causa la otra. La causalidad requiere diseño experimental\n                    o argumentación adicional."
+        "text": "Sí. El contraste detecta asociación estadística, pero no permite concluir que una variable causa la otra. La causalidad requiere diseño experimental o argumentación adicional."
       }
     },
     {
@@ -106,7 +260,7 @@
       "name": "¿Cómo afecta el tamaño muestral al resultado?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Con muestras muy grandes, el contraste puede detectar asociaciones muy\n                    pequeñas que no son relevantes en la práctica. En esos casos conviene\n                    complementar el p-valor con una medida de tamaño del efecto como la V\n                    de Cramér."
+        "text": "Con muestras muy grandes, el contraste puede detectar asociaciones muy pequeñas que no son relevantes en la práctica. En esos casos conviene complementar el p-valor con una medida de tamaño del efecto como la V de Cramér."
       }
     },
     {
@@ -162,8 +316,8 @@
     </nav>
     <header class="hero">
         <p class="eyebrow">Contrastes de hipótesis</p>
-        <h1>Calculadora de chi-cuadrado de independencia</h1>
-        <p class="hero-subtitle">Evalúa si dos variables categóricas son independientes.</p>
+        <h1>Calculadora de chi-cuadrado de independencia (tablas de contingencia)</h1>
+        <p class="hero-subtitle">Introduce los recuentos de una tabla de doble entrada r × c y comprueba si las dos variables categóricas son independientes.</p>
         <p class="hero-links"><a class="hero-link-button" href="contrastes-hipotesis/">Ver todos los contrastes</a></p>
     </header>
 
@@ -172,16 +326,50 @@
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculadora</h2>
-                <p>Introduce la tabla de contingencia (filas separadas por saltos de línea y columnas por comas o espacios).</p>
+                <p>Elige cuántas categorías tiene cada variable, escribe sus nombres y el número de observaciones de cada celda. Los totales marginales se actualizan al escribir.</p>
             </div>
 
             <div class="form-grid sample-grid">
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="numRows">Categorías en filas (r) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                        <select id="numRows">
+                            <option value="2">2</option>
+                            <option value="3" selected>3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                        </select>
+                        <p class="field-hint" hidden>Número de categorías de la variable que colocas en las filas (por ejemplo, el canal de compra: tienda física, web y app).</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="numCols">Categorías en columnas (c) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                        <select id="numCols">
+                            <option value="2">2</option>
+                            <option value="3" selected>3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                        </select>
+                        <p class="field-hint" hidden>Número de categorías de la variable que colocas en las columnas (por ejemplo, el nivel de satisfacción: alta, media y baja). Qué variable va en filas y cuál en columnas no cambia el resultado del contraste.</p>
+                    </div>
+                </div>
+
                 <div class="form-group">
-                    <label for="tableInput">Tabla observada <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                    <textarea id="tableInput" rows="6">40, 10, 15
-30, 25, 20
-20, 15, 25</textarea>
-                    <p class="field-hint" hidden>Tabla de contingencia con los recuentos observados: cada fila en una línea, columnas separadas por comas o espacios.</p>
+                    <label id="ctGridLabel">Tabla de contingencia observada <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                    <p class="field-hint" hidden>Cada celda es el número de observaciones que pertenecen a la vez a la categoría de su fila y a la de su columna (enteros no negativos). Puedes renombrar las categorías en las cabeceras y pegar en cualquier celda un bloque copiado de una hoja de cálculo; si incluye los nombres de filas y columnas, también se cargan.</p>
+                    <div class="ct-wrap">
+                        <table class="ct-grid" id="ctGrid" aria-labelledby="ctGridLabel"></table>
+                    </div>
+                    <div class="ct-actions">
+                        <button type="button" class="ct-action-btn" id="ctExampleBtn">Cargar ejemplo</button>
+                        <button type="button" class="ct-action-btn" id="ctClearBtn">Vaciar recuentos</button>
+                    </div>
+                    <p class="ct-notice" id="ctNotice" aria-live="polite"></p>
                 </div>
 
                 <div class="inline-inputs">
@@ -190,15 +378,41 @@
                         <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
                         <p class="field-hint" hidden>Riesgo de concluir que las variables están asociadas (rechazar H₀) cuando en realidad son independientes. El valor habitual es <strong>0,05</strong>.</p>
                     </div>
+                    <div class="form-group">
+                        <label class="ct-check" for="yates">
+                            <input type="checkbox" id="yates">
+                            Corrección de Yates (solo 2×2)
+                            <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button>
+                        </label>
+                        <p class="field-hint" hidden>Corrección por continuidad para tablas 2×2: resta 0,5 a cada |O − E| antes de elevar al cuadrado. Hace el contraste más conservador; en tablas mayores se ignora.</p>
+                    </div>
                 </div>
             </div>
 
             <button class="calculate-btn" id="calcChiBtn">Calcular contraste</button>
             <div id="chiResult" class="result-box">Resultado pendiente…</div>
             <div id="expectedTable" class="result-box" style="margin-top:12px;">Frecuencias esperadas pendientes…</div>
+            <div id="residualTable" class="result-box" style="margin-top:12px;">Residuos pendientes…</div>
             <div class="chart-wrap">
                 <canvas id="chiIndependenceChart" aria-label="Gráfico de zonas de aceptación y rechazo para el contraste chi-cuadrado de independencia" role="img"></canvas>
             </div>
+            <p class="chart-caption">
+                Distribución \(\chi^2\) con \((r-1)(c-1)\) grados de libertad bajo \(H_0\). La zona
+                <span style="color:#16a34a;font-weight:600">verde</span> es la región de no rechazo y la
+                <span style="color:#dc2626;font-weight:600">roja</span> la región crítica (cola derecha, de área \(\alpha\));
+                la línea <span style="color:#d97706;font-weight:600">ámbar</span> marca el estadístico observado.
+                Si cae en la zona roja, se rechaza la independencia.
+            </p>
+            <div class="chart-wrap">
+                <canvas id="profileChart" aria-label="Gráfico de barras apiladas con la distribución porcentual de las columnas dentro de cada fila" role="img"></canvas>
+            </div>
+            <p class="chart-caption">
+                Perfiles fila: cada barra reparte el 100 % de una fila entre las categorías de las columnas, y la
+                barra «Total» muestra el reparto global. Si las variables fueran independientes, todas las barras
+                se parecerían a la barra «Total»; cuanto más difieren, más fuerte es la asociación. Los porcentajes
+                exactos están en la tabla de abajo.
+            </p>
+            <div id="profileTable" class="result-box" style="margin-top:12px;">Porcentajes por fila pendientes…</div>
         </section>
 
         <section class="card content-card">
@@ -213,6 +427,15 @@
             </p>
 
             <p>
+                Una <strong>tabla de contingencia</strong> (o tabla de doble entrada) cruza las
+                categorías de dos variables: las \(r\) categorías de una variable se colocan en las
+                filas y las \(c\) categorías de la otra en las columnas. Cada celda contiene el
+                número de observaciones \(O_{ij}\) que pertenecen a la vez a la categoría \(i\) de la
+                fila y a la categoría \(j\) de la columna, y los márgenes recogen los totales de cada
+                fila, de cada columna y el total general \(n\).
+            </p>
+
+            <p>
                 La idea central es comparar lo que se ha observado con lo que se esperaría si las
                 variables fueran realmente independientes. Si las diferencias entre frecuencias
                 observadas y esperadas son demasiado grandes para atribuirlas al azar, se rechaza
@@ -222,7 +445,7 @@
             <p>
                 Por ejemplo, una empresa quiere saber si la satisfacción de sus clientes (alta,
                 media, baja) depende del canal de compra (tienda física, web, app). Recoge datos
-                de una muestra y construye una tabla de contingencia. Si el contraste resulta
+                de una muestra y construye una tabla de contingencia 3 × 3. Si el contraste resulta
                 significativo, hay evidencia de que el canal y la satisfacción están asociados;
                 si no lo es, los datos son compatibles con que ambas variables son independientes.
             </p>
@@ -242,8 +465,6 @@
                 con \(E_{ij} = \frac{n_{i\cdot} \cdot n_{\cdot j}}{n}\)
             </p>
         </section>
-
-
 
         <section class="card content-card">
             <h3>Contraste rápido</h3>
@@ -271,7 +492,30 @@
 
             <p>
                 donde \(n_{i\cdot}\) es el total de la fila \(i\), \(n_{\cdot j}\) es el total
-                de la columna \(j\) y \(n\) es el total general de la tabla.
+                de la columna \(j\) y \(n\) es el total general de la tabla. Se rechaza \(H_0\)
+                cuando \(\chi^2 > \chi^2_{\alpha,\,(r-1)(c-1)}\) o, de forma equivalente, cuando el
+                p-valor \(P\big(\chi^2_{(r-1)(c-1)} \geq \chi^2_{\text{obs}}\big)\) es menor que \(\alpha\).
+            </p>
+
+            <p>
+                Para localizar la asociación, la calculadora muestra los <strong>residuos
+                estandarizados ajustados</strong> de cada celda, que bajo \(H_0\) siguen
+                aproximadamente una normal estándar:
+            </p>
+
+            <p class="formula-line">
+                \(r_{ij} = \dfrac{O_{ij}-E_{ij}}{\sqrt{E_{ij}\left(1-\frac{n_{i\cdot}}{n}\right)\left(1-\frac{n_{\cdot j}}{n}\right)}}\)
+            </p>
+
+            <p>
+                La fuerza de la asociación se resume con la <strong>V de Cramér</strong>, que va de 0
+                (independencia) a 1 (asociación perfecta). En tablas 2×2 se puede aplicar además la
+                <strong>corrección de continuidad de Yates</strong>:
+            </p>
+
+            <p class="formula-line">
+                \(V = \sqrt{\dfrac{\chi^2}{n\,(\min(r,c)-1)}}\), &nbsp;&nbsp;
+                \(\chi^2_{\text{Yates}} = \sum_{i,j}\dfrac{\big(|O_{ij}-E_{ij}|-0{,}5\big)^2}{E_{ij}}\)
             </p>
 
             <p>
@@ -284,13 +528,43 @@
 
         <section class="card content-card">
             <h3>Ejemplo resuelto</h3>
-            <p>Se estudia la posible relación entre el hábito tabáquico y la enfermedad pulmonar en una muestra de 200 personas. La tabla de contingencia observada es:</p>
-            <p>No fumadores: con enfermedad = 10, sin enfermedad = 90 (total 100). Fumadores: con enfermedad = 25, sin enfermedad = 75 (total 100). Total general: con enfermedad = 35, sin enfermedad = 165, \(N = 200\).</p>
-            <p>Las frecuencias esperadas bajo independencia se calculan como \(E_{ij} = (\text{total fila}_i \times \text{total columna}_j) / N\). Por ejemplo, para no fumadores con enfermedad: \(E_{11} = 100 \cdot 35 / 200 = 17{,}5\). Para fumadores con enfermedad: \(E_{21} = 100 \cdot 35 / 200 = 17{,}5\). Para no fumadores sin enfermedad: \(E_{12} = 100 \cdot 165 / 200 = 82{,}5\). Para fumadores sin enfermedad: \(E_{22} = 82{,}5\).</p>
-            <p>El estadístico chi-cuadrado acumula las discrepancias entre frecuencias observadas y esperadas:</p>
-            <p class="formula-line">\( \chi^2 = \sum \dfrac{(O_{ij}-E_{ij})^2}{E_{ij}} = \dfrac{(10-17{,}5)^2}{17{,}5}+\dfrac{(90-82{,}5)^2}{82{,}5}+\dfrac{(25-17{,}5)^2}{17{,}5}+\dfrac{(75-82{,}5)^2}{82{,}5} \approx 7{,}79 \)</p>
-            <p>Los grados de libertad son \(gl = (2-1)(2-1) = 1\). El valor crítico para \(\alpha = 0{,}05\) es \(\chi^2_{0{,}05,\,1} \approx 3{,}84\). Como \(7{,}79 > 3{,}84\), se rechaza \(H_0\). El p-valor es \(p \approx 0{,}0052 < 0{,}05\).</p>
-            <p>Conclusión: <strong>se rechaza la independencia</strong>. Existe una asociación estadísticamente significativa entre el hábito tabáquico y la presencia de enfermedad pulmonar: los fumadores presentan una proporción de enfermos claramente superior a la esperada bajo independencia.</p>
+            <p>Una empresa quiere saber si la satisfacción de sus clientes depende del canal por el que compran. Encuesta a 200 clientes y obtiene la siguiente tabla de contingencia 3 × 3 (es la tabla que carga por defecto la calculadora):</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr>
+                            <th>Canal \ Satisfacción</th>
+                            <th>Alta</th>
+                            <th>Media</th>
+                            <th>Baja</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><th>Tienda física</th><td>40</td><td>10</td><td>15</td><td>65</td></tr>
+                        <tr><th>Web</th><td>30</td><td>25</td><td>20</td><td>75</td></tr>
+                        <tr><th>App</th><td>20</td><td>15</td><td>25</td><td>60</td></tr>
+                        <tr><th>Total</th><td>90</td><td>50</td><td>60</td><td>200</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p><strong>1. Frecuencias esperadas.</strong> Bajo independencia, \(E_{ij} = n_{i\cdot}\,n_{\cdot j}/n\). Por ejemplo, para tienda física y satisfacción alta: \(E_{11} = 65 \cdot 90 / 200 = 29{,}25\). Repitiendo el cálculo, las esperadas son 29,25; 16,25; 19,50 (tienda física), 33,75; 18,75; 22,50 (web) y 27,00; 15,00; 18,00 (app). Todas son mayores que 5, así que la aproximación chi-cuadrado es adecuada.</p>
+            <p><strong>2. Estadístico.</strong> Se suman las nueve contribuciones \((O_{ij}-E_{ij})^2/E_{ij}\):</p>
+            <p class="formula-line">\( \chi^2 = \dfrac{(40-29{,}25)^2}{29{,}25} + \dfrac{(10-16{,}25)^2}{16{,}25} + \cdots + \dfrac{(25-18)^2}{18} = 3{,}951 + 2{,}404 + 1{,}038 + 0{,}417 + 2{,}083 + 0{,}278 + 1{,}815 + 0 + 2{,}722 \approx 14{,}71 \)</p>
+            <p><strong>3. Decisión.</strong> Los grados de libertad son \(gl = (3-1)(3-1) = 4\) y el valor crítico para \(\alpha = 0{,}05\) es \(\chi^2_{0{,}05;\,4} \approx 9{,}488\). Como \(14{,}71 > 9{,}488\), se rechaza \(H_0\); el p-valor es \(p \approx 0{,}0053\).</p>
+            <p><strong>4. Tamaño del efecto.</strong> \(V = \sqrt{14{,}71 / (200 \cdot 2)} \approx 0{,}19\). Como \(\min(r,c)-1 = 2\), equivale a una \(w\) de Cohen de \(0{,}19\cdot\sqrt{2} \approx 0{,}27\): una asociación pequeña, cercana al umbral de 0,3 de un efecto mediano.</p>
+            <p><strong>5. ¿Dónde está la asociación?</strong> Los residuos ajustados con \(|r_{ij}| > 1{,}96\) son: tienda física–alta \((+3{,}26)\), app–baja \((+2{,}36)\), web–media \((+2{,}11)\), tienda física–media \((-2{,}18)\) y app–alta \((-2{,}17)\). En tienda física el 61,5 % de los clientes está muy satisfecho, frente al 45 % global, mientras que en la app el 41,7 % declara satisfacción baja, frente al 30 % global.</p>
+            <p>Conclusión: <strong>se rechaza la independencia</strong>. La satisfacción depende del canal de compra: la tienda física concentra más clientes muy satisfechos y la app más clientes insatisfechos de lo que cabría esperar si ambas variables fueran independientes.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Supuestos y condiciones de aplicación</h3>
+            <ul>
+                <li><strong>Observaciones independientes:</strong> cada individuo aporta una sola observación y aparece en una única celda. Si los datos están emparejados (antes/después en los mismos sujetos), usa el <a href="contraste-hipotesis-proporciones-apareadas.html">test de McNemar</a>.</li>
+                <li><strong>Recuentos, no porcentajes:</strong> las celdas deben contener frecuencias absolutas. Introducir porcentajes o medias invalida el estadístico, porque el contraste depende del tamaño muestral real.</li>
+                <li><strong>Categorías exhaustivas y mutuamente excluyentes</strong> en cada variable.</li>
+                <li><strong>Frecuencias esperadas suficientes (regla de Cochran):</strong> no más del 20 % de las celdas con \(E_{ij} &lt; 5\) y ninguna con \(E_{ij} &lt; 1\). La calculadora lo comprueba y avisa si no se cumple; en ese caso agrupa categorías poco frecuentes o, en tablas 2×2, usa el <a href="test-exacto-fisher.html">test exacto de Fisher</a>.</li>
+            </ul>
         </section>
 
         <section class="card content-card">
@@ -302,37 +576,44 @@
                 es decir, que la distribución de una cambia en función de la categoría de la otra.
                 Sin embargo, el test chi-cuadrado no informa ni de la <em>dirección</em> ni de la
                 <em>magnitud</em> de la asociación: solo detecta su existencia. Para cuantificar
-                la fuerza, calcula la <strong>V de Cramér</strong>
+                la fuerza, usa la <strong>V de Cramér</strong>
                 \(V = \sqrt{\chi^2 / (n \cdot \min(r-1, c-1))}\), que varía entre 0 (independencia)
-                y 1 (asociación perfecta). Valores de \(V\) alrededor de 0,1, 0,3 y 0,5 se
-                interpretan habitualmente como asociación débil, moderada y fuerte, respectivamente.
+                y 1 (asociación perfecta). En tablas con dos filas o dos columnas, valores de \(V\)
+                alrededor de 0,1, 0,3 y 0,5 se interpretan habitualmente como asociación pequeña,
+                mediana y grande; en tablas mayores esos umbrales se dividen por
+                \(\sqrt{\min(r,c)-1}\), que es lo mismo que comparar con 0,1, 0,3 y 0,5 la
+                \(w\) de Cohen \(= V\sqrt{\min(r,c)-1}\). La calculadora clasifica el efecto con este criterio.
                 </p>
 
                 <p>
                 <strong>No rechazar \(H_0\)</strong> (p-valor ≥ \(\alpha\)) no demuestra independencia;
                 solo indica que los datos son compatibles con ella al nivel elegido. Con tablas grandes
-                o celdas con frecuencias esperadas pequeñas la potencia puede ser insuficiente.
-                Verifica que ninguna frecuencia esperada \(E_{ij} = n \cdot p_{i\cdot} \cdot p_{\cdot j}\)
-                sea inferior a 5; si alguna lo es, considera fusionar categorías o usar el test exacto
-                de Fisher (para tablas 2×2).
+                o celdas con frecuencias esperadas pequeñas la potencia puede ser insuficiente; puedes
+                planificar el tamaño necesario con la
+                <a href="tamano-muestral-chi-cuadrado-independencia.html">calculadora de tamaño muestral
+                para chi-cuadrado de independencia</a>.
                 </p>
 
                 <p>
-                El <strong>estadístico chi-cuadrado</strong> se calcula sumando las discrepancias
-                cuadráticas ponderadas de todas las celdas: \(\chi^2 = \sum_{ij}(O_{ij}-E_{ij})^2/E_{ij}\).
-                Las celdas con residuos estandarizados \((O_{ij}-E_{ij})/\sqrt{E_{ij}}\) en valor
-                absoluto superiores a 2 son las que más contribuyen y señalan dónde se concentra la
-                asociación. En la visualización, la zona verde es la región de no rechazo y la zona
-                roja es la cola crítica derecha; la línea ámbar muestra el estadístico observado.
+                Para saber <strong>dónde</strong> está la asociación, revisa los <strong>residuos
+                estandarizados ajustados</strong>: las celdas resaltadas (\(|r_{ij}| &gt; 1{,}96\)) tienen
+                más casos de los esperados si el residuo es positivo y menos si es negativo. Como se
+                examinan muchas celdas a la vez, en tablas grandes conviene ser más exigente (por
+                ejemplo, \(|r_{ij}| &gt; 3\) o un umbral corregido por Bonferroni). El gráfico de
+                <strong>perfiles fila</strong> muestra lo mismo de forma visual: compara el reparto
+                porcentual de cada fila con la barra «Total».
                 </p>
         </section>
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>
                 <ul>
-                    <li><a href="chisquare.html">Distribución chi-cuadrado</a></li>
+                    <li><a href="test-exacto-fisher.html">Test exacto de Fisher (2×2)</a></li>
                     <li><a href="chi-cuadrado-bondad-ajuste.html">Chi-cuadrado de bondad de ajuste</a></li>
-                    <li><a href="test-exacto-fisher.html">Test exacto de Fisher</a></li>
+                    <li><a href="tamano-muestral-chi-cuadrado-independencia.html">Tamaño muestral para chi-cuadrado de independencia</a></li>
+                    <li><a href="contraste-hipotesis-proporciones-apareadas.html">Proporciones apareadas (McNemar)</a></li>
+                    <li><a href="chisquare.html">Distribución chi-cuadrado</a></li>
+                    <li><a href="tabla-chi-cuadrado.html">Tabla chi-cuadrado</a></li>
                     <li><a href="contrastes-hipotesis/">Contrastes de hipótesis</a></li>
                 </ul>
             </section>
@@ -343,24 +624,49 @@
                 <li>
                     <strong>¿Cuándo se usa el contraste chi-cuadrado de independencia?</strong>
                     Cuando se quiere saber si dos variables categóricas están asociadas a partir
-                    de los recuentos de una tabla de contingencia.
+                    de los recuentos de una tabla de contingencia (tabla de doble entrada) con
+                    \(r\) categorías en filas y \(c\) categorías en columnas.
+                </li>
+                <li>
+                    <strong>¿Cómo introduzco la tabla de contingencia en la calculadora?</strong>
+                    Elige el número de categorías de filas y de columnas (de 2 a 8), escribe sus
+                    nombres en las cabeceras y el número de observaciones de cada celda. También
+                    puedes copiar un bloque de recuentos de una hoja de cálculo y pegarlo en
+                    cualquier celda: la tabla se amplía automáticamente.
                 </li>
                 <li>
                     <strong>¿Cuántos grados de libertad tiene el estadístico?</strong>
                     Los grados de libertad son \((r-1)(c-1)\), donde \(r\) es el número de
-                    filas y \(c\) el número de columnas de la tabla.
+                    filas y \(c\) el número de columnas de la tabla. Una tabla 2×2 tiene 1 grado
+                    de libertad y una 3×4 tiene 6.
                 </li>
                 <li>
                     <strong>¿Qué condición deben cumplir las frecuencias esperadas?</strong>
-                    La aproximación es adecuada cuando la mayoría de las frecuencias esperadas
-                    son ≥ 5. Si hay celdas con frecuencias esperadas muy bajas, conviene usar
-                    el <a href="test-exacto-fisher.html">test exacto de Fisher</a> o agrupar categorías.
+                    Según la regla de Cochran, la aproximación es adecuada cuando no más del 20 %
+                    de las celdas tienen una frecuencia esperada menor que 5 y ninguna es menor
+                    que 1. Si no se cumple, conviene agrupar categorías o, en tablas 2×2, usar el
+                    <a href="test-exacto-fisher.html">test exacto de Fisher</a>.
+                </li>
+                <li>
+                    <strong>¿Cuándo debo aplicar la corrección de Yates?</strong>
+                    Solo tiene sentido en tablas 2×2. Resta 0,5 a cada diferencia \(|O-E|\) para
+                    compensar que los recuentos son discretos y hace el contraste más conservador.
+                    Con muestras grandes apenas cambia el resultado; con muestras pequeñas es
+                    preferible el test exacto de Fisher.
+                </li>
+                <li>
+                    <strong>¿Qué son los residuos estandarizados ajustados?</strong>
+                    Miden, celda a celda, cuánto se aleja el recuento observado del esperado en
+                    unidades de error típico. Bajo independencia siguen aproximadamente una normal
+                    estándar, así que valores con \(|r| &gt; 1{,}96\) señalan las celdas donde se
+                    concentra la asociación: positivos si hay más casos de los esperados y negativos
+                    si hay menos.
                 </li>
                 <li>
                     <strong>¿Qué diferencia hay con el chi-cuadrado de bondad de ajuste?</strong>
-                    El de bondad de ajuste contrasta si una variable sigue una distribución
-                    teórica concreta. El de independencia contrasta si dos variables están
-                    asociadas entre sí, sin asumir ninguna distribución específica.
+                    El de <a href="chi-cuadrado-bondad-ajuste.html">bondad de ajuste</a> contrasta si
+                    una variable sigue una distribución teórica concreta. El de independencia contrasta
+                    si dos variables están asociadas entre sí, sin asumir ninguna distribución específica.
                 </li>
                 <li>
                     <strong>¿Puede haber asociación sin causalidad?</strong>
@@ -374,6 +680,14 @@
                     pequeñas que no son relevantes en la práctica. En esos casos conviene
                     complementar el p-valor con una medida de tamaño del efecto como la V
                     de Cramér.
+                </li>
+                <li>
+                    <strong>¿Qué es el tamaño mínimo detectable (MDE) en chi-cuadrado de independencia?</strong>
+                    Es la asociación más pequeña entre variables (habitualmente expresada con V de
+                    Cramér) que el estudio puede detectar con la potencia y \(\alpha\) fijados. Con
+                    \(N\) pequeño solo se detectan asociaciones moderadas o grandes; para detectar
+                    asociaciones muy pequeñas se necesita aumentar el
+                    <a href="tamano-muestral-chi-cuadrado-independencia.html">tamaño muestral</a>.
                 </li>
             </ul>
             <p class="external-ref">Referencia: <a href="https://es.wikipedia.org/wiki/Prueba_%CF%87%C2%B2" target="_blank" rel="noopener noreferrer">Prueba chi-cuadrado de independencia</a> — Wikipedia</p>
@@ -404,8 +718,88 @@ window.MathJax = {
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
 <script>
-let chiIndependenceChart;
+const T = {
+  rowLabel: i => `Fila ${i+1}`,
+  colLabel: j => `Columna ${j+1}`,
+  corner: 'Filas \\ Columnas',
+  total: 'Total',
+  rowLabelAria: i => `Nombre de la categoría de la fila ${i+1}`,
+  colLabelAria: j => `Nombre de la categoría de la columna ${j+1}`,
+  cellAria: (rl, cl) => `Recuento de la fila «${rl}» y la columna «${cl}»`,
+  example: {
+    rowLabels: ['Tienda física', 'Web', 'App'],
+    colLabels: ['Alta', 'Media', 'Baja'],
+    values: [[40, 10, 15], [30, 25, 20], [20, 15, 25]]
+  },
+  pasteTrimmed: (r, c) => `Se han cargado solo las primeras ${r} filas y ${c} columnas (el máximo es 8 × 8).`,
+  pasted: (r, c) => `Datos pegados: tabla de ${r} × ${c}.`,
+  cleared: 'Recuentos vaciados. Escribe los nuevos valores y pulsa «Calcular contraste».',
+  errAlpha: 'α debe estar entre 0 y 1 (por ejemplo, 0.05).',
+  errEmpty: k => `Hay ${k} ${k === 1 ? 'celda vacía' : 'celdas vacías'}: completa todos los recuentos (escribe 0 si no hay observaciones).`,
+  errInvalid: 'Los recuentos deben ser números enteros no negativos.',
+  errZeroTotal: 'El total de la tabla debe ser mayor que 0.',
+  errZeroRow: l => `La fila «${l}» no tiene observaciones: elimínala o añade recuentos.`,
+  errZeroCol: l => `La columna «${l}» no tiene observaciones: elimínala o añade recuentos.`,
+  table: (r, c, n) => `Tabla ${r} × ${c} · N = ${n}`,
+  chiObs: yates => `χ² observado${yates ? ' (con corrección de Yates)' : ''}`,
+  df: 'Grados de libertad',
+  crit: 'Valor crítico',
+  pValue: 'p-valor',
+  cramer: 'V de Cramér',
+  effect: (lbl, w) => `asociación ${lbl}; w de Cohen = ${w}`,
+  effectLabels: ['despreciable', 'pequeña', 'mediana', 'grande'],
+  decision: 'Decisión',
+  reject: 'Se rechaza H₀ (hay evidencia de asociación entre las variables).',
+  noReject: 'No se rechaza H₀ (no hay evidencia suficiente de asociación).',
+  yatesIgnored: 'La corrección de Yates solo se aplica a tablas 2×2; se ha calculado el χ² de Pearson sin corregir.',
+  cochranOk: (minE, k, cells) => `Frecuencias esperadas: mínima ${minE}; ${k} de ${cells} celdas con E &lt; 5. Se cumple la regla de Cochran: la aproximación χ² es adecuada.`,
+  cochranFail: (minE, k, cells, pct, below1) => `⚠ Frecuencias esperadas: mínima ${minE}; ${k} de ${cells} celdas (${pct} %) con E &lt; 5${below1 ? ' y al menos una con E &lt; 1' : ''}. No se cumple la regla de Cochran: la aproximación χ² puede no ser fiable.`,
+  fisherHint: ' Usa el <a href="test-exacto-fisher.html">test exacto de Fisher</a>.',
+  groupHint: ' Agrupa categorías poco frecuentes y vuelve a calcular.',
+  expectedTitle: 'Frecuencias esperadas bajo H₀',
+  expectedNote: '* Celdas con frecuencia esperada menor que 5.',
+  residualTitle: 'Residuos estandarizados ajustados',
+  residualNote: 'Resaltadas: |r| &gt; 1.96 (azul, más casos de los esperados; rojo, menos).',
+  noSigResiduals: 'Ninguna celda tiene |r| &gt; 1.96.',
+  topCells: 'Celdas que más contribuyen al χ²',
+  profileTitle: 'Distribución porcentual por fila (perfiles fila)',
+  totalBar: 'Total',
+  acceptance: 'Zona de aceptación',
+  rejection: 'Zona de rechazo',
+  dist: df => `Distribución χ² (gl=${df})`,
+  statLine: 'χ² observado',
+  xStat: 'Estadístico χ²',
+  yDensity: 'Densidad',
+  xProfile: '% dentro de cada fila',
+  tooltipProfile: (lbl, pct, cnt) => `${lbl}: ${pct} % (${cnt} obs.)`,
+  errorPrefix: 'Error',
+  pending: 'Resultado pendiente…',
+  q: s => `«${s}»`,
+  pct: v => `${v} %`
+};
 
+const MIN_DIM = 2, MAX_DIM = 8;
+const PALETTE_LIGHT = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300', '#6250d6', '#e34948'];
+const PALETTE_DARK = ['#3987e5', '#d95926', '#199e70', '#c98500', '#d55181', '#008300', '#9085e9', '#e66767'];
+
+let chiIndependenceChart, profileChart, lastResult = null;
+let state = loadExample();
+
+function loadExample(){
+  return {
+    rows: T.example.rowLabels.length,
+    cols: T.example.colLabels.length,
+    rowLabels: T.example.rowLabels.slice(),
+    colLabels: T.example.colLabels.slice(),
+    values: T.example.values.map(r => r.map(String))
+  };
+}
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+/* ---------- Distribución chi-cuadrado ---------- */
 function gammaLn(z){
   const cof=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.001208650973866179,-0.000005395239384953];
   let x=z, y=z, tmp=x+5.5;
@@ -414,128 +808,505 @@ function gammaLn(z){
   for(let j=0;j<cof.length;j++){ y+=1; ser+=cof[j]/y; }
   return -tmp+Math.log(2.5066282746310005*ser/x);
 }
+function gammaPSeries(a,x){
+  let ap=a, sum=1/a, del=sum;
+  for(let n=1;n<=500;n++){ ap++; del*=x/ap; sum+=del; if(Math.abs(del)<Math.abs(sum)*1e-14) break; }
+  return sum*Math.exp(-x+a*Math.log(x)-gammaLn(a));
+}
+function gammaQContinuedFraction(a,x){
+  let b=x+1-a, c=1/1e-300, d=1/b, h=d;
+  for(let i=1;i<=500;i++){
+    const an=-i*(i-a); b+=2; d=an*d+b; if(Math.abs(d)<1e-300) d=1e-300;
+    c=b+an/c; if(Math.abs(c)<1e-300) c=1e-300; d=1/d;
+    const del=d*c; h*=del; if(Math.abs(del-1)<1e-14) break;
+  }
+  return Math.exp(-x+a*Math.log(x)-gammaLn(a))*h;
+}
 function gammaP(a,x){
   if(x<=0) return 0;
-  if(x<a+1){
-    let ap=a, sum=1/a, del=sum;
-    for(let n=1;n<=200;n++){ ap++; del*=x/ap; sum+=del; if(Math.abs(del)<Math.abs(sum)*1e-12) break; }
-    return sum*Math.exp(-x+a*Math.log(x)-gammaLn(a));
-  }
-  let b=x+1-a, c=1/1e-30, d=1/b, h=d;
-  for(let i=1;i<=200;i++){
-    const an=-i*(i-a); b+=2; d=an*d+b; if(Math.abs(d)<1e-30) d=1e-30;
-    c=b+an/c; if(Math.abs(c)<1e-30) c=1e-30; d=1/d;
-    const del=d*c; h*=del; if(Math.abs(del-1)<1e-12) break;
-  }
-  return 1-Math.exp(-x+a*Math.log(x)-gammaLn(a))*h;
+  return x<a+1 ? gammaPSeries(a,x) : 1-gammaQContinuedFraction(a,x);
 }
-function chiSquareSurvival(x,df){ return 1-gammaP(df/2,x/2); }
-
-function parseTable(raw){
-  const rows=raw.trim().split(/\n+/).map(r=>r.trim()).filter(Boolean);
-  const data=rows.map(r=>r.split(/[\s,;]+/).map(Number));
-  if(data.length<2) throw new Error('Incluye al menos 2 filas.');
-  const cols=data[0].length;
-  if(cols<2) throw new Error('Incluye al menos 2 columnas.');
-  if(data.some(r=>r.length!==cols)) throw new Error('Todas las filas deben tener el mismo número de columnas.');
-  if(data.flat().some(v=>!Number.isFinite(v)||v<0)) throw new Error('Usa solo frecuencias no negativas.');
-  return data;
+function chiSquareSurvival(x,df){
+  if(x<=0) return 1;
+  const a=df/2, h=x/2;
+  return h<a+1 ? 1-gammaPSeries(a,h) : gammaQContinuedFraction(a,h);
 }
-
 function chiSquarePdf(x, df){
   if(x<=0) return 0;
   const k=df/2;
   return Math.exp((k-1)*Math.log(x)-x/2-k*Math.log(2)-gammaLn(k));
 }
-
 function chiSquareQuantile(p, df){
   if(p<=0) return 0;
   if(p>=1) return Infinity;
   let lo=0, hi=Math.max(1, df);
   while(gammaP(df/2, hi/2) < p) hi *= 2;
-  for(let i=0;i<80;i++){
+  for(let i=0;i<100;i++){
     const mid=(lo+hi)/2;
     if(gammaP(df/2, mid/2) < p) lo=mid; else hi=mid;
   }
   return (lo+hi)/2;
 }
 
+/* ---------- Tabla de contingencia editable ---------- */
+const gridEl = document.getElementById('ctGrid');
+const rowsSel = document.getElementById('numRows');
+const colsSel = document.getElementById('numCols');
+const noticeEl = document.getElementById('ctNotice');
+
+function ensureSize(r, c){
+  for(let i=0;i<r;i++){
+    if(!state.values[i]) state.values[i]=[];
+    if(state.rowLabels[i]===undefined || state.rowLabels[i]==='') state.rowLabels[i]=T.rowLabel(i);
+    for(let j=0;j<c;j++) if(state.values[i][j]===undefined) state.values[i][j]='';
+  }
+  for(let j=0;j<c;j++) if(state.colLabels[j]===undefined || state.colLabels[j]==='') state.colLabels[j]=T.colLabel(j);
+  state.rows=r; state.cols=c;
+}
+
+function syncFromGrid(){
+  gridEl.querySelectorAll('input[data-r]').forEach(inp => { state.values[+inp.dataset.r][+inp.dataset.c]=inp.value; });
+  gridEl.querySelectorAll('input[data-row-label]').forEach(inp => { state.rowLabels[+inp.dataset.rowLabel]=inp.value; });
+  gridEl.querySelectorAll('input[data-col-label]').forEach(inp => { state.colLabels[+inp.dataset.colLabel]=inp.value; });
+}
+
+function rowName(i){ return (state.rowLabels[i]||'').trim() || T.rowLabel(i); }
+function colName(j){ return (state.colLabels[j]||'').trim() || T.colLabel(j); }
+
+function makeInput(type, cls){
+  const inp=document.createElement('input');
+  inp.type=type;
+  if(cls) inp.className=cls;
+  return inp;
+}
+
+function buildGrid(){
+  ensureSize(state.rows, state.cols);
+  rowsSel.value=String(state.rows);
+  colsSel.value=String(state.cols);
+  gridEl.textContent='';
+
+  const head=gridEl.createTHead().insertRow();
+  const corner=document.createElement('th');
+  corner.className='ct-corner'; corner.scope='col'; corner.textContent=T.corner;
+  head.appendChild(corner);
+  for(let j=0;j<state.cols;j++){
+    const th=document.createElement('th'); th.scope='col';
+    const inp=makeInput('text','ct-label');
+    inp.value=state.colLabels[j]; inp.maxLength=40; inp.dataset.colLabel=j;
+    inp.setAttribute('aria-label', T.colLabelAria(j));
+    th.appendChild(inp); head.appendChild(th);
+  }
+  const thTot=document.createElement('th'); thTot.className='ct-total'; thTot.scope='col'; thTot.textContent=T.total;
+  head.appendChild(thTot);
+
+  const body=gridEl.createTBody();
+  for(let i=0;i<state.rows;i++){
+    const tr=body.insertRow();
+    const th=document.createElement('th'); th.scope='row';
+    const lab=makeInput('text','ct-label');
+    lab.value=state.rowLabels[i]; lab.maxLength=40; lab.dataset.rowLabel=i;
+    lab.setAttribute('aria-label', T.rowLabelAria(i));
+    th.appendChild(lab); tr.appendChild(th);
+    for(let j=0;j<state.cols;j++){
+      const td=tr.insertCell();
+      const inp=makeInput('number');
+      inp.min='0'; inp.step='1'; inp.inputMode='numeric';
+      inp.value=state.values[i][j]; inp.dataset.r=i; inp.dataset.c=j;
+      td.appendChild(inp);
+    }
+    const tot=tr.insertCell(); tot.className='ct-total'; tot.id=`ctRowTot${i}`;
+  }
+  const foot=gridEl.createTFoot().insertRow();
+  const thF=document.createElement('th'); thF.className='ct-total'; thF.scope='row'; thF.textContent=T.total;
+  foot.appendChild(thF);
+  for(let j=0;j<state.cols;j++){ const td=foot.insertCell(); td.className='ct-total'; td.id=`ctColTot${j}`; }
+  const g=foot.insertCell(); g.className='ct-total'; g.id='ctGrandTot';
+
+  refreshCellLabels();
+  updateTotals();
+}
+
+function refreshCellLabels(){
+  gridEl.querySelectorAll('input[data-r]').forEach(inp => {
+    inp.setAttribute('aria-label', T.cellAria(rowName(+inp.dataset.r), colName(+inp.dataset.c)));
+  });
+}
+
+function parseCount(raw){
+  const s=String(raw).trim();
+  if(s==='') return {empty:true};
+  const v=Number(s);
+  return {value:v, valid:Number.isInteger(v) && v>=0};
+}
+
+function updateTotals(){
+  syncFromGrid();
+  const r=state.rows, c=state.cols;
+  const colSum=Array(c).fill(0), colOk=Array(c).fill(true);
+  let grand=0, grandOk=true;
+  for(let i=0;i<r;i++){
+    let s=0, ok=true;
+    for(let j=0;j<c;j++){
+      const p=parseCount(state.values[i][j]);
+      const inp=gridEl.querySelector(`input[data-r="${i}"][data-c="${j}"]`);
+      if(inp) inp.setAttribute('aria-invalid', String(!p.empty && !p.valid));
+      if(p.empty || !p.valid){ ok=false; colOk[j]=false; }
+      else { s+=p.value; colSum[j]+=p.value; }
+    }
+    document.getElementById(`ctRowTot${i}`).textContent = ok ? String(s) : '—';
+    if(ok) grand+=s; else grandOk=false;
+  }
+  for(let j=0;j<c;j++) document.getElementById(`ctColTot${j}`).textContent = colOk[j] ? String(colSum[j]) : '—';
+  document.getElementById('ctGrandTot').textContent = grandOk ? String(grand) : '—';
+}
+
+function splitLine(line){
+  if(line.includes('\t')) return line.split('\t');
+  if(/[;,]/.test(line)) return line.split(/[;,]/);
+  return line.trim().split(/\s+/);
+}
+
+function isNumeric(s){ return s!=='' && Number.isFinite(Number(s)); }
+
+function handlePaste(e){
+  const target=e.target;
+  if(!(target instanceof HTMLInputElement) || !gridEl.contains(target)) return;
+  const text=(e.clipboardData || window.clipboardData).getData('text') || '';
+  if(!/[\t\n]/.test(text.trim())) return;
+  e.preventDefault();
+  syncFromGrid();
+
+  const lines=text.replace(/\r/g,'').split('\n').filter(l => l.trim()!=='');
+  if(target.dataset.colLabel!==undefined && lines.length===1){
+    const labels=splitLine(lines[0]).map(s => s.trim());
+    const j0=+target.dataset.colLabel;
+    ensureSize(state.rows, Math.min(MAX_DIM, Math.max(state.cols, j0+labels.length)));
+    labels.forEach((l,k) => { if(j0+k<state.cols && l) state.colLabels[j0+k]=l; });
+    buildGrid();
+    return;
+  }
+  if(target.dataset.rowLabel!==undefined && lines.every(l => splitLine(l).length===1)){
+    const i0=+target.dataset.rowLabel;
+    ensureSize(Math.min(MAX_DIM, Math.max(state.rows, i0+lines.length)), state.cols);
+    lines.forEach((l,k) => { if(i0+k<state.rows) state.rowLabels[i0+k]=l.trim(); });
+    buildGrid();
+    return;
+  }
+
+  let cells=lines.map(l => splitLine(l).map(s => s.trim()));
+  let colLabels=null, rowLabels=null;
+  if(cells.length>1 && cells[0].slice(1).some(s => s!=='' && !isNumeric(s))){
+    colLabels=cells[0]; cells=cells.slice(1);
+  }
+  if(cells.some(row => row[0]!=='' && row[0]!==undefined && !isNumeric(row[0]))){
+    rowLabels=cells.map(row => row[0]); cells=cells.map(row => row.slice(1));
+  }
+  const nR=cells.length, nC=Math.max(...cells.map(row => row.length));
+  if(!nR || !nC) return;
+  if(colLabels && colLabels.length===nC+1) colLabels=colLabels.slice(1);
+
+  const fromStart = colLabels || rowLabels || !target.dataset.r;
+  const r0 = fromStart ? 0 : +target.dataset.r;
+  const c0 = fromStart ? 0 : +target.dataset.c;
+  const newRows = fromStart ? Math.max(MIN_DIM, nR) : Math.max(state.rows, r0+nR);
+  const newCols = fromStart ? Math.max(MIN_DIM, nC) : Math.max(state.cols, c0+nC);
+  const rows=Math.min(MAX_DIM, newRows), cols=Math.min(MAX_DIM, newCols);
+  if(fromStart){ state.values=[]; state.rowLabels=[]; state.colLabels=[]; }
+  ensureSize(rows, cols);
+
+  for(let i=0;i<nR && r0+i<rows;i++){
+    if(rowLabels && rowLabels[i]) state.rowLabels[r0+i]=rowLabels[i];
+    for(let j=0;j<nC && c0+j<cols;j++) state.values[r0+i][c0+j]=(cells[i][j]===undefined ? '' : cells[i][j]);
+  }
+  if(colLabels) for(let j=0;j<nC && j<cols;j++) if(colLabels[j]) state.colLabels[j]=colLabels[j];
+
+  buildGrid();
+  noticeEl.textContent = (newRows>MAX_DIM || newCols>MAX_DIM) ? T.pasteTrimmed(rows, cols) : T.pasted(rows, cols);
+}
+
+function resizeFromSelects(){
+  syncFromGrid();
+  state.rows=parseInt(rowsSel.value,10);
+  state.cols=parseInt(colsSel.value,10);
+  state.values=state.values.slice(0, state.rows).map(row => row.slice(0, state.cols));
+  state.rowLabels=state.rowLabels.slice(0, state.rows);
+  state.colLabels=state.colLabels.slice(0, state.cols);
+  noticeEl.textContent='';
+  buildGrid();
+}
+
+/* ---------- Gráficos ---------- */
+function chartTheme(){
+  const dark=document.documentElement.classList.contains('dark-mode');
+  return {
+    dark,
+    palette: dark ? PALETTE_DARK : PALETTE_LIGHT,
+    surface: dark ? '#1e293b' : '#ffffff',
+    text: dark ? '#cbd5e1' : '#475569',
+    grid: dark ? 'rgba(255,255,255,0.08)' : 'rgba(15,23,42,0.08)'
+  };
+}
+
+function axisStyle(th, title){
+  return {
+    title: {display:true, text:title, color:th.text},
+    ticks: {color:th.text},
+    grid: {color:th.grid}
+  };
+}
+
 function renderChiIndependenceChart(df, alpha, statValue){
   const ctx=document.getElementById('chiIndependenceChart');
   if(!ctx) return;
+  const th=chartTheme();
   const critical=chiSquareQuantile(1-alpha, df);
-  const maxX=Math.max(critical*1.4, statValue*1.4, df+10, 10);
+  const maxX=Math.max(critical*1.4, Math.min(statValue*1.4, critical*6), df+10, 10);
   const step=maxX/350;
-  const curve=[];
-  const acceptance=[];
-  const rejection=[];
+  const curve=[], acceptance=[], rejection=[];
   for(let x=0;x<=maxX;x+=step){
     const y=chiSquarePdf(x, df);
     curve.push({x,y});
     if(x<=critical){ acceptance.push({x,y}); rejection.push({x,y:null}); }
     else { acceptance.push({x,y:null}); rejection.push({x,y}); }
   }
-  const maxY=Math.max(...curve.map(p=>p.y));
-  const statLine=Number.isFinite(statValue)?[{x:statValue,y:0},{x:statValue,y:maxY}]:[];
+  const maxY=Math.max(...curve.filter(p => Number.isFinite(p.y)).map(p => p.y));
+  const statX=Math.min(statValue, maxX);
+  const statLine=Number.isFinite(statValue)?[{x:statX,y:0},{x:statX,y:maxY}]:[];
 
   if(chiIndependenceChart) chiIndependenceChart.destroy();
   chiIndependenceChart=new Chart(ctx,{
     type:'line',
     data:{datasets:[
-      {label:'Zona de aceptación',data:acceptance,borderColor:'rgba(34,197,94,0)',backgroundColor:'rgba(34,197,94,0.35)',fill:'origin',pointRadius:0,parsing:false},
-      {label:'Zona de rechazo',data:rejection,borderColor:'rgba(239,68,68,0)',backgroundColor:'rgba(239,68,68,0.35)',fill:'origin',pointRadius:0,parsing:false},
-      {label:`Distribución χ² (gl=${df})`,data:curve,borderColor:'#1d4ed8',borderWidth:2,pointRadius:0,fill:false,parsing:false},
-      {label:'χ² observado',data:statLine,borderColor:'#f59e0b',borderWidth:2,pointRadius:0,fill:false,parsing:false}
+      {label:T.acceptance,data:acceptance,borderColor:'rgba(34,197,94,0)',backgroundColor:'rgba(34,197,94,0.35)',fill:'origin',pointRadius:0,parsing:false},
+      {label:T.rejection,data:rejection,borderColor:'rgba(239,68,68,0)',backgroundColor:'rgba(239,68,68,0.35)',fill:'origin',pointRadius:0,parsing:false},
+      {label:T.dist(df),data:curve,borderColor:'#1d4ed8',borderWidth:2,pointRadius:0,fill:false,parsing:false},
+      {label:T.statLine,data:statLine,borderColor:'#f59e0b',borderWidth:2,pointRadius:0,fill:false,parsing:false}
     ]},
     options:{
       responsive:true,
       maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:th.text}}},
       scales:{
-        x:{type:'linear',min:0,max:maxX,title:{display:true,text:'Estadístico χ²'}},
-        y:{beginAtZero:true,title:{display:true,text:'Densidad'}}
+        x:Object.assign({type:'linear',min:0,max:maxX}, axisStyle(th, T.xStat)),
+        y:Object.assign({beginAtZero:true}, axisStyle(th, T.yDensity))
       }
     }
   });
 }
 
-function formatExpected(expected){
-  const rows=expected.map(r=>`<tr>${r.map(v=>`<td>${v.toFixed(2)}</td>`).join('')}</tr>`).join('');
-  return `<strong>Frecuencias esperadas</strong><br><table><tbody>${rows}</tbody></table>`;
+function renderProfileChart(res){
+  const ctx=document.getElementById('profileChart');
+  if(!ctx) return;
+  const th=chartTheme();
+  const labels=[...res.rowLabels, T.totalBar];
+  const datasets=res.colLabels.map((cl,j) => ({
+    label: cl,
+    data: [...res.O.map((row,i) => 100*row[j]/res.rowTotals[i]), 100*res.colTotals[j]/res.n],
+    counts: [...res.O.map(row => row[j]), res.colTotals[j]],
+    backgroundColor: th.palette[j % th.palette.length],
+    borderColor: th.surface,
+    borderWidth: 2,
+    borderSkipped: false,
+    maxBarThickness: 38
+  }));
+
+  if(profileChart) profileChart.destroy();
+  profileChart=new Chart(ctx,{
+    type:'bar',
+    data:{labels, datasets},
+    options:{
+      indexAxis:'y',
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'top', labels:{color:th.text}},
+        tooltip:{callbacks:{label:c => T.tooltipProfile(c.dataset.label, c.parsed.x.toFixed(1), c.dataset.counts[c.dataIndex])}}
+      },
+      scales:{
+        x:Object.assign({stacked:true, min:0, max:100}, axisStyle(th, T.xProfile), {ticks:{color:th.text, callback:v => T.pct(v)}}),
+        y:Object.assign({stacked:true}, axisStyle(th, ''), {title:{display:false}, grid:{display:false}})
+      }
+    }
+  });
 }
 
-document.getElementById('calcChiBtn').addEventListener('click',()=>{
-  try{
-    const table=parseTable(document.getElementById('tableInput').value);
-    const alpha=parseFloat(document.getElementById('alpha').value);
+/* ---------- Cálculo ---------- */
+function htmlTable(colLabels, rowLabels, cellFn, totals){
+  const head=`<tr><th></th>${colLabels.map(l => `<th>${esc(l)}</th>`).join('')}${totals ? `<th>${T.total}</th>` : ''}</tr>`;
+  const body=rowLabels.map((rl,i) => `<tr><th>${esc(rl)}</th>${colLabels.map((_,j) => cellFn(i,j)).join('')}${totals ? `<td>${totals.row[i]}</td>` : ''}</tr>`).join('');
+  const foot=totals ? `<tr><th>${T.total}</th>${totals.col.map(v => `<td>${v}</td>`).join('')}<td>${totals.grand}</td></tr>` : '';
+  return `<div class="result-table-wrap"><table><thead>${head}</thead><tbody>${body}${foot}</tbody></table></div>`;
+}
 
-    const r=table.length, c=table[0].length;
-    const rowTotals=table.map(row=>row.reduce((a,b)=>a+b,0));
-    const colTotals=Array.from({length:c},(_,j)=>table.reduce((s,row)=>s+row[j],0));
-    const n=rowTotals.reduce((a,b)=>a+b,0);
-    if(n<=0) throw new Error('El total muestral debe ser mayor que 0.');
+function effectLabel(w){
+  const L=T.effectLabels;
+  return w<0.1 ? L[0] : w<0.3 ? L[1] : w<0.5 ? L[2] : L[3];
+}
 
-    const expected=table.map((row,i)=>row.map((_,j)=>rowTotals[i]*colTotals[j]/n));
-    let chi2=0;
-    for(let i=0;i<r;i++) for(let j=0;j<c;j++) chi2 += Math.pow(table[i][j]-expected[i][j],2)/expected[i][j];
+function formatP(p){
+  return p<0.000001 ? '&lt; 0.000001' : p.toFixed(6);
+}
 
-    const df=(r-1)*(c-1);
-    const p=Math.max(0,Math.min(1,chiSquareSurvival(chi2,df)));
-    const decision=p<alpha?'Se rechaza H₀ (hay evidencia de asociación).':'No se rechaza H₀ (no hay evidencia suficiente de asociación).';
+function calculate(){
+  updateTotals();
+  const r=state.rows, c=state.cols;
+  const alpha=parseFloat(document.getElementById('alpha').value);
+  if(!(alpha>0 && alpha<1)) throw new Error(T.errAlpha);
 
-    document.getElementById('chiResult').innerHTML =
-      `χ² observado: <strong>${chi2.toFixed(4)}</strong><br>`+
-      `Grados de libertad: <strong>${df}</strong><br>`+
-      `p-valor: <strong>${p.toFixed(6)}</strong><br>`+
-      `Decisión (α=${alpha}): <strong>${decision}</strong>`;
-
-    document.getElementById('expectedTable').innerHTML = formatExpected(expected);
-    renderChiIndependenceChart(df, alpha, chi2);
-  }catch(err){
-    document.getElementById('chiResult').textContent = `Error: ${err.message}`;
-    if(chiIndependenceChart){ chiIndependenceChart.destroy(); chiIndependenceChart = null; }
+  const O=[]; let empty=0, invalid=0;
+  for(let i=0;i<r;i++){
+    O[i]=[];
+    for(let j=0;j<c;j++){
+      const p=parseCount(state.values[i][j]);
+      const inp=gridEl.querySelector(`input[data-r="${i}"][data-c="${j}"]`);
+      if(p.empty){ empty++; if(inp) inp.setAttribute('aria-invalid','true'); }
+      else if(!p.valid) invalid++;
+      O[i][j]=p.value;
+    }
   }
+  if(empty) throw new Error(T.errEmpty(empty));
+  if(invalid) throw new Error(T.errInvalid);
+
+  const rowLabels=Array.from({length:r},(_,i) => rowName(i));
+  const colLabels=Array.from({length:c},(_,j) => colName(j));
+  const rowTotals=O.map(row => row.reduce((a,b) => a+b, 0));
+  const colTotals=Array.from({length:c},(_,j) => O.reduce((s,row) => s+row[j], 0));
+  const n=rowTotals.reduce((a,b) => a+b, 0);
+  if(n<=0) throw new Error(T.errZeroTotal);
+  const zr=rowTotals.findIndex(v => v===0);
+  if(zr>=0) throw new Error(T.errZeroRow(rowLabels[zr]));
+  const zc=colTotals.findIndex(v => v===0);
+  if(zc>=0) throw new Error(T.errZeroCol(colLabels[zc]));
+
+  const yatesAsked=document.getElementById('yates').checked;
+  const yates=yatesAsked && r===2 && c===2;
+  const E=O.map((row,i) => row.map((_,j) => rowTotals[i]*colTotals[j]/n));
+  let chi2Pearson=0, chi2=0;
+  const contrib=O.map(row => row.map(() => 0));
+  const adj=O.map(row => row.map(() => 0));
+  for(let i=0;i<r;i++) for(let j=0;j<c;j++){
+    const d=O[i][j]-E[i][j];
+    const term=d*d/E[i][j];
+    const dy=yates ? Math.max(0, Math.abs(d)-0.5) : Math.abs(d);
+    contrib[i][j]=dy*dy/E[i][j];
+    chi2Pearson+=term;
+    chi2+=contrib[i][j];
+    adj[i][j]=d/Math.sqrt(E[i][j]*(1-rowTotals[i]/n)*(1-colTotals[j]/n));
+  }
+  const df=(r-1)*(c-1);
+  const p=Math.max(0, Math.min(1, chiSquareSurvival(chi2, df)));
+  const crit=chiSquareQuantile(1-alpha, df);
+  const k=Math.min(r,c)-1;
+  const V=Math.sqrt(chi2Pearson/(n*k));
+  const w=V*Math.sqrt(k);
+
+  const flatE=E.flat();
+  const minE=Math.min(...flatE);
+  const below5=flatE.filter(v => v<5).length;
+  const below1=flatE.some(v => v<1);
+  const cells=r*c;
+  const cochranOk=!below1 && below5<=0.2*cells;
+
+  let validity;
+  if(cochranOk){
+    validity=T.cochranOk(minE.toFixed(2), below5, cells);
+  } else {
+    validity=`<span class="ct-warn">${T.cochranFail(minE.toFixed(2), below5, cells, Math.round(100*below5/cells), below1)}${(r===2 && c===2) ? T.fisherHint : T.groupHint}</span>`;
+  }
+
+  const decision=p<alpha ? T.reject : T.noReject;
+  document.getElementById('chiResult').innerHTML =
+    `${T.table(r,c,n)}<br>`+
+    `${T.chiObs(yates)}: <strong>${chi2.toFixed(4)}</strong><br>`+
+    `${T.df}: <strong>${df}</strong><br>`+
+    `${T.crit} (α=${alpha}): <strong>${crit.toFixed(4)}</strong><br>`+
+    `${T.pValue}: <strong>${formatP(p)}</strong><br>`+
+    `${T.cramer}: <strong>${V.toFixed(4)}</strong> (${T.effect(effectLabel(w), w.toFixed(3))})<br>`+
+    `${T.decision} (α=${alpha}): <strong>${decision}</strong><br>`+
+    validity+
+    (yatesAsked && !yates ? `<br>${T.yatesIgnored}` : '');
+
+  const totals={row:rowTotals, col:colTotals, grand:n};
+  document.getElementById('expectedTable').innerHTML =
+    `<strong>${T.expectedTitle}</strong>`+
+    htmlTable(colLabels, rowLabels, (i,j) => `<td>${E[i][j].toFixed(2)}${E[i][j]<5 ? '*' : ''}</td>`, totals)+
+    (below5 ? T.expectedNote : '');
+
+  const ranked=[];
+  for(let i=0;i<r;i++) for(let j=0;j<c;j++) ranked.push({i,j,v:contrib[i][j]});
+  ranked.sort((a,b) => b.v-a.v);
+  const top=ranked.slice(0, Math.min(3, ranked.length)).filter(x => x.v>0)
+    .map(x => `${T.q(`${esc(rowLabels[x.i])} / ${esc(colLabels[x.j])}`)} (${T.pct((100*x.v/chi2).toFixed(1))})`).join(', ');
+  const anySig=adj.some(row => row.some(v => Math.abs(v)>1.96));
+  document.getElementById('residualTable').innerHTML =
+    `<strong>${T.residualTitle}</strong>`+
+    htmlTable(colLabels, rowLabels, (i,j) => {
+      const v=adj[i][j];
+      const cls=v>1.96 ? ' class="ct-pos"' : v<-1.96 ? ' class="ct-neg"' : '';
+      return `<td${cls}>${v>0 ? '+' : ''}${v.toFixed(2)}</td>`;
+    }, null)+
+    (anySig ? T.residualNote : T.noSigResiduals)+
+    (top && chi2>0 ? `<br>${T.topCells}: ${top}` : '');
+
+  const pctRows=O.map((row,i) => row.map(v => 100*v/rowTotals[i]));
+  const pctTotal=colTotals.map(v => 100*v/n);
+  document.getElementById('profileTable').innerHTML =
+    `<strong>${T.profileTitle}</strong>`+
+    htmlTable(colLabels, [...rowLabels, T.totalBar], (i,j) => `<td>${T.pct((i<r ? pctRows[i][j] : pctTotal[j]).toFixed(1))}</td>`, null);
+
+  lastResult={df, alpha, chi2, O, rowLabels, colLabels, rowTotals, colTotals, n};
+  renderCharts();
+}
+
+function renderCharts(){
+  if(!lastResult) return;
+  renderChiIndependenceChart(lastResult.df, lastResult.alpha, lastResult.chi2);
+  renderProfileChart(lastResult);
+}
+
+function runCalculation(){
+  try{
+    calculate();
+  }catch(err){
+    document.getElementById('chiResult').textContent = `${T.errorPrefix}: ${err.message}`;
+    document.getElementById('expectedTable').textContent = '—';
+    document.getElementById('residualTable').textContent = '—';
+    document.getElementById('profileTable').textContent = '—';
+    lastResult=null;
+    if(chiIndependenceChart){ chiIndependenceChart.destroy(); chiIndependenceChart=null; }
+    if(profileChart){ profileChart.destroy(); profileChart=null; }
+  }
+}
+
+gridEl.addEventListener('input', e => {
+  if(e.target.dataset.rowLabel!==undefined || e.target.dataset.colLabel!==undefined){ syncFromGrid(); refreshCellLabels(); }
+  else updateTotals();
 });
-document.getElementById('calcChiBtn').click();
+gridEl.addEventListener('paste', handlePaste);
+gridEl.addEventListener('keydown', e => { if(e.key==='Enter'){ e.preventDefault(); runCalculation(); } });
+rowsSel.addEventListener('change', resizeFromSelects);
+colsSel.addEventListener('change', resizeFromSelects);
+document.getElementById('ctExampleBtn').addEventListener('click', () => {
+  state=loadExample(); noticeEl.textContent=''; buildGrid(); runCalculation();
+});
+document.getElementById('ctClearBtn').addEventListener('click', () => {
+  syncFromGrid();
+  for(let i=0;i<state.rows;i++) for(let j=0;j<state.cols;j++) state.values[i][j]='';
+  buildGrid();
+  noticeEl.textContent=T.cleared;
+  const first=gridEl.querySelector('input[data-r]');
+  if(first) first.focus();
+});
+document.getElementById('calcChiBtn').addEventListener('click', runCalculation);
+let lastDark=document.documentElement.classList.contains('dark-mode');
+new MutationObserver(() => {
+  const dark=document.documentElement.classList.contains('dark-mode');
+  if(dark!==lastDark){ lastDark=dark; renderCharts(); }
+}).observe(document.documentElement, {attributes:true, attributeFilter:['class']});
+
+buildGrid();
+runCalculation();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="field-hints.js?v=20260730-1" defer></script>

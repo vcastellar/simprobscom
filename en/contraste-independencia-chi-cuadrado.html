@@ -2,20 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chi-Square Test of Independence Calculator | ProbLab</title>
+    <title>Chi-Square Test of Independence: Contingency Tables | ProbLab</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Chi-square test of independence to assess whether two categorical variables are associated.">
-    <meta name="keywords" content="chi-square test of independence, chi-square independence test calculator, contingency table chi-square test, categorical variable association test, chi-square test calculator, ProbLab, online statistics, statistics calculator">
+    <meta name="description" content="Chi-square test of independence for r×c contingency tables: enter the counts and get χ², the p-value, expected frequencies, residuals and Cramér's V.">
+    <meta name="keywords" content="chi-square test of independence, chi-square independence test calculator, contingency table chi-square test, two-way table, categorical variable association test, Cramér's V, adjusted residuals, chi-square test calculator, ProbLab, online statistics, statistics calculator">
     <link rel="canonical" href="https://problabtools.com/en/contraste-independencia-chi-cuadrado.html">
 
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Chi-Square Test of Independence Calculator | ProbLab">
-    <meta property="og:description" content="Chi-square test of independence to assess whether two categorical variables are associated.">
+    <meta property="og:title" content="Chi-Square Test of Independence: Contingency Tables | ProbLab">
+    <meta property="og:description" content="Chi-square test of independence for r×c contingency tables: enter the counts and get χ², the p-value, expected frequencies, residuals and Cramér's V.">
     <meta property="og:url" content="https://problabtools.com/en/contraste-independencia-chi-cuadrado.html">
     <meta property="og:site_name" content="ProbLab">
     <meta property="og:image" content="https://problabtools.com/og-image.png">
     <meta property="og:locale" content="en_US">
-    <meta property="og:image:alt" content="Chi-square test of independence calculator">
+    <meta property="og:image:alt" content="Chi-square test of independence calculator for contingency tables">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="author" content="Vicente Castellar">
     <meta name="theme-color" content="#4f46e5">
@@ -24,10 +24,10 @@
     <link rel="alternate" hreflang="x-default" href="https://problabtools.com/contraste-independencia-chi-cuadrado.html">
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Chi-Square Test of Independence Calculator | ProbLab">
-    <meta name="twitter:description" content="Chi-square test of independence to assess whether two categorical variables are associated.">
+    <meta name="twitter:title" content="Chi-Square Test of Independence: Contingency Tables | ProbLab">
+    <meta name="twitter:description" content="Chi-square test of independence for r×c contingency tables: enter the counts and get χ², the p-value, expected frequencies, residuals and Cramér's V.">
     <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-    <meta name="twitter:image:alt" content="Chi-square test of independence calculator">
+    <meta name="twitter:image:alt" content="Chi-square test of independence calculator for contingency tables">
 
     <script type="application/ld+json">
     {
@@ -49,12 +49,142 @@
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web",
       "url": "https://problabtools.com/en/contraste-independencia-chi-cuadrado.html",
-      "description": "Tool to test independence between categorical variables using a contingency table.",
+      "description": "Chi-square test of independence for r×c contingency tables: expected frequencies, χ² statistic, p-value, adjusted residuals and Cramér's V.",
       "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
     }
     </script>
 
     <link rel="stylesheet" href="../style_new.css?v=20260730-1">
+    <style>
+        .ct-wrap {
+            overflow-x: auto;
+            margin: 2px 0 10px;
+        }
+        .ct-grid {
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.92rem;
+            font-variant-numeric: tabular-nums;
+        }
+        .ct-grid th,
+        .ct-grid td {
+            padding: 6px;
+            text-align: center;
+            vertical-align: middle;
+            border-bottom: 1px solid rgba(79, 70, 229, 0.14);
+            border-right: 1px solid rgba(79, 70, 229, 0.10);
+        }
+        .ct-grid thead th,
+        .ct-grid tbody th {
+            background: rgba(79, 70, 229, 0.07);
+        }
+        .ct-grid .ct-corner {
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        .ct-grid .ct-total {
+            min-width: 64px;
+            font-weight: 700;
+            color: #1e1b4b;
+            background: rgba(15, 23, 42, 0.04);
+        }
+        .ct-grid input {
+            width: 84px;
+            padding: 7px 8px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.92rem;
+        }
+        .ct-grid input.ct-label {
+            width: 116px;
+            font-weight: 600;
+        }
+        .ct-grid input[aria-invalid="true"] {
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.18);
+        }
+        .ct-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .ct-action-btn {
+            border: 1px solid rgba(79, 70, 229, 0.28);
+            background: rgba(79, 70, 229, 0.06);
+            color: #3730a3;
+            border-radius: 10px;
+            padding: 7px 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .ct-action-btn:hover {
+            background: rgba(79, 70, 229, 0.12);
+        }
+        .ct-notice {
+            margin: 8px 0 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .ct-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0;
+        }
+        .ct-check input {
+            width: auto;
+            margin: 0;
+        }
+        .result-box td.ct-pos {
+            background: rgba(37, 99, 235, 0.16);
+            font-weight: 700;
+        }
+        .result-box td.ct-neg {
+            background: rgba(220, 38, 38, 0.14);
+            font-weight: 700;
+        }
+        .result-box .ct-warn {
+            color: #b45309;
+        }
+        .chart-caption {
+            margin-top: 0.75rem;
+            font-size: 0.88rem;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+        html.dark-mode .ct-grid th,
+        html.dark-mode .ct-grid td {
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+        html.dark-mode .ct-grid thead th,
+        html.dark-mode .ct-grid tbody th {
+            background: rgba(99, 102, 241, 0.12);
+        }
+        html.dark-mode .ct-grid .ct-total {
+            color: #e2e8f0;
+            background: rgba(255, 255, 255, 0.04);
+        }
+        html.dark-mode .ct-action-btn {
+            background: rgba(99, 102, 241, 0.18);
+            border-color: rgba(99, 102, 241, 0.40);
+            color: #a5b4fc;
+        }
+        html.dark-mode .result-box td.ct-pos {
+            background: rgba(59, 130, 246, 0.25);
+        }
+        html.dark-mode .result-box td.ct-neg {
+            background: rgba(239, 68, 68, 0.22);
+        }
+        html.dark-mode .result-box .ct-warn {
+            color: #fbbf24;
+        }
+        html.dark-mode .chart-caption {
+            color: #94a3b8;
+        }
+    </style>
 
     <script type="application/ld+json">
 {
@@ -66,7 +196,15 @@
       "name": "When is the chi-square test of independence used?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "When you want to know whether two categorical variables are associated, based\n                    on the counts in a contingency table."
+        "text": "When you want to know whether two categorical variables are associated, based on the counts in a contingency table (two-way table) with r categories in the rows and c categories in the columns."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I enter the contingency table in the calculator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Choose the number of row and column categories (from 2 to 8), type their names in the headers and the number of observations in each cell. You can also copy a block of counts from a spreadsheet and paste it into any cell: the table grows automatically."
       }
     },
     {
@@ -74,7 +212,7 @@
       "name": "How many degrees of freedom does the statistic have?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The degrees of freedom are \\((r-1)(c-1)\\), where \\(r\\) is the number of\n                    rows and \\(c\\) is the number of columns in the table."
+        "text": "The degrees of freedom are (r−1)(c−1), where r is the number of rows and c is the number of columns in the table. A 2×2 table has 1 degree of freedom and a 3×4 table has 6."
       }
     },
     {
@@ -82,7 +220,23 @@
       "name": "What condition must the expected frequencies meet?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The approximation is adequate when most expected frequencies are ≥ 5. If\n                    some cells have very low expected frequencies, it's best to use Fisher's\n                    exact test or group categories."
+        "text": "According to Cochran's rule, the approximation is adequate when no more than 20% of the cells have an expected frequency below 5 and none is below 1. If this does not hold, merge categories or, for 2×2 tables, use Fisher's exact test."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When should I apply Yates' correction?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Only for 2×2 tables. It subtracts 0.5 from each difference |O − E| to compensate for the counts being discrete, which makes the test more conservative. With large samples it barely changes the result; with small samples Fisher's exact test is preferable."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What are adjusted standardized residuals?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "They measure, cell by cell, how far the observed count is from the expected one in standard-error units. Under independence they approximately follow a standard normal, so values with |r| > 1.96 point to the cells where the association is concentrated: positive when there are more cases than expected and negative when there are fewer."
       }
     },
     {
@@ -90,7 +244,7 @@
       "name": "What's the difference from the chi-square goodness-of-fit test?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The goodness-of-fit test checks whether a variable follows a specific\n                    theoretical distribution. The independence test checks whether two\n                    variables are associated with each other, without assuming any specific\n                    distribution."
+        "text": "The goodness-of-fit test checks whether a variable follows a specific theoretical distribution. The independence test checks whether two variables are associated with each other, without assuming any specific distribution."
       }
     },
     {
@@ -98,7 +252,7 @@
       "name": "Can there be association without causation?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. The test detects statistical association, but it does not allow you to\n                    conclude that one variable causes the other. Establishing causation\n                    requires experimental design or additional argumentation."
+        "text": "Yes. The test detects statistical association, but it does not allow you to conclude that one variable causes the other. Establishing causation requires experimental design or additional argumentation."
       }
     },
     {
@@ -106,7 +260,7 @@
       "name": "How does sample size affect the result?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "With very large samples, the test can detect very small associations that\n                    are not practically relevant. In those cases it is a good idea to\n                    complement the p-value with an effect size measure such as Cramér's\n                    V."
+        "text": "With very large samples, the test can detect very small associations that are not practically relevant. In those cases it is a good idea to complement the p-value with an effect size measure such as Cramér's V."
       }
     },
     {
@@ -158,8 +312,8 @@
     </nav>
     <header class="hero">
         <p class="eyebrow">Hypothesis tests</p>
-        <h1>Chi-Square Test of Independence Calculator</h1>
-        <p class="hero-subtitle">Assess whether two categorical variables are independent.</p>
+        <h1>Chi-Square Test of Independence Calculator (Contingency Tables)</h1>
+        <p class="hero-subtitle">Enter the counts of an r × c two-way table and check whether the two categorical variables are independent.</p>
         <p class="hero-links"><a class="hero-link-button" href="contrastes-hipotesis/">See all hypothesis tests</a></p>
     </header>
 
@@ -168,16 +322,50 @@
         <section class="card sample-size-panel">
             <div class="panel-heading">
                 <h2>Calculator</h2>
-                <p>Enter the contingency table (rows separated by line breaks, columns by commas or spaces).</p>
+                <p>Choose how many categories each variable has, type their names and the number of observations in each cell. The marginal totals update as you type.</p>
             </div>
 
             <div class="form-grid sample-grid">
+                <div class="inline-inputs">
+                    <div class="form-group">
+                        <label for="numRows">Row categories (r) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                        <select id="numRows">
+                            <option value="2">2</option>
+                            <option value="3" selected>3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                        </select>
+                        <p class="field-hint" hidden>Number of categories of the variable you place in the rows (for example, the purchase channel: store, website and app).</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="numCols">Column categories (c) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                        <select id="numCols">
+                            <option value="2">2</option>
+                            <option value="3" selected>3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                        </select>
+                        <p class="field-hint" hidden>Number of categories of the variable you place in the columns (for example, the satisfaction level: high, medium and low). Which variable goes in rows and which in columns does not change the test result.</p>
+                    </div>
+                </div>
+
                 <div class="form-group">
-                    <label for="tableInput">Observed table <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                    <textarea id="tableInput" rows="6">40, 10, 15
-30, 25, 20
-20, 15, 25</textarea>
-                    <p class="field-hint" hidden>Contingency table with the observed counts: one row per line, columns separated by commas or spaces.</p>
+                    <label id="ctGridLabel">Observed contingency table <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                    <p class="field-hint" hidden>Each cell is the number of observations that belong both to its row category and to its column category (non-negative integers). You can rename the categories in the headers and paste a block copied from a spreadsheet into any cell; if it includes the row and column names, they are loaded too.</p>
+                    <div class="ct-wrap">
+                        <table class="ct-grid" id="ctGrid" aria-labelledby="ctGridLabel"></table>
+                    </div>
+                    <div class="ct-actions">
+                        <button type="button" class="ct-action-btn" id="ctExampleBtn">Load example</button>
+                        <button type="button" class="ct-action-btn" id="ctClearBtn">Clear counts</button>
+                    </div>
+                    <p class="ct-notice" id="ctNotice" aria-live="polite"></p>
                 </div>
 
                 <div class="inline-inputs">
@@ -186,15 +374,40 @@
                         <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
                         <p class="field-hint" hidden>Risk of concluding that the variables are associated (rejecting H₀) when they are in fact independent. The usual value is <strong>0.05</strong>.</p>
                     </div>
+                    <div class="form-group">
+                        <label class="ct-check" for="yates">
+                            <input type="checkbox" id="yates">
+                            Yates' correction (2×2 only)
+                            <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button>
+                        </label>
+                        <p class="field-hint" hidden>Continuity correction for 2×2 tables: subtracts 0.5 from each |O − E| before squaring. It makes the test more conservative; it is ignored for larger tables.</p>
+                    </div>
                 </div>
             </div>
 
             <button class="calculate-btn" id="calcChiBtn">Calculate test</button>
             <div id="chiResult" class="result-box">Result pending…</div>
             <div id="expectedTable" class="result-box" style="margin-top:12px;">Expected frequencies pending…</div>
+            <div id="residualTable" class="result-box" style="margin-top:12px;">Residuals pending…</div>
             <div class="chart-wrap">
                 <canvas id="chiIndependenceChart" aria-label="Chart of acceptance and rejection zones for the chi-square test of independence" role="img"></canvas>
             </div>
+            <p class="chart-caption">
+                \(\chi^2\) distribution with \((r-1)(c-1)\) degrees of freedom under \(H_0\). The
+                <span style="color:#16a34a;font-weight:600">green</span> zone is the non-rejection region and the
+                <span style="color:#dc2626;font-weight:600">red</span> zone is the critical region (right tail, area \(\alpha\));
+                the <span style="color:#d97706;font-weight:600">amber</span> line marks the observed statistic.
+                If it falls in the red zone, independence is rejected.
+            </p>
+            <div class="chart-wrap">
+                <canvas id="profileChart" aria-label="Stacked bar chart with the percentage distribution of the columns within each row" role="img"></canvas>
+            </div>
+            <p class="chart-caption">
+                Row profiles: each bar splits 100% of a row among the column categories, and the “Total” bar
+                shows the overall split. If the variables were independent, every bar would look like the “Total”
+                bar; the more they differ, the stronger the association. The exact percentages are in the table below.
+            </p>
+            <div id="profileTable" class="result-box" style="margin-top:12px;">Row percentages pending…</div>
         </section>
 
         <section class="card content-card">
@@ -209,6 +422,15 @@
             </p>
 
             <p>
+                A <strong>contingency table</strong> (or two-way table) crosses the categories of
+                two variables: the \(r\) categories of one variable go in the rows and the \(c\)
+                categories of the other in the columns. Each cell contains the number of
+                observations \(O_{ij}\) that belong both to row category \(i\) and to column
+                category \(j\), and the margins hold the totals of each row, of each column and the
+                grand total \(n\).
+            </p>
+
+            <p>
                 The core idea is to compare what was observed with what would be expected if
                 the variables were truly independent. If the differences between observed and
                 expected frequencies are too large to attribute to chance, the hypothesis of
@@ -218,7 +440,7 @@
             <p>
                 For example, a company wants to know whether customer satisfaction (high,
                 medium, low) depends on the purchase channel (physical store, website, app).
-                It collects data from a sample and builds a contingency table. If the test is
+                It collects data from a sample and builds a 3 × 3 contingency table. If the test is
                 significant, there is evidence that channel and satisfaction are associated;
                 if it is not, the data are compatible with both variables being independent.
             </p>
@@ -238,8 +460,6 @@
                 with \(E_{ij} = \frac{n_{i\cdot} \cdot n_{\cdot j}}{n}\)
             </p>
         </section>
-
-
 
         <section class="card content-card">
             <h3>Quick check</h3>
@@ -268,7 +488,30 @@
 
             <p>
                 where \(n_{i\cdot}\) is the total of row \(i\), \(n_{\cdot j}\) is the total
-                of column \(j\), and \(n\) is the overall total of the table.
+                of column \(j\), and \(n\) is the overall total of the table. \(H_0\) is rejected
+                when \(\chi^2 > \chi^2_{\alpha,\,(r-1)(c-1)}\) or, equivalently, when the p-value
+                \(P\big(\chi^2_{(r-1)(c-1)} \geq \chi^2_{\text{obs}}\big)\) is smaller than \(\alpha\).
+            </p>
+
+            <p>
+                To locate the association, the calculator shows the <strong>adjusted standardized
+                residuals</strong> of each cell, which approximately follow a standard normal under
+                \(H_0\):
+            </p>
+
+            <p class="formula-line">
+                \(r_{ij} = \dfrac{O_{ij}-E_{ij}}{\sqrt{E_{ij}\left(1-\frac{n_{i\cdot}}{n}\right)\left(1-\frac{n_{\cdot j}}{n}\right)}}\)
+            </p>
+
+            <p>
+                The strength of the association is summarized with <strong>Cramér's V</strong>, which
+                ranges from 0 (independence) to 1 (perfect association). For 2×2 tables you can also
+                apply <strong>Yates' continuity correction</strong>:
+            </p>
+
+            <p class="formula-line">
+                \(V = \sqrt{\dfrac{\chi^2}{n\,(\min(r,c)-1)}}\), &nbsp;&nbsp;
+                \(\chi^2_{\text{Yates}} = \sum_{i,j}\dfrac{\big(|O_{ij}-E_{ij}|-0.5\big)^2}{E_{ij}}\)
             </p>
 
             <p>
@@ -281,13 +524,43 @@
 
         <section class="card content-card">
             <h3>Worked example</h3>
-            <p>A study looks at the possible relationship between smoking habits and lung disease in a sample of 200 people. The observed contingency table is:</p>
-            <p>Non-smokers: with disease = 10, without disease = 90 (total 100). Smokers: with disease = 25, without disease = 75 (total 100). Overall totals: with disease = 35, without disease = 165, \(N = 200\).</p>
-            <p>Expected frequencies under independence are computed as \(E_{ij} = (\text{row total}_i \times \text{column total}_j) / N\). For example, for non-smokers with disease: \(E_{11} = 100 \cdot 35 / 200 = 17.5\). For smokers with disease: \(E_{21} = 100 \cdot 35 / 200 = 17.5\). For non-smokers without disease: \(E_{12} = 100 \cdot 165 / 200 = 82.5\). For smokers without disease: \(E_{22} = 82.5\).</p>
-            <p>The chi-square statistic accumulates the discrepancies between observed and expected frequencies:</p>
-            <p class="formula-line">\( \chi^2 = \sum \dfrac{(O_{ij}-E_{ij})^2}{E_{ij}} = \dfrac{(10-17.5)^2}{17.5}+\dfrac{(90-82.5)^2}{82.5}+\dfrac{(25-17.5)^2}{17.5}+\dfrac{(75-82.5)^2}{82.5} \approx 7.79 \)</p>
-            <p>The degrees of freedom are \(df = (2-1)(2-1) = 1\). The critical value for \(\alpha = 0.05\) is \(\chi^2_{0.05,\,1} \approx 3.84\). Since \(7.79 > 3.84\), \(H_0\) is rejected. The p-value is \(p \approx 0.0052 < 0.05\).</p>
-            <p>Conclusion: <strong>independence is rejected</strong>. There is a statistically significant association between smoking habits and the presence of lung disease: smokers show a clearly higher proportion of disease than expected under independence.</p>
+            <p>A company wants to know whether customer satisfaction depends on the channel through which customers buy. It surveys 200 customers and obtains the following 3 × 3 contingency table (it is the table the calculator loads by default):</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr>
+                            <th>Channel \ Satisfaction</th>
+                            <th>High</th>
+                            <th>Medium</th>
+                            <th>Low</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><th>Store</th><td>40</td><td>10</td><td>15</td><td>65</td></tr>
+                        <tr><th>Website</th><td>30</td><td>25</td><td>20</td><td>75</td></tr>
+                        <tr><th>App</th><td>20</td><td>15</td><td>25</td><td>60</td></tr>
+                        <tr><th>Total</th><td>90</td><td>50</td><td>60</td><td>200</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p><strong>1. Expected frequencies.</strong> Under independence, \(E_{ij} = n_{i\cdot}\,n_{\cdot j}/n\). For example, for store and high satisfaction: \(E_{11} = 65 \cdot 90 / 200 = 29.25\). Repeating the calculation, the expected counts are 29.25, 16.25, 19.50 (store), 33.75, 18.75, 22.50 (website) and 27.00, 15.00, 18.00 (app). All of them are above 5, so the chi-square approximation is adequate.</p>
+            <p><strong>2. Statistic.</strong> Add up the nine contributions \((O_{ij}-E_{ij})^2/E_{ij}\):</p>
+            <p class="formula-line">\( \chi^2 = \dfrac{(40-29.25)^2}{29.25} + \dfrac{(10-16.25)^2}{16.25} + \cdots + \dfrac{(25-18)^2}{18} = 3.951 + 2.404 + 1.038 + 0.417 + 2.083 + 0.278 + 1.815 + 0 + 2.722 \approx 14.71 \)</p>
+            <p><strong>3. Decision.</strong> The degrees of freedom are \(df = (3-1)(3-1) = 4\) and the critical value for \(\alpha = 0.05\) is \(\chi^2_{0.05,\,4} \approx 9.488\). Since \(14.71 > 9.488\), \(H_0\) is rejected; the p-value is \(p \approx 0.0053\).</p>
+            <p><strong>4. Effect size.</strong> \(V = \sqrt{14.71 / (200 \cdot 2)} \approx 0.19\). Since \(\min(r,c)-1 = 2\), this is equivalent to a Cohen's \(w\) of \(0.19\cdot\sqrt{2} \approx 0.27\): a small association, close to the 0.3 threshold of a medium effect.</p>
+            <p><strong>5. Where is the association?</strong> The adjusted residuals with \(|r_{ij}| > 1.96\) are: store–high \((+3.26)\), app–low \((+2.36)\), website–medium \((+2.11)\), store–medium \((-2.18)\) and app–high \((-2.17)\). In the store, 61.5% of customers are highly satisfied versus 45% overall, while in the app 41.7% report low satisfaction versus 30% overall.</p>
+            <p>Conclusion: <strong>independence is rejected</strong>. Satisfaction depends on the purchase channel: the store concentrates more highly satisfied customers and the app more dissatisfied customers than would be expected if both variables were independent.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Assumptions and conditions</h3>
+            <ul>
+                <li><strong>Independent observations:</strong> each individual contributes a single observation and appears in only one cell. If the data are paired (before/after on the same subjects), use the <a href="contraste-hipotesis-proporciones-apareadas.html">McNemar test</a>.</li>
+                <li><strong>Counts, not percentages:</strong> cells must contain absolute frequencies. Entering percentages or means invalidates the statistic, because the test depends on the actual sample size.</li>
+                <li><strong>Exhaustive and mutually exclusive categories</strong> in each variable.</li>
+                <li><strong>Large enough expected frequencies (Cochran's rule):</strong> no more than 20% of the cells with \(E_{ij} &lt; 5\) and none with \(E_{ij} &lt; 1\). The calculator checks this and warns you if it fails; in that case merge sparse categories or, for 2×2 tables, use <a href="test-exacto-fisher.html">Fisher's exact test</a>.</li>
+            </ul>
         </section>
 
         <section class="card content-card">
@@ -299,38 +572,45 @@
                 i.e., that the distribution of one changes depending on the category of the
                 other. However, the chi-square test does not indicate either the
                 <em>direction</em> or the <em>magnitude</em> of the association: it only
-                detects its existence. To quantify the strength, compute <strong>Cramér's
+                detects its existence. To quantify the strength, use <strong>Cramér's
                 V</strong> \(V = \sqrt{\chi^2 / (n \cdot \min(r-1, c-1))}\), which ranges
-                between 0 (independence) and 1 (perfect association). Values of \(V\) around
-                0.1, 0.3, and 0.5 are usually interpreted as weak, moderate, and strong
-                association, respectively.
+                between 0 (independence) and 1 (perfect association). In tables with two rows or
+                two columns, values of \(V\) around 0.1, 0.3 and 0.5 are usually read as small,
+                medium and large association; in larger tables those thresholds are divided by
+                \(\sqrt{\min(r,c)-1}\), which is the same as comparing Cohen's
+                \(w = V\sqrt{\min(r,c)-1}\) with 0.1, 0.3 and 0.5. The calculator classifies the
+                effect with this criterion.
                 </p>
 
                 <p>
                 <strong>Failing to reject \(H_0\)</strong> (p-value ≥ \(\alpha\)) does not prove
                 independence; it only indicates that the data are compatible with it at the
                 chosen level. With large tables or cells with small expected frequencies, power
-                may be insufficient. Check that no expected frequency \(E_{ij} = n \cdot
-                p_{i\cdot} \cdot p_{\cdot j}\) is below 5; if some are, consider merging
-                categories or using Fisher's exact test (for 2×2 tables).
+                may be insufficient; you can plan the required size with the
+                <a href="tamano-muestral-chi-cuadrado-independencia.html">sample size calculator for
+                the chi-square test of independence</a>.
                 </p>
 
                 <p>
-                The <strong>chi-square statistic</strong> is computed by summing the weighted
-                squared discrepancies of all cells: \(\chi^2 = \sum_{ij}(O_{ij}-E_{ij})^2/E_{ij}\).
-                Cells with standardized residuals \((O_{ij}-E_{ij})/\sqrt{E_{ij}}\) whose absolute
-                value exceeds 2 contribute the most and point to where the association is
-                concentrated. In the chart, the green zone is the non-rejection region and the
-                red zone is the right critical tail; the amber line shows the observed statistic.
+                To find out <strong>where</strong> the association lies, look at the <strong>adjusted
+                standardized residuals</strong>: highlighted cells (\(|r_{ij}| &gt; 1.96\)) have more
+                cases than expected if the residual is positive and fewer if it is negative. Since
+                many cells are examined at once, in large tables it is wise to be stricter (for
+                example, \(|r_{ij}| &gt; 3\) or a Bonferroni-corrected threshold). The
+                <strong>row profiles</strong> chart shows the same thing visually: compare the
+                percentage split of each row with the “Total” bar.
                 </p>
         </section>
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Related calculators</h3>
                 <ul>
-                    <li><a href="chisquare.html">Chi-square distribution</a></li>
+                    <li><a href="test-exacto-fisher.html">Fisher's exact test (2×2)</a></li>
                     <li><a href="chi-cuadrado-bondad-ajuste.html">Chi-square goodness-of-fit test</a></li>
-                    <li><a href="test-exacto-fisher.html">Fisher's exact test</a></li>
+                    <li><a href="tamano-muestral-chi-cuadrado-independencia.html">Sample size for the chi-square test of independence</a></li>
+                    <li><a href="contraste-hipotesis-proporciones-apareadas.html">Paired proportions (McNemar)</a></li>
+                    <li><a href="chisquare.html">Chi-square distribution</a></li>
+                    <li><a href="tabla-chi-cuadrado.html">Chi-square table</a></li>
                     <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
                 </ul>
             </section>
@@ -341,24 +621,50 @@
                 <li>
                     <strong>When is the chi-square test of independence used?</strong>
                     When you want to know whether two categorical variables are associated
-                    based on the counts in a contingency table.
+                    based on the counts in a contingency table (two-way table) with \(r\)
+                    categories in the rows and \(c\) categories in the columns.
+                </li>
+                <li>
+                    <strong>How do I enter the contingency table in the calculator?</strong>
+                    Choose the number of row and column categories (from 2 to 8), type their
+                    names in the headers and the number of observations in each cell. You can
+                    also copy a block of counts from a spreadsheet and paste it into any cell:
+                    the table grows automatically.
                 </li>
                 <li>
                     <strong>How many degrees of freedom does the statistic have?</strong>
                     The degrees of freedom are \((r-1)(c-1)\), where \(r\) is the number of
-                    rows and \(c\) is the number of columns of the table.
+                    rows and \(c\) is the number of columns of the table. A 2×2 table has 1
+                    degree of freedom and a 3×4 table has 6.
                 </li>
                 <li>
                     <strong>What condition must the expected frequencies meet?</strong>
-                    The approximation is adequate when most expected frequencies are ≥ 5. If
-                    there are cells with very low expected frequencies, it's best to use the
-                    <a href="test-exacto-fisher.html">Fisher's exact test</a> or group categories.
+                    According to Cochran's rule, the approximation is adequate when no more than
+                    20% of the cells have an expected frequency below 5 and none is below 1. If
+                    this does not hold, merge categories or, for 2×2 tables, use
+                    <a href="test-exacto-fisher.html">Fisher's exact test</a>.
+                </li>
+                <li>
+                    <strong>When should I apply Yates' correction?</strong>
+                    Only for 2×2 tables. It subtracts 0.5 from each difference \(|O-E|\) to
+                    compensate for the counts being discrete, which makes the test more
+                    conservative. With large samples it barely changes the result; with small
+                    samples Fisher's exact test is preferable.
+                </li>
+                <li>
+                    <strong>What are adjusted standardized residuals?</strong>
+                    They measure, cell by cell, how far the observed count is from the expected
+                    one in standard-error units. Under independence they approximately follow a
+                    standard normal, so values with \(|r| &gt; 1.96\) point to the cells where the
+                    association is concentrated: positive when there are more cases than expected
+                    and negative when there are fewer.
                 </li>
                 <li>
                     <strong>What's the difference from the chi-square goodness-of-fit test?</strong>
-                    The goodness-of-fit test checks whether a variable follows a specific
-                    theoretical distribution. The independence test checks whether two variables
-                    are associated with each other, without assuming any specific distribution.
+                    The <a href="chi-cuadrado-bondad-ajuste.html">goodness-of-fit test</a> checks
+                    whether a variable follows a specific theoretical distribution. The independence
+                    test checks whether two variables are associated with each other, without
+                    assuming any specific distribution.
                 </li>
                 <li>
                     <strong>Can there be association without causation?</strong>
@@ -371,6 +677,14 @@
                     With very large samples, the test can detect very small associations that
                     are not practically relevant. In those cases it is a good idea to
                     complement the p-value with an effect size measure such as Cramér's V.
+                </li>
+                <li>
+                    <strong>What is the minimum detectable effect (MDE) in the chi-square test of independence?</strong>
+                    It is the smallest association between variables (usually expressed as
+                    Cramér's V) that the study can detect with the power and \(\alpha\) set. With a
+                    small \(N\) only moderate or large associations can be detected; to detect very
+                    small associations you need to increase the
+                    <a href="tamano-muestral-chi-cuadrado-independencia.html">sample size</a>.
                 </li>
             </ul>
             <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Chi-squared_test" target="_blank" rel="noopener noreferrer">Chi-squared test of independence</a> — Wikipedia</p>
@@ -401,8 +715,88 @@ window.MathJax = {
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
 <script>
-let chiIndependenceChart;
+const T = {
+  rowLabel: i => `Row ${i+1}`,
+  colLabel: j => `Column ${j+1}`,
+  corner: 'Rows \\ Columns',
+  total: 'Total',
+  rowLabelAria: i => `Name of row category ${i+1}`,
+  colLabelAria: j => `Name of column category ${j+1}`,
+  cellAria: (rl, cl) => `Count for row “${rl}” and column “${cl}”`,
+  example: {
+    rowLabels: ['Store', 'Website', 'App'],
+    colLabels: ['High', 'Medium', 'Low'],
+    values: [[40, 10, 15], [30, 25, 20], [20, 15, 25]]
+  },
+  pasteTrimmed: (r, c) => `Only the first ${r} rows and ${c} columns were loaded (the maximum is 8 × 8).`,
+  pasted: (r, c) => `Pasted data: ${r} × ${c} table.`,
+  cleared: 'Counts cleared. Type the new values and press “Calculate test”.',
+  errAlpha: 'α must be between 0 and 1 (for example, 0.05).',
+  errEmpty: k => `There ${k === 1 ? 'is 1 empty cell' : `are ${k} empty cells`}: fill in every count (type 0 if there are no observations).`,
+  errInvalid: 'Counts must be non-negative integers.',
+  errZeroTotal: 'The table total must be greater than 0.',
+  errZeroRow: l => `Row “${l}” has no observations: remove it or add counts.`,
+  errZeroCol: l => `Column “${l}” has no observations: remove it or add counts.`,
+  table: (r, c, n) => `${r} × ${c} table · N = ${n}`,
+  chiObs: yates => `Observed χ²${yates ? ' (with Yates\' correction)' : ''}`,
+  df: 'Degrees of freedom',
+  crit: 'Critical value',
+  pValue: 'p-value',
+  cramer: 'Cramér\'s V',
+  effect: (lbl, w) => `${lbl} association; Cohen's w = ${w}`,
+  effectLabels: ['negligible', 'small', 'medium', 'large'],
+  decision: 'Decision',
+  reject: 'Reject H₀ (there is evidence of association between the variables).',
+  noReject: 'Do not reject H₀ (not enough evidence of association).',
+  yatesIgnored: 'Yates\' correction only applies to 2×2 tables; the uncorrected Pearson χ² has been computed.',
+  cochranOk: (minE, k, cells) => `Expected frequencies: minimum ${minE}; ${k} of ${cells} cells with E &lt; 5. Cochran's rule holds: the χ² approximation is adequate.`,
+  cochranFail: (minE, k, cells, pct, below1) => `⚠ Expected frequencies: minimum ${minE}; ${k} of ${cells} cells (${pct}%) with E &lt; 5${below1 ? ' and at least one with E &lt; 1' : ''}. Cochran's rule does not hold: the χ² approximation may be unreliable.`,
+  fisherHint: ' Use <a href="test-exacto-fisher.html">Fisher\'s exact test</a>.',
+  groupHint: ' Merge sparse categories and calculate again.',
+  expectedTitle: 'Expected frequencies under H₀',
+  expectedNote: '* Cells with an expected frequency below 5.',
+  residualTitle: 'Adjusted standardized residuals',
+  residualNote: 'Highlighted: |r| &gt; 1.96 (blue, more cases than expected; red, fewer).',
+  noSigResiduals: 'No cell has |r| &gt; 1.96.',
+  topCells: 'Cells contributing most to χ²',
+  profileTitle: 'Percentage distribution by row (row profiles)',
+  totalBar: 'Total',
+  acceptance: 'Acceptance zone',
+  rejection: 'Rejection zone',
+  dist: df => `χ² distribution (df=${df})`,
+  statLine: 'Observed χ²',
+  xStat: 'χ² statistic',
+  yDensity: 'Density',
+  xProfile: '% within each row',
+  tooltipProfile: (lbl, pct, cnt) => `${lbl}: ${pct}% (${cnt} obs.)`,
+  errorPrefix: 'Error',
+  pending: 'Result pending…',
+  q: s => `“${s}”`,
+  pct: v => `${v}%`
+};
 
+const MIN_DIM = 2, MAX_DIM = 8;
+const PALETTE_LIGHT = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300', '#6250d6', '#e34948'];
+const PALETTE_DARK = ['#3987e5', '#d95926', '#199e70', '#c98500', '#d55181', '#008300', '#9085e9', '#e66767'];
+
+let chiIndependenceChart, profileChart, lastResult = null;
+let state = loadExample();
+
+function loadExample(){
+  return {
+    rows: T.example.rowLabels.length,
+    cols: T.example.colLabels.length,
+    rowLabels: T.example.rowLabels.slice(),
+    colLabels: T.example.colLabels.slice(),
+    values: T.example.values.map(r => r.map(String))
+  };
+}
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+/* ---------- Chi-square distribution ---------- */
 function gammaLn(z){
   const cof=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.001208650973866179,-0.000005395239384953];
   let x=z, y=z, tmp=x+5.5;
@@ -411,128 +805,505 @@ function gammaLn(z){
   for(let j=0;j<cof.length;j++){ y+=1; ser+=cof[j]/y; }
   return -tmp+Math.log(2.5066282746310005*ser/x);
 }
+function gammaPSeries(a,x){
+  let ap=a, sum=1/a, del=sum;
+  for(let n=1;n<=500;n++){ ap++; del*=x/ap; sum+=del; if(Math.abs(del)<Math.abs(sum)*1e-14) break; }
+  return sum*Math.exp(-x+a*Math.log(x)-gammaLn(a));
+}
+function gammaQContinuedFraction(a,x){
+  let b=x+1-a, c=1/1e-300, d=1/b, h=d;
+  for(let i=1;i<=500;i++){
+    const an=-i*(i-a); b+=2; d=an*d+b; if(Math.abs(d)<1e-300) d=1e-300;
+    c=b+an/c; if(Math.abs(c)<1e-300) c=1e-300; d=1/d;
+    const del=d*c; h*=del; if(Math.abs(del-1)<1e-14) break;
+  }
+  return Math.exp(-x+a*Math.log(x)-gammaLn(a))*h;
+}
 function gammaP(a,x){
   if(x<=0) return 0;
-  if(x<a+1){
-    let ap=a, sum=1/a, del=sum;
-    for(let n=1;n<=200;n++){ ap++; del*=x/ap; sum+=del; if(Math.abs(del)<Math.abs(sum)*1e-12) break; }
-    return sum*Math.exp(-x+a*Math.log(x)-gammaLn(a));
-  }
-  let b=x+1-a, c=1/1e-30, d=1/b, h=d;
-  for(let i=1;i<=200;i++){
-    const an=-i*(i-a); b+=2; d=an*d+b; if(Math.abs(d)<1e-30) d=1e-30;
-    c=b+an/c; if(Math.abs(c)<1e-30) c=1e-30; d=1/d;
-    const del=d*c; h*=del; if(Math.abs(del-1)<1e-12) break;
-  }
-  return 1-Math.exp(-x+a*Math.log(x)-gammaLn(a))*h;
+  return x<a+1 ? gammaPSeries(a,x) : 1-gammaQContinuedFraction(a,x);
 }
-function chiSquareSurvival(x,df){ return 1-gammaP(df/2,x/2); }
-
-function parseTable(raw){
-  const rows=raw.trim().split(/\n+/).map(r=>r.trim()).filter(Boolean);
-  const data=rows.map(r=>r.split(/[\s,;]+/).map(Number));
-  if(data.length<2) throw new Error('Include at least 2 rows.');
-  const cols=data[0].length;
-  if(cols<2) throw new Error('Include at least 2 columns.');
-  if(data.some(r=>r.length!==cols)) throw new Error('All rows must have the same number of columns.');
-  if(data.flat().some(v=>!Number.isFinite(v)||v<0)) throw new Error('Use only non-negative frequencies.');
-  return data;
+function chiSquareSurvival(x,df){
+  if(x<=0) return 1;
+  const a=df/2, h=x/2;
+  return h<a+1 ? 1-gammaPSeries(a,h) : gammaQContinuedFraction(a,h);
 }
-
 function chiSquarePdf(x, df){
   if(x<=0) return 0;
   const k=df/2;
   return Math.exp((k-1)*Math.log(x)-x/2-k*Math.log(2)-gammaLn(k));
 }
-
 function chiSquareQuantile(p, df){
   if(p<=0) return 0;
   if(p>=1) return Infinity;
   let lo=0, hi=Math.max(1, df);
   while(gammaP(df/2, hi/2) < p) hi *= 2;
-  for(let i=0;i<80;i++){
+  for(let i=0;i<100;i++){
     const mid=(lo+hi)/2;
     if(gammaP(df/2, mid/2) < p) lo=mid; else hi=mid;
   }
   return (lo+hi)/2;
 }
 
+/* ---------- Editable contingency table ---------- */
+const gridEl = document.getElementById('ctGrid');
+const rowsSel = document.getElementById('numRows');
+const colsSel = document.getElementById('numCols');
+const noticeEl = document.getElementById('ctNotice');
+
+function ensureSize(r, c){
+  for(let i=0;i<r;i++){
+    if(!state.values[i]) state.values[i]=[];
+    if(state.rowLabels[i]===undefined || state.rowLabels[i]==='') state.rowLabels[i]=T.rowLabel(i);
+    for(let j=0;j<c;j++) if(state.values[i][j]===undefined) state.values[i][j]='';
+  }
+  for(let j=0;j<c;j++) if(state.colLabels[j]===undefined || state.colLabels[j]==='') state.colLabels[j]=T.colLabel(j);
+  state.rows=r; state.cols=c;
+}
+
+function syncFromGrid(){
+  gridEl.querySelectorAll('input[data-r]').forEach(inp => { state.values[+inp.dataset.r][+inp.dataset.c]=inp.value; });
+  gridEl.querySelectorAll('input[data-row-label]').forEach(inp => { state.rowLabels[+inp.dataset.rowLabel]=inp.value; });
+  gridEl.querySelectorAll('input[data-col-label]').forEach(inp => { state.colLabels[+inp.dataset.colLabel]=inp.value; });
+}
+
+function rowName(i){ return (state.rowLabels[i]||'').trim() || T.rowLabel(i); }
+function colName(j){ return (state.colLabels[j]||'').trim() || T.colLabel(j); }
+
+function makeInput(type, cls){
+  const inp=document.createElement('input');
+  inp.type=type;
+  if(cls) inp.className=cls;
+  return inp;
+}
+
+function buildGrid(){
+  ensureSize(state.rows, state.cols);
+  rowsSel.value=String(state.rows);
+  colsSel.value=String(state.cols);
+  gridEl.textContent='';
+
+  const head=gridEl.createTHead().insertRow();
+  const corner=document.createElement('th');
+  corner.className='ct-corner'; corner.scope='col'; corner.textContent=T.corner;
+  head.appendChild(corner);
+  for(let j=0;j<state.cols;j++){
+    const th=document.createElement('th'); th.scope='col';
+    const inp=makeInput('text','ct-label');
+    inp.value=state.colLabels[j]; inp.maxLength=40; inp.dataset.colLabel=j;
+    inp.setAttribute('aria-label', T.colLabelAria(j));
+    th.appendChild(inp); head.appendChild(th);
+  }
+  const thTot=document.createElement('th'); thTot.className='ct-total'; thTot.scope='col'; thTot.textContent=T.total;
+  head.appendChild(thTot);
+
+  const body=gridEl.createTBody();
+  for(let i=0;i<state.rows;i++){
+    const tr=body.insertRow();
+    const th=document.createElement('th'); th.scope='row';
+    const lab=makeInput('text','ct-label');
+    lab.value=state.rowLabels[i]; lab.maxLength=40; lab.dataset.rowLabel=i;
+    lab.setAttribute('aria-label', T.rowLabelAria(i));
+    th.appendChild(lab); tr.appendChild(th);
+    for(let j=0;j<state.cols;j++){
+      const td=tr.insertCell();
+      const inp=makeInput('number');
+      inp.min='0'; inp.step='1'; inp.inputMode='numeric';
+      inp.value=state.values[i][j]; inp.dataset.r=i; inp.dataset.c=j;
+      td.appendChild(inp);
+    }
+    const tot=tr.insertCell(); tot.className='ct-total'; tot.id=`ctRowTot${i}`;
+  }
+  const foot=gridEl.createTFoot().insertRow();
+  const thF=document.createElement('th'); thF.className='ct-total'; thF.scope='row'; thF.textContent=T.total;
+  foot.appendChild(thF);
+  for(let j=0;j<state.cols;j++){ const td=foot.insertCell(); td.className='ct-total'; td.id=`ctColTot${j}`; }
+  const g=foot.insertCell(); g.className='ct-total'; g.id='ctGrandTot';
+
+  refreshCellLabels();
+  updateTotals();
+}
+
+function refreshCellLabels(){
+  gridEl.querySelectorAll('input[data-r]').forEach(inp => {
+    inp.setAttribute('aria-label', T.cellAria(rowName(+inp.dataset.r), colName(+inp.dataset.c)));
+  });
+}
+
+function parseCount(raw){
+  const s=String(raw).trim();
+  if(s==='') return {empty:true};
+  const v=Number(s);
+  return {value:v, valid:Number.isInteger(v) && v>=0};
+}
+
+function updateTotals(){
+  syncFromGrid();
+  const r=state.rows, c=state.cols;
+  const colSum=Array(c).fill(0), colOk=Array(c).fill(true);
+  let grand=0, grandOk=true;
+  for(let i=0;i<r;i++){
+    let s=0, ok=true;
+    for(let j=0;j<c;j++){
+      const p=parseCount(state.values[i][j]);
+      const inp=gridEl.querySelector(`input[data-r="${i}"][data-c="${j}"]`);
+      if(inp) inp.setAttribute('aria-invalid', String(!p.empty && !p.valid));
+      if(p.empty || !p.valid){ ok=false; colOk[j]=false; }
+      else { s+=p.value; colSum[j]+=p.value; }
+    }
+    document.getElementById(`ctRowTot${i}`).textContent = ok ? String(s) : '—';
+    if(ok) grand+=s; else grandOk=false;
+  }
+  for(let j=0;j<c;j++) document.getElementById(`ctColTot${j}`).textContent = colOk[j] ? String(colSum[j]) : '—';
+  document.getElementById('ctGrandTot').textContent = grandOk ? String(grand) : '—';
+}
+
+function splitLine(line){
+  if(line.includes('\t')) return line.split('\t');
+  if(/[;,]/.test(line)) return line.split(/[;,]/);
+  return line.trim().split(/\s+/);
+}
+
+function isNumeric(s){ return s!=='' && Number.isFinite(Number(s)); }
+
+function handlePaste(e){
+  const target=e.target;
+  if(!(target instanceof HTMLInputElement) || !gridEl.contains(target)) return;
+  const text=(e.clipboardData || window.clipboardData).getData('text') || '';
+  if(!/[\t\n]/.test(text.trim())) return;
+  e.preventDefault();
+  syncFromGrid();
+
+  const lines=text.replace(/\r/g,'').split('\n').filter(l => l.trim()!=='');
+  if(target.dataset.colLabel!==undefined && lines.length===1){
+    const labels=splitLine(lines[0]).map(s => s.trim());
+    const j0=+target.dataset.colLabel;
+    ensureSize(state.rows, Math.min(MAX_DIM, Math.max(state.cols, j0+labels.length)));
+    labels.forEach((l,k) => { if(j0+k<state.cols && l) state.colLabels[j0+k]=l; });
+    buildGrid();
+    return;
+  }
+  if(target.dataset.rowLabel!==undefined && lines.every(l => splitLine(l).length===1)){
+    const i0=+target.dataset.rowLabel;
+    ensureSize(Math.min(MAX_DIM, Math.max(state.rows, i0+lines.length)), state.cols);
+    lines.forEach((l,k) => { if(i0+k<state.rows) state.rowLabels[i0+k]=l.trim(); });
+    buildGrid();
+    return;
+  }
+
+  let cells=lines.map(l => splitLine(l).map(s => s.trim()));
+  let colLabels=null, rowLabels=null;
+  if(cells.length>1 && cells[0].slice(1).some(s => s!=='' && !isNumeric(s))){
+    colLabels=cells[0]; cells=cells.slice(1);
+  }
+  if(cells.some(row => row[0]!=='' && row[0]!==undefined && !isNumeric(row[0]))){
+    rowLabels=cells.map(row => row[0]); cells=cells.map(row => row.slice(1));
+  }
+  const nR=cells.length, nC=Math.max(...cells.map(row => row.length));
+  if(!nR || !nC) return;
+  if(colLabels && colLabels.length===nC+1) colLabels=colLabels.slice(1);
+
+  const fromStart = colLabels || rowLabels || !target.dataset.r;
+  const r0 = fromStart ? 0 : +target.dataset.r;
+  const c0 = fromStart ? 0 : +target.dataset.c;
+  const newRows = fromStart ? Math.max(MIN_DIM, nR) : Math.max(state.rows, r0+nR);
+  const newCols = fromStart ? Math.max(MIN_DIM, nC) : Math.max(state.cols, c0+nC);
+  const rows=Math.min(MAX_DIM, newRows), cols=Math.min(MAX_DIM, newCols);
+  if(fromStart){ state.values=[]; state.rowLabels=[]; state.colLabels=[]; }
+  ensureSize(rows, cols);
+
+  for(let i=0;i<nR && r0+i<rows;i++){
+    if(rowLabels && rowLabels[i]) state.rowLabels[r0+i]=rowLabels[i];
+    for(let j=0;j<nC && c0+j<cols;j++) state.values[r0+i][c0+j]=(cells[i][j]===undefined ? '' : cells[i][j]);
+  }
+  if(colLabels) for(let j=0;j<nC && j<cols;j++) if(colLabels[j]) state.colLabels[j]=colLabels[j];
+
+  buildGrid();
+  noticeEl.textContent = (newRows>MAX_DIM || newCols>MAX_DIM) ? T.pasteTrimmed(rows, cols) : T.pasted(rows, cols);
+}
+
+function resizeFromSelects(){
+  syncFromGrid();
+  state.rows=parseInt(rowsSel.value,10);
+  state.cols=parseInt(colsSel.value,10);
+  state.values=state.values.slice(0, state.rows).map(row => row.slice(0, state.cols));
+  state.rowLabels=state.rowLabels.slice(0, state.rows);
+  state.colLabels=state.colLabels.slice(0, state.cols);
+  noticeEl.textContent='';
+  buildGrid();
+}
+
+/* ---------- Charts ---------- */
+function chartTheme(){
+  const dark=document.documentElement.classList.contains('dark-mode');
+  return {
+    dark,
+    palette: dark ? PALETTE_DARK : PALETTE_LIGHT,
+    surface: dark ? '#1e293b' : '#ffffff',
+    text: dark ? '#cbd5e1' : '#475569',
+    grid: dark ? 'rgba(255,255,255,0.08)' : 'rgba(15,23,42,0.08)'
+  };
+}
+
+function axisStyle(th, title){
+  return {
+    title: {display:true, text:title, color:th.text},
+    ticks: {color:th.text},
+    grid: {color:th.grid}
+  };
+}
+
 function renderChiIndependenceChart(df, alpha, statValue){
   const ctx=document.getElementById('chiIndependenceChart');
   if(!ctx) return;
+  const th=chartTheme();
   const critical=chiSquareQuantile(1-alpha, df);
-  const maxX=Math.max(critical*1.4, statValue*1.4, df+10, 10);
+  const maxX=Math.max(critical*1.4, Math.min(statValue*1.4, critical*6), df+10, 10);
   const step=maxX/350;
-  const curve=[];
-  const acceptance=[];
-  const rejection=[];
+  const curve=[], acceptance=[], rejection=[];
   for(let x=0;x<=maxX;x+=step){
     const y=chiSquarePdf(x, df);
     curve.push({x,y});
     if(x<=critical){ acceptance.push({x,y}); rejection.push({x,y:null}); }
     else { acceptance.push({x,y:null}); rejection.push({x,y}); }
   }
-  const maxY=Math.max(...curve.map(p=>p.y));
-  const statLine=Number.isFinite(statValue)?[{x:statValue,y:0},{x:statValue,y:maxY}]:[];
+  const maxY=Math.max(...curve.filter(p => Number.isFinite(p.y)).map(p => p.y));
+  const statX=Math.min(statValue, maxX);
+  const statLine=Number.isFinite(statValue)?[{x:statX,y:0},{x:statX,y:maxY}]:[];
 
   if(chiIndependenceChart) chiIndependenceChart.destroy();
   chiIndependenceChart=new Chart(ctx,{
     type:'line',
     data:{datasets:[
-      {label:'Acceptance zone',data:acceptance,borderColor:'rgba(34,197,94,0)',backgroundColor:'rgba(34,197,94,0.35)',fill:'origin',pointRadius:0,parsing:false},
-      {label:'Rejection zone',data:rejection,borderColor:'rgba(239,68,68,0)',backgroundColor:'rgba(239,68,68,0.35)',fill:'origin',pointRadius:0,parsing:false},
-      {label:`χ² distribution (df=${df})`,data:curve,borderColor:'#1d4ed8',borderWidth:2,pointRadius:0,fill:false,parsing:false},
-      {label:'Observed χ²',data:statLine,borderColor:'#f59e0b',borderWidth:2,pointRadius:0,fill:false,parsing:false}
+      {label:T.acceptance,data:acceptance,borderColor:'rgba(34,197,94,0)',backgroundColor:'rgba(34,197,94,0.35)',fill:'origin',pointRadius:0,parsing:false},
+      {label:T.rejection,data:rejection,borderColor:'rgba(239,68,68,0)',backgroundColor:'rgba(239,68,68,0.35)',fill:'origin',pointRadius:0,parsing:false},
+      {label:T.dist(df),data:curve,borderColor:'#1d4ed8',borderWidth:2,pointRadius:0,fill:false,parsing:false},
+      {label:T.statLine,data:statLine,borderColor:'#f59e0b',borderWidth:2,pointRadius:0,fill:false,parsing:false}
     ]},
     options:{
       responsive:true,
       maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:th.text}}},
       scales:{
-        x:{type:'linear',min:0,max:maxX,title:{display:true,text:'χ² statistic'}},
-        y:{beginAtZero:true,title:{display:true,text:'Density'}}
+        x:Object.assign({type:'linear',min:0,max:maxX}, axisStyle(th, T.xStat)),
+        y:Object.assign({beginAtZero:true}, axisStyle(th, T.yDensity))
       }
     }
   });
 }
 
-function formatExpected(expected){
-  const rows=expected.map(r=>`<tr>${r.map(v=>`<td>${v.toFixed(2)}</td>`).join('')}</tr>`).join('');
-  return `<strong>Expected frequencies</strong><br><table><tbody>${rows}</tbody></table>`;
+function renderProfileChart(res){
+  const ctx=document.getElementById('profileChart');
+  if(!ctx) return;
+  const th=chartTheme();
+  const labels=[...res.rowLabels, T.totalBar];
+  const datasets=res.colLabels.map((cl,j) => ({
+    label: cl,
+    data: [...res.O.map((row,i) => 100*row[j]/res.rowTotals[i]), 100*res.colTotals[j]/res.n],
+    counts: [...res.O.map(row => row[j]), res.colTotals[j]],
+    backgroundColor: th.palette[j % th.palette.length],
+    borderColor: th.surface,
+    borderWidth: 2,
+    borderSkipped: false,
+    maxBarThickness: 38
+  }));
+
+  if(profileChart) profileChart.destroy();
+  profileChart=new Chart(ctx,{
+    type:'bar',
+    data:{labels, datasets},
+    options:{
+      indexAxis:'y',
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'top', labels:{color:th.text}},
+        tooltip:{callbacks:{label:c => T.tooltipProfile(c.dataset.label, c.parsed.x.toFixed(1), c.dataset.counts[c.dataIndex])}}
+      },
+      scales:{
+        x:Object.assign({stacked:true, min:0, max:100}, axisStyle(th, T.xProfile), {ticks:{color:th.text, callback:v => T.pct(v)}}),
+        y:Object.assign({stacked:true}, axisStyle(th, ''), {title:{display:false}, grid:{display:false}})
+      }
+    }
+  });
 }
 
-document.getElementById('calcChiBtn').addEventListener('click',()=>{
-  try{
-    const table=parseTable(document.getElementById('tableInput').value);
-    const alpha=parseFloat(document.getElementById('alpha').value);
+/* ---------- Calculation ---------- */
+function htmlTable(colLabels, rowLabels, cellFn, totals){
+  const head=`<tr><th></th>${colLabels.map(l => `<th>${esc(l)}</th>`).join('')}${totals ? `<th>${T.total}</th>` : ''}</tr>`;
+  const body=rowLabels.map((rl,i) => `<tr><th>${esc(rl)}</th>${colLabels.map((_,j) => cellFn(i,j)).join('')}${totals ? `<td>${totals.row[i]}</td>` : ''}</tr>`).join('');
+  const foot=totals ? `<tr><th>${T.total}</th>${totals.col.map(v => `<td>${v}</td>`).join('')}<td>${totals.grand}</td></tr>` : '';
+  return `<div class="result-table-wrap"><table><thead>${head}</thead><tbody>${body}${foot}</tbody></table></div>`;
+}
 
-    const r=table.length, c=table[0].length;
-    const rowTotals=table.map(row=>row.reduce((a,b)=>a+b,0));
-    const colTotals=Array.from({length:c},(_,j)=>table.reduce((s,row)=>s+row[j],0));
-    const n=rowTotals.reduce((a,b)=>a+b,0);
-    if(n<=0) throw new Error('The sample total must be greater than 0.');
+function effectLabel(w){
+  const L=T.effectLabels;
+  return w<0.1 ? L[0] : w<0.3 ? L[1] : w<0.5 ? L[2] : L[3];
+}
 
-    const expected=table.map((row,i)=>row.map((_,j)=>rowTotals[i]*colTotals[j]/n));
-    let chi2=0;
-    for(let i=0;i<r;i++) for(let j=0;j<c;j++) chi2 += Math.pow(table[i][j]-expected[i][j],2)/expected[i][j];
+function formatP(p){
+  return p<0.000001 ? '&lt; 0.000001' : p.toFixed(6);
+}
 
-    const df=(r-1)*(c-1);
-    const p=Math.max(0,Math.min(1,chiSquareSurvival(chi2,df)));
-    const decision=p<alpha?'Reject H₀ (there is evidence of association).':'Fail to reject H₀ (not enough evidence of association).';
+function calculate(){
+  updateTotals();
+  const r=state.rows, c=state.cols;
+  const alpha=parseFloat(document.getElementById('alpha').value);
+  if(!(alpha>0 && alpha<1)) throw new Error(T.errAlpha);
 
-    document.getElementById('chiResult').innerHTML =
-      `Observed χ²: <strong>${chi2.toFixed(4)}</strong><br>`+
-      `Degrees of freedom: <strong>${df}</strong><br>`+
-      `p-value: <strong>${p.toFixed(6)}</strong><br>`+
-      `Decision (α=${alpha}): <strong>${decision}</strong>`;
-
-    document.getElementById('expectedTable').innerHTML = formatExpected(expected);
-    renderChiIndependenceChart(df, alpha, chi2);
-  }catch(err){
-    document.getElementById('chiResult').textContent = `Error: ${err.message}`;
-    if(chiIndependenceChart){ chiIndependenceChart.destroy(); chiIndependenceChart = null; }
+  const O=[]; let empty=0, invalid=0;
+  for(let i=0;i<r;i++){
+    O[i]=[];
+    for(let j=0;j<c;j++){
+      const p=parseCount(state.values[i][j]);
+      const inp=gridEl.querySelector(`input[data-r="${i}"][data-c="${j}"]`);
+      if(p.empty){ empty++; if(inp) inp.setAttribute('aria-invalid','true'); }
+      else if(!p.valid) invalid++;
+      O[i][j]=p.value;
+    }
   }
+  if(empty) throw new Error(T.errEmpty(empty));
+  if(invalid) throw new Error(T.errInvalid);
+
+  const rowLabels=Array.from({length:r},(_,i) => rowName(i));
+  const colLabels=Array.from({length:c},(_,j) => colName(j));
+  const rowTotals=O.map(row => row.reduce((a,b) => a+b, 0));
+  const colTotals=Array.from({length:c},(_,j) => O.reduce((s,row) => s+row[j], 0));
+  const n=rowTotals.reduce((a,b) => a+b, 0);
+  if(n<=0) throw new Error(T.errZeroTotal);
+  const zr=rowTotals.findIndex(v => v===0);
+  if(zr>=0) throw new Error(T.errZeroRow(rowLabels[zr]));
+  const zc=colTotals.findIndex(v => v===0);
+  if(zc>=0) throw new Error(T.errZeroCol(colLabels[zc]));
+
+  const yatesAsked=document.getElementById('yates').checked;
+  const yates=yatesAsked && r===2 && c===2;
+  const E=O.map((row,i) => row.map((_,j) => rowTotals[i]*colTotals[j]/n));
+  let chi2Pearson=0, chi2=0;
+  const contrib=O.map(row => row.map(() => 0));
+  const adj=O.map(row => row.map(() => 0));
+  for(let i=0;i<r;i++) for(let j=0;j<c;j++){
+    const d=O[i][j]-E[i][j];
+    const term=d*d/E[i][j];
+    const dy=yates ? Math.max(0, Math.abs(d)-0.5) : Math.abs(d);
+    contrib[i][j]=dy*dy/E[i][j];
+    chi2Pearson+=term;
+    chi2+=contrib[i][j];
+    adj[i][j]=d/Math.sqrt(E[i][j]*(1-rowTotals[i]/n)*(1-colTotals[j]/n));
+  }
+  const df=(r-1)*(c-1);
+  const p=Math.max(0, Math.min(1, chiSquareSurvival(chi2, df)));
+  const crit=chiSquareQuantile(1-alpha, df);
+  const k=Math.min(r,c)-1;
+  const V=Math.sqrt(chi2Pearson/(n*k));
+  const w=V*Math.sqrt(k);
+
+  const flatE=E.flat();
+  const minE=Math.min(...flatE);
+  const below5=flatE.filter(v => v<5).length;
+  const below1=flatE.some(v => v<1);
+  const cells=r*c;
+  const cochranOk=!below1 && below5<=0.2*cells;
+
+  let validity;
+  if(cochranOk){
+    validity=T.cochranOk(minE.toFixed(2), below5, cells);
+  } else {
+    validity=`<span class="ct-warn">${T.cochranFail(minE.toFixed(2), below5, cells, Math.round(100*below5/cells), below1)}${(r===2 && c===2) ? T.fisherHint : T.groupHint}</span>`;
+  }
+
+  const decision=p<alpha ? T.reject : T.noReject;
+  document.getElementById('chiResult').innerHTML =
+    `${T.table(r,c,n)}<br>`+
+    `${T.chiObs(yates)}: <strong>${chi2.toFixed(4)}</strong><br>`+
+    `${T.df}: <strong>${df}</strong><br>`+
+    `${T.crit} (α=${alpha}): <strong>${crit.toFixed(4)}</strong><br>`+
+    `${T.pValue}: <strong>${formatP(p)}</strong><br>`+
+    `${T.cramer}: <strong>${V.toFixed(4)}</strong> (${T.effect(effectLabel(w), w.toFixed(3))})<br>`+
+    `${T.decision} (α=${alpha}): <strong>${decision}</strong><br>`+
+    validity+
+    (yatesAsked && !yates ? `<br>${T.yatesIgnored}` : '');
+
+  const totals={row:rowTotals, col:colTotals, grand:n};
+  document.getElementById('expectedTable').innerHTML =
+    `<strong>${T.expectedTitle}</strong>`+
+    htmlTable(colLabels, rowLabels, (i,j) => `<td>${E[i][j].toFixed(2)}${E[i][j]<5 ? '*' : ''}</td>`, totals)+
+    (below5 ? T.expectedNote : '');
+
+  const ranked=[];
+  for(let i=0;i<r;i++) for(let j=0;j<c;j++) ranked.push({i,j,v:contrib[i][j]});
+  ranked.sort((a,b) => b.v-a.v);
+  const top=ranked.slice(0, Math.min(3, ranked.length)).filter(x => x.v>0)
+    .map(x => `${T.q(`${esc(rowLabels[x.i])} / ${esc(colLabels[x.j])}`)} (${T.pct((100*x.v/chi2).toFixed(1))})`).join(', ');
+  const anySig=adj.some(row => row.some(v => Math.abs(v)>1.96));
+  document.getElementById('residualTable').innerHTML =
+    `<strong>${T.residualTitle}</strong>`+
+    htmlTable(colLabels, rowLabels, (i,j) => {
+      const v=adj[i][j];
+      const cls=v>1.96 ? ' class="ct-pos"' : v<-1.96 ? ' class="ct-neg"' : '';
+      return `<td${cls}>${v>0 ? '+' : ''}${v.toFixed(2)}</td>`;
+    }, null)+
+    (anySig ? T.residualNote : T.noSigResiduals)+
+    (top && chi2>0 ? `<br>${T.topCells}: ${top}` : '');
+
+  const pctRows=O.map((row,i) => row.map(v => 100*v/rowTotals[i]));
+  const pctTotal=colTotals.map(v => 100*v/n);
+  document.getElementById('profileTable').innerHTML =
+    `<strong>${T.profileTitle}</strong>`+
+    htmlTable(colLabels, [...rowLabels, T.totalBar], (i,j) => `<td>${T.pct((i<r ? pctRows[i][j] : pctTotal[j]).toFixed(1))}</td>`, null);
+
+  lastResult={df, alpha, chi2, O, rowLabels, colLabels, rowTotals, colTotals, n};
+  renderCharts();
+}
+
+function renderCharts(){
+  if(!lastResult) return;
+  renderChiIndependenceChart(lastResult.df, lastResult.alpha, lastResult.chi2);
+  renderProfileChart(lastResult);
+}
+
+function runCalculation(){
+  try{
+    calculate();
+  }catch(err){
+    document.getElementById('chiResult').textContent = `${T.errorPrefix}: ${err.message}`;
+    document.getElementById('expectedTable').textContent = '—';
+    document.getElementById('residualTable').textContent = '—';
+    document.getElementById('profileTable').textContent = '—';
+    lastResult=null;
+    if(chiIndependenceChart){ chiIndependenceChart.destroy(); chiIndependenceChart=null; }
+    if(profileChart){ profileChart.destroy(); profileChart=null; }
+  }
+}
+
+gridEl.addEventListener('input', e => {
+  if(e.target.dataset.rowLabel!==undefined || e.target.dataset.colLabel!==undefined){ syncFromGrid(); refreshCellLabels(); }
+  else updateTotals();
 });
-document.getElementById('calcChiBtn').click();
+gridEl.addEventListener('paste', handlePaste);
+gridEl.addEventListener('keydown', e => { if(e.key==='Enter'){ e.preventDefault(); runCalculation(); } });
+rowsSel.addEventListener('change', resizeFromSelects);
+colsSel.addEventListener('change', resizeFromSelects);
+document.getElementById('ctExampleBtn').addEventListener('click', () => {
+  state=loadExample(); noticeEl.textContent=''; buildGrid(); runCalculation();
+});
+document.getElementById('ctClearBtn').addEventListener('click', () => {
+  syncFromGrid();
+  for(let i=0;i<state.rows;i++) for(let j=0;j<state.cols;j++) state.values[i][j]='';
+  buildGrid();
+  noticeEl.textContent=T.cleared;
+  const first=gridEl.querySelector('input[data-r]');
+  if(first) first.focus();
+});
+document.getElementById('calcChiBtn').addEventListener('click', runCalculation);
+let lastDark=document.documentElement.classList.contains('dark-mode');
+new MutationObserver(() => {
+  const dark=document.documentElement.classList.contains('dark-mode');
+  if(dark!==lastDark){ lastDark=dark; renderCharts(); }
+}).observe(document.documentElement, {attributes:true, attributeFilter:['class']});
+
+buildGrid();
+runCalculation();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
