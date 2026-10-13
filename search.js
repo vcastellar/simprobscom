@@ -129,6 +129,164 @@
     'Simulaciones':          { bg: 'rgba(217,119,6,0.09)',   color: '#b45309' }
   };
 
+  // ── English version ───────────────────────────────────────────────────
+  // Pages under /en/ reuse the same index: every tool exists at the same
+  // path with an "en/" prefix, so only names, tags and UI text change.
+  var IS_EN = document.documentElement.lang === 'en';
+
+  var EN_CATS = {
+    'Distribuciones': 'Distributions',
+    'Tablas estadísticas': 'Statistical tables',
+    'Intervalos de confianza': 'Confidence intervals',
+    'Tamaño muestral': 'Sample size',
+    'Contrastes de hipótesis': 'Hypothesis tests',
+    'Test A/B': 'A/B testing',
+    'Simulaciones': 'Simulations'
+  };
+
+  // url → [name, full name, tags]
+  var EN_TOOLS = {
+    '/normal.html': ['Normal', 'Normal distribution', 'gaussian bell curve z cdf pdf probability continuous'],
+    '/binomial.html': ['Binomial', 'Binomial distribution', 'discrete n p successes bernoulli trials'],
+    '/poisson.html': ['Poisson', 'Poisson distribution', 'lambda events per unit discrete arrivals'],
+    '/studentt.html': ["Student's t", "Student's t distribution", 'student degrees of freedom small sample t'],
+    '/chisquare.html': ['Chi-square', 'Chi-square distribution', 'chi square chi squared goodness of fit independence'],
+    '/centralf.html': ["Fisher-Snedecor's F", "Fisher-Snedecor's F distribution", 'F snedecor anova variance ratio'],
+    '/exponential.html': ['Exponential', 'Exponential distribution', 'exponential lambda time between events continuous'],
+    '/uniform.html': ['Uniform', 'Uniform distribution', 'uniform a b continuous equiprobable'],
+    '/gamma.html': ['Gamma', 'Gamma distribution', 'gamma k theta shape scale sum exponential'],
+    '/beta.html': ['Beta', 'Beta distribution', 'beta alpha proportions bayesian'],
+    '/lognormal.html': ['Log-normal', 'Log-normal distribution', 'lognormal logarithmic log normal mu sigma'],
+    '/weibull.html': ['Weibull', 'Weibull distribution', 'weibull reliability survival k lambda shape'],
+    '/negbin.html': ['Negative binomial', 'Negative binomial distribution', 'negative binomial failures r p discrete'],
+    '/geometric.html': ['Geometric', 'Geometric distribution', 'geometric first success p discrete'],
+    '/hypergeometric.html': ['Hypergeometric', 'Hypergeometric distribution', 'hypergeometric without replacement N K n'],
+    '/bernoulli.html': ['Bernoulli', 'Bernoulli distribution', 'bernoulli success failure p binary'],
+    '/tabla-normal.html': ['Standard normal table', 'Standard normal table — f(z) and Φ(z)', 'z table phi cdf normal cumulative'],
+    '/tabla-t-student.html': ["Student's t table", "Student's t table — critical values", 't table student degrees of freedom critical'],
+    '/tabla-chi-cuadrado.html': ['Chi-square table', 'Chi-square table — quantiles', 'chi square table quantiles critical'],
+    '/tabla-f-snedecor.html': ["Snedecor's F table", "Snedecor's F table — critical values", 'F table snedecor anova variances critical'],
+    '/tabla-binomial.html': ['Binomial table', 'Binomial table — P(X=k) and P(X≤k)', 'binomial table cumulative probability'],
+    '/tabla-poisson.html': ['Poisson table', 'Poisson table — P(X=k) and P(X≤k)', 'poisson table lambda probability'],
+    '/tabla-gamma.html': ['Gamma table', 'Gamma table — CDF and quantiles', 'gamma table quantiles CDF'],
+    '/tabla-beta.html': ['Beta table', 'Beta table — CDF and quantiles', 'beta table quantiles CDF bayesian'],
+    '/intervalo-confianza-media-sigma-conocida.html': ['CI mean (known σ)', 'Confidence interval for a mean (known σ)', 'confidence interval mean known sigma z normal'],
+    '/intervalo-confianza-media.html': ['CI mean (unknown σ)', 'Confidence interval for a mean (unknown σ)', 'confidence interval mean standard deviation t student'],
+    '/intervalo-confianza-proporcion.html': ['CI proportion', 'Confidence interval for a proportion', 'confidence interval proportion p binomial'],
+    '/intervalo-confianza-diferencia-medias.html': ['CI difference of means', 'Confidence interval for the difference of means', 'interval difference means two independent groups'],
+    '/intervalo-confianza-medias-apareadas.html': ['CI paired means', 'Confidence interval for paired means', 'interval paired means matched difference'],
+    '/intervalo-confianza-diferencia-proporciones.html': ['CI difference of proportions', 'Confidence interval for the difference of proportions', 'interval difference proportions two groups'],
+    '/intervalo-confianza-ratio-proporciones.html': ['CI ratio of proportions', 'Confidence interval for the ratio of proportions', 'interval ratio proportions relative risk'],
+    '/intervalo-confianza-odds-ratio.html': ['CI odds ratio', 'Confidence interval for the odds ratio', 'interval odds ratio case control'],
+    '/intervalo-confianza-varianza.html': ['CI variance', 'Confidence interval for the variance', 'confidence interval variance standard deviation chi'],
+    '/intervalo-confianza-proporcion-poblacion-finita.html': ['CI proportion (finite pop.)', 'Confidence interval for a proportion in a finite population', 'interval proportion finite population correction'],
+    '/intervalo-confianza-media-poblacion-finita.html': ['CI mean (finite pop.)', 'Confidence interval for a mean in a finite population', 'interval mean finite population correction'],
+    '/contraste-hipotesis-una-media.html': ['One-mean test', 'Hypothesis test for one mean', 'test mean t z one sample hypothesis p-value'],
+    '/contraste-hipotesis-dos-medias.html': ['Two independent means test', 'Hypothesis test for two independent means', 'test two means independent t Welch'],
+    '/contraste-hipotesis-medias-apareadas.html': ['Paired means test', 'Hypothesis test for paired means', 'test paired means matched difference t'],
+    '/anova.html': ['One-way ANOVA', 'One-way ANOVA', 'ANOVA factor variance k groups F'],
+    '/contraste-hipotesis-una-proporcion.html': ['One-proportion test', 'Hypothesis test for one proportion', 'test proportion z binomial hypothesis'],
+    '/contraste-hipotesis-dos-proporciones.html': ['Two proportions test', 'Hypothesis test for two independent proportions', 'test two proportions independent z'],
+    '/contraste-hipotesis-proporciones-apareadas.html': ['Paired proportions test (McNemar)', 'Paired proportions test — McNemar', 'McNemar paired proportions matched'],
+    '/contraste-hipotesis-varianzas.html': ['Variance test', 'Hypothesis test for one or two variances', 'test variance standard deviation chi square dispersion'],
+    '/contraste-hipotesis-dos-varianzas.html': ['Two variances test (F)', 'Hypothesis test for two variances — F test', 'test variances F levene homogeneity'],
+    '/contraste-independencia-chi-cuadrado.html': ['Chi-square test of independence', 'Chi-square test of independence', 'chi square independence contingency table'],
+    '/chi-cuadrado-bondad-ajuste.html': ['Chi-square goodness of fit', 'Chi-square goodness-of-fit test', 'chi square goodness of fit theoretical distribution'],
+    '/test-exacto-fisher.html': ["Fisher's exact test", "Fisher's exact test", 'Fisher exact 2x2 contingency table'],
+    '/kolmogorov-smirnov-bondad-ajuste.html': ['Kolmogorov-Smirnov', 'Kolmogorov-Smirnov — goodness of fit', 'kolmogorov smirnov KS goodness of fit normality'],
+    '/shapiro-wilk-normalidad.html': ['Shapiro-Wilk', 'Shapiro-Wilk normality test', 'shapiro wilk normality W statistic'],
+    '/contraste-hipotesis-correlacion.html': ['Pearson correlation test', 'Hypothesis test for the Pearson correlation', 'correlation pearson r test hypothesis'],
+    '/contraste-hipotesis-no-inferioridad.html': ['Non-inferiority test', 'Non-inferiority and equivalence test', 'non-inferiority equivalence delta margin'],
+    '/contraste-hipotesis-odds-ratio.html': ['Odds ratio test', 'Hypothesis test for the odds ratio', 'odds ratio test case control'],
+    '/potencia-contraste-una-proporcion.html': ['Power: one-proportion test', 'Statistical power for a one-proportion test', 'power type II error beta test proportion'],
+    '/tamano-muestral-una-proporcion.html': ['Sample size: one proportion (CI)', 'Sample size for the CI of one proportion', 'sample size proportion confidence interval survey margin of error'],
+    '/tamano-muestral-dos-proporciones.html': ['Sample size: two proportions (CI)', 'Sample size for the CI of two proportions', 'sample size two proportions difference CI'],
+    '/tamano-muestral-diferencia-proporciones-ic.html': ['Sample size: difference of proportions (CI)', 'Sample size for the CI of a difference of proportions', 'sample size difference proportions CI interval'],
+    '/tamano-muestral-una-media.html': ['Sample size: one mean (CI)', 'Sample size for the CI of one mean', 'sample size mean interval margin of error confidence'],
+    '/tamano-muestral-diferencia-medias.html': ['Sample size: two means (CI)', 'Sample size for the CI of two means', 'sample size difference means CI interval'],
+    '/tamano-muestral-medias-apareadas-ic.html': ['Sample size: paired means (CI)', 'Sample size for the CI of paired means', 'sample size paired CI interval'],
+    '/tamano-muestral-odds-ratio-ic.html': ['Sample size: odds ratio (CI)', 'Sample size for the CI of the odds ratio', 'sample size odds ratio CI interval'],
+    '/tamano-muestral-varianza-ic.html': ['Sample size: variance (CI)', 'Sample size for the CI of the variance', 'sample size variance CI interval'],
+    '/tamano-muestral-proporcion-poblacion-finita.html': ['Sample size: proportion, finite pop. (CI)', 'Sample size for a proportion in a finite population', 'sample size proportion finite population CI correction'],
+    '/tamano-muestral-media-poblacion-finita.html': ['Sample size: mean, finite pop. (CI)', 'Sample size for a mean in a finite population', 'sample size mean finite population CI correction'],
+    '/tamano-muestral-contraste-una-proporcion.html': ['Sample size: one proportion (H0)', 'Sample size for a one-proportion test', 'sample size proportion test hypothesis power alpha beta'],
+    '/tamano-muestral-contraste-una-media.html': ['Sample size: one mean (H0)', 'Sample size for a one-mean test', 'sample size mean test power alpha beta'],
+    '/tamano-muestral-medias-apareadas.html': ['Sample size: paired means (H0)', 'Sample size for a paired means test', 'sample size paired test power'],
+    '/tamano-muestral-proporciones-apareadas.html': ['Sample size: paired proportions (H0)', 'Sample size for paired proportions (McNemar)', 'sample size paired proportions McNemar'],
+    '/tamano-muestral-anova.html': ['Sample size: ANOVA (H0)', 'Sample size for ANOVA', 'sample size ANOVA k groups power F'],
+    '/tamano-muestral-correlacion.html': ['Sample size: correlation (H0)', 'Sample size for Pearson correlation', 'sample size correlation pearson r power'],
+    '/tamano-muestral-no-inferioridad.html': ['Sample size: non-inferiority (H0)', 'Sample size for non-inferiority and equivalence', 'non-inferiority equivalence delta margin sample size'],
+    '/tamano-muestral-odds-ratio.html': ['Sample size: odds ratio (H0)', 'Sample size for the odds ratio (case-control)', 'odds ratio case control test sample size'],
+    '/tamano-muestral-una-varianza.html': ['Sample size: one variance (H0)', 'Sample size for a one-variance test', 'variance chi square test power sample size'],
+    '/tamano-muestral-dos-varianzas.html': ['Sample size: two variances (H0)', 'Sample size for a two-variances test', 'two variances F test sample size'],
+    '/tamano-muestral-chi-cuadrado-independencia.html': ['Sample size: chi-square independence (H0)', 'Sample size for the chi-square test of independence', 'chi square independence contingency table sample size'],
+    '/tamano-muestral-chi-cuadrado-bondad.html': ['Sample size: chi-square goodness of fit (H0)', 'Sample size for the chi-square goodness-of-fit test', 'chi square goodness of fit sample size'],
+    '/tamano-muestral-fisher.html': ["Sample size: Fisher's exact test (H0)", "Sample size for Fisher's exact test", 'fisher exact 2x2 sample size'],
+    '/tamano-muestral-kolmogorov-smirnov.html': ['Sample size: Kolmogorov-Smirnov (H0)', 'Sample size for the Kolmogorov-Smirnov test', 'kolmogorov smirnov KS sample size normality'],
+    '/tamano-muestral-shapiro-wilk.html': ['Sample size: Shapiro-Wilk (H0)', 'Sample size for the Shapiro-Wilk test', 'shapiro wilk normality sample size'],
+    '/ab-testing-z-test.html': ['Frequentist A/B test (Z-test)', 'Frequentist A/B test — Z-test for proportions', 'ab testing z test frequentist significance p-value conversion'],
+    '/ab-testing-bayesiano.html': ['Bayesian A/B test (Beta-Binomial)', 'Bayesian A/B test — Beta-Binomial', 'bayesian beta binomial probability to beat ab'],
+    '/ab-testing-potencia.html': ['Power and MDE for A/B', 'Statistical power and MDE for A/B tests', 'power MDE minimum detectable effect sample size ab'],
+    '/ab-testing-simulacion.html': ['A/B experiment simulation', 'Monte Carlo simulation of A/B experiments', 'simulation monte carlo ab testing experiment'],
+    '/potencia-test-ab.html': ['A/B test power (advanced)', 'Power and type II error for A/B tests (advanced)', 'power type II error ab test advanced'],
+    '/simulaciones/teorema-central-limite.html': ['Central Limit Theorem', 'Central Limit Theorem (CLT) simulator', 'CLT central limit theorem sampling distribution mean convergence'],
+    '/simulaciones/simulador-intervalos-confianza.html': ['Confidence Interval Simulator', 'Confidence interval simulator', 'confidence interval simulation frequency coverage'],
+    '/simulaciones/simulador-cadenas-markov.html': ['Markov chains', 'Markov chain simulator', 'markov chains states transition stationary'],
+    '/simulaciones/simulador-proceso-poisson.html': ['Poisson process', 'Poisson process simulator', 'poisson process lambda events arrivals'],
+    '/simulaciones/simulador-paseo-aleatorio.html': ['1D and 2D random walk', '1D and 2D random walk simulator', 'random walk 1D 2D diffusion brownian'],
+    '/simulaciones/simulador-errores-tipo-i-ii.html': ['Type I and Type II errors', 'Type I and Type II error simulator', 'type I II errors alpha beta power hypothesis'],
+    '/simulaciones/simulador-bootstrap.html': ['Bootstrap', 'Bootstrap simulator', 'bootstrap resampling confidence interval empirical']
+  };
+
+  // url → [name, description]
+  var EN_SECTIONS = {
+    '/distribuciones/': ['Probability distributions', '16 distributions'],
+    '/tablas-estadisticas/': ['Statistical tables', '8 tables'],
+    '/intervalos-confianza/': ['Confidence intervals', '11 calculators'],
+    '/tamano-muestral/': ['Sample size', '25 calculators'],
+    '/contrastes-hipotesis/': ['Hypothesis tests', '18 tests'],
+    '/ab-testing/': ['A/B testing and experimentation', '5 tools'],
+    '/simulaciones/': ['Statistical simulations', '7 simulations']
+  };
+
+  var STR = IS_EN ? {
+    dialog: 'Search statistics tools',
+    placeholder: 'Search 90+ statistics tools…',
+    input: 'Search statistics tool',
+    quick: 'Quick access by area',
+    results: 'Results',
+    of: ' of ',
+    none: 'No results for',
+    more: ' more — refine your search',
+    nav: 'navigate', open: 'open', close: 'close'
+  } : {
+    dialog: 'Búsqueda de herramientas estadísticas',
+    placeholder: 'Buscar entre 90+ herramientas estadísticas…',
+    input: 'Buscar herramienta estadística',
+    quick: 'Acceso rápido por área',
+    results: 'Resultados',
+    of: ' de ',
+    none: 'Sin resultados para',
+    more: ' más — afina la búsqueda',
+    nav: 'navegar', open: 'abrir', close: 'cerrar'
+  };
+
+  if (IS_EN) {
+    TOOLS = TOOLS.map(function (t) {
+      var en = EN_TOOLS[t.url];
+      if (!en) return t;
+      return { name: en[0], full: en[1], cat: t.cat, catLabel: EN_CATS[t.cat], url: t.url, tags: en[2] };
+    });
+    SECTIONS = SECTIONS.map(function (sec) {
+      var en = EN_SECTIONS[sec.url];
+      return en ? { name: en[0], url: sec.url, icon: sec.icon, desc: en[1], color: sec.color } : sec;
+    });
+  }
+
+  function catLabel(tool) {
+    return tool.catLabel || tool.cat;
+  }
+
   var modal, inputEl, resultsEl, activeIdx = -1, filtered = [];
 
   // ── URL helper ────────────────────────────────────────────────────────
@@ -147,12 +305,12 @@
 
   function toUrl(absPath) {
     // absPath starts with '/' (e.g. '/normal.html')
-    return SITE_ROOT + absPath.slice(1);
+    return SITE_ROOT + (IS_EN ? 'en/' : '') + absPath.slice(1);
   }
 
   // ── Scoring ───────────────────────────────────────────────────────────
   function score(tool, q) {
-    var haystack = (tool.name + ' ' + tool.full + ' ' + tool.cat + ' ' + tool.tags).toLowerCase();
+    var haystack = (tool.name + ' ' + tool.full + ' ' + catLabel(tool) + ' ' + tool.tags).toLowerCase();
     var words = q.toLowerCase().trim().split(/\s+/);
     var s = 0;
     for (var i = 0; i < words.length; i++) {
@@ -161,7 +319,7 @@
       if (!haystack.includes(w)) return 0;
       if (tool.name.toLowerCase().includes(w)) s += 4;
       else if (tool.full.toLowerCase().includes(w)) s += 2;
-      else if (tool.cat.toLowerCase().includes(w)) s += 1;
+      else if (catLabel(tool).toLowerCase().includes(w)) s += 1;
       else s += 0.5;
     }
     return s;
@@ -198,7 +356,7 @@
 
     if (!q || !q.trim()) {
       // Quick access: section links
-      html = '<div class="search-group"><div class="search-group-label">Acceso rápido por área</div>';
+      html = '<div class="search-group"><div class="search-group-label">' + STR.quick + '</div>';
       for (i = 0; i < SECTIONS.length; i++) {
         var sec = SECTIONS[i];
         html += '<a class="search-item search-item--section" href="' + esc(toUrl(sec.url)) + '" data-idx="' + i + '">' +
@@ -216,14 +374,14 @@
     runFilter(q);
 
     if (filtered.length === 0) {
-      resultsEl.innerHTML = '<div class="search-empty">Sin resultados para &ldquo;' + esc(q) + '&rdquo;</div>';
+      resultsEl.innerHTML = '<div class="search-empty">' + STR.none + ' &ldquo;' + esc(q) + '&rdquo;</div>';
       activeIdx = -1;
       return;
     }
 
     var shown = filtered.slice(0, 24);
     var extra = filtered.length > 24 ? filtered.length - 24 : 0;
-    var label = 'Resultados (' + (extra ? shown.length + ' de ' + filtered.length : shown.length) + ')';
+    var label = STR.results + ' (' + (extra ? shown.length + STR.of + filtered.length : shown.length) + ')';
 
     html = '<div class="search-group"><div class="search-group-label">' + label + '</div>';
     for (i = 0; i < shown.length; i++) {
@@ -231,11 +389,11 @@
       style = CAT_STYLES[tool.cat] || { bg: 'rgba(100,116,139,0.09)', color: '#475569' };
       html += '<a class="search-item" href="' + esc(toUrl(tool.url)) + '" data-idx="' + i + '">' +
         '<span class="search-item-name">' + highlight(tool.full, q) + '</span>' +
-        '<span class="search-item-cat" style="background:' + style.bg + ';color:' + style.color + '">' + esc(tool.cat) + '</span>' +
+        '<span class="search-item-cat" style="background:' + style.bg + ';color:' + style.color + '">' + esc(catLabel(tool)) + '</span>' +
         '</a>';
     }
     if (extra) {
-      html += '<div class="search-more">+' + extra + ' más — afina la búsqueda</div>';
+      html += '<div class="search-more">+' + extra + STR.more + '</div>';
     }
     html += '</div>';
     resultsEl.innerHTML = html;
@@ -279,20 +437,20 @@
     modal.id = 'search-modal';
     modal.setAttribute('role', 'dialog');
     modal.setAttribute('aria-modal', 'true');
-    modal.setAttribute('aria-label', 'Búsqueda de herramientas estadísticas');
+    modal.setAttribute('aria-label', STR.dialog);
     modal.innerHTML =
       '<div class="search-backdrop" id="search-backdrop"></div>' +
       '<div class="search-box">' +
         '<div class="search-input-wrap">' +
           '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' +
-          '<input id="search-input" type="text" placeholder="Buscar entre 90+ herramientas estadísticas…" autocomplete="off" spellcheck="false" aria-label="Buscar herramienta estadística">' +
+          '<input id="search-input" type="text" placeholder="' + STR.placeholder + '" autocomplete="off" spellcheck="false" aria-label="' + STR.input + '">' +
           '<kbd class="search-esc-hint">ESC</kbd>' +
         '</div>' +
         '<div id="search-results" class="search-results" role="listbox"></div>' +
         '<div class="search-help-bar">' +
-          '<span><kbd>↑↓</kbd> navegar</span>' +
-          '<span><kbd>↵</kbd> abrir</span>' +
-          '<span><kbd>Esc</kbd> cerrar</span>' +
+          '<span><kbd>↑↓</kbd> ' + STR.nav + '</span>' +
+          '<span><kbd>↵</kbd> ' + STR.open + '</span>' +
+          '<span><kbd>Esc</kbd> ' + STR.close + '</span>' +
         '</div>' +
       '</div>';
     document.body.appendChild(modal);
