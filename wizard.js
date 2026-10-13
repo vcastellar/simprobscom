@@ -217,6 +217,118 @@
     }
   };
 
+  // ── English version ───────────────────────────────────────────────────
+  // Pages under /en/ reuse the same tree and paths (with an "en/" prefix);
+  // only the questions and option texts change. Each option is
+  // [label, description], in the same order as in NODES.
+  var IS_EN = document.documentElement.lang === 'en';
+
+  var EN_TEXT = {
+    root: ['What do you want to do?', [
+      ['Calculate probabilities for a distribution', 'P(X≤x), percentiles, PDF, CDF'],
+      ['Look up a statistical table', 'Critical values for Z, t, chi², F, binomial…'],
+      ['Determine the sample size', 'How many observations my study needs'],
+      ['Analyze data I already have', 'Confidence intervals or hypothesis tests'],
+      ['Design or analyze an A/B test', 'Significance, power, Bayesian or simulation'],
+      ['Learn with interactive simulations', 'CLT, Markov, bootstrap, type I/II errors…']
+    ]],
+    dist: ['Which distribution do you need?', [
+      ['Normal', 'Symmetric continuous variable (Gaussian)'],
+      ['Binomial', 'Number of successes in n trials'],
+      ['Poisson', 'Number of events in a fixed interval'],
+      ["Student's t", 'Sample mean with unknown variance'],
+      ['Chi-square / Snedecor\'s F', 'For variances, goodness of fit or ANOVA'],
+      ['Another distribution', 'Exponential, Gamma, Beta, Weibull, Log-normal…']
+    ]],
+    sample_goal: ['What is the sample size for?', [
+      ['Estimate with a confidence interval', 'I want to bound the margin of error'],
+      ['Test a hypothesis', 'I want to detect a difference with a given power'],
+      ['A/B test', 'Experiment with a control and a treatment variant']
+    ]],
+    sample_ic_param: ['Which parameter do you want to estimate?', [
+      ['One proportion', 'Survey, conversion rate, percentage'],
+      ['One mean', 'Continuous variable in a single sample'],
+      ['Difference between two groups', 'Compare two independent groups'],
+      ['Finite population', 'The total population size is known']
+    ]],
+    sample_ic_two: ['What type of variable are you comparing?', [
+      ['Proportions'], ['Means'], ['Paired means'], ['Odds ratio']
+    ]],
+    sample_ic_finite: ['What type of variable?', [
+      ['Proportion'], ['Mean']
+    ]],
+    sample_h0_n: ['How many samples or groups?', [
+      ['A single sample'], ['Two independent groups'], ['Two paired samples'], ['More than two groups (ANOVA)']
+    ]],
+    sample_h0_one: ['What type of variable?', [
+      ['Mean'], ['Proportion'], ['Variance'], ['Pearson correlation']
+    ]],
+    sample_h0_two: ['What type of variable?', [
+      ['Proportions'], ['Means'], ['Variances'], ['Odds ratio'], ['Non-inferiority / equivalence']
+    ]],
+    sample_h0_paired: ['What type of variable?', [
+      ['Paired means'], ['Paired proportions (McNemar)']
+    ]],
+    analyze_goal: ['What kind of analysis do you need?', [
+      ['Confidence interval', 'Range of plausible values for the parameter'],
+      ['Hypothesis test', 'P-value, critical region, statistical decision'],
+      ['Check normality', 'Check whether the data follow a normal distribution']
+    ]],
+    ic_param: ['Which parameter do you want to estimate?', [
+      ['Mean'], ['Proportion'], ['Difference between two groups'], ['Variance or odds ratio']
+    ]],
+    ic_mean: ['Do you know the population standard deviation (σ)?', [
+      ['Yes, σ is known'], ['No, I use the sample standard deviation s'], ['Finite population']
+    ]],
+    ic_prop: ['Is the population finite (known size)?', [
+      ['No, or it is very large'], ['Yes, known size']
+    ]],
+    ic_two: ['What kind of comparison?', [
+      ['Difference of means'], ['Paired means'], ['Difference of proportions'], ['Ratio of proportions (relative risk)']
+    ]],
+    ic_other: ['Which parameter?', [
+      ['Variance'], ['Odds ratio']
+    ]],
+    h0_samples: ['How many samples or groups do you have?', [
+      ['A single sample'], ['Two independent groups'], ['Two related (paired) samples'], ['More than two groups'], ['Contingency table (categorical variables)']
+    ]],
+    h0_one: ['What type of variable?', [
+      ['Mean'], ['Proportion'], ['Variance'], ['Pearson correlation']
+    ]],
+    h0_two: ['What type of variable?', [
+      ['Means'], ['Proportions'], ['Variances (F test)'], ['Odds ratio'], ['Non-inferiority / equivalence']
+    ]],
+    h0_paired: ['What type of variable?', [
+      ['Paired means'], ['Paired proportions (McNemar)']
+    ]],
+    h0_contingency: ['What do you want to analyze?', [
+      ['Independence between two variables'], ['2×2 table with low frequencies'], ['Paired proportions'], ['Goodness of fit to a theoretical distribution']
+    ]],
+    normality: ['Roughly how many observations do you have?', [
+      ['Fewer than 50', 'Shapiro-Wilk is the most powerful for small samples'],
+      ['50 or more', 'Kolmogorov-Smirnov is suitable for large samples'],
+      ["I'm not sure", 'Shapiro-Wilk is the usual choice in practice']
+    ]]
+  };
+
+  var STR = IS_EN ?
+    { title: 'Which tool do I need?', close: 'Close', back: '← Back', dialog: 'Tool selection assistant' } :
+    { title: '¿Qué herramienta necesito?', close: 'Cerrar', back: '← Atrás', dialog: 'Asistente de selección de herramienta' };
+
+  if (IS_EN) {
+    Object.keys(EN_TEXT).forEach(function (id) {
+      var node = NODES[id], en = EN_TEXT[id];
+      if (!node) return;
+      node.q = en[0];
+      node.opts.forEach(function (opt, i) {
+        var t = en[1][i];
+        if (!t) return;
+        opt.l = t[0];
+        if (opt.d) opt.d = t[1] || opt.d;
+      });
+    });
+  }
+
   // ── URL helper (mirrors search.js) ────────────────────────────────────
   var SITE_ROOT = (function () {
     var el = document.currentScript ||
@@ -228,7 +340,7 @@
   }());
 
   function toUrl(absPath) {
-    return SITE_ROOT + absPath.slice(1);
+    return SITE_ROOT + (IS_EN ? 'en/' : '') + absPath.slice(1);
   }
 
   function esc(s) {
@@ -268,8 +380,8 @@
 
     contentEl.innerHTML =
       '<div class="wz-header">' +
-        '<span class="wz-title">¿Qué herramienta necesito?</span>' +
-        '<button class="wz-close" type="button" aria-label="Cerrar">✕</button>' +
+        '<span class="wz-title">' + esc(STR.title) + '</span>' +
+        '<button class="wz-close" type="button" aria-label="' + esc(STR.close) + '">✕</button>' +
       '</div>' +
       (breadcrumb ? '<div class="wz-trail">' + breadcrumb + '</div>' : '') +
       '<div class="wz-body">' +
@@ -277,7 +389,7 @@
         '<div class="wz-opts">' + opts + '</div>' +
       '</div>' +
       (stack.length > 0 ?
-        '<div class="wz-footer"><button class="wz-back" type="button">← Atrás</button></div>' : '');
+        '<div class="wz-footer"><button class="wz-back" type="button">' + esc(STR.back) + '</button></div>' : '');
 
     contentEl.querySelector('.wz-close').addEventListener('click', closeModal);
 
@@ -328,7 +440,7 @@
     modal.id = 'wizard-modal';
     modal.setAttribute('role', 'dialog');
     modal.setAttribute('aria-modal', 'true');
-    modal.setAttribute('aria-label', 'Asistente de selección de herramienta');
+    modal.setAttribute('aria-label', STR.dialog);
 
     contentEl = document.createElement('div');
     contentEl.className = 'wz-box';
