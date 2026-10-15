@@ -579,14 +579,14 @@
       <p>The fact that the spread grows as <strong>√n</strong> rather than n is the most characteristic property of the random walk. The trajectories "fan out," but more slowly than one might expect. For example, after 10,000 steps, the standard deviation of the position is only √10,000 = 100.</p>
 
       <h3>Asymptotic distribution and the connection to the CLT</h3>
-      <p>By the <a href="teorema-central-limite.html">central limit theorem</a>, X<sub>n</sub> is a sum of n iid variables, so for large n:</p>
+      <p>By the <a href="teorema-central-limite.html">central limit theorem</a>, X<sub>n</sub> is a sum of n iid variables, so for large n we have the asymptotic approximation:</p>
       <p style="text-align:center; font-size:1.05rem; margin: 1rem 0;">
         \( X_n \approx \mathcal{N}\!\left(n(2p-1),\; 4p(1-p)\,n\right) \)
       </p>
-      <p>This justifies the theoretical ±2σ bands you can see in the simulator: approximately 95% of trajectories should fall within the band E[X<sub>n</sub>] ± 2 · 2√(p(1−p)n). Notice how the bands widen following the √n curve rather than a straight line.</p>
+      <p>This is only an approximation: the exact distribution of X<sub>n</sub> is discrete, since (X<sub>n</sub> + n)/2 ~ B(n, p), and X<sub>n</sub> only takes values with the same parity as n. This justifies the theoretical ±2σ bands you can see in the simulator: approximately 95% of trajectories should fall within the band E[X<sub>n</sub>] ± 2 · 2√(p(1−p)n). Notice how the bands widen following the √n curve rather than a straight line.</p>
 
       <h3>The random walk in 2D</h3>
-      <p>In two dimensions, the particle moves with equal probability 1/4 along each of the four axes (north, south, east, west). Now X<sub>n</sub> and Y<sub>n</sub> are two independent 1D random walks that evolve on alternating steps: on average, each component receives n/2 effective steps.</p>
+      <p>In two dimensions, the particle moves with equal probability 1/4 along each of the four axes (north, south, east, west). Now X<sub>n</sub> and Y<sub>n</sub> are two (lazy) 1D random walks that move only when the step falls on their axis: on average, each component receives n/2 effective steps. They are not independent (exactly one of them moves at each step), but they are uncorrelated, each with variance n/2; for large n, (X<sub>n</sub>, Y<sub>n</sub>) is approximately bivariate normal with covariance (n/2)·I, so the mean distance from the origin is approximately √(πn)/2 ≈ 0.886·√n.</p>
       <p>The Euclidean distance to the origin is still of order √n:</p>
       <p style="text-align:center; font-size:1.05rem; margin: 1rem 0;">
         \( \mathrm{E}\!\left[\,r_n^2\,\right] = \mathrm{E}[X_n^2 + Y_n^2] = n \)
@@ -691,7 +691,7 @@
     <section class="card content-card">
       <h2>Related tools</h2>
       <div class="related-tools">
-        <p><a href="teorema-central-limite.html">CLT simulator</a> — the random walk is a special case: X<sub>n</sub>/√n → N(0,1) by the CLT.</p>
+        <p><a href="teorema-central-limite.html">CLT simulator</a> — the random walk is a special case: in the symmetric case (p = 0.5), X<sub>n</sub>/√n converges in distribution to N(0,1) by the CLT.</p>
         <p><a href="simulador-cadenas-markov.html">Markov chain simulator</a> — the random walk with finite states is a Markov chain.</p>
         <p><a href="simulador-proceso-poisson.html">Poisson process simulator</a> — the Poisson process is the continuous analogue of the random walk for rare events.</p>
         <p><a href="../distribuciones/">Distribution calculators</a> — the asymptotic normal distribution of X<sub>n</sub> and the binomial distribution of the number of positive steps.</p>
@@ -1113,7 +1113,7 @@ function simulate2D() {
     }
 
     document.getElementById('s2d-dist').textContent  = fmtN(arrMean(dists));
-    document.getElementById('s2d-edist').textContent  = `Expected ≈ ${fmtN(sqrtN * Math.sqrt(Math.PI/2), 2)}`;
+    document.getElementById('s2d-edist').textContent  = `Expected ≈ ${fmtN(Math.sqrt(Math.PI * n) / 2, 2)}`;
     document.getElementById('s2d-dist2').textContent  = fmtN(arrMean(dists2), 1);
     document.getElementById('s2d-edist2').textContent = `Expected: n = ${n}`;
     document.getElementById('s2d-maxdist').textContent = fmtN(maxDist, 1);
@@ -1122,10 +1122,10 @@ function simulate2D() {
 
     // interpretation
     const dMean  = arrMean(dists);
-    const thDist = sqrtN * Math.sqrt(Math.PI / 2);
+    const thDist = Math.sqrt(Math.PI * n) / 2;
     const ratio  = dMean / thDist;
     let txt2 = `With n = ${n} steps, the distance from the origin is still of order √n ≈ ${fmtN(sqrtN, 1)}. `;
-    txt2 += `The empirical mean distance is ${fmtN(dMean, 2)} (theoretical: √(πn/2) ≈ ${fmtN(thDist, 2)}). `;
+    txt2 += `The empirical mean distance is ${fmtN(dMean, 2)} (approx. theoretical: √(πn)/2 ≈ ${fmtN(thDist, 2)}). `;
     if (nPaths === 1) {
       txt2 += `The trajectory has returned to the origin <strong>${returns}</strong> times, illustrating the recurrence of the 2D walk.`;
     } else {

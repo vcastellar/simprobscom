@@ -120,7 +120,7 @@
       <h2>Why learn statistics through simulation</h2>
       <p>Many statistical concepts are counterintuitive when presented only through formulas. Simulation lets you build intuition experimentally:</p>
       <ul>
-        <li><strong>The central limit theorem</strong> states that the mean of many independent observations follows a normal distribution, regardless of the original distribution. That's surprising: how can a skewed or discrete distribution produce perfectly normal means? Simulation makes it visible.</li>
+        <li><strong>The central limit theorem</strong> states that, under general conditions (independent observations with finite variance), the distribution of the sample mean approaches a normal distribution as n grows, whatever the original distribution. That's surprising: how can a skewed or discrete distribution produce approximately normal means? Simulation makes it visible.</li>
         <li><strong>A 95% confidence interval</strong> does not mean there is a 95% probability that the parameter lies inside that particular interval. It means that the construction procedure produces intervals that capture the true parameter 95% of the time. The difference is subtle but fundamental, and it becomes easy to grasp once you simulate hundreds of intervals.</li>
         <li><strong>Markov chains</strong> model systems that evolve randomly over time but with "short memory": the next state depends only on the current state, not on the full history. Their convergence to a stationary distribution is a theoretical result that can be observed directly by running the chain for enough steps.</li>
         <li><strong>The Poisson process</strong> is the canonical model for rare events that occur at a constant rate: phone calls, customer arrivals, radioactive decays. Simulating it makes it clear why the time between events follows an exponential distribution and how events accumulate over time.</li>
@@ -130,7 +130,7 @@
     <section class="card content-card">
       <h2>Central limit theorem simulator</h2>
       <p>The <strong>central limit theorem (CLT)</strong> is one of the most important results in probability and statistics. It states that, under very general conditions, the sum (or mean) of a sufficiently large number of independent and identically distributed random variables approaches a normal distribution, regardless of the original distribution of each variable.</p>
-      <p>In practice, this justifies the use of parametric tests (t, z, ANOVA...) even when the individual data aren't normal, as long as the sample is large enough. For most distributions, n ≥ 30 tends to be sufficient; for very skewed or heavy-tailed distributions, a larger n may be needed.</p>
+      <p>In practice, this justifies the use of parametric tests (t, z, ANOVA...) even when the individual data aren't normal, as long as the sample is large enough. However, <strong>there is no universal sample size</strong> that guarantees a good normal approximation: the speed of convergence depends on skewness, tail weight and other features of the distribution, as well as on the accuracy required (the extreme tails, which matter for small p-values, converge more slowly than the centre). The well-known n ≥ 30 rule is only a teaching guideline: with nearly symmetric data far fewer observations may suffice, while very skewed or heavy-tailed distributions, or proportions close to 0 or 1, may need hundreds. When in doubt, check it, for example by simulation.</p>
       <p>The simulator lets you choose among six distributions (Normal, Uniform, Exponential, Bernoulli, Poisson and Chi-square) and watch how the distribution of the sample mean converges to a normal distribution as the sample size n increases.</p>
       <p><a href="teorema-central-limite.html" class="hero-link-button" style="display:inline-block; margin-top: 0.5rem;">Open the CLT simulator →</a></p>
     </section>
@@ -164,8 +164,8 @@
     <section class="card content-card">
       <h2>1D and 2D random walk simulator</h2>
       <p>A <strong>random walk</strong> is a sequence of steps in which the direction of each move is chosen at random. In 1D, a particle moves +1 or −1 at each instant. In 2D, it moves in any of the four cardinal directions with equal probability.</p>
-      <p>The most characteristic property is that the spread grows as <strong>√n</strong>, not as n: after n steps, the positions are distributed as N(μ, σ²n) with σ proportional to √n. The theoretical ±2σ bands in the simulator show this fan-shaped widening.</p>
-      <p>The simulation includes drift (p ≠ 0.5), 2D recurrence (the trajectory returns to the origin infinitely many times), and the connection to Brownian motion, the gambler's ruin problem and the diffusion law.</p>
+      <p>The most characteristic property is that the spread grows as <strong>√n</strong>, not as n: in 1D, if each step is +1 with probability p, the position after n steps has mean n(2p − 1) and standard deviation 2√(p(1 − p))·√n. Its exact distribution is discrete (in fact, (X<sub>n</sub> + n)/2 follows a binomial B(n, p)); only for large n, by the central limit theorem, is it approximated by a normal N(n(2p − 1), 4p(1 − p)n). The theoretical ±2σ bands in the simulator show this fan-shaped widening.</p>
+      <p>The simulation includes drift (p ≠ 0.5), 2D recurrence (the symmetric walk returns to the origin with probability 1 and, therefore, infinitely many times), and the connection to Brownian motion, the gambler's ruin problem and the diffusion law.</p>
       <p><a href="simulador-paseo-aleatorio.html" class="hero-link-button" style="display:inline-block; margin-top: 0.5rem;">Open the random walk simulator →</a></p>
     </section>
 
