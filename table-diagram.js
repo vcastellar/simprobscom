@@ -208,7 +208,8 @@
             drawCont(body, caption, d, xt, { mode: "twotail" }, L.twoTail(xt.toFixed(3), fmt(ds.a1), fmt(ds.a2), par));
         } else if (mode === "crit-right") {
             var xr = +ds.val;
-            drawCont(body, caption, d, xr, { mode: "right" }, L.rightTail(xr.toFixed(3), fmt(ds.alpha), par));
+            // La tabla t guarda el α de una cola como data-a1
+            drawCont(body, caption, d, xr, { mode: "right" }, L.rightTail(xr.toFixed(3), fmt(ds.alpha != null ? ds.alpha : ds.a1), par));
         }
     }
 
