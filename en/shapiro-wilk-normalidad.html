@@ -161,7 +161,7 @@
                     <div class="form-group">
                         <label for="mcIter">Monte Carlo iterations (B) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                         <input type="number" id="mcIter" value="5000" step="500" min="1000" max="100000">
-                        <p class="field-hint" hidden>Number of simulated normal samples used to build the null distribution of \(W\). With <strong>B ≥ 5000</strong> the p-value estimate is reliable.</p>
+                        <p class="field-hint" hidden>Number of simulated normal samples used to build the null distribution of \(W\). The estimated p-value has an approximate standard error of √(p(1−p)/B): with <strong>B = 5000</strong> and a p-value near 0.05 it is ≈ 0.003. Increase B when the p-value is close to α.</p>
                     </div>
 
                     <div class="form-group">
@@ -230,8 +230,9 @@
             <h3>Monte Carlo simulation for the p-value</h3>
 
             <p>
-                The exact distribution of the \(W\) statistic under \(H_0\) has no closed form, so the p-value
-                is obtained by Monte Carlo simulation. The procedure is as follows:
+                The exact distribution of the \(W\) statistic under \(H_0\) has no simple closed form. Analytical
+                approximations exist (Royston's, which is the one R uses), but this calculator estimates the p-value
+                by Monte Carlo simulation. The procedure is as follows:
             </p>
             <ol>
                 <li>A random sample of size \(n\) is generated from \(N(0,1)\). The standard normal can be used
@@ -254,7 +255,13 @@
             <p>
                 The random seed lets you reproduce the exact same result: fixing the same seed guarantees
                 that the \(B\) simulated samples are identical across different runs, which makes it easy to share and verify results.
-                With large values of \(B\) (\(\geq 5000\)) the variability of the empirical p-value is small and the estimate is reliable.
+                The Monte Carlo p-value is an estimate subject to simulation error. Its standard error is approximately
+                \(\sqrt{p(1-p)/B}\), so it depends both on the p-value itself and on the number of replicates: with \(B = 5000\),
+                it is \(\approx 0.0031\) near \(p = 0.05\) (an approximate 95% margin of \(\pm 0.006\)) and \(\approx 0.007\)
+                near \(p = 0.5\). That precision is acceptable for many purposes, but it is not universally sufficient: if the
+                p-value is close to \(\alpha\), or if very small p-values must be estimated precisely, increase \(B\) (the error
+                shrinks as \(1/\sqrt{B}\): quadrupling \(B\) halves it). If no replicate produces a \(W\) as small as the observed
+                one, the calculator reports \(p &lt; 1/B\) rather than \(p = 0\).
             </p>
 
 
@@ -305,16 +312,17 @@
             <p>\(\displaystyle SS = \sum_{i=1}^{10}(x_i - \bar{x})^2 = (22.8-24.11)^2 + \cdots + (25.2-24.11)^2 = 6.069\)</p>
 
             <p><strong>Step 2 - Compute the coefficients \(a_i\)</strong></p>
-            <p>The calculator uses Royston's algorithm (AS R94, 1992), which applies two polynomial corrections to the expected normal quantiles to obtain the exact Shapiro-Wilk coefficients. For \(n = 10\) the resulting coefficients are:</p>
+            <p>The calculator uses Royston's algorithm (1992; AS R94, 1995), which starts from the expected normal quantiles and applies polynomial corrections to the extreme coefficients to <em>approximate</em> the Shapiro-Wilk coefficients. They are not the exact coefficients, whose computation requires the covariance matrix of normal order statistics. For \(n = 10\), Royston's coefficients and those tabulated by Shapiro and Wilk (1965) are:</p>
             <div class="table-wrap" style="overflow-x:auto;">
             <table class="stat-table">
               <thead><tr><th>Pair \(i\)</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
               <tbody>
-                <tr><td>\(a_i\) (Royston)</td><td>0.5739</td><td>0.3291</td><td>0.2141</td><td>0.1224</td><td>0.0399</td></tr>
+                <tr><td>\(a_i\) (Royston, calculator)</td><td>0.5737</td><td>0.3290</td><td>0.2143</td><td>0.1228</td><td>0.0401</td></tr>
+                <tr><td>\(a_i\) (Shapiro and Wilk table, 1965)</td><td>0.5739</td><td>0.3291</td><td>0.2141</td><td>0.1224</td><td>0.0399</td></tr>
               </tbody>
             </table>
             </div>
-            <p>These coefficients match the values tabulated by Shapiro &amp; Wilk (1965) and those computed by R.</p>
+            <p>Royston's approximation differs from the tabulated values in the fourth decimal place and is the same one R uses. The steps below use the tabulated values, which are the usual choice for hand calculation; with Royston's values, \(b\) and \(W\) agree to four decimal places.</p>
 
             <p><strong>Step 3 - Compute the numerator</strong></p>
             <p>Each \(a_i\) weights the difference between the \(i\)-th data point from the top and from the bottom of the sorted sample:</p>
@@ -329,10 +337,10 @@
             <p><strong>Step 5 - p-value via Monte Carlo simulation</strong></p>
             <p>The calculator generates \(B = 5000\) normal \(N(0,1)\) samples of size \(n = 10\), computes \(W\) for each one and estimates the p-value as the proportion of simulations with \(W \leq W_{\text{obs}}\):</p>
             <p class="formula-line">\(p\text{-value} = \dfrac{\#\{W_{\text{sim}} \leq 0.9557\}}{5000} \approx 0.73\)</p>
-            <p>R uses Royston's analytical approximation and reports \(p = 0.7355\); the Monte Carlo simulation converges to the same result for large \(B\). You can reproduce it by entering the data in the calculator with \(B = 5000\) and seed 12345.</p>
+            <p>With \(B = 5000\) and seed 12345 the calculator obtains \(p \approx 0.733\), with a Monte Carlo standard error of \(\sqrt{0.733 \cdot 0.267/5000} \approx 0.006\). R obtains \(p = 0.7355\) with Royston's analytical approximation (a normalizing transformation of \(W\)). Both are approximations of the same p-value and agree within simulation error, but they should not be expected to match in every decimal place. You can reproduce it by entering the data in the calculator with \(B = 5000\) and seed 12345.</p>
 
             <p><strong>Conclusion</strong></p>
-            <p>Since \(p \approx 0.73 \gg 0.05 = \alpha\), \(H_0\) is not rejected. At a 5% significance level, there is no statistical evidence that the dimensions of the parts fail to follow a normal distribution. This result allows parametric tools such as \(\bar{x}\text{-}R\) control charts to be applied with confidence in later stages of the quality analysis.</p>
+            <p>Since \(p \approx 0.73 \gg 0.05 = \alpha\), \(H_0\) is not rejected. At a 5% significance level, there is no statistical evidence that the dimensions of the parts fail to follow a normal distribution. This does not prove that they do: with \(n = 10\) the power of the test is limited and it would only detect marked departures. Before relying on parametric tools such as \(\bar{x}\text{-}R\) control charts, also check a Q-Q plot and prior knowledge of the process.</p>
         </section>
 
         <section class="card content-card">
@@ -351,8 +359,9 @@
                 <p>
                 <strong>Failing to reject \(H_0\)</strong> (p-value ≥ \(\alpha\)) does not prove normality;
                 it only indicates that the data are compatible with a normal distribution at the chosen level.
-                With small samples (\(n &lt; 20\)), the test has very little power and will almost never
-                reject \(H_0\), even when the data clearly depart from normal. With
+                With small samples (\(n &lt; 20\)), the test has little power against moderate departures
+                (somewhat heavier tails, mild skewness) and will often fail to reject \(H_0\) even when the data are
+                not normal; only marked departures are detected consistently. With
                 large samples (\(n &gt; 200\)), on the other hand, trivial deviations can turn out to be
                 highly significant without affecting the validity of the parametric methods that
                 assume normality. In practice, what matters is whether the deviation is severe enough
@@ -365,9 +374,9 @@
                 signal a severe deviation. Unlike chi-square- or KS-based tests,
                 Shapiro-Wilk has greater power to detect deviations in small samples and is
                 the recommended normality test for \(n \leq 50\). The tool shows the W value,
-                the p-value and, in the chart, the Q-Q plot with the confidence band; if the points
-                fall within the band, the deviation from normality is compatible with
-                chance at the chosen level.
+                the Monte Carlo p-value with its standard error and, in the chart, the simulated distribution
+                of W under normality together with the observed W and the critical value. To see <em>how</em>
+                the data depart from normality, complement the result with a Q-Q plot.
                 </p>
         </section>
         <section id="seo-support-content" class="card content-card">
@@ -404,7 +413,7 @@
                 <li>Shapiro, S. S. &amp; Wilk, M. B. (1965). An analysis of variance test for normality (complete samples). <em>Biometrika</em>, 52(3-4), 591-611. — Original paper of the test and of the tabulated \(a_i\) coefficients.</li>
                 <li>Royston, J. P. (1992). Approximating the Shapiro-Wilk W-test for non-normality. <em>Statistics and Computing</em>, 2, 117-119. — Polynomial approximation algorithm for the \(a_i\) coefficients implemented in this calculator.</li>
                 <li>Royston, J. P. (1995). Remark AS R94: A remark on Algorithm AS 181: The W-test for normality. <em>Applied Statistics</em>, 44(4), 547-551. — Revised version of the algorithm (AS R94), the basis for the computation of \(W\) in R and in this tool.</li>
-                <li>Wichura, M. J. (1988). Algorithm AS 241: The percentage points of the normal distribution. <em>Applied Statistics</em>, 37(3), 477-484. — Source of the coefficients of the rational approximation of \(\Phi^{-1}(p)\) used in the code.</li>
+                <li>Acklam, P. J. <em>An algorithm for computing the inverse normal cumulative distribution function</em> (algorithm published on the author's website). — Source of the coefficients of the rational approximation of \(\Phi^{-1}(p)\) used in the code, with a relative error below \(1.2 \times 10^{-9}\).</li>
             </ul>
         </section>
 
@@ -488,20 +497,25 @@ function shapiroWilkCoeffs(n) {
   // Corrected largest coefficient via polynomial
   a[0] = blom[blom.length - 1] / ssumm2 + polyEval(SW_C1, u);
 
-  if (m >= 2) {
-    // Corrected second-largest coefficient
+  // As in AS R94: the second-largest coefficient is also corrected only for n > 5;
+  // for n = 4, 5 it is obtained by normalization like the rest
+  const mn = blom[blom.length - 1];
+  let phi, first;
+  if (n > 5) {
     a[1] = blom[blom.length - 2] / ssumm2 + polyEval(SW_C2, u);
+    const mn1 = blom[blom.length - 2];
+    phi = (summ2 - 2 * mn * mn - 2 * mn1 * mn1) /
+          (1 - 2 * a[0] * a[0] - 2 * a[1] * a[1]);
+    first = 2;
+  } else {
+    phi = (summ2 - 2 * mn * mn) / (1 - 2 * a[0] * a[0]);
+    first = 1;
+  }
 
-    if (m >= 3) {
-      // Remaining coefficients via normalization (phi)
-      const mn = blom[blom.length - 1], mn1 = blom[blom.length - 2];
-      const phi = (summ2 - 2 * mn * mn - 2 * mn1 * mn1) /
-                  (1 - 2 * a[0] * a[0] - 2 * a[1] * a[1]);
-      const sqrtPhi = Math.sqrt(Math.max(phi, 1e-10));
-      for (let k = 2; k < m; k++) {
-        a[k] = blom[blom.length - 1 - k] / sqrtPhi;
-      }
-    }
+  // Remaining coefficients via normalization (phi)
+  const sqrtPhi = Math.sqrt(Math.max(phi, 1e-10));
+  for (let k = first; k < m; k++) {
+    a[k] = blom[blom.length - 1 - k] / sqrtPhi;
   }
   return a;
 }
@@ -575,20 +589,28 @@ document.getElementById('calcShapiroBtn').addEventListener('click', () => {
   setSeed(seed);
   const wObs = computeShapiroW(sample);
   const wSim = simulateShapiroDistribution(n, B);
-  const pValue = wSim.filter(w => w <= wObs).length / B;
+  const nBelow = wSim.filter(w => w <= wObs).length;
+  const pValue = nBelow / B;
+  // Monte Carlo standard error of the estimated p-value
+  const pSe = Math.sqrt(pValue * (1 - pValue) / B);
+  const pMin = (1 / B).toFixed(Math.max(4, Math.ceil(Math.log10(B))));
+  const nearAlpha = nBelow > 0 && Math.abs(pValue - alpha) < 2 * pSe;
   const wCrit = [...wSim].sort((a, b) => a - b)[Math.floor(alpha * B)];
   const decision = pValue < alpha ? 'Reject H₀ (not normal).' : 'Fail to reject H₀ (compatible with normality).';
 
   document.getElementById('shapiroResult').innerHTML =
     `n: <strong>${n}</strong><br>` +
     `Observed W: <strong>${wObs.toFixed(4)}</strong><br>` +
-    `Monte Carlo p-value: <strong>${pValue.toFixed(4)}</strong><br>` +
+    (nBelow === 0
+      ? `Monte Carlo p-value: <strong>&lt; ${pMin}</strong> (no replicate with W ≤ observed W)<br>`
+      : `Monte Carlo p-value: <strong>${pValue.toFixed(4)}</strong> (MC standard error ≈ ${pSe.toFixed(4)})<br>`) +
     `Critical W (left tail, α=${alpha}): <strong>${wCrit.toFixed(4)}</strong><br>` +
     `Decision: <strong>${decision}</strong>`;
 
   document.getElementById('shapiroNotes').innerHTML =
     `Rejection region: W ≤ ${wCrit.toFixed(4)} (left tail).<br>` +
-    `The simulation used ${B.toLocaleString('en-US')} normal samples under H₀ with seed ${seed}.`;
+    `The simulation used ${B.toLocaleString('en-US')} normal samples under H₀ with seed ${seed}.` +
+    (nearAlpha ? `<br>Note: the p-value is within two standard errors of α, so the decision may change with a different seed. Increase B to estimate it more precisely.` : '');
 
   drawShapiroChart(wSim, wObs, wCrit);
 });

@@ -315,7 +315,7 @@
   <header class="hero">
     <p class="eyebrow">Simulación estadística</p>
     <h1>Simulador de intervalos de confianza</h1>
-    <p class="hero-subtitle">Genera muestras repetidamente y observa qué fracción de los intervalos de confianza cubre el verdadero parámetro. La cobertura empírica converge al nivel nominal.</p>
+    <p class="hero-subtitle">Genera muestras repetidamente y observa qué fracción de los intervalos de confianza cubre el verdadero parámetro. La cobertura empírica converge a la cobertura real del método, que solo coincide con el nivel nominal si el método es exacto.</p>
   </header>
 
   <main>
@@ -340,7 +340,7 @@
 
       <!-- Panel: Media -->
       <div class="mode-panel active" id="panelMedia" role="tabpanel" aria-labelledby="tabMedia">
-        <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> simula repetidamente intervalos de confianza para la media de una población normal con σ conocida, y muestra qué fracción cubre realmente la μ verdadera. Elige este modo para comprobar que la cobertura real coincide con el nivel nominal para cualquier n.</p>
+        <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> simula repetidamente intervalos de confianza para la media de una población normal con σ conocida, y muestra qué fracción cubre realmente la μ verdadera. Elige este modo para comprobar que, con población normal y σ conocida, la cobertura real coincide con el nivel nominal para cualquier n (la empírica solo se aparta de ella por el error de simulación).</p>
         <div class="form-grid-ci">
           <div class="form-group">
             <label for="trueMu">Verdadera μ (media poblacional) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
@@ -381,7 +381,7 @@
               <option value="100" selected>100</option>
               <option value="200">200</option>
             </select>
-            <p class="field-hint" hidden>Cuántas repeticiones del experimento se simulan. Con más intervalos, la cobertura empírica converge más cerca del nivel nominal.</p>
+            <p class="field-hint" hidden>Cuántas repeticiones del experimento se simulan. Con más intervalos, la cobertura empírica se acerca más a la cobertura real del método: su error de simulación es ≈ √(p(1−p)/N), unos ±0,7 puntos con 1000 intervalos al 95 %.</p>
           </div>
         </div>
       </div>
@@ -424,7 +424,7 @@
               <option value="100" selected>100</option>
               <option value="200">200</option>
             </select>
-            <p class="field-hint" hidden>Cuántas repeticiones del experimento se simulan. Con más intervalos, la cobertura empírica converge más cerca del nivel nominal.</p>
+            <p class="field-hint" hidden>Cuántas repeticiones del experimento se simulan. Con más intervalos, la cobertura empírica se acerca más a la cobertura real del método: su error de simulación es ≈ √(p(1−p)/N), unos ±0,7 puntos con 1000 intervalos al 95 %.</p>
           </div>
           <div class="form-group">
             <label for="methodProp">Método para el IC <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
@@ -502,7 +502,7 @@
     <section class="card content-card">
       <h2>Cobertura nominal vs cobertura real</h2>
       <p>El <strong>nivel nominal</strong> es el valor de confianza que especificamos al construir el IC (90%, 95%, 99%). La <strong>cobertura real</strong> (o empírica) es la fracción de intervalos que efectivamente cubren el parámetro verdadero en una larga serie de repeticiones.</p>
-      <p>Para el IC de la media con σ conocida, la cobertura real coincide exactamente con la nominal para cualquier tamaño muestral, porque la distribución de la media muestral es exactamente normal (si la población también lo es) o asintóticamente normal por el TCL.</p>
+      <p>Para el IC de la media con σ conocida y una población normal, como en este simulador, la cobertura real coincide exactamente con la nominal para cualquier tamaño muestral, porque la media muestral es exactamente normal. Si la población no es normal, la coincidencia solo es aproximada y mejora con n por el TCL.</p>
       <p>Para proporciones, la situación es más complicada. El parámetro p es continuo, pero la variable binomial X ~ Bin(n, p) es discreta, y esta discretización causa que la cobertura real fluctúe alrededor del nivel nominal:</p>
       <ul>
         <li><strong>Intervalo de Wald:</strong> usa directamente la aproximación normal \(\hat{p} \pm z_{\alpha/2}\sqrt{\hat{p}(1-\hat{p})/n}\). Funciona bien para n grande y p alejado de 0 y 1, pero su cobertura puede ser notablemente inferior al nivel nominal cuando n es pequeño o p está cerca de los extremos.</li>
@@ -552,7 +552,7 @@
         </li>
         <li>
           <strong>¿El simulador usa una distribución normal exacta para la media?</strong>
-          Sí: en el modo Media (σ conocida) cada observación se genera de una N(μ, σ) usando el método Box-Muller. La media muestral tiene distribución exactamente N(μ, σ/√n) para cualquier n, por lo que la cobertura empírica debe coincidir con la nominal incluso para n pequeño.
+          Sí: en el modo Media (σ conocida) cada observación se genera de una N(μ, σ) usando el método Box-Muller. La media muestral tiene distribución exactamente N(μ, σ/√n) para cualquier n, por lo que la cobertura real es exactamente la nominal incluso para n pequeño; la empírica solo se aparta de ella por el error de simulación.
         </li>
       </ul>
     </section>
@@ -818,35 +818,40 @@ function computeStats(intervals) {
   return { n, covered, meanWidth };
 }
 
-function interpretCoverage(empiricalPct, nominalPct, mode, method) {
+function interpretCoverage(empiricalPct, nominalPct, mode, method, total) {
   const diff    = empiricalPct - nominalPct;
   const absDiff = Math.abs(diff);
+  // Error estándar de Monte Carlo (en puntos porcentuales) de la cobertura empírica
+  // si la cobertura real fuese la nominal: depende del nivel y del número de intervalos
+  const p  = nominalPct / 100;
+  const se = 100 * Math.sqrt(p * (1 - p) / total);
+  const seText = `${(2 * se).toFixed(1)} pp con ${total} intervalos`;
 
-  if (absDiff <= 3) {
+  if (absDiff <= 2 * se) {
     return {
       cls: '',
-      text: `La cobertura empírica (${empiricalPct.toFixed(1)}%) está muy cerca del nivel nominal (${nominalPct}%). El procedimiento funciona según lo esperado: la variabilidad residual se debe al número finito de intervalos simulados.`
+      text: `La cobertura empírica (${empiricalPct.toFixed(1)}%) es compatible con el nivel nominal (${nominalPct}%): la diferencia, de ${absDiff.toFixed(1)} puntos porcentuales, está dentro de dos errores estándar de simulación (±${seText}). Con más intervalos, ese margen se reduce.`
     };
   }
-  if (diff < -5) {
+  if (mode === 'media') {
+    return {
+      cls: 'info',
+      text: `La cobertura empírica (${empiricalPct.toFixed(1)}%) se aleja del nivel nominal (${nominalPct}%) más de dos errores estándar de simulación (±${seText}). En este modo la cobertura real es exactamente la nominal, así que se trata de una fluctuación aleatoria, que ocurre en torno al 5 % de las simulaciones: repite la simulación o aumenta el número de intervalos.`
+    };
+  }
+  if (diff < 0) {
     let extra = '';
-    if (mode === 'proporcion' && method === 'wald') {
+    if (method === 'wald') {
       extra = ' Esto es típico del intervalo de Wald con tamaños muestrales pequeños o proporciones cercanas a 0 o 1: la aproximación normal no es suficientemente precisa. Prueba el método Wilson para obtener mejor cobertura.';
     }
     return {
       cls: 'warn',
-      text: `La cobertura empírica (${empiricalPct.toFixed(1)}%) es notablemente inferior al nivel nominal (${nominalPct}%). El procedimiento está subestimando la incertidumbre.${extra}`
-    };
-  }
-  if (diff > 5) {
-    return {
-      cls: 'info',
-      text: `La cobertura empírica (${empiricalPct.toFixed(1)}%) es superior al nivel nominal (${nominalPct}%). El procedimiento es conservador: produce intervalos más anchos de lo necesario.`
+      text: `La cobertura empírica (${empiricalPct.toFixed(1)}%) es inferior al nivel nominal (${nominalPct}%) en más de dos errores estándar de simulación (±${seText}), así que probablemente no se debe solo al azar: el procedimiento está subestimando la incertidumbre.${extra}`
     };
   }
   return {
     cls: 'info',
-    text: `La cobertura empírica (${empiricalPct.toFixed(1)}%) se aproxima al nivel nominal (${nominalPct}%), con una diferencia de ${absDiff.toFixed(1)} puntos porcentuales. Con más intervalos la estimación mejorará.`
+    text: `La cobertura empírica (${empiricalPct.toFixed(1)}%) es superior al nivel nominal (${nominalPct}%) en más de dos errores estándar de simulación (±${seText}). El procedimiento parece conservador: produce intervalos más anchos de lo necesario.`
   };
 }
 
@@ -933,7 +938,7 @@ function runAndDisplay() {
 
   // Interpretation
   const methodUsed = mode === 'proporcion' ? params.method : null;
-  const interp = interpretCoverage(empiricalPct, nominalPct, mode, methodUsed);
+  const interp = interpretCoverage(empiricalPct, nominalPct, mode, methodUsed, total);
   const box = document.getElementById('ciResultBox');
   box.style.display = 'block';
   box.className = 'result-box interpretation-box' + (interp.cls ? ' ' + interp.cls : '');

@@ -88,7 +88,7 @@
       <h3>General principles</h3>
       <ul>
         <li>The calculators show numerical results and, where relevant, formulas and an explanation of the interpretation.</li>
-        <li>Sample sizes are rounded up to guarantee the minimum required under the assumptions entered.</li>
+        <li>Sample sizes are rounded up so as not to fall below the minimum required under the assumptions entered.</li>
         <li>Intervals and tests depend on assumptions such as independence, randomization, approximate normality or sufficiently large expected counts.</li>
         <li>Results should be reviewed with methodological judgment, especially in clinical, regulatory, financial or high-impact studies.</li>
       </ul>
@@ -102,13 +102,14 @@
 
     <section class="card content-card">
       <h3>Intervals, tests and sample sizes</h3>
-      <p>Confidence intervals combine a point estimate, standard error and critical value. Hypothesis tests compare an observed statistic against a null distribution to obtain a p-value or critical region. Sample size tools estimate the minimum number needed based on confidence, margin of error, variability, power and minimum detectable effect.</p>
+      <p>Confidence intervals combine a point estimate, standard error and critical value. Hypothesis tests compare an observed statistic against a null distribution to obtain a p-value or critical region. Sample size tools estimate the minimum number needed based on confidence, margin of error, variability, power and minimum detectable effect. Most of them use approximate (normal or asymptotic) formulas, so the result is an estimate under the assumptions entered, not a guarantee.</p>
       <p>If you change the confidence level, power or minimum detectable effect, the required sample size can vary substantially. It is therefore advisable to run a sensitivity analysis before finalizing a design.</p>
     </section>
 
     <section class="card content-card">
       <h3>Numerical precision and rounding</h3>
       <p>Calculations run in the browser using JavaScript and statistical libraries where needed. Results are formatted for human reading, so small differences may exist compared to specialized software due to rounding, floating-point precision or alternative parameterizations.</p>
+      <p>Some tools (the Shapiro–Wilk test, Bayesian A/B testing, the A/B experiment simulation and the simulators) use Monte Carlo simulation and therefore also carry <strong>simulation error</strong>. A probability or p-value estimated from B replicates has an approximate standard error of √(p(1−p)/B): it depends on the estimated value itself and on the number of replicates, and it only halves when B is quadrupled. For example, with B = 5000 it is about 0.003 near p = 0.05 and about 0.007 near p = 0.5. No number of replicates is sufficient in every case: when the result is close to a decision threshold, increase B or rerun the simulation with another seed to check its stability.</p>
       <p>When a result will be published or used for an important decision, cross-check it with a second tool or statistical software and document the inputs used.</p>
     </section>
 

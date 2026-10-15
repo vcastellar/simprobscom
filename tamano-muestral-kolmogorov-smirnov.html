@@ -88,7 +88,7 @@
           "name": "¿Es válida la fórmula para muestras pequeñas?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "La fórmula de potencia basada en la aproximación por desplazamiento (shift model) es conservadora para muestras pequeñas (n < 20–30), lo que significa que el n calculado puede ser ligeramente mayor del estrictamente necesario. Para n pequeño existen tablas exactas de la distribución de Kolmogorov. La aproximación mejora a medida que n crece y es muy precisa para n ≥ 30."
+            "text": "Hay que usarla con cautela. La fórmula de potencia se basa en una aproximación asintótica por desplazamiento (shift model) que solo tiene en cuenta la desviación máxima d, no la forma de la alternativa, y suele ser optimista: puede subestimar de forma apreciable el tamaño muestral necesario. Por ejemplo, en simulaciones con varias alternativas con d = 0,15, la potencia real con n = 23 quedó entre el 32 % y el 44 %, lejos del 80 % previsto. Si el tamaño muestral es crítico, conviene verificarlo por simulación."
           }
         },
         {
@@ -146,7 +146,7 @@
     <header class="hero">
         <p class="eyebrow">Tamaño muestral</p>
         <h1>Calculadora de tamaño muestral para el test de Kolmogorov–Smirnov</h1>
-        <p class="hero-subtitle">Calcula el número de observaciones para detectar una desviación d de la distribución teórica con una potencia objetivo mediante la distribución de Kolmogorov exacta.</p>
+        <p class="hero-subtitle">Calcula el número de observaciones para detectar una desviación d de la distribución teórica con una potencia objetivo mediante una aproximación basada en la distribución asintótica de Kolmogorov.</p>
         <p class="hero-links"><a class="hero-link-button" href="tamano-muestral/">Ver todas las calculadoras de tamaño muestral</a></p>
     </header>
 
@@ -190,7 +190,7 @@
             <p>El test de Kolmogorov–Smirnov de una muestra contrasta si los datos provienen de una distribución teórica completamente especificada \(F_0\). El estadístico de contraste es la desviación máxima absoluta entre la función de distribución empírica \(\hat{F}_n\) y la teórica:</p>
             <p class="formula-line">\( D_n = \sup_x \left| \hat{F}_n(x) - F_0(x) \right| \)</p>
             <p>El tamaño del efecto es \(d = \max_x |F_{\text{verdadera}}(x) - F_0(x)|\), es decir, la máxima distancia vertical entre la CDF real y la hipotética. Bajo \(H_0\), la distribución asintótica de \(\sqrt{n}\,D_n\) es la distribución de Kolmogorov.</p>
-            <p>La fórmula de potencia usa la <strong>aproximación por desplazamiento</strong> (<em>shift model</em>): bajo \(H_1\), el estadístico \(\sqrt{n}\,D_n\) se desplaza aproximadamente \(d\sqrt{n}\) respecto a su distribución bajo \(H_0\). Esta aproximación es conservadora para muestras pequeñas y muy precisa para \(n \geq 30\).</p>
+            <p>La fórmula de potencia usa la <strong>aproximación por desplazamiento</strong> (<em>shift model</em>): bajo \(H_1\), el estadístico \(\sqrt{n}\,D_n\) se desplaza aproximadamente \(d\sqrt{n}\) respecto a su distribución bajo \(H_0\). Es una aproximación heurística: la potencia real depende de la forma completa de la alternativa, no solo de \(d\), y la fórmula suele ser optimista, es decir, tiende a subestimar el \(n\) necesario (véase la nota del ejemplo).</p>
             <h3>Fórmula de potencia</h3>
             <p>La CDF de la distribución de Kolmogorov es:</p>
             <p class="formula-line">\( P(K \leq x) = 1 - 2\sum_{k=1}^{\infty} (-1)^{k+1} e^{-2k^2 x^2}, \quad x > 0 \)</p>
@@ -215,17 +215,17 @@
                 <li>El menor \(n\) tal que \(1 - P(K \leq 1{,}358 - 0{,}15\sqrt{n}) \geq 0{,}80\).</li>
             </ol>
             <p>El resultado según la aproximación del modelo de desplazamiento es <strong>n = 23 observaciones</strong>. Con esa muestra, si la CDF real se aleja 0,15 de la exponencial teórica, el test lo detectará el 80 % de las veces según esta fórmula asintótica.</p>
-            <p><strong>Nota sobre la aproximación:</strong> el modelo de desplazamiento asintótico tiende a <em>subestimar</em> el tamaño muestral real necesario, especialmente para valores de \(d\) pequeños y \(n\) moderados. Para estudios donde el tamaño muestral sea crítico se recomienda complementar este resultado con simulaciones de Monte Carlo.</p>
-            <p><strong>Análisis de sensibilidad:</strong> con \(d = 0{,}10\) (efecto pequeño) se necesitan n ≈ 51 observaciones; con \(d = 0{,}30\) (efecto grande) bastan n ≈ 6. La muestra necesaria crece aproximadamente como \(1/d^2\).</p>
+            <p><strong>Nota sobre la aproximación:</strong> el modelo de desplazamiento asintótico tiende a <em>subestimar</em> el tamaño muestral real necesario, especialmente para valores de \(d\) pequeños y \(n\) moderados. La discrepancia puede ser grande: en simulaciones con tres alternativas distintas a la uniforme, todas con \(d = 0{,}15\), la potencia real con \(n = 23\) fue del 32–44 %, y con \(n = 40\) del 53–70 %. Para estudios donde el tamaño muestral sea crítico se recomienda complementar este resultado con simulaciones de Monte Carlo para la alternativa concreta que se espera.</p>
+            <p><strong>Análisis de sensibilidad:</strong> según la misma aproximación, con \(d = 0{,}10\) (efecto pequeño) se necesitarían n ≈ 51 observaciones y con \(d = 0{,}30\) (efecto grande) bastarían n ≈ 6; por lo dicho en la nota anterior, las cifras reales pueden ser bastante mayores. La muestra necesaria crece aproximadamente como \(1/d^2\).</p>
             <h3>Supuestos del modelo</h3>
             <ul>
                 <li>Muestra aleatoria de una variable continua, con observaciones independientes e idénticamente distribuidas.</li>
                 <li>La distribución teórica de referencia está completamente especificada (sus parámetros no se estiman a partir de los datos).</li>
                 <li>El tamaño del efecto es la desviación máxima \(d\) entre la distribución teórica y la alternativa.</li>
-                <li>La potencia se evalúa con la distribución de Kolmogorov exacta.</li>
+                <li>La potencia se aproxima con la distribución asintótica de Kolmogorov y el modelo de desplazamiento; no se usa la distribución exacta de \(D_n\) para \(n\) finito.</li>
             </ul>
             <h3>Cómo interpretar el resultado</h3>
-                <p>El valor \(n\) es el <strong>mínimo de observaciones necesarias</strong> para que el test de Kolmogorov-Smirnov (KS) detecte la desviación especificada respecto a la distribución teórica con la potencia y el nivel \(\alpha\) indicados. Redondea siempre hacia arriba. Si prevés pérdidas de datos o exclusiones, divide \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener el número de unidades a recoger. Un supuesto crítico es que la distribución teórica bajo \(H_0\) debe estar <strong>completamente especificada</strong> (todos sus parámetros conocidos a priori): si en cambio los parámetros se estiman a partir de los propios datos (como en el test de Lilliefors para normalidad), las tablas críticas del KS estándar no son válidas y el p-valor estará inflado.</p>
+                <p>El valor \(n\) es el número de observaciones con el que, según la aproximación del modelo de desplazamiento, el test de Kolmogorov-Smirnov (KS) alcanzaría la potencia indicada al nivel \(\alpha\) frente a la desviación especificada. Como esa aproximación suele ser optimista, tómalo como un <strong>mínimo orientativo</strong>, no como una garantía. Redondea siempre hacia arriba. Si prevés pérdidas de datos o exclusiones, divide \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener el número de unidades a recoger. Un supuesto crítico es que la distribución teórica bajo \(H_0\) debe estar <strong>completamente especificada</strong> (todos sus parámetros conocidos a priori): si en cambio los parámetros se estiman a partir de los propios datos (como en el test de Lilliefors para normalidad), las tablas críticas del KS estándar no son válidas y el p-valor estará inflado.</p>
                 <p>La potencia del test KS depende de la distancia máxima \(D = \sup_x |F_n(x) - F_0(x)|\) que se desea detectar. El test KS es relativamente potente para detectar diferencias en la zona central de la distribución, pero tiene poca potencia para diferencias en las colas. Si las desviaciones que te interesan son principalmente en los extremos (colas pesadas, asimetría), el test de Anderson-Darling o el test de Cramér-von Mises son más potentes y requieren menor \(n\) para la misma eficacia. Realiza un <em>análisis de sensibilidad</em> variando la distancia \(D\) mínima detectable en ±0,05 para evaluar cuánto cambia \(n\).</p>
                 <p>Si el \(n\) calculado supera varios cientos, ten en cuenta que con muestras muy grandes el test KS detectará desviaciones triviales de la distribución teórica que no tienen relevancia práctica: un \(p < 0{,}05\) no implica que la distribución sea "demasiado distinta" para los propósitos del análisis. En ese contexto, complementa el test con gráficos Q-Q y valora si las desviaciones son sustantivas. Con los datos recogidos, realiza el test con la <a href="kolmogorov-smirnov-bondad-ajuste.html">calculadora de Kolmogorov-Smirnov</a>; si el objetivo es contrastar normalidad específicamente, usa la <a href="tamano-muestral-shapiro-wilk.html">calculadora de Shapiro-Wilk</a> para muestras pequeñas o medianas.</p>
         </section>

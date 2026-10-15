@@ -72,7 +72,7 @@
           "name": "¿Cuándo debo usar el test exacto de Fisher en lugar del chi-cuadrado?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "El test exacto de Fisher es preferible cuando alguna frecuencia esperada en la tabla 2×2 es inferior a 5, o cuando el tamaño muestral total es pequeño (típicamente N < 20–25). El chi-cuadrado con corrección de Yates es una alternativa, pero Fisher es más exacto al no depender de ninguna aproximación asintótica."
+            "text": "El test exacto de Fisher es preferible cuando alguna frecuencia esperada en la tabla 2×2 es inferior a 5, o cuando el tamaño muestral total es pequeño (típicamente N < 20–25). El chi-cuadrado con corrección de Yates es una alternativa, pero Fisher no depende de ninguna aproximación asintótica."
           }
         },
         {
@@ -88,7 +88,7 @@
           "name": "¿Qué significa la corrección de continuidad en el tamaño muestral para Fisher?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "La corrección de continuidad de Casagrande y Pike ajusta hacia arriba el tamaño muestral de Fleiss para compensar la naturaleza discreta de la distribución hipergeométrica. Produce estimaciones más conservadoras (mayor n) que garantizan con mayor seguridad alcanzar la potencia objetivo."
+            "text": "La corrección de continuidad de Casagrande y Pike ajusta hacia arriba el tamaño muestral de Fleiss para compensar la naturaleza discreta de la distribución hipergeométrica. Produce estimaciones más conservadoras (mayor n) que se acercan más a la potencia real del test de Fisher, aunque siguen siendo una aproximación y no garantizan alcanzar la potencia objetivo."
           }
         },
         {
@@ -246,10 +246,10 @@
             <p>Un ensayo clínico compara la tasa de respuesta a un tratamiento en dos grupos. Se espera una respuesta del 40 % en el grupo tratado (\(p_1 = 0{,}40\)) y del 20 % en el grupo control (\(p_2 = 0{,}20\)). Se elige \(\alpha = 0{,}05\) bilateral y potencia del 80 %. Los grupos tienen el mismo tamaño (\(r = 1\)).</p>
             <p>Paso 1 — proporción ponderada: \(\bar{p} = (0{,}40 + 0{,}20)/2 = 0{,}30\).</p>
             <p>Con \(z_{\alpha/2} = 1{,}960\) y \(z_\beta = 0{,}842\):</p>
-            <p class="formula-line">\( n_1^{(0)} = \frac{\bigl(1{,}960\sqrt{2\times0{,}30\times0{,}70} + 0{,}842\sqrt{0{,}40\times0{,}60+0{,}20\times0{,}80}\bigr)^2}{(0{,}20)^2} \approx \frac{(1{,}960\times0{,}648 + 0{,}842\times0{,}566)^2}{0{,}04} \approx \frac{(1{,}270+0{,}477)^2}{0{,}04} \approx \frac{3{,}050}{0{,}04} \approx 76{,}3 \)</p>
+            <p class="formula-line">\( n_1^{(0)} = \frac{\bigl(1{,}960\sqrt{2\times0{,}30\times0{,}70} + 0{,}842\sqrt{0{,}40\times0{,}60+0{,}20\times0{,}80}\bigr)^2}{(0{,}20)^2} \approx \frac{(1{,}960\times0{,}648 + 0{,}842\times0{,}632)^2}{0{,}04} \approx \frac{(1{,}270+0{,}532)^2}{0{,}04} \approx \frac{3{,}248}{0{,}04} \approx 81{,}2 \)</p>
             <p>Paso 2 — corrección de continuidad:</p>
             <p class="formula-line">\( n_1 = \frac{81{,}2}{4}\left(1 + \sqrt{1 + \frac{4}{81{,}2\times0{,}20}}\right)^2 \approx 20{,}3\times(1+\sqrt{1{,}246})^2 \approx 20{,}3\times(1+1{,}116)^2 \approx 20{,}3\times4{,}478 \approx 90{,}9 \)</p>
-            <p>Redondeando: <strong>n₁ = 91 y n₂ = 91</strong> (total = 182). Con esta muestra, el test exacto de Fisher detectará la diferencia de 20 puntos porcentuales el 80 % de las veces.</p>
+            <p>Redondeando: <strong>n₁ = 91 y n₂ = 91</strong> (total = 182). Con esta muestra, la potencia del test exacto de Fisher para detectar la diferencia de 20 puntos porcentuales, calculada por enumeración exacta, es de aproximadamente el 81 %. En otros escenarios la corrección de continuidad puede quedarse corta o pasarse, por lo que conviene comprobarlo si el estudio es crítico.</p>
             <h3>Supuestos del modelo</h3>
             <ul>
                 <li>Dos grupos independientes con una respuesta binaria (éxito/fracaso).</li>
@@ -284,7 +284,7 @@
             <h3>Preguntas frecuentes</h3>
             <ul>
                 <li><strong>¿Cuándo debo usar el test exacto de Fisher en lugar del chi-cuadrado?</strong> Cuando alguna frecuencia esperada en la tabla 2×2 es inferior a 5, o cuando el tamaño muestral total es pequeño (N &lt; 20–25). En muestras grandes, ambos tests convergen al mismo resultado.</li>
-                <li><strong>¿Por qué la corrección de continuidad aumenta el tamaño muestral?</strong> Porque el test exacto de Fisher opera sobre la distribución discreta hipergeométrica. La corrección ajusta el n para garantizar que la potencia real del test discreto alcance el objetivo, en lugar de la potencia asintótica continua.</li>
+                <li><strong>¿Por qué la corrección de continuidad aumenta el tamaño muestral?</strong> Porque el test exacto de Fisher opera sobre la distribución discreta hipergeométrica. La corrección ajusta el n para aproximar mejor la potencia real del test discreto, en lugar de la potencia asintótica continua; sigue siendo una aproximación, así que conviene verificar el resultado por simulación o enumeración exacta si el estudio es crítico.</li>
                 <li><strong>¿El tamaño muestral calculado es exacto?</strong> No; es una aproximación. El valor real depende de los parámetros verdaderos y de la discretización de la distribución hipergeométrica. Para confirmación en estudios críticos, complementa con simulación de Monte Carlo.</li>
                 <li><strong>¿Puedo usar esta calculadora para un diseño caso-control?</strong> Sí. Introduce la proporción de expuestos en casos como \(p_1\), la de controles como \(p_2\), y ajusta \(r\) a la razón de controles por caso deseada.</li>
             </ul>

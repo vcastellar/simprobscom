@@ -70,7 +70,7 @@
       "name": "How many Monte Carlo samples does the calculator use?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "30,000. This gives a standard error for the P(B > A) estimate of about ±0.003 for values around 0.5."
+        "text": "30,000. The standard error of the P(B > A) estimate is approximately √(p(1−p)/30,000): ±0.003 for values around 0.5 and ±0.001 for values around 0.97."
       }
     },
     {
@@ -78,7 +78,7 @@
       "name": "Can I use this with small sample sizes?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. The biggest advantage of the Bayesian approach is that it works correctly with small samples, where the z-test can be imprecise."
+        "text": "Yes. The Bayesian calculation does not rely on asymptotic approximations, so it remains valid with small samples, where the z-test can be imprecise. In exchange, with little data the result depends more on the chosen prior, so check how it changes under reasonable alternative priors."
       }
     },
     {
@@ -199,7 +199,7 @@
 
         <section class="card content-card">
       <h3>Beta-Binomial model</h3>
-      <p>In the Bayesian conjugate model for proportions, the prior is a Beta distribution and the likelihood is binomial. The resulting posterior is also a Beta, which allows exact analytical calculations.</p>
+      <p>In the Bayesian conjugate model for proportions, the prior is a Beta distribution and the likelihood is binomial. The resulting posterior is also a Beta, so the posterior distributions and their credible intervals can be obtained analytically. The probability P(B &gt; A), on the other hand, is estimated by Monte Carlo and carries a small simulation error.</p>
       <p class="formula-line">\( p_A \sim \text{Beta}(\alpha_0, \beta_0) \xrightarrow{\text{data}} p_A \mid \text{data} \sim \text{Beta}(\alpha_0 + x_A,\; \beta_0 + n_A - x_A) \)</p>
       <p class="formula-line">\( p_B \sim \text{Beta}(\alpha_0, \beta_0) \xrightarrow{\text{data}} p_B \mid \text{data} \sim \text{Beta}(\alpha_0 + x_B,\; \beta_0 + n_B - x_B) \)</p>
       <h3>Choosing the prior</h3>
@@ -219,8 +219,9 @@
             <p class="formula-line">\( p_A \mid \text{data} \sim \text{Beta}(1 + 94,\; 1 + 1{,}200 - 94) = \text{Beta}(95,\; 1{,}107) \)</p>
             <p class="formula-line">\( p_B \mid \text{data} \sim \text{Beta}(1 + 113,\; 1 + 1{,}200 - 113) = \text{Beta}(114,\; 1{,}088) \)</p>
             <p>The posterior mean of A is \( \hat{p}_A = 95/(95+1{,}107) \approx 7.9\% \) and that of B is \( \hat{p}_B = 114/(114+1{,}088) \approx 9.5\% \). Using Monte Carlo with 30,000 samples drawn from both posterior distributions, the probability that B beats A is estimated as:</p>
-            <p class="formula-line">\( P(p_B > p_A) \approx 0.962 \)</p>
-            <p>The expected lift of B over A is approximately \( (9.5 - 7.9)/7.9 \approx +20\% \) in relative terms. With a 96.2% probability that variant B is genuinely better, the team exceeds the usual decision threshold (95%) and can roll out B as the new default version, estimating that the change will generate around 16 additional sign-ups per 1,000 visits.</p>
+            <p class="formula-line">\( P(p_B > p_A) \approx 0.916 \)</p>
+            <p>With 30,000 samples, the Monte Carlo standard error of this estimate is \( \sqrt{0.916 \cdot 0.084/30{,}000} \approx 0.002 \), so the result can change in the third decimal place from one run to the next.</p>
+            <p>The expected lift of B over A is approximately \( (9.5 - 7.9)/7.9 \approx +20\% \) in relative terms. With a 91.6% posterior probability that variant B is better, the evidence favours B, but the team does <strong>not reach</strong> the usual 95% decision threshold. It can extend the experiment to gather more data or decide by weighing the cost of each possible error; if it does roll out B, the central estimate is around 16 additional sign-ups per 1,000 visits, with considerable uncertainty.</p>
         </section>
 
     <section class="card content-card">
@@ -253,8 +254,8 @@
       <h3>Frequently asked questions</h3>
       <ul>
         <li><strong>What prior should I use if I have no historical data?</strong> Beta(1, 1), the uniform prior. If you have historical conversion rates, you can parameterize the prior as if you had α₀ prior successes and β₀ prior failures.</li>
-        <li><strong>How many Monte Carlo samples does the calculator use?</strong> 30,000. This gives a standard error for the P(B &gt; A) estimate of about ±0.003 for values around 0.5.</li>
-        <li><strong>Can I use this with small sample sizes?</strong> Yes. The biggest advantage of the Bayesian approach is that it works correctly with small samples, where the z-test can be imprecise.</li>
+        <li><strong>How many Monte Carlo samples does the calculator use?</strong> 30,000. The standard error of the P(B &gt; A) estimate is approximately √(p(1−p)/30,000): ±0.003 for values around 0.5 and ±0.001 for values around 0.97.</li>
+        <li><strong>Can I use this with small sample sizes?</strong> Yes. The Bayesian calculation does not rely on asymptotic approximations, so it remains valid with small samples, where the z-test can be imprecise. In exchange, with little data the result depends more on the chosen prior, so check how it changes under reasonable alternative priors.</li>
         <li><strong>What's the difference between P(B &gt; A) = 0.97 and a p-value of 0.03?</strong> The p-value measures the probability of observing data as extreme under H₀; P(B &gt; A) directly measures how much you believe B beats A given what you've observed. The latter is more intuitive.</li>
       </ul>
     </section>
@@ -397,7 +398,7 @@ function calculateBayes() {
       `<strong>${credPct}% CI A:</strong> [${ciA[0].toFixed(4)}, ${ciA[1].toFixed(4)}]<br>` +
       `<strong>Posterior B:</strong> ${posteriorB} &nbsp;→ mean = ${meanB.toFixed(4)}<br>` +
       `<strong>${credPct}% CI B:</strong> [${ciB[0].toFixed(4)}, ${ciB[1].toFixed(4)}]<br>` +
-      `<strong>P(B &gt; A):</strong> ${(pBgtA * 100).toFixed(2)}% &nbsp;<em>(${N.toLocaleString()} Monte Carlo simulations)</em><br>` +
+      `<strong>P(B &gt; A):</strong> ${(pBgtA * 100).toFixed(2)}% &nbsp;<em>(${N.toLocaleString()} Monte Carlo simulations; standard error ≈ ${(Math.sqrt(pBgtA * (1 - pBgtA) / N) * 100).toFixed(2)} pp)</em><br>` +
       (!isNaN(lift) ? `<strong>Expected lift:</strong> ${lift >= 0 ? '+' : ''}${lift.toFixed(2)}%` : '');
   }, 10);
 }

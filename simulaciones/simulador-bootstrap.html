@@ -540,9 +540,11 @@
         El <strong>método percentil</strong> es el más sencillo y el que implementa este simulador.
         Para muestras pequeñas o estimadores sesgados, métodos más sofisticados como
         <em>BCa</em> (bias-corrected and accelerated) ofrecen mejor cobertura.
-        En la práctica, \(B = 1000\) réplicas es suficiente para estimar el error estándar y
-        construir intervalos de confianza con buena precisión; \(B = 5000\) proporciona mayor
-        estabilidad en los percentiles extremos.
+        En la práctica, \(B = 1000\) réplicas suele bastar para estimar el error estándar y
+        construir intervalos percentiles al 95 %, aunque sus extremos todavía varían algo de una
+        ejecución a otra (error de Monte Carlo); \(B = 5000\) o más proporciona mayor estabilidad
+        en los percentiles extremos. Ninguna cifra es universalmente suficiente: depende del nivel
+        de confianza y de cuántos decimales del intervalo se quieran interpretar.
       </p>
     </section>
 
@@ -1229,9 +1231,9 @@
       ? `Con <strong>n = ${n}</strong> la distribución bootstrap tiene forma irregular; aumentar <em>n</em> la hará más suave y el IC más estrecho.`
       : `Con <strong>n = ${n}</strong> la distribución bootstrap ya es bastante suave. Incrementar <em>n</em> reduciría el IC aproximadamente como √(${n}/${n+20}).`;
 
-    const Beffect = B < 500
+    const Beffect = B < 1000
       ? `Con solo <strong>B = ${B}</strong> réplicas los percentiles del IC pueden variar bastante entre ejecuciones. Usa B ≥ 1000 para mayor estabilidad.`
-      : `Con <strong>B = ${B}</strong> réplicas los percentiles del IC son estables. Aumentar B más allá de 5000 aportaría mejoras mínimas.`;
+      : `Con <strong>B = ${B}</strong> réplicas los extremos del IC varían poco entre ejecuciones en comparación con su anchura, aunque no son exactos: repite la simulación para ver cuánto cambian y aumenta B si necesitas más precisión.`;
 
     const box = document.getElementById('interpretation');
     box.innerHTML = `<p>${seComparison} ${widthComment}</p><p>${nEffect} ${Beffect}</p>`;

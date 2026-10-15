@@ -187,7 +187,7 @@
       <h2>The test statistic and the p-value</h2>
 
       <h3>Test statistic</h3>
-      <p>The test statistic is a number computed from the sample that summarizes the evidence against H₀. Its exact distribution under H₀ is known mathematically, which lets you compute probabilities. The most common ones are:</p>
+      <p>The test statistic is a number computed from the sample that summarizes the evidence against H₀. Its distribution under H₀ is known, either exactly (for example, Student's t with normal data) or approximately (for example, Pearson's chi-square with large samples), which lets you compute probabilities. The most common ones are:</p>
       <ul>
         <li><strong>z:</strong> used when the population variance is known or the sample size is large (roughly n ≥ 30). It follows a standard normal distribution N(0, 1) under H₀.</li>
         <li><strong>Student's t:</strong> used when the population variance is unknown and estimated from the sample. It follows a t distribution with n − 1 degrees of freedom.</li>
@@ -225,7 +225,7 @@
       <div class="decision-grid">
         <div>
           <h3>Type I error (α) — False positive</h3>
-          <p>Rejecting H₀ when it is actually true. This is the error of "seeing an effect that doesn't exist." Its probability is exactly α (the chosen significance level). If we set α = 0.05, on average 5% of tests performed when H₀ is true will produce a false positive.</p>
+          <p>Rejecting H₀ when it is actually true. This is the error of "seeing an effect that doesn't exist." Its probability is α, the chosen significance level; it is exactly α only if the test's assumptions hold and the statistic is continuous (for approximate or discrete tests the actual rate can differ somewhat). If we set α = 0.05, on average 5% of tests performed when H₀ is true will produce a false positive.</p>
         </div>
         <div>
           <h3>Type II error (β) — False negative</h3>
@@ -322,7 +322,7 @@
       <p>Every test rests on a set of assumptions that must hold (at least approximately) for the inference to be valid. Ignoring the assumptions is one of the most common sources of misleading results.</p>
 
       <h3>Normality</h3>
-      <p>Parametric tests (t, z, F) assume that the data come from a normal distribution or, thanks to the Central Limit Theorem, that the sample size is large enough for the statistic to converge to the theoretical distribution. For n ≥ 30 the CLT is usually sufficient; with small samples it's worth checking normality with the <a href="../shapiro-wilk-normalidad.html">Shapiro-Wilk test</a> or the <a href="../kolmogorov-smirnov-bondad-ajuste.html">Kolmogorov-Smirnov test</a>.</p>
+      <p>Parametric tests (t, z, F) assume that the data come from a normal distribution or, thanks to the Central Limit Theorem, that the sample size is large enough for the statistic to converge to the theoretical distribution. For n ≥ 30 the CLT is usually sufficient, although with highly skewed data or outliers considerably more may be needed; with small samples it's worth checking normality with the <a href="../shapiro-wilk-normalidad.html">Shapiro-Wilk test</a> or the <a href="../kolmogorov-smirnov-bondad-ajuste.html">Kolmogorov-Smirnov test</a>.</p>
 
       <h3>Independence of observations</h3>
       <p>Observations must be independent of one another. The most frequent violation occurs when there are repeated measures on the same subject (before/after) or when the data are clustered. In these cases you should use a paired-sample test or mixed models.</p>
