@@ -165,7 +165,7 @@
                     <div class="form-group">
                         <label for="mcIter">Iteraciones Monte Carlo (B) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                         <input type="number" id="mcIter" value="5000" step="500" min="1000" max="100000">
-                        <p class="field-hint" hidden>Número de muestras normales simuladas para construir la distribución nula de \(W\). El p-valor estimado tiene un error estándar aproximado de √(p(1−p)/B): con <strong>B = 5000</strong> y un p-valor cercano a 0,05 es ≈ 0,003. Aumenta B si el p-valor queda cerca de α.</p>
+                        <p class="field-hint" hidden>Número de muestras normales simuladas para construir la distribución nula de \(W\). El p-valor estimado tiene un error estándar aproximado de √(p(1−p)/B): con <strong>B = 5000</strong> y un p-valor cercano a 0,05 es ≈ 0,003. El menor p-valor que se puede obtener es 1/(B+1). Aumenta B si el p-valor queda cerca de α o si necesitas resolver p-valores muy pequeños.</p>
                     </div>
 
                     <div class="form-group">
@@ -245,27 +245,66 @@
                 <li>Se calcula el estadístico \(W\) en esa muestra simulada.</li>
                 <li>Se repite \(B\) veces (por ejemplo, \(B = 5000\)). Con ello se obtiene una distribución empírica
                     de \(W\) bajo \(H_0\): es decir, cómo se comportaría \(W\) si los datos realmente fueran normales.</li>
-                <li>El p-valor empírico se calcula como la fracción de simulaciones con \(W_{\text{sim}} \leq W_{\text{obs}}\):
-                    \[p\text{-valor} = \dfrac{\#\{W_{\text{sim}} \leq W_{\text{obs}}\}}{B}\]
+                <li>Se cuenta el número \(b\) de simulaciones al menos tan extremas como la observada. En Shapiro–Wilk
+                    son los valores <em>pequeños</em> de \(W\) los que indican falta de normalidad, así que
+                    \(b = \#\{W_{\text{sim}} \leq W_{\text{obs}}\}\), y el p-valor Monte Carlo se calcula como
+                    \[\hat p = \dfrac{b+1}{B+1}\]
                     Un \(W\) observado muy pequeño (lejos de 1) caerá en la cola izquierda de la distribución simulada,
                     dando un p-valor pequeño y llevando a rechazar la normalidad.</li>
             </ol>
+
+            <h4>¿Por qué \((b+1)/(B+1)\) y no \(b/B\)?</h4>
+            <p>
+                La fracción \(b/B\) es el estimador natural de la probabilidad de cola \(p = P(W \leq W_{\text{obs}} \mid H_0)\)
+                (de hecho es insesgado para ella), pero cuando el p-valor se usa para <em>decidir</em> con un número finito de
+                réplicas conviene la corrección \((b+1)/(B+1)\), recomendada en la literatura de pruebas Monte Carlo
+                (Davison y Hinkley, 1997; North, Curtis y Sham, 2002; Phipson y Smyth, 2010). La justificación es la siguiente:
+            </p>
+            <ul>
+                <li><strong>Validez exacta del contraste.</strong> Bajo \(H_0\), el \(W\) observado y los \(B\) simulados son
+                    \(B+1\) valores intercambiables de la misma distribución, de modo que la posición del observado entre ellos es
+                    uniforme en \(\{1, \dots, B+1\}\). Por eso \(P\bigl(\hat p \leq \alpha\bigr) \leq \alpha\) para <em>cualquier</em> \(B\),
+                    con igualdad cuando \(\alpha(B+1)\) es entero: la tasa de error de tipo I nunca supera el \(\alpha\) nominal.
+                    Con \(b/B\), en cambio, \(P(b/B \leq \alpha) = (\lfloor \alpha B \rfloor + 1)/(B+1)\), que puede superar ligeramente
+                    \(\alpha\) (con \(B = 5000\) y \(\alpha = 0{,}05\) es \(251/5001 \approx 0{,}0502\)).</li>
+                <li><strong>Nunca da \(p = 0\).</strong> Si ninguna réplica es tan extrema como la muestra, \(b/B\) devolvería
+                    un p-valor nulo, que sugiere una certeza imposible con \(B\) réplicas. La versión corregida devuelve
+                    \(1/(B+1)\), que es la menor probabilidad que una simulación de tamaño \(B\) puede resolver.</li>
+                <li><strong>El coste es despreciable.</strong> La diferencia entre ambos estimadores es como mucho
+                    \(1/(B+1)\) (≈ 0,0002 con \(B = 5000\)), muy por debajo del error de simulación salvo en la cola extrema,
+                    así que solo afecta a casos límite, y en ellos lo hace en la dirección conservadora.</li>
+            </ul>
             <p>
                 El histograma del gráfico muestra precisamente esa distribución empírica: las barras acumulan los \(B\) valores simulados
                 de \(W\). El marcador rojo señala el \(W\) observado en tu muestra; si cae en la cola izquierda (zona de valores bajos),
-                hay evidencia contra la normalidad. El marcador verde indica el valor crítico \(W_\alpha\): el percentil \(\alpha\)
-                de la distribución simulada, que es el umbral por debajo del cual se rechazaría \(H_0\).
+                hay evidencia contra la normalidad. El marcador verde indica el valor crítico \(W_\alpha\): aproximadamente el
+                percentil \(\alpha\) de la distribución simulada, elegido de forma que \(W_{\text{obs}} &lt; W_\alpha\) equivale
+                exactamente a \(\hat p &lt; \alpha\), de modo que el gráfico y la decisión siempre coinciden.
             </p>
+            <h4>Incertidumbre Monte Carlo</h4>
             <p>
                 La semilla aleatoria permite reproducir exactamente el mismo resultado: fijar la misma semilla garantiza
                 que las \(B\) muestras simuladas sean idénticas en distintas ejecuciones, lo que facilita compartir y verificar resultados.
-                El p-valor Monte Carlo es una estimación sujeta a error de simulación. Su error estándar es aproximadamente
-                \(\sqrt{p(1-p)/B}\), de modo que depende tanto del propio p-valor como del número de réplicas: con \(B = 5000\),
-                cerca de \(p = 0{,}05\) es \(\approx 0{,}0031\) (un margen aproximado del 95 % de \(\pm 0{,}006\)), y cerca de
-                \(p = 0{,}5\) es \(\approx 0{,}007\). Esa precisión es aceptable para muchos usos, pero no es universalmente
-                suficiente: si el p-valor queda cerca de \(\alpha\), o si se necesita estimar con precisión p-valores muy pequeños,
-                conviene aumentar \(B\) (el error disminuye como \(1/\sqrt{B}\): cuadruplicar \(B\) lo reduce a la mitad).
-                Si ninguna réplica produce un \(W\) tan pequeño como el observado, la calculadora informa \(p &lt; 1/B\) en lugar de \(p = 0\).
+                Pero el p-valor Monte Carlo sigue siendo una estimación del p-valor que se obtendría con infinitas réplicas,
+                \(p = P(W \leq W_{\text{obs}} \mid H_0)\). Como el mismo cálculo de \(W\) se aplica a la muestra observada y a las
+                simuladas, el error de simulación es la única diferencia entre ambos.
+            </p>
+            <p>
+                El número de réplicas tan extremas sigue una distribución binomial, \(b \sim \text{Bin}(B, p)\), así que el
+                error estándar del p-valor estimado es aproximadamente \(\sqrt{p(1-p)/B}\): depende tanto del propio p-valor
+                como del número de réplicas. Con \(B = 5000\), cerca de \(p = 0{,}05\) es \(\approx 0{,}0031\) (un margen
+                aproximado del 95 % de \(\pm 0{,}006\)), y cerca de \(p = 0{,}5\) es \(\approx 0{,}007\). Además del error
+                estándar, la calculadora muestra un <strong>intervalo de confianza del 95 % de Wilson</strong> para \(p\) a partir de
+                \(b\) y \(B\), que sigue siendo informativo cuando \(b\) es pequeño o nulo (con \(b = 0\) su límite superior
+                es \(\approx 3{,}84/B\)). Si \(\alpha\) cae dentro de ese intervalo, la simulación no basta para saber de qué
+                lado de \(\alpha\) está el p-valor y la calculadora lo advierte.
+            </p>
+            <p>
+                Esa precisión es aceptable para muchos usos, pero no es universalmente suficiente. El error disminuye como
+                \(1/\sqrt{B}\) (cuadruplicar \(B\) lo reduce a la mitad) y, para lograr un error estándar \(\delta\), hacen
+                falta unas \(B \approx p(1-p)/\delta^2\) réplicas: por ejemplo, unas 47 500 para \(\delta = 0{,}001\) cerca de
+                \(p = 0{,}05\). Si el p-valor queda cerca de \(\alpha\), o si se necesita estimar con precisión p-valores muy
+                pequeños, conviene aumentar \(B\).
             </p>
 
 
@@ -339,9 +378,9 @@
             <p>Este valor coincide con el que devuelve R: <code>shapiro.test(...)$statistic = 0.9557</code>.</p>
 
             <p><strong>Paso 5 – p-valor mediante simulación Monte Carlo</strong></p>
-            <p>La calculadora genera \(B = 5000\) muestras normales \(N(0,1)\) de tamaño \(n = 10\), calcula \(W\) en cada una y estima el p-valor como la proporción de simulaciones con \(W \leq W_{\text{obs}}\):</p>
-            <p class="formula-line">\(p\text{-valor} = \dfrac{\#\{W_{\text{sim}} \leq 0{,}9557\}}{5000} \approx 0{,}73\)</p>
-            <p>Con \(B = 5000\) y semilla 12345 la calculadora obtiene \(p \approx 0{,}733\), con un error estándar de Monte Carlo de \(\sqrt{0{,}733 \cdot 0{,}267/5000} \approx 0{,}006\). R obtiene \(p = 0{,}7355\) con la aproximación analítica de Royston (una transformación normalizadora de \(W\)). Ambos son aproximaciones del mismo p-valor y resultan compatibles dentro del error de simulación, pero no cabe esperar que coincidan en todos los decimales. Puedes reproducirlo introduciendo los datos en la calculadora con \(B = 5000\) y semilla 12345.</p>
+            <p>La calculadora genera \(B = 5000\) muestras normales \(N(0,1)\) de tamaño \(n = 10\), calcula \(W\) en cada una y cuenta las simulaciones con \(W_{\text{sim}} \leq W_{\text{obs}}\). Con semilla 12345 son \(b = 3663\), así que:</p>
+            <p class="formula-line">\(\hat p = \dfrac{b+1}{B+1} = \dfrac{3664}{5001} \approx 0{,}7327\)</p>
+            <p>(La fracción sin corregir, \(3663/5000 = 0{,}7326\), es prácticamente igual: con un p-valor lejos de \(\alpha\) la corrección no cambia nada.) El error estándar de Monte Carlo es \(\sqrt{0{,}7327 \cdot 0{,}2673/5000} \approx 0{,}006\) y el intervalo de Wilson del 95 % para el p-valor es aproximadamente \([0{,}720;\ 0{,}745]\). R obtiene \(p = 0{,}7355\) con la aproximación analítica de Royston (una transformación normalizadora de \(W\)). Ambos son aproximaciones del mismo p-valor y resultan compatibles dentro del error de simulación (0,7355 está dentro del intervalo), pero no cabe esperar que coincidan en todos los decimales. Puedes reproducirlo introduciendo los datos en la calculadora con \(B = 5000\) y semilla 12345.</p>
 
             <p><strong>Conclusión</strong></p>
             <p>Dado que \(p \approx 0{,}73 \gg 0{,}05 = \alpha\), no se rechaza \(H_0\). Con un nivel de significación del 5 %, no hay evidencia estadística de que las dimensiones de las piezas no sigan una distribución normal. Esto no demuestra que lo sean: con \(n = 10\) la potencia del test es limitada y solo detectaría desviaciones marcadas. Antes de apoyarse en herramientas paramétricas como los gráficos de control \(\bar{x}\text{-}R\), conviene revisar también un gráfico Q–Q y el conocimiento previo del proceso.</p>
@@ -378,7 +417,7 @@
                 señalan una desviación severa. A diferencia de los tests basados en chi-cuadrado o KS,
                 Shapiro-Wilk tiene mayor potencia para detectar desviaciones en muestras pequeñas y es
                 el test de normalidad recomendado para \(n \leq 50\). La herramienta muestra el valor W,
-                el p-valor Monte Carlo con su error estándar y, en el gráfico, la distribución simulada de
+                el p-valor Monte Carlo con su error estándar y su intervalo de confianza Monte Carlo y, en el gráfico, la distribución simulada de
                 W bajo normalidad junto con el W observado y el valor crítico. Para ver <em>cómo</em> se
                 desvían los datos de la normal, complementa el resultado con un gráfico Q–Q.
                 </p>
@@ -536,6 +575,22 @@ function computeShapiroW(sample) {
   return Math.min(1.0, (b * b) / ss);
 }
 
+// 95% Wilson score interval for a binomial proportion k/N
+function wilsonInterval(k, N, z = 1.959964) {
+  const z2 = z * z;
+  const center = (k + z2 / 2) / (N + z2);
+  const half = z * Math.sqrt(k * (N - k) / N + z2 / 4) / (N + z2);
+  return [Math.max(0, center - half), Math.min(1, center + half)];
+}
+
+// Largest count b such that (b+1)/(B+1) < alpha (-1 if no count rejects)
+function maxRejectCount(B, alpha) {
+  let k = Math.ceil(alpha * (B + 1)) - 2;
+  while (k >= 0 && (k + 1) / (B + 1) >= alpha) k -= 1;
+  while ((k + 2) / (B + 1) < alpha) k += 1;
+  return k;
+}
+
 function simulateShapiroDistribution(n, B) {
   const out = [];
   for (let b = 0; b < B; b += 1) {
@@ -561,7 +616,7 @@ function drawShapiroChart(wSim, wObs, wCrit) {
   });
   const labels = counts.map((_, i) => (minW + bw * (i + 0.5)).toFixed(3));
   const markerObs = labels.map(x => Math.abs(parseFloat(x) - wObs) < bw / 2 ? Math.max(...counts) * 0.95 : null);
-  const markerCrit = labels.map(x => Math.abs(parseFloat(x) - wCrit) < bw / 2 ? Math.max(...counts) * 0.8 : null);
+  const markerCrit = labels.map(x => wCrit !== null && Math.abs(parseFloat(x) - wCrit) < bw / 2 ? Math.max(...counts) * 0.8 : null);
 
   shapiroChart = new Chart(ctx, {
     data: {
@@ -594,27 +649,35 @@ document.getElementById('calcShapiroBtn').addEventListener('click', () => {
   const wObs = computeShapiroW(sample);
   const wSim = simulateShapiroDistribution(n, B);
   const nBelow = wSim.filter(w => w <= wObs).length;
-  const pValue = nBelow / B;
-  // Monte Carlo standard error of the estimated p-value
+  // Monte Carlo p-value with the (b+1)/(B+1) correction: the observed sample counts as one more draw
+  // under H0, so P(p ≤ α) ≤ α holds for any B and the p-value is never 0
+  const pValue = (nBelow + 1) / (B + 1);
+  // Monte Carlo standard error and 95% Wilson interval for the p-value with B → ∞
   const pSe = Math.sqrt(pValue * (1 - pValue) / B);
-  const pMin = (1 / B).toFixed(Math.max(4, Math.ceil(Math.log10(B))));
-  const nearAlpha = nBelow > 0 && Math.abs(pValue - alpha) < 2 * pSe;
-  const wCrit = [...wSim].sort((a, b) => a - b)[Math.floor(alpha * B)];
+  const [ciLo, ciHi] = wilsonInterval(nBelow, B);
+  const nearAlpha = ciLo <= alpha && alpha <= ciHi;
+  const digits = Math.max(4, Math.ceil(Math.log10(B + 1)));
+  // Critical value consistent with the decision: reject iff b ≤ kMax, i.e. iff W_obs < sorted[kMax]
+  const kMax = maxRejectCount(B, alpha);
+  const wCrit = kMax >= 0 ? [...wSim].sort((a, b) => a - b)[kMax] : null;
   const decision = pValue < alpha ? 'Se rechaza H₀ (no normalidad).' : 'No se rechaza H₀ (compatible con normalidad).';
 
   document.getElementById('shapiroResult').innerHTML =
     `n: <strong>${n}</strong><br>` +
     `W observado: <strong>${wObs.toFixed(4)}</strong><br>` +
-    (nBelow === 0
-      ? `p-valor Monte Carlo: <strong>&lt; ${pMin}</strong> (ninguna réplica con W ≤ W observado)<br>`
-      : `p-valor Monte Carlo: <strong>${pValue.toFixed(4)}</strong> (error estándar MC ≈ ${pSe.toFixed(4)})<br>`) +
-    `W crítico (cola izq., α=${alpha}): <strong>${wCrit.toFixed(4)}</strong><br>` +
+    `Réplicas con W ≤ W observado: <strong>b = ${nBelow.toLocaleString('es-ES')}</strong> de ${B.toLocaleString('es-ES')}<br>` +
+    `p-valor Monte Carlo (b+1)/(B+1): <strong>${pValue.toFixed(digits)}</strong>` +
+    (nBelow === 0 ? ` (mínimo posible con este B)` : ` (error estándar MC ≈ ${pSe.toFixed(4)})`) + `<br>` +
+    `IC 95 % Monte Carlo del p-valor (Wilson): <strong>[${ciLo.toFixed(digits)}; ${ciHi.toFixed(digits)}]</strong><br>` +
+    (wCrit !== null ? `W crítico (cola izq., α=${alpha}): <strong>${wCrit.toFixed(4)}</strong><br>` : '') +
     `Decisión: <strong>${decision}</strong>`;
 
   document.getElementById('shapiroNotes').innerHTML =
-    `Región de rechazo: W ≤ ${wCrit.toFixed(4)} (cola izquierda).<br>` +
+    (wCrit !== null
+      ? `Región de rechazo: W &lt; ${wCrit.toFixed(4)} (cola izquierda).<br>`
+      : `Con B = ${B.toLocaleString('es-ES')} el menor p-valor posible, 1/(B+1), no es inferior a α: aumenta B para poder rechazar a este nivel.<br>`) +
     `En la simulación se usaron ${B.toLocaleString('es-ES')} muestras normales bajo H₀ con semilla ${seed}.` +
-    (nearAlpha ? `<br>Atención: el p-valor está a menos de dos errores estándar de α, así que la decisión puede cambiar con otra semilla. Aumenta B para estimarlo con más precisión.` : '');
+    (nearAlpha ? `<br>Atención: α está dentro del intervalo de confianza Monte Carlo del p-valor, así que la decisión puede cambiar con otra semilla. Aumenta B para estimarlo con más precisión.` : '');
 
   drawShapiroChart(wSim, wObs, wCrit);
 });
