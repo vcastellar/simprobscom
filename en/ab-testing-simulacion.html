@@ -118,7 +118,7 @@
       "name": "Why doesn't the empirical power exactly match the theoretical one?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "There is always sampling variance. With 5,000 replicates, the standard error of the simulated proportion is approximately ±0.006 for powers around 80%."
+        "text": "For two reasons. The empirical power has Monte Carlo error: its standard error is approximately √(p(1−p)/N), which with 5,000 replicates is ±0.006 for powers around 80% and ±0.003 for rejection rates around 5%. In addition, the “theoretical” power is itself a normal approximation, which can depart from the true power with small samples or extreme rates."
       }
     },
     {
@@ -217,7 +217,7 @@
               <option value="5000" selected>5,000</option>
               <option value="10000">10,000</option>
             </select>
-              <p class="field-hint" hidden>Number of independent experiments that are simulated. With more replications the empirical power is estimated more precisely; with 5,000 replications the standard error of the simulated proportion is roughly ±0.006.</p>
+              <p class="field-hint" hidden>Number of independent experiments that are simulated. With more replications the empirical power is estimated more precisely: its standard error is approximately √(p(1−p)/N), which with 5,000 replications is ±0.006 for powers around 80% and ±0.003 for rates around 5%.</p>
           </div>
         </div>
         <div class="inline-inputs">
@@ -295,12 +295,12 @@
         <section class="card content-card">
             <h3>Worked example</h3>
             <p>A digital marketing team wants to evaluate whether a new email subject line (variant B) improves the open rate over the current subject line (variant A). Historical data shows the current open rate is <strong>p_A = 0.22</strong> (22%). Variant B is expected to reach a rate of <strong>p_B = 0.26</strong> (26%), an absolute improvement of 4 percentage points.</p>
-            <p>The team sets a two-tailed α = 0.05 and 80% power, which with the standard analytical formula yields approximately <strong>n = 476 users per group</strong> (952 in total). Before launching the real experiment, the team decides to validate these results via Monte Carlo simulation with <strong>N = 5,000 replicates</strong>.</p>
-            <p>In each replicate i, the tool generates \( n_A = n_B = 476 \) Bernoulli observations with the true rates, computes the z statistic of the two-proportion test, and records whether H₀ is rejected:</p>
-            <p class="formula-line">\( z^{(i)} = \dfrac{\hat{p}_B^{(i)} - \hat{p}_A^{(i)}}{\sqrt{\hat{p}^{(i)}(1-\hat{p}^{(i)})\!\left(\tfrac{1}{476}+\tfrac{1}{476}\right)}} \)</p>
-            <p>After the 5,000 replicates, the simulation yields the following results: the empirical rejection rate is <strong>80.3%</strong>, in excellent agreement with the theoretical power of 80%. The histogram of the z statistic shifts to the right relative to the null N(0,1), with the empirical mean around \( \bar{z} \approx 1.45 \), reflecting the real effect of \( \Delta = 0.04 \). The p-value distribution shows a strong concentration near 0: in 80% of the replicates, the p-value falls below 0.05.</p>
-            <p>To check the control of the type I error, the team also runs the simulation under H₀ (setting p_B = p_A = 0.22). With the same 5,000 replicates, the empirical rejection rate turns out to be <strong>4.9%</strong>, very close to the nominal level α = 0.05, and the p-value distribution is approximately uniform on [0, 1], exactly as theory predicts.</p>
-            <p>The practical conclusion is twofold: the analytically calculated sample size is correct (empirical power matches the theoretical power), and the test maintains good control of the type I error. The team can launch the experiment with confidence, knowing that if the real improvement is 4pp, they will have an 80% probability of detecting it with statistically significant results.</p>
+            <p>The team sets a two-tailed α = 0.05 and 80% power, which with the standard analytical formula yields approximately <strong>n = 1,789 users per group</strong> (3,578 in total). Before launching the real experiment, the team decides to validate these results via Monte Carlo simulation with <strong>N = 5,000 replicates</strong>.</p>
+            <p>In each replicate i, the tool generates \( n_A = n_B = 1789 \) Bernoulli observations with the true rates, computes the z statistic of the two-proportion test, and records whether H₀ is rejected:</p>
+            <p class="formula-line">\( z^{(i)} = \dfrac{\hat{p}_B^{(i)} - \hat{p}_A^{(i)}}{\sqrt{\hat{p}^{(i)}(1-\hat{p}^{(i)})\!\left(\tfrac{1}{1789}+\tfrac{1}{1789}\right)}} \)</p>
+            <p>After the 5,000 replicates, the simulation yields the following results: the empirical rejection rate is <strong>79.6%</strong>. With 5,000 replicates, the Monte Carlo standard error of that proportion is \( \sqrt{0.8 \cdot 0.2/5000} \approx 0.006 \), so the result is consistent with the theoretical power of 80%. The histogram of the z statistic shifts to the right relative to the null N(0,1), with the empirical mean around \( \bar{z} \approx 2.8 \), reflecting the real effect of \( \Delta = 0.04 \). The p-value distribution shows a strong concentration near 0: in about 80% of the replicates, the p-value falls below 0.05.</p>
+            <p>To check the control of the type I error, the team also runs the simulation under H₀ (setting p_B = p_A = 0.22). With the same 5,000 replicates, the empirical rejection rate turns out to be <strong>4.7%</strong>, consistent with the nominal level α = 0.05 (near 0.05, the Monte Carlo standard error with 5,000 replicates is \( \approx 0.003 \)), and the p-value distribution is approximately uniform on [0, 1], exactly as theory predicts.</p>
+            <p>The practical conclusion is twofold: the simulation finds no discrepancy with the analytically calculated sample size (the empirical power is consistent with the theoretical power within Monte Carlo error), and the test maintains good control of the type I error. If the real improvement is 4pp, the team will have roughly an 80% probability of detecting it with statistically significant results. This check is only valid under the simulated assumptions (known true rates and independent observations): if the real effect is smaller than assumed, the power will be lower too.</p>
         </section>
 
     <section class="card content-card">
@@ -326,7 +326,7 @@
       <h3>Frequently asked questions</h3>
       <ul>
         <li><strong>Does the simulation use binomial samples?</strong> Each replicate approximates x_A ~ Bin(n, p_A) and x_B ~ Bin(n, p_B) using the De Moivre-Laplace normal approximation. It is adequate when n·p and n·(1−p) are not small; for small samples or extreme proportions the simulation should be interpreted as approximate.</li>
-        <li><strong>Why doesn't the empirical power exactly match the theoretical one?</strong> There is always sampling variance. With 5,000 replicates, the standard error of the simulated proportion is approximately ±0.006 for powers around 80%.</li>
+        <li><strong>Why doesn't the empirical power exactly match the theoretical one?</strong> For two reasons. The empirical power has Monte Carlo error: its standard error is approximately √(p(1−p)/N), which with 5,000 replicates is ±0.006 for powers around 80% and ±0.003 for rejection rates around 5%. In addition, the “theoretical” power is itself a normal approximation, which can depart from the true power with small samples or extreme rates.</li>
         <li><strong>Can I simulate with p_A = p_B to check the α level?</strong> Yes: enter the same value for p_A and p_B and check that the empirical rejection rate approaches α.</li>
         <li><strong>Are the replicates independent?</strong> Yes: each replicate generates new samples with no dependency on the previous ones.</li>
       </ul>

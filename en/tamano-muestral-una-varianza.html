@@ -193,7 +193,7 @@
                 <section class="card content-card">
             <h3>Explanation</h3>
             <p>The chi-square variance test checks \(H_0: \sigma^2 = \sigma_0^2\) using the statistic \(T = (n-1)S^2/\sigma_0^2\), which under \(H_0\) follows a \(\chi^2_{n-1}\) distribution.</p>
-            <p>Under the alternative \(\sigma_1 = R\cdot\sigma_0\), the statistic \(T\) follows an \(R^2 \cdot \chi^2_{n-1}\) distribution, equivalently \(T/R^2 \sim \chi^2_{n-1}\). Exact power is evaluated using the central chi-square CDF, without normal approximations.</p>
+            <p>Under the alternative \(\sigma_1 = R\cdot\sigma_0\), the statistic \(T\) follows an \(R^2 \cdot \chi^2_{n-1}\) distribution, equivalently \(T/R^2 \sim \chi^2_{n-1}\). If the data are normal, the power is exact: it is evaluated with the central chi-square CDF, without normal approximations.</p>
             <h3>Exact power formula</h3>
             <p>For the two-sided alternative (\(H_a: \sigma \neq \sigma_0\)):</p>
             <p class="formula-line">\( \text{Power} = F_{\chi^2_{n-1}}\!\left(\frac{\chi^2_{\alpha/2,\,n-1}}{R^2}\right) + 1 - F_{\chi^2_{n-1}}\!\left(\frac{\chi^2_{1-\alpha/2,\,n-1}}{R^2}\right) \)</p>
@@ -212,8 +212,8 @@
             </ul>
             <h3>Worked example</h3>
             <p>A semiconductor manufacturer wants to detect an increase of at least 50% in the standard deviation of chip diameter (R = σ₁/σ₀ = 1.5). The nominal process has \(\sigma_0 = 2\) μm. A two-sided test is wanted with \(\alpha = 0.05\) and 80% power.</p>
-            <p>The calculator finds the smallest \(n\) such that the exact power is ≥ 0.80 with R = 1.5, and returns approximately <strong>n = 54 observations</strong>. With that sample, if the true variance is \((1.5 \times 2)^2 = 9\) μm² (instead of the nominal 4 μm²), the test will detect the change 80% of the time.</p>
-            <p><strong>Sensitivity analysis:</strong> with R = 2 (quadruple variance), the sample shrinks to n ≈ 18. To detect R = 1.25 (a 25% increase) with the same power requires n ≈ 184. Variance tests need considerably larger samples than mean tests for the same relative effect size.</p>
+            <p>The calculator finds the smallest \(n\) such that the exact power is ≥ 0.80 with R = 1.5, and returns <strong>n = 24 observations</strong> (power ≈ 0.81). With that sample, if the true variance is \((1.5 \times 2)^2 = 9\) μm² (instead of the nominal 4 μm²) and the data are normal, the test will detect the change about 81% of the time.</p>
+            <p><strong>Sensitivity analysis:</strong> with R = 2 (quadruple variance), the sample shrinks to n = 9. To detect R = 1.25 (a 25% increase) with the same power requires n = 76. Variance tests need considerably larger samples than mean tests for the same relative effect size.</p>
             <h3>Model assumptions</h3>
             <ul>
                 <li>Simple random sampling with independent observations.</li>

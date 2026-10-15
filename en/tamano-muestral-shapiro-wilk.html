@@ -80,7 +80,7 @@
           "name": "Why use the Jarque–Bera approximation?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The Jarque–Bera test combines skewness and kurtosis into a single statistic that, under H₀ of normality, asymptotically follows a chi-square distribution with 2 degrees of freedom. This analytical structure yields a closed-form formula for power as a function of n, γ₁ and γ₂, which makes computing the sample size straightforward. The Shapiro–Wilk test has no equivalent analytical power formula, so the JB approximation provides a conservative lower bound on the required n: in practice, SW is usually more powerful and requires fewer observations."
+            "text": "The Jarque–Bera test combines skewness and kurtosis into a single statistic that, under H₀ of normality, asymptotically follows a chi-square distribution with 2 degrees of freedom. This analytical structure yields a closed-form formula for power as a function of n, γ₁ and γ₂, which makes computing the sample size straightforward. The Shapiro–Wilk test has no equivalent analytical power formula, so this calculator uses the JB approximation as a guide. It is not a conservative bound: with small samples it can greatly underestimate the n that SW needs against skewed or heavy-tailed alternatives, and overestimate it against light-tailed ones. The result should be verified by simulation."
           }
         },
         {
@@ -96,7 +96,7 @@
           "name": "Is this calculator valid for detecting kurtosis without skewness?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. If γ₁ = 0 and γ₂ ≠ 0 (as in Student's t or the Laplace distribution), the noncentrality parameter reduces to λ(n) = n·γ₂²/24, and the calculation remains valid. For symmetric distributions with heavy tails, detection requires considerably larger samples than for asymmetric distributions with a similar 'distance' from the normal."
+            "text": "It can be used, but with great caution. If γ₁ = 0 and γ₂ ≠ 0 (as in Student's t or the Laplace distribution), the noncentrality parameter reduces to λ(n) = n·γ₂²/24, but with heavy tails the approximation is especially optimistic: for Student's t with 5 df it gives n = 7, whereas in simulation Shapiro–Wilk needs about 195 observations to reach 80% power. For symmetric distributions with heavy tails, detection requires considerably larger samples than for skewed distributions."
           }
         }
       ]
@@ -199,7 +199,7 @@
 
             <div style="margin-top:1rem; padding:0.75rem 1rem; background:var(--surface-alt, #f8f9fc); border-radius:8px; border-left:3px solid var(--accent, #4f46e5); font-size:0.875rem; color:var(--text-muted, #6b7280);">
                 <strong>Notes:</strong>
-                (a) This calculation is a conservative lower bound: the Jarque–Bera approximation tends to overestimate the required n because the Shapiro–Wilk test is generally more powerful.
+                (a) This calculation is only indicative: it relies on the asymptotic Jarque–Bera approximation, which with small samples can be very optimistic against skewed or heavy-tailed alternatives (it underestimates the required n) and pessimistic against light-tailed alternatives such as the uniform. If the sample size matters, verify it by simulation.
                 (b) The Shapiro–Wilk test is valid for 3 ≤ n ≤ 5000; n ≥ 8 is recommended for reasonable power.
             </div>
         </section>
@@ -207,7 +207,7 @@
                 <section class="card content-card">
             <h3>Explanation</h3>
             <p>The Shapiro–Wilk test contrasts the null hypothesis that a sample comes from a normal distribution. Its power depends on how much the real (alternative) distribution differs from the normal, and that difference is mainly quantified by the <strong>skewness</strong> (\(\gamma_1\)) and <strong>excess kurtosis</strong> (\(\gamma_2\)) of the alternative distribution. For the normal distribution, \(\gamma_1 = 0\) and \(\gamma_2 = 0\).</p>
-            <p>Since the Shapiro–Wilk test has no analytical power formula as a function of \(n\), this calculator uses the <strong>Jarque–Bera approximation</strong>, which combines skewness and kurtosis into an omnibus statistic whose distribution under \(H_0\) is asymptotically \(\chi^2(2)\). This approximation gives an estimate of the required n that is <em>conservative</em>: the actual n required with Shapiro–Wilk tends to be smaller, since SW makes better use of the sample information than the JB test.</p>
+            <p>Since the Shapiro–Wilk test has no analytical power formula as a function of \(n\), this calculator uses the <strong>Jarque–Bera approximation</strong>, which combines skewness and kurtosis into an omnibus statistic whose distribution under \(H_0\) is asymptotically \(\chi^2(2)\). The result is approximate in two ways: it replaces the Shapiro–Wilk test with the Jarque–Bera test and, in addition, it assumes that the JB statistic follows a noncentral chi-square distribution, which with small samples can be far from reality. The estimate is therefore <strong>not conservative</strong>: as the reference table shows, against skewed or heavy-tailed alternatives the \(n\) that Shapiro–Wilk actually needs can be several times larger than the computed one, while against light-tailed alternatives (uniform) it can be smaller.</p>
             <h3>Power formula (Jarque–Bera approximation)</h3>
             <p>Under the alternative with shape parameters \(\gamma_1\) and \(\gamma_2\), the noncentrality parameter of the Jarque–Bera statistic for a sample of size \(n\) is:</p>
             <p class="formula-line">\( \lambda(n) = n \left(\frac{\gamma_1^2}{6} + \frac{\gamma_2^2}{24}\right) \)</p>
@@ -217,7 +217,7 @@
             <p class="formula-line">\( F_{\chi^2(df,\lambda)}(x) = \sum_{k=0}^{\infty} \frac{e^{-\lambda/2}(\lambda/2)^k}{k!} \cdot F_{\chi^2(df+2k)}(x) \)</p>
             <p>The calculator searches for the minimum integer \(n \geq 3\) for which the computed power exceeds the target.</p>
             <h3>Reference distributions</h3>
-            <p>The table below shows the moments and the approximate sample size needed to detect non-normality with 80% power and \(\alpha = 0.05\) (JB approximation).</p>
+            <p>The table below shows the moments of several distributions, the sample size returned by this calculator (JB approximation) and the one the Shapiro–Wilk test actually needs according to simulation, in both cases for 80% power with \(\alpha = 0.05\).</p>
             <div class="content-table-wrap">
                 <table class="content-table">
                     <thead>
@@ -225,7 +225,8 @@
                             <th>Distribution</th>
                             <th>γ₁ (skewness)</th>
                             <th>γ₂ (excess kurtosis)</th>
-                            <th>Approx. n (80%, α=0.05)</th>
+                            <th>n from JB approximation</th>
+                            <th>Actual n with Shapiro–Wilk (simulation)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -233,42 +234,48 @@
                             <td>Exponential</td>
                             <td>2</td>
                             <td>6</td>
-                            <td>≈ 10</td>
+                            <td>5</td>
+                            <td>≈ 19</td>
                         </tr>
                         <tr>
                             <td>Log-normal (σ = 0.5)</td>
                             <td>1.75</td>
                             <td>5.9</td>
-                            <td>≈ 11</td>
+                            <td>5</td>
+                            <td>≈ 36</td>
                         </tr>
                         <tr>
                             <td>Chi-square (2 df)</td>
                             <td>2</td>
                             <td>6</td>
-                            <td>≈ 10</td>
+                            <td>5</td>
+                            <td>≈ 19</td>
                         </tr>
                         <tr>
                             <td>Laplace (double exponential)</td>
                             <td>0</td>
                             <td>3</td>
-                            <td>≈ 52</td>
+                            <td>26</td>
+                            <td>≈ 100</td>
                         </tr>
                         <tr>
                             <td>Student's t (5 df)</td>
                             <td>0</td>
                             <td>6</td>
-                            <td>≈ 26</td>
+                            <td>7</td>
+                            <td>≈ 195</td>
                         </tr>
                         <tr>
                             <td>Uniform</td>
                             <td>0</td>
                             <td>−1.2</td>
-                            <td>≈ 130</td>
+                            <td>161</td>
+                            <td>≈ 54</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <p style="font-size:0.875rem; color:var(--text-muted);">The n values are estimates based on the JB approximation. The Shapiro–Wilk test typically requires smaller samples in practice.</p>
+            <p style="font-size:0.875rem; color:var(--text-muted);">The last column is the smallest \(n\) for which the Shapiro–Wilk test reaches 80% power (\(\alpha = 0.05\)) in Monte Carlo simulations with 10,000-20,000 replicates per value of \(n\); the figures are approximate. The comparison shows that the JB approximation can be far off, in both directions.</p>
             <h3>Quick setup</h3>
             <ul>
                 <li><strong>Unknown alternative distribution:</strong> if you have no information about γ₁ and γ₂, use the values for the closest distribution in the table above or apply one of the presets.</li>
@@ -282,20 +289,20 @@
             <p><strong>Step 1 — Noncentrality parameter:</strong></p>
             <p class="formula-line">\( \lambda(n) = n\!\left(\frac{2^2}{6} + \frac{6^2}{24}\right) = n\!\left(\frac{4}{6} + \frac{36}{24}\right) = n\!\left(0.6\overline{6} + 1.5\right) = n \cdot 2.1\overline{6} \)</p>
             <p><strong>Step 2 — Critical value:</strong> \(\chi^2_{0.95,\,2} \approx 5.991\).</p>
-            <p><strong>Step 3 — Power for n = 10:</strong></p>
-            <p class="formula-line">\( \lambda(10) = 10 \times 2.1\overline{6} \approx 21.67 \)</p>
-            <p class="formula-line">\( 1 - \beta \approx 1 - F_{\chi^2(2,\,21.67)}(5.991) \approx 0.83 \geq 0.80 \checkmark \)</p>
-            <p>With as few as <strong>n = 10 observations</strong>, the target power of 80% is exceeded. This reflects that the exponential distribution deviates strongly from the normal (high skewness and kurtosis), so it is easily detectable. You can verify this by clicking the "Exponential" preset in the calculator.</p>
+            <p><strong>Step 3 — Approximate power for n = 4 and n = 5:</strong></p>
+            <p class="formula-line">\( \lambda(4) \approx 8.67 \;\Rightarrow\; 1 - \beta \approx 1 - F_{\chi^2(2,\,8.67)}(5.991) \approx 0.75 &lt; 0.80 \)</p>
+            <p class="formula-line">\( \lambda(5) \approx 10.83 \;\Rightarrow\; 1 - \beta \approx 1 - F_{\chi^2(2,\,10.83)}(5.991) \approx 0.85 \geq 0.80 \checkmark \)</p>
+            <p>According to the JB approximation, <strong>n = 5 observations</strong> would suffice, which is what the calculator returns with the "Exponential" preset. However, in simulation the actual power of the Shapiro–Wilk test against an exponential is only about 16% with \(n = 5\) and 44% with \(n = 10\); about <strong>19 observations</strong> are needed to reach 80%. The example shows why the result should be treated as indicative and checked by simulation when the sample size matters.</p>
             <h3>Model assumptions</h3>
             <ul>
                 <li>Random sample of independent observations of a single continuous variable.</li>
                 <li>The null hypothesis of normality is tested against an alternative with given skewness and/or kurtosis.</li>
                 <li>Power is approximated using the Jarque–Bera statistic.</li>
-                <li>Appropriate for small to moderate sample sizes.</li>
+                <li>The approximation is asymptotic, so it is least reliable precisely with small samples.</li>
             </ul>
             <h3>How to interpret the result</h3>
-                <p>The value \(n\) is the <strong>lower bound on the recommended sample size</strong> for the Shapiro-Wilk (SW) test to detect the specified deviation from normality with the desired power. The formula used relies on the Jarque-Bera approximation, which tends to be conservative; SW is generally more powerful than JB and can detect non-normality with somewhat smaller samples. Always round up. If you anticipate data loss, divide \(n\) by \((1 - \text{dropout rate})\) to obtain the required recruitment. Keep in mind that SW is only designed for \(3 \leq n \leq 5000\); for \(n > 5000\) it is not directly applicable.</p>
-                <p>The power of SW to detect non-normality depends on the type of deviation and on \(n\): the test is especially powerful against symmetric distributions with heavy tails (leptokurtic) or light tails (platykurtic), and somewhat less effective for moderately skewed distributions with small samples. For \(n < 8\), the power of SW is very low regardless of the effect; if your sample is very small, normality tests have limited practical value and it is preferable to rely on the study design and graphical tools (histogram, Q-Q plot). Perform a <em>sensitivity analysis</em> by varying the target skewness or kurtosis parameter to see how much the required \(n\) changes.</p>
+                <p>The value \(n\) is an <strong>indicative estimate</strong> of the sample size for the Shapiro-Wilk (SW) test to detect the specified deviation from normality with the desired power. The formula relies on the asymptotic Jarque-Bera approximation, which is not conservative: against skewed or heavy-tailed alternatives it can underestimate the required \(n\) several times over (see the reference table), so it should be verified by simulation. Always round up. If you anticipate data loss, divide \(n\) by \((1 - \text{dropout rate})\) to obtain the required recruitment. Keep in mind that SW is only designed for \(3 \leq n \leq 5000\); for \(n > 5000\) it is not directly applicable.</p>
+                <p>The power of SW to detect non-normality depends on the type of deviation and on \(n\): clearly skewed alternatives are detected with relatively small samples, while symmetric ones require many more observations, especially if they have heavy tails (see the reference table). For \(n < 8\), the power of SW is very low regardless of the effect; if your sample is very small, normality tests have limited practical value and it is preferable to rely on the study design and graphical tools (histogram, Q-Q plot). Perform a <em>sensitivity analysis</em> by varying the target skewness or kurtosis parameter to see how much the required \(n\) changes.</p>
                 <p>If the computed \(n\) exceeds 5000, the SW test is not applicable and you should use alternatives such as Kolmogorov-Smirnov (with the Lilliefors correction for estimated parameters), Anderson-Darling, or simply assess normality using graphical methods (Q-Q plot, histogram). With large samples, remember that the p-value of a normality test becomes very sensitive to trivial deviations; in that context, the relevant question is not "are the data exactly normal?" but "do they deviate enough from normality to compromise the statistical procedure?". Once you have collected the data, run the normality test with the <a href="shapiro-wilk-normalidad.html">Shapiro-Wilk calculator</a> and interpret the result together with the Q-Q plot.</p>
         </section>
 
@@ -318,9 +325,9 @@
             <h3>Frequently asked questions</h3>
             <ul>
                 <li><strong>What is skewness (γ₁) and excess kurtosis (γ₂)?</strong> Skewness measures the degree of tilt in the distribution (\(\gamma_1 = 0\) for symmetric distributions). Excess kurtosis measures the heaviness of the tails relative to the normal (\(\gamma_2 = 0\) for the normal, positive for heavier tails). Any deviation from these zero values indicates non-normality.</li>
-                <li><strong>Why use the Jarque–Bera approximation?</strong> Because it provides an analytical power formula based on the noncentral chi-square distribution, allowing the sample size to be computed without simulation. The estimate is conservative: SW generally requires fewer observations in practice.</li>
+                <li><strong>Why use the Jarque–Bera approximation?</strong> Because it provides an analytical power formula based on the noncentral chi-square distribution, allowing the sample size to be computed without simulation. In exchange, the estimate is only indicative and not conservative: against skewed or heavy-tailed alternatives, SW may need considerably more observations than indicated.</li>
                 <li><strong>What sample sizes is the Shapiro–Wilk test valid for?</strong> For 3 ≤ n ≤ 5000. For n &lt; 8 power is very low. For n &gt; 5000, the test is excessively sensitive; it is recommended to combine it with graphical analysis (Q-Q plot).</li>
-                <li><strong>Is this calculator valid for detecting kurtosis without skewness?</strong> Yes. With γ₁ = 0, the noncentrality parameter reduces to λ(n) = n·γ₂²/24. Symmetric distributions with high kurtosis (Student's t, Laplace) require larger samples than skewed distributions at a comparable distance from the normal.</li>
+                <li><strong>Is this calculator valid for detecting kurtosis without skewness?</strong> It can be used, but with great caution. With γ₁ = 0, the noncentrality parameter reduces to λ(n) = n·γ₂²/24, but with heavy tails the approximation is especially optimistic: for Student's t with 5 df it gives n = 7, whereas in simulation SW needs about 195 observations. Symmetric distributions with high kurtosis (Student's t, Laplace) require much larger samples than skewed ones.</li>
             </ul>
         </section>
     </main>
@@ -401,10 +408,11 @@ function calculateSWsampleSize() {
                     n > 5000 ? '\nWarning: n > 5000 exceeds the optimal range of the Shapiro–Wilk test. Consider alternative tests.' : '';
 
     resultEl.innerText =
-        `Minimum recommended n: ${n} observations\n` +
-        `Achieved power: ${(achievedPower * 100).toFixed(2)}% (target: ${(power * 100).toFixed(0)}%)\n` +
+        `Indicative n (JB approximation): ${n} observations\n` +
+        `Approximate power according to JB: ${(achievedPower * 100).toFixed(2)}% (target: ${(power * 100).toFixed(0)}%)\n` +
         `γ₁ = ${gamma1}  |  γ₂ = ${gamma2}  |  λ = n·(γ₁²/6 + γ₂²/24) = ${lambda.toFixed(3)}  |  α = ${alpha}` +
-        warning;
+        warning +
+        '\nThe JB approximation can be very optimistic with small samples: verify the result by simulation if the sample size matters.';
 }
 
 document.getElementById('swCalculateBtn').addEventListener('click', calculateSWsampleSize);

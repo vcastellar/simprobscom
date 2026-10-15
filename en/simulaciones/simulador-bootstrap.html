@@ -534,9 +534,11 @@
         The <strong>percentile method</strong> is the simplest one, and the one implemented in this simulator.
         For small samples or biased estimators, more sophisticated methods such as
         <em>BCa</em> (bias-corrected and accelerated) offer better coverage.
-        In practice, \(B = 1000\) replicates is enough to estimate the standard error and
-        build confidence intervals with good precision; \(B = 5000\) provides greater
-        stability in the extreme percentiles.
+        In practice, \(B = 1000\) replicates is usually enough to estimate the standard error and
+        build 95% percentile intervals, although their endpoints still vary somewhat from one run
+        to the next (Monte Carlo error); \(B = 5000\) or more provides greater stability in the
+        extreme percentiles. No number is universally sufficient: it depends on the confidence
+        level and on how many decimal places of the interval you want to interpret.
       </p>
     </section>
 
@@ -1224,9 +1226,9 @@
       ? `With <strong>n = ${n}</strong> the bootstrap distribution has an irregular shape; increasing <em>n</em> will make it smoother and the CI narrower.`
       : `With <strong>n = ${n}</strong> the bootstrap distribution is already fairly smooth. Increasing <em>n</em> would shrink the CI by roughly √(${n}/${n+20}).`;
 
-    const Beffect = B < 500
+    const Beffect = B < 1000
       ? `With only <strong>B = ${B}</strong> replicates, the CI percentiles can vary quite a bit between runs. Use B ≥ 1000 for greater stability.`
-      : `With <strong>B = ${B}</strong> replicates, the CI percentiles are stable. Increasing B beyond 5000 would bring only marginal improvements.`;
+      : `With <strong>B = ${B}</strong> replicates, the CI endpoints vary little between runs compared with the interval width, although they are not exact: rerun the simulation to see how much they change and increase B if you need more precision.`;
 
     const box = document.getElementById('interpretation');
     box.innerHTML = `<p>${seComparison} ${widthComment}</p><p>${nEffect} ${Beffect}</p>`;

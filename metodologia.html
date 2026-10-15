@@ -92,7 +92,7 @@
       <h3>Principios generales</h3>
       <ul>
         <li>Las calculadoras muestran resultados numéricos y, cuando procede, fórmulas y explicación de interpretación.</li>
-        <li>Los tamaños muestrales se redondean hacia arriba para asegurar el mínimo requerido bajo los supuestos introducidos.</li>
+        <li>Los tamaños muestrales se redondean hacia arriba para no quedar por debajo del mínimo requerido bajo los supuestos introducidos.</li>
         <li>Los intervalos y contrastes dependen de supuestos como independencia, aleatorización, normalidad aproximada o tamaños esperados suficientes.</li>
         <li>Los resultados deben revisarse con criterio metodológico, especialmente en estudios clínicos, regulatorios, financieros o de alto impacto.</li>
       </ul>
@@ -106,13 +106,14 @@
 
     <section class="card content-card">
       <h3>Intervalos, contrastes y tamaños muestrales</h3>
-      <p>Los intervalos de confianza combinan estimación puntual, error estándar y valor crítico. Los contrastes de hipótesis comparan un estadístico observado con una distribución nula para obtener p-valor o región crítica. Las herramientas de tamaño muestral estiman el número mínimo necesario según confianza, margen de error, variabilidad, potencia y efecto mínimo detectable.</p>
+      <p>Los intervalos de confianza combinan estimación puntual, error estándar y valor crítico. Los contrastes de hipótesis comparan un estadístico observado con una distribución nula para obtener p-valor o región crítica. Las herramientas de tamaño muestral estiman el número mínimo necesario según confianza, margen de error, variabilidad, potencia y efecto mínimo detectable. La mayoría lo hace con fórmulas aproximadas (normales o asintóticas), de modo que el resultado es una estimación bajo los supuestos introducidos, no una garantía.</p>
       <p>Si cambias el nivel de confianza, la potencia o el efecto mínimo detectable, el tamaño muestral puede variar de forma sustancial. Por eso es recomendable hacer análisis de sensibilidad antes de cerrar un diseño.</p>
     </section>
 
     <section class="card content-card">
       <h3>Precisión numérica y redondeos</h3>
       <p>Las operaciones se ejecutan en el navegador con JavaScript y bibliotecas estadísticas cuando son necesarias. Los resultados se formatean para lectura humana, por lo que pueden existir pequeñas diferencias respecto a software especializado por redondeo, precisión de coma flotante o parametrizaciones alternativas.</p>
+      <p>Algunas herramientas (el test de Shapiro–Wilk, el A/B testing bayesiano, la simulación de experimentos A/B y los simuladores) usan simulación de Monte Carlo y tienen, además, <strong>error de simulación</strong>. Una probabilidad o un p-valor estimado con B réplicas tiene un error estándar aproximado de √(p(1−p)/B): depende del propio valor estimado y del número de réplicas, y solo se reduce a la mitad al cuadruplicar B. Por ejemplo, con B = 5000 es de unas 0,003 cerca de p = 0,05 y de unas 0,007 cerca de p = 0,5. Ningún número de réplicas es suficiente en todos los casos: cuando el resultado esté cerca de un umbral de decisión, aumenta B o repite la simulación con otra semilla para comprobar su estabilidad.</p>
       <p>Cuando el resultado vaya a publicarse o usarse en una decisión relevante, contrástalo con una segunda herramienta o software estadístico y documenta las entradas usadas.</p>
     </section>
 

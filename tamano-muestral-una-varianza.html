@@ -197,7 +197,7 @@
                 <section class="card content-card">
             <h3>Explicación</h3>
             <p>El test chi-cuadrado de varianza contrasta \(H_0: \sigma^2 = \sigma_0^2\) mediante el estadístico \(T = (n-1)S^2/\sigma_0^2\), que bajo \(H_0\) sigue una distribución \(\chi^2_{n-1}\).</p>
-            <p>Bajo la alternativa \(\sigma_1 = R\cdot\sigma_0\), el estadístico \(T\) sigue una distribución \(R^2 \cdot \chi^2_{n-1}\), equivalentemente \(T/R^2 \sim \chi^2_{n-1}\). La potencia exacta se evalúa usando la CDF de la distribución chi-cuadrado central, sin aproximaciones normales.</p>
+            <p>Bajo la alternativa \(\sigma_1 = R\cdot\sigma_0\), el estadístico \(T\) sigue una distribución \(R^2 \cdot \chi^2_{n-1}\), equivalentemente \(T/R^2 \sim \chi^2_{n-1}\). Si los datos son normales, la potencia es exacta: se evalúa con la CDF de la distribución chi-cuadrado central, sin aproximaciones normales.</p>
             <h3>Fórmula de potencia exacta</h3>
             <p>Para alternativa bilateral (\(H_a: \sigma \neq \sigma_0\)):</p>
             <p class="formula-line">\( \text{Potencia} = F_{\chi^2_{n-1}}\!\left(\frac{\chi^2_{\alpha/2,\,n-1}}{R^2}\right) + 1 - F_{\chi^2_{n-1}}\!\left(\frac{\chi^2_{1-\alpha/2,\,n-1}}{R^2}\right) \)</p>
@@ -216,8 +216,8 @@
             </ul>
             <h3>Ejemplo resuelto</h3>
             <p>Un fabricante de semiconductores quiere detectar un incremento de al menos un 50 % en la desviación estándar del diámetro de los chips (R = σ₁/σ₀ = 1,5). El proceso nominal tiene \(\sigma_0 = 2\) μm. Se quiere un contraste bilateral con \(\alpha = 0{,}05\) y potencia del 80 %.</p>
-            <p>La calculadora busca el menor \(n\) tal que la potencia exacta sea ≥ 0,80 con R = 1,5, y devuelve aproximadamente <strong>n = 54 observaciones</strong>. Con esa muestra, si la varianza real es \((1{,}5 \times 2)^2 = 9\) μm² (en lugar de los 4 μm² nominales), el test detectará el cambio el 80 % de las veces.</p>
-            <p><strong>Análisis de sensibilidad:</strong> con R = 2 (varianza cuádruple), la muestra se reduce a n ≈ 18. Para detectar R = 1,25 (incremento del 25 %) con la misma potencia se necesitan n ≈ 184. Los contrastes de varianza requieren muestras considerablemente mayores que los de media para el mismo nivel de efecto relativo.</p>
+            <p>La calculadora busca el menor \(n\) tal que la potencia exacta sea ≥ 0,80 con R = 1,5, y devuelve <strong>n = 24 observaciones</strong> (potencia ≈ 0,81). Con esa muestra, si la varianza real es \((1{,}5 \times 2)^2 = 9\) μm² (en lugar de los 4 μm² nominales) y los datos son normales, el test detectará el cambio aproximadamente el 81 % de las veces.</p>
+            <p><strong>Análisis de sensibilidad:</strong> con R = 2 (varianza cuádruple), la muestra se reduce a n = 9. Para detectar R = 1,25 (incremento del 25 %) con la misma potencia se necesitan n = 76. Los contrastes de varianza requieren muestras considerablemente mayores que los de media para el mismo nivel de efecto relativo.</p>
             <h3>Supuestos del modelo</h3>
             <ul>
                 <li>Muestreo aleatorio simple con observaciones independientes.</li>

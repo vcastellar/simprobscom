@@ -118,7 +118,7 @@
       "name": "¿Por qué la potencia empírica no coincide exactamente con la teórica?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Siempre hay varianza de muestreo. Con 5 000 réplicas, el error estándar de la proporción simulada es de aproximadamente ±0.006 para potencias en torno al 80%."
+        "text": "Por dos motivos. La potencia empírica tiene error de Monte Carlo: su error estándar es aproximadamente √(p(1−p)/N), que con 5 000 réplicas vale ±0,006 para potencias en torno al 80 % y ±0,003 para tasas de rechazo en torno al 5 %. Además, la potencia «teórica» es a su vez una aproximación normal, que puede desviarse de la real con muestras pequeñas o tasas extremas."
       }
     },
     {
@@ -221,7 +221,7 @@
               <option value="5000" selected>5 000</option>
               <option value="10000">10 000</option>
             </select>
-            <p class="field-hint" hidden>Número de experimentos independientes que se simulan. Con más réplicas la potencia empírica se estima con más precisión; con 5 000 réplicas el error estándar de la proporción simulada es de aproximadamente ±0,006.</p>
+            <p class="field-hint" hidden>Número de experimentos independientes que se simulan. Con más réplicas la potencia empírica se estima con más precisión: su error estándar es aproximadamente √(p(1−p)/N), que con 5 000 réplicas vale ±0,006 para potencias en torno al 80 % y ±0,003 para tasas en torno al 5 %.</p>
           </div>
         </div>
         <div class="inline-inputs">
@@ -301,12 +301,12 @@
         <section class="card content-card">
             <h3>Ejemplo resuelto</h3>
             <p>Un equipo de marketing digital quiere evaluar si un nuevo asunto de correo electrónico (variante B) mejora la tasa de apertura respecto al asunto actual (variante A). Los datos históricos indican que la tasa de apertura actual es del <strong>p_A = 0,22</strong> (22 %). Se espera que la variante B alcance una tasa de <strong>p_B = 0,26</strong> (26 %), una mejora absoluta de 4 puntos porcentuales.</p>
-            <p>El equipo fija α = 0,05 bilateral y potencia del 80 %, lo que con la fórmula analítica estándar arroja aproximadamente <strong>n = 476 usuarios por grupo</strong> (952 en total). Antes de lanzar el experimento real, decide validar estos resultados mediante simulación Monte Carlo con <strong>N = 5 000 réplicas</strong>.</p>
-            <p>En cada réplica i la herramienta genera \( n_A = n_B = 476 \) observaciones Bernoulli con las tasas verdaderas, calcula el estadístico z del test de dos proporciones y registra si se rechaza H₀:</p>
-            <p class="formula-line">\( z^{(i)} = \dfrac{\hat{p}_B^{(i)} - \hat{p}_A^{(i)}}{\sqrt{\hat{p}^{(i)}(1-\hat{p}^{(i)})\!\left(\tfrac{1}{476}+\tfrac{1}{476}\right)}} \)</p>
-            <p>Tras las 5 000 réplicas, la simulación da los siguientes resultados: la tasa de rechazo empírica es del <strong>80,3 %</strong>, en excelente concordancia con la potencia teórica del 80 %. El histograma del estadístico z se desplaza hacia la derecha respecto a la N(0,1) nula, con la media empírica en torno a \( \bar{z} \approx 1{,}45 \), reflejando el efecto real de \( \Delta = 0{,}04 \). La distribución de p-valores muestra una fuerte concentración cerca de 0: en el 80 % de las réplicas el p-valor queda por debajo de 0,05.</p>
-            <p>Para comprobar el control del error de tipo I, el equipo también ejecuta la simulación bajo H₀ (fijando p_B = p_A = 0,22). Con las mismas 5 000 réplicas, la tasa de rechazo empírica resulta del <strong>4,9 %</strong>, muy próxima al nivel nominal α = 0,05, y la distribución de p-valores es aproximadamente uniforme en [0, 1], tal y como predice la teoría.</p>
-            <p>La conclusión práctica es doble: el tamaño de muestra calculado analíticamente es correcto (la potencia empírica coincide con la teórica), y el test mantiene un buen control del error de tipo I. El equipo puede lanzar el experimento con confianza, sabiendo que si la mejora real es de 4 pp tendrá una probabilidad del 80 % de detectarla con resultados estadísticamente significativos.</p>
+            <p>El equipo fija α = 0,05 bilateral y potencia del 80 %, lo que con la fórmula analítica estándar arroja aproximadamente <strong>n = 1 789 usuarios por grupo</strong> (3 578 en total). Antes de lanzar el experimento real, decide validar estos resultados mediante simulación Monte Carlo con <strong>N = 5 000 réplicas</strong>.</p>
+            <p>En cada réplica i la herramienta genera \( n_A = n_B = 1789 \) observaciones Bernoulli con las tasas verdaderas, calcula el estadístico z del test de dos proporciones y registra si se rechaza H₀:</p>
+            <p class="formula-line">\( z^{(i)} = \dfrac{\hat{p}_B^{(i)} - \hat{p}_A^{(i)}}{\sqrt{\hat{p}^{(i)}(1-\hat{p}^{(i)})\!\left(\tfrac{1}{1789}+\tfrac{1}{1789}\right)}} \)</p>
+            <p>Tras las 5 000 réplicas, la simulación da los siguientes resultados: la tasa de rechazo empírica es del <strong>79,6 %</strong>. Con 5 000 réplicas, el error estándar de Monte Carlo de esa proporción es \( \sqrt{0{,}8 \cdot 0{,}2/5000} \approx 0{,}006 \), así que el resultado es compatible con la potencia teórica del 80 %. El histograma del estadístico z se desplaza hacia la derecha respecto a la N(0,1) nula, con la media empírica en torno a \( \bar{z} \approx 2{,}8 \), reflejando el efecto real de \( \Delta = 0{,}04 \). La distribución de p-valores muestra una fuerte concentración cerca de 0: en torno al 80 % de las réplicas el p-valor queda por debajo de 0,05.</p>
+            <p>Para comprobar el control del error de tipo I, el equipo también ejecuta la simulación bajo H₀ (fijando p_B = p_A = 0,22). Con las mismas 5 000 réplicas, la tasa de rechazo empírica resulta del <strong>4,7 %</strong>, compatible con el nivel nominal α = 0,05 (cerca de 0,05, el error estándar de Monte Carlo con 5 000 réplicas es \( \approx 0{,}003 \)), y la distribución de p-valores es aproximadamente uniforme en [0, 1], tal y como predice la teoría.</p>
+            <p>La conclusión práctica es doble: la simulación no detecta discrepancias con el tamaño de muestra calculado analíticamente (la potencia empírica es compatible con la teórica dentro del error de Monte Carlo), y el test mantiene un buen control del error de tipo I. Si la mejora real es de 4 pp, el equipo tendrá aproximadamente un 80 % de probabilidad de detectarla con resultados estadísticamente significativos. Esta comprobación solo es válida bajo los supuestos simulados (tasas verdaderas conocidas y observaciones independientes): si el efecto real es menor que el supuesto, la potencia también lo será.</p>
         </section>
 
     <section class="card content-card">
@@ -332,7 +332,7 @@
       <h3>Preguntas frecuentes</h3>
       <ul>
         <li><strong>¿La simulación usa muestras binomiales?</strong> Cada réplica aproxima x_A ~ Bin(n, p_A) y x_B ~ Bin(n, p_B) con la aproximación normal de De Moivre-Laplace. Es adecuada cuando n·p y n·(1−p) no son pequeños; para muestras pequeñas o proporciones extremas conviene interpretar la simulación como aproximada.</li>
-        <li><strong>¿Por qué la potencia empírica no coincide exactamente con la teórica?</strong> Siempre hay varianza de muestreo. Con 5 000 réplicas, el error estándar de la proporción simulada es de aproximadamente ±0.006 para potencias en torno al 80%.</li>
+        <li><strong>¿Por qué la potencia empírica no coincide exactamente con la teórica?</strong> Por dos motivos. La potencia empírica tiene error de Monte Carlo: su error estándar es aproximadamente √(p(1−p)/N), que con 5 000 réplicas vale ±0,006 para potencias en torno al 80 % y ±0,003 para tasas de rechazo en torno al 5 %. Además, la potencia «teórica» es a su vez una aproximación normal, que puede desviarse de la real con muestras pequeñas o tasas extremas.</li>
         <li><strong>¿Puedo simular con p_A = p_B para verificar el nivel α?</strong> Sí: introduce el mismo valor en p_A y p_B y comprueba que la tasa de rechazo empírica se aproxima a α.</li>
         <li><strong>¿Las réplicas son independientes?</strong> Sí: cada réplica genera nuevas muestras sin dependencia con las anteriores.</li>
       </ul>

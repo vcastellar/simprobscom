@@ -311,7 +311,7 @@
   <header class="hero">
     <p class="eyebrow">Statistical simulation</p>
     <h1>Confidence Interval Simulator</h1>
-    <p class="hero-subtitle">Generate samples repeatedly and see what fraction of the confidence intervals cover the true parameter. The empirical coverage converges to the nominal level.</p>
+    <p class="hero-subtitle">Generate samples repeatedly and see what fraction of the confidence intervals cover the true parameter. The empirical coverage converges to the method's actual coverage, which only equals the nominal level if the method is exact.</p>
   </header>
 
   <main>
@@ -376,7 +376,7 @@
               <option value="100" selected>100</option>
               <option value="200">200</option>
             </select>
-              <p class="field-hint" hidden>How many repetitions of the experiment are simulated. With more intervals, empirical coverage converges closer to the nominal level.</p>
+              <p class="field-hint" hidden>How many repetitions of the experiment are simulated. With more intervals, the empirical coverage gets closer to the method's actual coverage: its simulation error is ≈ √(p(1−p)/N), about ±0.7 points with 1000 intervals at 95%.</p>
           </div>
         </div>
       </div>
@@ -418,7 +418,7 @@
               <option value="100" selected>100</option>
               <option value="200">200</option>
             </select>
-              <p class="field-hint" hidden>How many repetitions of the experiment are simulated. With more intervals, empirical coverage converges closer to the nominal level.</p>
+              <p class="field-hint" hidden>How many repetitions of the experiment are simulated. With more intervals, the empirical coverage gets closer to the method's actual coverage: its simulation error is ≈ √(p(1−p)/N), about ±0.7 points with 1000 intervals at 95%.</p>
           </div>
           <div class="form-group">
             <label for="methodProp">Method for the CI <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
@@ -496,7 +496,7 @@
     <section class="card content-card">
       <h2>Nominal coverage vs actual coverage</h2>
       <p>The <strong>nominal level</strong> is the confidence value we specify when constructing the CI (90%, 95%, 99%). The <strong>actual (or empirical) coverage</strong> is the fraction of intervals that actually cover the true parameter across a long series of repetitions.</p>
-      <p>For the CI of the mean with known σ, the actual coverage matches the nominal level exactly for any sample size, because the distribution of the sample mean is exactly normal (if the population is too) or asymptotically normal by the CLT.</p>
+      <p>For the CI of the mean with known σ and a normal population, as in this simulator, the actual coverage matches the nominal level exactly for any sample size, because the sample mean is exactly normal. If the population is not normal, the match is only approximate and improves with n by the CLT.</p>
       <p>For proportions, the situation is more complicated. The parameter p is continuous, but the binomial variable X ~ Bin(n, p) is discrete, and this discretization causes the actual coverage to fluctuate around the nominal level:</p>
       <ul>
         <li><strong>Wald interval:</strong> uses the normal approximation directly, \(\hat{p} \pm z_{\alpha/2}\sqrt{\hat{p}(1-\hat{p})/n}\). It works well for large n and p away from 0 and 1, but its coverage can be noticeably below the nominal level when n is small or p is near the extremes.</li>
@@ -546,7 +546,7 @@
         </li>
         <li>
           <strong>Does the simulator use an exact normal distribution for the mean?</strong>
-          Yes: in Mean mode (known σ) each observation is generated from an N(μ, σ) using the Box-Muller method. The sample mean has an exactly N(μ, σ/√n) distribution for any n, so the empirical coverage should match the nominal level even for small n.
+          Yes: in Mean mode (known σ) each observation is generated from an N(μ, σ) using the Box-Muller method. The sample mean has an exactly N(μ, σ/√n) distribution for any n, so the actual coverage is exactly nominal even for small n; the empirical coverage only departs from it through simulation error.
         </li>
       </ul>
     </section>
@@ -812,35 +812,40 @@ function computeStats(intervals) {
   return { n, covered, meanWidth };
 }
 
-function interpretCoverage(empiricalPct, nominalPct, mode, method) {
+function interpretCoverage(empiricalPct, nominalPct, mode, method, total) {
   const diff    = empiricalPct - nominalPct;
   const absDiff = Math.abs(diff);
+  // Monte Carlo standard error (in percentage points) of the empirical coverage
+  // if the true coverage were nominal: it depends on the level and on the number of intervals
+  const p  = nominalPct / 100;
+  const se = 100 * Math.sqrt(p * (1 - p) / total);
+  const seText = `${(2 * se).toFixed(1)} pp with ${total} intervals`;
 
-  if (absDiff <= 3) {
+  if (absDiff <= 2 * se) {
     return {
       cls: '',
-      text: `The empirical coverage (${empiricalPct.toFixed(1)}%) is very close to the nominal level (${nominalPct}%). The procedure is working as expected: the remaining variability is due to the finite number of simulated intervals.`
+      text: `The empirical coverage (${empiricalPct.toFixed(1)}%) is consistent with the nominal level (${nominalPct}%): the difference of ${absDiff.toFixed(1)} percentage points is within two simulation standard errors (±${seText}). With more intervals, that margin shrinks.`
     };
   }
-  if (diff < -5) {
+  if (mode === 'media') {
+    return {
+      cls: 'info',
+      text: `The empirical coverage (${empiricalPct.toFixed(1)}%) differs from the nominal level (${nominalPct}%) by more than two simulation standard errors (±${seText}). In this mode the true coverage is exactly nominal, so this is a random fluctuation, which happens in about 5% of simulations: rerun the simulation or increase the number of intervals.`
+    };
+  }
+  if (diff < 0) {
     let extra = '';
-    if (mode === 'proporcion' && method === 'wald') {
+    if (method === 'wald') {
       extra = ' This is typical of the Wald interval with small sample sizes or proportions close to 0 or 1: the normal approximation isn\'t accurate enough. Try the Wilson method to get better coverage.';
     }
     return {
       cls: 'warn',
-      text: `The empirical coverage (${empiricalPct.toFixed(1)}%) is notably below the nominal level (${nominalPct}%). The procedure is underestimating the uncertainty.${extra}`
-    };
-  }
-  if (diff > 5) {
-    return {
-      cls: 'info',
-      text: `The empirical coverage (${empiricalPct.toFixed(1)}%) is above the nominal level (${nominalPct}%). The procedure is conservative: it produces wider intervals than necessary.`
+      text: `The empirical coverage (${empiricalPct.toFixed(1)}%) is below the nominal level (${nominalPct}%) by more than two simulation standard errors (±${seText}), so it is probably not due to chance alone: the procedure is underestimating the uncertainty.${extra}`
     };
   }
   return {
     cls: 'info',
-    text: `The empirical coverage (${empiricalPct.toFixed(1)}%) is close to the nominal level (${nominalPct}%), with a difference of ${absDiff.toFixed(1)} percentage points. With more intervals, the estimate will improve.`
+    text: `The empirical coverage (${empiricalPct.toFixed(1)}%) is above the nominal level (${nominalPct}%) by more than two simulation standard errors (±${seText}). The procedure appears conservative: it produces wider intervals than necessary.`
   };
 }
 
@@ -927,7 +932,7 @@ function runAndDisplay() {
 
   // Interpretation
   const methodUsed = mode === 'proporcion' ? params.method : null;
-  const interp = interpretCoverage(empiricalPct, nominalPct, mode, methodUsed);
+  const interp = interpretCoverage(empiricalPct, nominalPct, mode, methodUsed, total);
   const box = document.getElementById('ciResultBox');
   box.style.display = 'block';
   box.className = 'result-box interpretation-box' + (interp.cls ? ' ' + interp.cls : '');
