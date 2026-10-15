@@ -14,10 +14,13 @@
  *
  * Config por atributos data-* en cada <figure class="dist-diagram" ...>:
  *   data-dist   : normal|student|chisquare|centralF|beta|gamma|poisson|binomial
- *   data-mode   : left-x|left-val|pdf-point|crit-two|crit-right|bars-pmf|bars-cdf
+ *   data-mode   : left-x|left-val|right-val|pdf-point|crit-two|crit-right|bars-pmf|bars-cdf
  *   data-tables : ids de tablas cuyos clics actualizan la figura
  *   data-params : "selectorId:attr …" selectores de parámetro que la actualizan
  *   data-*      : "celda virtual" con el estado inicial
+ *
+ * Si la página cambia data-mode, puede pedir que se redibuje la figura
+ * disparando sobre ella el evento "dg:redraw".
  */
 (function () {
     "use strict";
@@ -168,7 +171,7 @@
         var st = statOf(dist, s);
         if (mode === "left-x") { s.val = st.cdf(num(s.t, s.x, s.f, s.z)).toFixed(4); }
         else if (mode === "pdf-point") { s.val = st.pdf(num(s.t, s.x, s.z)).toFixed(4); }
-        else if (mode === "left-val") { s.val = fmt(st.inv(+s.p)); }
+        else if (mode === "left-val" || mode === "right-val") { s.val = fmt(st.inv(+s.p)); }
         // crit-two / crit-right: sus tablas no tienen selectores de parámetro
     }
 
@@ -194,6 +197,9 @@
         } else if (mode === "left-val") {
             var xv = +ds.val;
             drawCont(body, caption, d, xv, { mode: "left" }, L.leftArea(fmt(xv), fmt(ds.p), par));
+        } else if (mode === "right-val") {
+            var xrv = +ds.val;
+            drawCont(body, caption, d, xrv, { mode: "right" }, L.rightTail(fmt(xrv), fmt(1 - ds.p), par));
         } else if (mode === "pdf-point") {
             var xp = num(ds.t, ds.x, ds.z);
             drawCont(body, caption, d, xp, { mode: "point" }, L.height(fmt(xp), ds.val, par));
@@ -211,6 +217,7 @@
         var state = copyDs(fig.dataset);
         function draw() { render(fig, state); }
         draw();
+        fig.addEventListener("dg:redraw", draw);
 
         // Clic en celda: toma punto + parámetros de la celda
         (fig.dataset.tables || "").split(/\s+/).forEach(function (id) {
