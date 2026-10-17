@@ -585,14 +585,14 @@
       <p>El hecho de que la dispersión crezca como <strong>√n</strong> y no como n es la propiedad más característica del paseo aleatorio. Las trayectorias se "abren" en abanico, pero más lentamente de lo que podría parecer. Por ejemplo, tras 10.000 pasos, la desviación típica de la posición es solo √10.000 = 100.</p>
 
       <h3>Distribución asintótica y conexión con el TCL</h3>
-      <p>Por el <a href="teorema-central-limite.html">teorema central del límite</a>, X<sub>n</sub> es una suma de n variables iid, por lo que para n grande:</p>
+      <p>Por el <a href="teorema-central-limite.html">teorema central del límite</a>, X<sub>n</sub> es una suma de n variables iid, por lo que para n grande se tiene la aproximación asintótica:</p>
       <p style="text-align:center; font-size:1.05rem; margin: 1rem 0;">
         \( X_n \approx \mathcal{N}\!\left(n(2p-1),\; 4p(1-p)\,n\right) \)
       </p>
-      <p>Esto justifica las bandas teóricas ±2σ que puedes ver en el simulador: aproximadamente el 95 % de las trayectorias deberían quedar dentro de la banda E[X<sub>n</sub>] ± 2 · 2√(p(1−p)n). Observa cómo las bandas se abren siguiendo la curva √n y no una línea recta.</p>
+      <p>Es solo una aproximación: la distribución exacta de X<sub>n</sub> es discreta, ya que (X<sub>n</sub> + n)/2 ~ B(n, p), y X<sub>n</sub> solo toma valores con la misma paridad que n. Esto justifica las bandas teóricas ±2σ que puedes ver en el simulador: aproximadamente el 95 % de las trayectorias deberían quedar dentro de la banda E[X<sub>n</sub>] ± 2 · 2√(p(1−p)n). Observa cómo las bandas se abren siguiendo la curva √n y no una línea recta.</p>
 
       <h3>El paseo aleatorio en 2D</h3>
-      <p>En dos dimensiones, la partícula se mueve con igual probabilidad 1/4 en cada uno de los cuatro ejes (norte, sur, este, oeste). Ahora X<sub>n</sub> e Y<sub>n</sub> son dos paseos aleatorios 1D independientes que evolucionan en pasos alternos: en promedio, cada componente recibe n/2 pasos efectivos.</p>
+      <p>En dos dimensiones, la partícula se mueve con igual probabilidad 1/4 en cada uno de los cuatro ejes (norte, sur, este, oeste). Ahora X<sub>n</sub> e Y<sub>n</sub> son dos paseos aleatorios 1D (perezosos) que avanzan solo cuando el paso cae en su eje: en promedio, cada componente recibe n/2 pasos efectivos. No son independientes (en cada paso se mueve exactamente una de las dos), pero sí incorreladas, cada una con varianza n/2; para n grande, (X<sub>n</sub>, Y<sub>n</sub>) es aproximadamente normal bivariante con covarianza (n/2)·I, de modo que la distancia media al origen es aproximadamente √(πn)/2 ≈ 0,886·√n.</p>
       <p>La distancia euclidiana al origen sigue siendo del orden √n:</p>
       <p style="text-align:center; font-size:1.05rem; margin: 1rem 0;">
         \( \mathrm{E}\!\left[\,r_n^2\,\right] = \mathrm{E}[X_n^2 + Y_n^2] = n \)
@@ -627,7 +627,7 @@
       </p>
       <p>Para el juego justo (p = 0,5), la probabilidad de ruina depende solo de la proporción de capital: si el jugador tiene €100 y la banca tiene €900, la probabilidad de que el jugador se arruine es 900/1000 = 90 %. Incluso con un juego perfectamente justo, la asimetría de capital hace casi segura la ruina del jugador más pobre.</p>
       <p>Con p &lt; 0,5 (la situación real en un casino, donde la casa tiene ventaja), la ruina es prácticamente inevitable a largo plazo. Solo con p &gt; 0,5 puede el jugador tener probabilidad positiva de arruinar a su rival antes de arruinarse él.</p>
-      <p>En el simulador 1D, cambia p a 0,40 o 0,30 con derive negativa y observa cómo las trayectorias descienden sistemáticamente — eso es la ventaja de la casa actuando.</p>
+      <p>En el simulador 1D, cambia p a 0,40 o 0,30 con deriva negativa y observa cómo las trayectorias descienden sistemáticamente — eso es la ventaja de la casa actuando.</p>
     </section>
 
     <section class="card content-card">
@@ -697,7 +697,7 @@
     <section class="card content-card">
       <h2>Herramientas relacionadas</h2>
       <div class="related-tools">
-        <p><a href="teorema-central-limite.html">Simulador del TCL</a> — el paseo aleatorio es un caso especial: X<sub>n</sub>/√n → N(0,1) por el TCL.</p>
+        <p><a href="teorema-central-limite.html">Simulador del TCL</a> — el paseo aleatorio es un caso especial: en el caso simétrico (p = 0,5), X<sub>n</sub>/√n converge en distribución a N(0,1) por el TCL.</p>
         <p><a href="simulador-cadenas-markov.html">Simulador de cadenas de Markov</a> — el paseo aleatorio con estados finitos es una cadena de Markov.</p>
         <p><a href="simulador-proceso-poisson.html">Simulador de proceso de Poisson</a> — el proceso de Poisson es el análogo continuo del paseo aleatorio para eventos raros.</p>
         <p><a href="../distribuciones/">Calculadoras de distribuciones</a> — distribución normal asintótica de X<sub>n</sub> y distribución binomial del número de pasos positivos.</p>
@@ -1119,7 +1119,7 @@ function simulate2D() {
     }
 
     document.getElementById('s2d-dist').textContent  = fmtN(arrMean(dists));
-    document.getElementById('s2d-edist').textContent  = `Esperado ≈ ${fmtN(sqrtN * Math.sqrt(Math.PI/2), 2)}`;
+    document.getElementById('s2d-edist').textContent  = `Esperado ≈ ${fmtN(Math.sqrt(Math.PI * n) / 2, 2)}`;
     document.getElementById('s2d-dist2').textContent  = fmtN(arrMean(dists2), 1);
     document.getElementById('s2d-edist2').textContent = `Esperado: n = ${n}`;
     document.getElementById('s2d-maxdist').textContent = fmtN(maxDist, 1);
@@ -1128,10 +1128,10 @@ function simulate2D() {
 
     // interpretation
     const dMean  = arrMean(dists);
-    const thDist = sqrtN * Math.sqrt(Math.PI / 2);
+    const thDist = Math.sqrt(Math.PI * n) / 2;
     const ratio  = dMean / thDist;
     let txt2 = `Con n = ${n} pasos, la distancia al origen sigue siendo del orden √n ≈ ${fmtN(sqrtN, 1)}. `;
-    txt2 += `La distancia media empírica es ${fmtN(dMean, 2)} (teórica: √(πn/2) ≈ ${fmtN(thDist, 2)}). `;
+    txt2 += `La distancia media empírica es ${fmtN(dMean, 2)} (teórica aprox.: √(πn)/2 ≈ ${fmtN(thDist, 2)}). `;
     if (nPaths === 1) {
       txt2 += `La trayectoria ha regresado al origen <strong>${returns}</strong> veces, ilustrando la recurrencia del paseo 2D.`;
     } else {

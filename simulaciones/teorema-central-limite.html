@@ -573,16 +573,18 @@
           prácticamente normal. La Normal es, trivialmente, exacta para cualquier \(n\).
         </li>
         <li>
-          <strong>Distribuciones moderadamente asimétricas (Exponencial, Poisson):</strong> la regla empírica habitual de \(n \geq 30\)
-          suele ser suficiente. Con la exponencial (\(\text{coef. asimetría} = 2\)) ya con \(n = 30\) la aproximación es muy buena.
+          <strong>Distribuciones moderadamente asimétricas (Exponencial, Poisson):</strong> la asimetría de la media decrece como
+          \(\gamma_1/\sqrt{n}\). Con la exponencial (\(\gamma_1 = 2\)) y \(n = 30\) la media aún conserva una asimetría de \(\approx 0{,}37\): la aproximación
+          es razonable en el centro, pero menos precisa en las colas.
         </li>
         <li>
           <strong>Distribuciones discretas acotadas (Bernoulli):</strong> con probabilidades cercanas a 0 o 1 la asimetría es alta,
-          pero al ser acotada la convergencia es relativamente rápida. Con \(n = 30\) la aproximación es excelente.
+          y la convergencia es lenta: lo relevante es el número esperado de éxitos y fracasos, no \(n\). Por ejemplo, con \(p = 0{,}01\)
+          y \(n = 30\) lo más probable es no observar ningún éxito y la aproximación normal es muy mala; pueden hacer falta cientos o miles de observaciones.
         </li>
         <li>
-          <strong>Distribuciones de cola pesada (Chi-cuadrado con pocos grados de libertad):</strong> la asimetría es más pronunciada y
-          puede requerirse \(n \geq 50\) para una aproximación satisfactoria.
+          <strong>Distribuciones muy asimétricas o de cola pesada (Chi-cuadrado con 1 grado de libertad, lognormal…):</strong> la asimetría es
+          más pronunciada (\(\gamma_1 \approx 2{,}83\) para \(\chi^2_1\)) y puede requerirse un \(n\) bastante mayor que 30; con colas muy pesadas, del orden de cientos o más.
         </li>
         <li>
           <strong>Distribuciones sin varianza finita (Cauchy):</strong> el TCL <em>no se aplica</em> en su forma estándar, pues la varianza
@@ -590,9 +592,10 @@
         </li>
       </ul>
       <p>
-        La regla práctica \(n \geq 30\) que aparece en muchos libros de texto es una heurística conservadora válida para las
-        distribuciones habituales en ciencias aplicadas. Sin embargo, para distribuciones muy sesgadas o con colas muy pesadas
-        puede ser insuficiente.
+        La regla práctica \(n \geq 30\) que aparece en muchos libros de texto es solo una orientación didáctica, no una garantía:
+        no existe un tamaño muestral universal que asegure una buena aproximación normal. Puede ser excesiva para datos casi simétricos
+        e insuficiente para distribuciones muy sesgadas, con colas pesadas o proporciones extremas. Lo prudente es comprobarlo
+        (por ejemplo, con este simulador) para la distribución y el uso concretos.
       </p>
     </section>
 

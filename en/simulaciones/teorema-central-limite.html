@@ -569,16 +569,18 @@
           already practically normal. The Normal is, trivially, exact for any \(n\).
         </li>
         <li>
-          <strong>Moderately skewed distributions (Exponential, Poisson):</strong> the usual rule of thumb of \(n \geq 30\)
-          is typically enough. With the exponential (skewness coefficient \(= 2\)) the approximation is already very good at \(n = 30\).
+          <strong>Moderately skewed distributions (Exponential, Poisson):</strong> the skewness of the mean decreases as
+          \(\gamma_1/\sqrt{n}\). With the exponential (\(\gamma_1 = 2\)) and \(n = 30\) the mean still has skewness \(\approx 0.37\): the approximation
+          is reasonable in the centre but less accurate in the tails.
         </li>
         <li>
           <strong>Bounded discrete distributions (Bernoulli):</strong> with probabilities close to 0 or 1 the skewness is high,
-          but because the variable is bounded, convergence is relatively fast. At \(n = 30\) the approximation is excellent.
+          and convergence is slow: what matters is the expected number of successes and failures, not \(n\). For example, with \(p = 0.01\)
+          and \(n = 30\) the most likely outcome is zero successes and the normal approximation is very poor; hundreds or thousands of observations may be needed.
         </li>
         <li>
-          <strong>Heavy-tailed distributions (Chi-square with few degrees of freedom):</strong> the skewness is more pronounced
-          and \(n \geq 50\) may be needed for a satisfactory approximation.
+          <strong>Highly skewed or heavy-tailed distributions (Chi-square with 1 degree of freedom, lognormal…):</strong> the skewness is
+          more pronounced (\(\gamma_1 \approx 2.83\) for \(\chi^2_1\)) and an \(n\) well above 30 may be needed; with very heavy tails, hundreds or more.
         </li>
         <li>
           <strong>Distributions without finite variance (Cauchy):</strong> the CLT <em>does not apply</em> in its standard form,
@@ -586,9 +588,10 @@
         </li>
       </ul>
       <p>
-        The practical rule \(n \geq 30\) found in many textbooks is a conservative heuristic that is valid for the
-        distributions commonly encountered in applied sciences. However, for highly skewed distributions or distributions
-        with very heavy tails, it may be insufficient.
+        The practical rule \(n \geq 30\) found in many textbooks is only a teaching guideline, not a guarantee:
+        there is no universal sample size that ensures a good normal approximation. It may be more than enough for nearly symmetric data
+        and insufficient for highly skewed or heavy-tailed distributions or extreme proportions. The prudent approach is to check it
+        (for example, with this simulator) for the specific distribution and use.
       </p>
     </section>
 
