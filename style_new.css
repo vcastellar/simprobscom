@@ -880,10 +880,10 @@ canvas {
 }
 
 .tools-grid a {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+    column-gap: 10px;
     padding: 11px 14px;
     border-radius: 12px;
     text-decoration: none;
@@ -899,7 +899,8 @@ canvas {
 /* Flecha que aparece al pasar el ratón */
 .tools-grid a::after {
     content: "\2192";
-    flex: 0 0 auto;
+    grid-column: 2;
+    grid-row: 1 / span 2;
     color: #94a3b8;
     font-weight: 500;
     opacity: 0;
@@ -921,6 +922,26 @@ canvas {
     opacity: 1;
     transform: none;
     color: var(--accent);
+}
+
+/* Nombre y descripción breve de cada herramienta (hubs) */
+.tool-name {
+    grid-column: 1;
+    display: block;
+}
+
+.tool-desc {
+    grid-column: 1;
+    display: block;
+    margin-top: 2px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+html.dark-mode .tool-desc {
+    color: #94a3b8;
 }
 
 .hypothesis-category-grid {
@@ -3246,5 +3267,150 @@ html.dark-mode .home-faq details.faq-item p {
 
     .home-faq {
         margin-top: 30px;
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   Páginas hub (distribuciones/, contrastes-hipotesis/, …)
+   ══════════════════════════════════════════════════════════════════════ */
+.hub-hero {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 22px;
+    align-items: start;
+    padding: 8px 4px 26px;
+}
+
+.hub-hero-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    margin-top: 4px;
+    border-radius: 16px;
+    background: var(--fam-tint);
+    color: var(--fam-color);
+}
+
+.hub-hero-icon svg {
+    width: 30px;
+    height: 30px;
+}
+
+.hub-hero .eyebrow {
+    color: var(--fam-color);
+}
+
+.hub-hero h1 {
+    margin: 6px 0 10px;
+}
+
+.hub-hero .hero-subtitle {
+    max-width: 760px;
+}
+
+/* Anclas a las secciones de la página */
+.hub-jump {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+}
+
+.hub-jump-label {
+    margin-right: 2px;
+    color: #94a3b8;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.hub-jump a {
+    display: inline-block;
+    padding: 7px 13px;
+    border-radius: 999px;
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    background: #ffffff;
+    color: #334155;
+    font-size: 0.86rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.hub-jump a:hover,
+.hub-jump a:focus-visible {
+    border-color: var(--fam-color);
+    background: var(--fam-tint);
+    color: var(--fam-color);
+    outline: none;
+}
+
+/* Las secciones enlazadas desde el hero no quedan bajo la barra fija */
+.content-card[id] {
+    scroll-margin-top: 76px;
+}
+
+.sample-objective-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 30px 0 6px;
+    font-size: 1.12rem;
+}
+
+.sample-objective-title::before {
+    content: "";
+    width: 4px;
+    height: 1.1em;
+    border-radius: 2px;
+    background: var(--accent);
+}
+
+html.dark-mode .hub-jump-label {
+    color: #64748b;
+}
+
+html.dark-mode .hub-jump a {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: #1e293b;
+    color: #e2e8f0;
+}
+
+html.dark-mode .hub-jump a:hover,
+html.dark-mode .hub-jump a:focus-visible {
+    border-color: var(--fam-color);
+    background: var(--fam-tint);
+    color: var(--fam-color);
+}
+
+@media (max-width: 640px) {
+    .hub-hero {
+        grid-template-columns: 1fr;
+        row-gap: 12px;
+        padding: 4px 2px 20px;
+    }
+
+    .hub-hero-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 13px;
+    }
+
+    .hub-hero-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .hub-jump {
+        gap: 6px;
+    }
+
+    .hub-jump a {
+        padding: 6px 11px;
+        font-size: 0.82rem;
     }
 }
