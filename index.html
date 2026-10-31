@@ -78,6 +78,22 @@
             "@type": "Answer",
             "text": "Todos los cálculos se hacen en tu navegador. Cada calculadora explica su fórmula, la aproximación que utiliza y sus supuestos; la página de metodología recoge los criterios generales (redondeo, precisión numérica, error de simulación) y las referencias utilizadas (NIST, SciPy, R). Si un resultado va a respaldar una decisión importante, conviene contrastarlo con un segundo software estadístico."
           }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Es gratis? ¿Hace falta registrarse?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí: todas las herramientas son gratuitas y no requieren registro ni instalación. Los cálculos se ejecutan en tu navegador, así que los datos que introduces no se envían a ningún servidor."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo encuentro la herramienta adecuada?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Usa el buscador (Ctrl K) si conoces el nombre de la distribución o del test. Si no estás seguro, el asistente «¿Qué necesito?» te lleva a la herramienta en dos o tres preguntas, y cada familia tiene una guía con criterios para elegir y ejemplos resueltos."
+          }
         }
       ]
     }
@@ -88,539 +104,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional"></noscript>
-    <link rel="stylesheet" href="style_new.css?v=20260730-1">
-
-    <style>
-        /* ── Index-specific styles ── */
-
-        .site-nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(15, 23, 42, 0.08);
-        }
-
-        .site-nav-inner {
-            width: min(1200px, 94vw);
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 0;
-        }
-
-        .site-brand {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: #2563eb;
-            text-decoration: none;
-            letter-spacing: -0.03em;
-        }
-
-        .site-brand:hover { color: #1d4ed8; }
-
-        .site-nav-links {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 4px;
-        }
-
-        .site-nav-links a {
-            display: block;
-            padding: 6px 14px;
-            border-radius: 999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: #334155;
-            text-decoration: none;
-            transition: background 0.15s ease, color 0.15s ease;
-        }
-
-        .site-nav-links a:hover {
-            background: rgba(37, 99, 235, 0.08);
-            color: #2563eb;
-        }
-
-        /* Hero: buscador como acción principal */
-        .hero-index {
-            padding: 44px 4px 8px;
-        }
-
-        .hero-index .hero-subtitle {
-            max-width: 720px;
-        }
-
-        .hero-search {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-            max-width: 640px;
-            margin-top: 26px;
-            padding: 15px 18px;
-            border-radius: 14px;
-            border: 1px solid rgba(37, 99, 235, 0.35);
-            background: #ffffff;
-            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.1);
-            color: #64748b;
-            font: inherit;
-            font-size: 1rem;
-            text-align: left;
-            cursor: text;
-            transition: border-color 0.15s ease, box-shadow 0.15s ease;
-        }
-
-        .hero-search:hover {
-            border-color: #2563eb;
-            box-shadow: 0 10px 28px rgba(37, 99, 235, 0.16);
-        }
-
-        .hero-search:focus-visible {
-            outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 4px var(--ring), 0 10px 28px rgba(37, 99, 235, 0.16);
-        }
-
-        .hero-search svg {
-            flex: 0 0 auto;
-            color: #2563eb;
-        }
-
-        .hero-search-text {
-            flex: 1;
-            min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .hero-search kbd {
-            flex: 0 0 auto;
-            padding: 2px 8px;
-            border-radius: 6px;
-            border: 1px solid rgba(15, 23, 42, 0.12);
-            background: #f8fafc;
-            color: #64748b;
-            font: inherit;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .hero-wizard {
-            margin: 12px 0 0;
-            color: #64748b;
-            font-size: 0.95rem;
-        }
-
-        .hero-wizard button {
-            padding: 0;
-            border: 0;
-            background: none;
-            color: #1d4ed8;
-            font: inherit;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .hero-wizard button:hover,
-        .hero-wizard button:focus-visible {
-            text-decoration: underline;
-        }
-
-        html.dark-mode .hero-search {
-            background: #1e293b;
-            border-color: rgba(59, 130, 246, 0.4);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-            color: #94a3b8;
-        }
-
-        html.dark-mode .hero-search:hover {
-            border-color: #3b82f6;
-        }
-
-        html.dark-mode .hero-search svg {
-            color: #93c5fd;
-        }
-
-        html.dark-mode .hero-search kbd {
-            background: #0f172a;
-            border-color: rgba(255, 255, 255, 0.12);
-            color: #94a3b8;
-        }
-
-        html.dark-mode .hero-wizard {
-            color: #94a3b8;
-        }
-
-        html.dark-mode .hero-wizard button {
-            color: #93c5fd;
-        }
-
-        /* Más usadas */
-        .popular {
-            margin-top: 28px;
-        }
-
-        .popular-title {
-            margin: 0 0 10px;
-            color: #64748b;
-            font-size: 0.78rem;
-            font-weight: 800;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-        .popular-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .popular-list a {
-            display: inline-block;
-            padding: 8px 14px;
-            border-radius: 999px;
-            border: 1px solid rgba(15, 23, 42, 0.1);
-            background: #ffffff;
-            color: #1e293b;
-            font-size: 0.92rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-        }
-
-        .popular-list a:hover,
-        .popular-list a:focus-visible {
-            border-color: rgba(37, 99, 235, 0.45);
-            background: #eff6ff;
-            color: #1d4ed8;
-        }
-
-        html.dark-mode .popular-title {
-            color: #94a3b8;
-        }
-
-        html.dark-mode .popular-list a {
-            border-color: rgba(255, 255, 255, 0.1);
-            background: #1e293b;
-            color: #e2e8f0;
-        }
-
-        html.dark-mode .popular-list a:hover,
-        html.dark-mode .popular-list a:focus-visible {
-            border-color: rgba(59, 130, 246, 0.45);
-            background: rgba(59, 130, 246, 0.12);
-            color: #93c5fd;
-        }
-
-        /* Catálogo completo por familias */
-        .catalog {
-            margin-top: 32px;
-            padding: 26px 28px 6px;
-        }
-
-        .catalog > h2 {
-            margin: 0 0 4px;
-        }
-
-        .catalog > p {
-            margin: 0 0 8px;
-            color: #64748b;
-        }
-
-        html.dark-mode .catalog:hover {
-            border-color: rgba(255, 255, 255, 0.08);
-            box-shadow: none;
-        }
-
-        .fam {
-            display: grid;
-            grid-template-columns: 250px minmax(0, 1fr);
-            gap: 14px 32px;
-            padding: 22px 0;
-            border-top: 1px solid rgba(15, 23, 42, 0.08);
-            scroll-margin-top: 72px;
-        }
-
-        .fam-dist   { --fam-color: #2563eb; --fam-tint: rgba(37, 99, 235, 0.1); }
-        .fam-tables { --fam-color: #059669; --fam-tint: rgba(5, 150, 105, 0.1); }
-        .fam-sim    { --fam-color: #b45309; --fam-tint: rgba(217, 119, 6, 0.12); }
-        .fam-hyp    { --fam-color: #7c3aed; --fam-tint: rgba(124, 58, 237, 0.1); }
-        .fam-sample { --fam-color: #4f46e5; --fam-tint: rgba(79, 70, 229, 0.1); }
-        .fam-ci     { --fam-color: #0e7490; --fam-tint: rgba(8, 145, 178, 0.1); }
-        .fam-ab     { --fam-color: #0f766e; --fam-tint: rgba(15, 118, 110, 0.1); }
-
-        html.dark-mode .fam-dist   { --fam-color: #93c5fd; --fam-tint: rgba(147, 197, 253, 0.14); }
-        html.dark-mode .fam-tables { --fam-color: #6ee7b7; --fam-tint: rgba(110, 231, 183, 0.14); }
-        html.dark-mode .fam-sim    { --fam-color: #fcd34d; --fam-tint: rgba(252, 211, 77, 0.14); }
-        html.dark-mode .fam-hyp    { --fam-color: #c4b5fd; --fam-tint: rgba(196, 181, 253, 0.14); }
-        html.dark-mode .fam-sample { --fam-color: #a5b4fc; --fam-tint: rgba(165, 180, 252, 0.14); }
-        html.dark-mode .fam-ci     { --fam-color: #67e8f9; --fam-tint: rgba(103, 232, 249, 0.14); }
-        html.dark-mode .fam-ab     { --fam-color: #5eead4; --fam-tint: rgba(94, 234, 212, 0.14); }
-
-        .fam-head {
-            display: grid;
-            grid-template-columns: 40px minmax(0, 1fr);
-            align-content: start;
-            gap: 4px 12px;
-        }
-
-        .fam-icon {
-            grid-row: span 3;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: var(--fam-tint);
-            color: var(--fam-color);
-            font-size: 1.05rem;
-            font-weight: 700;
-        }
-
-        .content-card .fam-head h3 {
-            margin: 0;
-            font-size: 1.1rem;
-            line-height: 1.3;
-        }
-
-        .fam-head h3 a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        .fam-head h3 a:hover,
-        .fam-head h3 a:focus-visible {
-            color: var(--fam-color);
-        }
-
-        .content-card .fam-head p {
-            margin: 0;
-            color: #64748b;
-            font-size: 0.92rem;
-            line-height: 1.5;
-        }
-
-        .fam-more {
-            justify-self: start;
-            color: var(--fam-color);
-            font-size: 0.9rem;
-            font-weight: 700;
-            text-decoration: none;
-        }
-
-        .fam-more:hover,
-        .fam-more:focus-visible {
-            text-decoration: underline;
-        }
-
-        .fam-group + .fam-group {
-            margin-top: 14px;
-        }
-
-        .content-card .fam-group h4 {
-            margin: 0 0 4px;
-            color: #64748b;
-            font-size: 0.74rem;
-            font-weight: 800;
-            letter-spacing: 0.07em;
-            text-transform: uppercase;
-        }
-
-        .content-card ul.fam-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            column-gap: 24px;
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .content-card .fam-list li {
-            margin: 0;
-            line-height: 1.35;
-        }
-
-        .fam-list a {
-            display: inline-block;
-            padding: 5px 0;
-            color: #1e293b;
-            font-size: 0.95rem;
-            font-weight: 500;
-            text-decoration: none;
-        }
-
-        .fam-list a:hover,
-        .fam-list a:focus-visible {
-            color: var(--fam-color);
-            text-decoration: underline;
-        }
-
-        html.dark-mode .fam {
-            border-top-color: rgba(255, 255, 255, 0.08);
-        }
-
-        html.dark-mode .catalog > p,
-        html.dark-mode .content-card .fam-head p,
-        html.dark-mode .content-card .fam-group h4 {
-            color: #94a3b8;
-        }
-
-        html.dark-mode .fam-list a {
-            color: #e2e8f0;
-        }
-
-        html.dark-mode .fam-list a:hover,
-        html.dark-mode .fam-list a:focus-visible {
-            color: var(--fam-color);
-        }
-
-        /* Skip link */
-        .skip-link {
-            position: absolute;
-            left: -9999px;
-            top: 0;
-            z-index: 200;
-            padding: 10px 16px;
-            background: #1d4ed8;
-            color: #ffffff;
-            font-weight: 700;
-            text-decoration: none;
-            border-radius: 0 0 10px 0;
-        }
-
-        .skip-link:focus {
-            left: 0;
-        }
-
-        /* Mobile nav toggle */
-        .nav-toggle {
-            display: none;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            border: 1px solid rgba(15, 23, 42, 0.12);
-            background: transparent;
-            color: #334155;
-            cursor: pointer;
-        }
-
-        html.dark-mode .nav-toggle {
-            color: #e2e8f0;
-            border-color: rgba(255, 255, 255, 0.15);
-        }
-
-        @media (max-width: 900px) {
-            .site-nav-inner {
-                flex-direction: row !important;
-                align-items: center !important;
-                flex-wrap: wrap;
-            }
-
-            .nav-toggle {
-                display: inline-flex;
-            }
-
-            .site-nav-links {
-                display: none;
-                width: 100%;
-                flex-direction: column;
-                align-items: stretch;
-                gap: 2px;
-                padding: 10px 0 14px;
-            }
-
-            .site-nav.nav-open .site-nav-links {
-                display: flex;
-            }
-
-            .site-nav-links a {
-                padding: 10px 12px !important;
-                font-size: 0.95rem !important;
-                border-radius: 10px;
-            }
-
-            .site-nav-links li[id] {
-                padding-top: 8px;
-            }
-        }
-
-        /* FAQ */
-        .faq-card {
-            border-top: 3px solid #f59e0b;
-        }
-
-        .faq-list {
-            display: grid;
-            gap: 14px;
-            margin: 16px 0 0;
-        }
-
-        .faq-item {
-            padding: 16px 18px;
-            border: 1px solid rgba(15, 23, 42, 0.08);
-            border-radius: 14px;
-            background: #f8fafc;
-        }
-
-        .faq-item h3 {
-            margin: 0 0 8px;
-            color: #0f172a;
-            font-size: 1.05rem;
-            letter-spacing: -0.01em;
-        }
-
-        .faq-item p {
-            margin: 0;
-            line-height: 1.65;
-        }
-
-        @media (max-width: 900px) {
-            .fam {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .hero-index {
-                padding: 28px 4px 4px;
-            }
-
-            .hero-search {
-                margin-top: 20px;
-                padding: 13px 14px;
-            }
-
-            .hero-search kbd {
-                display: none;
-            }
-
-            .site-nav-links a {
-                padding: 6px 10px;
-                font-size: 0.82rem;
-            }
-
-            .catalog {
-                padding: 20px 18px 4px;
-            }
-
-            .content-card ul.fam-list {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                column-gap: 16px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style_new.css?v=20261031-1">
 
 </head>
 <body>
@@ -630,9 +114,6 @@
 <nav class="site-nav" aria-label="Navegación principal">
     <div class="site-nav-inner">
         <a class="site-brand" href="index.html">ProbLab</a>
-        <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="site-menu">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
         <ul class="site-nav-links" id="site-menu">
             <li><a href="distribuciones/">Distribuciones</a></li>
             <li><a href="tablas-estadisticas/">Tablas</a></li>
@@ -661,11 +142,10 @@
 </nav>
 
 <div class="page-wrap">
-    <header class="hero hero-index">
+    <header class="home-hero">
         <h1>Calculadoras online de probabilidades e inferencia estadística</h1>
-        <p class="hero-subtitle">Calcula probabilidades, consulta tablas de distribuciones estadísticas y resuelve contrastes
-            de hipótesis, intervalos de confianza, tamaños muestrales y test A/B.
-            Gratis, sin registro y directamente desde el navegador.</p>
+        <p class="hero-subtitle">Distribuciones, tablas estadísticas, intervalos de confianza, tamaño muestral, contrastes de hipótesis y test A/B. Con fórmulas, gráficas y ejemplos resueltos; gratis, sin registro y directamente en tu navegador.</p>
+
         <button class="hero-search hero-cta-search" type="button" aria-haspopup="dialog" aria-label="Buscar herramienta (Ctrl+K)">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             <span class="hero-search-text">Busca una herramienta: normal, tabla t, tamaño muestral…</span>
@@ -673,9 +153,9 @@
         </button>
         <p class="hero-wizard">¿No sabes cuál usar? <button class="hero-cta-wizard" type="button" aria-haspopup="dialog">Responde dos o tres preguntas →</button></p>
 
-        <nav class="popular" aria-labelledby="popular-title">
-            <h2 id="popular-title" class="popular-title">Más usadas</h2>
-            <ul class="popular-list">
+        <nav aria-label="Herramientas más usadas">
+            <ul class="home-popular">
+                <li><span class="home-popular-label">Más usadas</span></li>
                 <li><a href="tabla-normal.html">Tabla normal (Z)</a></li>
                 <li><a href="normal.html">Distribución normal</a></li>
                 <li><a href="studentt.html">t de Student</a></li>
@@ -684,257 +164,154 @@
                 <li><a href="binomial.html">Binomial</a></li>
                 <li><a href="shapiro-wilk-normalidad.html">Shapiro–Wilk</a></li>
                 <li><a href="simulaciones/teorema-central-limite.html">Teorema central del límite</a></li>
-                <li><a href="poisson.html">Poisson</a></li>
-                <li><a href="tamano-muestral-una-media.html">Tamaño muestral de una media</a></li>
             </ul>
         </nav>
     </header>
 
     <main id="main-content">
-        <section class="card content-card catalog" aria-labelledby="catalog-title">
-            <h2 id="catalog-title">Todas las herramientas</h2>
-            <p>Cada familia tiene su guía con explicaciones, criterios para elegir y ejemplos resueltos.</p>
+        <section class="home-section" aria-labelledby="families-title">
+            <div class="home-section-head">
+                <h2 id="families-title">Explora por familia</h2>
+                <p>Cada familia tiene su guía con criterios para elegir, explicaciones y ejemplos resueltos.</p>
+            </div>
 
-            <section id="distribuciones" class="fam fam-dist" aria-labelledby="fam-dist-title">
-                <div class="fam-head">
-                    <span class="fam-icon" aria-hidden="true">∫</span>
-                    <h3 id="fam-dist-title"><a href="distribuciones/">Distribuciones de probabilidad</a></h3>
+            <ul class="family-grid">
+                <li class="family-card fam-dist">
+                    <div class="family-card-top">
+                        <span class="family-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19c4.5 0 5-13 9-13s4.5 13 9 13"/><path d="M3 19h18" opacity=".45"/></svg></span>
+                        <svg class="family-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                    </div>
+                    <h3><a href="distribuciones/">Distribuciones de probabilidad</a></h3>
                     <p>P(X≤x), colas, percentiles y valores críticos, con gráfica.</p>
-                    <a class="fam-more" href="distribuciones/">Guía y ejemplos →</a>
-                </div>
-                <div class="fam-body">
-                    <div class="fam-group">
-                        <h4>Continuas</h4>
-                        <ul class="fam-list">
-                            <li><a href="normal.html">Normal</a></li>
-                            <li><a href="studentt.html">t de Student</a></li>
-                            <li><a href="chisquare.html">Chi-cuadrado</a></li>
-                            <li><a href="centralf.html">F de Fisher-Snedecor</a></li>
-                            <li><a href="exponential.html">Exponencial</a></li>
-                            <li><a href="gamma.html">Gamma</a></li>
-                            <li><a href="beta.html">Beta</a></li>
-                            <li><a href="uniform.html">Uniforme</a></li>
-                            <li><a href="lognormal.html">Log-normal</a></li>
-                            <li><a href="weibull.html">Weibull</a></li>
-                        </ul>
-                    </div>
-                    <div class="fam-group">
-                        <h4>Discretas</h4>
-                        <ul class="fam-list">
-                            <li><a href="binomial.html">Binomial</a></li>
-                            <li><a href="poisson.html">Poisson</a></li>
-                            <li><a href="hypergeometric.html">Hipergeométrica</a></li>
-                            <li><a href="geometric.html">Geométrica</a></li>
-                            <li><a href="negbin.html">Binomial negativa</a></li>
-                            <li><a href="bernoulli.html">Bernoulli</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+                    <ul class="family-examples" aria-label="Ejemplos de distribuciones">
+                        <li><a href="normal.html">Normal</a></li>
+                        <li><a href="binomial.html">Binomial</a></li>
+                        <li><a href="poisson.html">Poisson</a></li>
+                        <li><a href="studentt.html">t de Student</a></li>
+                    </ul>
+                    <span class="family-count">16 calculadoras →</span>
+                </li>
 
-            <section id="tablas" class="fam fam-tables" aria-labelledby="fam-tables-title">
-                <div class="fam-head">
-                    <span class="fam-icon" aria-hidden="true">▦</span>
-                    <h3 id="fam-tables-title"><a href="tablas-estadisticas/">Tablas estadísticas</a></h3>
+                <li class="family-card fam-tables">
+                    <div class="family-card-top">
+                        <span class="family-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 10h18M9 10v10M15 10v10"/></svg></span>
+                        <svg class="family-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                    </div>
+                    <h3><a href="tablas-estadisticas/">Tablas estadísticas</a></h3>
                     <p>Valores críticos y probabilidades en el formato clásico, imprimibles.</p>
-                    <a class="fam-more" href="tablas-estadisticas/">Guía y ejemplos →</a>
-                </div>
-                <div class="fam-body">
-                    <ul class="fam-list">
-                        <li><a href="tabla-normal.html">Normal estándar (Z)</a></li>
+                    <ul class="family-examples" aria-label="Ejemplos de tablas">
+                        <li><a href="tabla-normal.html">Normal (Z)</a></li>
                         <li><a href="tabla-t-student.html">t de Student</a></li>
                         <li><a href="tabla-chi-cuadrado.html">Chi-cuadrado</a></li>
                         <li><a href="tabla-f-snedecor.html">F de Snedecor</a></li>
-                        <li><a href="tabla-binomial.html">Binomial</a></li>
-                        <li><a href="tabla-poisson.html">Poisson</a></li>
-                        <li><a href="tabla-gamma.html">Gamma</a></li>
-                        <li><a href="tabla-beta.html">Beta</a></li>
                     </ul>
-                </div>
-            </section>
+                    <span class="family-count">8 tablas →</span>
+                </li>
 
-            <section id="simulaciones" class="fam fam-sim" aria-labelledby="fam-sim-title">
-                <div class="fam-head">
-                    <span class="fam-icon" aria-hidden="true">∿</span>
-                    <h3 id="fam-sim-title"><a href="simulaciones/">Simulaciones estadísticas</a></h3>
-                    <p>Experimentos interactivos para ver la teoría en acción.</p>
-                    <a class="fam-more" href="simulaciones/">Guía y ejemplos →</a>
-                </div>
-                <div class="fam-body">
-                    <ul class="fam-list">
+                <li class="family-card fam-ci">
+                    <div class="family-card-top">
+                        <span class="family-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M5 8v8M19 8v8"/><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/></svg></span>
+                        <svg class="family-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                    </div>
+                    <h3><a href="intervalos-confianza/">Intervalos de confianza</a></h3>
+                    <p>Ya tienes datos y quieres estimar un parámetro con su margen de error.</p>
+                    <ul class="family-examples" aria-label="Ejemplos de intervalos de confianza">
+                        <li><a href="intervalo-confianza-media.html">Una media</a></li>
+                        <li><a href="intervalo-confianza-proporcion.html">Una proporción</a></li>
+                        <li><a href="intervalo-confianza-diferencia-medias.html">Diferencia de medias</a></li>
+                        <li><a href="intervalo-confianza-odds-ratio.html">Odds ratio</a></li>
+                    </ul>
+                    <span class="family-count">11 calculadoras →</span>
+                </li>
+
+                <li class="family-card fam-hyp">
+                    <div class="family-card-top">
+                        <span class="family-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19c4.5 0 5-13 9-13s4.5 13 9 13"/><path d="M16.5 19v-6.5" stroke-dasharray="2 2"/><path d="M16.5 19c1.3-1.6 2.6-3.4 4.5-4.4V19z" fill="currentColor" stroke="none" opacity=".45"/></svg></span>
+                        <svg class="family-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                    </div>
+                    <h3><a href="contrastes-hipotesis/">Contrastes de hipótesis</a></h3>
+                    <p>Ya tienes datos y quieres decidir: estadístico, p-valor e interpretación.</p>
+                    <ul class="family-examples" aria-label="Ejemplos de contrastes">
+                        <li><a href="contraste-hipotesis-una-media.html">Una media</a></li>
+                        <li><a href="contraste-hipotesis-dos-medias.html">Dos medias</a></li>
+                        <li><a href="anova.html">ANOVA</a></li>
+                        <li><a href="contraste-independencia-chi-cuadrado.html">Chi-cuadrado</a></li>
+                        <li><a href="shapiro-wilk-normalidad.html">Shapiro–Wilk</a></li>
+                    </ul>
+                    <span class="family-count">19 contrastes →</span>
+                </li>
+
+                <li class="family-card fam-sample">
+                    <div class="family-card-top">
+                        <span class="family-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" stroke-dasharray="3.2 3.2"/><circle cx="9" cy="10" r="1.7" fill="currentColor" stroke="none"/><circle cx="14.5" cy="9" r="1.7" fill="currentColor" stroke="none"/><circle cx="12.5" cy="14.5" r="1.7" fill="currentColor" stroke="none"/></svg></span>
+                        <svg class="family-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                    </div>
+                    <h3><a href="tamano-muestral/">Tamaño muestral</a></h3>
+                    <p>Antes de recoger datos: cuántas observaciones necesitas.</p>
+                    <ul class="family-examples" aria-label="Ejemplos de tamaño muestral">
+                        <li><a href="tamano-muestral-una-media.html">Una media</a></li>
+                        <li><a href="tamano-muestral-una-proporcion.html">Una proporción (encuestas)</a></li>
+                        <li><a href="tamano-muestral-diferencia-medias.html">Dos medias</a></li>
+                        <li><a href="tamano-muestral-anova.html">ANOVA</a></li>
+                    </ul>
+                    <span class="family-count">25 calculadoras →</span>
+                </li>
+
+                <li class="family-card fam-ab">
+                    <div class="family-card-top">
+                        <span class="family-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="6" height="10" rx="1.5"/><rect x="14" y="4" width="6" height="16" rx="1.5"/></svg></span>
+                        <svg class="family-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                    </div>
+                    <h3><a href="ab-testing/">Test A/B y experimentación</a></h3>
+                    <p>Diseñar y analizar experimentos de conversión.</p>
+                    <ul class="family-examples" aria-label="Ejemplos de test A/B">
+                        <li><a href="ab-testing-z-test.html">Test Z</a></li>
+                        <li><a href="ab-testing-bayesiano.html">Bayesiano</a></li>
+                        <li><a href="ab-testing-potencia.html">Potencia y MDE</a></li>
+                    </ul>
+                    <span class="family-count">5 herramientas →</span>
+                </li>
+
+                <li class="family-card family-card--wide fam-sim">
+                    <div class="family-card-top">
+                        <span class="family-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15l3-6 3 4 3-8 3 7 3-3 3 5"/></svg></span>
+                    </div>
+                    <div class="family-body">
+                        <h3><a href="simulaciones/">Simulaciones estadísticas</a></h3>
+                        <p>Experimentos interactivos para ver la teoría en acción: ajusta los parámetros y observa qué ocurre.</p>
+                    </div>
+                    <ul class="family-examples" aria-label="Simulaciones disponibles">
                         <li><a href="simulaciones/teorema-central-limite.html">Teorema central del límite</a></li>
                         <li><a href="simulaciones/simulador-intervalos-confianza.html">Intervalos de confianza</a></li>
-                        <li><a href="simulaciones/simulador-errores-tipo-i-ii.html">Errores tipo I y tipo II</a></li>
+                        <li><a href="simulaciones/simulador-errores-tipo-i-ii.html">Errores tipo I y II</a></li>
                         <li><a href="simulaciones/simulador-bootstrap.html">Bootstrap</a></li>
                         <li><a href="simulaciones/simulador-cadenas-markov.html">Cadenas de Markov</a></li>
                         <li><a href="simulaciones/simulador-proceso-poisson.html">Proceso de Poisson</a></li>
-                        <li><a href="simulaciones/simulador-paseo-aleatorio.html">Paseo aleatorio 1D y 2D</a></li>
+                        <li><a href="simulaciones/simulador-paseo-aleatorio.html">Paseo aleatorio</a></li>
                     </ul>
-                </div>
-            </section>
-
-            <section id="contrastes" class="fam fam-hyp" aria-labelledby="fam-hyp-title">
-                <div class="fam-head">
-                    <span class="fam-icon" aria-hidden="true">p</span>
-                    <h3 id="fam-hyp-title"><a href="contrastes-hipotesis/">Contrastes de hipótesis</a></h3>
-                    <p>Ya tienes datos y quieres decidir: estadístico, p-valor e interpretación.</p>
-                    <a class="fam-more" href="contrastes-hipotesis/">Guía y ejemplos →</a>
-                </div>
-                <div class="fam-body">
-                    <div class="fam-group">
-                        <h4>Medias y comparación de grupos</h4>
-                        <ul class="fam-list">
-                            <li><a href="contraste-hipotesis-una-media.html">Una media</a></li>
-                            <li><a href="contraste-hipotesis-dos-medias.html">Dos medias independientes</a></li>
-                            <li><a href="contraste-hipotesis-medias-apareadas.html">Medias apareadas</a></li>
-                            <li><a href="anova.html">ANOVA de un factor</a></li>
-                            <li><a href="contraste-hipotesis-no-inferioridad.html">No inferioridad y equivalencia</a></li>
-                        </ul>
-                    </div>
-                    <div class="fam-group">
-                        <h4>Proporciones y tablas de contingencia</h4>
-                        <ul class="fam-list">
-                            <li><a href="contraste-hipotesis-una-proporcion.html">Una proporción</a></li>
-                            <li><a href="contraste-hipotesis-dos-proporciones.html">Dos proporciones</a></li>
-                            <li><a href="contraste-hipotesis-proporciones-apareadas.html">Proporciones apareadas (McNemar)</a></li>
-                            <li><a href="contraste-hipotesis-odds-ratio.html">Odds ratio</a></li>
-                            <li><a href="contraste-independencia-chi-cuadrado.html">Chi-cuadrado de independencia</a></li>
-                            <li><a href="test-exacto-fisher.html">Test exacto de Fisher (2×2)</a></li>
-                            <li><a href="potencia-contraste-una-proporcion.html">Potencia para una proporción</a></li>
-                        </ul>
-                    </div>
-                    <div class="fam-group">
-                        <h4>Varianzas y correlación</h4>
-                        <ul class="fam-list">
-                            <li><a href="contraste-hipotesis-varianzas.html">Una varianza</a></li>
-                            <li><a href="contraste-hipotesis-dos-varianzas.html">Dos varianzas (test F)</a></li>
-                            <li><a href="contraste-hipotesis-correlacion.html">Correlación de Pearson</a></li>
-                        </ul>
-                    </div>
-                    <div class="fam-group">
-                        <h4>Bondad de ajuste y normalidad</h4>
-                        <ul class="fam-list">
-                            <li><a href="shapiro-wilk-normalidad.html">Shapiro–Wilk</a></li>
-                            <li><a href="kolmogorov-smirnov-bondad-ajuste.html">Kolmogorov–Smirnov</a></li>
-                            <li><a href="chi-cuadrado-bondad-ajuste.html">Chi-cuadrado de bondad de ajuste</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <section id="tamano-muestral" class="fam fam-sample" aria-labelledby="fam-sample-title">
-                <div class="fam-head">
-                    <span class="fam-icon" aria-hidden="true">n</span>
-                    <h3 id="fam-sample-title"><a href="tamano-muestral/">Tamaño muestral</a></h3>
-                    <p>Antes de recoger datos: cuántas observaciones necesitas.</p>
-                    <a class="fam-more" href="tamano-muestral/">Guía y ejemplos →</a>
-                </div>
-                <div class="fam-body">
-                    <div class="fam-group">
-                        <h4>Para estimar con un intervalo de confianza</h4>
-                        <ul class="fam-list">
-                            <li><a href="tamano-muestral-una-media.html">Una media</a></li>
-                            <li><a href="tamano-muestral-diferencia-medias.html">Diferencia de medias</a></li>
-                            <li><a href="tamano-muestral-medias-apareadas-ic.html">Medias apareadas</a></li>
-                            <li><a href="tamano-muestral-media-poblacion-finita.html">Media (población finita)</a></li>
-                            <li><a href="tamano-muestral-una-proporcion.html">Una proporción (encuestas)</a></li>
-                            <li><a href="tamano-muestral-dos-proporciones.html">Dos proporciones</a></li>
-                            <li><a href="tamano-muestral-diferencia-proporciones-ic.html">Diferencia de proporciones</a></li>
-                            <li><a href="tamano-muestral-proporcion-poblacion-finita.html">Proporción (población finita)</a></li>
-                            <li><a href="tamano-muestral-varianza-ic.html">Una varianza</a></li>
-                            <li><a href="tamano-muestral-odds-ratio-ic.html">Odds ratio</a></li>
-                        </ul>
-                    </div>
-                    <div class="fam-group">
-                        <h4>Para un contraste de hipótesis</h4>
-                        <ul class="fam-list">
-                            <li><a href="tamano-muestral-contraste-una-media.html">Una media</a></li>
-                            <li><a href="tamano-muestral-medias-apareadas.html">Medias apareadas</a></li>
-                            <li><a href="tamano-muestral-anova.html">ANOVA (k grupos)</a></li>
-                            <li><a href="tamano-muestral-no-inferioridad.html">No inferioridad / equivalencia</a></li>
-                            <li><a href="tamano-muestral-contraste-una-proporcion.html">Una proporción</a></li>
-                            <li><a href="tamano-muestral-proporciones-apareadas.html">Proporciones apareadas</a></li>
-                            <li><a href="tamano-muestral-odds-ratio.html">Odds ratio (caso-control)</a></li>
-                            <li><a href="tamano-muestral-fisher.html">Test exacto de Fisher</a></li>
-                            <li><a href="tamano-muestral-una-varianza.html">Una varianza</a></li>
-                            <li><a href="tamano-muestral-dos-varianzas.html">Dos varianzas</a></li>
-                            <li><a href="tamano-muestral-correlacion.html">Correlación de Pearson</a></li>
-                            <li><a href="tamano-muestral-chi-cuadrado-independencia.html">Chi-cuadrado de independencia</a></li>
-                            <li><a href="tamano-muestral-chi-cuadrado-bondad.html">Chi-cuadrado de bondad de ajuste</a></li>
-                            <li><a href="tamano-muestral-kolmogorov-smirnov.html">Kolmogorov–Smirnov</a></li>
-                            <li><a href="tamano-muestral-shapiro-wilk.html">Shapiro–Wilk</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <section id="intervalos" class="fam fam-ci" aria-labelledby="fam-ci-title">
-                <div class="fam-head">
-                    <span class="fam-icon" aria-hidden="true">±</span>
-                    <h3 id="fam-ci-title"><a href="intervalos-confianza/">Intervalos de confianza</a></h3>
-                    <p>Ya tienes datos y quieres estimar un parámetro con su margen de error.</p>
-                    <a class="fam-more" href="intervalos-confianza/">Guía y ejemplos →</a>
-                </div>
-                <div class="fam-body">
-                    <div class="fam-group">
-                        <h4>Medias</h4>
-                        <ul class="fam-list">
-                            <li><a href="intervalo-confianza-media.html">Una media (σ desconocida)</a></li>
-                            <li><a href="intervalo-confianza-media-sigma-conocida.html">Una media (σ conocida)</a></li>
-                            <li><a href="intervalo-confianza-diferencia-medias.html">Diferencia de medias</a></li>
-                            <li><a href="intervalo-confianza-medias-apareadas.html">Medias apareadas</a></li>
-                            <li><a href="intervalo-confianza-media-poblacion-finita.html">Media (población finita)</a></li>
-                        </ul>
-                    </div>
-                    <div class="fam-group">
-                        <h4>Proporciones</h4>
-                        <ul class="fam-list">
-                            <li><a href="intervalo-confianza-proporcion.html">Una proporción</a></li>
-                            <li><a href="intervalo-confianza-diferencia-proporciones.html">Diferencia de proporciones</a></li>
-                            <li><a href="intervalo-confianza-proporcion-poblacion-finita.html">Proporción (población finita)</a></li>
-                        </ul>
-                    </div>
-                    <div class="fam-group">
-                        <h4>Varianza y medidas de asociación</h4>
-                        <ul class="fam-list">
-                            <li><a href="intervalo-confianza-varianza.html">Una varianza</a></li>
-                            <li><a href="intervalo-confianza-ratio-proporciones.html">Ratio de proporciones</a></li>
-                            <li><a href="intervalo-confianza-odds-ratio.html">Odds ratio</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <section id="ab-testing" class="fam fam-ab" aria-labelledby="fam-ab-title">
-                <div class="fam-head">
-                    <span class="fam-icon" aria-hidden="true">A/B</span>
-                    <h3 id="fam-ab-title"><a href="ab-testing/">Test A/B y experimentación</a></h3>
-                    <p>Diseñar y analizar experimentos de conversión.</p>
-                    <a class="fam-more" href="ab-testing/">Guía y ejemplos →</a>
-                </div>
-                <div class="fam-body">
-                    <ul class="fam-list">
-                        <li><a href="ab-testing-z-test.html">Test Z de conversión</a></li>
-                        <li><a href="ab-testing-bayesiano.html">Bayesiano Beta-Binomial</a></li>
-                        <li><a href="ab-testing-potencia.html">MDE, potencia y tamaño muestral</a></li>
-                        <li><a href="potencia-test-ab.html">Potencia y error tipo II (avanzado)</a></li>
-                        <li><a href="ab-testing-simulacion.html">Simulación de experimentos</a></li>
-                    </ul>
-                </div>
-            </section>
+                    <span class="family-count">7 simulaciones →</span>
+                </li>
+            </ul>
         </section>
 
-        <section id="preguntas-frecuentes" class="card content-card faq-card" aria-labelledby="faq-title">
+        <section id="preguntas-frecuentes" class="home-faq" aria-labelledby="faq-title">
             <h2 id="faq-title">Preguntas frecuentes</h2>
             <div class="faq-list">
-                <article class="faq-item">
-                    <h3>¿Cómo se calculan los resultados?</h3>
+                <details class="faq-item">
+                    <summary>¿Cómo se calculan los resultados?</summary>
                     <p>Todos los cálculos se hacen en tu navegador. Cada calculadora explica su fórmula, la aproximación que utiliza y sus supuestos; la página de <a href="metodologia.html">metodología</a> recoge los criterios generales (redondeo, precisión numérica, error de simulación) y las referencias utilizadas (NIST, SciPy, R). Si un resultado va a respaldar una decisión importante, conviene contrastarlo con un segundo software estadístico.</p>
-                </article>
+                </details>
+                <details class="faq-item">
+                    <summary>¿Es gratis? ¿Hace falta registrarse?</summary>
+                    <p>Sí: todas las herramientas son gratuitas y no requieren registro ni instalación. Los cálculos se ejecutan en tu navegador, así que los datos que introduces no se envían a ningún servidor.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>¿Cómo encuentro la herramienta adecuada?</summary>
+                    <p>Usa el buscador (Ctrl K) si conoces el nombre de la distribución o del test. Si no estás seguro, el asistente «¿Qué necesito?» te lleva a la herramienta en dos o tres preguntas, y cada familia tiene una guía con criterios para elegir y ejemplos resueltos.</p>
+                </details>
             </div>
         </section>
     </main>
-
 
     <footer class="legal-footer">
         <p>
@@ -950,32 +327,9 @@
     </footer>
 </div>
 
-
-
-<script src="search.js?v=20261013-1" defer></script>
+<script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20261013-1" defer></script>
-<script src="theme.js?v=20260730-1" defer></script>
-<script>
-(function () {
-    function delegate(btnSel, targetSel) {
-        var btn = document.querySelector(btnSel);
-        if (btn) btn.addEventListener('click', function () {
-            var target = document.querySelector(targetSel);
-            if (target) target.click();
-        });
-    }
-    delegate('.hero-cta-search', '.site-nav-links .search-btn');
-    delegate('.hero-cta-wizard', '.site-nav-links .wz-nav-btn');
-
-    var navToggle = document.querySelector('.nav-toggle');
-    if (navToggle) navToggle.addEventListener('click', function () {
-        var nav = document.querySelector('.site-nav');
-        var open = nav.classList.toggle('nav-open');
-        navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        navToggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
-    });
-})();
-</script>
+<script src="theme.js?v=20261031-1" defer></script>
 <script data-goatcounter="https://vintcent.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

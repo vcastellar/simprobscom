@@ -114,7 +114,7 @@
     { name: 'Tablas estadísticas', url: '/tablas-estadisticas/', icon: '▦', desc: '8 tablas', color: '#15803d' },
     { name: 'Intervalos de confianza', url: '/intervalos-confianza/', icon: '±', desc: '11 calculadoras', color: '#7e22ce' },
     { name: 'Tamaño muestral', url: '/tamano-muestral/', icon: 'n', desc: '25 calculadoras', color: '#c2410c' },
-    { name: 'Contrastes de hipótesis', url: '/contrastes-hipotesis/', icon: 'p', desc: '18 contrastes', color: '#b91c1c' },
+    { name: 'Contrastes de hipótesis', url: '/contrastes-hipotesis/', icon: 'p', desc: '19 contrastes', color: '#b91c1c' },
     { name: 'Test A/B y experimentación', url: '/ab-testing/', icon: 'A/B', desc: '5 herramientas', color: '#0f766e' },
     { name: 'Simulaciones estadísticas', url: '/simulaciones/', icon: '∿', desc: '7 simulaciones', color: '#b45309' }
   ];
@@ -244,7 +244,7 @@
     '/tablas-estadisticas/': ['Statistical tables', '8 tables'],
     '/intervalos-confianza/': ['Confidence intervals', '11 calculators'],
     '/tamano-muestral/': ['Sample size', '25 calculators'],
-    '/contrastes-hipotesis/': ['Hypothesis tests', '18 tests'],
+    '/contrastes-hipotesis/': ['Hypothesis tests', '19 tests'],
     '/ab-testing/': ['A/B testing and experimentation', '5 tools'],
     '/simulaciones/': ['Statistical simulations', '7 simulations']
   };
