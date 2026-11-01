@@ -74,7 +74,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-2">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -121,58 +121,65 @@
     <main>
         <p class="tool-intro">This calculator estimates how many observations you need <strong>per group</strong> for a one-way ANOVA to detect, with the power you set, real differences among the means of \(k\) groups. Enter the number of groups, the effect size and the significance level to get the minimum sample size.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Balanced one-way ANOVA. Enter the number of groups, the effect size, alpha and power.</p>
-            </div>
-
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="anovaK">Number of groups (k) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="anovaK" value="3" step="1" min="2" max="50">
-                        <p class="field-hint" hidden>Number of groups being compared (k ≥ 2). Include every group in the design, even a control group.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="anovaF">Cohen's effect size (f) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="anovaF" value="0.25" step="0.01" min="0.01" max="5">
-                        <p class="field-hint" hidden>Ratio between the standard deviation of the group means and the standard deviation within groups. Reference: <strong>0.10</strong> small, <strong>0.25</strong> medium, <strong>0.40</strong> large.</p>
-                    </div>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Balanced one-way ANOVA. Enter the number of groups, the effect size, alpha and power.</p>
                 </div>
 
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="anovaAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="anovaAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Significance level of the overall F test. The standard value is <strong>0.05</strong>; use 0.01 in confirmatory studies.</p>
+                <div class="form-grid sample-grid" id="anovaForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="anovaK">Number of groups (k) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="anovaK" value="3" step="1" min="2" max="50">
+                            <p class="field-hint" hidden>Number of groups being compared (k ≥ 2). Include every group in the design, even a control group.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="anovaF">Cohen's effect size (f) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="anovaF" value="0.25" step="0.01" min="0.01" max="5">
+                            <p class="field-hint" hidden>Ratio between the standard deviation of the group means and the standard deviation within groups. Reference: <strong>0.10</strong> small, <strong>0.25</strong> medium, <strong>0.40</strong> large.</p>
+                        </div>
                     </div>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="anovaAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="anovaAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Significance level of the overall F test. The standard value is <strong>0.05</strong>; use 0.01 in confirmatory studies.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="anovaPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="anovaPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                            <p class="field-hint" hidden>Probability of detecting the effect if it really exists. <strong>0.80</strong> is the usual minimum; use 0.90 if post-hoc comparisons are the main goal.</p>
+                        </div>
+                    </div>
+
                     <div class="form-group">
-                        <label for="anovaPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="anovaPower" value="0.80" step="0.01" min="0.5" max="0.999">
-                        <p class="field-hint" hidden>Probability of detecting the effect if it really exists. <strong>0.80</strong> is the usual minimum; use 0.90 if post-hoc comparisons are the main goal.</p>
+                        <label for="anovaPreset">Quick reference for f <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                        <select id="anovaPreset">
+                            <option value="">— Select —</option>
+                            <option value="0.10">Small (f = 0.10)</option>
+                            <option value="0.25">Medium (f = 0.25)</option>
+                            <option value="0.40">Large (f = 0.40)</option>
+                        </select>
+                        <p class="field-hint" hidden>Shortcut to fill in the f field with a reference value based on Cohen's criteria, if you do not have an estimate of your own.</p>
                     </div>
                 </div>
+            </section>
 
-                <div class="form-group">
-                    <label for="anovaPreset">Quick reference for f <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                    <select id="anovaPreset">
-                        <option value="">— Select —</option>
-                        <option value="0.10">Small (f = 0.10)</option>
-                        <option value="0.25">Medium (f = 0.25)</option>
-                        <option value="0.40">Large (f = 0.40)</option>
-                    </select>
-                    <p class="field-hint" hidden>Shortcut to fill in the f field with a reference value based on Cohen's criteria, if you do not have an estimate of your own.</p>
+            <div id="anovaResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Power curve by sample size</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="anovaChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="anovaChartNote"></p>
                 </div>
-            </div>
-
-            <button class="calculate-btn" id="anovaCalculateBtn">Calculate sample size</button>
-            <div id="anovaResult" class="result-box">Result pending…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Power curve by sample size</h3>
-                <canvas id="anovaChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
-                <p class="ss-chart-note" id="anovaChartNote"></p>
-            </div>
+                <p class="ss-chart-empty">Check the parameters: the chart will appear once they are valid.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -274,7 +281,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../sample-size-charts.js?v=20261101-2"></script>
+<script src="../sample-size-charts.js?v=20261101-3"></script>
 <script>
 // Non-central F CDF via Poisson-weighted sum of regularized incomplete beta functions.
 // P(F'(df1, df2, ncp) <= x) = sum_{j>=0} Pois(j; ncp/2) * I(df1*x/(df1*x+df2); (df1+2j)/2; df2/2)
@@ -344,7 +351,7 @@ document.getElementById("anovaPreset").addEventListener("change", function () {
         this.value = "";
     }
 });
-document.getElementById("anovaCalculateBtn").addEventListener("click", calculateAnovaSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('anovaForm', calculateAnovaSampleSize);
 calculateAnovaSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>

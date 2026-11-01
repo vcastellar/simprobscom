@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-2">
 
     <script type="application/ld+json">
 {
@@ -158,46 +158,53 @@
     <main>
         <p class="tool-intro">Calcula cuántos pares necesitas para detectar un cambio medio mínimo en un diseño de medidas repetidas o antes/después, con la potencia objetivo. Trabaja sobre la desviación típica de las diferencias.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Introduce σd, Δ, confianza y potencia para obtener el número de pares necesarios.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Introduce σd, Δ, confianza y potencia para obtener el número de pares necesarios.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="pairedMeanSigmaD">Desv. estándar de diferencias (σd) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="pairedMeanSigmaD" value="8" step="0.1" min="0.0001">
-                        <p class="field-hint" hidden>Desviación estándar de las diferencias <strong>intraindividuales</strong> (d_i = X₁ᵢ − X₂ᵢ), no la de cada grupo por separado. Si solo conoces la σ individual y la correlación ρ, usa σd ≈ σ·√(2(1−ρ)).</p>
+                <div class="form-grid sample-grid" id="pairedMeanForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="pairedMeanSigmaD">Desv. estándar de diferencias (σd) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="pairedMeanSigmaD" value="8" step="0.1" min="0.0001">
+                            <p class="field-hint" hidden>Desviación estándar de las diferencias <strong>intraindividuales</strong> (d_i = X₁ᵢ − X₂ᵢ), no la de cada grupo por separado. Si solo conoces la σ individual y la correlación ρ, usa σd ≈ σ·√(2(1−ρ)).</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="pairedMeanDelta">Cambio mínimo detectable (Δ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="pairedMeanDelta" value="3" step="0.1" min="0.0001">
+                            <p class="field-hint" hidden>Diferencia media mínima que quieres detectar, fijada con criterio práctico o clínico antes del estudio.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="pairedMeanDelta">Cambio mínimo detectable (Δ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="pairedMeanDelta" value="3" step="0.1" min="0.0001">
-                        <p class="field-hint" hidden>Diferencia media mínima que quieres detectar, fijada con criterio práctico o clínico antes del estudio.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="pairedMeanAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="pairedMeanAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Nivel de significación bilateral. El valor estándar es <strong>0,05</strong>.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="pairedMeanPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="pairedMeanPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                            <p class="field-hint" hidden>Probabilidad de detectar el cambio Δ si realmente existe. <strong>0,80</strong> es la base habitual; 0,90 si los falsos negativos son costosos.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="pairedMeanAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="pairedMeanAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Nivel de significación bilateral. El valor estándar es <strong>0,05</strong>.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="pairedMeanPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="pairedMeanPower" value="0.8" step="0.01" min="0.5" max="0.999">
-                        <p class="field-hint" hidden>Probabilidad de detectar el cambio Δ si realmente existe. <strong>0,80</strong> es la base habitual; 0,90 si los falsos negativos son costosos.</p>
-                    </div>
-                </div>
-            </div>
+            </section>
 
-            <button class="calculate-btn" id="pairedMeanCalculateBtn">Calcular tamaño muestral</button>
-            <div id="pairedMeanResult" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Curva de potencia según el tamaño muestral</h3>
-                <canvas id="pairedMeanChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
-                <p class="ss-chart-note" id="pairedMeanChartNote"></p>
-            </div>
+            <div id="pairedMeanResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Curva de potencia según el tamaño muestral</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="pairedMeanChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="pairedMeanChartNote"></p>
+                </div>
+                <p class="ss-chart-empty">Revisa los parámetros: el gráfico aparecerá cuando sean válidos.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -291,7 +298,7 @@
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-2"></script>
+<script src="sample-size-charts.js?v=20261101-3"></script>
 <script>
 function calculatePairedMeanSampleSize(){
  window.SampleSizeCharts && SampleSizeCharts.clear('pairedMeanChart');
@@ -318,7 +325,7 @@ function calculatePairedMeanSampleSize(){
   });
 }
 
-document.getElementById('pairedMeanCalculateBtn').addEventListener('click', calculatePairedMeanSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('pairedMeanForm', calculatePairedMeanSampleSize);
 calculatePairedMeanSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

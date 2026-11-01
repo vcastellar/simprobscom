@@ -798,6 +798,132 @@ canvas {
     margin-top: 14px;
 }
 
+/* Calculadoras de tamaño muestral en dos columnas (piloto), como las de
+   distribuciones: parámetros a la izquierda y, a la derecha, el resultado
+   encima del gráfico, para que n se vea sin bajar. En pantallas estrechas
+   el orden es parámetros → resultado → gráfico. Para llevar el resultado
+   debajo de ambas columnas basta con usar las áreas
+   "controls chart" / "result result". */
+.ss-shell {
+    display: grid;
+    grid-template-columns: 380px minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        "controls result"
+        "controls chart";
+    gap: 20px;
+    align-items: stretch;
+    margin-top: 20px;
+}
+
+.ss-controls {
+    grid-area: controls;
+}
+
+.ss-controls .form-grid {
+    margin-top: 16px;
+}
+
+.ss-controls .inline-inputs {
+    grid-template-columns: 1fr;
+    gap: 0;
+}
+
+.ss-chart-panel {
+    grid-area: chart;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.ss-chart-panel .ss-chart-title {
+    font-size: 1.15rem;
+}
+
+.ss-chart-panel .ss-chart {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+}
+
+.ss-chart-panel .ss-chart[hidden] {
+    display: none;
+}
+
+/* El lienzo ocupa el alto que sobra en la columna del gráfico, con un
+   mínimo. Va en posición absoluta dentro de .ss-canvas para que su tamaño
+   no realimente el cálculo del alto (Chart.js lo redimensiona al tamaño
+   del contenedor). */
+.ss-canvas {
+    position: relative;
+    flex: 1 1 0;
+    min-height: 400px;
+}
+
+.ss-chart-panel .ss-chart canvas {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.ss-chart-empty {
+    display: none;
+}
+
+.ss-chart[hidden] + .ss-chart-empty {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    min-height: 260px;
+    margin: 0;
+    padding: 24px;
+    text-align: center;
+    color: var(--text-muted);
+    border: 1px dashed var(--surface-border);
+    border-radius: 12px;
+}
+
+.result-box.ss-result {
+    grid-area: result;
+    margin-top: 0;
+}
+
+@media (max-width: 1024px) {
+    .ss-shell {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: none;
+        grid-template-areas:
+            "controls"
+            "result"
+            "chart";
+    }
+
+    .ss-controls .inline-inputs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+}
+
+@media (max-width: 640px) {
+    .ss-shell {
+        gap: 14px;
+    }
+
+    .ss-controls .inline-inputs {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .ss-canvas {
+        min-height: 300px;
+    }
+}
+
 .formula-box {
     margin-top: 10px;
     border-radius: 12px;

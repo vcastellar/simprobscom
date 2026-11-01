@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-2">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -153,50 +153,57 @@
     <main>
         <p class="tool-intro">Esta herramienta calcula el tamaño de muestra para contrastar si la varianza (o desviación típica) difiere de un valor de referencia (\(H_0: \sigma = \sigma_0\)) con la potencia objetivo, mediante la distribución chi-cuadrado exacta.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Introduce la razón R = σ₁/σ₀, el nivel de significación, la potencia deseada y el tipo de alternativa para obtener el tamaño muestral mínimo.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Introduce la razón R = σ₁/σ₀, el nivel de significación, la potencia deseada y el tipo de alternativa para obtener el tamaño muestral mínimo.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="varR">Razón R = σ₁/σ₀ <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="varR" value="1.5" step="0.05" min="0.01">
-                        <p class="field-hint" hidden>Cociente entre la desviación estándar real bajo H₁ y la hipotética bajo H₀ que quieres poder detectar. <strong>R = 1,5</strong> (incremento del 50 %) es un efecto moderado; R = 2 se detecta con muestras más pequeñas.</p>
+                <div class="form-grid sample-grid" id="varForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="varR">Razón R = σ₁/σ₀ <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="varR" value="1.5" step="0.05" min="0.01">
+                            <p class="field-hint" hidden>Cociente entre la desviación estándar real bajo H₁ y la hipotética bajo H₀ que quieres poder detectar. <strong>R = 1,5</strong> (incremento del 50 %) es un efecto moderado; R = 2 se detecta con muestras más pequeñas.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="varAlternative">Hipótesis alternativa <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <select id="varAlternative">
+                                <option value="two-sided">Ha: σ ≠ σ0</option>
+                                <option value="greater">Ha: σ ≥ σ0</option>
+                                <option value="less">Ha: σ ≤ σ0</option>
+                            </select>
+                            <p class="field-hint" hidden>Bilateral si no tienes dirección previa; unilateral superior es habitual en control de calidad para detectar solo incrementos de variabilidad.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="varAlternative">Hipótesis alternativa <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <select id="varAlternative">
-                            <option value="two-sided">Ha: σ ≠ σ0</option>
-                            <option value="greater">Ha: σ ≥ σ0</option>
-                            <option value="less">Ha: σ ≤ σ0</option>
-                        </select>
-                        <p class="field-hint" hidden>Bilateral si no tienes dirección previa; unilateral superior es habitual en control de calidad para detectar solo incrementos de variabilidad.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="varAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="varAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Riesgo de rechazar H₀ siendo cierta. <strong>0,05</strong> es el estándar; usa 0,01 para decisiones con consecuencias críticas.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="varPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="varPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                            <p class="field-hint" hidden>Probabilidad de detectar la desviación de varianza si es real. <strong>0,80</strong> es el mínimo habitual; usa 0,90 si los falsos negativos son costosos.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="varAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="varAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Riesgo de rechazar H₀ siendo cierta. <strong>0,05</strong> es el estándar; usa 0,01 para decisiones con consecuencias críticas.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="varPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="varPower" value="0.8" step="0.01" min="0.5" max="0.999">
-                        <p class="field-hint" hidden>Probabilidad de detectar la desviación de varianza si es real. <strong>0,80</strong> es el mínimo habitual; usa 0,90 si los falsos negativos son costosos.</p>
-                    </div>
-                </div>
-            </div>
+            </section>
 
-            <button class="calculate-btn" id="varCalculateBtn">Calcular tamaño muestral</button>
-            <div id="varResult" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Curva de potencia según el tamaño muestral</h3>
-                <canvas id="varChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
-                <p class="ss-chart-note" id="varChartNote"></p>
-            </div>
+            <div id="varResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Curva de potencia según el tamaño muestral</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="varChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="varChartNote"></p>
+                </div>
+                <p class="ss-chart-empty">Revisa los parámetros: el gráfico aparecerá cuando sean válidos.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -272,7 +279,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-2"></script>
+<script src="sample-size-charts.js?v=20261101-3"></script>
 <script>
 function powerOneVariance(n, R, alpha, alternative) {
     const df = n - 1;
@@ -334,7 +341,7 @@ function calculateOneVarianceSampleSize() {
     });
 }
 
-document.getElementById('varCalculateBtn').addEventListener('click', calculateOneVarianceSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('varForm', calculateOneVarianceSampleSize);
 calculateOneVarianceSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

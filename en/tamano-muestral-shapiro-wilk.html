@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-2">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -149,64 +149,71 @@
     <main>
         <p class="tool-intro">Estimate the number of observations needed for the Shapiro–Wilk test to detect deviations from normality with the target power, using the Jarque–Bera approximation.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Enter the skewness and excess kurtosis of the alternative distribution, the significance level and the desired power.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Enter the skewness and excess kurtosis of the alternative distribution, the significance level and the desired power.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="swGamma1">Expected skewness under H₁ (γ₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="swGamma1" value="2.0" step="0.1" min="-10" max="10">
-                        <p class="field-hint" hidden>Skewness of the alternative distribution: <strong>0</strong> is symmetric; the larger |γ₁| is (e.g. &gt; 1.5), the easier it is to detect with small samples.</p>
+                <div class="form-grid sample-grid" id="swForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="swGamma1">Expected skewness under H₁ (γ₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="swGamma1" value="2.0" step="0.1" min="-10" max="10">
+                            <p class="field-hint" hidden>Skewness of the alternative distribution: <strong>0</strong> is symmetric; the larger |γ₁| is (e.g. &gt; 1.5), the easier it is to detect with small samples.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="swGamma2">Expected excess kurtosis under H₁ (γ₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="swGamma2" value="6.0" step="0.1" min="-2" max="200">
+                            <p class="field-hint" hidden>Heaviness of the tails relative to the normal: <strong>0</strong> corresponds to the normal. Detecting kurtosis alone (with γ₁ = 0) requires considerably larger samples than detecting skewness.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="swGamma2">Expected excess kurtosis under H₁ (γ₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="swGamma2" value="6.0" step="0.1" min="-2" max="200">
-                        <p class="field-hint" hidden>Heaviness of the tails relative to the normal: <strong>0</strong> corresponds to the normal. Detecting kurtosis alone (with γ₁ = 0) requires considerably larger samples than detecting skewness.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="swAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="swAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>False-positive risk you accept. The standard value is <strong>0.05</strong>.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="swPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="swPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                            <p class="field-hint" hidden>Probability of detecting the departure from normality if it really exists. The usual minimum is <strong>0.80</strong>; use 0.90 if a failure of normality has serious consequences.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="swAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="swAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>False-positive risk you accept. The standard value is <strong>0.05</strong>.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="swPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="swPower" value="0.80" step="0.01" min="0.5" max="0.999">
-                        <p class="field-hint" hidden>Probability of detecting the departure from normality if it really exists. The usual minimum is <strong>0.80</strong>; use 0.90 if a failure of normality has serious consequences.</p>
+
+                <div class="form-group" style="margin-top:1rem;">
+                    <label>Quick reference distributions</label>
+                    <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.4rem;">
+                        <button type="button" class="calculate-btn" style="width:auto; padding:7px 14px; font-size:0.85rem; font-weight:600;" onclick="applyPreset(2, 6)">Exponential</button>
+                        <button type="button" class="calculate-btn" style="width:auto; padding:7px 14px; font-size:0.85rem; font-weight:600;" onclick="applyPreset(0, -1.2)">Uniform</button>
+                        <button type="button" class="calculate-btn" style="width:auto; padding:7px 14px; font-size:0.85rem; font-weight:600;" onclick="applyPreset(1.75, 5.9)">Log-normal (σ=0.5)</button>
+                        <button type="button" class="calculate-btn" style="width:auto; padding:7px 14px; font-size:0.85rem; font-weight:600;" onclick="applyPreset(0, 6)">Student's t (5 df)</button>
+                        <button type="button" class="calculate-btn" style="width:auto; padding:7px 14px; font-size:0.85rem; font-weight:600;" onclick="applyPreset(0, 3)">Laplace</button>
+                        <button type="button" class="calculate-btn" style="width:auto; padding:7px 14px; font-size:0.85rem; font-weight:600;" onclick="applyPreset(2, 6)">Chi²(2)</button>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="form-group" style="margin-top:1rem;">
-                <label>Quick reference distributions</label>
-                <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.4rem;">
-                    <button type="button" class="calculate-btn" style="width:auto; padding:7px 14px; font-size:0.85rem; font-weight:600;" onclick="applyPreset(2, 6)">Exponential</button>
-                    <button type="button" class="calculate-btn" style="width:auto; padding:7px 14px; font-size:0.85rem; font-weight:600;" onclick="applyPreset(0, -1.2)">Uniform</button>
-                    <button type="button" class="calculate-btn" style="width:auto; padding:7px 14px; font-size:0.85rem; font-weight:600;" onclick="applyPreset(1.75, 5.9)">Log-normal (σ=0.5)</button>
-                    <button type="button" class="calculate-btn" style="width:auto; padding:7px 14px; font-size:0.85rem; font-weight:600;" onclick="applyPreset(0, 6)">Student's t (5 df)</button>
-                    <button type="button" class="calculate-btn" style="width:auto; padding:7px 14px; font-size:0.85rem; font-weight:600;" onclick="applyPreset(0, 3)">Laplace</button>
-                    <button type="button" class="calculate-btn" style="width:auto; padding:7px 14px; font-size:0.85rem; font-weight:600;" onclick="applyPreset(2, 6)">Chi²(2)</button>
+            <div id="swResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Power curve by sample size</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="swChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="swChartNote"></p>
                 </div>
-            </div>
+                <p class="ss-chart-empty">Check the parameters: the chart will appear once they are valid.</p>
 
-            <button class="calculate-btn" id="swCalculateBtn" style="margin-top:1.25rem;">Calculate sample size</button>
-            <div id="swResult" class="result-box">Result pending…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Power curve by sample size</h3>
-                <canvas id="swChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
-                <p class="ss-chart-note" id="swChartNote"></p>
-            </div>
-
-            <div style="margin-top:1rem; padding:0.75rem 1rem; background:var(--surface-alt, #f8f9fc); border-radius:8px; border-left:3px solid var(--accent, #4f46e5); font-size:0.875rem; color:var(--text-muted, #6b7280);">
-                <strong>Notes:</strong>
-                (a) This calculation is only indicative: it relies on the asymptotic Jarque–Bera approximation, which with small samples can be very optimistic against skewed or heavy-tailed alternatives (it underestimates the required n) and pessimistic against light-tailed alternatives such as the uniform. If the sample size matters, verify it by simulation.
-                (b) The Shapiro–Wilk test is valid for 3 ≤ n ≤ 5000; n ≥ 8 is recommended for reasonable power.
-            </div>
+                <div style="margin-top:1rem; padding:0.75rem 1rem; background:var(--surface-alt, #f8f9fc); border-radius:8px; border-left:3px solid var(--accent, #4f46e5); font-size:0.875rem; color:var(--text-muted, #6b7280);">
+                    <strong>Notes:</strong>
+                    (a) This calculation is only indicative: it relies on the asymptotic Jarque–Bera approximation, which with small samples can be very optimistic against skewed or heavy-tailed alternatives (it underestimates the required n) and pessimistic against light-tailed alternatives such as the uniform. If the sample size matters, verify it by simulation.
+                    (b) The Shapiro–Wilk test is valid for 3 ≤ n ≤ 5000; n ≥ 8 is recommended for reasonable power.
+                </div>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -354,7 +361,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../sample-size-charts.js?v=20261101-2"></script>
+<script src="../sample-size-charts.js?v=20261101-3"></script>
 <script>
 function ncChiSqCDF(x, df, lambda) {
     if (x <= 0) return 0;
@@ -428,7 +435,7 @@ function calculateSWsampleSize() {
     });
 }
 
-document.getElementById('swCalculateBtn').addEventListener('click', calculateSWsampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('swForm', calculateSWsampleSize);
 calculateSWsampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>

@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-2">
     <style>
         .theory-table-wrap { margin: 10px 0 16px; overflow-x: auto; border-radius: 12px; border: 1px solid rgba(79, 70, 229, 0.18); }
         .theory-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; line-height: 1.5; font-variant-numeric: tabular-nums; }
@@ -169,67 +169,74 @@
     <main>
         <p class="tool-intro">Esta calculadora determina el tamaño de muestra necesario para que un test chi-cuadrado de independencia detecte una asociación entre dos variables categóricas con la potencia objetivo, a partir de la \(w\) de Cohen y las dimensiones de la tabla.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Introduce la w de Cohen, los grados de libertad de la tabla, el nivel de significación y la potencia deseada.</p>
-            </div>
-
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="chiW">Tamaño de efecto w de Cohen <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="chiW" value="0.3" step="0.01" min="0.001" max="5">
-                        <p class="field-hint" hidden>Tamaño del efecto de asociación entre las variables categóricas. Valores orientativos: <strong>0,1</strong> pequeño, <strong>0,3</strong> mediano (el más habitual), <strong>0,5</strong> grande.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="chiDf">Grados de libertad df = (r−1)(c−1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="chiDf" value="1" step="1" min="1">
-                        <p class="field-hint" hidden>Grados de libertad de la tabla de contingencia: (nº filas − 1) × (nº columnas − 1). Para una tabla 2×2, df = 1.</p>
-                    </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Introduce la w de Cohen, los grados de libertad de la tabla, el nivel de significación y la potencia deseada.</p>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="chiAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="chiAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Nivel de significación del test. El valor estándar es <strong>0,05</strong>.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="chiPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="chiPower" value="0.8" step="0.01" min="0.5" max="0.999">
-                        <p class="field-hint" hidden>Probabilidad de detectar la asociación si realmente existe. <strong>0,80</strong> es el mínimo habitual; 0,90 para estudios confirmatorios.</p>
-                    </div>
-                </div>
-            </div>
 
-            <button class="calculate-btn" id="chiCalculateBtn">Calcular tamaño muestral</button>
-            <div id="chiResult" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Curva de potencia según el tamaño muestral</h3>
-                <canvas id="chiChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
-                <p class="ss-chart-note" id="chiChartNote"></p>
-            </div>
-
-            <details style="margin-top:1.5rem;">
-                <summary style="cursor:pointer; font-weight:600; color:var(--primary);">Asistente para tablas 2×2: calcular w desde p₁ y p₂</summary>
-                <div style="margin-top:1rem;">
-                    <p style="font-size:0.9rem; color:var(--text-muted);">Introduce las proporciones de los dos grupos para calcular automáticamente w y actualizarla en el campo superior.</p>
+                <div class="form-grid sample-grid" id="chiForm">
                     <div class="inline-inputs">
                         <div class="form-group">
-                            <label for="chiP1">Proporción grupo 1 (p₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                            <input type="number" id="chiP1" value="0.4" step="0.01" min="0.001" max="0.999">
-                            <p class="field-hint" hidden>Proporción observada o esperada en el primer grupo, para tablas 2×2.</p>
+                            <label for="chiW">Tamaño de efecto w de Cohen <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="chiW" value="0.3" step="0.01" min="0.001" max="5">
+                            <p class="field-hint" hidden>Tamaño del efecto de asociación entre las variables categóricas. Valores orientativos: <strong>0,1</strong> pequeño, <strong>0,3</strong> mediano (el más habitual), <strong>0,5</strong> grande.</p>
                         </div>
                         <div class="form-group">
-                            <label for="chiP2">Proporción grupo 2 (p₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                            <input type="number" id="chiP2" value="0.6" step="0.01" min="0.001" max="0.999">
-                            <p class="field-hint" hidden>Proporción observada o esperada en el segundo grupo, para tablas 2×2.</p>
+                            <label for="chiDf">Grados de libertad df = (r−1)(c−1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="chiDf" value="1" step="1" min="1">
+                            <p class="field-hint" hidden>Grados de libertad de la tabla de contingencia: (nº filas − 1) × (nº columnas − 1). Para una tabla 2×2, df = 1.</p>
                         </div>
                     </div>
-                    <button class="calculate-btn" id="chiWBtn" style="margin-top:0.5rem;">Calcular w y actualizar</button>
-                    <div id="chiWResult" style="margin-top:0.5rem; font-size:0.9rem;"></div>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="chiAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="chiAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Nivel de significación del test. El valor estándar es <strong>0,05</strong>.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="chiPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="chiPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                            <p class="field-hint" hidden>Probabilidad de detectar la asociación si realmente existe. <strong>0,80</strong> es el mínimo habitual; 0,90 para estudios confirmatorios.</p>
+                        </div>
+                    </div>
                 </div>
-            </details>
+
+                <details style="margin-top:1.5rem;">
+                    <summary style="cursor:pointer; font-weight:600; color:var(--primary);">Asistente para tablas 2×2: calcular w desde p₁ y p₂</summary>
+                    <div style="margin-top:1rem;">
+                        <p style="font-size:0.9rem; color:var(--text-muted);">Introduce las proporciones de los dos grupos para calcular automáticamente w y actualizarla en el campo superior.</p>
+                        <div class="inline-inputs">
+                            <div class="form-group">
+                                <label for="chiP1">Proporción grupo 1 (p₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                                <input type="number" id="chiP1" value="0.4" step="0.01" min="0.001" max="0.999">
+                                <p class="field-hint" hidden>Proporción observada o esperada en el primer grupo, para tablas 2×2.</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="chiP2">Proporción grupo 2 (p₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                                <input type="number" id="chiP2" value="0.6" step="0.01" min="0.001" max="0.999">
+                                <p class="field-hint" hidden>Proporción observada o esperada en el segundo grupo, para tablas 2×2.</p>
+                            </div>
+                        </div>
+                        <button class="calculate-btn" id="chiWBtn" style="margin-top:0.5rem;">Calcular w y actualizar</button>
+                        <div id="chiWResult" style="margin-top:0.5rem; font-size:0.9rem;"></div>
+                    </div>
+                </details>
+            </section>
+
+            <div id="chiResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Curva de potencia según el tamaño muestral</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="chiChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="chiChartNote"></p>
+                </div>
+                <p class="ss-chart-empty">Revisa los parámetros: el gráfico aparecerá cuando sean válidos.</p>
+            </section>
         </section>
 
         <section class="card content-card">
@@ -369,7 +376,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-2"></script>
+<script src="sample-size-charts.js?v=20261101-3"></script>
 <script>
 function ncChiSqCDF(x, df, lambda) {
     if (x <= 0) return 0;
@@ -441,8 +448,8 @@ function calculateWFromProportions() {
     document.getElementById('chiDf').value = 1;
 }
 
-document.getElementById('chiCalculateBtn').addEventListener('click', calculateChiIndSampleSize);
-document.getElementById('chiWBtn').addEventListener('click', calculateWFromProportions);
+window.SampleSizeCharts && SampleSizeCharts.live('chiForm', calculateChiIndSampleSize);
+document.getElementById('chiWBtn').addEventListener('click', function () { calculateWFromProportions(); calculateChiIndSampleSize(); });
 calculateChiIndSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

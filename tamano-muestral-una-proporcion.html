@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-2">
 
     <script type="application/ld+json">
 {
@@ -158,42 +158,49 @@
     <main>
         <p class="tool-intro">Calcula el tamaño mínimo de muestra para estimar una proporción con el margen de error y el nivel de confianza que desees. Útil en encuestas y estudios de prevalencia.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Introduce tus supuestos y obtén el tamaño muestral mínimo recomendado para una proporción.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Introduce tus supuestos y obtén el tamaño muestral mínimo recomendado para una proporción.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="onePropP">Proporción esperada (p) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="onePropP" value="0.5" step="0.01" min="0.0001" max="0.9999">
-                        <p class="field-hint" hidden>Estimación previa del valor que buscas (entre 0 y 1). Si no tienes datos previos, deja <strong>0,5</strong>: es el escenario conservador que da la muestra más grande posible.</p>
+                <div class="form-grid sample-grid" id="onePropForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="onePropP">Proporción esperada (p) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="onePropP" value="0.5" step="0.01" min="0.0001" max="0.9999">
+                            <p class="field-hint" hidden>Estimación previa del valor que buscas (entre 0 y 1). Si no tienes datos previos, deja <strong>0,5</strong>: es el escenario conservador que da la muestra más grande posible.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="onePropE">Margen de error (E) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="onePropE" value="0.05" step="0.001" min="0.0001" max="0.9999">
+                            <p class="field-hint" hidden>Precisión que quieres para tu estimación, en puntos porcentuales. Ej.: 0,05 significa ±5 puntos. Cuanto más pequeño, más muestra hace falta.</p>
+                        </div>
                     </div>
+
                     <div class="form-group">
-                        <label for="onePropE">Margen de error (E) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="onePropE" value="0.05" step="0.001" min="0.0001" max="0.9999">
-                        <p class="field-hint" hidden>Precisión que quieres para tu estimación, en puntos porcentuales. Ej.: 0,05 significa ±5 puntos. Cuanto más pequeño, más muestra hace falta.</p>
+                        <label for="onePropConfidence">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                        <input type="number" id="onePropConfidence" value="95" step="any" min="0.01" max="99.99" inputmode="decimal">
+                        <p class="field-hint" hidden>Probabilidad de que el intervalo resultante contenga el valor real. 95 % es el estándar habitual en encuestas y estudios de salud. Puedes introducir cualquier valor entre 0 y 100 (por ejemplo, 97,5).</p>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="onePropConfidence">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                    <input type="number" id="onePropConfidence" value="95" step="any" min="0.01" max="99.99" inputmode="decimal">
-                    <p class="field-hint" hidden>Probabilidad de que el intervalo resultante contenga el valor real. 95 % es el estándar habitual en encuestas y estudios de salud. Puedes introducir cualquier valor entre 0 y 100 (por ejemplo, 97,5).</p>
+                <p class="example-hint"><strong>Ejemplo con los valores por defecto:</strong> una encuesta de satisfacción donde no conoces de antemano el porcentaje de clientes satisfechos (p = 0,5), quieres un margen de error de ±5 puntos y un 95 % de confianza. Resultado: 385 respuestas mínimas (ver el ejemplo resuelto completo más abajo).</p>
+            </section>
+
+            <div id="onePropResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Cómo cambia n con el margen de error</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="onePropChart" role="img" aria-label="Gráfico de líneas: tamaño muestral n en función del margen de error para el nivel de confianza elegido y los niveles ±5 puntos"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="onePropChartNote"></p>
                 </div>
-            </div>
-
-            <p class="example-hint"><strong>Ejemplo con los valores por defecto:</strong> una encuesta de satisfacción donde no conoces de antemano el porcentaje de clientes satisfechos (p = 0,5), quieres un margen de error de ±5 puntos y un 95 % de confianza. Resultado: 385 respuestas mínimas (ver el ejemplo resuelto completo más abajo).</p>
-
-            <button class="calculate-btn" id="onePropCalculateBtn">Calcular tamaño muestral</button>
-            <div id="onePropResult" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Cómo cambia n con el margen de error</h3>
-                <canvas id="onePropChart" role="img" aria-label="Gráfico de líneas: tamaño muestral n en función del margen de error para el nivel de confianza elegido y los niveles ±5 puntos"></canvas>
-                <p class="ss-chart-note" id="onePropChartNote"></p>
-            </div>
+                <p class="ss-chart-empty">Revisa los parámetros: el gráfico aparecerá cuando sean válidos.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -294,7 +301,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-2"></script>
+<script src="sample-size-charts.js?v=20261101-3"></script>
 <script>
 function refreshMathJaxOneProp() {
     if (window.MathJax?.typesetPromise) {
@@ -342,7 +349,7 @@ function calculateOnePropSampleSize() {
     refreshMathJaxOneProp();
 }
 
-document.getElementById("onePropCalculateBtn").addEventListener("click", calculateOnePropSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('onePropForm', calculateOnePropSampleSize);
 calculateOnePropSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

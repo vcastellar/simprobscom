@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-2">
     <style>
         .theory-table-wrap { margin: 10px 0 16px; overflow-x: auto; border-radius: 12px; border: 1px solid rgba(79, 70, 229, 0.18); }
         .theory-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; line-height: 1.5; font-variant-numeric: tabular-nums; }
@@ -169,65 +169,72 @@
     <main>
         <p class="tool-intro">Usa esta herramienta para planificar un test chi-cuadrado de bondad de ajuste: calcula cuántas observaciones necesitas para detectar, con la potencia deseada, que tus datos se apartan de una distribución teórica. El efecto se expresa con la \(w\) de Cohen.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Introduce la w de Cohen, el número de categorías k, el nivel de significación y la potencia deseada.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Introduce la w de Cohen, el número de categorías k, el nivel de significación y la potencia deseada.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="bondadW">Tamaño de efecto w de Cohen <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="bondadW" value="0.3" step="0.01" min="0.001" max="5">
-                        <p class="field-hint" hidden>Cuánto se aleja la distribución esperada de la teórica: <strong>0,1</strong> (pequeño), <strong>0,3</strong> (mediano), <strong>0,5</strong> (grande) según Cohen. Usa el asistente de abajo si conoces las proporciones esperadas.</p>
+                <div class="form-grid sample-grid" id="bondadForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="bondadW">Tamaño de efecto w de Cohen <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="bondadW" value="0.3" step="0.01" min="0.001" max="5">
+                            <p class="field-hint" hidden>Cuánto se aleja la distribución esperada de la teórica: <strong>0,1</strong> (pequeño), <strong>0,3</strong> (mediano), <strong>0,5</strong> (grande) según Cohen. Usa el asistente de abajo si conoces las proporciones esperadas.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="bondadK">Número de categorías (k) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="bondadK" value="5" step="1" min="2">
+                            <p class="field-hint" hidden>Número total de categorías de la variable. Los grados de libertad del test son <strong>df = k − 1</strong> (sin parámetros estimados).</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="bondadK">Número de categorías (k) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="bondadK" value="5" step="1" min="2">
-                        <p class="field-hint" hidden>Número total de categorías de la variable. Los grados de libertad del test son <strong>df = k − 1</strong> (sin parámetros estimados).</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="bondadAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="bondadAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Riesgo de falso positivo que aceptas. El valor habitual es <strong>0,05</strong>.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="bondadPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="bondadPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                            <p class="field-hint" hidden>Probabilidad de detectar la desviación de la distribución teórica si realmente existe. El valor habitual es <strong>0,80</strong> (80 %).</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="bondadAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="bondadAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Riesgo de falso positivo que aceptas. El valor habitual es <strong>0,05</strong>.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="bondadPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="bondadPower" value="0.8" step="0.01" min="0.5" max="0.999">
-                        <p class="field-hint" hidden>Probabilidad de detectar la desviación de la distribución teórica si realmente existe. El valor habitual es <strong>0,80</strong> (80 %).</p>
-                    </div>
-                </div>
-            </div>
 
-            <button class="calculate-btn" id="bondadCalculateBtn">Calcular tamaño muestral</button>
-            <div id="bondadResult" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Curva de potencia según el tamaño muestral</h3>
-                <canvas id="bondadChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
-                <p class="ss-chart-note" id="bondadChartNote"></p>
-            </div>
+                <details style="margin-top:1.5rem;">
+                    <summary style="cursor:pointer; font-weight:600; color:var(--primary);">Asistente: calcular w desde proporciones observadas y teóricas</summary>
+                    <div style="margin-top:1rem;">
+                        <p style="font-size:0.9rem; color:var(--text-muted);">Introduce las proporciones bajo H1 (observadas esperadas) y bajo H0 (teóricas) separadas por comas. El número de valores debe ser igual a k.</p>
+                        <div class="form-group">
+                            <label for="bondadPObs">Proporciones H1 (p_obs) — separadas por comas <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="text" id="bondadPObs" value="0.30, 0.25, 0.20, 0.15, 0.10" style="width:100%;">
+                            <p class="field-hint" hidden>Proporciones que esperas observar en cada categoría bajo la hipótesis alternativa; deben tener tantos valores como categorías k.</p>
+                        </div>
+                        <div class="form-group" style="margin-top:0.5rem;">
+                            <label for="bondadPTeo">Proporciones H0 (p_teo) — separadas por comas <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="text" id="bondadPTeo" value="0.20, 0.20, 0.20, 0.20, 0.20" style="width:100%;">
+                            <p class="field-hint" hidden>Proporciones teóricas de referencia bajo H0 para cada categoría (p. ej., 0,20 en cada una de 5 categorías si esperas una distribución uniforme).</p>
+                        </div>
+                        <button class="calculate-btn" id="bondadWBtn" style="margin-top:0.5rem;">Calcular w y actualizar</button>
+                        <div id="bondadWResult" style="margin-top:0.5rem; font-size:0.9rem;"></div>
+                    </div>
+                </details>
+            </section>
 
-            <details style="margin-top:1.5rem;">
-                <summary style="cursor:pointer; font-weight:600; color:var(--primary);">Asistente: calcular w desde proporciones observadas y teóricas</summary>
-                <div style="margin-top:1rem;">
-                    <p style="font-size:0.9rem; color:var(--text-muted);">Introduce las proporciones bajo H1 (observadas esperadas) y bajo H0 (teóricas) separadas por comas. El número de valores debe ser igual a k.</p>
-                    <div class="form-group">
-                        <label for="bondadPObs">Proporciones H1 (p_obs) — separadas por comas <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="text" id="bondadPObs" value="0.30, 0.25, 0.20, 0.15, 0.10" style="width:100%;">
-                        <p class="field-hint" hidden>Proporciones que esperas observar en cada categoría bajo la hipótesis alternativa; deben tener tantos valores como categorías k.</p>
+            <div id="bondadResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Curva de potencia según el tamaño muestral</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="bondadChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
                     </div>
-                    <div class="form-group" style="margin-top:0.5rem;">
-                        <label for="bondadPTeo">Proporciones H0 (p_teo) — separadas por comas <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="text" id="bondadPTeo" value="0.20, 0.20, 0.20, 0.20, 0.20" style="width:100%;">
-                        <p class="field-hint" hidden>Proporciones teóricas de referencia bajo H0 para cada categoría (p. ej., 0,20 en cada una de 5 categorías si esperas una distribución uniforme).</p>
-                    </div>
-                    <button class="calculate-btn" id="bondadWBtn" style="margin-top:0.5rem;">Calcular w y actualizar</button>
-                    <div id="bondadWResult" style="margin-top:0.5rem; font-size:0.9rem;"></div>
+                    <p class="ss-chart-note" id="bondadChartNote"></p>
                 </div>
-            </details>
+                <p class="ss-chart-empty">Revisa los parámetros: el gráfico aparecerá cuando sean válidos.</p>
+            </section>
         </section>
 
         <section class="card content-card">
@@ -378,7 +385,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-2"></script>
+<script src="sample-size-charts.js?v=20261101-3"></script>
 <script>
 function ncChiSqCDF(x, df, lambda) {
     if (x <= 0) return 0;
@@ -470,8 +477,8 @@ function calculateWFromCategories() {
     resEl.innerText = `w calculada = ${w.toFixed(4)}  |  k = ${k}  |  df = ${k - 1}`;
 }
 
-document.getElementById('bondadCalculateBtn').addEventListener('click', calculateBondadSampleSize);
-document.getElementById('bondadWBtn').addEventListener('click', calculateWFromCategories);
+window.SampleSizeCharts && SampleSizeCharts.live('bondadForm', calculateBondadSampleSize);
+document.getElementById('bondadWBtn').addEventListener('click', function () { calculateWFromCategories(); calculateBondadSampleSize(); });
 calculateBondadSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

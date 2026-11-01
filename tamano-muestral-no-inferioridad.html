@@ -74,7 +74,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-2">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -125,64 +125,71 @@
     <main>
         <p class="tool-intro">Esta herramienta planifica ensayos de <strong>no inferioridad</strong> o <strong>equivalencia</strong>: calcula el tamaño de muestra para demostrar que un tratamiento nuevo no es peor (o es intercambiable) respecto a uno de referencia, dado un margen clínico.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Selecciona el tipo de ensayo y configura los parámetros del diseño.</p>
-            </div>
-
-            <div class="form-grid sample-grid">
-                <div class="form-group">
-                    <label for="niType">Tipo de ensayo <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                    <select id="niType">
-                        <option value="ni" selected>No inferioridad (unilateral)</option>
-                        <option value="eq">Equivalencia — TOST (bilateral)</option>
-                    </select>
-                    <p class="field-hint" hidden>Elige <strong>no inferioridad</strong> si solo quieres demostrar que el tratamiento nuevo no es peor que el de referencia. Elige <strong>equivalencia</strong> si necesitas demostrar que ambos son intercambiables (la diferencia cae dentro de ±M en cualquier dirección).</p>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Selecciona el tipo de ensayo y configura los parámetros del diseño.</p>
                 </div>
 
-                <div class="inline-inputs">
+                <div class="form-grid sample-grid" id="niForm">
                     <div class="form-group">
-                        <label for="niSigma">Desviación estándar común (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="niSigma" value="10" step="0.1" min="0.0001">
-                        <p class="field-hint" hidden>Variabilidad esperada de lo que mides, en las mismas unidades (ej. mmHg, kg). Se estima con datos de estudios previos o un piloto.</p>
+                        <label for="niType">Tipo de ensayo <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                        <select id="niType">
+                            <option value="ni" selected>No inferioridad (unilateral)</option>
+                            <option value="eq">Equivalencia — TOST (bilateral)</option>
+                        </select>
+                        <p class="field-hint" hidden>Elige <strong>no inferioridad</strong> si solo quieres demostrar que el tratamiento nuevo no es peor que el de referencia. Elige <strong>equivalencia</strong> si necesitas demostrar que ambos son intercambiables (la diferencia cae dentro de ±M en cualquier dirección).</p>
                     </div>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="niSigma">Desviación estándar común (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="niSigma" value="10" step="0.1" min="0.0001">
+                            <p class="field-hint" hidden>Variabilidad esperada de lo que mides, en las mismas unidades (ej. mmHg, kg). Se estima con datos de estudios previos o un piloto.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="niMargin">Margen M (positivo) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="niMargin" value="5" step="0.1" min="0.0001">
+                            <p class="field-hint" hidden>La mayor diferencia que consideras clínicamente irrelevante, fijada <strong>antes</strong> de ver los datos. Ej.: 5 mmHg en un ensayo de presión arterial.</p>
+                        </div>
+                    </div>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="niDelta" id="niDeltaLabel">Diferencia asumida (δ = μT − μC) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="niDelta" value="0" step="0.1">
+                            <p class="field-hint" hidden>Diferencia real que supones entre tratamientos. 0 es lo habitual (asumes que tienen el mismo efecto medio).</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="niAlpha">Alfa (α) — unilateral <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="niAlpha" value="0.025" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Riesgo de falso positivo que aceptas. El estándar regulatorio (EMA/FDA) es 0,025, equivalente a un IC del 95 % para la diferencia.</p>
+                        </div>
+                    </div>
+
                     <div class="form-group">
-                        <label for="niMargin">Margen M (positivo) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="niMargin" value="5" step="0.1" min="0.0001">
-                        <p class="field-hint" hidden>La mayor diferencia que consideras clínicamente irrelevante, fijada <strong>antes</strong> de ver los datos. Ej.: 5 mmHg en un ensayo de presión arterial.</p>
+                        <label for="niPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                        <input type="number" id="niPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                        <p class="field-hint" hidden>Probabilidad de detectar la no inferioridad si realmente existe. 0,80 es el mínimo habitual; 0,90 en estudios pivotales.</p>
                     </div>
                 </div>
 
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="niDelta" id="niDeltaLabel">Diferencia asumida (δ = μT − μC) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="niDelta" value="0" step="0.1">
-                        <p class="field-hint" hidden>Diferencia real que supones entre tratamientos. 0 es lo habitual (asumes que tienen el mismo efecto medio).</p>
+                <p class="example-hint"><strong>Ejemplo con los valores por defecto:</strong> un fármaco genérico frente al de referencia, con σ = 10 mmHg de variabilidad, un margen de no inferioridad de 5 mmHg, δ = 0 y potencia del 80 %. Resultado: 63 pacientes por grupo (ver el ejemplo resuelto completo más abajo).</p>
+            </section>
+
+            <div id="niResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Curva de potencia según el tamaño muestral</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="niChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
                     </div>
-                    <div class="form-group">
-                        <label for="niAlpha">Alfa (α) — unilateral <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="niAlpha" value="0.025" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Riesgo de falso positivo que aceptas. El estándar regulatorio (EMA/FDA) es 0,025, equivalente a un IC del 95 % para la diferencia.</p>
-                    </div>
+                    <p class="ss-chart-note" id="niChartNote"></p>
                 </div>
-
-                <div class="form-group">
-                    <label for="niPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                    <input type="number" id="niPower" value="0.80" step="0.01" min="0.5" max="0.999">
-                    <p class="field-hint" hidden>Probabilidad de detectar la no inferioridad si realmente existe. 0,80 es el mínimo habitual; 0,90 en estudios pivotales.</p>
-                </div>
-            </div>
-
-            <p class="example-hint"><strong>Ejemplo con los valores por defecto:</strong> un fármaco genérico frente al de referencia, con σ = 10 mmHg de variabilidad, un margen de no inferioridad de 5 mmHg, δ = 0 y potencia del 80 %. Resultado: 63 pacientes por grupo (ver el ejemplo resuelto completo más abajo).</p>
-
-            <button class="calculate-btn" id="niCalculateBtn">Calcular tamaño muestral</button>
-            <div id="niResult" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Curva de potencia según el tamaño muestral</h3>
-                <canvas id="niChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
-                <p class="ss-chart-note" id="niChartNote"></p>
-            </div>
+                <p class="ss-chart-empty">Revisa los parámetros: el gráfico aparecerá cuando sean válidos.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -284,7 +291,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-2"></script>
+<script src="sample-size-charts.js?v=20261101-3"></script>
 <script>
 function calculateNISampleSize() {
     window.SampleSizeCharts && SampleSizeCharts.clear('niChart');
@@ -331,7 +338,7 @@ function calculateNISampleSize() {
     }
 }
 
-document.getElementById("niCalculateBtn").addEventListener("click", calculateNISampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('niForm', calculateNISampleSize);
 calculateNISampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-2">
     <style>
         .theory-table-wrap { margin: 10px 0 16px; overflow-x: auto; border-radius: 12px; border: 1px solid rgba(79, 70, 229, 0.18); }
         .theory-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; line-height: 1.5; font-variant-numeric: tabular-nums; }
@@ -165,65 +165,72 @@
     <main>
         <p class="tool-intro">Use this tool to plan a chi-square goodness-of-fit test: calculate how many observations you need to detect, with the desired power, that your data depart from a theoretical distribution. The effect is expressed with Cohen's \(w\).</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Enter Cohen's w, the number of categories k, the significance level and the desired power.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Enter Cohen's w, the number of categories k, the significance level and the desired power.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="bondadW">Effect size, Cohen's w <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="bondadW" value="0.3" step="0.01" min="0.001" max="5">
-                        <p class="field-hint" hidden>How far the expected distribution departs from the theoretical one: <strong>0.1</strong> (small), <strong>0.3</strong> (medium), <strong>0.5</strong> (large) according to Cohen. Use the helper below if you know the expected proportions.</p>
+                <div class="form-grid sample-grid" id="bondadForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="bondadW">Effect size, Cohen's w <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="bondadW" value="0.3" step="0.01" min="0.001" max="5">
+                            <p class="field-hint" hidden>How far the expected distribution departs from the theoretical one: <strong>0.1</strong> (small), <strong>0.3</strong> (medium), <strong>0.5</strong> (large) according to Cohen. Use the helper below if you know the expected proportions.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="bondadK">Number of categories (k) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="bondadK" value="5" step="1" min="2">
+                            <p class="field-hint" hidden>Total number of categories of the variable. The degrees of freedom of the test are <strong>df = k − 1</strong> (with no estimated parameters).</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="bondadK">Number of categories (k) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="bondadK" value="5" step="1" min="2">
-                        <p class="field-hint" hidden>Total number of categories of the variable. The degrees of freedom of the test are <strong>df = k − 1</strong> (with no estimated parameters).</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="bondadAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="bondadAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>False-positive risk you accept. The usual value is <strong>0.05</strong>.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="bondadPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="bondadPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                            <p class="field-hint" hidden>Probability of detecting the departure from the theoretical distribution if it really exists. The usual value is <strong>0.80</strong> (80%).</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="bondadAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="bondadAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>False-positive risk you accept. The usual value is <strong>0.05</strong>.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="bondadPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="bondadPower" value="0.8" step="0.01" min="0.5" max="0.999">
-                        <p class="field-hint" hidden>Probability of detecting the departure from the theoretical distribution if it really exists. The usual value is <strong>0.80</strong> (80%).</p>
-                    </div>
-                </div>
-            </div>
 
-            <button class="calculate-btn" id="bondadCalculateBtn">Calculate sample size</button>
-            <div id="bondadResult" class="result-box">Result pending…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Power curve by sample size</h3>
-                <canvas id="bondadChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
-                <p class="ss-chart-note" id="bondadChartNote"></p>
-            </div>
+                <details style="margin-top:1.5rem;">
+                    <summary style="cursor:pointer; font-weight:600; color:var(--primary);">Wizard: calculate w from observed and theoretical proportions</summary>
+                    <div style="margin-top:1rem;">
+                        <p style="font-size:0.9rem; color:var(--text-muted);">Enter the proportions under H1 (expected observed) and under H0 (theoretical), separated by commas. The number of values must equal k.</p>
+                        <div class="form-group">
+                            <label for="bondadPObs">H1 proportions (p_obs) — comma separated <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="text" id="bondadPObs" value="0.30, 0.25, 0.20, 0.15, 0.10" style="width:100%;">
+                            <p class="field-hint" hidden>Proportions you expect to observe in each category under the alternative hypothesis; there must be as many values as categories k.</p>
+                        </div>
+                        <div class="form-group" style="margin-top:0.5rem;">
+                            <label for="bondadPTeo">H0 proportions (p_teo) — comma separated <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="text" id="bondadPTeo" value="0.20, 0.20, 0.20, 0.20, 0.20" style="width:100%;">
+                            <p class="field-hint" hidden>Theoretical reference proportions under H0 for each category (e.g. 0.20 in each of 5 categories if you expect a uniform distribution).</p>
+                        </div>
+                        <button class="calculate-btn" id="bondadWBtn" style="margin-top:0.5rem;">Calculate w and update</button>
+                        <div id="bondadWResult" style="margin-top:0.5rem; font-size:0.9rem;"></div>
+                    </div>
+                </details>
+            </section>
 
-            <details style="margin-top:1.5rem;">
-                <summary style="cursor:pointer; font-weight:600; color:var(--primary);">Wizard: calculate w from observed and theoretical proportions</summary>
-                <div style="margin-top:1rem;">
-                    <p style="font-size:0.9rem; color:var(--text-muted);">Enter the proportions under H1 (expected observed) and under H0 (theoretical), separated by commas. The number of values must equal k.</p>
-                    <div class="form-group">
-                        <label for="bondadPObs">H1 proportions (p_obs) — comma separated <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="text" id="bondadPObs" value="0.30, 0.25, 0.20, 0.15, 0.10" style="width:100%;">
-                        <p class="field-hint" hidden>Proportions you expect to observe in each category under the alternative hypothesis; there must be as many values as categories k.</p>
+            <div id="bondadResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Power curve by sample size</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="bondadChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
                     </div>
-                    <div class="form-group" style="margin-top:0.5rem;">
-                        <label for="bondadPTeo">H0 proportions (p_teo) — comma separated <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="text" id="bondadPTeo" value="0.20, 0.20, 0.20, 0.20, 0.20" style="width:100%;">
-                        <p class="field-hint" hidden>Theoretical reference proportions under H0 for each category (e.g. 0.20 in each of 5 categories if you expect a uniform distribution).</p>
-                    </div>
-                    <button class="calculate-btn" id="bondadWBtn" style="margin-top:0.5rem;">Calculate w and update</button>
-                    <div id="bondadWResult" style="margin-top:0.5rem; font-size:0.9rem;"></div>
+                    <p class="ss-chart-note" id="bondadChartNote"></p>
                 </div>
-            </details>
+                <p class="ss-chart-empty">Check the parameters: the chart will appear once they are valid.</p>
+            </section>
         </section>
 
         <section class="card content-card">
@@ -374,7 +381,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../sample-size-charts.js?v=20261101-2"></script>
+<script src="../sample-size-charts.js?v=20261101-3"></script>
 <script>
 function ncChiSqCDF(x, df, lambda) {
     if (x <= 0) return 0;
@@ -466,8 +473,8 @@ function calculateWFromCategories() {
     resEl.innerText = `w calculated = ${w.toFixed(4)}  |  k = ${k}  |  df = ${k - 1}`;
 }
 
-document.getElementById('bondadCalculateBtn').addEventListener('click', calculateBondadSampleSize);
-document.getElementById('bondadWBtn').addEventListener('click', calculateWFromCategories);
+window.SampleSizeCharts && SampleSizeCharts.live('bondadForm', calculateBondadSampleSize);
+document.getElementById('bondadWBtn').addEventListener('click', function () { calculateWFromCategories(); calculateBondadSampleSize(); });
 calculateBondadSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>

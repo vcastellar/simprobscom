@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-2">
 
     <script type="application/ld+json">
 {
@@ -154,45 +154,53 @@
     <main>
         <p class="tool-intro">This calculator adjusts the sample size to estimate a proportion when the total universe \(N\) is limited, applying the finite population correction factor.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Enter p, E, confidence level and N to get the minimum corrected sample size.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Enter p, E, confidence level and N to get the minimum corrected sample size.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="finitePropP">Expected proportion (p) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="finitePropP" value="0.5" step="0.01" min="0.0001" max="0.9999">
-                        <p class="field-hint" hidden>Prior estimate of the value you are after (between 0 and 1). If you have no prior data, leave <strong>0.5</strong>: it is the conservative scenario that gives the largest possible sample.</p>
+                <div class="form-grid sample-grid" id="finitePropForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="finitePropP">Expected proportion (p) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="finitePropP" value="0.5" step="0.01" min="0.0001" max="0.9999">
+                            <p class="field-hint" hidden>Prior estimate of the value you are after (between 0 and 1). If you have no prior data, leave <strong>0.5</strong>: it is the conservative scenario that gives the largest possible sample.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="finitePropE">Margin of error (E) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="finitePropE" value="0.05" step="0.001" min="0.0001" max="0.9999">
+                            <p class="field-hint" hidden>Maximum precision tolerated relative to the true value, in absolute percentage points. <strong>0.05</strong> (±5%) is common in organizational surveys.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="finitePropE">Margin of error (E) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="finitePropE" value="0.05" step="0.001" min="0.0001" max="0.9999">
-                        <p class="field-hint" hidden>Maximum precision tolerated relative to the true value, in absolute percentage points. <strong>0.05</strong> (±5%) is common in organizational surveys.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="finitePropN">Population size (N) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="finitePropN" value="2000" step="1" min="2">
+                            <p class="field-hint" hidden>Total, known size of the universe the sample comes from (e.g. number of employees, active customers). It must be a real count, not an estimate.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="finitePropConfidence">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="finitePropConfidence" value="95" step="any" min="0.01" max="99.99" inputmode="decimal">
+                            <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true value. <strong>95%</strong> is the usual standard. You can enter any value between 0 and 100 (e.g. 97.5).</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="finitePropN">Population size (N) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="finitePropN" value="2000" step="1" min="2">
-                        <p class="field-hint" hidden>Total, known size of the universe the sample comes from (e.g. number of employees, active customers). It must be a real count, not an estimate.</p>
+            </section>
+
+            <div id="finitePropResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">How n changes with the margin of error</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="finitePropChart" role="img" aria-label="Line chart: sample size n as a function of the margin of error for the chosen confidence level and the levels ±5 points"></canvas>
                     </div>
-                    <div class="form-group">
-                        <label for="finitePropConfidence">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="finitePropConfidence" value="95" step="any" min="0.01" max="99.99" inputmode="decimal">
-                        <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true value. <strong>95%</strong> is the usual standard. You can enter any value between 0 and 100 (e.g. 97.5).</p>
-                    </div>
+                    <p class="ss-chart-note" id="finitePropChartNote"></p>
                 </div>
-            </div>
-            <button class="calculate-btn" id="finitePropCalculateBtn">Calculate sample size</button>
-            <div id="finitePropResult" class="result-box">Result pending…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">How n changes with the margin of error</h3>
-                <canvas id="finitePropChart" role="img" aria-label="Line chart: sample size n as a function of the margin of error for the chosen confidence level and the levels ±5 points"></canvas>
-                <p class="ss-chart-note" id="finitePropChartNote"></p>
-            </div>
+                <p class="ss-chart-empty">Check the parameters: the chart will appear once they are valid.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -287,7 +295,7 @@
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../sample-size-charts.js?v=20261101-2"></script>
+<script src="../sample-size-charts.js?v=20261101-3"></script>
 <script>
 function calculateFinitePropSampleSize() {
     window.SampleSizeCharts && SampleSizeCharts.clear('finitePropChart');
@@ -320,7 +328,7 @@ function calculateFinitePropSampleSize() {
     });
 }
 
-document.getElementById('finitePropCalculateBtn').addEventListener('click', calculateFinitePropSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('finitePropForm', calculateFinitePropSampleSize);
 calculateFinitePropSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>

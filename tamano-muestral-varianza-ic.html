@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-2">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -153,34 +153,41 @@
     <main>
         <p class="tool-intro">Estima cuántas observaciones necesitas para que el intervalo de confianza chi-cuadrado de la varianza tenga una amplitud relativa máxima, fijando el nivel de confianza.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Introduce el cociente U/L máximo tolerable del IC y el nivel de confianza para obtener el tamaño muestral mínimo.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Introduce el cociente U/L máximo tolerable del IC y el nivel de confianza para obtener el tamaño muestral mínimo.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="varR">Cociente máximo U/L del IC (R) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="varR" value="2.5" step="0.1" min="1.001">
-                        <p class="field-hint" hidden>Cociente máximo tolerable entre el límite superior y el inferior del IC de la varianza. Cuanto más cercano a 1, más estrecho (preciso) el intervalo, pero más muestra hace falta. <strong>R entre 2 y 4</strong> es habitual en control de calidad.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="varConfidence">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="varConfidence" value="95" step="any" min="0.01" max="99.99" inputmode="decimal">
-                        <p class="field-hint" hidden>Probabilidad de que el procedimiento produzca un intervalo que contenga la varianza real. 95 % es el estándar; con 99 % se necesita más muestra para el mismo cociente R. Puedes introducir cualquier valor entre 0 y 100 (por ejemplo, 97,5).</p>
+                <div class="form-grid sample-grid" id="varForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="varR">Cociente máximo U/L del IC (R) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="varR" value="2.5" step="0.1" min="1.001">
+                            <p class="field-hint" hidden>Cociente máximo tolerable entre el límite superior y el inferior del IC de la varianza. Cuanto más cercano a 1, más estrecho (preciso) el intervalo, pero más muestra hace falta. <strong>R entre 2 y 4</strong> es habitual en control de calidad.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="varConfidence">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="varConfidence" value="95" step="any" min="0.01" max="99.99" inputmode="decimal">
+                            <p class="field-hint" hidden>Probabilidad de que el procedimiento produzca un intervalo que contenga la varianza real. 95 % es el estándar; con 99 % se necesita más muestra para el mismo cociente R. Puedes introducir cualquier valor entre 0 y 100 (por ejemplo, 97,5).</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <button class="calculate-btn" id="varCalculateBtn">Calcular tamaño muestral</button>
-            <div id="varResult" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Cómo cambia n con el cociente U/L</h3>
-                <canvas id="varChart" role="img" aria-label="Gráfico de líneas: tamaño muestral n en función del cociente U/L para el nivel de confianza elegido y los niveles ±5 puntos"></canvas>
-                <p class="ss-chart-note" id="varChartNote"></p>
-            </div>
+            <div id="varResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Cómo cambia n con el cociente U/L</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="varChart" role="img" aria-label="Gráfico de líneas: tamaño muestral n en función del cociente U/L para el nivel de confianza elegido y los niveles ±5 puntos"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="varChartNote"></p>
+                </div>
+                <p class="ss-chart-empty">Revisa los parámetros: el gráfico aparecerá cuando sean válidos.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -273,7 +280,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-2"></script>
+<script src="sample-size-charts.js?v=20261101-3"></script>
 <script>
 // n mínimo tal que χ²_{1-α/2}/χ²_{α/2} ≤ R (el cociente decrece con n: búsqueda binaria).
 function varianceSampleSizeFor(R, confidence) {
@@ -344,7 +351,7 @@ function calculateVarianceSampleSize() {
     });
 }
 
-document.getElementById('varCalculateBtn').addEventListener('click', calculateVarianceSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('varForm', calculateVarianceSampleSize);
 calculateVarianceSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-2">
 
     <script type="application/ld+json">
 {
@@ -158,46 +158,53 @@
     <main>
         <p class="tool-intro">Calcula cuántos pares necesitas para detectar un cambio en una respuesta binaria medida dos veces sobre los mismos sujetos (diseño antes/después), basándose en el test de McNemar.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Introduce p01, p10, confianza y potencia para calcular el número de pares necesarios.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Introduce p01, p10, confianza y potencia para calcular el número de pares necesarios.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="pairedPropP01">Proporción discordante p01 (0→1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="pairedPropP01" value="0.18" step="0.01" min="0.0001" max="0.9999">
-                        <p class="field-hint" hidden>Proporción de pares que cambian de respuesta negativa a positiva (0→1). Estímala de un piloto o de datos históricos.</p>
+                <div class="form-grid sample-grid" id="pairedPropForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="pairedPropP01">Proporción discordante p01 (0→1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="pairedPropP01" value="0.18" step="0.01" min="0.0001" max="0.9999">
+                            <p class="field-hint" hidden>Proporción de pares que cambian de respuesta negativa a positiva (0→1). Estímala de un piloto o de datos históricos.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="pairedPropP10">Proporción discordante p10 (1→0) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="pairedPropP10" value="0.08" step="0.01" min="0.0001" max="0.9999">
+                            <p class="field-hint" hidden>Proporción de pares que cambian de respuesta positiva a negativa (1→0). Junto con p01, solo estos pares discordantes determinan el tamaño muestral necesario.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="pairedPropP10">Proporción discordante p10 (1→0) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="pairedPropP10" value="0.08" step="0.01" min="0.0001" max="0.9999">
-                        <p class="field-hint" hidden>Proporción de pares que cambian de respuesta positiva a negativa (1→0). Junto con p01, solo estos pares discordantes determinan el tamaño muestral necesario.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="pairedPropAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="pairedPropAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Nivel de significación del test de McNemar. El valor estándar habitual es <strong>0,05</strong>.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="pairedPropPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="pairedPropPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                            <p class="field-hint" hidden>Probabilidad de detectar un efecto real cuando existe. Lo habitual es fijarla en <strong>0,80</strong> o 0,90.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="pairedPropAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="pairedPropAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Nivel de significación del test de McNemar. El valor estándar habitual es <strong>0,05</strong>.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="pairedPropPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="pairedPropPower" value="0.8" step="0.01" min="0.5" max="0.999">
-                        <p class="field-hint" hidden>Probabilidad de detectar un efecto real cuando existe. Lo habitual es fijarla en <strong>0,80</strong> o 0,90.</p>
-                    </div>
-                </div>
-            </div>
+            </section>
 
-            <button class="calculate-btn" id="pairedPropCalculateBtn">Calcular tamaño muestral</button>
-            <div id="pairedPropResult" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Curva de potencia según el tamaño muestral</h3>
-                <canvas id="pairedPropChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
-                <p class="ss-chart-note" id="pairedPropChartNote"></p>
-            </div>
+            <div id="pairedPropResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Curva de potencia según el tamaño muestral</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="pairedPropChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="pairedPropChartNote"></p>
+                </div>
+                <p class="ss-chart-empty">Revisa los parámetros: el gráfico aparecerá cuando sean válidos.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -290,7 +297,7 @@
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-2"></script>
+<script src="sample-size-charts.js?v=20261101-3"></script>
 <script>
 function calculatePairedPropSampleSize(){
  window.SampleSizeCharts && SampleSizeCharts.clear('pairedPropChart');
@@ -320,7 +327,7 @@ function calculatePairedPropSampleSize(){
   });
 }
 
-document.getElementById('pairedPropCalculateBtn').addEventListener('click', calculatePairedPropSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('pairedPropForm', calculatePairedPropSampleSize);
 calculatePairedPropSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

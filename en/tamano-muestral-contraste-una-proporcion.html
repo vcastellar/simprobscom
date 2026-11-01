@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-2">
 
     <script type="application/ld+json">
 {
@@ -154,55 +154,62 @@
     <main>
         <p class="tool-intro">This tool estimates the minimum sample size needed to test whether a proportion differs from a reference value with the power you choose, while controlling both type I and type II error.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Enter your assumptions to get the minimum recommended sample size for a one-proportion test.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Enter your assumptions to get the minimum recommended sample size for a one-proportion test.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="onePropH0">Null hypothesis (p0) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="onePropH0" value="0.3" step="0.01" min="0.001" max="0.999">
-                        <p class="field-hint" hidden>Reference value you want to test against: the proportion under the null hypothesis H₀.</p>
+                <div class="form-grid sample-grid" id="onePropForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="onePropH0">Null hypothesis (p0) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="onePropH0" value="0.3" step="0.01" min="0.001" max="0.999">
+                            <p class="field-hint" hidden>Reference value you want to test against: the proportion under the null hypothesis H₀.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="onePropDelta">Minimum detectable difference |p−p0| (Δ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="onePropDelta" value="0.1" step="0.001" min="0.0001" max="0.9999">
+                            <p class="field-hint" hidden>Minimum difference between p and p0 you want to be able to detect with the chosen power, set by practical relevance before seeing the data.</p>
+                        </div>
+                    </div>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="onePropAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="onePropAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>False-positive risk you accept (rejecting H₀ when p = p0 in fact). The typical value is <strong>0.05</strong>.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="onePropPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="onePropPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                            <p class="field-hint" hidden>Probability of detecting the difference Δ if it really exists. Use <strong>0.80</strong> or <strong>0.90</strong> depending on how demanding the study is.</p>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="onePropDelta">Minimum detectable difference |p−p0| (Δ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="onePropDelta" value="0.1" step="0.001" min="0.0001" max="0.9999">
-                        <p class="field-hint" hidden>Minimum difference between p and p0 you want to be able to detect with the chosen power, set by practical relevance before seeing the data.</p>
+                        <label for="onePropAlternative">Alternative hypothesis <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                        <select id="onePropAlternative">
+                            <option value="two-sided">Ha: p ≠ p0</option>
+                            <option value="greater">Ha: p ≥ p0</option>
+                            <option value="less">Ha: p ≤ p0</option>
+                        </select>
+                        <p class="field-hint" hidden>Use <strong>two-tailed</strong> (≠) if you have no prior direction; use <strong>one-tailed</strong> (≥ or ≤) only if you care about detecting the change in a single direction — it requires a smaller sample, but you must be able to justify it a priori.</p>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="onePropAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="onePropAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>False-positive risk you accept (rejecting H₀ when p = p0 in fact). The typical value is <strong>0.05</strong>.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="onePropPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="onePropPower" value="0.8" step="0.01" min="0.5" max="0.999">
-                        <p class="field-hint" hidden>Probability of detecting the difference Δ if it really exists. Use <strong>0.80</strong> or <strong>0.90</strong> depending on how demanding the study is.</p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="onePropAlternative">Alternative hypothesis <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                    <select id="onePropAlternative">
-                        <option value="two-sided">Ha: p ≠ p0</option>
-                        <option value="greater">Ha: p ≥ p0</option>
-                        <option value="less">Ha: p ≤ p0</option>
-                    </select>
-                    <p class="field-hint" hidden>Use <strong>two-tailed</strong> (≠) if you have no prior direction; use <strong>one-tailed</strong> (≥ or ≤) only if you care about detecting the change in a single direction — it requires a smaller sample, but you must be able to justify it a priori.</p>
-                </div>
-            </div>
+            </section>
 
-            <button class="calculate-btn" id="onePropCalculateBtn">Calculate sample size</button>
-            <div id="onePropResult" class="result-box">Result pending…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Power curve by sample size</h3>
-                <canvas id="onePropChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
-                <p class="ss-chart-note" id="onePropChartNote"></p>
-            </div>
+            <div id="onePropResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Power curve by sample size</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="onePropChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="onePropChartNote"></p>
+                </div>
+                <p class="ss-chart-empty">Check the parameters: the chart will appear once they are valid.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -277,7 +284,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../sample-size-charts.js?v=20261101-2"></script>
+<script src="../sample-size-charts.js?v=20261101-3"></script>
 <script>
 function refreshMathJaxOneProp() {
     if (window.MathJax?.typesetPromise) {
@@ -329,7 +336,7 @@ function calculateOnePropSampleSize() {
     refreshMathJaxOneProp();
 }
 
-document.getElementById("onePropCalculateBtn").addEventListener("click", calculateOnePropSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('onePropForm', calculateOnePropSampleSize);
 calculateOnePropSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>

@@ -74,7 +74,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-2">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -121,58 +121,65 @@
     <main>
         <p class="tool-intro">Calculate how many <strong>cases and controls</strong> you need for a case-control study to detect an odds ratio different from 1 with the desired power, fixing the controls:cases ratio.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Enter the exposure prevalence in controls, the odds ratio to detect and the design parameters.</p>
-            </div>
-
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="orP0">Exposed proportion in controls (p₀) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="orP0" value="0.30" step="0.01" min="0.0001" max="0.9999">
-                        <p class="field-hint" hidden>Prevalence of the risk factor in the control population (or in the general population if the disease is rare). It is obtained from earlier studies or health registries.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="orOR">Odds ratio to detect (OR) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="orOR" value="2.0" step="0.1" min="0.01">
-                        <p class="field-hint" hidden>Minimum odds ratio you want to be able to detect. <strong>OR = 2</strong> is a moderate effect in epidemiology; the closer to 1, the larger the sample needed. Values &lt; 1 (protective factor) are also accepted.</p>
-                    </div>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Enter the exposure prevalence in controls, the odds ratio to detect and the design parameters.</p>
                 </div>
 
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="orAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="orAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>False-positive risk you accept. The standard value is 0.05.</p>
+                <div class="form-grid sample-grid" id="orForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="orP0">Exposed proportion in controls (p₀) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="orP0" value="0.30" step="0.01" min="0.0001" max="0.9999">
+                            <p class="field-hint" hidden>Prevalence of the risk factor in the control population (or in the general population if the disease is rare). It is obtained from earlier studies or health registries.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="orOR">Odds ratio to detect (OR) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="orOR" value="2.0" step="0.1" min="0.01">
+                            <p class="field-hint" hidden>Minimum odds ratio you want to be able to detect. <strong>OR = 2</strong> is a moderate effect in epidemiology; the closer to 1, the larger the sample needed. Values &lt; 1 (protective factor) are also accepted.</p>
+                        </div>
                     </div>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="orAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="orAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>False-positive risk you accept. The standard value is 0.05.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="orPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="orPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                            <p class="field-hint" hidden>Probability of detecting the odds ratio if it really exists. 0.80 (80%) is the usual minimum.</p>
+                        </div>
+                    </div>
+
                     <div class="form-group">
-                        <label for="orPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="orPower" value="0.80" step="0.01" min="0.5" max="0.999">
-                        <p class="field-hint" hidden>Probability of detecting the odds ratio if it really exists. 0.80 (80%) is the usual minimum.</p>
+                        <label for="orRatio">Controls per case (r) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                        <select id="orRatio">
+                            <option value="1" selected>1 control per case (1:1)</option>
+                            <option value="2">2 controls per case (1:2)</option>
+                            <option value="3">3 controls per case (1:3)</option>
+                            <option value="4">4 controls per case (1:4)</option>
+                        </select>
+                        <p class="field-hint" hidden>Number of controls recruited per case. Increasing it helps gain power when cases are scarce, but more than 4 controls per case adds little further benefit.</p>
                     </div>
                 </div>
+            </section>
 
-                <div class="form-group">
-                    <label for="orRatio">Controls per case (r) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                    <select id="orRatio">
-                        <option value="1" selected>1 control per case (1:1)</option>
-                        <option value="2">2 controls per case (1:2)</option>
-                        <option value="3">3 controls per case (1:3)</option>
-                        <option value="4">4 controls per case (1:4)</option>
-                    </select>
-                    <p class="field-hint" hidden>Number of controls recruited per case. Increasing it helps gain power when cases are scarce, but more than 4 controls per case adds little further benefit.</p>
+            <div id="orResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Power curve by sample size</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="orChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="orChartNote"></p>
                 </div>
-            </div>
-
-            <button class="calculate-btn" id="orCalculateBtn">Calculate sample size</button>
-            <div id="orResult" class="result-box">Result pending…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Power curve by sample size</h3>
-                <canvas id="orChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
-                <p class="ss-chart-note" id="orChartNote"></p>
-            </div>
+                <p class="ss-chart-empty">Check the parameters: the chart will appear once they are valid.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -274,7 +281,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../sample-size-charts.js?v=20261101-2"></script>
+<script src="../sample-size-charts.js?v=20261101-3"></script>
 <script>
 function calculateORSampleSize() {
     window.SampleSizeCharts && SampleSizeCharts.clear('orChart');
@@ -326,7 +333,7 @@ function calculateORSampleSize() {
     }
 }
 
-document.getElementById("orCalculateBtn").addEventListener("click", calculateORSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('orForm', calculateORSampleSize);
 calculateORSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
