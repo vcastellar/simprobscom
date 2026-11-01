@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
 
     <script type="application/ld+json">
 {
@@ -189,6 +189,11 @@
 
             <button class="calculate-btn" id="pairedPropCalculateBtn">Calculate sample size</button>
             <div id="pairedPropResult" class="result-box">Result pending…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">Power curve by sample size</h3>
+                <canvas id="pairedPropChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
+                <p class="ss-chart-note" id="pairedPropChartNote"></p>
+            </div>
         </section>
 
                 <section class="card content-card">
@@ -280,8 +285,11 @@
 <script>window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };</script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../sample-size-charts.js?v=20261101-1"></script>
 <script>
 function calculatePairedPropSampleSize(){
+ window.SampleSizeCharts && SampleSizeCharts.clear('pairedPropChart');
  const p01=parseFloat(document.getElementById('pairedPropP01').value);
  const p10=parseFloat(document.getElementById('pairedPropP10').value);
  const alpha=parseFloat(document.getElementById('pairedPropAlpha').value);
@@ -301,6 +309,11 @@ function calculatePairedPropSampleSize(){
  const n = Math.ceil(Math.pow(zAlpha * Math.sqrt(pd) + zBeta * Math.sqrt(pd - delta * delta), 2) / (delta * delta));
 
  resultEl.innerText=`Recommended minimum n: ${n} pairs.`;
+ window.SampleSizeCharts && SampleSizeCharts.power({
+   canvas: 'pairedPropChart', n: n, target: power,
+   xLabel: 'Number of pairs n',
+   powerFn: function (m) { return jStat.normal.cdf((delta * Math.sqrt(m) - zAlpha * Math.sqrt(pd)) / Math.sqrt(pd - delta * delta), 0, 1); }
+  });
 }
 
 document.getElementById('pairedPropCalculateBtn').addEventListener('click', calculatePairedPropSampleSize);

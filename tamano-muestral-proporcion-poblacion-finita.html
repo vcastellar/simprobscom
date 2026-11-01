@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-1">
 
     <script type="application/ld+json">
 {
@@ -196,6 +196,11 @@
             </div>
             <button class="calculate-btn" id="finitePropCalculateBtn">Calcular tamaño muestral</button>
             <div id="finitePropResult" class="result-box">Resultado pendiente…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">Cómo cambia n con el margen de error</h3>
+                <canvas id="finitePropChart" role="img" aria-label="Gráfico de líneas: tamaño muestral n en función del margen de error para distintos niveles de confianza"></canvas>
+                <p class="ss-chart-note" id="finitePropChartNote"></p>
+            </div>
         </section>
 
                 <section class="card content-card">
@@ -289,8 +294,11 @@
 <script>window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };</script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="sample-size-charts.js?v=20261101-1"></script>
 <script>
 function calculateFinitePropSampleSize() {
+    window.SampleSizeCharts && SampleSizeCharts.clear('finitePropChart');
     const p = parseFloat(document.getElementById('finitePropP').value);
     const e = parseFloat(document.getElementById('finitePropE').value);
     const nPop = parseFloat(document.getElementById('finitePropN').value);
@@ -307,6 +315,16 @@ function calculateFinitePropSampleSize() {
     const n = Math.ceil(n0 / (1 + ((n0 - 1) / nPop)));
 
     resultEl.innerText = `n corregido recomendado: ${n} (n infinito≈${Math.ceil(n0)}).`;
+    window.SampleSizeCharts && SampleSizeCharts.precision({
+        canvas: 'finitePropChart', x: e, n: n, confidence: confidence,
+        xName: 'E', xLabel: 'Margen de error E', xMax: 0.5,
+        unit: 'observaciones',
+        nFn: function (x, conf) {
+            const zc = jStat.normal.inv(1 - ((1 - conf) / 2), 0, 1);
+            const m0 = (zc * zc * p * (1 - p)) / (x * x);
+            return Math.ceil(m0 / (1 + ((m0 - 1) / nPop)));
+        }
+    });
 }
 
 document.getElementById('finitePropCalculateBtn').addEventListener('click', calculateFinitePropSampleSize);

@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
 
     <script type="application/ld+json">
 {
@@ -187,6 +187,11 @@
 
             <button class="calculate-btn" id="onePropCalculateBtn">Calculate sample size</button>
             <div id="onePropResult" class="result-box">Result pending…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">How n changes with the margin of error</h3>
+                <canvas id="onePropChart" role="img" aria-label="Line chart: sample size n as a function of the margin of error for different confidence levels"></canvas>
+                <p class="ss-chart-note" id="onePropChartNote"></p>
+            </div>
         </section>
 
                 <section class="card content-card">
@@ -286,6 +291,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../sample-size-charts.js?v=20261101-1"></script>
 <script>
 function refreshMathJaxOneProp() {
     if (window.MathJax?.typesetPromise) {
@@ -294,6 +301,7 @@ function refreshMathJaxOneProp() {
 }
 
 function calculateOnePropSampleSize() {
+    window.SampleSizeCharts && SampleSizeCharts.clear('onePropChart');
     const p = parseFloat(document.getElementById("onePropP").value);
     const e = parseFloat(document.getElementById("onePropE").value);
     const confidence = parseFloat(document.getElementById("onePropConfidence").value);
@@ -319,6 +327,15 @@ function calculateOnePropSampleSize() {
     const n = Math.ceil((Math.pow(z, 2) * p * (1 - p)) / Math.pow(e, 2));
 
     resultEl.innerText = `Minimum recommended n: ${n} observations (${Math.round(confidence * 100)}% confidence).`;
+    window.SampleSizeCharts && SampleSizeCharts.precision({
+        canvas: 'onePropChart', x: e, n: n, confidence: confidence,
+        xName: 'E', xLabel: 'Margin of error E', xMax: 0.5,
+        unit: 'observations',
+        nFn: function (x, conf) {
+            const zc = jStat.normal.inv(1 - (1 - conf) / 2, 0, 1);
+            return Math.ceil((zc * zc * p * (1 - p)) / (x * x));
+        }
+    });
     refreshMathJaxOneProp();
 }
 

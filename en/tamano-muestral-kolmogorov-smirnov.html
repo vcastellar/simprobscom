@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -179,6 +179,11 @@
 
             <button class="calculate-btn" id="ksCalculateBtn">Calculate sample size</button>
             <div id="ksResult" class="result-box">Result pending…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">Power curve by sample size</h3>
+                <canvas id="ksChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
+                <p class="ss-chart-note" id="ksChartNote"></p>
+            </div>
         </section>
 
                 <section class="card content-card">
@@ -261,6 +266,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../sample-size-charts.js?v=20261101-1"></script>
 <script>
 function ksCDF(x) {
     if (x <= 0) return 0;
@@ -296,6 +303,7 @@ function computePower(n, kAlpha, d) {
 }
 
 function calculateKSSampleSize() {
+    window.SampleSizeCharts && SampleSizeCharts.clear('ksChart');
     const d = parseFloat(document.getElementById('ksD').value);
     const alpha = parseFloat(document.getElementById('ksAlpha').value);
     const power = parseFloat(document.getElementById('ksPower').value);
@@ -333,6 +341,11 @@ function calculateKSSampleSize() {
         `Minimum recommended n: ${n} observations\n` +
         `Achieved power: ${(actualPower * 100).toFixed(2)}% (target: ${(power * 100).toFixed(0)}%)\n` +
         `d = ${d}  |  α = ${alpha}  |  k_α = ${kAlpha.toFixed(4)}`;
+    window.SampleSizeCharts && SampleSizeCharts.power({
+        canvas: 'ksChart', n: n, target: power,
+        xLabel: 'Sample size n',
+        powerFn: function (m) { return computePower(m, kAlpha, d); }
+    });
 }
 
 document.getElementById('ksCalculateBtn').addEventListener('click', calculateKSSampleSize);

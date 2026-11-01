@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
 
     <script type="application/ld+json">
 {
@@ -205,6 +205,11 @@
 
             <button class="calculate-btn" id="oneMeanCalculateBtn">Calculate sample size</button>
             <div id="oneMeanResult" class="result-box">Result pending…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">Power curve by sample size</h3>
+                <canvas id="oneMeanChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
+                <p class="ss-chart-note" id="oneMeanChartNote"></p>
+            </div>
         </section>
 
                 <section class="card content-card">
@@ -277,6 +282,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../sample-size-charts.js?v=20261101-1"></script>
 <script>
 function refreshMathJaxOneMean() {
     if (window.MathJax?.typesetPromise) {
@@ -285,6 +292,7 @@ function refreshMathJaxOneMean() {
 }
 
 function calculateOneMeanSampleSize() {
+    window.SampleSizeCharts && SampleSizeCharts.clear('oneMeanChart');
     const sigma = parseFloat(document.getElementById("oneMeanSigma").value);
     const delta = parseFloat(document.getElementById("oneMeanDelta").value);
     const alpha = parseFloat(document.getElementById("oneMeanAlpha").value);
@@ -304,6 +312,11 @@ function calculateOneMeanSampleSize() {
     const altText = alternative === "two-sided" ? "Ha: μ ≠ μ0" : (alternative === "greater" ? "Ha: μ ≥ μ0" : "Ha: μ ≤ μ0");
 
     resultEl.innerText = `Minimum recommended n: ${n} observations for H0: μ = ${h0} and ${altText}.`;
+    window.SampleSizeCharts && SampleSizeCharts.power({
+        canvas: 'oneMeanChart', n: n, target: power,
+        xLabel: 'Sample size n',
+        powerFn: function (m) { return jStat.normal.cdf((delta * Math.sqrt(m)) / sigma - zAlpha, 0, 1); }
+    });
     refreshMathJaxOneMean();
 }
 

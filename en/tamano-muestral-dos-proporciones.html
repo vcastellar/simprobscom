@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
 
     <script type="application/ld+json">
 {
@@ -205,6 +205,11 @@
 
             <button class="calculate-btn" id="twoPropCalculateBtn">Calculate sample size</button>
             <div id="twoPropResult" class="result-box">Result pending…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">Power curve by sample size</h3>
+                <canvas id="twoPropChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
+                <p class="ss-chart-note" id="twoPropChartNote"></p>
+            </div>
         </section>
 
                 <section class="card content-card">
@@ -303,6 +308,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../sample-size-charts.js?v=20261101-1"></script>
 <script>
 function refreshMathJaxTwoProp() {
     if (window.MathJax?.typesetPromise) {
@@ -321,6 +328,7 @@ function getTwoPropRatio() {
 }
 
 function calculateTwoPropSampleSize() {
+    window.SampleSizeCharts && SampleSizeCharts.clear('twoPropChart');
     const resultEl = document.getElementById("twoPropResult");
 
     try {
@@ -357,6 +365,15 @@ function calculateTwoPropSampleSize() {
         resultEl.innerText = Math.abs(k - 1) < 1e-10
             ? `Minimum n per group: ${n1} (total: ${n1 + n2}).`
             : `Minimum n group 1: ${n1}; group 2: ${n2} (k=${k.toFixed(2)}, total: ${n1 + n2}).`;
+        window.SampleSizeCharts && SampleSizeCharts.power({
+            canvas: 'twoPropChart', n: n1, target: power,
+            xLabel: Math.abs(k - 1) < 1e-10 ? 'n per group' : 'Group 1 sample size n',
+            powerFn: function (m) {
+                const a = zAlpha * Math.sqrt((1 + (1 / k)) * pBar * (1 - pBar));
+                const s = Math.sqrt((p1 * (1 - p1)) + ((p2 * (1 - p2)) / k));
+                return jStat.normal.cdf((diff * Math.sqrt(m) - a) / s, 0, 1);
+            }
+        });
         refreshMathJaxTwoProp();
     } catch (error) {
         resultEl.innerText = `Error: ${error.message}`;

@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -196,6 +196,11 @@
 
             <button class="calculate-btn" id="swCalculateBtn" style="margin-top:1.25rem;">Calculate sample size</button>
             <div id="swResult" class="result-box">Result pending…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">Power curve by sample size</h3>
+                <canvas id="swChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
+                <p class="ss-chart-note" id="swChartNote"></p>
+            </div>
 
             <div style="margin-top:1rem; padding:0.75rem 1rem; background:var(--surface-alt, #f8f9fc); border-radius:8px; border-left:3px solid var(--accent, #4f46e5); font-size:0.875rem; color:var(--text-muted, #6b7280);">
                 <strong>Notes:</strong>
@@ -348,6 +353,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../sample-size-charts.js?v=20261101-1"></script>
 <script>
 function ncChiSqCDF(x, df, lambda) {
     if (x <= 0) return 0;
@@ -370,6 +377,7 @@ function applyPreset(g1, g2) {
 }
 
 function calculateSWsampleSize() {
+    window.SampleSizeCharts && SampleSizeCharts.clear('swChart');
     const gamma1 = parseFloat(document.getElementById('swGamma1').value);
     const gamma2 = parseFloat(document.getElementById('swGamma2').value);
     const alpha  = parseFloat(document.getElementById('swAlpha').value);
@@ -413,6 +421,11 @@ function calculateSWsampleSize() {
         `γ₁ = ${gamma1}  |  γ₂ = ${gamma2}  |  λ = n·(γ₁²/6 + γ₂²/24) = ${lambda.toFixed(3)}  |  α = ${alpha}` +
         warning +
         '\nThe JB approximation can be very optimistic with small samples: verify the result by simulation if the sample size matters.';
+    window.SampleSizeCharts && SampleSizeCharts.power({
+        canvas: 'swChart', n: n, target: power, nMin: 3,
+        xLabel: 'Sample size n',
+        powerFn: function (m) { return 1 - ncChiSqCDF(critVal, 2, m * jbComponent); }
+    });
 }
 
 document.getElementById('swCalculateBtn').addEventListener('click', calculateSWsampleSize);

@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -206,6 +206,11 @@
 
             <button class="calculate-btn" id="fisherCalculateBtn">Calculate sample size</button>
             <div id="fisherResult" class="result-box">Result pending…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">Power curve by sample size</h3>
+                <canvas id="fisherChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
+                <p class="ss-chart-note" id="fisherChartNote"></p>
+            </div>
         </section>
 
                 <section class="card content-card">
@@ -303,8 +308,11 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../sample-size-charts.js?v=20261101-1"></script>
 <script>
 function calculateFisherSampleSize() {
+    window.SampleSizeCharts && SampleSizeCharts.clear('fisherChart');
     const resultEl = document.getElementById('fisherResult');
     try {
         const p1    = parseFloat(document.getElementById('fisherP1').value);
@@ -352,6 +360,23 @@ function calculateFisherSampleSize() {
             `n₁ (group 1): ${n1_final}  |  n₂ (group 2): ${n2_cc}  |  N total: ${n_total}\n` +
             `With α = ${alpha} (${tailLabel}), power = ${(power * 100).toFixed(0)} %, p₁ = ${p1}, p₂ = ${p2}, r = ${r}.\n` +
             `n₁ without continuity correction (basic Fleiss): ${Math.ceil(n1_approx)}`;
+        window.SampleSizeCharts && SampleSizeCharts.power({
+            canvas: 'fisherChart', n: n1_final, target: power,
+            xLabel: 'Group 1 sample size n',
+            // Potencia de un n con corrección de continuidad: se deshace la corrección
+            // de Casagrande-Pike (n_cc → n de Fleiss) y se evalúa la aproximación normal.
+            powerFn: function (m) {
+                const A = 2 * (1 + 1 / r) / Math.abs(p1 - p2);
+                let nFleiss = 0;
+                if (4 * m > A) {
+                    const s = (4 * m + A) / (4 * m - A);
+                    nFleiss = A / (s * s - 1);
+                }
+                const a = z_alpha * Math.sqrt((1 + 1 / r) * p_bar * q_bar);
+                const sd = Math.sqrt(p1 * (1 - p1) + p2 * (1 - p2) / r);
+                return jStat.normal.cdf((Math.abs(p1 - p2) * Math.sqrt(nFleiss) - a) / sd, 0, 1);
+            }
+        });
     } catch (e) {
         resultEl.innerText = 'Error: ' + e.message;
     }

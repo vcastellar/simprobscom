@@ -74,7 +74,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -175,6 +175,11 @@
 
             <button class="calculate-btn" id="corrCalculateBtn">Calcular tamaño muestral</button>
             <div id="corrResult" class="result-box">Resultado pendiente…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">Curva de potencia según el tamaño muestral</h3>
+                <canvas id="corrChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
+                <p class="ss-chart-note" id="corrChartNote"></p>
+            </div>
         </section>
 
                 <section class="card content-card">
@@ -274,8 +279,11 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="sample-size-charts.js?v=20261101-1"></script>
 <script>
 function calculateCorrSampleSize() {
+    window.SampleSizeCharts && SampleSizeCharts.clear('corrChart');
     const resultEl = document.getElementById("corrResult");
     try {
         const rho = parseFloat(document.getElementById("corrRho").value);
@@ -300,6 +308,11 @@ function calculateCorrSampleSize() {
         resultEl.innerText =
             `n mínimo (pares de observaciones): ${n}.\n` +
             `Parámetros: ρ = ${rho}, α = ${alpha} (${tail === "two" ? "bilateral" : "unilateral"}), potencia = ${(power * 100).toFixed(0)} %.`;
+        window.SampleSizeCharts && SampleSizeCharts.power({
+            canvas: 'corrChart', n: n, target: power, nMin: 4,
+            xLabel: 'Número de pares n',
+            powerFn: function (m) { return jStat.normal.cdf(zRho * Math.sqrt(m - 3) - zAlpha, 0, 1); }
+        });
     } catch (e) {
         resultEl.innerText = `Error: ${e.message}`;
     }
