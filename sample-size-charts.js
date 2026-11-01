@@ -8,6 +8,8 @@
  *     (0, 100 %), otras dos para ese nivel −5 y +5 puntos.
  *   SampleSizeCharts.power(opts)     → curva de potencia en función de n.
  *   SampleSizeCharts.clear(canvasId) → oculta el gráfico (entrada no válida).
+ *   SampleSizeCharts.live(formId, fn) → recalcula al editar cualquier campo
+ *     del formulario, con un pequeño retardo mientras se escribe.
  *
  * El punto calculado se marca y se etiqueta; debajo del gráfico se escribe
  * una frase "¿y si…?" con dos escenarios alternativos. Los colores se leen de
@@ -576,9 +578,21 @@
     });
   }
 
+  // Recalcula al editar (los <select> también emiten "input").
+  function live(formId, fn, delay) {
+    var form = document.getElementById(formId);
+    if (!form || typeof fn !== 'function') return;
+    var timer = null;
+    form.addEventListener('input', function () {
+      clearTimeout(timer);
+      timer = setTimeout(fn, delay == null ? 250 : delay);
+    });
+  }
+
   window.SampleSizeCharts = {
     precision: function (opts) { render('precision', opts); },
     power: function (opts) { render('power', opts); },
-    clear: clear
+    clear: clear,
+    live: live
   };
 }());

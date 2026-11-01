@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-2">
 
     <script type="application/ld+json">
 {
@@ -158,62 +158,67 @@
     <main>
         <p class="tool-intro">Calcula cuántas observaciones necesitas para contrastar si la media poblacional difiere de un valor de referencia con la potencia deseada. A diferencia del enfoque por precisión, aquí el objetivo es <strong>detectar</strong> una diferencia mínima relevante.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Calcula el tamaño muestral necesario para contrastar una media con potencia objetivo.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Calcula el tamaño muestral necesario para contrastar una media con potencia objetivo.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="oneMeanSigma">Desviación estándar (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="oneMeanSigma" value="10" step="0.1" min="0.0001">
-                        <p class="field-hint" hidden>Desviación estándar esperada de la variable, en sus unidades originales. Usa datos históricos, un estudio piloto o la literatura.</p>
+                <div class="form-grid sample-grid" id="oneMeanForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="oneMeanSigma">Desviación estándar (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="oneMeanSigma" value="10" step="0.1" min="0.0001">
+                            <p class="field-hint" hidden>Desviación estándar esperada de la variable, en sus unidades originales. Usa datos históricos, un estudio piloto o la literatura.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="oneMeanDelta">Diferencia mínima detectable |μ−μ0| (Δ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="oneMeanDelta" value="2" step="0.1" min="0.0001">
+                            <p class="field-hint" hidden>La menor diferencia entre μ y μ0 que quieres poder detectar con la potencia indicada, en las unidades originales de la variable.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="oneMeanDelta">Diferencia mínima detectable |μ−μ0| (Δ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="oneMeanDelta" value="2" step="0.1" min="0.0001">
-                        <p class="field-hint" hidden>La menor diferencia entre μ y μ0 que quieres poder detectar con la potencia indicada, en las unidades originales de la variable.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="oneMeanAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="oneMeanAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Riesgo de rechazar H₀ siendo cierta. <strong>0,05</strong> es habitual; usa 0,01 en escenarios confirmatorios.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="oneMeanPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="oneMeanPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                            <p class="field-hint" hidden>Probabilidad de detectar un efecto real. <strong>0,80</strong> es el mínimo frecuente; usa 0,90 cuando quieras reducir falsos negativos.</p>
+                        </div>
+                    </div>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="oneMeanH0">Hipótesis nula (μ0) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="oneMeanH0" value="0" step="0.1">
+                            <p class="field-hint" hidden>Valor de referencia de la media bajo H₀ (por ejemplo, el valor nominal o histórico con el que se compara).</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="oneMeanAlternative">Hipótesis alternativa <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <select id="oneMeanAlternative">
+                                <option value="two-sided">Ha: μ ≠ μ0</option>
+                                <option value="greater">Ha: μ ≥ μ0</option>
+                                <option value="less">Ha: μ ≤ μ0</option>
+                            </select>
+                            <p class="field-hint" hidden>Usa bilateral si no tienes dirección previa y unilateral si solo te interesa detectar un cambio en un sentido concreto.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="oneMeanAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="oneMeanAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Riesgo de rechazar H₀ siendo cierta. <strong>0,05</strong> es habitual; usa 0,01 en escenarios confirmatorios.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="oneMeanPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="oneMeanPower" value="0.8" step="0.01" min="0.5" max="0.999">
-                        <p class="field-hint" hidden>Probabilidad de detectar un efecto real. <strong>0,80</strong> es el mínimo frecuente; usa 0,90 cuando quieras reducir falsos negativos.</p>
-                    </div>
-                </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="oneMeanH0">Hipótesis nula (μ0) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="oneMeanH0" value="0" step="0.1">
-                        <p class="field-hint" hidden>Valor de referencia de la media bajo H₀ (por ejemplo, el valor nominal o histórico con el que se compara).</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="oneMeanAlternative">Hipótesis alternativa <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <select id="oneMeanAlternative">
-                            <option value="two-sided">Ha: μ ≠ μ0</option>
-                            <option value="greater">Ha: μ ≥ μ0</option>
-                            <option value="less">Ha: μ ≤ μ0</option>
-                        </select>
-                        <p class="field-hint" hidden>Usa bilateral si no tienes dirección previa y unilateral si solo te interesa detectar un cambio en un sentido concreto.</p>
-                    </div>
-                </div>
-            </div>
+            </section>
 
-            <button class="calculate-btn" id="oneMeanCalculateBtn">Calcular tamaño muestral</button>
-            <div id="oneMeanResult" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Curva de potencia según el tamaño muestral</h3>
-                <canvas id="oneMeanChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
-                <p class="ss-chart-note" id="oneMeanChartNote"></p>
-            </div>
+            <div id="oneMeanResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Curva de potencia según el tamaño muestral</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <canvas id="oneMeanChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
+                    <p class="ss-chart-note" id="oneMeanChartNote"></p>
+                </div>
+                <p class="ss-chart-empty">Revisa los parámetros: el gráfico aparecerá cuando sean válidos.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -287,7 +292,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-2"></script>
+<script src="sample-size-charts.js?v=20261101-3"></script>
 <script>
 function refreshMathJaxOneMean() {
     if (window.MathJax?.typesetPromise) {
@@ -324,7 +329,7 @@ function calculateOneMeanSampleSize() {
     refreshMathJaxOneMean();
 }
 
-document.getElementById("oneMeanCalculateBtn").addEventListener("click", calculateOneMeanSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('oneMeanForm', calculateOneMeanSampleSize);
 calculateOneMeanSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>
