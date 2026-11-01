@@ -4,7 +4,8 @@
  *
  * Dos tipos de gráfico, uno por familia de calculadora:
  *   SampleSizeCharts.precision(opts) → n en función del margen de error, con
- *     una curva por nivel de confianza (90/95/99 % y el elegido).
+ *     una curva para el nivel de confianza elegido y, si quedan dentro de
+ *     (0, 100 %), otras dos para ese nivel −5 y +5 puntos.
  *   SampleSizeCharts.power(opts)     → curva de potencia en función de n.
  *   SampleSizeCharts.clear(canvasId) → oculta el gráfico (entrada no válida).
  *
@@ -18,7 +19,7 @@
   var IS_EN = document.documentElement.lang === 'en';
   var LOCALE = IS_EN ? 'en-US' : 'es-ES';
   var FONT = "'Inter', 'Inter-fallback', sans-serif";
-  var STD_LEVELS = [0.90, 0.95, 0.99];
+  var LEVEL_STEP = 0.05; // curvas vecinas: nivel elegido ± 5 puntos
   var registry = {}; // canvasId → { kind, opts, chart }
 
   var STR = IS_EN ? {
@@ -67,6 +68,13 @@
   function fmtPct(v, decimals) {
     var s = (v * 100).toLocaleString(LOCALE, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
     return s + (IS_EN ? '%' : ' %');
+  }
+  // Decimales (0–2) necesarios para escribir un nivel de confianza en %.
+  function pctDecimals(level) {
+    var p = level * 100;
+    if (Math.abs(p - Math.round(p)) < 1e-6) return 0;
+    if (Math.abs(p * 10 - Math.round(p * 10)) < 1e-6) return 1;
+    return 2;
   }
   function clamp01(v) {
     if (!Number.isFinite(v)) return null;
@@ -286,20 +294,23 @@
   }
 
   // ── Gráfico de precisión: n frente al margen ──────────────────────────
+  // Nivel elegido y sus vecinos a ±5 puntos; se descartan los que no son
+  // niveles de confianza válidos (≤ 0 % o ≥ 100 %). Orden creciente.
+  function roundLevel(v) {
+    return Math.round(v * 1e6) / 1e6;
+  }
   function chooseLevels(current) {
-    var levels = STD_LEVELS.slice();
-    var isStd = STD_LEVELS.some(function (l) { return Math.abs(l - current) < 1e-9; });
-    if (!isStd) {
-      var far = null;
-      var farDist = -1;
-      STD_LEVELS.forEach(function (l) {
-        var d = Math.abs(l - current);
-        if (d > farDist) { farDist = d; far = l; }
-      });
-      levels = levels.filter(function (l) { return l !== far; });
-      levels.push(current);
-    }
-    return levels.sort(function (a, b) { return a - b; });
+    var cur = roundLevel(current);
+    return [cur - LEVEL_STEP, cur, cur + LEVEL_STEP]
+      .map(roundLevel)
+      .filter(function (l) { return l > 0 && l < 1; });
+  }
+  // Color de la rampa según la posición respecto al nivel elegido
+  // (0 = menor, 1 = el elegido, 2 = mayor).
+  function rampIndex(level, current) {
+    if (level < current - 1e-9) return 0;
+    if (level > current + 1e-9) return 2;
+    return 1;
   }
 
   function safeN(fn, x, level) {
@@ -323,15 +334,16 @@
 
     var levels = chooseLevels(o.confidence);
     var maxAll = 0;
-    var datasets = levels.map(function (level, idx) {
-      var isCurrent = Math.abs(level - o.confidence) < 1e-9;
+    var datasets = levels.map(function (level) {
+      var isCurrent = Math.abs(level - o.confidence) < 1e-6;
+      var idx = rampIndex(level, o.confidence);
       var data = xsGrid.map(function (x) {
         var n = safeN(o.nFn, x, level);
         if (n != null && n > maxAll) maxAll = n;
         return { x: x, y: n };
       });
       return {
-        label: fmtPct(level, Math.abs(level * 100 - Math.round(level * 100)) > 1e-6 ? 1 : 0) + ' ' + STR.confidence,
+        label: fmtPct(level, pctDecimals(level)) + ' ' + STR.confidence,
         data: data,
         borderColor: pal.ramp[idx],
         backgroundColor: pal.ramp[idx],
@@ -376,7 +388,7 @@
       label: 'n = ' + fmtInt(o.n),
       hLine: { y: o.n, full: false },
       labelBelow: false,
-      color: pal.ramp[levels.findIndex(function (l) { return Math.abs(l - o.confidence) < 1e-9; })] || pal.accent,
+      color: pal.ramp[1],
       surface: pal.surface,
       refColor: pal.ref,
       borderColor: pal.border,
