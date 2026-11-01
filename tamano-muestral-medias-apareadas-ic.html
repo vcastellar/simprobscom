@@ -106,7 +106,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-2">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -157,40 +157,47 @@
     <main>
         <p class="tool-intro">Estima cuántos pares necesitas para que el intervalo de confianza de la diferencia media en un diseño antes/después (o de medidas repetidas) alcance la precisión que fijes.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Calcula el número mínimo de pares para estimar la diferencia media con precisión objetivo.</p>
-            </div>
-
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="pairedSigmaD">Desviación estándar de las diferencias (σ<sub>d</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="pairedSigmaD" value="8" step="0.1" min="0.0001">
-                        <p class="field-hint" hidden>Desviación estándar de las diferencias individuales \(d_i\) = después − antes (no la de cada grupo por separado). Estímala con datos piloto de 10–20 pares o de la literatura.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="pairedE">Margen de error (E) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="pairedE" value="2" step="0.1" min="0.0001">
-                        <p class="field-hint" hidden>Máxima desviación tolerable entre la diferencia media estimada y la real, en las mismas unidades que las diferencias. Ej.: 2 mmHg.</p>
-                    </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Calcula el número mínimo de pares para estimar la diferencia media con precisión objetivo.</p>
                 </div>
 
-                <div class="form-group">
-                    <label for="pairedConfidence">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                    <input type="number" id="pairedConfidence" value="95" step="any" min="0.01" max="99.99" inputmode="decimal">
-                    <p class="field-hint" hidden>Probabilidad de que el procedimiento produzca un intervalo que contenga la diferencia media real. <strong>95 %</strong> es el estándar habitual. Puedes introducir cualquier valor entre 0 y 100 (por ejemplo, 97,5).</p>
-                </div>
-            </div>
+                <div class="form-grid sample-grid" id="pairedForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="pairedSigmaD">Desviación estándar de las diferencias (σ<sub>d</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="pairedSigmaD" value="8" step="0.1" min="0.0001">
+                            <p class="field-hint" hidden>Desviación estándar de las diferencias individuales \(d_i\) = después − antes (no la de cada grupo por separado). Estímala con datos piloto de 10–20 pares o de la literatura.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="pairedE">Margen de error (E) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="pairedE" value="2" step="0.1" min="0.0001">
+                            <p class="field-hint" hidden>Máxima desviación tolerable entre la diferencia media estimada y la real, en las mismas unidades que las diferencias. Ej.: 2 mmHg.</p>
+                        </div>
+                    </div>
 
-            <button class="calculate-btn" id="pairedCalculateBtn">Calcular tamaño muestral</button>
-            <div id="pairedResult" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Cómo cambia n con el margen de error</h3>
-                <canvas id="pairedChart" role="img" aria-label="Gráfico de líneas: tamaño muestral n en función del margen de error para el nivel de confianza elegido y los niveles ±5 puntos"></canvas>
-                <p class="ss-chart-note" id="pairedChartNote"></p>
-            </div>
+                    <div class="form-group">
+                        <label for="pairedConfidence">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                        <input type="number" id="pairedConfidence" value="95" step="any" min="0.01" max="99.99" inputmode="decimal">
+                        <p class="field-hint" hidden>Probabilidad de que el procedimiento produzca un intervalo que contenga la diferencia media real. <strong>95 %</strong> es el estándar habitual. Puedes introducir cualquier valor entre 0 y 100 (por ejemplo, 97,5).</p>
+                    </div>
+                </div>
+            </section>
+
+            <div id="pairedResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Cómo cambia n con el margen de error</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="pairedChart" role="img" aria-label="Gráfico de líneas: tamaño muestral n en función del margen de error para el nivel de confianza elegido y los niveles ±5 puntos"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="pairedChartNote"></p>
+                </div>
+                <p class="ss-chart-empty">Revisa los parámetros: el gráfico aparecerá cuando sean válidos.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -288,7 +295,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-2"></script>
+<script src="sample-size-charts.js?v=20261101-3"></script>
 <script>
 function calculatePairedMeansSampleSize() {
     window.SampleSizeCharts && SampleSizeCharts.clear('pairedChart');
@@ -329,7 +336,7 @@ function calculatePairedMeansSampleSize() {
     });
 }
 
-document.getElementById('pairedCalculateBtn').addEventListener('click', calculatePairedMeansSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('pairedForm', calculatePairedMeansSampleSize);
 calculatePairedMeansSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

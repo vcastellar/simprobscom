@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-2">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -153,41 +153,48 @@
     <main>
         <p class="tool-intro">Calcula el número de observaciones para que el test de Kolmogorov–Smirnov detecte, con la potencia deseada, una desviación máxima \(d\) respecto a una distribución teórica completamente especificada.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Introduce la desviación máxima de la CDF (d), el nivel de significación y la potencia deseada para obtener el tamaño muestral mínimo.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Introduce la desviación máxima de la CDF (d), el nivel de significación y la potencia deseada para obtener el tamaño muestral mínimo.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="ksD">Desviación máxima de la CDF (d) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="ksD" value="0.15" step="0.01" min="0.001" max="0.999">
-                        <p class="field-hint" hidden>Máxima distancia vertical entre la CDF real y la teórica que quieres poder detectar. Referencia: <strong>0,10</strong> (pequeña), <strong>0,20</strong> (mediana), <strong>0,30</strong> (grande).</p>
+                <div class="form-grid sample-grid" id="ksForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="ksD">Desviación máxima de la CDF (d) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="ksD" value="0.15" step="0.01" min="0.001" max="0.999">
+                            <p class="field-hint" hidden>Máxima distancia vertical entre la CDF real y la teórica que quieres poder detectar. Referencia: <strong>0,10</strong> (pequeña), <strong>0,20</strong> (mediana), <strong>0,30</strong> (grande).</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="ksAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="ksAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Riesgo de falso positivo que aceptas. <strong>0,05</strong> es el estándar habitual; usa 0,01 si el coste de un falso positivo es alto.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="ksAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="ksAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Riesgo de falso positivo que aceptas. <strong>0,05</strong> es el estándar habitual; usa 0,01 si el coste de un falso positivo es alto.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="ksPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="ksPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                            <p class="field-hint" hidden>Probabilidad de detectar la desviación si realmente existe. <strong>0,80</strong> es el mínimo habitual; usa 0,90 si los falsos negativos tienen consecuencias importantes.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="ksPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="ksPower" value="0.80" step="0.01" min="0.5" max="0.999">
-                        <p class="field-hint" hidden>Probabilidad de detectar la desviación si realmente existe. <strong>0,80</strong> es el mínimo habitual; usa 0,90 si los falsos negativos tienen consecuencias importantes.</p>
-                    </div>
-                </div>
-            </div>
+            </section>
 
-            <button class="calculate-btn" id="ksCalculateBtn">Calcular tamaño muestral</button>
-            <div id="ksResult" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Curva de potencia según el tamaño muestral</h3>
-                <canvas id="ksChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
-                <p class="ss-chart-note" id="ksChartNote"></p>
-            </div>
+            <div id="ksResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Curva de potencia según el tamaño muestral</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="ksChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="ksChartNote"></p>
+                </div>
+                <p class="ss-chart-empty">Revisa los parámetros: el gráfico aparecerá cuando sean válidos.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -271,7 +278,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-2"></script>
+<script src="sample-size-charts.js?v=20261101-3"></script>
 <script>
 function ksCDF(x) {
     if (x <= 0) return 0;
@@ -352,7 +359,7 @@ function calculateKSSampleSize() {
     });
 }
 
-document.getElementById('ksCalculateBtn').addEventListener('click', calculateKSSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('ksForm', calculateKSSampleSize);
 calculateKSSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

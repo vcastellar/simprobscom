@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-2">
 
     <script type="application/ld+json">
 {
@@ -158,40 +158,47 @@
     <main>
         <p class="tool-intro">Esta calculadora estima el tamaño de muestra necesario para medir una media con la precisión (margen de error) que fijes y un nivel de confianza dado. Es un enfoque por <strong>estimación</strong>; si tu objetivo es contrastar una hipótesis, usa la versión por potencia.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Calcula el tamaño muestral necesario para estimar una media con precisión objetivo.</p>
-            </div>
-
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="oneMeanSigma">Desviación estándar (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="oneMeanSigma" value="10" step="0.1" min="0.0001">
-                        <p class="field-hint" hidden>Desviación estándar esperada de la variable. Si no la conoces, estímala de un piloto o usa la regla <strong>rango / 4</strong> como aproximación conservadora.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="oneMeanE">Margen de error (E) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="oneMeanE" value="2" step="0.1" min="0.0001">
-                        <p class="field-hint" hidden>Precisión máxima tolerable: el intervalo de confianza resultante tendrá, como máximo, este margen de error, en las mismas unidades que σ.</p>
-                    </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Calcula el tamaño muestral necesario para estimar una media con precisión objetivo.</p>
                 </div>
 
-                <div class="form-group">
-                    <label for="oneMeanConfidence">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                    <input type="number" id="oneMeanConfidence" value="95" step="any" min="0.01" max="99.99" inputmode="decimal">
-                    <p class="field-hint" hidden>Probabilidad de que el intervalo de confianza resultante contenga la verdadera media poblacional. El <strong>95 %</strong> es el estándar en la mayoría de disciplinas científicas. Puedes introducir cualquier valor entre 0 y 100 (por ejemplo, 97,5).</p>
-                </div>
-            </div>
+                <div class="form-grid sample-grid" id="oneMeanForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="oneMeanSigma">Desviación estándar (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="oneMeanSigma" value="10" step="0.1" min="0.0001">
+                            <p class="field-hint" hidden>Desviación estándar esperada de la variable. Si no la conoces, estímala de un piloto o usa la regla <strong>rango / 4</strong> como aproximación conservadora.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="oneMeanE">Margen de error (E) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="oneMeanE" value="2" step="0.1" min="0.0001">
+                            <p class="field-hint" hidden>Precisión máxima tolerable: el intervalo de confianza resultante tendrá, como máximo, este margen de error, en las mismas unidades que σ.</p>
+                        </div>
+                    </div>
 
-            <button class="calculate-btn" id="oneMeanCalculateBtn">Calcular tamaño muestral</button>
-            <div id="oneMeanResult" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Cómo cambia n con el margen de error</h3>
-                <canvas id="oneMeanChart" role="img" aria-label="Gráfico de líneas: tamaño muestral n en función del margen de error para el nivel de confianza elegido y los niveles ±5 puntos"></canvas>
-                <p class="ss-chart-note" id="oneMeanChartNote"></p>
-            </div>
+                    <div class="form-group">
+                        <label for="oneMeanConfidence">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                        <input type="number" id="oneMeanConfidence" value="95" step="any" min="0.01" max="99.99" inputmode="decimal">
+                        <p class="field-hint" hidden>Probabilidad de que el intervalo de confianza resultante contenga la verdadera media poblacional. El <strong>95 %</strong> es el estándar en la mayoría de disciplinas científicas. Puedes introducir cualquier valor entre 0 y 100 (por ejemplo, 97,5).</p>
+                    </div>
+                </div>
+            </section>
+
+            <div id="oneMeanResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Cómo cambia n con el margen de error</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="oneMeanChart" role="img" aria-label="Gráfico de líneas: tamaño muestral n en función del margen de error para el nivel de confianza elegido y los niveles ±5 puntos"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="oneMeanChartNote"></p>
+                </div>
+                <p class="ss-chart-empty">Revisa los parámetros: el gráfico aparecerá cuando sean válidos.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -291,7 +298,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-2"></script>
+<script src="sample-size-charts.js?v=20261101-3"></script>
 <script>
 function refreshMathJaxOneMean() {
     if (window.MathJax?.typesetPromise) {
@@ -337,7 +344,7 @@ function calculateOneMeanSampleSize() {
     refreshMathJaxOneMean();
 }
 
-document.getElementById("oneMeanCalculateBtn").addEventListener("click", calculateOneMeanSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('oneMeanForm', calculateOneMeanSampleSize);
 calculateOneMeanSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

@@ -841,13 +841,33 @@ canvas {
 }
 
 .ss-chart-panel .ss-chart {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
     margin-top: 0;
     padding-top: 0;
     border-top: 0;
 }
 
+.ss-chart-panel .ss-chart[hidden] {
+    display: none;
+}
+
+/* El lienzo ocupa el alto que sobra en la columna del gráfico, con un
+   mínimo. Va en posición absoluta dentro de .ss-canvas para que su tamaño
+   no realimente el cálculo del alto (Chart.js lo redimensiona al tamaño
+   del contenedor). */
+.ss-canvas {
+    position: relative;
+    flex: 1 1 0;
+    min-height: 400px;
+}
+
 .ss-chart-panel .ss-chart canvas {
-    height: 400px !important;
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
 }
 
 .ss-chart-empty {
@@ -899,8 +919,8 @@ canvas {
         gap: 0;
     }
 
-    .ss-chart-panel .ss-chart canvas {
-        height: 300px !important;
+    .ss-canvas {
+        min-height: 300px;
     }
 }
 

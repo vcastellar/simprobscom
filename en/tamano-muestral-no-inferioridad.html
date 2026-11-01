@@ -74,7 +74,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-2">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -121,62 +121,69 @@
     <main>
         <p class="tool-intro">This tool plans <strong>non-inferiority</strong> or <strong>equivalence</strong> trials: it calculates the sample size needed to show that a new treatment is not worse than (or is interchangeable with) a reference treatment, given a clinical margin.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Select the trial type and configure the design parameters.</p>
-            </div>
-
-            <div class="form-grid sample-grid">
-                <div class="form-group">
-                    <label for="niType">Trial type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                    <select id="niType">
-                        <option value="ni" selected>Non-inferiority (one-sided)</option>
-                        <option value="eq">Equivalence — TOST (two-sided)</option>
-                    </select>
-                    <p class="field-hint" hidden>Choose <strong>non-inferiority</strong> if you only want to show that the new treatment is not worse than the reference one. Choose <strong>equivalence</strong> if you need to show that both are interchangeable (the difference falls within ±M in either direction).</p>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Select the trial type and configure the design parameters.</p>
                 </div>
 
-                <div class="inline-inputs">
+                <div class="form-grid sample-grid" id="niForm">
                     <div class="form-group">
-                        <label for="niSigma">Common standard deviation (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="niSigma" value="10" step="0.1" min="0.0001">
-                        <p class="field-hint" hidden>Expected variability of what you measure, in the same units (e.g. mmHg, kg). It is estimated from earlier studies or a pilot.</p>
+                        <label for="niType">Trial type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                        <select id="niType">
+                            <option value="ni" selected>Non-inferiority (one-sided)</option>
+                            <option value="eq">Equivalence — TOST (two-sided)</option>
+                        </select>
+                        <p class="field-hint" hidden>Choose <strong>non-inferiority</strong> if you only want to show that the new treatment is not worse than the reference one. Choose <strong>equivalence</strong> if you need to show that both are interchangeable (the difference falls within ±M in either direction).</p>
                     </div>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="niSigma">Common standard deviation (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="niSigma" value="10" step="0.1" min="0.0001">
+                            <p class="field-hint" hidden>Expected variability of what you measure, in the same units (e.g. mmHg, kg). It is estimated from earlier studies or a pilot.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="niMargin">Margin M (positive) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="niMargin" value="5" step="0.1" min="0.0001">
+                            <p class="field-hint" hidden>The largest difference you consider clinically irrelevant, set <strong>before</strong> seeing the data. E.g. 5 mmHg in a blood pressure trial.</p>
+                        </div>
+                    </div>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="niDelta"><span id="niDeltaLabel">Assumed difference (δ = μT − μC)</span> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="niDelta" value="0" step="0.1">
+                            <p class="field-hint" hidden>True difference you assume between treatments. 0 is the usual choice (you assume they have the same mean effect).</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="niAlpha">Alpha (α) — one-sided <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="niAlpha" value="0.025" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>False-positive risk you accept. The regulatory standard (EMA/FDA) is 0.025, equivalent to a 95% CI for the difference.</p>
+                        </div>
+                    </div>
+
                     <div class="form-group">
-                        <label for="niMargin">Margin M (positive) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="niMargin" value="5" step="0.1" min="0.0001">
-                        <p class="field-hint" hidden>The largest difference you consider clinically irrelevant, set <strong>before</strong> seeing the data. E.g. 5 mmHg in a blood pressure trial.</p>
+                        <label for="niPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                        <input type="number" id="niPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                        <p class="field-hint" hidden>Probability of detecting non-inferiority if it really holds. 0.80 is the usual minimum; 0.90 in pivotal studies.</p>
                     </div>
                 </div>
+            </section>
 
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="niDelta"><span id="niDeltaLabel">Assumed difference (δ = μT − μC)</span> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="niDelta" value="0" step="0.1">
-                        <p class="field-hint" hidden>True difference you assume between treatments. 0 is the usual choice (you assume they have the same mean effect).</p>
+            <div id="niResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Power curve by sample size</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="niChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
                     </div>
-                    <div class="form-group">
-                        <label for="niAlpha">Alpha (α) — one-sided <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="niAlpha" value="0.025" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>False-positive risk you accept. The regulatory standard (EMA/FDA) is 0.025, equivalent to a 95% CI for the difference.</p>
-                    </div>
+                    <p class="ss-chart-note" id="niChartNote"></p>
                 </div>
-
-                <div class="form-group">
-                    <label for="niPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                    <input type="number" id="niPower" value="0.80" step="0.01" min="0.5" max="0.999">
-                    <p class="field-hint" hidden>Probability of detecting non-inferiority if it really holds. 0.80 is the usual minimum; 0.90 in pivotal studies.</p>
-                </div>
-            </div>
-
-            <button class="calculate-btn" id="niCalculateBtn">Calculate sample size</button>
-            <div id="niResult" class="result-box">Result pending…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Power curve by sample size</h3>
-                <canvas id="niChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
-                <p class="ss-chart-note" id="niChartNote"></p>
-            </div>
+                <p class="ss-chart-empty">Check the parameters: the chart will appear once they are valid.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -278,7 +285,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../sample-size-charts.js?v=20261101-2"></script>
+<script src="../sample-size-charts.js?v=20261101-3"></script>
 <script>
 function calculateNISampleSize() {
     window.SampleSizeCharts && SampleSizeCharts.clear('niChart');
@@ -325,7 +332,7 @@ function calculateNISampleSize() {
     }
 }
 
-document.getElementById("niCalculateBtn").addEventListener("click", calculateNISampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('niForm', calculateNISampleSize);
 calculateNISampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>

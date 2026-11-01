@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-2">
 
     <script type="application/ld+json">
 {
@@ -158,56 +158,63 @@
     <main>
         <p class="tool-intro">Esta calculadora estima la media de una población <strong>finita y conocida</strong> con la precisión deseada, aplicando el factor de corrección por población finita cuando la muestra representa una fracción apreciable del total.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Introduce σ, E, confianza y N para obtener el tamaño mínimo con corrección por población finita.</p>
-            </div>
-
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="finiteMeanSigma">Desviación estándar (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="finiteMeanSigma" value="12" step="0.1" min="0.0001">
-                        <p class="field-hint" hidden>La desviación estándar esperada de la variable, obtenida de datos históricos, un piloto o la literatura. Si no la tienes, usa rango/4 como estimación conservadora.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="finiteMeanE">Margen de error (E) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="finiteMeanE" value="2" step="0.1" min="0.0001">
-                        <p class="field-hint" hidden>Error máximo tolerable respecto al valor real, en las mismas unidades que σ. Define a partir de qué diferencia cambiaría tu decisión.</p>
-                    </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Introduce σ, E, confianza y N para obtener el tamaño mínimo con corrección por población finita.</p>
                 </div>
 
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="finiteMeanN">Tamaño poblacional (N) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="finiteMeanN" value="1200" step="1" min="2">
-                        <p class="field-hint" hidden>El recuento exacto y conocido de la población objetivo antes del muestreo. Es lo que activa la corrección por población finita.</p>
+                <div class="form-grid sample-grid" id="finiteMeanForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="finiteMeanSigma">Desviación estándar (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="finiteMeanSigma" value="12" step="0.1" min="0.0001">
+                            <p class="field-hint" hidden>La desviación estándar esperada de la variable, obtenida de datos históricos, un piloto o la literatura. Si no la tienes, usa rango/4 como estimación conservadora.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="finiteMeanE">Margen de error (E) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="finiteMeanE" value="2" step="0.1" min="0.0001">
+                            <p class="field-hint" hidden>Error máximo tolerable respecto al valor real, en las mismas unidades que σ. Define a partir de qué diferencia cambiaría tu decisión.</p>
+                        </div>
                     </div>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="finiteMeanN">Tamaño poblacional (N) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="finiteMeanN" value="1200" step="1" min="2">
+                            <p class="field-hint" hidden>El recuento exacto y conocido de la población objetivo antes del muestreo. Es lo que activa la corrección por población finita.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="finiteMeanConfidence">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="finiteMeanConfidence" value="95" step="any" min="0.01" max="99.99" inputmode="decimal">
+                            <p class="field-hint" hidden>El porcentaje de veces que el procedimiento capturaría el valor poblacional verdadero. <strong>95 %</strong> es el estándar; usa 99 % para decisiones críticas. Puedes introducir cualquier valor entre 0 y 100 (por ejemplo, 97,5).</p>
+                        </div>
+                    </div>
+
                     <div class="form-group">
-                        <label for="finiteMeanConfidence">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="finiteMeanConfidence" value="95" step="any" min="0.01" max="99.99" inputmode="decimal">
-                        <p class="field-hint" hidden>El porcentaje de veces que el procedimiento capturaría el valor poblacional verdadero. <strong>95 %</strong> es el estándar; usa 99 % para decisiones críticas. Puedes introducir cualquier valor entre 0 y 100 (por ejemplo, 97,5).</p>
+                        <label style="display:flex;align-items:center;gap:8px;font-weight:600;font-size:0.82rem;margin-bottom:0;">
+                            <input type="checkbox" id="finiteMeanApplyFPC" checked style="width:auto;margin:0;">
+                            Aplicar corrección por población finita
+                            <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button>
+                        </label>
+                        <p class="field-hint" hidden>Reduce el tamaño muestral cuando la muestra representa una fracción apreciable de N (regla práctica: n₀/N &gt; 5 %). Desactívala para ver el tamaño muestral estándar, como si la población fuera infinita.</p>
                     </div>
                 </div>
+            </section>
 
-                <div class="form-group">
-                    <label style="display:flex;align-items:center;gap:8px;font-weight:600;font-size:0.82rem;margin-bottom:0;">
-                        <input type="checkbox" id="finiteMeanApplyFPC" checked style="width:auto;margin:0;">
-                        Aplicar corrección por población finita
-                        <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button>
-                    </label>
-                    <p class="field-hint" hidden>Reduce el tamaño muestral cuando la muestra representa una fracción apreciable de N (regla práctica: n₀/N &gt; 5 %). Desactívala para ver el tamaño muestral estándar, como si la población fuera infinita.</p>
+            <div id="finiteMeanResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Cómo cambia n con el margen de error</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="finiteMeanChart" role="img" aria-label="Gráfico de líneas: tamaño muestral n en función del margen de error para el nivel de confianza elegido y los niveles ±5 puntos"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="finiteMeanChartNote"></p>
                 </div>
-            </div>
-
-            <button class="calculate-btn" id="finiteMeanCalculateBtn">Calcular tamaño muestral</button>
-            <div id="finiteMeanResult" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Cómo cambia n con el margen de error</h3>
-                <canvas id="finiteMeanChart" role="img" aria-label="Gráfico de líneas: tamaño muestral n en función del margen de error para el nivel de confianza elegido y los niveles ±5 puntos"></canvas>
-                <p class="ss-chart-note" id="finiteMeanChartNote"></p>
-            </div>
+                <p class="ss-chart-empty">Revisa los parámetros: el gráfico aparecerá cuando sean válidos.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -301,7 +308,7 @@
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-2"></script>
+<script src="sample-size-charts.js?v=20261101-3"></script>
 <script>
 function calculateFiniteMeanSampleSize() {
  window.SampleSizeCharts && SampleSizeCharts.clear('finiteMeanChart');
@@ -343,7 +350,7 @@ function calculateFiniteMeanSampleSize() {
  drawFiniteMeanChart(n);
 }
 
-document.getElementById('finiteMeanCalculateBtn').addEventListener('click', calculateFiniteMeanSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('finiteMeanForm', calculateFiniteMeanSampleSize);
 calculateFiniteMeanSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

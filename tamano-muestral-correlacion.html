@@ -74,7 +74,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-2">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -125,61 +125,68 @@
     <main>
         <p class="tool-intro">Calcula cuántos pares de observaciones necesitas para que un test de correlación de Pearson detecte, con la potencia objetivo, una correlación mínima distinta de cero. Se basa en la transformación \(z\) de Fisher.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Introduce la correlación mínima a detectar, el alfa, la potencia y el tipo de contraste.</p>
-            </div>
-
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="corrRho">Correlación mínima a detectar (ρ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="corrRho" value="0.30" step="0.01" min="-0.9999" max="0.9999">
-                        <p class="field-hint" hidden>Correlación de Pearson más pequeña que consideras relevante detectar. Valores de referencia (Cohen, 1988): <strong>0,10</strong> (pequeña), <strong>0,30</strong> (moderada), <strong>0,50</strong> (grande).</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="corrAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="corrAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Riesgo de falso positivo que aceptas. <strong>0,05</strong> es el valor habitual.</p>
-                    </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Introduce la correlación mínima a detectar, el alfa, la potencia y el tipo de contraste.</p>
                 </div>
 
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="corrPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="corrPower" value="0.80" step="0.01" min="0.5" max="0.999">
-                        <p class="field-hint" hidden>Probabilidad de detectar la correlación si realmente existe. <strong>0,80</strong> es el mínimo habitual; usa 0,90 para estudios confirmatorios o validación psicométrica.</p>
+                <div class="form-grid sample-grid" id="corrForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="corrRho">Correlación mínima a detectar (ρ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="corrRho" value="0.30" step="0.01" min="-0.9999" max="0.9999">
+                            <p class="field-hint" hidden>Correlación de Pearson más pequeña que consideras relevante detectar. Valores de referencia (Cohen, 1988): <strong>0,10</strong> (pequeña), <strong>0,30</strong> (moderada), <strong>0,50</strong> (grande).</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="corrAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="corrAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Riesgo de falso positivo que aceptas. <strong>0,05</strong> es el valor habitual.</p>
+                        </div>
                     </div>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="corrPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="corrPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                            <p class="field-hint" hidden>Probabilidad de detectar la correlación si realmente existe. <strong>0,80</strong> es el mínimo habitual; usa 0,90 para estudios confirmatorios o validación psicométrica.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="corrTail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <select id="corrTail">
+                                <option value="two" selected>Bilateral (H1: ρ ≠ 0)</option>
+                                <option value="one">Unilateral (H1: ρ &gt; 0 o ρ &lt; 0)</option>
+                            </select>
+                            <p class="field-hint" hidden>El <strong>bilateral</strong> se usa cuando no tienes hipótesis direccional previa. El <strong>unilateral</strong> reduce n pero solo es válido si tienes razones sólidas para esperar la correlación en un sentido concreto.</p>
+                        </div>
+                    </div>
+
                     <div class="form-group">
-                        <label for="corrTail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <select id="corrTail">
-                            <option value="two" selected>Bilateral (H1: ρ ≠ 0)</option>
-                            <option value="one">Unilateral (H1: ρ &gt; 0 o ρ &lt; 0)</option>
+                        <label for="corrPreset">Referencia rápida de ρ <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                        <select id="corrPreset">
+                            <option value="">— Seleccionar —</option>
+                            <option value="0.10">Pequeña (ρ = 0,10)</option>
+                            <option value="0.30">Moderada (ρ = 0,30)</option>
+                            <option value="0.50">Grande (ρ = 0,50)</option>
                         </select>
-                        <p class="field-hint" hidden>El <strong>bilateral</strong> se usa cuando no tienes hipótesis direccional previa. El <strong>unilateral</strong> reduce n pero solo es válido si tienes razones sólidas para esperar la correlación en un sentido concreto.</p>
+                        <p class="field-hint" hidden>Atajo para rellenar el campo ρ con un valor de referencia habitual (Cohen, 1988) según el tamaño de efecto esperado.</p>
                     </div>
                 </div>
+            </section>
 
-                <div class="form-group">
-                    <label for="corrPreset">Referencia rápida de ρ <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                    <select id="corrPreset">
-                        <option value="">— Seleccionar —</option>
-                        <option value="0.10">Pequeña (ρ = 0,10)</option>
-                        <option value="0.30">Moderada (ρ = 0,30)</option>
-                        <option value="0.50">Grande (ρ = 0,50)</option>
-                    </select>
-                    <p class="field-hint" hidden>Atajo para rellenar el campo ρ con un valor de referencia habitual (Cohen, 1988) según el tamaño de efecto esperado.</p>
+            <div id="corrResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Curva de potencia según el tamaño muestral</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="corrChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="corrChartNote"></p>
                 </div>
-            </div>
-
-            <button class="calculate-btn" id="corrCalculateBtn">Calcular tamaño muestral</button>
-            <div id="corrResult" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Curva de potencia según el tamaño muestral</h3>
-                <canvas id="corrChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
-                <p class="ss-chart-note" id="corrChartNote"></p>
-            </div>
+                <p class="ss-chart-empty">Revisa los parámetros: el gráfico aparecerá cuando sean válidos.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -280,7 +287,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-2"></script>
+<script src="sample-size-charts.js?v=20261101-3"></script>
 <script>
 function calculateCorrSampleSize() {
     window.SampleSizeCharts && SampleSizeCharts.clear('corrChart');
@@ -324,7 +331,7 @@ document.getElementById("corrPreset").addEventListener("change", function () {
         this.value = "";
     }
 });
-document.getElementById("corrCalculateBtn").addEventListener("click", calculateCorrSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('corrForm', calculateCorrSampleSize);
 calculateCorrSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

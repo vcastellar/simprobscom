@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-2">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -153,41 +153,48 @@
     <main>
         <p class="tool-intro">Esta herramienta calcula el tamaño de muestra necesario para contrastar la igualdad de dos varianzas (\(H_0: \sigma_1 = \sigma_2\)) con la potencia objetivo, mediante el test \(F\) exacto.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Introduce la razón R = σ₁/σ₂, el nivel de significación y la potencia deseada. Se asume el mismo tamaño en ambos grupos (n₁ = n₂ = n).</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Introduce la razón R = σ₁/σ₂, el nivel de significación y la potencia deseada. Se asume el mismo tamaño en ambos grupos (n₁ = n₂ = n).</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="twoVarR">Razón R = σ₁/σ₂ <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="twoVarR" value="1.5" step="0.05" min="0.01">
-                        <p class="field-hint" hidden>Razón entre las desviaciones estándar reales de los dos grupos bajo la alternativa. Usa siempre <strong>R &gt; 1</strong>; R = 1,5 es un efecto moderado, R = 2 ya es grande.</p>
+                <div class="form-grid sample-grid" id="twoVarForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="twoVarR">Razón R = σ₁/σ₂ <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="twoVarR" value="1.5" step="0.05" min="0.01">
+                            <p class="field-hint" hidden>Razón entre las desviaciones estándar reales de los dos grupos bajo la alternativa. Usa siempre <strong>R &gt; 1</strong>; R = 1,5 es un efecto moderado, R = 2 ya es grande.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="twoVarAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="twoVarAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Riesgo de rechazar H₀ siendo cierta. <strong>0,05</strong> es el estándar; usa 0,01 para decisiones críticas sobre variabilidad.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="twoVarAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="twoVarAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Riesgo de rechazar H₀ siendo cierta. <strong>0,05</strong> es el estándar; usa 0,01 para decisiones críticas sobre variabilidad.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="twoVarPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="twoVarPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                            <p class="field-hint" hidden>Probabilidad de detectar la diferencia de varianzas si es real. <strong>0,80</strong> como mínimo habitual; 0,90 para estudios de validación.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="twoVarPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="twoVarPower" value="0.8" step="0.01" min="0.5" max="0.999">
-                        <p class="field-hint" hidden>Probabilidad de detectar la diferencia de varianzas si es real. <strong>0,80</strong> como mínimo habitual; 0,90 para estudios de validación.</p>
-                    </div>
-                </div>
-            </div>
+            </section>
 
-            <button class="calculate-btn" id="twoVarCalculateBtn">Calcular tamaño muestral</button>
-            <div id="twoVarResult" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Curva de potencia según el tamaño muestral</h3>
-                <canvas id="twoVarChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
-                <p class="ss-chart-note" id="twoVarChartNote"></p>
-            </div>
+            <div id="twoVarResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Curva de potencia según el tamaño muestral</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="twoVarChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="twoVarChartNote"></p>
+                </div>
+                <p class="ss-chart-empty">Revisa los parámetros: el gráfico aparecerá cuando sean válidos.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -261,7 +268,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-2"></script>
+<script src="sample-size-charts.js?v=20261101-3"></script>
 <script>
 function powerTwoVariances(n, R, alpha) {
     const df = n - 1;
@@ -316,7 +323,7 @@ function calculateTwoVariancesSampleSize() {
     });
 }
 
-document.getElementById('twoVarCalculateBtn').addEventListener('click', calculateTwoVariancesSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('twoVarForm', calculateTwoVariancesSampleSize);
 calculateTwoVariancesSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

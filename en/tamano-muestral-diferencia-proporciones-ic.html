@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-2">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -149,46 +149,53 @@
     <main>
         <p class="tool-intro">Estimate how many observations per group you need so that the confidence interval for the difference between two proportions has the precision (margin of error) you set. This is an <strong>estimation</strong> approach, not a hypothesis test.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Calculate the minimum number of observations per group (1:1 allocation) to estimate p₁ − p₂ with a target precision.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Calculate the minimum number of observations per group (1:1 allocation) to estimate p₁ − p₂ with a target precision.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="dp2p1">Expected proportion group 1 (p₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="dp2p1" value="0.60" step="0.01" min="0.0001" max="0.9999">
-                        <p class="field-hint" hidden>Proportion you expect to observe in group 1, based on pilot data or the literature. If you have no prior information, use <strong>0.5</strong> (the conservative scenario).</p>
+                <div class="form-grid sample-grid" id="dp2Form">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="dp2p1">Expected proportion group 1 (p₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="dp2p1" value="0.60" step="0.01" min="0.0001" max="0.9999">
+                            <p class="field-hint" hidden>Proportion you expect to observe in group 1, based on pilot data or the literature. If you have no prior information, use <strong>0.5</strong> (the conservative scenario).</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="dp2p2">Expected proportion group 2 (p₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="dp2p2" value="0.40" step="0.01" min="0.0001" max="0.9999">
+                            <p class="field-hint" hidden>Proportion you expect to observe in group 2. Together with p₁ it determines the variance of the difference, which is largest when both are close to 0.5.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="dp2p2">Expected proportion group 2 (p₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="dp2p2" value="0.40" step="0.01" min="0.0001" max="0.9999">
-                        <p class="field-hint" hidden>Proportion you expect to observe in group 2. Together with p₁ it determines the variance of the difference, which is largest when both are close to 0.5.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="dp2E">Margin of error (E) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="dp2E" value="0.10" step="0.01" min="0.0001" max="0.9999">
+                            <p class="field-hint" hidden>Maximum tolerable deviation between the estimated difference \(\hat{p}_1-\hat{p}_2\) and the true difference, in absolute percentage points. E.g. 0.10 = ±10 points.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="dp2Confidence">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="dp2Confidence" value="95" step="any" min="0.01" max="99.99" inputmode="decimal">
+                            <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true population difference. <strong>95%</strong> is the usual standard. You can enter any value between 0 and 100 (e.g. 97.5).</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="dp2E">Margin of error (E) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="dp2E" value="0.10" step="0.01" min="0.0001" max="0.9999">
-                        <p class="field-hint" hidden>Maximum tolerable deviation between the estimated difference \(\hat{p}_1-\hat{p}_2\) and the true difference, in absolute percentage points. E.g. 0.10 = ±10 points.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="dp2Confidence">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="dp2Confidence" value="95" step="any" min="0.01" max="99.99" inputmode="decimal">
-                        <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true population difference. <strong>95%</strong> is the usual standard. You can enter any value between 0 and 100 (e.g. 97.5).</p>
-                    </div>
-                </div>
-            </div>
+            </section>
 
-            <button class="calculate-btn" id="dp2CalculateBtn">Calculate sample size</button>
-            <div id="dp2Result" class="result-box">Result pending…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">How n changes with the margin of error</h3>
-                <canvas id="dp2Chart" role="img" aria-label="Line chart: sample size n as a function of the margin of error for the chosen confidence level and the levels ±5 points"></canvas>
-                <p class="ss-chart-note" id="dp2ChartNote"></p>
-            </div>
+            <div id="dp2Result" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">How n changes with the margin of error</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="dp2Chart" role="img" aria-label="Line chart: sample size n as a function of the margin of error for the chosen confidence level and the levels ±5 points"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="dp2ChartNote"></p>
+                </div>
+                <p class="ss-chart-empty">Check the parameters: the chart will appear once they are valid.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -284,7 +291,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../sample-size-charts.js?v=20261101-2"></script>
+<script src="../sample-size-charts.js?v=20261101-3"></script>
 <script>
 function calculateDiffPropSampleSize() {
     window.SampleSizeCharts && SampleSizeCharts.clear('dp2Chart');
@@ -331,7 +338,7 @@ function calculateDiffPropSampleSize() {
     });
 }
 
-document.getElementById('dp2CalculateBtn').addEventListener('click', calculateDiffPropSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('dp2Form', calculateDiffPropSampleSize);
 calculateDiffPropSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>

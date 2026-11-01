@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-2">
 
     <script type="application/ld+json">
 {
@@ -158,69 +158,76 @@
     <main>
         <p class="tool-intro">Esta calculadora determina el tamaño de muestra <strong>por grupo</strong> necesario para detectar una diferencia mínima entre las medias de dos grupos independientes, fijando el nivel de significación y la potencia.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Calcula el tamaño muestral por grupo para detectar una diferencia mínima entre dos medias.</p>
-            </div>
-
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="twoMeanSigma1">Desviación estándar del grupo 1 (σ1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="twoMeanSigma1" value="10" step="0.1" min="0.0001">
-                        <p class="field-hint" hidden>Variabilidad esperada en el grupo 1, obtenida de datos históricos, un piloto o la literatura. Si asumes varianzas iguales, usa la misma σ en ambos campos.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="twoMeanSigma2">Desviación estándar del grupo 2 (σ2) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="twoMeanSigma2" value="10" step="0.1" min="0.0001">
-                        <p class="field-hint" hidden>Variabilidad esperada en el grupo 2. Si es muy distinta de σ1, considera además un test de Welch al analizar los datos.</p>
-                    </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Calcula el tamaño muestral por grupo para detectar una diferencia mínima entre dos medias.</p>
                 </div>
 
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="twoMeanDelta">Diferencia mínima detectable (Δ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="twoMeanDelta" value="5" step="0.1" min="0.0001">
-                        <p class="field-hint" hidden>La diferencia mínima entre medias que consideras práctica o clínicamente relevante, fijada <strong>antes</strong> de ver los datos — no la diferencia que esperas encontrar.</p>
+                <div class="form-grid sample-grid" id="twoMeanForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="twoMeanSigma1">Desviación estándar del grupo 1 (σ1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="twoMeanSigma1" value="10" step="0.1" min="0.0001">
+                            <p class="field-hint" hidden>Variabilidad esperada en el grupo 1, obtenida de datos históricos, un piloto o la literatura. Si asumes varianzas iguales, usa la misma σ en ambos campos.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="twoMeanSigma2">Desviación estándar del grupo 2 (σ2) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="twoMeanSigma2" value="10" step="0.1" min="0.0001">
+                            <p class="field-hint" hidden>Variabilidad esperada en el grupo 2. Si es muy distinta de σ1, considera además un test de Welch al analizar los datos.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="twoMeanAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="twoMeanAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Nivel de significación del contraste bilateral. El valor estándar es <strong>0,05</strong>; usa 0,01 para estudios confirmatorios.</p>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="twoMeanDelta">Diferencia mínima detectable (Δ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="twoMeanDelta" value="5" step="0.1" min="0.0001">
+                            <p class="field-hint" hidden>La diferencia mínima entre medias que consideras práctica o clínicamente relevante, fijada <strong>antes</strong> de ver los datos — no la diferencia que esperas encontrar.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="twoMeanAlpha">Alfa (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="twoMeanAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Nivel de significación del contraste bilateral. El valor estándar es <strong>0,05</strong>; usa 0,01 para estudios confirmatorios.</p>
+                        </div>
+                    </div>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="twoMeanPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="twoMeanPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                            <p class="field-hint" hidden>Probabilidad de detectar la diferencia Δ si realmente existe. <strong>0,80</strong> es el mínimo aceptado; usa 0,90 en estudios pivotales.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="twoMeanAllocation">Asignación entre grupos <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <select id="twoMeanAllocation">
+                                <option value="equal" selected>Igual (1:1)</option>
+                                <option value="custom">Desigual (n2/n1 personalizado)</option>
+                            </select>
+                            <p class="field-hint" hidden>La asignación 1:1 es siempre la más eficiente cuando el coste por sujeto es similar en ambos grupos. Usa una razón personalizada si un grupo es más caro o difícil de reclutar.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="twoMeanRatioGroup" hidden>
+                        <label for="twoMeanRatio">Razón n2/n1 (k) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                        <input type="number" id="twoMeanRatio" value="1.5" step="0.1" min="0.1">
+                        <p class="field-hint" hidden>Cuántas veces mayor será el grupo 2 respecto al grupo 1 (n2 = k·n1). Solo se usa si eliges asignación desigual arriba.</p>
                     </div>
                 </div>
+            </section>
 
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="twoMeanPower">Potencia (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="twoMeanPower" value="0.8" step="0.01" min="0.5" max="0.999">
-                        <p class="field-hint" hidden>Probabilidad de detectar la diferencia Δ si realmente existe. <strong>0,80</strong> es el mínimo aceptado; usa 0,90 en estudios pivotales.</p>
+            <div id="twoMeanResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Curva de potencia según el tamaño muestral</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="twoMeanChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
                     </div>
-                    <div class="form-group">
-                        <label for="twoMeanAllocation">Asignación entre grupos <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <select id="twoMeanAllocation">
-                            <option value="equal" selected>Igual (1:1)</option>
-                            <option value="custom">Desigual (n2/n1 personalizado)</option>
-                        </select>
-                        <p class="field-hint" hidden>La asignación 1:1 es siempre la más eficiente cuando el coste por sujeto es similar en ambos grupos. Usa una razón personalizada si un grupo es más caro o difícil de reclutar.</p>
-                    </div>
+                    <p class="ss-chart-note" id="twoMeanChartNote"></p>
                 </div>
-
-                <div class="form-group" id="twoMeanRatioGroup" hidden>
-                    <label for="twoMeanRatio">Razón n2/n1 (k) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                    <input type="number" id="twoMeanRatio" value="1.5" step="0.1" min="0.1">
-                    <p class="field-hint" hidden>Cuántas veces mayor será el grupo 2 respecto al grupo 1 (n2 = k·n1). Solo se usa si eliges asignación desigual arriba.</p>
-                </div>
-            </div>
-
-            <button class="calculate-btn" id="twoMeanCalculateBtn">Calcular tamaño muestral</button>
-            <div id="twoMeanResult" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Curva de potencia según el tamaño muestral</h3>
-                <canvas id="twoMeanChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
-                <p class="ss-chart-note" id="twoMeanChartNote"></p>
-            </div>
+                <p class="ss-chart-empty">Revisa los parámetros: el gráfico aparecerá cuando sean válidos.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -320,7 +327,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-2"></script>
+<script src="sample-size-charts.js?v=20261101-3"></script>
 <script>
 function refreshMathJaxTwoMean() {
     if (window.MathJax?.typesetPromise) {
@@ -390,7 +397,7 @@ function updateTwoMeanControls() {
 }
 
 document.getElementById("twoMeanAllocation").addEventListener("change", updateTwoMeanControls);
-document.getElementById("twoMeanCalculateBtn").addEventListener("click", calculateTwoMeanSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('twoMeanForm', calculateTwoMeanSampleSize);
 updateTwoMeanControls();
 calculateTwoMeanSampleSize();
 </script>

@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-2">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -149,46 +149,53 @@
     <main>
         <p class="tool-intro">Estimate how many observations per group you need to obtain a confidence interval for the odds ratio with the target width on the log scale. This is a precision-based approach.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Enter the expected OR, the event proportion in the reference group, and the desired precision on the log(OR) scale.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Enter the expected OR, the event proportion in the reference group, and the desired precision on the log(OR) scale.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="orOR">Expected odds ratio (OR) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="orOR" value="2.0" step="0.1" min="0.0001">
-                        <p class="field-hint" hidden>The OR you expect to find, based on earlier studies or on the smallest association you consider relevant.</p>
+                <div class="form-grid sample-grid" id="orForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="orOR">Expected odds ratio (OR) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="orOR" value="2.0" step="0.1" min="0.0001">
+                            <p class="field-hint" hidden>The OR you expect to find, based on earlier studies or on the smallest association you consider relevant.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="orP2">Event proportion in the reference group (p₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="orP2" value="0.20" step="0.01" min="0.0001" max="0.9999">
+                            <p class="field-hint" hidden>Expected frequency of the event in the unexposed population (reference group). Together with the OR, it is the parameter that most influences the required n.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="orP2">Event proportion in the reference group (p₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="orP2" value="0.20" step="0.01" min="0.0001" max="0.9999">
-                        <p class="field-hint" hidden>Expected frequency of the event in the unexposed population (reference group). Together with the OR, it is the parameter that most influences the required n.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="orElog">CI half-width on the log(OR) scale (E<sub>log</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="orElog" value="0.5" step="0.05" min="0.0001">
+                            <p class="field-hint" hidden>Desired precision on the logarithmic scale. The final CI for OR runs from OR·e⁻ᴱ to OR·e⁺ᴱ. Values between <strong>0.3 and 0.7</strong> are common; the smaller E_log is, the more subjects you need.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="orConfidence">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="orConfidence" value="95" step="any" min="0.01" max="99.99" inputmode="decimal">
+                            <p class="field-hint" hidden>Probability that the procedure produces a CI containing the true OR. <strong>95%</strong> is the standard; use 99% for regulatory or high-impact decisions. You can enter any value between 0 and 100 (e.g. 97.5).</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="orElog">CI half-width on the log(OR) scale (E<sub>log</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="orElog" value="0.5" step="0.05" min="0.0001">
-                        <p class="field-hint" hidden>Desired precision on the logarithmic scale. The final CI for OR runs from OR·e⁻ᴱ to OR·e⁺ᴱ. Values between <strong>0.3 and 0.7</strong> are common; the smaller E_log is, the more subjects you need.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="orConfidence">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="orConfidence" value="95" step="any" min="0.01" max="99.99" inputmode="decimal">
-                        <p class="field-hint" hidden>Probability that the procedure produces a CI containing the true OR. <strong>95%</strong> is the standard; use 99% for regulatory or high-impact decisions. You can enter any value between 0 and 100 (e.g. 97.5).</p>
-                    </div>
-                </div>
-            </div>
+            </section>
 
-            <button class="calculate-btn" id="orCalculateBtn">Calculate sample size</button>
-            <div id="orResult" class="result-box">Result pending…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">How n changes with the margin E_log</h3>
-                <canvas id="orChart" role="img" aria-label="Line chart: sample size n as a function of the log-scale margin of error for the chosen confidence level and the levels ±5 points"></canvas>
-                <p class="ss-chart-note" id="orChartNote"></p>
-            </div>
+            <div id="orResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">How n changes with the margin E_log</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="orChart" role="img" aria-label="Line chart: sample size n as a function of the log-scale margin of error for the chosen confidence level and the levels ±5 points"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="orChartNote"></p>
+                </div>
+                <p class="ss-chart-empty">Check the parameters: the chart will appear once they are valid.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -288,7 +295,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../sample-size-charts.js?v=20261101-2"></script>
+<script src="../sample-size-charts.js?v=20261101-3"></script>
 <script>
 function calculateORSampleSize() {
     window.SampleSizeCharts && SampleSizeCharts.clear('orChart');
@@ -345,7 +352,7 @@ function calculateORSampleSize() {
     });
 }
 
-document.getElementById('orCalculateBtn').addEventListener('click', calculateORSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('orForm', calculateORSampleSize);
 calculateORSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>

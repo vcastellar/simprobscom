@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-2">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -149,41 +149,48 @@
     <main>
         <p class="tool-intro">Calculate the number of observations needed for the Kolmogorov–Smirnov test to detect, with the desired power, a maximum deviation \(d\) from a fully specified theoretical distribution.</p>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Enter the maximum CDF deviation (d), the significance level and the desired power to obtain the minimum sample size.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Enter the maximum CDF deviation (d), the significance level and the desired power to obtain the minimum sample size.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="ksD">Maximum CDF deviation (d) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="ksD" value="0.15" step="0.01" min="0.001" max="0.999">
-                        <p class="field-hint" hidden>Maximum vertical distance between the true CDF and the theoretical one that you want to be able to detect. Reference: <strong>0.10</strong> (small), <strong>0.20</strong> (medium), <strong>0.30</strong> (large).</p>
+                <div class="form-grid sample-grid" id="ksForm">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="ksD">Maximum CDF deviation (d) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="ksD" value="0.15" step="0.01" min="0.001" max="0.999">
+                            <p class="field-hint" hidden>Maximum vertical distance between the true CDF and the theoretical one that you want to be able to detect. Reference: <strong>0.10</strong> (small), <strong>0.20</strong> (medium), <strong>0.30</strong> (large).</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="ksAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="ksAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>False-positive risk you accept. <strong>0.05</strong> is the usual standard; use 0.01 if the cost of a false positive is high.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="ksAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="ksAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>False-positive risk you accept. <strong>0.05</strong> is the usual standard; use 0.01 if the cost of a false positive is high.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="ksPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="ksPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                            <p class="field-hint" hidden>Probability of detecting the departure if it really exists. <strong>0.80</strong> is the usual minimum; use 0.90 if false negatives have important consequences.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="ksPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="ksPower" value="0.80" step="0.01" min="0.5" max="0.999">
-                        <p class="field-hint" hidden>Probability of detecting the departure if it really exists. <strong>0.80</strong> is the usual minimum; use 0.90 if false negatives have important consequences.</p>
-                    </div>
-                </div>
-            </div>
+            </section>
 
-            <button class="calculate-btn" id="ksCalculateBtn">Calculate sample size</button>
-            <div id="ksResult" class="result-box">Result pending…</div>
-            <div class="chart-wrap ss-chart" hidden>
-                <h3 class="ss-chart-title">Power curve by sample size</h3>
-                <canvas id="ksChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
-                <p class="ss-chart-note" id="ksChartNote"></p>
-            </div>
+            <div id="ksResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Power curve by sample size</h2>
+                <div class="chart-wrap ss-chart" hidden>
+                    <div class="ss-canvas">
+                        <canvas id="ksChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="ksChartNote"></p>
+                </div>
+                <p class="ss-chart-empty">Check the parameters: the chart will appear once they are valid.</p>
+            </section>
         </section>
 
                 <section class="card content-card">
@@ -267,7 +274,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../sample-size-charts.js?v=20261101-2"></script>
+<script src="../sample-size-charts.js?v=20261101-3"></script>
 <script>
 function ksCDF(x) {
     if (x <= 0) return 0;
@@ -348,7 +355,7 @@ function calculateKSSampleSize() {
     });
 }
 
-document.getElementById('ksCalculateBtn').addEventListener('click', calculateKSSampleSize);
+window.SampleSizeCharts && SampleSizeCharts.live('ksForm', calculateKSSampleSize);
 calculateKSSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
