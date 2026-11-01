@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-1">
 
     <script type="application/ld+json">
 {
@@ -207,6 +207,11 @@
 
             <button class="calculate-btn" id="finiteMeanCalculateBtn">Calcular tamaño muestral</button>
             <div id="finiteMeanResult" class="result-box">Resultado pendiente…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">Cómo cambia n con el margen de error</h3>
+                <canvas id="finiteMeanChart" role="img" aria-label="Gráfico de líneas: tamaño muestral n en función del margen de error para distintos niveles de confianza"></canvas>
+                <p class="ss-chart-note" id="finiteMeanChartNote"></p>
+            </div>
         </section>
 
                 <section class="card content-card">
@@ -299,8 +304,11 @@
 <script>window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };</script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="sample-size-charts.js?v=20261101-1"></script>
 <script>
 function calculateFiniteMeanSampleSize() {
+ window.SampleSizeCharts && SampleSizeCharts.clear('finiteMeanChart');
  const sigma=parseFloat(document.getElementById('finiteMeanSigma').value);
  const e=parseFloat(document.getElementById('finiteMeanE').value);
  const nPop=parseFloat(document.getElementById('finiteMeanN').value);
@@ -317,13 +325,25 @@ function calculateFiniteMeanSampleSize() {
  const n0=Math.pow((z*sigma)/e,2);
  const n0Rounded=Math.ceil(n0);
 
+ const drawFiniteMeanChart = (nShown) => window.SampleSizeCharts && SampleSizeCharts.precision({
+  canvas: 'finiteMeanChart', x: e, n: nShown, confidence: conf,
+  xName: 'E', xLabel: 'Margen de error E',
+  unit: 'observaciones',
+  nFn: function (x, c) {
+   const zc = jStat.normal.inv(1 - ((1 - c) / 2), 0, 1);
+   const m0 = Math.pow((zc * sigma) / x, 2);
+   return applyFPC ? Math.ceil(m0 / (1 + ((m0 - 1) / nPop))) : Math.ceil(m0);
+  }
+ });
  if(!applyFPC){
   resultEl.innerText=`n recomendado (sin corrección por población finita): ${n0Rounded}.`;
+  drawFiniteMeanChart(n0Rounded);
   return;
  }
 
  const n=Math.ceil(n0/(1+((n0-1)/nPop)));
  resultEl.innerText=`n corregido recomendado: ${n} (n infinito≈${n0Rounded}).`;
+ drawFiniteMeanChart(n);
 }
 
 document.getElementById('finiteMeanCalculateBtn').addEventListener('click', calculateFiniteMeanSampleSize);

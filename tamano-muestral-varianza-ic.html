@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -180,6 +180,11 @@
 
             <button class="calculate-btn" id="varCalculateBtn">Calcular tamaño muestral</button>
             <div id="varResult" class="result-box">Resultado pendiente…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">Cómo cambia n con el cociente U/L</h3>
+                <canvas id="varChart" role="img" aria-label="Gráfico de líneas: tamaño muestral n en función del cociente U/L para distintos niveles de confianza"></canvas>
+                <p class="ss-chart-note" id="varChartNote"></p>
+            </div>
         </section>
 
                 <section class="card content-card">
@@ -271,8 +276,24 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="sample-size-charts.js?v=20261101-1"></script>
 <script>
+// n mínimo tal que χ²_{1-α/2}/χ²_{α/2} ≤ R (el cociente decrece con n: búsqueda binaria).
+function varianceSampleSizeFor(R, confidence) {
+    const a = 1 - confidence;
+    const ratioAt = (m) => jStat.chisquare.inv(1 - a / 2, m - 1) / jStat.chisquare.inv(a / 2, m - 1);
+    let lo = 2;
+    let hi = 100000;
+    if (ratioAt(hi) > R) return null;
+    while (lo < hi) {
+        const mid = Math.floor((lo + hi) / 2);
+        if (ratioAt(mid) <= R) hi = mid; else lo = mid + 1;
+    }
+    return lo;
+}
 function calculateVarianceSampleSize() {
+    window.SampleSizeCharts && SampleSizeCharts.clear('varChart');
     const R = parseFloat(document.getElementById('varR').value);
     const confidence = parseFloat(document.getElementById('varConfidence').value);
     const resultEl = document.getElementById('varResult');
@@ -314,6 +335,17 @@ function calculateVarianceSampleSize() {
         `n mínimo recomendado: ${n} observaciones (${confPct} % de confianza, cociente U/L ≤ ${R})\n` +
         `gl = ${df}  |  χ²_{1-α/2} = ${chiUpper.toFixed(4)}  |  χ²_{α/2} = ${chiLower.toFixed(4)}\n` +
         `Cociente real U/L = ${actualRatio.toFixed(4)} ≤ ${R}`;
+    window.SampleSizeCharts && SampleSizeCharts.precision({
+        canvas: 'varChart', x: R, n: n, confidence: confidence,
+        xName: 'R', xLabel: 'Cociente U/L del intervalo (R)',
+        xMin: 1.001, xRange: [1 + (R - 1) * 0.5, 1 + (R - 1) * 2],
+        xHalf: 1 + (R - 1) * 0.5, xDouble: 1 + (R - 1) * 2,
+        nFn: varianceSampleSizeFor,
+        insight: function (c) {
+            if (c.nHalf == null || c.nDouble == null) return '';
+            return 'Si exiges un cociente más estrecho (R = ' + c.fmt(c.xHalf) + ') harían falta ' + c.fmtN(c.nHalf) + ' observaciones; si aceptas uno más amplio (R = ' + c.fmt(c.xDouble) + '), bastarían ' + c.fmtN(c.nDouble) + '.';
+        }
+    });
 }
 
 document.getElementById('varCalculateBtn').addEventListener('click', calculateVarianceSampleSize);

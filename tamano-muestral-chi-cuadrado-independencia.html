@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-1">
     <style>
         .theory-table-wrap { margin: 10px 0 16px; overflow-x: auto; border-radius: 12px; border: 1px solid rgba(79, 70, 229, 0.18); }
         .theory-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; line-height: 1.5; font-variant-numeric: tabular-nums; }
@@ -204,6 +204,11 @@
 
             <button class="calculate-btn" id="chiCalculateBtn">Calcular tamaño muestral</button>
             <div id="chiResult" class="result-box">Resultado pendiente…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">Curva de potencia según el tamaño muestral</h3>
+                <canvas id="chiChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
+                <p class="ss-chart-note" id="chiChartNote"></p>
+            </div>
 
             <details style="margin-top:1.5rem;">
                 <summary style="cursor:pointer; font-weight:600; color:var(--primary);">Asistente para tablas 2×2: calcular w desde p₁ y p₂</summary>
@@ -363,6 +368,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="sample-size-charts.js?v=20261101-1"></script>
 <script>
 function ncChiSqCDF(x, df, lambda) {
     if (x <= 0) return 0;
@@ -385,6 +392,7 @@ function ncChiSqPower(N, df, w, alpha) {
 }
 
 function calculateChiIndSampleSize() {
+    window.SampleSizeCharts && SampleSizeCharts.clear('chiChart');
     const w = parseFloat(document.getElementById('chiW').value);
     const df = parseInt(document.getElementById('chiDf').value);
     const alpha = parseFloat(document.getElementById('chiAlpha').value);
@@ -413,6 +421,11 @@ function calculateChiIndSampleSize() {
         `N total mínimo recomendado: ${N} observaciones\n` +
         `Potencia alcanzada: ${(actualPower * 100).toFixed(2)} % (objetivo: ${(power * 100).toFixed(0)} %)\n` +
         `w = ${w}  |  df = ${df}  |  λ = N·w² = ${(N * w * w).toFixed(2)}  |  α = ${alpha}`;
+    window.SampleSizeCharts && SampleSizeCharts.power({
+        canvas: 'chiChart', n: N, target: power,
+        xLabel: 'N total',
+        powerFn: function (m) { return ncChiSqPower(m, df, w, alpha); }
+    });
 }
 
 function calculateWFromProportions() {

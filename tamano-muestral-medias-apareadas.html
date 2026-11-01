@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-1">
 
     <script type="application/ld+json">
 {
@@ -193,6 +193,11 @@
 
             <button class="calculate-btn" id="pairedMeanCalculateBtn">Calcular tamaño muestral</button>
             <div id="pairedMeanResult" class="result-box">Resultado pendiente…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">Curva de potencia según el tamaño muestral</h3>
+                <canvas id="pairedMeanChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
+                <p class="ss-chart-note" id="pairedMeanChartNote"></p>
+            </div>
         </section>
 
                 <section class="card content-card">
@@ -285,8 +290,11 @@
 <script>window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };</script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="sample-size-charts.js?v=20261101-1"></script>
 <script>
 function calculatePairedMeanSampleSize(){
+ window.SampleSizeCharts && SampleSizeCharts.clear('pairedMeanChart');
  const sigmaD=parseFloat(document.getElementById('pairedMeanSigmaD').value);
  const delta=parseFloat(document.getElementById('pairedMeanDelta').value);
  const alpha=parseFloat(document.getElementById('pairedMeanAlpha').value);
@@ -303,6 +311,11 @@ function calculatePairedMeanSampleSize(){
  const n=Math.ceil(Math.pow(((zAlpha+zBeta)*sigmaD)/delta,2));
 
  resultEl.innerText=`n mínimo recomendado: ${n} pares.`;
+ window.SampleSizeCharts && SampleSizeCharts.power({
+   canvas: 'pairedMeanChart', n: n, target: power,
+   xLabel: 'Número de pares n',
+   powerFn: function (m) { return jStat.normal.cdf((delta * Math.sqrt(m)) / sigmaD - zAlpha, 0, 1); }
+  });
 }
 
 document.getElementById('pairedMeanCalculateBtn').addEventListener('click', calculatePairedMeanSampleSize);

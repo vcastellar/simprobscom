@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -188,6 +188,11 @@
 
             <button class="calculate-btn" id="orCalculateBtn">Calculate sample size</button>
             <div id="orResult" class="result-box">Result pending…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">How n changes with the margin E_log</h3>
+                <canvas id="orChart" role="img" aria-label="Line chart: sample size n as a function of the log-scale margin of error for different confidence levels"></canvas>
+                <p class="ss-chart-note" id="orChartNote"></p>
+            </div>
         </section>
 
                 <section class="card content-card">
@@ -286,8 +291,11 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../sample-size-charts.js?v=20261101-1"></script>
 <script>
 function calculateORSampleSize() {
+    window.SampleSizeCharts && SampleSizeCharts.clear('orChart');
     const OR = parseFloat(document.getElementById('orOR').value);
     const p2 = parseFloat(document.getElementById('orP2').value);
     const eLog = parseFloat(document.getElementById('orElog').value);
@@ -330,6 +338,15 @@ function calculateORSampleSize() {
         `Minimum n per group: ${n}  |  Total: ${2 * n} observations (${confPct}% confidence)\n` +
         `Z = ${z.toFixed(4)}  |  E_log = ${eLog}  |  U/L ratio of the CI = e^(2·E_log) = ${ciRatio.toFixed(3)}\n` +
         `CI for OR ≈ [${(OR * Math.exp(-eLog)).toFixed(3)}, ${(OR * Math.exp(eLog)).toFixed(3)}]`;
+    window.SampleSizeCharts && SampleSizeCharts.precision({
+        canvas: 'orChart', x: eLog, n: n, confidence: confidence,
+        xName: 'E_log', xLabel: 'Margin of error on the log scale (E_log)',
+        yLabel: 'n per group', unit: 'observations per group',
+        nFn: function (x, conf) {
+            const zc = jStat.normal.inv(1 - (1 - conf) / 2, 0, 1);
+            return Math.ceil(zc * zc * varianceTerm / (x * x));
+        }
+    });
 }
 
 document.getElementById('orCalculateBtn').addEventListener('click', calculateORSampleSize);

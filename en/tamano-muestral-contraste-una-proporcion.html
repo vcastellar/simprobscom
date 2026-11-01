@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
 
     <script type="application/ld+json">
 {
@@ -198,6 +198,11 @@
 
             <button class="calculate-btn" id="onePropCalculateBtn">Calculate sample size</button>
             <div id="onePropResult" class="result-box">Result pending…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">Power curve by sample size</h3>
+                <canvas id="onePropChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
+                <p class="ss-chart-note" id="onePropChartNote"></p>
+            </div>
         </section>
 
                 <section class="card content-card">
@@ -271,6 +276,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../sample-size-charts.js?v=20261101-1"></script>
 <script>
 function refreshMathJaxOneProp() {
     if (window.MathJax?.typesetPromise) {
@@ -279,6 +286,7 @@ function refreshMathJaxOneProp() {
 }
 
 function calculateOnePropSampleSize() {
+    window.SampleSizeCharts && SampleSizeCharts.clear('onePropChart');
     const p0 = parseFloat(document.getElementById("onePropH0").value);
     const delta = parseFloat(document.getElementById("onePropDelta").value);
     const alpha = parseFloat(document.getElementById("onePropAlpha").value);
@@ -308,6 +316,16 @@ function calculateOnePropSampleSize() {
     const altText = alternative === "two-sided" ? "Ha: p ≠ p0" : (alternative === "greater" ? "Ha: p ≥ p0" : "Ha: p ≤ p0");
 
     resultEl.innerText = `Minimum recommended n: ${n} observations for H0: p = ${p0} and ${altText}.`;
+    window.SampleSizeCharts && SampleSizeCharts.power({
+        canvas: 'onePropChart', n: n, target: power,
+        xLabel: 'Sample size n',
+        powerFn: function (m) {
+            const clampP = (v) => Math.min(0.9999, Math.max(0.0001, v));
+            const pw = (p1) => jStat.normal.cdf((delta * Math.sqrt(m) - zAlpha * Math.sqrt(p0 * (1 - p0))) / Math.sqrt(p1 * (1 - p1)), 0, 1);
+            if (alternative === "two-sided") return Math.min(pw(clampP(p0 + delta)), pw(clampP(p0 - delta)));
+            return pw(clampP(p0 + (alternative === "less" ? -delta : delta)));
+        }
+    });
     refreshMathJaxOneProp();
 }
 

@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -188,6 +188,11 @@
 
             <button class="calculate-btn" id="dp2CalculateBtn">Calculate sample size</button>
             <div id="dp2Result" class="result-box">Result pending…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">How n changes with the margin of error</h3>
+                <canvas id="dp2Chart" role="img" aria-label="Line chart: sample size n as a function of the margin of error for different confidence levels"></canvas>
+                <p class="ss-chart-note" id="dp2ChartNote"></p>
+            </div>
         </section>
 
                 <section class="card content-card">
@@ -282,8 +287,11 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../sample-size-charts.js?v=20261101-1"></script>
 <script>
 function calculateDiffPropSampleSize() {
+    window.SampleSizeCharts && SampleSizeCharts.clear('dp2Chart');
     const p1 = parseFloat(document.getElementById('dp2p1').value);
     const p2 = parseFloat(document.getElementById('dp2p2').value);
     const e  = parseFloat(document.getElementById('dp2E').value);
@@ -316,6 +324,15 @@ function calculateDiffPropSampleSize() {
     resultEl.innerText =
         `Minimum n per group: ${n}  |  Total: ${2 * n} observations (${confPct}% confidence)\n` +
         `Z = ${z.toFixed(4)}  |  p₁(1−p₁) + p₂(1−p₂) = ${variance.toFixed(6)}  |  E = ${e}`;
+    window.SampleSizeCharts && SampleSizeCharts.precision({
+        canvas: 'dp2Chart', x: e, n: n, confidence: confidence,
+        xName: 'E', xLabel: 'Margin of error E', xMax: 0.5,
+        yLabel: 'n per group', unit: 'observations per group',
+        nFn: function (x, conf) {
+            const zc = jStat.normal.inv(1 - (1 - conf) / 2, 0, 1);
+            return Math.ceil(zc * zc * variance / (x * x));
+        }
+    });
 }
 
 document.getElementById('dp2CalculateBtn').addEventListener('click', calculateDiffPropSampleSize);

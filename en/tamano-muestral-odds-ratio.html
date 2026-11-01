@@ -74,7 +74,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -168,6 +168,11 @@
 
             <button class="calculate-btn" id="orCalculateBtn">Calculate sample size</button>
             <div id="orResult" class="result-box">Result pending…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">Power curve by sample size</h3>
+                <canvas id="orChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
+                <p class="ss-chart-note" id="orChartNote"></p>
+            </div>
         </section>
 
                 <section class="card content-card">
@@ -268,8 +273,11 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../sample-size-charts.js?v=20261101-1"></script>
 <script>
 function calculateORSampleSize() {
+    window.SampleSizeCharts && SampleSizeCharts.clear('orChart');
     const resultEl = document.getElementById("orResult");
     try {
         const p0 = parseFloat(document.getElementById("orP0").value);
@@ -304,6 +312,15 @@ function calculateORSampleSize() {
         resultEl.innerText =
             `Minimum n: ${nCases} cases and ${nControls} controls (total: ${nCases + nControls}).\n` +
             `p₁ (exposure in cases): ${p1.toFixed(4)}. Ratio: 1:${r}.`;
+        window.SampleSizeCharts && SampleSizeCharts.power({
+            canvas: 'orChart', n: nCases, target: power,
+            xLabel: 'Number of cases',
+            powerFn: function (m) {
+                const a = zAlpha * Math.sqrt((1 + 1 / r) * pBar * (1 - pBar));
+                const s = Math.sqrt(p1 * (1 - p1) + p0 * (1 - p0) / r);
+                return jStat.normal.cdf((diff * Math.sqrt(m) - a) / s, 0, 1);
+            }
+        });
     } catch (e) {
         resultEl.innerText = `Error: ${e.message}`;
     }

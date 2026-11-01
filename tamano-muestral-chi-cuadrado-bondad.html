@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="style_new.css?v=20261101-1">
     <style>
         .theory-table-wrap { margin: 10px 0 16px; overflow-x: auto; border-radius: 12px; border: 1px solid rgba(79, 70, 229, 0.18); }
         .theory-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; line-height: 1.5; font-variant-numeric: tabular-nums; }
@@ -204,6 +204,11 @@
 
             <button class="calculate-btn" id="bondadCalculateBtn">Calcular tamaño muestral</button>
             <div id="bondadResult" class="result-box">Resultado pendiente…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">Curva de potencia según el tamaño muestral</h3>
+                <canvas id="bondadChart" role="img" aria-label="Gráfico de líneas: potencia del contraste en función del tamaño muestral"></canvas>
+                <p class="ss-chart-note" id="bondadChartNote"></p>
+            </div>
 
             <details style="margin-top:1.5rem;">
                 <summary style="cursor:pointer; font-weight:600; color:var(--primary);">Asistente: calcular w desde proporciones observadas y teóricas</summary>
@@ -372,6 +377,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="sample-size-charts.js?v=20261101-1"></script>
 <script>
 function ncChiSqCDF(x, df, lambda) {
     if (x <= 0) return 0;
@@ -394,6 +401,7 @@ function ncChiSqPower(N, df, w, alpha) {
 }
 
 function calculateBondadSampleSize() {
+    window.SampleSizeCharts && SampleSizeCharts.clear('bondadChart');
     const w = parseFloat(document.getElementById('bondadW').value);
     const k = parseInt(document.getElementById('bondadK').value);
     const alpha = parseFloat(document.getElementById('bondadAlpha').value);
@@ -426,6 +434,11 @@ function calculateBondadSampleSize() {
         `Potencia alcanzada: ${(actualPower * 100).toFixed(2)} % (objetivo: ${(power * 100).toFixed(0)} %)\n` +
         `w = ${w}  |  k = ${k}  |  λ = N·w² = ${(N * w * w).toFixed(2)}  |  α = ${alpha}\n` +
         `Frecuencia media esperada por celda: N/k = ${freqPerCell}${cellWarning}`;
+    window.SampleSizeCharts && SampleSizeCharts.power({
+        canvas: 'bondadChart', n: N, target: power,
+        xLabel: 'N total',
+        powerFn: function (m) { return ncChiSqPower(m, df, w, alpha); }
+    });
 }
 
 function calculateWFromCategories() {

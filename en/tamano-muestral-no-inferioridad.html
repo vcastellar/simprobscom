@@ -74,7 +74,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261101-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -172,6 +172,11 @@
 
             <button class="calculate-btn" id="niCalculateBtn">Calculate sample size</button>
             <div id="niResult" class="result-box">Result pending…</div>
+            <div class="chart-wrap ss-chart" hidden>
+                <h3 class="ss-chart-title">Power curve by sample size</h3>
+                <canvas id="niChart" role="img" aria-label="Line chart: test power as a function of sample size"></canvas>
+                <p class="ss-chart-note" id="niChartNote"></p>
+            </div>
         </section>
 
                 <section class="card content-card">
@@ -272,8 +277,11 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../sample-size-charts.js?v=20261101-1"></script>
 <script>
 function calculateNISampleSize() {
+    window.SampleSizeCharts && SampleSizeCharts.clear('niChart');
     const resultEl = document.getElementById("niResult");
     try {
         const type = document.getElementById("niType").value;
@@ -307,6 +315,11 @@ function calculateNISampleSize() {
         resultEl.innerText =
             `Minimum n per group (${typeLabel}): ${n} (total: ${2 * n}).\n` +
             `Parameters: σ = ${sigma}, M = ${margin}, δ = ${delta}, α = ${alpha} one-sided, power = ${(power * 100).toFixed(0)}%.`;
+        window.SampleSizeCharts && SampleSizeCharts.power({
+            canvas: 'niChart', n: n, target: power,
+            xLabel: 'n per group',
+            powerFn: function (m) { return jStat.normal.cdf((denom * Math.sqrt(m / 2)) / sigma - zAlpha, 0, 1); }
+        });
     } catch (e) {
         resultEl.innerText = `Error: ${e.message}`;
     }
