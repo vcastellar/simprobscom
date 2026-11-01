@@ -180,12 +180,8 @@
                     </div>
                     <div class="form-group">
                         <label for="dp2Confidence">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <select id="dp2Confidence">
-                            <option value="0.90">90%</option>
-                            <option value="0.95" selected>95%</option>
-                            <option value="0.99">99%</option>
-                        </select>
-                        <p class="field-hint" hidden>Probabilidad de que el procedimiento produzca un intervalo que contenga la diferencia poblacional real. <strong>95 %</strong> es el estándar habitual.</p>
+                        <input type="number" id="dp2Confidence" value="95" step="any" min="0.01" max="99.99" inputmode="decimal">
+                        <p class="field-hint" hidden>Probabilidad de que el procedimiento produzca un intervalo que contenga la diferencia poblacional real. <strong>95 %</strong> es el estándar habitual. Puedes introducir cualquier valor entre 0 y 100 (por ejemplo, 97,5).</p>
                     </div>
                 </div>
             </div>
@@ -194,7 +190,7 @@
             <div id="dp2Result" class="result-box">Resultado pendiente…</div>
             <div class="chart-wrap ss-chart" hidden>
                 <h3 class="ss-chart-title">Cómo cambia n con el margen de error</h3>
-                <canvas id="dp2Chart" role="img" aria-label="Gráfico de líneas: tamaño muestral n en función del margen de error para distintos niveles de confianza"></canvas>
+                <canvas id="dp2Chart" role="img" aria-label="Gráfico de líneas: tamaño muestral n en función del margen de error para el nivel de confianza elegido y los niveles ±5 puntos"></canvas>
                 <p class="ss-chart-note" id="dp2ChartNote"></p>
             </div>
         </section>
@@ -292,14 +288,15 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-1"></script>
+<script src="sample-size-charts.js?v=20261101-2"></script>
 <script>
 function calculateDiffPropSampleSize() {
     window.SampleSizeCharts && SampleSizeCharts.clear('dp2Chart');
     const p1 = parseFloat(document.getElementById('dp2p1').value);
     const p2 = parseFloat(document.getElementById('dp2p2').value);
     const e  = parseFloat(document.getElementById('dp2E').value);
-    const confidence = parseFloat(document.getElementById('dp2Confidence').value);
+    const confPct = parseFloat(document.getElementById('dp2Confidence').value);
+    const confidence = confPct / 100;
     const resultEl = document.getElementById('dp2Result');
 
     if (!Number.isFinite(p1) || p1 <= 0 || p1 >= 1) {
@@ -314,8 +311,8 @@ function calculateDiffPropSampleSize() {
         resultEl.innerText = 'Error: E debe estar entre 0 y 1 (sin incluir extremos).';
         return;
     }
-    if (!Number.isFinite(confidence) || confidence <= 0 || confidence >= 1) {
-        resultEl.innerText = 'Error: el nivel de confianza debe estar entre 0 y 1.';
+    if (!Number.isFinite(confPct) || confPct <= 0 || confPct >= 100) {
+        resultEl.innerText = 'Error: el nivel de confianza debe ser un número entre 0 y 100.';
         return;
     }
 
@@ -323,7 +320,6 @@ function calculateDiffPropSampleSize() {
     const z = jStat.normal.inv(1 - alpha / 2, 0, 1);
     const variance = p1 * (1 - p1) + p2 * (1 - p2);
     const n = Math.ceil(z * z * variance / (e * e));
-    const confPct = Math.round(confidence * 100);
 
     resultEl.innerText =
         `n mínimo por grupo: ${n}  |  Total: ${2 * n} observaciones (${confPct} % de confianza)\n` +

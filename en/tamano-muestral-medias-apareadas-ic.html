@@ -175,12 +175,8 @@
 
                 <div class="form-group">
                     <label for="pairedConfidence">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                    <select id="pairedConfidence">
-                        <option value="0.90">90%</option>
-                        <option value="0.95" selected>95%</option>
-                        <option value="0.99">99%</option>
-                    </select>
-                    <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true mean difference. <strong>95%</strong> is the usual standard.</p>
+                    <input type="number" id="pairedConfidence" value="95" step="any" min="0.01" max="99.99" inputmode="decimal">
+                    <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true mean difference. <strong>95%</strong> is the usual standard. You can enter any value between 0 and 100 (e.g. 97.5).</p>
                 </div>
             </div>
 
@@ -188,7 +184,7 @@
             <div id="pairedResult" class="result-box">Result pending…</div>
             <div class="chart-wrap ss-chart" hidden>
                 <h3 class="ss-chart-title">How n changes with the margin of error</h3>
-                <canvas id="pairedChart" role="img" aria-label="Line chart: sample size n as a function of the margin of error for different confidence levels"></canvas>
+                <canvas id="pairedChart" role="img" aria-label="Line chart: sample size n as a function of the margin of error for the chosen confidence level and the levels ±5 points"></canvas>
                 <p class="ss-chart-note" id="pairedChartNote"></p>
             </div>
         </section>
@@ -288,13 +284,14 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../sample-size-charts.js?v=20261101-1"></script>
+<script src="../sample-size-charts.js?v=20261101-2"></script>
 <script>
 function calculatePairedMeansSampleSize() {
     window.SampleSizeCharts && SampleSizeCharts.clear('pairedChart');
     const sigmaD = parseFloat(document.getElementById('pairedSigmaD').value);
     const e = parseFloat(document.getElementById('pairedE').value);
-    const confidence = parseFloat(document.getElementById('pairedConfidence').value);
+    const confPct = parseFloat(document.getElementById('pairedConfidence').value);
+    const confidence = confPct / 100;
     const resultEl = document.getElementById('pairedResult');
 
     if (!Number.isFinite(sigmaD) || sigmaD <= 0) {
@@ -305,15 +302,14 @@ function calculatePairedMeansSampleSize() {
         resultEl.innerText = 'Error: E must be greater than 0.';
         return;
     }
-    if (!Number.isFinite(confidence) || confidence <= 0 || confidence >= 1) {
-        resultEl.innerText = 'Error: the confidence level must be between 0 and 1.';
+    if (!Number.isFinite(confPct) || confPct <= 0 || confPct >= 100) {
+        resultEl.innerText = 'Error: the confidence level must be a number between 0 and 100.';
         return;
     }
 
     const alpha = 1 - confidence;
     const z = jStat.normal.inv(1 - alpha / 2, 0, 1);
     const n = Math.ceil(Math.pow((z * sigmaD) / e, 2));
-    const confPct = Math.round(confidence * 100);
 
     resultEl.innerText =
         `Minimum recommended n: ${n} pairs (${confPct}% confidence, σ_d = ${sigmaD}, E = ${e}).\n` +
