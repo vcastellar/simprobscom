@@ -32,9 +32,70 @@
         return heading ? heading.textContent.trim() : STR.fallbackTitle;
     }
 
+    // Para el nombre del CSV: los símbolos que slugify eliminaría se pasan a
+    // palabras, para que «P(X = k)» y «P(X ≤ k)» no den el mismo nombre.
+    const SYMBOL_WORDS = isEn
+        ? { "≤": "le", "≥": "ge", "=": "eq", "<": "lt", ">": "gt" }
+        : { "≤": "menor o igual", "≥": "mayor o igual", "=": "igual", "<": "menor", ">": "mayor" };
+    const GREEK_WORDS = { "λ": "lambda", "α": isEn ? "alpha" : "alfa", "β": "beta", "ν": "nu", "χ": "chi", "Φ": "phi", "Γ": "gamma", "μ": "mu", "σ": "sigma" };
+
+    function symbolsToWords(text) {
+        return (text || "")
+            .replace(/[−-](?=\d)/g, isEn ? " minus " : " menos ")
+            .replace(/[≤≥=<>]/g, c => ` ${SYMBOL_WORDS[c]} `)
+            .replace(/[λαβνχΦΓμσ]/g, c => ` ${GREEK_WORDS[c]}`)
+            .replace(/[₀-₉]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x2050))
+            .replace(/²/g, "2")
+            .replace(/⁻¹/g, " inv ");
+    }
+
+
+    // Separador decimal de la configuración regional del navegador, que suele
+    // coincidir con la de Excel: con coma decimal, «0.9750» se importaría
+    // como texto en lugar de como número.
+    const DECIMAL = (() => {
+        try {
+            const part = new Intl.NumberFormat().formatToParts(1.5).find(p => p.type === "decimal");
+            return part ? part.value : ".";
+        } catch (e) {
+            return ".";
+        }
+    })();
+
+    // Separador de campos: el que usa Excel en esa configuración regional,
+    // «;» donde la coma es el separador decimal y «,» en el resto. No se
+    // escribe la línea «sep=;»: con ella Excel ignora la marca BOM y lee el
+    // UTF-8 como ANSI («distribuciÃ³n», «Î¦» en lugar de «Φ»).
+    const FIELD_SEP = DECIMAL === "," ? ";" : ",";
+
     function csvEscape(value) {
         const normalized = (value || "").replace(/\s+/g, " ").trim();
-        return /[",\n;]/.test(normalized) ? `"${normalized.replace(/"/g, '""')}"` : normalized;
+        const needsQuotes = normalized.includes('"') || normalized.includes(FIELD_SEP);
+        return needsQuotes ? `"${normalized.replace(/"/g, '""')}"` : normalized;
+    }
+
+    // 6 decimales, o notación científica si el valor es menor que 0.001,
+    // para no perder las colas (P(Z > 4) = 3.16712E-05 en lugar de 0.0000).
+    function csvNumber(v) {
+        const abs = Math.abs(v);
+        const text = abs === 0 || abs >= 0.001 ? v.toFixed(6) : v.toExponential(5).toUpperCase();
+        return text.replace(".", DECIMAL);
+    }
+
+    // Valor de una celda para el CSV. Si la página sabe calcular el valor
+    // exacto (window.tableCellExact), se escribe con más precisión que la
+    // tabla; si no, se usa el texto de la celda, con el separador decimal local
+    // cuando es un número. «−0.0» se deja como texto para no perder el signo.
+    function cellCsvValue(cell) {
+        if (cell.dataset.val !== undefined && typeof window.tableCellExact === "function") {
+            const v = window.tableCellExact(cell);
+            if (typeof v === "number" && isFinite(v)) return csvNumber(v);
+        }
+        const text = cell.textContent.replace(/\s+/g, " ").trim();
+        if (/^[-−]?\d+(\.\d+)?$/.test(text) && !/^[-−]0(\.0+)?$/.test(text)) {
+            return text.replace("−", "-").replace(".", DECIMAL);
+        }
+        return text;
     }
 
     function escapeHtml(value) {
@@ -49,19 +110,27 @@
         const rows = Array.from(table.querySelectorAll("tr"));
         return rows
             .map(row => Array.from(row.querySelectorAll("th, td"))
-                .map(cell => csvEscape(cell.textContent))
-                .join(";"))
+                .map(cell => csvEscape(cellCsvValue(cell)))
+                .join(FIELD_SEP))
             .join("\n");
     }
 
     function downloadTableCsv(table) {
         const title = getTableTitle(table);
-        const csv = `sep=;\n${tableToCsv(table)}`;
+        const heading = document.querySelector("h1");
+        const page = heading ? heading.textContent.trim() : STR.fallbackTitle;
+        // Primera línea: qué tabla es, ya que el nombre del
+        // archivo no siempre se ve al abrirlo
+        const caption = title && title !== page ? `${page} — ${title}` : page;
+        const csv = `${csvEscape(caption)}\n${tableToCsv(table)}`;
         const blob = new Blob(["\ufeff", csv], { type: "text/csv;charset=utf-8;" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = `${slugify(document.title)}-${slugify(title || table.id)}.csv`;
+        // Nombre a partir del h1 (el <title> lleva palabras de SEO, como
+        // «acumulada», que no describen todas las tablas de la página)
+        const name = title && title !== page ? `${page} ${symbolsToWords(title)}` : page;
+        link.download = `${slugify(name || table.id)}.csv`;
         document.body.appendChild(link);
         link.click();
         link.remove();
