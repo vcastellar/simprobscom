@@ -114,7 +114,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="style_new.css?v=20261102-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -164,48 +164,57 @@
 
     <main>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Introduce los pares discordantes de la tabla 2×2 para obtener el estadístico chi-cuadrado, p-valor y decisión del test de McNemar.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Introduce los pares discordantes de la tabla 2×2 para obtener el estadístico chi-cuadrado, p-valor y decisión del test de McNemar.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="bVal">Pares discordantes b (cond. 1 sí, cond. 2 no) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="bVal" value="18" step="1" min="0">
-                        <p class="field-hint" hidden>Número de sujetos que tuvieron éxito en la condición 1 pero no en la condición 2. Junto con c, es el único dato que usa el test de McNemar.</p>
+                <div class="form-grid sample-grid">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="bVal">Pares discordantes b (cond. 1 sí, cond. 2 no) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="bVal" value="18" step="1" min="0">
+                            <p class="field-hint" hidden>Número de sujetos que tuvieron éxito en la condición 1 pero no en la condición 2. Junto con c, es el único dato que usa el test de McNemar.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="cVal">Pares discordantes c (cond. 1 no, cond. 2 sí) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="cVal" value="8" step="1" min="0">
+                            <p class="field-hint" hidden>Número de sujetos que tuvieron éxito en la condición 2 pero no en la condición 1. Los pares concordantes (a y d) no se incluyen porque no aportan información sobre la diferencia.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="cVal">Pares discordantes c (cond. 1 no, cond. 2 sí) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="cVal" value="8" step="1" min="0">
-                        <p class="field-hint" hidden>Número de sujetos que tuvieron éxito en la condición 2 pero no en la condición 1. Los pares concordantes (a y d) no se incluyen porque no aportan información sobre la diferencia.</p>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="correction">Corrección de continuidad <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <select id="correction">
+                                <option value="yes">Con corrección de continuidad</option>
+                                <option value="no">Sin corrección de continuidad</option>
+                            </select>
+                            <p class="field-hint" hidden>La corrección de Edwards ajusta el estadístico discreto hacia la distribución continua χ², reduciendo el error de tipo I cuando b+c es pequeño. Es la opción recomendada por defecto; omítela solo si b+c &gt; 100.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="alpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Riesgo de falso positivo que aceptas (rechazar H₀ cuando en realidad las proporciones marginales son iguales). El valor habitual es 0,05.</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="correction">Corrección de continuidad <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <select id="correction">
-                            <option value="yes">Con corrección de continuidad</option>
-                            <option value="no">Sin corrección de continuidad</option>
-                        </select>
-                        <p class="field-hint" hidden>La corrección de Edwards ajusta el estadístico discreto hacia la distribución continua χ², reduciendo el error de tipo I cuando b+c es pequeño. Es la opción recomendada por defecto; omítela solo si b+c &gt; 100.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="alpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Riesgo de falso positivo que aceptas (rechazar H₀ cuando en realidad las proporciones marginales son iguales). El valor habitual es 0,05.</p>
+                <button class="calculate-btn" id="calcBtn">Calcular test de McNemar</button>
+            </section>
+
+            <div id="result" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Regiones de rechazo y estadístico observado</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="mcnemarChart" aria-label="Gráfico de distribución chi-cuadrado con zona de rechazo para el test de McNemar" role="img"></canvas>
                     </div>
                 </div>
-            </div>
-
-            <button class="calculate-btn" id="calcBtn">Calcular test de McNemar</button>
-            <div id="result" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap">
-                <canvas id="mcnemarChart" aria-label="Gráfico de distribución chi-cuadrado con zona de rechazo para el test de McNemar" role="img"></canvas>
-            </div>
+            </section>
         </section>
 
         <section class="card content-card">

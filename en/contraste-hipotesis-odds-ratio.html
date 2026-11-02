@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
 
     <script type="application/ld+json">
 {
@@ -156,64 +156,72 @@
     <main>
         <!-- Section order: 1) Key concepts, 2) Description, 3) Calculator, 4) Quick test, 5) Rest -->
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>
-                    Enter the frequencies of the 2×2 case-control table to get the odds ratio,
-                    the Z statistic, the p-value, the confidence interval and the statistical decision.
-                </p>
-            </div>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>
+                        Enter the frequencies of the 2×2 case-control table to get the odds ratio,
+                        the Z statistic, the p-value, the confidence interval and the statistical decision.
+                    </p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="cellA">Exposed – Cases (a) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="cellA" value="40" step="1" min="1">
-                        <p class="field-hint" hidden>Number of cases (people with the disease) who were exposed to the factor of interest.</p>
+                <div class="form-grid sample-grid">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="cellA">Exposed – Cases (a) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="cellA" value="40" step="1" min="1">
+                            <p class="field-hint" hidden>Number of cases (people with the disease) who were exposed to the factor of interest.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="cellB">Unexposed – Cases (b) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="cellB" value="60" step="1" min="1">
+                            <p class="field-hint" hidden>Number of cases (people with the disease) who were NOT exposed to the factor of interest.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="cellB">Unexposed – Cases (b) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="cellB" value="60" step="1" min="1">
-                        <p class="field-hint" hidden>Number of cases (people with the disease) who were NOT exposed to the factor of interest.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="cellC">Exposed – Controls (c) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="cellC" value="30" step="1" min="1">
+                            <p class="field-hint" hidden>Number of controls (people without the disease) who were exposed to the factor of interest.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="cellD">Unexposed – Controls (d) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="cellD" value="70" step="1" min="1">
+                            <p class="field-hint" hidden>Number of controls (people without the disease) who were NOT exposed to the factor of interest.</p>
+                        </div>
+                    </div>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="alpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Risk of rejecting H₀ when it is true. The usual value is <strong>0.05</strong>, equivalent to a 95% CI for the OR.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="tail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <select id="tail">
+                                <option value="two">Two-tailed (OR≠1)</option>
+                                <option value="right">Right tail (OR&gt;1)</option>
+                                <option value="left">Left tail (OR&lt;1)</option>
+                            </select>
+                            <p class="field-hint" hidden>Two-tailed tests OR ≠ 1; the one-tailed options specifically test whether the exposure is a risk factor (OR&gt;1) or protective (OR&lt;1).</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="cellC">Exposed – Controls (c) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="cellC" value="30" step="1" min="1">
-                        <p class="field-hint" hidden>Number of controls (people without the disease) who were exposed to the factor of interest.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="cellD">Unexposed – Controls (d) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="cellD" value="70" step="1" min="1">
-                        <p class="field-hint" hidden>Number of controls (people without the disease) who were NOT exposed to the factor of interest.</p>
+
+                <button class="calculate-btn" id="calcORBtn">Calculate test</button>
+            </section>
+
+            <div id="orResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Rejection regions and observed statistic</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="orTestChart" aria-label="Chart of acceptance and rejection zones for the odds ratio test" role="img"></canvas>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="alpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Risk of rejecting H₀ when it is true. The usual value is <strong>0.05</strong>, equivalent to a 95% CI for the OR.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="tail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <select id="tail">
-                            <option value="two">Two-tailed (OR≠1)</option>
-                            <option value="right">Right tail (OR&gt;1)</option>
-                            <option value="left">Left tail (OR&lt;1)</option>
-                        </select>
-                        <p class="field-hint" hidden>Two-tailed tests OR ≠ 1; the one-tailed options specifically test whether the exposure is a risk factor (OR&gt;1) or protective (OR&lt;1).</p>
-                    </div>
-                </div>
-            </div>
-
-            <button class="calculate-btn" id="calcORBtn">Calculate test</button>
-            <div id="orResult" class="result-box">Result pending…</div>
-
-            <div class="chart-wrap">
-                <canvas id="orTestChart" aria-label="Chart of acceptance and rejection zones for the odds ratio test" role="img"></canvas>
-            </div>
+            </section>
         </section>
 
         <section class="card content-card">
