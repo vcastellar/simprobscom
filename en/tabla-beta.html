@@ -401,6 +401,14 @@
         return Number(e) >= -6 ? v.toPrecision(3) : `${m} × 10<sup>${Number(e)}</sup>`;
     }
 
+    // Valor exacto de una celda, para el CSV (table-actions.js).
+    window.tableCellExact = td => {
+        const a = +td.dataset.alpha, b = +td.dataset.beta;
+        if (td.dataset.type === undefined) return jStat.beta.inv(+td.dataset.p, a, b);
+        const x = +td.dataset.x;
+        return td.dataset.type === 'cdf' ? jStat.beta.cdf(x, a, b) : jStat.beta.pdf(x, a, b);
+    };
+
     let lastHighlight = null;
 
     function cellClick(td) {
@@ -447,7 +455,7 @@
     buildQuantTable(1);
 </script>
 <script src="../table-diagram.js?v=20261102-2"></script>
-<script src="../table-actions.js?v=20260730-1"></script>
+<script src="../table-actions.js?v=20261103-1"></script>
 <script src="../theme.js?v=20261031-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).

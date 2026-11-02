@@ -34,7 +34,44 @@
 
     function csvEscape(value) {
         const normalized = (value || "").replace(/\s+/g, " ").trim();
-        return /[",\n;]/.test(normalized) ? `"${normalized.replace(/"/g, '""')}"` : normalized;
+        // El separador es «;», así que la coma decimal no necesita comillas
+        return /["\n;]/.test(normalized) ? `"${normalized.replace(/"/g, '""')}"` : normalized;
+    }
+
+    // Separador decimal de la configuración regional del navegador, que suele
+    // coincidir con la de Excel: con coma decimal, «0.9750» se importaría
+    // como texto en lugar de como número.
+    const DECIMAL = (() => {
+        try {
+            const part = new Intl.NumberFormat().formatToParts(1.5).find(p => p.type === "decimal");
+            return part ? part.value : ".";
+        } catch (e) {
+            return ".";
+        }
+    })();
+
+    // 6 decimales, o notación científica si el valor es menor que 0.001,
+    // para no perder las colas (P(Z > 4) = 3.16712E-05 en lugar de 0.0000).
+    function csvNumber(v) {
+        const abs = Math.abs(v);
+        const text = abs === 0 || abs >= 0.001 ? v.toFixed(6) : v.toExponential(5).toUpperCase();
+        return text.replace(".", DECIMAL);
+    }
+
+    // Valor de una celda para el CSV. Si la página sabe calcular el valor
+    // exacto (window.tableCellExact), se escribe con más precisión que la
+    // tabla; si no, se usa el texto de la celda, con el separador decimal local
+    // cuando es un número. «−0.0» se deja como texto para no perder el signo.
+    function cellCsvValue(cell) {
+        if (cell.dataset.val !== undefined && typeof window.tableCellExact === "function") {
+            const v = window.tableCellExact(cell);
+            if (typeof v === "number" && isFinite(v)) return csvNumber(v);
+        }
+        const text = cell.textContent.replace(/\s+/g, " ").trim();
+        if (/^[-−]?\d+(\.\d+)?$/.test(text) && !/^[-−]0(\.0+)?$/.test(text)) {
+            return text.replace("−", "-").replace(".", DECIMAL);
+        }
+        return text;
     }
 
     function escapeHtml(value) {
@@ -49,7 +86,7 @@
         const rows = Array.from(table.querySelectorAll("tr"));
         return rows
             .map(row => Array.from(row.querySelectorAll("th, td"))
-                .map(cell => csvEscape(cell.textContent))
+                .map(cell => csvEscape(cellCsvValue(cell)))
                 .join(";"))
             .join("\n");
     }
