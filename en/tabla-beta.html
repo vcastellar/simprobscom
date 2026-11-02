@@ -178,7 +178,7 @@
     <header class="hero">
         <p class="eyebrow">Statistical tables</p>
         <h1>Beta Distribution Table</h1>
-        <p class="hero-subtitle">Table of the Beta distribution Be(α, β): cumulative distribution P(X ≤ x), density f(x) and quantiles for different α and β parameters. The support is x ∈ (0, 1). Click a cell to read the value.</p>
+        <p class="hero-subtitle">Table of the Beta distribution Be(α, β): cumulative distribution P(X ≤ x), density f(x) and quantiles for different α and β parameters. The support is x ∈ (0, 1). Click a cell to see the value with more decimals.</p>
         <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">See all tables</a></p>
     </header>
 
@@ -201,7 +201,7 @@
                     <label for="beta-cdf">β:</label>
                     <select id="beta-cdf" class="df-select" onchange="rebuildBetaTable('cdf')"></select>
                 </div>
-                <div id="lookup-cdf" class="lookup-result"><span>Click a cell to read the value.</span></div>
+                <div id="lookup-cdf" class="lookup-result"><span>Click a cell to see the value with more decimals.</span></div>
                 <figure class="dist-diagram" data-dist="beta" data-mode="left-x" data-tables="tbl-cdf" data-params="alpha-cdf:alpha beta-cdf:beta" data-alpha="2" data-beta="2" data-x="0.5" data-val="0.5">
                     <svg viewBox="0 0 480 220" role="img" aria-label="Beta density with the area to the left of x shaded." preserveAspectRatio="xMidYMid meet">
                         <g data-dg-body></g>
@@ -223,7 +223,7 @@
                     <label for="beta-pdf">β:</label>
                     <select id="beta-pdf" class="df-select" onchange="rebuildBetaTable('pdf')"></select>
                 </div>
-                <div id="lookup-pdf" class="lookup-result"><span>Click a cell to read the value.</span></div>
+                <div id="lookup-pdf" class="lookup-result"><span>Click a cell to see the value with more decimals.</span></div>
                 <figure class="dist-diagram" data-dist="beta" data-mode="pdf-point" data-tables="tbl-pdf" data-params="alpha-pdf:alpha beta-pdf:beta" data-alpha="2" data-beta="2" data-x="0.5" data-val="1.5">
                     <svg viewBox="0 0 480 220" role="img" aria-label="Beta density with the point f(x) marked." preserveAspectRatio="xMidYMid meet">
                         <g data-dg-body></g>
@@ -243,7 +243,7 @@
                     <label for="beta-quant">β:</label>
                     <select id="beta-quant" class="df-select" onchange="rebuildQuantTable()"></select>
                 </div>
-                <div id="lookup-quant" class="lookup-result"><span>Click a cell to read the value.</span></div>
+                <div id="lookup-quant" class="lookup-result"><span>Click a cell to see the value with more decimals.</span></div>
                 <figure class="dist-diagram" data-dist="beta" data-mode="left-val" data-tables="tbl-quant" data-params="beta-quant:beta" data-alpha="2" data-beta="2" data-val="0.5" data-p="0.5">
                     <svg viewBox="0 0 480 220" role="img" aria-label="Beta density with the area to the left of the quantile shaded." preserveAspectRatio="xMidYMid meet">
                         <g data-dg-body></g>
@@ -373,13 +373,13 @@
         const alpha = parseFloat(document.getElementById('alpha-' + type).value);
         const beta  = parseFloat(document.getElementById('beta-' + type).value);
         buildBetaTable('tbl-' + type, type, alpha, beta);
-        document.getElementById('lookup-' + type).innerHTML = '<span>Click a cell to read the value.</span>';
+        document.getElementById('lookup-' + type).innerHTML = '<span>Click a cell to see the value with more decimals.</span>';
     }
 
     function rebuildQuantTable() {
         const beta = parseFloat(document.getElementById('beta-quant').value);
         buildQuantTable(beta);
-        document.getElementById('lookup-quant').innerHTML = '<span>Click a cell to read the value.</span>';
+        document.getElementById('lookup-quant').innerHTML = '<span>Click a cell to see the value with more decimals.</span>';
     }
 
     function switchTab(tab, btn) {
@@ -390,6 +390,17 @@
         document.getElementById('tab-' + tab).classList.add('active');
     }
 
+    // Valor del panel de lectura con más precisión que la tabla: 6 decimales,
+    // o 3 cifras significativas cuando es muy pequeño (colas).
+    function fmtPrecise(v) {
+        if (!isFinite(v)) return '∞';
+        if (v <= 0) return '0';
+        if (v < 1e-15) return '≈ 0';
+        if (v >= 0.001) return v.toFixed(6);
+        const [m, e] = v.toExponential(2).split('e');
+        return Number(e) >= -6 ? v.toPrecision(3) : `${m} × 10<sup>${Number(e)}</sup>`;
+    }
+
     let lastHighlight = null;
 
     function cellClick(td) {
@@ -398,7 +409,7 @@
         lastHighlight = td;
 
         const x     = td.dataset.x;
-        const val   = td.dataset.val;
+        const val = td.dataset.type === 'cdf' ? fmtPrecise(jStat.beta.cdf(+x, +td.dataset.alpha, +td.dataset.beta)) : fmtPrecise(jStat.beta.pdf(+x, +td.dataset.alpha, +td.dataset.beta));
         const type  = td.dataset.type;
         const alpha = td.dataset.alpha;
         const beta  = td.dataset.beta;
@@ -409,6 +420,7 @@
         } else {
             el.innerHTML = `α = ${alpha}, β = ${beta}, <strong>x = ${x}</strong>: <strong>f(x) = ${val}</strong>`;
         }
+        if (type === 'cdf') el.innerHTML += ` &nbsp;·&nbsp; P(X &gt; ${x}) = ${fmtPrecise(1 - jStat.beta.cdf(+x, +alpha, +beta))}`;
     }
 
     function quantCellClick(td) {
@@ -419,7 +431,7 @@
         const alpha = td.dataset.alpha;
         const beta  = td.dataset.beta;
         const p     = td.dataset.p;
-        const val   = td.dataset.val;
+        const val = jStat.beta.inv(+p, +alpha, +beta).toFixed(6);
         document.getElementById('lookup-quant').innerHTML =
             `α = ${alpha}, β = ${beta}, p = ${p}: <strong>x = ${val}</strong> → P(X ≤ ${val}) = ${p}`;
     }

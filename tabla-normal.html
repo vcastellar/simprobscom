@@ -423,7 +423,7 @@
                     <button class="sign-btn active" onclick="switchSign('cdf','pos',this)">z ≥ 0</button>
                     <button class="sign-btn"        onclick="switchSign('cdf','neg',this)">z &lt; 0</button>
                 </div>
-                <div id="lookup-cdf" class="lookup-result"><span>Haz clic en una celda para leer el valor.</span></div>
+                <div id="lookup-cdf" class="lookup-result"><span>Haz clic en una celda para ver el valor con más decimales.</span></div>
                 <figure class="dist-diagram" data-dist="normal" data-mode="left-x" data-tables="tbl-cdf-pos tbl-cdf-neg" data-z="1.00" data-val="0.8413">
                     <svg viewBox="0 0 480 220" role="img" aria-label="Densidad Normal con el área a la izquierda de z sombreada (Φ(z) = P(Z ≤ z))." preserveAspectRatio="xMidYMid meet">
                         <g data-dg-body></g>
@@ -523,7 +523,7 @@
                 <div class="info-box">
                     <strong>Cómo leer la tabla:</strong> cada celda muestra f(z) = φ(z) = (1/√(2π)) · e<sup>−z²/2</sup>. La función de densidad es simétrica: f(−z) = f(z). El máximo es f(0) = 0.3989.
                 </div>
-                <div id="lookup-pdf" class="lookup-result"><span>Haz clic en una celda para leer el valor.</span></div>
+                <div id="lookup-pdf" class="lookup-result"><span>Haz clic en una celda para ver el valor con más decimales.</span></div>
                 <figure class="dist-diagram" data-dist="normal" data-mode="pdf-point" data-tables="tbl-pdf-pos" data-z="1.00" data-val="0.2420">
                     <svg viewBox="0 0 480 220" role="img" aria-label="Densidad Normal con el punto f(z) marcado sobre la curva." preserveAspectRatio="xMidYMid meet">
                         <g data-dg-body></g>
@@ -724,16 +724,27 @@
         const isPos = sign === 'pos';
         document.getElementById(type + '-pos-wrap').style.display = isPos ? '' : 'none';
         document.getElementById(type + '-neg-wrap').style.display = isPos ? 'none' : '';
-        document.getElementById('lookup-' + type).innerHTML = '<span>Haz clic en una celda para leer el valor.</span>';
+        document.getElementById('lookup-' + type).innerHTML = '<span>Haz clic en una celda para ver el valor con más decimales.</span>';
     }
 
     // ── Cell click ────────────────────────────────────────────────────────────
+
+    // Valor del panel de lectura con más precisión que la tabla: 6 decimales,
+    // o 3 cifras significativas cuando es muy pequeño (colas).
+    function fmtPrecise(v) {
+        if (!isFinite(v)) return '∞';
+        if (v <= 0) return '0';
+        if (v < 1e-15) return '≈ 0';
+        if (v >= 0.001) return v.toFixed(6);
+        const [m, e] = v.toExponential(2).split('e');
+        return Number(e) >= -6 ? v.toPrecision(3) : `${m} × 10<sup>${Number(e)}</sup>`;
+    }
 
     let lastHighlight = null;
 
     function cellClick(td) {
         const z    = parseFloat(td.dataset.z);
-        const val  = td.dataset.val;
+        const val = td.dataset.type === 'cdf' ? fmtPrecise(jStat.normal.cdf(z, 0, 1)) : fmtPrecise(jStat.normal.pdf(Math.abs(z), 0, 1));
         const type = td.dataset.type;
 
         // Remove previous highlight
@@ -747,6 +758,7 @@
         } else {
             resultEl.innerHTML = `Para <strong>z = ${z >= 0 ? '+' : ''}${z.toFixed(2)}</strong>: <strong>f(z) = ${val}</strong>`;
         }
+        if (type === 'cdf') resultEl.innerHTML += ` &nbsp;·&nbsp; P(Z &gt; ${z.toFixed(2)}) = ${fmtPrecise(jStat.normal.cdf(-z, 0, 1))}`;
     }
 
     // ── Init ──────────────────────────────────────────────────────────────────

@@ -243,7 +243,7 @@
                         <option value="30" selected>30</option>
                     </select>
                 </div>
-                <div id="lookup-pmf" class="lookup-result"><span>Click a cell to read the value.</span></div>
+                <div id="lookup-pmf" class="lookup-result"><span>Click a cell to see the value with more decimals.</span></div>
                 <figure class="dist-diagram" data-dist="poisson" data-mode="bars-pmf" data-tables="tbl-pmf" data-lam="4" data-k="4" data-val="0.1954">
                     <svg viewBox="0 0 480 220" role="img" aria-label="Poisson probability mass bars; highlighted bar is P(X=k)." preserveAspectRatio="xMidYMid meet">
                         <g data-dg-body></g>
@@ -267,7 +267,7 @@
                         <option value="30" selected>30</option>
                     </select>
                 </div>
-                <div id="lookup-cdf" class="lookup-result"><span>Click a cell to read the value.</span></div>
+                <div id="lookup-cdf" class="lookup-result"><span>Click a cell to see the value with more decimals.</span></div>
                 <figure class="dist-diagram" data-dist="poisson" data-mode="bars-cdf" data-tables="tbl-cdf" data-lam="4" data-k="4" data-val="0.6288">
                     <svg viewBox="0 0 480 220" role="img" aria-label="Poisson bars accumulated up to k, P(X<=k)." preserveAspectRatio="xMidYMid meet">
                         <g data-dg-body></g>
@@ -362,7 +362,7 @@
     function rebuildPoissonTable(type) {
         const kMax = parseInt(document.getElementById('kmax-' + type).value, 10);
         buildPoissonTable('tbl-' + type, type, kMax);
-        document.getElementById('lookup-' + type).innerHTML = '<span>Click a cell to read the value.</span>';
+        document.getElementById('lookup-' + type).innerHTML = '<span>Click a cell to see the value with more decimals.</span>';
     }
 
     function switchTab(tab, btn) {
@@ -371,6 +371,17 @@
         btn.classList.add('active');
         btn.setAttribute('aria-selected','true');
         document.getElementById('tab-' + tab).classList.add('active');
+    }
+
+    // Valor del panel de lectura con más precisión que la tabla: 6 decimales,
+    // o 3 cifras significativas cuando es muy pequeño (colas).
+    function fmtPrecise(v) {
+        if (!isFinite(v)) return '∞';
+        if (v <= 0) return '0';
+        if (v < 1e-15) return '≈ 0';
+        if (v >= 0.001) return v.toFixed(6);
+        const [m, e] = v.toExponential(2).split('e');
+        return Number(e) >= -6 ? v.toPrecision(3) : `${m} × 10<sup>${Number(e)}</sup>`;
     }
 
     let lastHighlight = null;
@@ -382,7 +393,7 @@
 
         const k    = td.dataset.k;
         const lam  = td.dataset.lam;
-        const val  = td.dataset.val;
+        const val = td.dataset.type === 'pmf' ? fmtPrecise(jStat.poisson.pdf(+k, +lam)) : fmtPrecise(jStat.poisson.cdf(+k, +lam));
         const type = td.dataset.type;
         const el   = document.getElementById('lookup-' + type);
 
@@ -391,6 +402,7 @@
         } else {
             el.innerHTML = `λ = ${lam}, <strong>k = ${k}</strong>: <strong>P(X ≤ ${k}) = ${val}</strong>`;
         }
+        if (type === 'cdf') el.innerHTML += ` &nbsp;·&nbsp; P(X &gt; ${k}) = ${fmtPrecise(1 - jStat.poisson.cdf(+k, +lam))}`;
     }
 
     buildPoissonTable('tbl-pmf', 'pmf', 30);
