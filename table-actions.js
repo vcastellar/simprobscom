@@ -32,6 +32,23 @@
         return heading ? heading.textContent.trim() : STR.fallbackTitle;
     }
 
+    // Para el nombre del CSV: los símbolos que slugify eliminaría se pasan a
+    // palabras, para que «P(X = k)» y «P(X ≤ k)» no den el mismo nombre.
+    const SYMBOL_WORDS = isEn
+        ? { "≤": "le", "≥": "ge", "=": "eq", "<": "lt", ">": "gt" }
+        : { "≤": "menor o igual", "≥": "mayor o igual", "=": "igual", "<": "menor", ">": "mayor" };
+    const GREEK_WORDS = { "λ": "lambda", "α": isEn ? "alpha" : "alfa", "β": "beta", "ν": "nu", "χ": "chi", "Φ": "phi", "Γ": "gamma", "μ": "mu", "σ": "sigma" };
+
+    function symbolsToWords(text) {
+        return (text || "")
+            .replace(/[−-](?=\d)/g, isEn ? " minus " : " menos ")
+            .replace(/[≤≥=<>]/g, c => ` ${SYMBOL_WORDS[c]} `)
+            .replace(/[λαβνχΦΓμσ]/g, c => ` ${GREEK_WORDS[c]}`)
+            .replace(/[₀-₉]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x2050))
+            .replace(/²/g, "2")
+            .replace(/⁻¹/g, " inv ");
+    }
+
     function csvEscape(value) {
         const normalized = (value || "").replace(/\s+/g, " ").trim();
         // El separador es «;», así que la coma decimal no necesita comillas
@@ -93,12 +110,20 @@
 
     function downloadTableCsv(table) {
         const title = getTableTitle(table);
-        const csv = `sep=;\n${tableToCsv(table)}`;
+        const heading = document.querySelector("h1");
+        const page = heading ? heading.textContent.trim() : STR.fallbackTitle;
+        // Primera línea tras «sep=;»: qué tabla es, ya que el nombre del
+        // archivo no siempre se ve al abrirlo
+        const caption = title && title !== page ? `${page} — ${title}` : page;
+        const csv = `sep=;\n${csvEscape(caption)}\n${tableToCsv(table)}`;
         const blob = new Blob(["\ufeff", csv], { type: "text/csv;charset=utf-8;" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = `${slugify(document.title)}-${slugify(title || table.id)}.csv`;
+        // Nombre a partir del h1 (el <title> lleva palabras de SEO, como
+        // «acumulada», que no describen todas las tablas de la página)
+        const name = title && title !== page ? `${page} ${symbolsToWords(title)}` : page;
+        link.download = `${slugify(name || table.id)}.csv`;
         document.body.appendChild(link);
         link.click();
         link.remove();
