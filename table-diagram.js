@@ -82,11 +82,32 @@
             case "normal": return { pdf: function (v) { return jStat.normal.pdf(v, 0, 1); }, cdf: function (v) { return jStat.normal.cdf(v, 0, 1); }, inv: function (p) { return jStat.normal.inv(p, 0, 1); }, kind: "sym", params: "" };
             case "student": var df = +ds.df; return { pdf: function (v) { return jStat.studentt.pdf(v, df); }, cdf: function (v) { return jStat.studentt.cdf(v, df); }, inv: function (p) { return jStat.studentt.inv(p, df); }, kind: "sym", params: "ν = " + df };
             case "chisquare": var c = +ds.df; return { pdf: function (v) { return jStat.chisquare.pdf(v, c); }, cdf: function (v) { return jStat.chisquare.cdf(v, c); }, inv: function (p) { return jStat.chisquare.inv(p, c); }, kind: "pos", params: "ν = " + c };
-            case "centralF": var d1 = +ds.df1, d2 = +ds.df2; return { pdf: function (v) { return jStat.centralF.pdf(v, d1, d2); }, cdf: function (v) { return jStat.centralF.cdf(v, d1, d2); }, inv: function (p) { return jStat.centralF.inv(p, d1, d2); }, kind: "pos", params: L.fdf(d1, d2) };
+            case "centralF": return fDist(ds);
             case "beta": var ba = +ds.alpha, bb = +ds.beta; return { pdf: function (v) { return jStat.beta.pdf(v, ba, bb); }, cdf: function (v) { return jStat.beta.cdf(v, ba, bb); }, inv: function (p) { return jStat.beta.inv(p, ba, bb); }, kind: "unit", params: "α = " + ba + ", β = " + bb };
             case "gamma": var ga = +ds.alpha, gb = +ds.beta; return { pdf: function (v) { return jStat.gamma.pdf(v, ga, gb); }, cdf: function (v) { return jStat.gamma.cdf(v, ga, gb); }, inv: function (p) { return jStat.gamma.inv(p, ga, gb); }, kind: "pos", params: "α = " + ga + ", β = " + gb };
         }
         return null;
+    }
+    // F de Snedecor. ν = ∞ llega como «∞» (tablas de valores críticos) o como
+    // 10000 (selectores); se usa el límite exacto: con ν₂ = ∞, F = χ²(ν₁)/ν₁;
+    // con ν₁ = ∞, F = ν₂/χ²(ν₂). Con los dos infinitos la F se concentra en 1 y
+    // no tiene densidad: se dibuja con ν = 1000, que a la vista es el límite.
+    function fDist(ds) {
+        var inf = function (v) { return v === "∞" || +v === 10000; };
+        var i1 = inf(ds.df1), i2 = inf(ds.df2);
+        var d1 = i1 ? Infinity : +ds.df1, d2 = i2 ? Infinity : +ds.df2;
+        var params = L.fdf(i1 ? "∞" : d1, i2 ? "∞" : d2);
+        var C = jStat.chisquare;
+        if (i1 && i2) {
+            return { pdf: function (v) { return jStat.centralF.pdf(v, 1000, 1000); }, cdf: function (v) { return v >= 1 ? 1 : 0; }, inv: function () { return 1; }, kind: "pos", params: params };
+        }
+        if (i2) {
+            return { pdf: function (v) { return d1 * C.pdf(d1 * v, d1); }, cdf: function (v) { return C.cdf(d1 * v, d1); }, inv: function (p) { return C.inv(p, d1) / d1; }, kind: "pos", params: params };
+        }
+        if (i1) {
+            return { pdf: function (v) { return v > 0 ? C.pdf(d2 / v, d2) * d2 / (v * v) : 0; }, cdf: function (v) { return v > 0 ? 1 - C.cdf(d2 / v, d2) : 0; }, inv: function (p) { return d2 / C.inv(1 - p, d2); }, kind: "pos", params: params };
+        }
+        return { pdf: function (v) { return jStat.centralF.pdf(v, d1, d2); }, cdf: function (v) { return jStat.centralF.cdf(v, d1, d2); }, inv: function (p) { return jStat.centralF.inv(p, d1, d2); }, kind: "pos", params: params };
     }
     function domainOf(d, x) {
         if (d.kind === "unit") return [0, 1];
