@@ -114,7 +114,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -160,131 +160,140 @@
 
     <main>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Select the test type and variable, enter the data and the margin δ to get the z statistics, p-value, decision and confidence interval.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Select the test type and variable, enter the data and the margin δ to get the z statistics, p-value, decision and confidence interval.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="testType">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <select id="testType">
-                            <option value="ni">Non-inferiority</option>
-                            <option value="tost">Equivalence (TOST)</option>
-                        </select>
-                        <p class="field-hint" hidden>“Non-inferiority” shows that the treatment is not worse than the control by more than the margin δ (one-sided test). “Equivalence (TOST)” shows that it is neither meaningfully better nor worse (two simultaneous one-sided tests).</p>
+                <div class="form-grid sample-grid">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="testType">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <select id="testType">
+                                <option value="ni">Non-inferiority</option>
+                                <option value="tost">Equivalence (TOST)</option>
+                            </select>
+                            <p class="field-hint" hidden>“Non-inferiority” shows that the treatment is not worse than the control by more than the margin δ (one-sided test). “Equivalence (TOST)” shows that it is neither meaningfully better nor worse (two simultaneous one-sided tests).</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="varType">Variable <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <select id="varType">
+                                <option value="prop">Proportions</option>
+                                <option value="means">Means</option>
+                            </select>
+                            <p class="field-hint" hidden>Indicates whether your data are proportions (success rates) or means (continuous variables); the input fields change according to the type you choose.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="varType">Variable <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <select id="varType">
-                            <option value="prop">Proportions</option>
-                            <option value="means">Means</option>
-                        </select>
-                        <p class="field-hint" hidden>Indicates whether your data are proportions (success rates) or means (continuous variables); the input fields change according to the type you choose.</p>
+
+                    <!-- Proportions inputs -->
+                    <div id="propInputs">
+                        <div class="inline-inputs">
+                            <div class="form-group">
+                                <label for="p1">Treatment proportion (p̂₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                                <input type="number" id="p1" value="0.72" step="0.01" min="0.001" max="0.999">
+                                <p class="field-hint" hidden>Success proportion observed in the treatment group, between 0 and 1.</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="p2">Control proportion (p̂₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                                <input type="number" id="p2" value="0.75" step="0.01" min="0.001" max="0.999">
+                                <p class="field-hint" hidden>Success proportion observed in the control (reference) group, between 0 and 1.</p>
+                            </div>
+                        </div>
+                        <div class="inline-inputs">
+                            <div class="form-group">
+                                <label for="n1p">Treatment sample size (n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                                <input type="number" id="n1p" value="200" step="1" min="2">
+                                <p class="field-hint" hidden>Number of observations in the treatment group.</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="n2p">Control sample size (n₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                                <input type="number" id="n2p" value="200" step="1" min="2">
+                                <p class="field-hint" hidden>Number of observations in the control group.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Means inputs (hidden by default) -->
+                    <div id="meansInputs" style="display:none;">
+                        <div class="inline-inputs">
+                            <div class="form-group">
+                                <label for="xbar1">Treatment mean (x̄₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                                <input type="number" id="xbar1" value="48" step="0.01">
+                                <p class="field-hint" hidden>Mean observed in the treatment group.</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="xbar2">Control mean (x̄₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                                <input type="number" id="xbar2" value="50" step="0.01">
+                                <p class="field-hint" hidden>Mean observed in the control (reference) group.</p>
+                            </div>
+                        </div>
+                        <div class="inline-inputs">
+                            <div class="form-group">
+                                <label for="s1">Treatment standard deviation (s₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                                <input type="number" id="s1" value="10" step="0.01" min="0.0001">
+                                <p class="field-hint" hidden>Sample standard deviation of the treatment group.</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="s2">Control standard deviation (s₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                                <input type="number" id="s2" value="10" step="0.01" min="0.0001">
+                                <p class="field-hint" hidden>Sample standard deviation of the control group.</p>
+                            </div>
+                        </div>
+                        <div class="inline-inputs">
+                            <div class="form-group">
+                                <label for="n1m">Treatment sample size (n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                                <input type="number" id="n1m" value="100" step="1" min="2">
+                                <p class="field-hint" hidden>Number of observations in the treatment group.</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="n2m">Control sample size (n₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                                <input type="number" id="n2m" value="100" step="1" min="2">
+                                <p class="field-hint" hidden>Number of observations in the control group.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="delta">Equivalence/non-inferiority margin (δ &gt; 0) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="delta" value="0.10" step="0.01" min="0.001">
+                            <p class="field-hint" hidden>Maximum tolerable difference in favor of the control, set <strong>a priori</strong> on clinical or regulatory grounds, not statistical ones.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="alpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Significance level of each one-sided test. With α = 0.05, the criterion is equivalent to checking that the 90&nbsp;% CI of the difference fits inside the margin [−δ, +δ].</p>
+                        </div>
+                    </div>
+
+                    <!-- Direction selector for NI only -->
+                    <div id="directionRow" class="inline-inputs">
+                        <div class="form-group">
+                            <label for="niDirection">Direction (non-inferiority) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <select id="niDirection">
+                                <option value="ni">Treatment non-inferior (Δ &gt; −δ)</option>
+                                <option value="ns">Treatment non-superior (Δ &lt; +δ)</option>
+                            </select>
+                            <p class="field-hint" hidden>Choose whether you want to show that the treatment is non-inferior (no worse than −δ) or non-superior (no better than +δ) relative to the control.</p>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Proportions inputs -->
-                <div id="propInputs">
-                    <div class="inline-inputs">
-                        <div class="form-group">
-                            <label for="p1">Treatment proportion (p̂₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                            <input type="number" id="p1" value="0.72" step="0.01" min="0.001" max="0.999">
-                            <p class="field-hint" hidden>Success proportion observed in the treatment group, between 0 and 1.</p>
-                        </div>
-                        <div class="form-group">
-                            <label for="p2">Control proportion (p̂₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                            <input type="number" id="p2" value="0.75" step="0.01" min="0.001" max="0.999">
-                            <p class="field-hint" hidden>Success proportion observed in the control (reference) group, between 0 and 1.</p>
-                        </div>
-                    </div>
-                    <div class="inline-inputs">
-                        <div class="form-group">
-                            <label for="n1p">Treatment sample size (n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                            <input type="number" id="n1p" value="200" step="1" min="2">
-                            <p class="field-hint" hidden>Number of observations in the treatment group.</p>
-                        </div>
-                        <div class="form-group">
-                            <label for="n2p">Control sample size (n₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                            <input type="number" id="n2p" value="200" step="1" min="2">
-                            <p class="field-hint" hidden>Number of observations in the control group.</p>
-                        </div>
+                <button class="calculate-btn" id="calcBtn">Calculate test</button>
+            </section>
+
+            <div id="result" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Decision zones of the test</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="niChart" aria-label="Chart of the normal distribution with decision zones for the non-inferiority or equivalence test" role="img"></canvas>
                     </div>
                 </div>
-
-                <!-- Means inputs (hidden by default) -->
-                <div id="meansInputs" style="display:none;">
-                    <div class="inline-inputs">
-                        <div class="form-group">
-                            <label for="xbar1">Treatment mean (x̄₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                            <input type="number" id="xbar1" value="48" step="0.01">
-                            <p class="field-hint" hidden>Mean observed in the treatment group.</p>
-                        </div>
-                        <div class="form-group">
-                            <label for="xbar2">Control mean (x̄₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                            <input type="number" id="xbar2" value="50" step="0.01">
-                            <p class="field-hint" hidden>Mean observed in the control (reference) group.</p>
-                        </div>
-                    </div>
-                    <div class="inline-inputs">
-                        <div class="form-group">
-                            <label for="s1">Treatment standard deviation (s₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                            <input type="number" id="s1" value="10" step="0.01" min="0.0001">
-                            <p class="field-hint" hidden>Sample standard deviation of the treatment group.</p>
-                        </div>
-                        <div class="form-group">
-                            <label for="s2">Control standard deviation (s₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                            <input type="number" id="s2" value="10" step="0.01" min="0.0001">
-                            <p class="field-hint" hidden>Sample standard deviation of the control group.</p>
-                        </div>
-                    </div>
-                    <div class="inline-inputs">
-                        <div class="form-group">
-                            <label for="n1m">Treatment sample size (n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                            <input type="number" id="n1m" value="100" step="1" min="2">
-                            <p class="field-hint" hidden>Number of observations in the treatment group.</p>
-                        </div>
-                        <div class="form-group">
-                            <label for="n2m">Control sample size (n₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                            <input type="number" id="n2m" value="100" step="1" min="2">
-                            <p class="field-hint" hidden>Number of observations in the control group.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="delta">Equivalence/non-inferiority margin (δ &gt; 0) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="delta" value="0.10" step="0.01" min="0.001">
-                        <p class="field-hint" hidden>Maximum tolerable difference in favor of the control, set <strong>a priori</strong> on clinical or regulatory grounds, not statistical ones.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="alpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Significance level of each one-sided test. With α = 0.05, the criterion is equivalent to checking that the 90&nbsp;% CI of the difference fits inside the margin [−δ, +δ].</p>
-                    </div>
-                </div>
-
-                <!-- Direction selector for NI only -->
-                <div id="directionRow" class="inline-inputs">
-                    <div class="form-group">
-                        <label for="niDirection">Direction (non-inferiority) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <select id="niDirection">
-                            <option value="ni">Treatment non-inferior (Δ &gt; −δ)</option>
-                            <option value="ns">Treatment non-superior (Δ &lt; +δ)</option>
-                        </select>
-                        <p class="field-hint" hidden>Choose whether you want to show that the treatment is non-inferior (no worse than −δ) or non-superior (no better than +δ) relative to the control.</p>
-                    </div>
-                </div>
-            </div>
-
-            <button class="calculate-btn" id="calcBtn">Calculate test</button>
-            <div id="result" class="result-box">Result pending…</div>
-            <div class="chart-wrap">
-                <canvas id="niChart" aria-label="Chart of the normal distribution with decision zones for the non-inferiority or equivalence test" role="img"></canvas>
-            </div>
+            </section>
         </section>
 
         <section class="card content-card">

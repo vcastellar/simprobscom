@@ -106,7 +106,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="style_new.css?v=20261102-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -158,67 +158,75 @@
 
     <main>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>
-                    Introduce las varianzas muestrales y los tamaños de muestra de los dos grupos.
-                    La calculadora obtiene el estadístico F, el p-valor, los valores críticos y la
-                    decisión al nivel de significación elegido.
-                </p>
-            </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>
+                        Introduce las varianzas muestrales y los tamaños de muestra de los dos grupos.
+                        La calculadora obtiene el estadístico F, el p-valor, los valores críticos y la
+                        decisión al nivel de significación elegido.
+                    </p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="n1">Tamaño muestral grupo 1 (n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="n1" value="20" step="1" min="2">
-                        <p class="field-hint" hidden>Número de observaciones del grupo 1. Determina los grados de libertad del numerador: gl₁ = n₁ − 1.</p>
+                <div class="form-grid sample-grid">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="n1">Tamaño muestral grupo 1 (n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="n1" value="20" step="1" min="2">
+                            <p class="field-hint" hidden>Número de observaciones del grupo 1. Determina los grados de libertad del numerador: gl₁ = n₁ − 1.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="n2">Tamaño muestral grupo 2 (n₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="n2" value="18" step="1" min="2">
+                            <p class="field-hint" hidden>Número de observaciones del grupo 2. Determina los grados de libertad del denominador: gl₂ = n₂ − 1.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="n2">Tamaño muestral grupo 2 (n₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="n2" value="18" step="1" min="2">
-                        <p class="field-hint" hidden>Número de observaciones del grupo 2. Determina los grados de libertad del denominador: gl₂ = n₂ − 1.</p>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="s1sq">Varianza muestral grupo 1 (s₁²) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="s1sq" value="16" step="0.01" min="0.0001">
+                            <p class="field-hint" hidden>Varianza observada en la muestra del grupo 1. Va en el numerador del estadístico F = s₁²/s₂².</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="s2sq">Varianza muestral grupo 2 (s₂²) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="s2sq" value="9" step="0.01" min="0.0001">
+                            <p class="field-hint" hidden>Varianza observada en la muestra del grupo 2. Va en el denominador del estadístico F = s₁²/s₂².</p>
+                        </div>
+                    </div>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="alpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Probabilidad de rechazar H₀ (igualdad de varianzas) cuando en realidad es cierta. El valor habitual es <strong>0,05</strong>.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="tail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <select id="tail">
+                                <option value="two">Bilateral (σ₁² ≠ σ₂²)</option>
+                                <option value="right">Cola derecha (σ₁² &gt; σ₂²)</option>
+                                <option value="left">Cola izquierda (σ₁² &lt; σ₂²)</option>
+                            </select>
+                            <p class="field-hint" hidden>Bilateral no asume dirección. Si quieres contrastar que σ₁² &gt; σ₂², usa cola derecha con la varianza del grupo 1 en el numerador; para σ₁² &lt; σ₂², usa cola izquierda.</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="s1sq">Varianza muestral grupo 1 (s₁²) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="s1sq" value="16" step="0.01" min="0.0001">
-                        <p class="field-hint" hidden>Varianza observada en la muestra del grupo 1. Va en el numerador del estadístico F = s₁²/s₂².</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="s2sq">Varianza muestral grupo 2 (s₂²) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="s2sq" value="9" step="0.01" min="0.0001">
-                        <p class="field-hint" hidden>Varianza observada en la muestra del grupo 2. Va en el denominador del estadístico F = s₁²/s₂².</p>
+                <button class="calculate-btn" id="calcBtn">Calcular contraste</button>
+            </section>
+
+            <div id="dosVarianzasResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Regiones de rechazo y estadístico observado</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="dosVarianzasChart" aria-label="Gráfico de zonas de aceptación y rechazo para el contraste F de dos varianzas" role="img"></canvas>
                     </div>
                 </div>
-
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="alpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Probabilidad de rechazar H₀ (igualdad de varianzas) cuando en realidad es cierta. El valor habitual es <strong>0,05</strong>.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="tail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <select id="tail">
-                            <option value="two">Bilateral (σ₁² ≠ σ₂²)</option>
-                            <option value="right">Cola derecha (σ₁² &gt; σ₂²)</option>
-                            <option value="left">Cola izquierda (σ₁² &lt; σ₂²)</option>
-                        </select>
-                        <p class="field-hint" hidden>Bilateral no asume dirección. Si quieres contrastar que σ₁² &gt; σ₂², usa cola derecha con la varianza del grupo 1 en el numerador; para σ₁² &lt; σ₂², usa cola izquierda.</p>
-                    </div>
-                </div>
-            </div>
-
-            <button class="calculate-btn" id="calcBtn">Calcular contraste</button>
-            <div id="dosVarianzasResult" class="result-box">Resultado pendiente…</div>
-
-            <div class="chart-wrap">
-                <canvas id="dosVarianzasChart" aria-label="Gráfico de zonas de aceptación y rechazo para el contraste F de dos varianzas" role="img"></canvas>
-            </div>
+            </section>
         </section>
 
         <section class="card content-card">

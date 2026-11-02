@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="style_new.css?v=20261102-1">
 
     <script type="application/ld+json">
 {
@@ -169,53 +169,62 @@
 
 
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Calculadora online que calcula z, p-valor y la decisión del contraste para una proporción.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Calculadora online que calcula z, p-valor y la decisión del contraste para una proporción.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="p0">Proporción hipotética (p₀) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="p0" value="0.5" step="0.01" min="0.0001" max="0.9999">
-                        <p class="field-hint" hidden>El valor de referencia planteado en H₀: p = p₀. El error estándar del contraste se calcula con este valor, no con la proporción observada.</p>
+                <div class="form-grid sample-grid">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="p0">Proporción hipotética (p₀) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="p0" value="0.5" step="0.01" min="0.0001" max="0.9999">
+                            <p class="field-hint" hidden>El valor de referencia planteado en H₀: p = p₀. El error estándar del contraste se calcula con este valor, no con la proporción observada.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="phat">Proporción observada (p̂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="phat" value="0.58" step="0.01" min="0" max="1">
+                            <p class="field-hint" hidden>La proporción muestral obtenida (éxitos / n) que quieres comparar con p₀.</p>
+                        </div>
+                    </div>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="n">Tamaño muestral (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="n" value="120" step="1" min="2">
+                            <p class="field-hint" hidden>Número de observaciones de la muestra. La aproximación normal es razonable cuando n·p₀ y n·(1−p₀) son al menos 5 o 10.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="alpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Riesgo de falso positivo que aceptas al rechazar H₀. El valor estándar habitual es <strong>0,05</strong>.</p>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="phat">Proporción observada (p̂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="phat" value="0.58" step="0.01" min="0" max="1">
-                        <p class="field-hint" hidden>La proporción muestral obtenida (éxitos / n) que quieres comparar con p₀.</p>
+                        <label for="tail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                        <select id="tail">
+                            <option value="two">Bilateral (≠)</option>
+                            <option value="right">Cola derecha (>)</option>
+                            <option value="left">Cola izquierda (&lt;)</option>
+                        </select>
+                        <p class="field-hint" hidden>Bilateral si buscas cualquier diferencia respecto a p₀; unilateral (cola derecha o izquierda) si solo te interesa un aumento o una disminución.</p>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="n">Tamaño muestral (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="n" value="120" step="1" min="2">
-                        <p class="field-hint" hidden>Número de observaciones de la muestra. La aproximación normal es razonable cuando n·p₀ y n·(1−p₀) son al menos 5 o 10.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="alpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Riesgo de falso positivo que aceptas al rechazar H₀. El valor estándar habitual es <strong>0,05</strong>.</p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="tail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                    <select id="tail">
-                        <option value="two">Bilateral (≠)</option>
-                        <option value="right">Cola derecha (>)</option>
-                        <option value="left">Cola izquierda (&lt;)</option>
-                    </select>
-                    <p class="field-hint" hidden>Bilateral si buscas cualquier diferencia respecto a p₀; unilateral (cola derecha o izquierda) si solo te interesa un aumento o una disminución.</p>
-                </div>
-            </div>
 
-            <button class="calculate-btn" id="calcPropBtn">Calcular contraste</button>
-            <div id="propResult" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap">
-                <canvas id="propTestChart" aria-label="Gráfico de zonas de aceptación y rechazo para el contraste de una proporción" role="img"></canvas>
-            </div>
+                <button class="calculate-btn" id="calcPropBtn">Calcular contraste</button>
+            </section>
+
+            <div id="propResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Regiones de rechazo y estadístico observado</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="propTestChart" aria-label="Gráfico de zonas de aceptación y rechazo para el contraste de una proporción" role="img"></canvas>
+                    </div>
+                </div>
+            </section>
         </section>
 
         <section class="card content-card">

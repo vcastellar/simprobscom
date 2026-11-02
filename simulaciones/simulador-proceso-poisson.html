@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Simulador de proceso de Poisson | ProbLab">
   <meta name="twitter:description" content="Simulador del proceso de Poisson: trayectorias, número de eventos y tiempos entre llegadas con curvas teóricas.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261102-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -187,24 +187,7 @@
     .related-tools a:hover {
       text-decoration: underline;
     }
-    /* Sim layout: side panel + chart area */
-    .sim-layout {
-      display: grid;
-      grid-template-columns: 320px minmax(0, 1fr);
-      gap: 20px;
-      align-items: start;
-    }
-    .sim-panel {
-      position: sticky;
-      top: 18px;
-    }
     @media (max-width: 860px) {
-      .sim-layout {
-        grid-template-columns: 1fr;
-      }
-      .sim-panel {
-        position: static;
-      }
       .results-grid {
         grid-template-columns: 1fr 1fr;
       }
@@ -303,9 +286,9 @@
     <!-- MODE 1: Trayectoria -->
     <div id="panel-trayectoria" class="mode-section active" role="tabpanel" aria-labelledby="tab-trayectoria">
       <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> dibuja cómo crece el número de eventos N(t) a medida que pasa el tiempo, para una o varias simulaciones a la vez. Sirve para ver visualmente cómo se acumulan los eventos y comparar la variabilidad entre trayectorias distintas.</p>
-      <div class="sim-layout">
+      <div class="ss-shell ss-sim">
         <!-- Panel de control -->
-        <aside class="card sim-panel sample-size-panel" aria-label="Parámetros de simulación">
+        <aside class="card ss-controls" aria-label="Parámetros de simulación">
           <h2 style="margin:0 0 4px; font-size:1.1rem;">Panel de control</h2>
           <p style="margin:0 0 16px; color:var(--text-muted); font-size:0.87rem;">Parámetros del proceso de Poisson</p>
 
@@ -336,23 +319,26 @@
         </aside>
 
         <!-- Results area -->
-        <div>
-          <div id="chart-wrap-t" class="chart-wrap">
-            <div class="chart-placeholder" id="placeholder-t">
-              <div>
-                <div style="font-size:2rem; margin-bottom:8px;">📈</div>
-                Haz clic en <strong>'Simular'</strong> para comenzar.<br>
-                <span style="font-size:0.85rem;">Se mostrarán las trayectorias N(t) como funciones escalonadas.</span>
-              </div>
-            </div>
-            <canvas id="chart-trayectoria" style="display:none;"></canvas>
-          </div>
+        <div class="ss-main">
 
           <div id="results-t" style="display:none;">
             <div class="results-grid" id="stats-t"></div>
-            <ul class="traj-list" id="traj-detail"></ul>
-            <div class="interp-box" id="interp-t"></div>
           </div>
+          <section class="card ss-sim-chart">
+              <h2 class="ss-chart-title">Trayectorias N(t)</h2>
+              <div id="chart-wrap-t" class="chart-wrap">
+                <div class="chart-placeholder" id="placeholder-t">
+                  <div>
+                    <div style="font-size:2rem; margin-bottom:8px;">📈</div>
+                    Haz clic en <strong>'Simular'</strong> para comenzar.<br>
+                    <span style="font-size:0.85rem;">Se mostrarán las trayectorias N(t) como funciones escalonadas.</span>
+                  </div>
+                </div>
+                <canvas id="chart-trayectoria" style="display:none;"></canvas>
+              </div>
+          </section>
+          <ul class="traj-list" id="traj-detail"></ul>
+          <div class="interp-box" id="interp-t"></div>
         </div>
       </div>
     </div>
@@ -360,8 +346,8 @@
     <!-- MODE 2: Distribución N(T) -->
     <div id="panel-distribucion" class="mode-section" role="tabpanel" aria-labelledby="tab-distribucion">
       <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> repite la simulación miles de veces y compara, en un histograma, cuántos eventos se observan en el instante T frente a lo que predice la distribución de Poisson teórica. Sirve para comprobar visualmente que N(T) sigue una Poisson(λT).</p>
-      <div class="sim-layout">
-        <aside class="card sim-panel sample-size-panel" aria-label="Parámetros de simulación">
+      <div class="ss-shell ss-sim">
+        <aside class="card ss-controls" aria-label="Parámetros de simulación">
           <h2 style="margin:0 0 4px; font-size:1.1rem;">Panel de control</h2>
           <p style="margin:0 0 16px; color:var(--text-muted); font-size:0.87rem;">Parámetros del proceso de Poisson</p>
 
@@ -392,22 +378,25 @@
           <button class="calculate-btn" id="btn-simular-d" type="button">Simular</button>
         </aside>
 
-        <div>
-          <div id="chart-wrap-d" class="chart-wrap">
-            <div class="chart-placeholder" id="placeholder-d">
-              <div>
-                <div style="font-size:2rem; margin-bottom:8px;">📊</div>
-                Haz clic en <strong>'Simular'</strong> para comenzar.<br>
-                <span style="font-size:0.85rem;">Se mostrará el histograma de N(T) vs la PMF teórica de Poisson(λT).</span>
-              </div>
-            </div>
-            <canvas id="chart-distribucion" style="display:none;"></canvas>
-          </div>
+        <div class="ss-main">
 
           <div id="results-d" style="display:none;">
             <div class="results-grid" id="stats-d"></div>
-            <div class="interp-box" id="interp-d"></div>
           </div>
+          <section class="card ss-sim-chart">
+              <h2 class="ss-chart-title">Distribución de N(T)</h2>
+              <div id="chart-wrap-d" class="chart-wrap">
+                <div class="chart-placeholder" id="placeholder-d">
+                  <div>
+                    <div style="font-size:2rem; margin-bottom:8px;">📊</div>
+                    Haz clic en <strong>'Simular'</strong> para comenzar.<br>
+                    <span style="font-size:0.85rem;">Se mostrará el histograma de N(T) vs la PMF teórica de Poisson(λT).</span>
+                  </div>
+                </div>
+                <canvas id="chart-distribucion" style="display:none;"></canvas>
+              </div>
+          </section>
+          <div class="interp-box" id="interp-d"></div>
         </div>
       </div>
     </div>
@@ -415,8 +404,8 @@
     <!-- MODE 3: Tiempos entre llegadas -->
     <div id="panel-tiempos" class="mode-section" role="tabpanel" aria-labelledby="tab-tiempos">
       <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> mide el tiempo que transcurre entre eventos consecutivos en miles de simulaciones y compara esa distribución empírica con la exponencial teórica. Sirve para ver la propiedad de "falta de memoria" del proceso de Poisson.</p>
-      <div class="sim-layout">
-        <aside class="card sim-panel sample-size-panel" aria-label="Parámetros de simulación">
+      <div class="ss-shell ss-sim">
+        <aside class="card ss-controls" aria-label="Parámetros de simulación">
           <h2 style="margin:0 0 4px; font-size:1.1rem;">Panel de control</h2>
           <p style="margin:0 0 16px; color:var(--text-muted); font-size:0.87rem;">Parámetros del proceso de Poisson</p>
 
@@ -447,22 +436,25 @@
           <button class="calculate-btn" id="btn-simular-e" type="button">Simular</button>
         </aside>
 
-        <div>
-          <div id="chart-wrap-e" class="chart-wrap">
-            <div class="chart-placeholder" id="placeholder-e">
-              <div>
-                <div style="font-size:2rem; margin-bottom:8px;">⏱️</div>
-                Haz clic en <strong>'Simular'</strong> para comenzar.<br>
-                <span style="font-size:0.85rem;">Se mostrará el histograma de tiempos entre llegadas vs la PDF exponencial teórica.</span>
-              </div>
-            </div>
-            <canvas id="chart-tiempos" style="display:none;"></canvas>
-          </div>
+        <div class="ss-main">
 
           <div id="results-e" style="display:none;">
             <div class="results-grid" id="stats-e"></div>
-            <div class="interp-box" id="interp-e"></div>
           </div>
+          <section class="card ss-sim-chart">
+              <h2 class="ss-chart-title">Tiempos entre llegadas</h2>
+              <div id="chart-wrap-e" class="chart-wrap">
+                <div class="chart-placeholder" id="placeholder-e">
+                  <div>
+                    <div style="font-size:2rem; margin-bottom:8px;">⏱️</div>
+                    Haz clic en <strong>'Simular'</strong> para comenzar.<br>
+                    <span style="font-size:0.85rem;">Se mostrará el histograma de tiempos entre llegadas vs la PDF exponencial teórica.</span>
+                  </div>
+                </div>
+                <canvas id="chart-tiempos" style="display:none;"></canvas>
+              </div>
+          </section>
+          <div class="interp-box" id="interp-e"></div>
         </div>
       </div>
     </div>

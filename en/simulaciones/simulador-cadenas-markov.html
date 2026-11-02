@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Markov Chain Simulator | ProbLab">
   <meta name="twitter:description" content="Markov chain simulator: define the transition matrix and watch the convergence toward the stationary distribution.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../../style_new.css?v=20261031-1">
+  <link rel="stylesheet" href="../../style_new.css?v=20261102-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -307,6 +307,14 @@
       background: #1e293b;
       border-color: rgba(255,255,255,0.08);
     }
+    /* Maqueta en dos columnas: columna de parámetros algo más ancha y matriz
+       más compacta, para que la matriz por defecto quepa sin desplazarla. */
+    @media (min-width: 1025px) {
+      .ss-shell.ss-sim { grid-template-columns: 460px minmax(0, 1fr); }
+    }
+    .ss-controls .matrix-table td { padding: 4px; }
+    .ss-controls .matrix-table input[type="number"] { width: 60px; padding: 7px 4px; }
+    .ss-controls .matrix-table input[type="text"] { width: 72px; }
   </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
@@ -354,99 +362,105 @@
 
   <main>
     <!-- SIMULATOR CARD -->
-    <section class="card" id="simulator">
-      <!-- Preset tabs -->
-      <div>
-        <p style="margin:0 0 10px; font-size:0.82rem; font-weight:700; color:#334155; text-transform:uppercase; letter-spacing:0.08em;">Preset</p>
-        <div class="preset-tabs" role="group" aria-label="Select preset">
-          <button class="preset-tab active" data-preset="clima" type="button">Weather</button>
-          <button class="preset-tab" data-preset="cliente" type="button">Customer / Churn</button>
-          <button class="preset-tab" data-preset="custom" type="button">Custom</button>
+    <div class="ss-shell ss-sim">
+        <section class="card ss-controls" id="simulator">
+          <!-- Preset tabs -->
+          <div>
+            <p style="margin:0 0 10px; font-size:0.82rem; font-weight:700; color:#334155; text-transform:uppercase; letter-spacing:0.08em;">Preset</p>
+            <div class="preset-tabs" role="group" aria-label="Select preset">
+              <button class="preset-tab active" data-preset="clima" type="button">Weather</button>
+              <button class="preset-tab" data-preset="cliente" type="button">Customer / Churn</button>
+              <button class="preset-tab" data-preset="custom" type="button">Custom</button>
+            </div>
+          </div>
+
+          <!-- Control panel -->
+          <div class="sample-size-panel">
+            <div class="sample-grid">
+
+              <!-- Number of states (only custom) -->
+              <div id="statesRow" class="states-row" style="display:none;">
+                <label for="numStates">Number of states:</label>
+                <select id="numStates">
+                  <option value="2">2</option>
+                  <option value="3" selected>3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+                <span class="states-note">(Changes the matrix size)</span>
+              </div>
+
+              <!-- Matrix section -->
+              <div class="matrix-section">
+                <h3>Transition matrix P</h3>
+                <p style="margin:0 0 10px; font-size:0.875rem; color:var(--text-muted);">Each row represents the current state; each column, the next state. Each row must sum to 1.</p>
+                <div class="matrix-table-wrap">
+                  <table class="matrix-table" id="matrixTable" aria-label="Transition matrix">
+                    <!-- Built dynamically by JS -->
+                  </table>
+                </div>
+                <div class="matrix-error" id="matrixError" role="alert"></div>
+              </div>
+
+              <!-- Initial state + steps -->
+              <div class="inline-inputs" style="margin-top:18px;">
+                <div class="form-group">
+                  <label for="initState">Initial state <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                  <select id="initState">
+                    <!-- Built dynamically -->
+                  </select>
+                    <p class="field-hint" hidden>State the simulation starts from. If the chain is ergodic, the distribution converges to the same π in the long run whatever the initial state.</p>
+                </div>
+                <div class="form-group">
+                  <label for="numSteps">Number of steps <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                  <select id="numSteps">
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="200" selected>200</option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                  </select>
+                    <p class="field-hint" hidden>How many steps are simulated. With more steps, the empirical fraction of time in each state gets closer to the theoretical stationary distribution π.</p>
+                </div>
+              </div>
+
+              <button class="calculate-btn" id="simBtn" type="button">Simulate</button>
+            </div>
+          </div>
+        </section>
+
+        <div class="ss-main">
+            <div class="sim-placeholder" id="simPlaceholder">
+              Select a preset or configure the matrix and click &ldquo;Simulate&rdquo;
+            </div>
+
+            <div id="simResults">
+              <!-- Charts -->
+              <div class="result-box" id="resultBox" role="status" aria-live="polite">
+                <p><strong>Stationary distribution:</strong> <span id="rStationary"></span></p>
+                <p><strong>Empirical distribution (fraction of time):</strong> <span id="rEmpirical"></span></p>
+                <p><strong>Maximum difference |π − empirical|:</strong> <span id="rMaxDiff"></span></p>
+                <p><strong>Interpretation:</strong> <span id="rInterpretation"></span></p>
+              </div>
+              <div class="charts-grid">
+                <div class="chart-card">
+                  <h3>State evolution (cumulative proportion)</h3>
+                  <div class="chart-wrap"><canvas id="chartEvolution" aria-label="State evolution chart"></canvas></div>
+                </div>
+                <div class="chart-card">
+                  <h3>Final distribution vs stationary distribution</h3>
+                  <div class="chart-wrap"><canvas id="chartFinal" aria-label="Final versus stationary distribution chart"></canvas></div>
+                </div>
+              </div>
+
+              <!-- Result box -->
+            </div>
         </div>
-      </div>
-
-      <!-- Control panel -->
-      <div class="sample-size-panel">
-        <div class="sample-grid">
-
-          <!-- Number of states (only custom) -->
-          <div id="statesRow" class="states-row" style="display:none;">
-            <label for="numStates">Number of states:</label>
-            <select id="numStates">
-              <option value="2">2</option>
-              <option value="3" selected>3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select>
-            <span class="states-note">(Changes the matrix size)</span>
-          </div>
-
-          <!-- Matrix section -->
-          <div class="matrix-section">
-            <h3>Transition matrix P</h3>
-            <p style="margin:0 0 10px; font-size:0.875rem; color:var(--text-muted);">Each row represents the current state; each column, the next state. Each row must sum to 1.</p>
-            <div class="matrix-table-wrap">
-              <table class="matrix-table" id="matrixTable" aria-label="Transition matrix">
-                <!-- Built dynamically by JS -->
-              </table>
-            </div>
-            <div class="matrix-error" id="matrixError" role="alert"></div>
-          </div>
-
-          <!-- Initial state + steps -->
-          <div class="inline-inputs" style="margin-top:18px;">
-            <div class="form-group">
-              <label for="initState">Initial state <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <select id="initState">
-                <!-- Built dynamically -->
-              </select>
-                <p class="field-hint" hidden>State the simulation starts from. If the chain is ergodic, the distribution converges to the same π in the long run whatever the initial state.</p>
-            </div>
-            <div class="form-group">
-              <label for="numSteps">Number of steps <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <select id="numSteps">
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="200" selected>200</option>
-                <option value="500">500</option>
-                <option value="1000">1000</option>
-              </select>
-                <p class="field-hint" hidden>How many steps are simulated. With more steps, the empirical fraction of time in each state gets closer to the theoretical stationary distribution π.</p>
-            </div>
-          </div>
-
-          <button class="calculate-btn" id="simBtn" type="button">Simulate</button>
-        </div>
-      </div>
-    </section>
+    </div>
 
     <!-- PLACEHOLDER (shown before first run) -->
-    <div class="sim-placeholder" id="simPlaceholder">
-      Select a preset or configure the matrix and click &ldquo;Simulate&rdquo;
-    </div>
 
     <!-- RESULTS (hidden until first run) -->
-    <div id="simResults">
-      <!-- Charts -->
-      <div class="charts-grid">
-        <div class="chart-card">
-          <h3>State evolution (cumulative proportion)</h3>
-          <div class="chart-wrap"><canvas id="chartEvolution" aria-label="State evolution chart"></canvas></div>
-        </div>
-        <div class="chart-card">
-          <h3>Final distribution vs stationary distribution</h3>
-          <div class="chart-wrap"><canvas id="chartFinal" aria-label="Final versus stationary distribution chart"></canvas></div>
-        </div>
-      </div>
-
-      <!-- Result box -->
-      <div class="result-box" id="resultBox" role="status" aria-live="polite">
-        <p><strong>Stationary distribution:</strong> <span id="rStationary"></span></p>
-        <p><strong>Empirical distribution (fraction of time):</strong> <span id="rEmpirical"></span></p>
-        <p><strong>Maximum difference |π − empirical|:</strong> <span id="rMaxDiff"></span></p>
-        <p><strong>Interpretation:</strong> <span id="rInterpretation"></span></p>
-      </div>
-    </div>
 
     <!-- EDUCATIONAL CONTENT -->
     <section class="card content-card">

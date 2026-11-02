@@ -106,7 +106,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -154,67 +154,75 @@
 
     <main>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>
-                    Enter the sample variances and sample sizes of the two groups.
-                    The calculator computes the F statistic, the p-value, the critical values and the
-                    decision at the chosen significance level.
-                </p>
-            </div>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>
+                        Enter the sample variances and sample sizes of the two groups.
+                        The calculator computes the F statistic, the p-value, the critical values and the
+                        decision at the chosen significance level.
+                    </p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="n1">Sample size group 1 (n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="n1" value="20" step="1" min="2">
-                        <p class="field-hint" hidden>Number of observations in group 1. It determines the numerator degrees of freedom: df₁ = n₁ − 1.</p>
+                <div class="form-grid sample-grid">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="n1">Sample size group 1 (n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="n1" value="20" step="1" min="2">
+                            <p class="field-hint" hidden>Number of observations in group 1. It determines the numerator degrees of freedom: df₁ = n₁ − 1.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="n2">Sample size group 2 (n₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="n2" value="18" step="1" min="2">
+                            <p class="field-hint" hidden>Number of observations in group 2. It determines the denominator degrees of freedom: df₂ = n₂ − 1.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="n2">Sample size group 2 (n₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="n2" value="18" step="1" min="2">
-                        <p class="field-hint" hidden>Number of observations in group 2. It determines the denominator degrees of freedom: df₂ = n₂ − 1.</p>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="s1sq">Sample variance group 1 (s₁²) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="s1sq" value="16" step="0.01" min="0.0001">
+                            <p class="field-hint" hidden>Variance observed in the sample from group 1. It goes in the numerator of the statistic F = s₁²/s₂².</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="s2sq">Sample variance group 2 (s₂²) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="s2sq" value="9" step="0.01" min="0.0001">
+                            <p class="field-hint" hidden>Variance observed in the sample from group 2. It goes in the denominator of the statistic F = s₁²/s₂².</p>
+                        </div>
+                    </div>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="alpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Probability of rejecting H₀ (equality of variances) when it is actually true. The usual value is <strong>0.05</strong>.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="tail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <select id="tail">
+                                <option value="two">Two-tailed (σ₁² ≠ σ₂²)</option>
+                                <option value="right">Right tail (σ₁² &gt; σ₂²)</option>
+                                <option value="left">Left tail (σ₁² &lt; σ₂²)</option>
+                            </select>
+                            <p class="field-hint" hidden>Two-tailed assumes no direction. If you want to test that σ₁² &gt; σ₂², use right-tailed with the group 1 variance in the numerator; for σ₁² &lt; σ₂², use left-tailed.</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="s1sq">Sample variance group 1 (s₁²) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="s1sq" value="16" step="0.01" min="0.0001">
-                        <p class="field-hint" hidden>Variance observed in the sample from group 1. It goes in the numerator of the statistic F = s₁²/s₂².</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="s2sq">Sample variance group 2 (s₂²) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="s2sq" value="9" step="0.01" min="0.0001">
-                        <p class="field-hint" hidden>Variance observed in the sample from group 2. It goes in the denominator of the statistic F = s₁²/s₂².</p>
+                <button class="calculate-btn" id="calcBtn">Calculate test</button>
+            </section>
+
+            <div id="dosVarianzasResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Rejection regions and observed statistic</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="dosVarianzasChart" aria-label="Chart of acceptance and rejection regions for the F-test of two variances" role="img"></canvas>
                     </div>
                 </div>
-
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="alpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Probability of rejecting H₀ (equality of variances) when it is actually true. The usual value is <strong>0.05</strong>.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="tail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <select id="tail">
-                            <option value="two">Two-tailed (σ₁² ≠ σ₂²)</option>
-                            <option value="right">Right tail (σ₁² &gt; σ₂²)</option>
-                            <option value="left">Left tail (σ₁² &lt; σ₂²)</option>
-                        </select>
-                        <p class="field-hint" hidden>Two-tailed assumes no direction. If you want to test that σ₁² &gt; σ₂², use right-tailed with the group 1 variance in the numerator; for σ₁² &lt; σ₂², use left-tailed.</p>
-                    </div>
-                </div>
-            </div>
-
-            <button class="calculate-btn" id="calcBtn">Calculate test</button>
-            <div id="dosVarianzasResult" class="result-box">Result pending…</div>
-
-            <div class="chart-wrap">
-                <canvas id="dosVarianzasChart" aria-label="Chart of acceptance and rejection regions for the F-test of two variances" role="img"></canvas>
-            </div>
+            </section>
         </section>
 
         <section class="card content-card">

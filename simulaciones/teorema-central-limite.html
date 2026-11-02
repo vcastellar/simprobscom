@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Simulador del teorema central del límite | ProbLab">
   <meta name="twitter:description" content="Simulador del teorema central del límite: elige distribución, tamaño de muestra y simulaciones para ver convergencia normal.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261102-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -305,122 +305,130 @@
   <main>
 
     <!-- Control panel -->
-    <section class="card sample-size-panel" aria-labelledby="params-heading">
-      <h2 class="panel-heading" id="params-heading">Parámetros de simulación</h2>
-      <div class="sim-form-grid">
-        <div class="form-group">
-          <label for="dist">Distribución base <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-          <select id="dist">
-            <option value="normal">Normal (μ=0, σ=1)</option>
-            <option value="uniform">Uniforme (a=0, b=1)</option>
-            <option value="exponential">Exponencial (λ=1)</option>
-            <option value="bernoulli">Bernoulli (p=0,3)</option>
-            <option value="poisson">Poisson (λ=3)</option>
-            <option value="chisquare">Chi-cuadrado (k=3)</option>
-          </select>
-          <p class="field-hint" hidden>Distribución de la que se extraen las observaciones individuales que después se promedian. Sus parámetros están fijados (por ejemplo, Exponencial con λ=1) y determinan la media μ y la varianza σ² que aparecen en la columna «Teórico». El TCL garantiza que la media muestral se aproxima a una normal sea cual sea esta distribución de partida, pero la velocidad de convergencia depende de su asimetría: prueba una simétrica (Uniforme) y una asimétrica (Exponencial, Chi-cuadrado) con el mismo n.</p>
+    <div class="ss-shell ss-sim">
+        <section class="card ss-controls" aria-labelledby="params-heading">
+          <h2 class="panel-heading" id="params-heading">Parámetros de simulación</h2>
+          <div class="sim-form-grid">
+            <div class="form-group">
+              <label for="dist">Distribución base <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+              <select id="dist">
+                <option value="normal">Normal (μ=0, σ=1)</option>
+                <option value="uniform">Uniforme (a=0, b=1)</option>
+                <option value="exponential">Exponencial (λ=1)</option>
+                <option value="bernoulli">Bernoulli (p=0,3)</option>
+                <option value="poisson">Poisson (λ=3)</option>
+                <option value="chisquare">Chi-cuadrado (k=3)</option>
+              </select>
+              <p class="field-hint" hidden>Distribución de la que se extraen las observaciones individuales que después se promedian. Sus parámetros están fijados (por ejemplo, Exponencial con λ=1) y determinan la media μ y la varianza σ² que aparecen en la columna «Teórico». El TCL garantiza que la media muestral se aproxima a una normal sea cual sea esta distribución de partida, pero la velocidad de convergencia depende de su asimetría: prueba una simétrica (Uniforme) y una asimétrica (Exponencial, Chi-cuadrado) con el mismo n.</p>
+            </div>
+            <div class="form-group">
+              <label for="sampleSize">Tamaño de muestra <em>n</em> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+              <select id="sampleSize">
+                <option value="1">n = 1</option>
+                <option value="2">n = 2</option>
+                <option value="5">n = 5</option>
+                <option value="10">n = 10</option>
+                <option value="30" selected>n = 30</option>
+                <option value="50">n = 50</option>
+                <option value="100">n = 100</option>
+              </select>
+              <p class="field-hint" hidden>Número de observaciones independientes que se extraen y se promedian para obtener cada media muestral. Con n = 1 no hay promediado y los dos histogramas coinciden; al aumentar n, el histograma inferior se vuelve más simétrico (efecto del TCL) y más estrecho, porque la desviación típica de la media es σ/√n.</p>
+            </div>
+            <div class="form-group">
+              <label for="numSims">Número de simulaciones <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+              <select id="numSims">
+                <option value="100">100</option>
+                <option value="500">500</option>
+                <option value="1000" selected>1000</option>
+                <option value="5000">5000</option>
+                <option value="10000">10000</option>
+              </select>
+              <p class="field-hint" hidden>Cuántas veces se repite el proceso «extraer n observaciones y calcular su media». Cada repetición aporta un punto al histograma inferior. Más simulaciones no cambian la forma de la distribución de la media (eso depende de n), pero hacen el histograma más suave y las cifras de la columna «Empírico» más estables. En total se generan n × simulaciones observaciones individuales.</p>
+            </div>
+          </div>
+          <button class="calculate-btn" id="simBtn" type="button">Simular</button>
+        </section>
+
+        <div class="ss-main">
+            <div class="stats-table-wrap" id="statsSection" style="display:none;">
+              <table class="stats-table" aria-label="Comparación teórico-empírica">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Teórico</th>
+                    <th>Empírico</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Media de la media muestral (μ)</td>
+                    <td class="val-teorico" id="statTeoMean">—</td>
+                    <td class="val-empirico" id="statEmpMean">—</td>
+                  </tr>
+                  <tr>
+                    <td>Desv. típica de la media muestral (σ/√n)</td>
+                    <td class="val-teorico" id="statTeoSd">—</td>
+                    <td class="val-empirico" id="statEmpSd">—</td>
+                  </tr>
+                  <tr>
+                    <td>Varianza de la media muestral (σ²/n)</td>
+                    <td class="val-teorico" id="statTeoVar">—</td>
+                    <td class="val-empirico" id="statEmpVar">—</td>
+                  </tr>
+                  <tr>
+                    <td>Asimetría de la media muestral (γ₁/√n)</td>
+                    <td class="val-teorico" id="statTeoSkew">—</td>
+                    <td class="val-empirico" id="statEmpSkew">—</td>
+                  </tr>
+                  <tr>
+                    <td>Número de medias muestrales</td>
+                    <td class="val-teorico" id="statTeoN">—</td>
+                    <td class="val-empirico" id="statEmpN">—</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="charts-grid" id="chartsSection">
+              <div class="chart-panel">
+                <h3>Distribución original</h3>
+                <p class="chart-sub" id="origSub">Histograma de muchas observaciones individuales extraídas de la distribución elegida (barras) junto con su densidad teórica (línea roja). Muestra la forma de partida: simétrica, asimétrica, acotada o discreta.</p>
+                <div class="chart-wrap" id="origWrap">
+                  <div class="sim-placeholder" id="origPlaceholder">
+                    <span>Haz clic en «Simular» para comenzar</span>
+                  </div>
+                  <canvas id="origChart" style="display:none;"></canvas>
+                </div>
+              </div>
+              <div class="chart-panel">
+                <h3>Distribución de la media muestral</h3>
+                <p class="chart-sub" id="meansSub">Histograma de las medias muestrales obtenidas en las simulaciones (barras). La línea roja es la normal N(μ, σ²/n) que predice el TCL; la verde discontinua es la normal ajustada a las medias simuladas. Cuanto más se parezcan las barras a las curvas, mejor funciona la aproximación normal.</p>
+                <div class="chart-wrap" id="meansWrap">
+                  <div class="sim-placeholder" id="meansPlaceholder">
+                    <span>Haz clic en «Simular» para comenzar</span>
+                  </div>
+                  <canvas id="meansChart" style="display:none;"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="legend-dots" id="legendArea" style="display:none;">
+              <span class="legend-dot"><span class="dot-bar" style="background:rgba(79,70,229,0.5); border:1px solid rgba(79,70,229,0.8);"></span> Barras: frecuencia relativa de los valores simulados, en escala de densidad (área total = 1)</span>
+              <span class="legend-dot"><span style="background:#dc2626;"></span> Línea roja: densidad teórica (arriba, la de la distribución base; abajo, la normal N(μ, σ²/n) que predice el TCL)</span>
+              <span class="legend-dot"><span style="background:#16a34a; border-top: 2px dashed #16a34a; height:0; width:24px;"></span> Línea verde discontinua: normal ajustada a las medias simuladas (media y desviación típica empíricas)</span>
+            </div>
+
+            <div id="interpretation" class="result-box" style="display:none;" role="status" aria-live="polite"></div>
         </div>
-        <div class="form-group">
-          <label for="sampleSize">Tamaño de muestra <em>n</em> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-          <select id="sampleSize">
-            <option value="1">n = 1</option>
-            <option value="2">n = 2</option>
-            <option value="5">n = 5</option>
-            <option value="10">n = 10</option>
-            <option value="30" selected>n = 30</option>
-            <option value="50">n = 50</option>
-            <option value="100">n = 100</option>
-          </select>
-          <p class="field-hint" hidden>Número de observaciones independientes que se extraen y se promedian para obtener cada media muestral. Con n = 1 no hay promediado y los dos histogramas coinciden; al aumentar n, el histograma de la derecha se vuelve más simétrico (efecto del TCL) y más estrecho, porque la desviación típica de la media es σ/√n.</p>
-        </div>
-        <div class="form-group">
-          <label for="numSims">Número de simulaciones <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-          <select id="numSims">
-            <option value="100">100</option>
-            <option value="500">500</option>
-            <option value="1000" selected>1000</option>
-            <option value="5000">5000</option>
-            <option value="10000">10000</option>
-          </select>
-          <p class="field-hint" hidden>Cuántas veces se repite el proceso «extraer n observaciones y calcular su media». Cada repetición aporta un punto al histograma de la derecha. Más simulaciones no cambian la forma de la distribución de la media (eso depende de n), pero hacen el histograma más suave y las cifras de la columna «Empírico» más estables. En total se generan n × simulaciones observaciones individuales.</p>
-        </div>
-      </div>
-      <button class="calculate-btn" id="simBtn" type="button">Simular</button>
-    </section>
+    </div>
 
     <!-- Charts -->
-    <div class="charts-grid" id="chartsSection">
-      <div class="chart-panel">
-        <h3>Distribución original</h3>
-        <p class="chart-sub" id="origSub">Histograma de muchas observaciones individuales extraídas de la distribución elegida (barras) junto con su densidad teórica (línea roja). Muestra la forma de partida: simétrica, asimétrica, acotada o discreta.</p>
-        <div class="chart-wrap" id="origWrap">
-          <div class="sim-placeholder" id="origPlaceholder">
-            <span>Haz clic en «Simular» para comenzar</span>
-          </div>
-          <canvas id="origChart" style="display:none;"></canvas>
-        </div>
-      </div>
-      <div class="chart-panel">
-        <h3>Distribución de la media muestral</h3>
-        <p class="chart-sub" id="meansSub">Histograma de las medias muestrales obtenidas en las simulaciones (barras). La línea roja es la normal N(μ, σ²/n) que predice el TCL; la verde discontinua es la normal ajustada a las medias simuladas. Cuanto más se parezcan las barras a las curvas, mejor funciona la aproximación normal.</p>
-        <div class="chart-wrap" id="meansWrap">
-          <div class="sim-placeholder" id="meansPlaceholder">
-            <span>Haz clic en «Simular» para comenzar</span>
-          </div>
-          <canvas id="meansChart" style="display:none;"></canvas>
-        </div>
-      </div>
-    </div>
 
     <!-- Legend -->
-    <div class="legend-dots" id="legendArea" style="display:none;">
-      <span class="legend-dot"><span class="dot-bar" style="background:rgba(79,70,229,0.5); border:1px solid rgba(79,70,229,0.8);"></span> Barras: frecuencia relativa de los valores simulados, en escala de densidad (área total = 1)</span>
-      <span class="legend-dot"><span style="background:#dc2626;"></span> Línea roja: densidad teórica (izquierda, la de la distribución base; derecha, la normal N(μ, σ²/n) que predice el TCL)</span>
-      <span class="legend-dot"><span style="background:#16a34a; border-top: 2px dashed #16a34a; height:0; width:24px;"></span> Línea verde discontinua: normal ajustada a las medias simuladas (media y desviación típica empíricas)</span>
-    </div>
 
     <!-- Stats table -->
-    <div class="stats-table-wrap" id="statsSection" style="display:none;">
-      <table class="stats-table" aria-label="Comparación teórico-empírica">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Teórico</th>
-            <th>Empírico</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Media de la media muestral (μ)</td>
-            <td class="val-teorico" id="statTeoMean">—</td>
-            <td class="val-empirico" id="statEmpMean">—</td>
-          </tr>
-          <tr>
-            <td>Desv. típica de la media muestral (σ/√n)</td>
-            <td class="val-teorico" id="statTeoSd">—</td>
-            <td class="val-empirico" id="statEmpSd">—</td>
-          </tr>
-          <tr>
-            <td>Varianza de la media muestral (σ²/n)</td>
-            <td class="val-teorico" id="statTeoVar">—</td>
-            <td class="val-empirico" id="statEmpVar">—</td>
-          </tr>
-          <tr>
-            <td>Asimetría de la media muestral (γ₁/√n)</td>
-            <td class="val-teorico" id="statTeoSkew">—</td>
-            <td class="val-empirico" id="statEmpSkew">—</td>
-          </tr>
-          <tr>
-            <td>Número de medias muestrales</td>
-            <td class="val-teorico" id="statTeoN">—</td>
-            <td class="val-empirico" id="statEmpN">—</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
 
     <!-- Interpretation -->
-    <div id="interpretation" class="result-box" style="display:none;" role="status" aria-live="polite"></div>
 
     <!-- How the simulation works -->
     <section class="card content-card" aria-labelledby="how-sim-heading">
@@ -443,16 +451,16 @@
         <li>
           <strong>Se repiten los pasos 1 y 2</strong> tantas veces como indique «Número de simulaciones».
           Con 1000 simulaciones se obtienen 1000 medias muestrales, lo que supone \(1000 \times n\) observaciones
-          individuales en total. Esas 1000 medias son los datos del gráfico de la derecha y de la columna «Empírico».
+          individuales en total. Esas 1000 medias son los datos del gráfico inferior y de la columna «Empírico».
         </li>
         <li>
-          <strong>Para el gráfico de la izquierda</strong> se genera además una muestra grande e independiente de observaciones
+          <strong>Para el gráfico superior</strong> se genera además una muestra grande e independiente de observaciones
           individuales (hasta 50&nbsp;000) de la misma distribución base. No son las observaciones usadas para calcular las medias,
           pero proceden de la misma distribución y sirven para mostrar su forma con claridad.
         </li>
       </ol>
 
-      <h3>Gráfico de la izquierda: distribución original</h3>
+      <h3>Gráfico superior: distribución original</h3>
       <p>
         Las <strong>barras</strong> son el histograma de las observaciones individuales. Su altura está en escala de densidad,
         es decir, la altura de cada barra es la proporción de observaciones que caen en ese intervalo dividida por la anchura
@@ -462,10 +470,10 @@
         las barras muestran la frecuencia relativa de cada valor entero y los huecos entre ellas son normales.
         El objetivo de este gráfico es ver <em>de qué forma se parte</em>: una campana (Normal), una meseta (Uniforme), una cola larga
         a la derecha (Exponencial, Chi-cuadrado) o dos únicos valores (Bernoulli). Cuanto menos se parezca a una campana, más
-        llamativo resulta el gráfico de la derecha.
+        llamativo resulta el gráfico inferior.
       </p>
 
-      <h3>Gráfico de la derecha: distribución de la media muestral</h3>
+      <h3>Gráfico inferior: distribución de la media muestral</h3>
       <p>
         Las <strong>barras</strong> son el histograma de las medias muestrales, una por simulación, también en escala de densidad:
         la altura de cada barra indica qué proporción de las simulaciones produjo una media dentro de ese intervalo.
@@ -497,7 +505,7 @@
           Monte Carlo y se reduce aumentando el número de simulaciones.
         </li>
         <li>
-          <strong>¿Qué anchura tiene el histograma?</strong> Compara la escala del eje horizontal con la del gráfico de la izquierda:
+          <strong>¿Qué anchura tiene el histograma?</strong> Compara la escala del eje horizontal con la del gráfico superior:
           la de las medias es mucho más estrecha, porque promediar reduce la dispersión en un factor \(\sqrt{n}\).
         </li>
       </ul>
@@ -1057,17 +1065,17 @@
     const totalDraws = numSims * n;
 
     // Paragraph 1: what was generated
-    let p1 = `Se han extraído <strong>${numSims.toLocaleString('es-ES')}</strong> muestras de <strong>n = ${n}</strong> observaciones de la distribución <em>${distName}</em> (${totalDraws.toLocaleString('es-ES')} observaciones individuales en total) y se ha calculado la media de cada muestra. El gráfico de la izquierda muestra ${origSize.toLocaleString('es-ES')} observaciones individuales de esa misma distribución; el de la derecha, las ${numSims.toLocaleString('es-ES')} medias obtenidas.`;
+    let p1 = `Se han extraído <strong>${numSims.toLocaleString('es-ES')}</strong> muestras de <strong>n = ${n}</strong> observaciones de la distribución <em>${distName}</em> (${totalDraws.toLocaleString('es-ES')} observaciones individuales en total) y se ha calculado la media de cada muestra. El gráfico superior muestra ${origSize.toLocaleString('es-ES')} observaciones individuales de esa misma distribución; el inferior, las ${numSims.toLocaleString('es-ES')} medias obtenidas.`;
 
     // Paragraph 2: shape of the distribution of the mean
     let p2 = '';
     if (n === 1) {
-      p2 = `Con <strong>n = 1</strong> no hay promediado: cada «media muestral» es un único valor individual, así que el histograma de la derecha reproduce la forma de la distribución original y la curva normal roja no se ajusta a las barras (salvo si la distribución base ya es normal). Es el punto de partida del experimento.`;
+      p2 = `Con <strong>n = 1</strong> no hay promediado: cada «media muestral» es un único valor individual, así que el histograma inferior reproduce la forma de la distribución original y la curva normal roja no se ajusta a las barras (salvo si la distribución base ya es normal). Es el punto de partida del experimento.`;
     } else if (n <= 5) {
       if (isSymmetric) {
-        p2 = `Con <strong>n = ${n}</strong> y una distribución de partida simétrica, el histograma de las medias ya se parece bastante a una campana: al promediar valores simétricos no aparece ninguna cola dominante. Fíjate en que las barras se concentran alrededor de μ y que la escala horizontal es más estrecha que a la izquierda.`;
+        p2 = `Con <strong>n = ${n}</strong> y una distribución de partida simétrica, el histograma de las medias ya se parece bastante a una campana: al promediar valores simétricos no aparece ninguna cola dominante. Fíjate en que las barras se concentran alrededor de μ y que la escala horizontal es más estrecha que en el gráfico superior.`;
       } else {
-        p2 = `Con <strong>n = ${n}</strong> el histograma de las medias ya es más suave y más concentrado que la distribución original, pero conserva su asimetría: la cola más larga sigue al mismo lado que en el gráfico de la izquierda, y las barras sobresalen por un lado de la curva roja y quedan por debajo en el otro. El efecto del TCL es solo incipiente.`;
+        p2 = `Con <strong>n = ${n}</strong> el histograma de las medias ya es más suave y más concentrado que la distribución original, pero conserva su asimetría: la cola más larga sigue al mismo lado que en el gráfico superior, y las barras sobresalen por un lado de la curva roja y quedan por debajo en el otro. El efecto del TCL es solo incipiente.`;
       }
       if (isDiscrete) {
         p2 += ` Como la distribución es discreta, las medias solo pueden tomar valores separados por 1/n = ${fmt(1 / n, 3)}; por eso el histograma tiene forma de «peine» con huecos entre barras.`;

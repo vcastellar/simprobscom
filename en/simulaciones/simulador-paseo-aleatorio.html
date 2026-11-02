@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Random Walk Simulator: 1D and 2D | ProbLab">
   <meta name="twitter:description" content="Interactive random walk simulator in 1D and 2D. Visualize trajectories, ±2σ diffusion bands and the √n behavior.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../../style_new.css?v=20261031-1">
+  <link rel="stylesheet" href="../../style_new.css?v=20261102-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -66,20 +66,6 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
   <style>
-    /* ── layout ── */
-    .sim-layout {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 20px;
-      align-items: start;
-    }
-    @media (max-width: 700px) {
-      .sim-layout { grid-template-columns: 1fr; }
-    }
-    .sim-panel {
-      position: sticky;
-      top: 72px;
-    }
 
     /* ── control panel ── */
     .panel-heading {
@@ -366,10 +352,10 @@
 
     <!-- ═══════════════════════════════ 1D ═══════════════════════════════ -->
     <div id="panel-1d" class="mode-section active" role="tabpanel" aria-labelledby="tab-1d">
-      <div class="sim-layout">
+      <div class="ss-shell ss-sim">
 
         <!-- Control panel -->
-        <aside class="card sample-size-panel sim-panel" aria-label="1D walk parameters">
+        <aside class="card ss-controls" aria-label="1D walk parameters">
           <h2 class="panel-heading">Parameters</h2>
 
           <div class="form-group">
@@ -425,20 +411,7 @@
         </aside>
 
         <!-- Results area -->
-        <div>
-          <div class="chart-outer">
-            <h3>Trajectories X(t)</h3>
-            <p class="chart-sub">Cumulative position as a function of step t</p>
-            <div class="chart-wrap">
-              <div class="sim-placeholder" id="ph1d">
-                <span class="icon">📉</span>
-                Click <strong>Simulate</strong> to begin.
-              </div>
-              <canvas id="canvas1d" style="display:none;" aria-label="Chart of 1D random walk trajectories"></canvas>
-            </div>
-            <div id="legend1d" class="legend-row" style="display:none;"></div>
-          </div>
-
+        <div class="ss-main">
           <div id="stats1d" style="display:none;">
             <div class="stats-grid">
               <div class="stat-cell">
@@ -460,8 +433,21 @@
                 <div class="stat-val" id="s1d-max">—</div>
               </div>
             </div>
-            <div class="result-box" id="interp1d"></div>
           </div>
+          <div class="chart-outer">
+            <h3>Trajectories X(t)</h3>
+            <p class="chart-sub">Cumulative position as a function of step t</p>
+            <div class="chart-wrap">
+              <div class="sim-placeholder" id="ph1d">
+                <span class="icon">📉</span>
+                Click <strong>Simulate</strong> to begin.
+              </div>
+              <canvas id="canvas1d" style="display:none;" aria-label="Chart of 1D random walk trajectories"></canvas>
+            </div>
+            <div id="legend1d" class="legend-row" style="display:none;"></div>
+          </div>
+          <div class="result-box" id="interp1d"></div>
+
         </div>
 
       </div>
@@ -469,10 +455,10 @@
 
     <!-- ═══════════════════════════════ 2D ═══════════════════════════════ -->
     <div id="panel-2d" class="mode-section" role="tabpanel" aria-labelledby="tab-2d" style="display:none;">
-      <div class="sim-layout">
+      <div class="ss-shell ss-sim">
 
         <!-- Control panel -->
-        <aside class="card sample-size-panel sim-panel" aria-label="2D walk parameters">
+        <aside class="card ss-controls" aria-label="2D walk parameters">
           <h2 class="panel-heading">Parameters</h2>
 
           <div class="form-group">
@@ -511,19 +497,7 @@
         </aside>
 
         <!-- Results area -->
-        <div>
-          <div class="chart-outer">
-            <h3>Trajectories in the plane</h3>
-            <p class="chart-sub">Position (x, y) at each step. Black dot = origin. The dashed circle marks the expected distance √n.</p>
-            <div class="canvas2d-wrap">
-              <div class="sim-placeholder" id="ph2d" style="min-height:420px;">
-                <span class="icon">🗺️</span>
-                Click <strong>Simulate</strong> to begin.
-              </div>
-              <canvas id="canvas2d" style="display:none;" aria-label="Chart of 2D random walk trajectories"></canvas>
-            </div>
-          </div>
-
+        <div class="ss-main">
           <div id="stats2d" style="display:none;">
             <div class="stats-grid">
               <div class="stat-cell">
@@ -545,8 +519,20 @@
                 <div class="stat-val" id="s2d-returns">—</div>
               </div>
             </div>
-            <div class="result-box" id="interp2d"></div>
           </div>
+          <div class="chart-outer">
+            <h3>Trajectories in the plane</h3>
+            <p class="chart-sub">Position (x, y) at each step. Black dot = origin. The dashed circle marks the expected distance √n.</p>
+            <div class="canvas2d-wrap">
+              <div class="sim-placeholder" id="ph2d" style="min-height:420px;">
+                <span class="icon">🗺️</span>
+                Click <strong>Simulate</strong> to begin.
+              </div>
+              <canvas id="canvas2d" style="display:none;" aria-label="Chart of 2D random walk trajectories"></canvas>
+            </div>
+          </div>
+          <div class="result-box" id="interp2d"></div>
+
         </div>
 
       </div>

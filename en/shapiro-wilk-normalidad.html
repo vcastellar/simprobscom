@@ -65,7 +65,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
 
     <script type="application/ld+json">
 {
@@ -144,47 +144,56 @@
 
     <main>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Enter the sample data and simulate the null distribution of \(W\) via Monte Carlo to obtain an empirical p-value.</p>
-            </div>
-
-            <div class="form-grid sample-grid">
-                <div class="form-group">
-                    <label for="sampleData">Sample data (separated by commas or spaces) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                    <textarea id="sampleData" rows="4" placeholder="Example: 12.1, 11.8, 12.5, 13.0, 12.4, 11.9, 12.2"></textarea>
-                    <p class="field-hint" hidden>Paste your numeric values separated by commas, spaces or line breaks. At least 3 observations are needed.</p>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Enter the sample data and simulate the null distribution of \(W\) via Monte Carlo to obtain an empirical p-value.</p>
                 </div>
 
-                <div class="inline-inputs">
+                <div class="form-grid sample-grid">
                     <div class="form-group">
-                        <label for="mcIter">Monte Carlo iterations (B) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="mcIter" value="5000" step="500" min="1000" max="100000">
-                        <p class="field-hint" hidden>Number of simulated normal samples used to build the null distribution of \(W\). The estimated p-value has an approximate standard error of √(p(1−p)/B): with <strong>B = 5000</strong> and a p-value near 0.05 it is ≈ 0.003. The smallest p-value that can be obtained is 1/(B+1). Increase B when the p-value is close to α or when you need to resolve very small p-values.</p>
+                        <label for="sampleData">Sample data (separated by commas or spaces) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                        <textarea id="sampleData" rows="4" placeholder="Example: 12.1, 11.8, 12.5, 13.0, 12.4, 11.9, 12.2"></textarea>
+                        <p class="field-hint" hidden>Paste your numeric values separated by commas, spaces or line breaks. At least 3 observations are needed.</p>
                     </div>
 
-                    <div class="form-group">
-                        <label for="alpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>Decision threshold: if the p-value is smaller than α, normality is rejected. <strong>0.05</strong> is the usual value.</p>
-                    </div>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="mcIter">Monte Carlo iterations (B) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="mcIter" value="5000" step="500" min="1000" max="100000">
+                            <p class="field-hint" hidden>Number of simulated normal samples used to build the null distribution of \(W\). The estimated p-value has an approximate standard error of √(p(1−p)/B): with <strong>B = 5000</strong> and a p-value near 0.05 it is ≈ 0.003. The smallest p-value that can be obtained is 1/(B+1). Increase B when the p-value is close to α or when you need to resolve very small p-values.</p>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="mcSeed">Random seed (optional) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="mcSeed" value="12345" step="1" min="0">
-                        <p class="field-hint" hidden>Sets the seed so you can reproduce exactly the same result across different runs of the simulation.</p>
+                        <div class="form-group">
+                            <label for="alpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>Decision threshold: if the p-value is smaller than α, normality is rejected. <strong>0.05</strong> is the usual value.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mcSeed">Random seed (optional) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="mcSeed" value="12345" step="1" min="0">
+                            <p class="field-hint" hidden>Sets the seed so you can reproduce exactly the same result across different runs of the simulation.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <button class="calculate-btn" id="calcShapiroBtn">Calculate test</button>
-            <div id="shapiroResult" class="result-box">Result pending…</div>
-            <div id="shapiroNotes" class="result-box" style="margin-top:12px;">Interpretation notes pending…</div>
-            <div class="chart-wrap">
-                <canvas id="shapiroChart" aria-label="Chart comparing the p-value with the significance level" role="img"></canvas>
-            </div>
-            <p class="chart-note"><strong>How to read the chart (step by step):</strong> 1) The Monte Carlo simulation generates many normal samples under \(H_0\) of the same size as your sample and computes a \(W\) for each one. 2) The <strong>blue bars</strong> count how many simulations fell in each range of \(W\): that is why their Y axis is frequency and their X axis is the value of \(W\). 3) The <strong>red</strong> marker shows your observed \(W\) and the <strong>green</strong> marker the critical \(W\) for \(\alpha\). <strong>Only their horizontal position (X) matters</strong>; their vertical height is set artificially so they are visible above the bars.</p>
+                <button class="calculate-btn" id="calcShapiroBtn">Calculate test</button>
+            </section>
+
+            <div id="shapiroResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">p-value vs. significance level</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="shapiroChart" aria-label="Chart comparing the p-value with the significance level" role="img"></canvas>
+                    </div>
+                    <p class="chart-note"><strong>How to read the chart (step by step):</strong> 1) The Monte Carlo simulation generates many normal samples under \(H_0\) of the same size as your sample and computes a \(W\) for each one. 2) The <strong>blue bars</strong> count how many simulations fell in each range of \(W\): that is why their Y axis is frequency and their X axis is the value of \(W\). 3) The <strong>red</strong> marker shows your observed \(W\) and the <strong>green</strong> marker the critical \(W\) for \(\alpha\). <strong>Only their horizontal position (X) matters</strong>; their vertical height is set artificially so they are visible above the bars.</p>
+                </div>
+                <div id="shapiroNotes" class="result-box" style="margin-top:12px;">Interpretation notes pending…</div>
+            </section>
         </section>
 
         <section class="card content-card">

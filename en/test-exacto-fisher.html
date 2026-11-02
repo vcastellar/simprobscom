@@ -69,7 +69,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
     <style>
         .contingency-table {
             border-collapse: collapse;
@@ -190,75 +190,83 @@
 
     <main>
 
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>
-                    Enter the counts of the 2×2 table to get the exact p-value,
-                    the odds ratio and the test decision.
-                </p>
-            </div>
-
-            <div class="form-grid sample-grid">
-                <div class="form-group">
-                    <label>2×2 contingency table <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                    <table class="contingency-table">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Column A</th>
-                                <th>Column B</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th>Row 1</th>
-                                <td><input type="number" id="cellA" value="8" step="1" min="0" aria-label="Cell a (row 1, col A)"></td>
-                                <td><input type="number" id="cellB" value="2" step="1" min="0" aria-label="Cell b (row 1, col B)"></td>
-                            </tr>
-                            <tr>
-                                <th>Row 2</th>
-                                <td><input type="number" id="cellC" value="1" step="1" min="0" aria-label="Cell c (row 2, col A)"></td>
-                                <td><input type="number" id="cellD" value="9" step="1" min="0" aria-label="Cell d (row 2, col B)"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p class="field-hint" hidden>Enter the four observed counts: row 1 is the cases from group or condition A, row 2 those from group B; the columns are the two outcome categories. All four values must be non-negative integers.</p>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>
+                        Enter the counts of the 2×2 table to get the exact p-value,
+                        the odds ratio and the test decision.
+                    </p>
                 </div>
 
-                <div class="inline-inputs">
+                <div class="form-grid sample-grid">
                     <div class="form-group">
-                        <label for="alpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                        <p class="field-hint" hidden>False-positive risk you accept. <strong>0.05</strong> is the usual value.</p>
+                        <label>2×2 contingency table <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                        <table class="contingency-table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Column A</th>
+                                    <th>Column B</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Row 1</th>
+                                    <td><input type="number" id="cellA" value="8" step="1" min="0" aria-label="Cell a (row 1, col A)"></td>
+                                    <td><input type="number" id="cellB" value="2" step="1" min="0" aria-label="Cell b (row 1, col B)"></td>
+                                </tr>
+                                <tr>
+                                    <th>Row 2</th>
+                                    <td><input type="number" id="cellC" value="1" step="1" min="0" aria-label="Cell c (row 2, col A)"></td>
+                                    <td><input type="number" id="cellD" value="9" step="1" min="0" aria-label="Cell d (row 2, col B)"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="field-hint" hidden>Enter the four observed counts: row 1 is the cases from group or condition A, row 2 those from group B; the columns are the two outcome categories. All four values must be non-negative integers.</p>
                     </div>
-                    <div class="form-group">
-                        <label for="tail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <select id="tail">
-                            <option value="two">Two-tailed (OR ≠ 1)</option>
-                            <option value="right">Right tail (OR &gt; 1)</option>
-                            <option value="left">Left tail (OR &lt; 1)</option>
-                        </select>
-                        <p class="field-hint" hidden>The <strong>two-tailed</strong> test detects association in either direction. The <strong>one-tailed</strong> options only detect one specific direction (OR greater or smaller than 1); use them only if you know the expected direction in advance.</p>
+
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="alpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
+                            <p class="field-hint" hidden>False-positive risk you accept. <strong>0.05</strong> is the usual value.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="tail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <select id="tail">
+                                <option value="two">Two-tailed (OR ≠ 1)</option>
+                                <option value="right">Right tail (OR &gt; 1)</option>
+                                <option value="left">Left tail (OR &lt; 1)</option>
+                            </select>
+                            <p class="field-hint" hidden>The <strong>two-tailed</strong> test detects association in either direction. The <strong>one-tailed</strong> options only detect one specific direction (OR greater or smaller than 1); use them only if you know the expected direction in advance.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <button class="calculate-btn" id="calcFisherBtn">Calculate test</button>
-            <div id="fisherResult" class="result-box">Result pending…</div>
+                <button class="calculate-btn" id="calcFisherBtn">Calculate test</button>
+            </section>
 
-            <div class="chart-wrap">
-                <canvas id="fisherChart" aria-label="Hypergeometric distribution chart for Fisher's exact test" role="img"></canvas>
-            </div>
-            <p class="chart-caption">
-                The chart shows the probability mass function of the hypergeometric distribution:
-                each bar represents the exact probability that cell <em>a</em> takes the
-                value <em>k</em>, given the fixed margins of the table. Bars in
-                <span style="color:#dc2626;font-weight:600">red</span> are the ones that contribute to the
-                p-value (the most extreme ones according to the test type); the bar in
-                <span style="color:#d97706;font-weight:600">orange</span> marks the observed value.
-                The p-value is the sum of the red probabilities.
-            </p>
+            <div id="fisherResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Hypergeometric distribution under H₀</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="fisherChart" aria-label="Hypergeometric distribution chart for Fisher's exact test" role="img"></canvas>
+                    </div>
+                    <p class="chart-caption">
+                        The chart shows the probability mass function of the hypergeometric distribution:
+                        each bar represents the exact probability that cell <em>a</em> takes the
+                        value <em>k</em>, given the fixed margins of the table. Bars in
+                        <span style="color:#dc2626;font-weight:600">red</span> are the ones that contribute to the
+                        p-value (the most extreme ones according to the test type); the bar in
+                        <span style="color:#d97706;font-weight:600">orange</span> marks the observed value.
+                        The p-value is the sum of the red probabilities.
+                    </p>
+                </div>
+            </section>
         </section>
 
         <section class="card content-card">

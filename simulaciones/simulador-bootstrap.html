@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Simulador bootstrap | ProbLab">
   <meta name="twitter:description" content="Simulador bootstrap: remuestreo con reemplazamiento, distribución de estadísticos e intervalos de confianza no paramétricos.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261102-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -338,143 +338,151 @@
   <main>
 
     <!-- Control panel -->
-    <section class="card sample-size-panel" aria-labelledby="params-heading">
-      <h2 class="panel-heading" id="params-heading">Parámetros de simulación</h2>
-      <div class="sim-form-grid">
-        <div class="form-group">
-          <label for="popDist">Distribución poblacional <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-          <select id="popDist">
-            <optgroup label="Continuas">
-              <option value="normal">Normal (μ=5, σ=2)</option>
-              <option value="exponential">Exponencial (λ=0,5)</option>
-              <option value="uniform">Uniforme (a=0, b=10)</option>
-              <option value="lognormal">Log-normal (μ<sub>log</sub>=1, σ<sub>log</sub>=0,5)</option>
-            </optgroup>
-            <optgroup label="Discretas">
-              <option value="binomial">Binomial (n=10, p=0,5)</option>
-              <option value="poisson">Poisson (λ=5)</option>
-            </optgroup>
-          </select>
-          <p class="field-hint" hidden>La distribución de la que se genera la muestra original. El bootstrap no exige distribuciones continuas: también funciona con datos discretos como la binomial o la Poisson. Prueba con la log-normal o la exponencial para ver cómo se comporta con datos asimétricos.</p>
+    <div class="ss-shell ss-sim">
+        <section class="card ss-controls" aria-labelledby="params-heading">
+          <h2 class="panel-heading" id="params-heading">Parámetros de simulación</h2>
+          <div class="sim-form-grid">
+            <div class="form-group">
+              <label for="popDist">Distribución poblacional <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+              <select id="popDist">
+                <optgroup label="Continuas">
+                  <option value="normal">Normal (μ=5, σ=2)</option>
+                  <option value="exponential">Exponencial (λ=0,5)</option>
+                  <option value="uniform">Uniforme (a=0, b=10)</option>
+                  <option value="lognormal">Log-normal (μ<sub>log</sub>=1, σ<sub>log</sub>=0,5)</option>
+                </optgroup>
+                <optgroup label="Discretas">
+                  <option value="binomial">Binomial (n=10, p=0,5)</option>
+                  <option value="poisson">Poisson (λ=5)</option>
+                </optgroup>
+              </select>
+              <p class="field-hint" hidden>La distribución de la que se genera la muestra original. El bootstrap no exige distribuciones continuas: también funciona con datos discretos como la binomial o la Poisson. Prueba con la log-normal o la exponencial para ver cómo se comporta con datos asimétricos.</p>
+            </div>
+            <div class="form-group">
+              <label for="statistic">Estadístico <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+              <select id="statistic">
+                <option value="mean" selected>Media (x̄)</option>
+                <option value="median">Mediana</option>
+                <option value="sd">Desviación típica (s)</option>
+              </select>
+              <p class="field-hint" hidden>El estadístico cuya distribución bootstrap quieres estimar. La mediana y la desviación típica no siempre tienen una fórmula analítica sencilla de error estándar, por lo que el bootstrap es especialmente útil ahí.</p>
+            </div>
+            <div class="form-group">
+              <label for="sampleN">Tamaño de muestra <em>n</em> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+              <select id="sampleN">
+                <option value="10">n = 10</option>
+                <option value="20">n = 20</option>
+                <option value="30" selected>n = 30</option>
+                <option value="50">n = 50</option>
+                <option value="100">n = 100</option>
+                <option value="500">n = 500</option>
+                <option value="1000">n = 1000</option>
+              </select>
+              <p class="field-hint" hidden>Número de observaciones de la muestra original que se remuestrea. El bootstrap funciona razonablemente bien desde n ≈ 15–20; con n = 500 o n = 1000 la distribución bootstrap es muy suave y el IC muy estrecho.</p>
+            </div>
+            <div class="form-group">
+              <label for="numBoot">Réplicas bootstrap <em>B</em> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+              <select id="numBoot">
+                <option value="200">B = 200</option>
+                <option value="500">B = 500</option>
+                <option value="1000" selected>B = 1000</option>
+                <option value="5000">B = 5000</option>
+              </select>
+              <p class="field-hint" hidden>Número de remuestreos con reemplazamiento. Para el error estándar basta con B = 200–500; para intervalos de confianza percentiles al 95 % se recomienda <strong>B ≥ 1000</strong>.</p>
+            </div>
+            <div class="form-group">
+              <label for="confLevel">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+              <select id="confLevel">
+                <option value="0.90">90 %</option>
+                <option value="0.95" selected>95 %</option>
+                <option value="0.99">99 %</option>
+              </select>
+              <p class="field-hint" hidden>El nivel usado para construir el IC bootstrap por el método percentil (y el IC normal, cuando el estadístico es la media). <strong>95 %</strong> es el estándar habitual.</p>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="calculate-btn" id="newSampleBtn" type="button">Nueva muestra</button>
+            <button class="calculate-btn btn-secondary" id="rebootBtn" type="button">Regenerar bootstrap</button>
+          </div>
+        </section>
+
+        <div class="ss-main">
+            <div class="stats-table-wrap" id="statsSection" style="display:none;">
+              <table class="stats-table" aria-label="Comparación teórico-empírica del bootstrap">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Teórico</th>
+                    <th>Bootstrap / Muestral</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td id="trueParamLabel">Parámetro verdadero (θ)</td>
+                    <td class="val-teorico" id="statTrueParam">—</td>
+                    <td class="val-empirico" id="statSampleStat">—</td>
+                  </tr>
+                  <tr>
+                    <td>Error estándar (SE)</td>
+                    <td class="val-teorico" id="statTrueSE">—</td>
+                    <td class="val-empirico" id="statBootSE">—</td>
+                  </tr>
+                  <tr>
+                    <td id="ciPercentileLabel">IC bootstrap percentil</td>
+                    <td class="val-na">—</td>
+                    <td class="val-empirico" id="statBootCI">—</td>
+                  </tr>
+                  <tr id="rowNormalCI">
+                    <td>IC normal (x̄ ± z·s/√n)</td>
+                    <td class="val-na">—</td>
+                    <td class="val-empirico" id="statNormalCI">—</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="charts-grid" id="chartsSection">
+              <div class="chart-panel">
+                <h3>Muestra original</h3>
+                <p class="chart-sub">Histograma de la muestra con curva de densidad teórica</p>
+                <div class="chart-wrap" id="sampleWrap">
+                  <div class="sim-placeholder" id="samplePlaceholder">
+                    <span>Haz clic en «Nueva muestra» para comenzar</span>
+                  </div>
+                  <canvas id="sampleChart" style="display:none;"></canvas>
+                </div>
+              </div>
+              <div class="chart-panel">
+                <h3 id="bootChartTitle">Distribución bootstrap del estadístico</h3>
+                <p class="chart-sub" id="bootChartSub">Histograma de las B réplicas con el IC sombreado</p>
+                <div class="chart-wrap" id="bootWrap">
+                  <div class="sim-placeholder" id="bootPlaceholder">
+                    <span>Haz clic en «Nueva muestra» para comenzar</span>
+                  </div>
+                  <canvas id="bootChart" style="display:none;"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="legend-dots" id="legendArea" style="display:none;">
+              <span class="legend-dot"><span class="dot-bar" style="background:rgba(79,70,229,0.5); border:1px solid rgba(79,70,229,0.8);"></span> Frecuencia relativa (muestra)</span>
+              <span class="legend-dot"><span style="background:#dc2626;"></span> Densidad teórica (o PMF, si es discreta)</span>
+              <span class="legend-dot"><span class="dot-bar" style="background:rgba(22,163,74,0.55); border:1px solid rgba(22,163,74,0.8);"></span> Bootstrap (dentro del IC)</span>
+              <span class="legend-dot"><span class="dot-bar" style="background:rgba(148,163,184,0.55); border:1px solid rgba(148,163,184,0.8);"></span> Bootstrap (fuera del IC)</span>
+              <span class="legend-dot"><span style="background:#0891b2;"></span> Límites del IC</span>
+            </div>
+
+            <div id="interpretation" class="result-box" style="display:none;" role="status" aria-live="polite"></div>
         </div>
-        <div class="form-group">
-          <label for="statistic">Estadístico <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-          <select id="statistic">
-            <option value="mean" selected>Media (x̄)</option>
-            <option value="median">Mediana</option>
-            <option value="sd">Desviación típica (s)</option>
-          </select>
-          <p class="field-hint" hidden>El estadístico cuya distribución bootstrap quieres estimar. La mediana y la desviación típica no siempre tienen una fórmula analítica sencilla de error estándar, por lo que el bootstrap es especialmente útil ahí.</p>
-        </div>
-        <div class="form-group">
-          <label for="sampleN">Tamaño de muestra <em>n</em> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-          <select id="sampleN">
-            <option value="10">n = 10</option>
-            <option value="20">n = 20</option>
-            <option value="30" selected>n = 30</option>
-            <option value="50">n = 50</option>
-            <option value="100">n = 100</option>
-            <option value="500">n = 500</option>
-            <option value="1000">n = 1000</option>
-          </select>
-          <p class="field-hint" hidden>Número de observaciones de la muestra original que se remuestrea. El bootstrap funciona razonablemente bien desde n ≈ 15–20; con n = 500 o n = 1000 la distribución bootstrap es muy suave y el IC muy estrecho.</p>
-        </div>
-        <div class="form-group">
-          <label for="numBoot">Réplicas bootstrap <em>B</em> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-          <select id="numBoot">
-            <option value="200">B = 200</option>
-            <option value="500">B = 500</option>
-            <option value="1000" selected>B = 1000</option>
-            <option value="5000">B = 5000</option>
-          </select>
-          <p class="field-hint" hidden>Número de remuestreos con reemplazamiento. Para el error estándar basta con B = 200–500; para intervalos de confianza percentiles al 95 % se recomienda <strong>B ≥ 1000</strong>.</p>
-        </div>
-        <div class="form-group">
-          <label for="confLevel">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-          <select id="confLevel">
-            <option value="0.90">90 %</option>
-            <option value="0.95" selected>95 %</option>
-            <option value="0.99">99 %</option>
-          </select>
-          <p class="field-hint" hidden>El nivel usado para construir el IC bootstrap por el método percentil (y el IC normal, cuando el estadístico es la media). <strong>95 %</strong> es el estándar habitual.</p>
-        </div>
-      </div>
-      <div class="btn-row">
-        <button class="calculate-btn" id="newSampleBtn" type="button">Nueva muestra</button>
-        <button class="calculate-btn btn-secondary" id="rebootBtn" type="button">Regenerar bootstrap</button>
-      </div>
-    </section>
+    </div>
 
     <!-- Charts -->
-    <div class="charts-grid" id="chartsSection">
-      <div class="chart-panel">
-        <h3>Muestra original</h3>
-        <p class="chart-sub">Histograma de la muestra con curva de densidad teórica</p>
-        <div class="chart-wrap" id="sampleWrap">
-          <div class="sim-placeholder" id="samplePlaceholder">
-            <span>Haz clic en «Nueva muestra» para comenzar</span>
-          </div>
-          <canvas id="sampleChart" style="display:none;"></canvas>
-        </div>
-      </div>
-      <div class="chart-panel">
-        <h3 id="bootChartTitle">Distribución bootstrap del estadístico</h3>
-        <p class="chart-sub" id="bootChartSub">Histograma de las B réplicas con el IC sombreado</p>
-        <div class="chart-wrap" id="bootWrap">
-          <div class="sim-placeholder" id="bootPlaceholder">
-            <span>Haz clic en «Nueva muestra» para comenzar</span>
-          </div>
-          <canvas id="bootChart" style="display:none;"></canvas>
-        </div>
-      </div>
-    </div>
 
     <!-- Legend -->
-    <div class="legend-dots" id="legendArea" style="display:none;">
-      <span class="legend-dot"><span class="dot-bar" style="background:rgba(79,70,229,0.5); border:1px solid rgba(79,70,229,0.8);"></span> Frecuencia relativa (muestra)</span>
-      <span class="legend-dot"><span style="background:#dc2626;"></span> Densidad teórica (o PMF, si es discreta)</span>
-      <span class="legend-dot"><span class="dot-bar" style="background:rgba(22,163,74,0.55); border:1px solid rgba(22,163,74,0.8);"></span> Bootstrap (dentro del IC)</span>
-      <span class="legend-dot"><span class="dot-bar" style="background:rgba(148,163,184,0.55); border:1px solid rgba(148,163,184,0.8);"></span> Bootstrap (fuera del IC)</span>
-      <span class="legend-dot"><span style="background:#0891b2;"></span> Límites del IC</span>
-    </div>
 
     <!-- Stats table -->
-    <div class="stats-table-wrap" id="statsSection" style="display:none;">
-      <table class="stats-table" aria-label="Comparación teórico-empírica del bootstrap">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Teórico</th>
-            <th>Bootstrap / Muestral</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td id="trueParamLabel">Parámetro verdadero (θ)</td>
-            <td class="val-teorico" id="statTrueParam">—</td>
-            <td class="val-empirico" id="statSampleStat">—</td>
-          </tr>
-          <tr>
-            <td>Error estándar (SE)</td>
-            <td class="val-teorico" id="statTrueSE">—</td>
-            <td class="val-empirico" id="statBootSE">—</td>
-          </tr>
-          <tr>
-            <td id="ciPercentileLabel">IC bootstrap percentil</td>
-            <td class="val-na">—</td>
-            <td class="val-empirico" id="statBootCI">—</td>
-          </tr>
-          <tr id="rowNormalCI">
-            <td>IC normal (x̄ ± z·s/√n)</td>
-            <td class="val-na">—</td>
-            <td class="val-empirico" id="statNormalCI">—</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
 
     <!-- Interpretation -->
-    <div id="interpretation" class="result-box" style="display:none;" role="status" aria-live="polite"></div>
 
     <!-- Educational section 1 -->
     <section class="card content-card" aria-labelledby="what-bootstrap-heading">

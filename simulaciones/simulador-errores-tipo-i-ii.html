@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Simulador de errores tipo I y tipo II | ProbLab">
   <meta name="twitter:description" content="Simulador interactivo de errores tipo I (α) y tipo II (β) en contrastes de hipótesis. Visualiza la potencia estadística y el dilema α–β.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261102-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -67,20 +67,6 @@
   <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
   <style>
-    /* ── layout ── */
-    .sim-layout {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 20px;
-      align-items: start;
-    }
-    @media (max-width: 700px) {
-      .sim-layout { grid-template-columns: 1fr; }
-    }
-    .sim-panel {
-      position: sticky;
-      top: 72px;
-    }
 
     /* ── control panel ── */
     .panel-heading {
@@ -377,10 +363,10 @@
   <main>
 
     <!-- ═══════════════════════════════ SIMULATOR ═══════════════════════════════ -->
-    <div class="sim-layout">
+    <div class="ss-shell ss-sim">
 
       <!-- Control panel -->
-      <aside class="card sample-size-panel sim-panel" aria-label="Parámetros del contraste">
+      <aside class="card ss-controls" aria-label="Parámetros del contraste">
         <h2 class="panel-heading">Parámetros</h2>
 
         <div class="form-group">
@@ -425,15 +411,7 @@
       </aside>
 
       <!-- Results area -->
-      <div>
-        <div class="chart-outer">
-          <h3>Distribuciones bajo H₀ y H₁</h3>
-          <p class="chart-sub">Estadístico estandarizado Z. Las regiones coloreadas representan las probabilidades de cada tipo de error y la potencia del contraste.</p>
-          <div class="chart-wrap">
-            <canvas id="errorChart" aria-label="Gráfico de distribuciones H0 y H1 con regiones de error tipo I, tipo II y potencia"></canvas>
-          </div>
-        </div>
-
+      <div class="ss-main">
         <div class="stats-grid" id="statsGrid">
           <div class="stat-cell" id="cellAlpha" style="background:rgba(220,38,38,0.06); border-color:rgba(220,38,38,0.20);">
             <div class="stat-label">Error tipo I (α)</div>
@@ -456,13 +434,21 @@
             <div class="stat-sub">δ = d × √n</div>
           </div>
         </div>
+        <div class="chart-outer">
+          <h3>Distribuciones bajo H₀ y H₁</h3>
+          <p class="chart-sub">Estadístico estandarizado Z. Las regiones coloreadas representan las probabilidades de cada tipo de error y la potencia del contraste.</p>
+          <div class="chart-wrap">
+            <canvas id="errorChart" aria-label="Gráfico de distribuciones H0 y H1 con regiones de error tipo I, tipo II y potencia"></canvas>
+          </div>
+        </div>
+
 
         <div class="result-box" id="interpretation">
           Ajusta los parámetros del panel izquierdo para ver el análisis de potencia.
         </div>
       </div>
 
-    </div><!-- /sim-layout -->
+    </div>
 
 
     <!-- ═══════════════════════════════ EDUCATIONAL ═══════════════════════ -->
