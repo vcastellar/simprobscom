@@ -71,6 +71,22 @@
         if (!isFinite(n)) return String(v);
         return (Math.round(n * 10000) / 10000).toString();
     }
+    // Valores calculados (probabilidades, densidades, cuantiles) con la misma
+    // precisión que el panel de lectura de las tablas: 6 decimales, o 3 cifras
+    // significativas cuando el valor es muy pequeño.
+    function prec(v) {
+        var n = Number(v);
+        if (!isFinite(n)) return n > 0 ? "∞" : String(v);
+        if (n === 0) return "0";
+        if (Math.abs(n) < 1e-15) return "≈ 0";
+        if (Math.abs(n) >= 0.001) return n.toFixed(6);
+        var e = n.toExponential(2).split("e");
+        return +e[1] >= -6 ? n.toPrecision(3) : e[0] + " × 10<sup>" + (+e[1]) + "</sup>";
+    }
+    // Cuantil exacto de la distribución; si no se puede calcular, el de la tabla.
+    function invOr(d, p, fallback) {
+        try { var v = d.inv(p); return isFinite(v) ? v : fallback; } catch (e) { return fallback; }
+    }
     function safeInv(fn, fallback) {
         try { var v = fn(); return isFinite(v) && v > 0 ? v : fallback; } catch (e) { return fallback; }
     }
@@ -204,7 +220,7 @@
 
         if (dist === "poisson" || dist === "binomial") {
             var pf = pmfOf(dist, ds); if (!pf) return;
-            var k = +ds.k, type = mode === "bars-cdf" ? "cdf" : "pmf", val = ds.val;
+            var k = +ds.k, type = mode === "bars-cdf" ? "cdf" : "pmf", val = prec(type === "cdf" ? pf.cdf(k) : pf.f(k));
             var lbl = type === "cdf" ? L.barCdf(k, val, pf.params) : L.barPmf(k, val, pf.params);
             drawDisc(body, caption, pf, k, type, lbl);
             return;
@@ -214,23 +230,24 @@
         var par = d.params ? " · " + d.params : "";
         if (mode === "left-x") {
             var x = num(ds.t, ds.x, ds.f, ds.z);
-            drawCont(body, caption, d, x, { mode: "left" }, L.leftArea(fmt(x), ds.val, par));
+            drawCont(body, caption, d, x, { mode: "left" }, L.leftArea(fmt(x), prec(d.cdf(x)), par));
         } else if (mode === "left-val") {
-            var xv = +ds.val;
-            drawCont(body, caption, d, xv, { mode: "left" }, L.leftArea(fmt(xv), fmt(ds.p), par));
+            var xv = invOr(d, +ds.p, +ds.val);
+            drawCont(body, caption, d, xv, { mode: "left" }, L.leftArea(prec(xv), fmt(ds.p), par));
         } else if (mode === "right-val") {
-            var xrv = +ds.val;
-            drawCont(body, caption, d, xrv, { mode: "right" }, L.rightTail(fmt(xrv), fmt(1 - ds.p), par));
+            var xrv = invOr(d, +ds.p, +ds.val);
+            drawCont(body, caption, d, xrv, { mode: "right" }, L.rightTail(prec(xrv), fmt(1 - ds.p), par));
         } else if (mode === "pdf-point") {
             var xp = num(ds.t, ds.x, ds.z);
-            drawCont(body, caption, d, xp, { mode: "point" }, L.height(fmt(xp), ds.val, par));
+            drawCont(body, caption, d, xp, { mode: "point" }, L.height(fmt(xp), prec(d.pdf(xp)), par));
         } else if (mode === "crit-two") {
-            var xt = Math.abs(+ds.val);
-            drawCont(body, caption, d, xt, { mode: "twotail" }, L.twoTail(xt.toFixed(3), fmt(ds.a1), fmt(ds.a2), par));
+            var xt = invOr(d, 1 - ds.a1, Math.abs(+ds.val));
+            drawCont(body, caption, d, xt, { mode: "twotail" }, L.twoTail(prec(xt), fmt(ds.a1), fmt(ds.a2), par));
         } else if (mode === "crit-right") {
-            var xr = +ds.val;
             // La tabla t guarda el α de una cola como data-a1
-            drawCont(body, caption, d, xr, { mode: "right" }, L.rightTail(xr.toFixed(3), fmt(ds.alpha != null ? ds.alpha : ds.a1), par));
+            var al = ds.alpha != null ? ds.alpha : ds.a1;
+            var xr = invOr(d, 1 - al, +ds.val);
+            drawCont(body, caption, d, xr, { mode: "right" }, L.rightTail(prec(xr), fmt(al), par));
         }
     }
 

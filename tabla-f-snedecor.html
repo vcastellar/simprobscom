@@ -513,11 +513,8 @@
         const df1   = td.dataset.df1;
         const df2   = td.dataset.df2;
         const alpha = td.dataset.alpha;
-        // Con ν = ∞ la tabla usa 10000 como aproximación: más decimales no
-        // aportarían precisión real, así que se deja el valor de la tabla.
-        const val = td.dataset.df1 === '∞' || td.dataset.df2 === '∞'
-            ? td.dataset.val
-            : jStat.centralF.inv(1 - td.dataset.alpha, +td.dataset.df1, +td.dataset.df2).toFixed(6);
+        const dfNum = l => l === '∞' ? DF_INF : +l;
+        const val = fInv(1 - alpha, dfNum(df1), dfNum(df2)).toFixed(6);
         document.getElementById('lookup-' + tabKey).innerHTML =
             `ν₁ = ${df1}, ν₂ = ${df2}, α = ${alpha}: <strong>F = ${val}</strong> &nbsp;→ P(F &gt; ${val}) = ${alpha}`;
     }
@@ -544,7 +541,7 @@
     buildDfSelector('df2-cdf', DF_SEL, DF_SEL_LABELS, 20);
     buildFCdfTable(3, 20);
 </script>
-<script src="table-diagram.js?v=20261102-1"></script>
+<script src="table-diagram.js?v=20261102-2"></script>
 <script src="table-actions.js?v=20260730-1"></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
