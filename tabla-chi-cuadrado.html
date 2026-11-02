@@ -252,7 +252,7 @@
                 <div class="info-box">
                     <strong>Cómo leer la tabla:</strong> elige la fila de los grados de libertad ν y la columna del área. Con <em>cola derecha</em> (opción por defecto y la convención de la mayoría de libros), cada columna es el área α = P(X &gt; χ²) a la derecha del valor; es la que necesitas en los contrastes de bondad de ajuste e independencia. Por ejemplo, al 5 % con ν = 10: columna <em>α = 0.05</em> → χ² = 18.307. Con <em>cola izquierda</em>, cada columna es la probabilidad acumulada p = P(X ≤ χ²). Los valores de las celdas son los mismos en las dos vistas; solo cambia la etiqueta de la columna (p = 1 − α).
                 </div>
-                <div id="lookup-crit" class="lookup-result"><span>Haz clic en una celda para leer el valor crítico.</span></div>
+                <div id="lookup-crit" class="lookup-result"><span>Haz clic en una celda para ver el valor crítico con más decimales.</span></div>
                 <figure class="dist-diagram" data-dist="chisquare" id="dg-crit" data-mode="right-val" data-tables="tbl-crit" data-df="5" data-val="11.070" data-p="0.95">
                     <svg viewBox="0 0 480 220" role="img" aria-label="Densidad chi-cuadrado con el área de la cola seleccionada sombreada." preserveAspectRatio="xMidYMid meet">
                         <g data-dg-body></g>
@@ -274,7 +274,7 @@
                     <label for="df-cdf">Grados de libertad (ν):</label>
                     <select id="df-cdf" class="df-select" onchange="rebuildChiTable('cdf')"></select>
                 </div>
-                <div id="lookup-cdf" class="lookup-result"><span>Haz clic en una celda para leer el valor.</span></div>
+                <div id="lookup-cdf" class="lookup-result"><span>Haz clic en una celda para ver el valor con más decimales.</span></div>
                 <figure class="dist-diagram" data-dist="chisquare" data-mode="left-x" data-tables="tbl-cdf" data-params="df-cdf:df" data-df="5" data-x="4.0" data-val="0.4506">
                     <svg viewBox="0 0 480 220" role="img" aria-label="Densidad chi-cuadrado con el area a la izquierda de x sombreada." preserveAspectRatio="xMidYMid meet">
                         <g data-dg-body></g>
@@ -294,7 +294,7 @@
                     <label for="df-pdf">Grados de libertad (ν):</label>
                     <select id="df-pdf" class="df-select" onchange="rebuildChiTable('pdf')"></select>
                 </div>
-                <div id="lookup-pdf" class="lookup-result"><span>Haz clic en una celda para leer el valor.</span></div>
+                <div id="lookup-pdf" class="lookup-result"><span>Haz clic en una celda para ver el valor con más decimales.</span></div>
                 <figure class="dist-diagram" data-dist="chisquare" data-mode="pdf-point" data-tables="tbl-pdf" data-params="df-pdf:df" data-df="5" data-x="4.0" data-val="0.1440">
                     <svg viewBox="0 0 480 220" role="img" aria-label="Densidad chi-cuadrado con el punto f(x) marcado." preserveAspectRatio="xMidYMid meet">
                         <g data-dg-body></g>
@@ -453,7 +453,7 @@
         fig.dispatchEvent(new Event('dg:redraw'));
 
         if (lastHighlight && tbl.contains(lastHighlight)) critCellClick(lastHighlight);
-        else document.getElementById('lookup-crit').innerHTML = '<span>Haz clic en una celda para leer el valor crítico.</span>';
+        else document.getElementById('lookup-crit').innerHTML = '<span>Haz clic en una celda para ver el valor crítico con más decimales.</span>';
     }
 
     function buildChiTable(tableId, type, df) {
@@ -490,7 +490,7 @@
     function rebuildChiTable(type) {
         const df = parseInt(document.getElementById('df-' + type).value, 10);
         buildChiTable('tbl-' + type, type, df);
-        document.getElementById('lookup-' + type).innerHTML = '<span>Haz clic en una celda para leer el valor.</span>';
+        document.getElementById('lookup-' + type).innerHTML = '<span>Haz clic en una celda para ver el valor con más decimales.</span>';
     }
 
     function switchTab(tab, btn) {
@@ -501,6 +501,17 @@
         document.getElementById('tab-' + tab).classList.add('active');
     }
 
+    // Valor del panel de lectura con más precisión que la tabla: 6 decimales,
+    // o 3 cifras significativas cuando es muy pequeño (colas).
+    function fmtPrecise(v) {
+        if (!isFinite(v)) return '∞';
+        if (v <= 0) return '0';
+        if (v < 1e-15) return '≈ 0';
+        if (v >= 0.001) return v.toFixed(6);
+        const [m, e] = v.toExponential(2).split('e');
+        return Number(e) >= -6 ? v.toPrecision(3) : `${m} × 10<sup>${Number(e)}</sup>`;
+    }
+
     let lastHighlight = null;
 
     function cellClick(td) {
@@ -509,7 +520,7 @@
         lastHighlight = td;
 
         const x    = parseFloat(td.dataset.x);
-        const val  = td.dataset.val;
+        const val = td.dataset.type === 'cdf' ? fmtPrecise(jStat.chisquare.cdf(x, +td.dataset.df)) : fmtPrecise(jStat.chisquare.pdf(x, +td.dataset.df));
         const type = td.dataset.type;
         const df   = td.dataset.df;
         const el   = document.getElementById('lookup-' + type);
@@ -519,6 +530,7 @@
         } else {
             el.innerHTML = `ν = ${df}, <strong>x = ${x.toFixed(1)}</strong>: <strong>f(x, ν) = ${val}</strong>`;
         }
+        if (type === 'cdf') el.innerHTML += ` &nbsp;·&nbsp; P(X &gt; ${x.toFixed(1)}) = ${fmtPrecise(1 - jStat.chisquare.cdf(x, +df))}`;
     }
 
     function critCellClick(td) {
@@ -529,7 +541,7 @@
         const df  = td.dataset.df;
         const p   = td.dataset.p;
         const a   = +(1 - p).toFixed(3);
-        const val = td.dataset.val;
+        const val = jStat.chisquare.inv(+td.dataset.p, +td.dataset.df).toFixed(6);
         document.getElementById('lookup-crit').innerHTML = critTail === 'right'
             ? `ν = ${df}, <strong>α = ${a}</strong>: <strong>χ² = ${val}</strong> &nbsp;→ P(X &gt; ${val}) = ${a} &nbsp;<span>(equivale a P(X ≤ ${val}) = ${p})</span>`
             : `ν = ${df}, <strong>p = ${p}</strong>: <strong>χ² = ${val}</strong> &nbsp;→ P(X ≤ ${val}) = ${p} &nbsp;<span>(cola derecha: P(X &gt; ${val}) = ${a})</span>`;

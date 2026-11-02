@@ -312,7 +312,7 @@
     <header class="hero">
         <p class="eyebrow">Tablas estadísticas</p>
         <h1>Tabla t de Student (valores críticos)</h1>
-        <p class="hero-subtitle">La tabla t de Student con los valores críticos t<sub>α,ν</sub>, la función de densidad f(t,ν) y la distribución acumulada P(T ≤ t) para cualquier grado de libertad. Haz clic en una celda para leer el valor.</p>
+        <p class="hero-subtitle">La tabla t de Student con los valores críticos t<sub>α,ν</sub>, la función de densidad f(t,ν) y la distribución acumulada P(T ≤ t) para cualquier grado de libertad. Haz clic en una celda para ver el valor con más decimales.</p>
         <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">Ver todas las tablas</a></p>
     </header>
 
@@ -336,7 +336,7 @@
                 <div class="info-box">
                     <strong>Cómo leer la tabla:</strong> elige el tipo de contraste, la fila de los grados de libertad ν y la columna del nivel de significación α. Con <em>dos colas</em> (test bilateral, opción por defecto) cada columna es α = P(|T| &gt; t): el área se reparte a partes iguales entre ambos extremos. Con <em>una cola</em> (test unilateral) cada columna es α = P(T &gt; t), el área a la derecha; para la cola izquierda usa −t. Las celdas son las mismas en las dos vistas, porque α (dos colas) = 2 × α (una cola). Ejemplo: con ν = 10, un test bilateral al 5 % (columna α = 0.05 de dos colas, o α = 0.025 de una cola) da t = 2.228.
                 </div>
-                <div id="lookup-crit" class="lookup-result"><span>Haz clic en una celda para leer el valor crítico.</span></div>
+                <div id="lookup-crit" class="lookup-result"><span>Haz clic en una celda para ver el valor crítico con más decimales.</span></div>
                 <figure class="dist-diagram" data-dist="student" id="dg-crit" data-mode="crit-two" data-tables="tbl-crit" data-df="10" data-a1="0.025" data-a2="0.05" data-val="2.228">
                     <svg viewBox="0 0 480 220" role="img" aria-label="Densidad t de Student con la cola o colas seleccionadas sombreadas." preserveAspectRatio="xMidYMid meet">
                         <g data-dg-body></g>
@@ -362,7 +362,7 @@
                     <button class="sign-btn active" onclick="switchSign('cdf','pos',this)">t ≥ 0</button>
                     <button class="sign-btn"        onclick="switchSign('cdf','neg',this)">t &lt; 0</button>
                 </div>
-                <div id="lookup-cdf" class="lookup-result"><span>Haz clic en una celda para leer el valor.</span></div>
+                <div id="lookup-cdf" class="lookup-result"><span>Haz clic en una celda para ver el valor con más decimales.</span></div>
                 <figure class="dist-diagram" data-dist="student" data-mode="left-x" data-tables="tbl-cdf-pos tbl-cdf-neg" data-params="df-cdf:df" data-df="10" data-t="1.00" data-val="0.830">
                     <svg viewBox="0 0 480 220" role="img" aria-label="Densidad t con el area a la izquierda de t sombreada." preserveAspectRatio="xMidYMid meet">
                         <g data-dg-body></g>
@@ -388,7 +388,7 @@
                     <label for="df-pdf">Grados de libertad (ν):</label>
                     <select id="df-pdf" class="df-select" onchange="rebuildStudentTable('pdf')"></select>
                 </div>
-                <div id="lookup-pdf" class="lookup-result"><span>Haz clic en una celda para leer el valor.</span></div>
+                <div id="lookup-pdf" class="lookup-result"><span>Haz clic en una celda para ver el valor con más decimales.</span></div>
                 <figure class="dist-diagram" data-dist="student" data-mode="pdf-point" data-tables="tbl-pdf-pos" data-params="df-pdf:df" data-df="10" data-t="1.00" data-val="0.2304">
                     <svg viewBox="0 0 480 220" role="img" aria-label="Densidad t con el punto f(t) marcado sobre la curva." preserveAspectRatio="xMidYMid meet">
                         <g data-dg-body></g>
@@ -561,7 +561,7 @@
         fig.dispatchEvent(new Event('dg:redraw'));
 
         if (lastHighlight && tbl.contains(lastHighlight)) critCellClick(lastHighlight);
-        else document.getElementById('lookup-crit').innerHTML = '<span>Haz clic en una celda para leer el valor crítico.</span>';
+        else document.getElementById('lookup-crit').innerHTML = '<span>Haz clic en una celda para ver el valor crítico con más decimales.</span>';
     }
 
     // ── Build student t PDF / CDF table ──────────────────────────────────────
@@ -606,7 +606,7 @@
         } else {
             buildStudentTable('tbl-pdf-pos', 'pdf',  1, df);
         }
-        document.getElementById('lookup-' + type).innerHTML = '<span>Haz clic en una celda para leer el valor.</span>';
+        document.getElementById('lookup-' + type).innerHTML = '<span>Haz clic en una celda para ver el valor con más decimales.</span>';
     }
 
     // ── Tab & sign logic ──────────────────────────────────────────────────────
@@ -625,10 +625,21 @@
         const isPos = sign === 'pos';
         document.getElementById(type + '-pos-wrap').style.display = isPos ? '' : 'none';
         document.getElementById(type + '-neg-wrap').style.display = isPos ? 'none' : '';
-        document.getElementById('lookup-' + type).innerHTML = '<span>Haz clic en una celda para leer el valor.</span>';
+        document.getElementById('lookup-' + type).innerHTML = '<span>Haz clic en una celda para ver el valor con más decimales.</span>';
     }
 
     // ── Cell click ────────────────────────────────────────────────────────────
+
+    // Valor del panel de lectura con más precisión que la tabla: 6 decimales,
+    // o 3 cifras significativas cuando es muy pequeño (colas).
+    function fmtPrecise(v) {
+        if (!isFinite(v)) return '∞';
+        if (v <= 0) return '0';
+        if (v < 1e-15) return '≈ 0';
+        if (v >= 0.001) return v.toFixed(6);
+        const [m, e] = v.toExponential(2).split('e');
+        return Number(e) >= -6 ? v.toPrecision(3) : `${m} × 10<sup>${Number(e)}</sup>`;
+    }
 
     let lastHighlight = null;
 
@@ -638,7 +649,7 @@
         lastHighlight = td;
 
         const t    = parseFloat(td.dataset.t);
-        const val  = td.dataset.val;
+        const val = td.dataset.type === 'cdf' ? fmtPrecise(jStat.studentt.cdf(t, +td.dataset.df)) : fmtPrecise(jStat.studentt.pdf(Math.abs(t), +td.dataset.df));
         const type = td.dataset.type;
         const df   = td.dataset.df;
         const el   = document.getElementById('lookup-' + type);
@@ -648,6 +659,7 @@
         } else {
             el.innerHTML = `ν = ${df}, <strong>t = ${t >= 0 ? '+' : ''}${t.toFixed(2)}</strong>: <strong>f(t,ν) = ${val}</strong>`;
         }
+        if (type === 'cdf') el.innerHTML += ` &nbsp;·&nbsp; P(T &gt; ${t.toFixed(2)}) = ${fmtPrecise(jStat.studentt.cdf(-t, +df))}`;
     }
 
     function critCellClick(td) {
@@ -658,7 +670,7 @@
         const df  = td.dataset.df;
         const a1  = td.dataset.a1;
         const a2  = td.dataset.a2;
-        const val = td.dataset.val;
+        const val = jStat.studentt.inv(1 - td.dataset.a1, +td.dataset.df).toFixed(6);
         document.getElementById('lookup-crit').innerHTML = critTail === 'two'
             ? `ν = ${df}, <strong>α = ${a2}</strong> (dos colas): <strong>t = ${val}</strong> &nbsp;→ P(|T| &gt; ${val}) = ${a2} &nbsp;<span>(equivale a una cola con α = ${a1})</span>`
             : `ν = ${df}, <strong>α = ${a1}</strong> (una cola): <strong>t = ${val}</strong> &nbsp;→ P(T &gt; ${val}) = ${a1} &nbsp;<span>(equivale a dos colas con α = ${a2})</span>`;

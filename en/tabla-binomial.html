@@ -248,7 +248,7 @@
                     <button class="sign-btn active" onclick="switchPRange('pmf','lo',this)">p ≤ 0.50</button>
                     <button class="sign-btn"        onclick="switchPRange('pmf','hi',this)">p &gt; 0.50</button>
                 </div>
-                <div id="lookup-pmf" class="lookup-result"><span>Click a cell to read the value.</span></div>
+                <div id="lookup-pmf" class="lookup-result"><span>Click a cell to see the value with more decimals.</span></div>
                 <figure class="dist-diagram" data-dist="binomial" data-mode="bars-pmf" data-tables="tbl-pmf-lo tbl-pmf-hi" data-params="n-pmf:n" data-n="10" data-p="0.5" data-k="5" data-val="0.2461">
                     <svg viewBox="0 0 480 220" role="img" aria-label="Binomial probability mass bars; highlighted bar is P(X=k)." preserveAspectRatio="xMidYMid meet">
                         <g data-dg-body></g>
@@ -278,7 +278,7 @@
                     <button class="sign-btn active" onclick="switchPRange('cdf','lo',this)">p ≤ 0.50</button>
                     <button class="sign-btn"        onclick="switchPRange('cdf','hi',this)">p &gt; 0.50</button>
                 </div>
-                <div id="lookup-cdf" class="lookup-result"><span>Click a cell to read the value.</span></div>
+                <div id="lookup-cdf" class="lookup-result"><span>Click a cell to see the value with more decimals.</span></div>
                 <figure class="dist-diagram" data-dist="binomial" data-mode="bars-cdf" data-tables="tbl-cdf-lo tbl-cdf-hi" data-params="n-cdf:n" data-n="10" data-p="0.5" data-k="5" data-val="0.6230">
                     <svg viewBox="0 0 480 220" role="img" aria-label="Binomial bars accumulated up to k, P(X<=k)." preserveAspectRatio="xMidYMid meet">
                         <g data-dg-body></g>
@@ -405,7 +405,7 @@
         const n = parseInt(document.getElementById('n-' + type).value, 10);
         buildBinomTable('tbl-' + type + '-lo', type, n, P_LO);
         buildBinomTable('tbl-' + type + '-hi', type, n, P_HI);
-        document.getElementById('lookup-' + type).innerHTML = '<span>Click a cell to read the value.</span>';
+        document.getElementById('lookup-' + type).innerHTML = '<span>Click a cell to see the value with more decimals.</span>';
     }
 
     function switchTab(tab, btn) {
@@ -422,7 +422,18 @@
         const isLo = range === 'lo';
         document.getElementById(type + '-lo-wrap').style.display = isLo ? '' : 'none';
         document.getElementById(type + '-hi-wrap').style.display = isLo ? 'none' : '';
-        document.getElementById('lookup-' + type).innerHTML = '<span>Click a cell to read the value.</span>';
+        document.getElementById('lookup-' + type).innerHTML = '<span>Click a cell to see the value with more decimals.</span>';
+    }
+
+    // Valor del panel de lectura con más precisión que la tabla: 6 decimales,
+    // o 3 cifras significativas cuando es muy pequeño (colas).
+    function fmtPrecise(v) {
+        if (!isFinite(v)) return '∞';
+        if (v <= 0) return '0';
+        if (v < 1e-15) return '≈ 0';
+        if (v >= 0.001) return v.toFixed(6);
+        const [m, e] = v.toExponential(2).split('e');
+        return Number(e) >= -6 ? v.toPrecision(3) : `${m} × 10<sup>${Number(e)}</sup>`;
     }
 
     let lastHighlight = null;
@@ -435,7 +446,7 @@
         const k    = td.dataset.k;
         const n    = td.dataset.n;
         const p    = td.dataset.p;
-        const val  = td.dataset.val;
+        const val = td.dataset.type === 'pmf' ? fmtPrecise(jStat.binomial.pdf(+k, +n, +p)) : fmtPrecise(jStat.binomial.cdf(+k, +n, +p));
         const type = td.dataset.type;
         const el   = document.getElementById('lookup-' + type);
 
@@ -444,6 +455,7 @@
         } else {
             el.innerHTML = `n = ${n}, p = ${p}, <strong>k = ${k}</strong>: <strong>P(X ≤ ${k}) = ${val}</strong>`;
         }
+        if (type === 'cdf') el.innerHTML += ` &nbsp;·&nbsp; P(X &gt; ${k}) = ${fmtPrecise(1 - jStat.binomial.cdf(+k, +n, +p))}`;
     }
 
     buildNSelector('n-pmf');

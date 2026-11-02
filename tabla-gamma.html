@@ -181,7 +181,7 @@
     <header class="hero">
         <p class="eyebrow">Tablas estadísticas</p>
         <h1>Tabla de la distribución Gamma</h1>
-        <p class="hero-subtitle">Tabla de la distribución Gamma Γ(α, β): distribución acumulada P(X ≤ x), densidad f(x) y cuantiles para distintos parámetros de forma α y escala β. Haz clic en una celda para leer el valor.</p>
+        <p class="hero-subtitle">Tabla de la distribución Gamma Γ(α, β): distribución acumulada P(X ≤ x), densidad f(x) y cuantiles para distintos parámetros de forma α y escala β. Haz clic en una celda para ver el valor con más decimales.</p>
         <p class="hero-links"><a class="hero-link-button" href="tablas-estadisticas/">Ver todas las tablas</a></p>
     </header>
 
@@ -204,7 +204,7 @@
                     <label for="beta-cdf">β (escala):</label>
                     <select id="beta-cdf" class="df-select" onchange="rebuildGammaTable('cdf')"></select>
                 </div>
-                <div id="lookup-cdf" class="lookup-result"><span>Haz clic en una celda para leer el valor.</span></div>
+                <div id="lookup-cdf" class="lookup-result"><span>Haz clic en una celda para ver el valor con más decimales.</span></div>
                 <figure class="dist-diagram" data-dist="gamma" data-mode="left-x" data-tables="tbl-cdf" data-params="alpha-cdf:alpha beta-cdf:beta" data-alpha="2" data-beta="1" data-x="2" data-val="0.5940">
                     <svg viewBox="0 0 480 220" role="img" aria-label="Densidad Gamma con el area a la izquierda de x sombreada." preserveAspectRatio="xMidYMid meet">
                         <g data-dg-body></g>
@@ -226,7 +226,7 @@
                     <label for="beta-pdf">β (escala):</label>
                     <select id="beta-pdf" class="df-select" onchange="rebuildGammaTable('pdf')"></select>
                 </div>
-                <div id="lookup-pdf" class="lookup-result"><span>Haz clic en una celda para leer el valor.</span></div>
+                <div id="lookup-pdf" class="lookup-result"><span>Haz clic en una celda para ver el valor con más decimales.</span></div>
                 <figure class="dist-diagram" data-dist="gamma" data-mode="pdf-point" data-tables="tbl-pdf" data-params="alpha-pdf:alpha beta-pdf:beta" data-alpha="2" data-beta="1" data-x="2" data-val="0.2707">
                     <svg viewBox="0 0 480 220" role="img" aria-label="Densidad Gamma con el punto f(x) marcado." preserveAspectRatio="xMidYMid meet">
                         <g data-dg-body></g>
@@ -246,7 +246,7 @@
                     <label for="beta-quant">β (escala):</label>
                     <select id="beta-quant" class="df-select" onchange="rebuildQuantTable()"></select>
                 </div>
-                <div id="lookup-quant" class="lookup-result"><span>Haz clic en una celda para leer el valor.</span></div>
+                <div id="lookup-quant" class="lookup-result"><span>Haz clic en una celda para ver el valor con más decimales.</span></div>
                 <figure class="dist-diagram" data-dist="gamma" data-mode="left-val" data-tables="tbl-quant" data-params="beta-quant:beta" data-alpha="2" data-beta="1" data-val="1.678" data-p="0.5">
                     <svg viewBox="0 0 480 220" role="img" aria-label="Densidad Gamma con el area a la izquierda del cuantil." preserveAspectRatio="xMidYMid meet">
                         <g data-dg-body></g>
@@ -371,13 +371,13 @@
         const alpha = parseFloat(document.getElementById('alpha-' + type).value);
         const beta  = parseFloat(document.getElementById('beta-' + type).value);
         buildGammaTable('tbl-' + type, type, alpha, beta);
-        document.getElementById('lookup-' + type).innerHTML = '<span>Haz clic en una celda para leer el valor.</span>';
+        document.getElementById('lookup-' + type).innerHTML = '<span>Haz clic en una celda para ver el valor con más decimales.</span>';
     }
 
     function rebuildQuantTable() {
         const beta = parseFloat(document.getElementById('beta-quant').value);
         buildQuantTable(beta);
-        document.getElementById('lookup-quant').innerHTML = '<span>Haz clic en una celda para leer el valor.</span>';
+        document.getElementById('lookup-quant').innerHTML = '<span>Haz clic en una celda para ver el valor con más decimales.</span>';
     }
 
     function switchTab(tab, btn) {
@@ -388,6 +388,17 @@
         document.getElementById('tab-' + tab).classList.add('active');
     }
 
+    // Valor del panel de lectura con más precisión que la tabla: 6 decimales,
+    // o 3 cifras significativas cuando es muy pequeño (colas).
+    function fmtPrecise(v) {
+        if (!isFinite(v)) return '∞';
+        if (v <= 0) return '0';
+        if (v < 1e-15) return '≈ 0';
+        if (v >= 0.001) return v.toFixed(6);
+        const [m, e] = v.toExponential(2).split('e');
+        return Number(e) >= -6 ? v.toPrecision(3) : `${m} × 10<sup>${Number(e)}</sup>`;
+    }
+
     let lastHighlight = null;
 
     function cellClick(td) {
@@ -396,7 +407,7 @@
         lastHighlight = td;
 
         const x     = td.dataset.x;
-        const val   = td.dataset.val;
+        const val = td.dataset.type === 'cdf' ? fmtPrecise(jStat.gamma.cdf(+x, +td.dataset.alpha, +td.dataset.beta)) : fmtPrecise(jStat.gamma.pdf(+x, +td.dataset.alpha, +td.dataset.beta));
         const type  = td.dataset.type;
         const alpha = td.dataset.alpha;
         const beta  = td.dataset.beta;
@@ -407,6 +418,7 @@
         } else {
             el.innerHTML = `α = ${alpha}, β = ${beta}, <strong>x = ${x}</strong>: <strong>f(x) = ${val}</strong>`;
         }
+        if (type === 'cdf') el.innerHTML += ` &nbsp;·&nbsp; P(X &gt; ${x}) = ${fmtPrecise(1 - jStat.gamma.cdf(+x, +alpha, +beta))}`;
     }
 
     function quantCellClick(td) {
@@ -417,7 +429,7 @@
         const alpha = td.dataset.alpha;
         const beta  = td.dataset.beta;
         const p     = td.dataset.p;
-        const val   = td.dataset.val;
+        const val = jStat.gamma.inv(+p, +alpha, +beta).toFixed(6);
         document.getElementById('lookup-quant').innerHTML =
             `α = ${alpha}, β = ${beta}, p = ${p}: <strong>x = ${val}</strong> → P(X ≤ ${val}) = ${p}`;
     }
