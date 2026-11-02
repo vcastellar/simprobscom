@@ -63,7 +63,7 @@ Fecha de despliegue: anotar la fecha en que se publique en producción.
 
 ## Lote 2: páginas en inglés (title y description)
 
-Fecha de despliegue: anotar la fecha en que se publique en producción.
+Fecha de despliegue: 02/11/2026.
 
 Solo cambian el `<title>`, la meta description y sus copias en Open Graph y Twitter. No cambian el H1, el contenido ni las URLs. Se descartó traducir las URLs al inglés: la sección `/en/` ya aporta un tercio de los clics y posiciona bien con las URLs actuales, y el problema es el CTR.
 
