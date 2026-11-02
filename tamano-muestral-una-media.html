@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261101-2">
+    <link rel="stylesheet" href="style_new.css?v=20261102-1">
 
     <script type="application/ld+json">
 {
@@ -165,7 +165,7 @@
                     <p>Calcula el tamaño muestral necesario para estimar una media con precisión objetivo.</p>
                 </div>
 
-                <div class="form-grid sample-grid" id="oneMeanForm">
+                <div class="form-grid sample-grid">
                     <div class="inline-inputs">
                         <div class="form-group">
                             <label for="oneMeanSigma">Desviación estándar (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
@@ -185,6 +185,8 @@
                         <p class="field-hint" hidden>Probabilidad de que el intervalo de confianza resultante contenga la verdadera media poblacional. El <strong>95 %</strong> es el estándar en la mayoría de disciplinas científicas. Puedes introducir cualquier valor entre 0 y 100 (por ejemplo, 97,5).</p>
                     </div>
                 </div>
+
+                <button class="calculate-btn" id="oneMeanCalculateBtn">Calcular tamaño muestral</button>
             </section>
 
             <div id="oneMeanResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
@@ -298,7 +300,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-3"></script>
+<script src="sample-size-charts.js?v=20261101-2"></script>
 <script>
 function refreshMathJaxOneMean() {
     if (window.MathJax?.typesetPromise) {
@@ -344,7 +346,7 @@ function calculateOneMeanSampleSize() {
     refreshMathJaxOneMean();
 }
 
-window.SampleSizeCharts && SampleSizeCharts.live('oneMeanForm', calculateOneMeanSampleSize);
+document.getElementById("oneMeanCalculateBtn").addEventListener("click", calculateOneMeanSampleSize);
 calculateOneMeanSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

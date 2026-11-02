@@ -74,7 +74,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261101-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -128,7 +128,7 @@
                     <p>Balanced one-way ANOVA. Enter the number of groups, the effect size, alpha and power.</p>
                 </div>
 
-                <div class="form-grid sample-grid" id="anovaForm">
+                <div class="form-grid sample-grid">
                     <div class="inline-inputs">
                         <div class="form-group">
                             <label for="anovaK">Number of groups (k) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
@@ -154,18 +154,9 @@
                             <p class="field-hint" hidden>Probability of detecting the effect if it really exists. <strong>0.80</strong> is the usual minimum; use 0.90 if post-hoc comparisons are the main goal.</p>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="anovaPreset">Quick reference for f <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <select id="anovaPreset">
-                            <option value="">— Select —</option>
-                            <option value="0.10">Small (f = 0.10)</option>
-                            <option value="0.25">Medium (f = 0.25)</option>
-                            <option value="0.40">Large (f = 0.40)</option>
-                        </select>
-                        <p class="field-hint" hidden>Shortcut to fill in the f field with a reference value based on Cohen's criteria, if you do not have an estimate of your own.</p>
-                    </div>
                 </div>
+
+                <button class="calculate-btn" id="anovaCalculateBtn">Calculate sample size</button>
             </section>
 
             <div id="anovaResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
@@ -281,7 +272,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../sample-size-charts.js?v=20261101-3"></script>
+<script src="../sample-size-charts.js?v=20261101-2"></script>
 <script>
 // Non-central F CDF via Poisson-weighted sum of regularized incomplete beta functions.
 // P(F'(df1, df2, ncp) <= x) = sum_{j>=0} Pois(j; ncp/2) * I(df1*x/(df1*x+df2); (df1+2j)/2; df2/2)
@@ -345,13 +336,7 @@ function calculateAnovaSampleSize() {
     }
 }
 
-document.getElementById("anovaPreset").addEventListener("change", function () {
-    if (this.value) {
-        document.getElementById("anovaF").value = this.value;
-        this.value = "";
-    }
-});
-window.SampleSizeCharts && SampleSizeCharts.live('anovaForm', calculateAnovaSampleSize);
+document.getElementById("anovaCalculateBtn").addEventListener("click", calculateAnovaSampleSize);
 calculateAnovaSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>

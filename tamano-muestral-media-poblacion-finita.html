@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261101-2">
+    <link rel="stylesheet" href="style_new.css?v=20261102-1">
 
     <script type="application/ld+json">
 {
@@ -165,7 +165,7 @@
                     <p>Introduce σ, E, confianza y N para obtener el tamaño mínimo con corrección por población finita.</p>
                 </div>
 
-                <div class="form-grid sample-grid" id="finiteMeanForm">
+                <div class="form-grid sample-grid">
                     <div class="inline-inputs">
                         <div class="form-group">
                             <label for="finiteMeanSigma">Desviación estándar (σ) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
@@ -201,6 +201,8 @@
                         <p class="field-hint" hidden>Reduce el tamaño muestral cuando la muestra representa una fracción apreciable de N (regla práctica: n₀/N &gt; 5 %). Desactívala para ver el tamaño muestral estándar, como si la población fuera infinita.</p>
                     </div>
                 </div>
+
+                <button class="calculate-btn" id="finiteMeanCalculateBtn">Calcular tamaño muestral</button>
             </section>
 
             <div id="finiteMeanResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
@@ -308,7 +310,7 @@
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="sample-size-charts.js?v=20261101-3"></script>
+<script src="sample-size-charts.js?v=20261101-2"></script>
 <script>
 function calculateFiniteMeanSampleSize() {
  window.SampleSizeCharts && SampleSizeCharts.clear('finiteMeanChart');
@@ -350,7 +352,7 @@ function calculateFiniteMeanSampleSize() {
  drawFiniteMeanChart(n);
 }
 
-window.SampleSizeCharts && SampleSizeCharts.live('finiteMeanForm', calculateFiniteMeanSampleSize);
+document.getElementById('finiteMeanCalculateBtn').addEventListener('click', calculateFiniteMeanSampleSize);
 calculateFiniteMeanSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

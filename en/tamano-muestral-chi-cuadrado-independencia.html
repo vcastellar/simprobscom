@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261101-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
     <style>
         .theory-table-wrap { margin: 10px 0 16px; overflow-x: auto; border-radius: 12px; border: 1px solid rgba(79, 70, 229, 0.18); }
         .theory-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; line-height: 1.5; font-variant-numeric: tabular-nums; }
@@ -172,7 +172,7 @@
                     <p>Enter Cohen's w, the table's degrees of freedom, the significance level and the desired power.</p>
                 </div>
 
-                <div class="form-grid sample-grid" id="chiForm">
+                <div class="form-grid sample-grid">
                     <div class="inline-inputs">
                         <div class="form-group">
                             <label for="chiW">Effect size, Cohen's w <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
@@ -219,6 +219,8 @@
                         <div id="chiWResult" style="margin-top:0.5rem; font-size:0.9rem;"></div>
                     </div>
                 </details>
+
+                <button class="calculate-btn" id="chiCalculateBtn">Calculate sample size</button>
             </section>
 
             <div id="chiResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
@@ -372,7 +374,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../sample-size-charts.js?v=20261101-3"></script>
+<script src="../sample-size-charts.js?v=20261101-2"></script>
 <script>
 function ncChiSqCDF(x, df, lambda) {
     if (x <= 0) return 0;
@@ -444,7 +446,7 @@ function calculateWFromProportions() {
     document.getElementById('chiDf').value = 1;
 }
 
-window.SampleSizeCharts && SampleSizeCharts.live('chiForm', calculateChiIndSampleSize);
+document.getElementById('chiCalculateBtn').addEventListener('click', calculateChiIndSampleSize);
 document.getElementById('chiWBtn').addEventListener('click', function () { calculateWFromProportions(); calculateChiIndSampleSize(); });
 calculateChiIndSampleSize();
 </script>

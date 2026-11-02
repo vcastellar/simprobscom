@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261101-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -156,7 +156,7 @@
                     <p>Calculate the minimum number of observations per group (1:1 allocation) to estimate p₁ − p₂ with a target precision.</p>
                 </div>
 
-                <div class="form-grid sample-grid" id="dp2Form">
+                <div class="form-grid sample-grid">
                     <div class="inline-inputs">
                         <div class="form-group">
                             <label for="dp2p1">Expected proportion group 1 (p₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
@@ -182,6 +182,8 @@
                         </div>
                     </div>
                 </div>
+
+                <button class="calculate-btn" id="dp2CalculateBtn">Calculate sample size</button>
             </section>
 
             <div id="dp2Result" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
@@ -291,7 +293,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../sample-size-charts.js?v=20261101-3"></script>
+<script src="../sample-size-charts.js?v=20261101-2"></script>
 <script>
 function calculateDiffPropSampleSize() {
     window.SampleSizeCharts && SampleSizeCharts.clear('dp2Chart');
@@ -338,7 +340,7 @@ function calculateDiffPropSampleSize() {
     });
 }
 
-window.SampleSizeCharts && SampleSizeCharts.live('dp2Form', calculateDiffPropSampleSize);
+document.getElementById('dp2CalculateBtn').addEventListener('click', calculateDiffPropSampleSize);
 calculateDiffPropSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>

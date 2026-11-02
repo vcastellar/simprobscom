@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261101-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
 
     <script type="application/ld+json">
 {
@@ -161,7 +161,7 @@
                     <p>Calculate the sample size to compare two independent proportions.</p>
                 </div>
 
-                <div class="form-grid sample-grid" id="twoPropForm">
+                <div class="form-grid sample-grid">
                     <div class="inline-inputs">
                         <div class="form-group">
                             <label for="twoPropP1">Expected proportion group 1 (p1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
@@ -203,6 +203,8 @@
                         <p class="field-hint" hidden>Ratio between the size of group 2 and group 1 (n2/n1). E.g. k = 1.5 means group 2 will have 50% more observations than group 1.</p>
                     </div>
                 </div>
+
+                <button class="calculate-btn" id="twoPropCalculateBtn">Calculate sample size</button>
             </section>
 
             <div id="twoPropResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
@@ -316,7 +318,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../sample-size-charts.js?v=20261101-3"></script>
+<script src="../sample-size-charts.js?v=20261101-2"></script>
 <script>
 function refreshMathJaxTwoProp() {
     if (window.MathJax?.typesetPromise) {
@@ -393,7 +395,7 @@ function updateTwoPropControls() {
 }
 
 document.getElementById("twoPropAllocation").addEventListener("change", updateTwoPropControls);
-window.SampleSizeCharts && SampleSizeCharts.live('twoPropForm', calculateTwoPropSampleSize);
+document.getElementById("twoPropCalculateBtn").addEventListener("click", calculateTwoPropSampleSize);
 updateTwoPropControls();
 calculateTwoPropSampleSize();
 </script>
