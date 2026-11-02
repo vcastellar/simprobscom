@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Type I and Type II Error Visualizer | ProbLab">
   <meta name="twitter:description" content="Interactive simulator of type I (α) and type II (β) errors in hypothesis tests. Visualize statistical power and the α–β trade-off.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../../style_new.css?v=20261031-1">
+  <link rel="stylesheet" href="../../style_new.css?v=20261102-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -67,20 +67,6 @@
   <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
   <style>
-    /* ── layout ── */
-    .sim-layout {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 20px;
-      align-items: start;
-    }
-    @media (max-width: 700px) {
-      .sim-layout { grid-template-columns: 1fr; }
-    }
-    .sim-panel {
-      position: sticky;
-      top: 72px;
-    }
 
     /* ── control panel ── */
     .panel-heading {
@@ -373,10 +359,10 @@
   <main>
 
     <!-- ═══════════════════════════════ SIMULATOR ═══════════════════════════════ -->
-    <div class="sim-layout">
+    <div class="ss-shell ss-sim">
 
       <!-- Control panel -->
-      <aside class="card sample-size-panel sim-panel" aria-label="Test parameters">
+      <aside class="card ss-controls" aria-label="Test parameters">
         <h2 class="panel-heading">Parameters</h2>
 
         <div class="form-group">
@@ -421,15 +407,7 @@
       </aside>
 
       <!-- Results area -->
-      <div>
-        <div class="chart-outer">
-          <h3>Distributions under H₀ and H₁</h3>
-          <p class="chart-sub">Standardized Z statistic. The shaded regions represent the probabilities of each type of error and the power of the test.</p>
-          <div class="chart-wrap">
-            <canvas id="errorChart" aria-label="Chart of H0 and H1 distributions with type I error, type II error and power regions"></canvas>
-          </div>
-        </div>
-
+      <div class="ss-main">
         <div class="stats-grid" id="statsGrid">
           <div class="stat-cell" id="cellAlpha" style="background:rgba(220,38,38,0.06); border-color:rgba(220,38,38,0.20);">
             <div class="stat-label">Type I error (α)</div>
@@ -452,13 +430,21 @@
             <div class="stat-sub">δ = d × √n</div>
           </div>
         </div>
+        <div class="chart-outer">
+          <h3>Distributions under H₀ and H₁</h3>
+          <p class="chart-sub">Standardized Z statistic. The shaded regions represent the probabilities of each type of error and the power of the test.</p>
+          <div class="chart-wrap">
+            <canvas id="errorChart" aria-label="Chart of H0 and H1 distributions with type I error, type II error and power regions"></canvas>
+          </div>
+        </div>
+
 
         <div class="result-box" id="interpretation">
           Adjust the parameters in the left panel to see the power analysis.
         </div>
       </div>
 
-    </div><!-- /sim-layout -->
+    </div>
 
 
     <!-- ═══════════════════════════════ EDUCATIONAL ═══════════════════════ -->

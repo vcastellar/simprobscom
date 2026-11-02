@@ -841,7 +841,8 @@ canvas {
     min-width: 0;
 }
 
-.ss-chart-panel .ss-chart-title {
+.ss-chart-panel .ss-chart-title,
+.ss-sim-chart .ss-chart-title {
     font-size: 1.15rem;
 }
 
@@ -926,6 +927,44 @@ canvas {
 
     .ss-canvas {
         min-height: 300px;
+    }
+}
+
+/* Simuladores: misma maqueta, pero la columna derecha (.ss-main) apila los
+   resultados resumidos, los gráficos y la interpretación, en ese orden. */
+.ss-shell.ss-sim {
+    grid-template-rows: auto;
+    grid-template-areas: "controls main";
+}
+
+.ss-main {
+    grid-area: main;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+}
+
+.ss-shell .ss-main > * {
+    margin-top: 0;
+}
+
+/* Cajas que el simulador rellena al ejecutarse: vacías no ocupan sitio. */
+.ss-main > :empty {
+    display: none;
+}
+
+.ss-controls .sim-form-grid,
+.ss-controls .form-grid-ci,
+.ss-main .charts-grid {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+@media (max-width: 1024px) {
+    .ss-shell.ss-sim {
+        grid-template-areas:
+            "controls"
+            "main";
     }
 }
 

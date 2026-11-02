@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Simulador de paseo aleatorio 1D y 2D | ProbLab">
   <meta name="twitter:description" content="Simulador interactivo de paseo aleatorio en 1D y 2D. Visualiza trayectorias, bandas de difusión ±2σ y el comportamiento √n.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261102-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -66,20 +66,6 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
   <style>
-    /* ── layout ── */
-    .sim-layout {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 20px;
-      align-items: start;
-    }
-    @media (max-width: 700px) {
-      .sim-layout { grid-template-columns: 1fr; }
-    }
-    .sim-panel {
-      position: sticky;
-      top: 72px;
-    }
 
     /* ── control panel ── */
     .panel-heading {
@@ -371,10 +357,10 @@
     <!-- ═══════════════════════════════ 1D ═══════════════════════════════ -->
     <div id="panel-1d" class="mode-section active" role="tabpanel" aria-labelledby="tab-1d">
       <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> simula uno o varios paseos aleatorios en una dimensión, donde la partícula avanza +1 o retrocede −1 en cada paso. Sirve para ver cómo la dispersión crece como √n y el efecto de una posible deriva cuando p ≠ 0,5.</p>
-      <div class="sim-layout">
+      <div class="ss-shell ss-sim">
 
         <!-- Control panel -->
-        <aside class="card sample-size-panel sim-panel" aria-label="Parámetros del paseo 1D">
+        <aside class="card ss-controls" aria-label="Parámetros del paseo 1D">
           <h2 class="panel-heading">Parámetros</h2>
 
           <div class="form-group">
@@ -430,20 +416,7 @@
         </aside>
 
         <!-- Results area -->
-        <div>
-          <div class="chart-outer">
-            <h3>Trayectorias X(t)</h3>
-            <p class="chart-sub">Posición acumulada en función del paso t</p>
-            <div class="chart-wrap">
-              <div class="sim-placeholder" id="ph1d">
-                <span class="icon">📉</span>
-                Haz clic en <strong>Simular</strong> para comenzar.
-              </div>
-              <canvas id="canvas1d" style="display:none;" aria-label="Gráfico de trayectorias del paseo aleatorio 1D"></canvas>
-            </div>
-            <div id="legend1d" class="legend-row" style="display:none;"></div>
-          </div>
-
+        <div class="ss-main">
           <div id="stats1d" style="display:none;">
             <div class="stats-grid">
               <div class="stat-cell">
@@ -465,8 +438,21 @@
                 <div class="stat-val" id="s1d-max">—</div>
               </div>
             </div>
-            <div class="result-box" id="interp1d"></div>
           </div>
+          <div class="chart-outer">
+            <h3>Trayectorias X(t)</h3>
+            <p class="chart-sub">Posición acumulada en función del paso t</p>
+            <div class="chart-wrap">
+              <div class="sim-placeholder" id="ph1d">
+                <span class="icon">📉</span>
+                Haz clic en <strong>Simular</strong> para comenzar.
+              </div>
+              <canvas id="canvas1d" style="display:none;" aria-label="Gráfico de trayectorias del paseo aleatorio 1D"></canvas>
+            </div>
+            <div id="legend1d" class="legend-row" style="display:none;"></div>
+          </div>
+          <div class="result-box" id="interp1d"></div>
+
         </div>
 
       </div>
@@ -475,10 +461,10 @@
     <!-- ═══════════════════════════════ 2D ═══════════════════════════════ -->
     <div id="panel-2d" class="mode-section" role="tabpanel" aria-labelledby="tab-2d" style="display:none;">
       <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> simula uno o varios paseos aleatorios en el plano, con igual probabilidad de moverse en cada uno de los cuatro ejes. Sirve para visualizar la recurrencia del paseo 2D y comprobar que la distancia al origen crece como √n.</p>
-      <div class="sim-layout">
+      <div class="ss-shell ss-sim">
 
         <!-- Control panel -->
-        <aside class="card sample-size-panel sim-panel" aria-label="Parámetros del paseo 2D">
+        <aside class="card ss-controls" aria-label="Parámetros del paseo 2D">
           <h2 class="panel-heading">Parámetros</h2>
 
           <div class="form-group">
@@ -517,19 +503,7 @@
         </aside>
 
         <!-- Results area -->
-        <div>
-          <div class="chart-outer">
-            <h3>Trayectorias en el plano</h3>
-            <p class="chart-sub">Posición (x, y) en cada paso. Punto negro = origen. El círculo discontinuo marca la distancia esperada √n.</p>
-            <div class="canvas2d-wrap">
-              <div class="sim-placeholder" id="ph2d" style="min-height:420px;">
-                <span class="icon">🗺️</span>
-                Haz clic en <strong>Simular</strong> para comenzar.
-              </div>
-              <canvas id="canvas2d" style="display:none;" aria-label="Gráfico de trayectorias del paseo aleatorio 2D"></canvas>
-            </div>
-          </div>
-
+        <div class="ss-main">
           <div id="stats2d" style="display:none;">
             <div class="stats-grid">
               <div class="stat-cell">
@@ -551,8 +525,20 @@
                 <div class="stat-val" id="s2d-returns">—</div>
               </div>
             </div>
-            <div class="result-box" id="interp2d"></div>
           </div>
+          <div class="chart-outer">
+            <h3>Trayectorias en el plano</h3>
+            <p class="chart-sub">Posición (x, y) en cada paso. Punto negro = origen. El círculo discontinuo marca la distancia esperada √n.</p>
+            <div class="canvas2d-wrap">
+              <div class="sim-placeholder" id="ph2d" style="min-height:420px;">
+                <span class="icon">🗺️</span>
+                Haz clic en <strong>Simular</strong> para comenzar.
+              </div>
+              <canvas id="canvas2d" style="display:none;" aria-label="Gráfico de trayectorias del paseo aleatorio 2D"></canvas>
+            </div>
+          </div>
+          <div class="result-box" id="interp2d"></div>
+
         </div>
 
       </div>

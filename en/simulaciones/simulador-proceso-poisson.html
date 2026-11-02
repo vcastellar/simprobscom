@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Poisson Process Simulator | ProbLab">
   <meta name="twitter:description" content="Poisson process simulator: sample paths, number of events, and inter-arrival times with theoretical curves.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../../style_new.css?v=20261031-1">
+  <link rel="stylesheet" href="../../style_new.css?v=20261102-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -187,24 +187,7 @@
     .related-tools a:hover {
       text-decoration: underline;
     }
-    /* Sim layout: side panel + chart area */
-    .sim-layout {
-      display: grid;
-      grid-template-columns: 320px minmax(0, 1fr);
-      gap: 20px;
-      align-items: start;
-    }
-    .sim-panel {
-      position: sticky;
-      top: 18px;
-    }
     @media (max-width: 860px) {
-      .sim-layout {
-        grid-template-columns: 1fr;
-      }
-      .sim-panel {
-        position: static;
-      }
       .results-grid {
         grid-template-columns: 1fr 1fr;
       }
@@ -298,9 +281,9 @@
 
     <!-- MODE 1: Trayectoria -->
     <div id="panel-trayectoria" class="mode-section active" role="tabpanel" aria-labelledby="tab-trayectoria">
-      <div class="sim-layout">
+      <div class="ss-shell ss-sim">
         <!-- Control panel -->
-        <aside class="card sim-panel sample-size-panel" aria-label="Simulation parameters">
+        <aside class="card ss-controls" aria-label="Simulation parameters">
           <h2 style="margin:0 0 4px; font-size:1.1rem;">Control panel</h2>
           <p style="margin:0 0 16px; color:var(--text-muted); font-size:0.87rem;">Poisson process parameters</p>
 
@@ -331,31 +314,34 @@
         </aside>
 
         <!-- Results area -->
-        <div>
-          <div id="chart-wrap-t" class="chart-wrap">
-            <div class="chart-placeholder" id="placeholder-t">
-              <div>
-                <div style="font-size:2rem; margin-bottom:8px;">📈</div>
-                Click <strong>'Simulate'</strong> to get started.<br>
-                <span style="font-size:0.85rem;">The N(t) sample paths will be shown as step functions.</span>
-              </div>
-            </div>
-            <canvas id="chart-trayectoria" style="display:none;"></canvas>
-          </div>
+        <div class="ss-main">
 
           <div id="results-t" style="display:none;">
             <div class="results-grid" id="stats-t"></div>
-            <ul class="traj-list" id="traj-detail"></ul>
-            <div class="interp-box" id="interp-t"></div>
           </div>
+          <section class="card ss-sim-chart">
+              <h2 class="ss-chart-title">Trajectories N(t)</h2>
+              <div id="chart-wrap-t" class="chart-wrap">
+                <div class="chart-placeholder" id="placeholder-t">
+                  <div>
+                    <div style="font-size:2rem; margin-bottom:8px;">📈</div>
+                    Click <strong>'Simulate'</strong> to get started.<br>
+                    <span style="font-size:0.85rem;">The N(t) sample paths will be shown as step functions.</span>
+                  </div>
+                </div>
+                <canvas id="chart-trayectoria" style="display:none;"></canvas>
+              </div>
+          </section>
+          <ul class="traj-list" id="traj-detail"></ul>
+          <div class="interp-box" id="interp-t"></div>
         </div>
       </div>
     </div>
 
     <!-- MODE 2: Distribución N(T) -->
     <div id="panel-distribucion" class="mode-section" role="tabpanel" aria-labelledby="tab-distribucion">
-      <div class="sim-layout">
-        <aside class="card sim-panel sample-size-panel" aria-label="Simulation parameters">
+      <div class="ss-shell ss-sim">
+        <aside class="card ss-controls" aria-label="Simulation parameters">
           <h2 style="margin:0 0 4px; font-size:1.1rem;">Control panel</h2>
           <p style="margin:0 0 16px; color:var(--text-muted); font-size:0.87rem;">Poisson process parameters</p>
 
@@ -386,30 +372,33 @@
           <button class="calculate-btn" id="btn-simular-d" type="button">Simulate</button>
         </aside>
 
-        <div>
-          <div id="chart-wrap-d" class="chart-wrap">
-            <div class="chart-placeholder" id="placeholder-d">
-              <div>
-                <div style="font-size:2rem; margin-bottom:8px;">📊</div>
-                Click <strong>'Simulate'</strong> to get started.<br>
-                <span style="font-size:0.85rem;">The histogram of N(T) will be shown against the theoretical Poisson(λT) PMF.</span>
-              </div>
-            </div>
-            <canvas id="chart-distribucion" style="display:none;"></canvas>
-          </div>
+        <div class="ss-main">
 
           <div id="results-d" style="display:none;">
             <div class="results-grid" id="stats-d"></div>
-            <div class="interp-box" id="interp-d"></div>
           </div>
+          <section class="card ss-sim-chart">
+              <h2 class="ss-chart-title">Distribution of N(T)</h2>
+              <div id="chart-wrap-d" class="chart-wrap">
+                <div class="chart-placeholder" id="placeholder-d">
+                  <div>
+                    <div style="font-size:2rem; margin-bottom:8px;">📊</div>
+                    Click <strong>'Simulate'</strong> to get started.<br>
+                    <span style="font-size:0.85rem;">The histogram of N(T) will be shown against the theoretical Poisson(λT) PMF.</span>
+                  </div>
+                </div>
+                <canvas id="chart-distribucion" style="display:none;"></canvas>
+              </div>
+          </section>
+          <div class="interp-box" id="interp-d"></div>
         </div>
       </div>
     </div>
 
     <!-- MODE 3: Tiempos entre llegadas -->
     <div id="panel-tiempos" class="mode-section" role="tabpanel" aria-labelledby="tab-tiempos">
-      <div class="sim-layout">
-        <aside class="card sim-panel sample-size-panel" aria-label="Simulation parameters">
+      <div class="ss-shell ss-sim">
+        <aside class="card ss-controls" aria-label="Simulation parameters">
           <h2 style="margin:0 0 4px; font-size:1.1rem;">Control panel</h2>
           <p style="margin:0 0 16px; color:var(--text-muted); font-size:0.87rem;">Poisson process parameters</p>
 
@@ -440,22 +429,25 @@
           <button class="calculate-btn" id="btn-simular-e" type="button">Simulate</button>
         </aside>
 
-        <div>
-          <div id="chart-wrap-e" class="chart-wrap">
-            <div class="chart-placeholder" id="placeholder-e">
-              <div>
-                <div style="font-size:2rem; margin-bottom:8px;">⏱️</div>
-                Click <strong>'Simulate'</strong> to get started.<br>
-                <span style="font-size:0.85rem;">The histogram of inter-arrival times will be shown against the theoretical exponential PDF.</span>
-              </div>
-            </div>
-            <canvas id="chart-tiempos" style="display:none;"></canvas>
-          </div>
+        <div class="ss-main">
 
           <div id="results-e" style="display:none;">
             <div class="results-grid" id="stats-e"></div>
-            <div class="interp-box" id="interp-e"></div>
           </div>
+          <section class="card ss-sim-chart">
+              <h2 class="ss-chart-title">Inter-arrival times</h2>
+              <div id="chart-wrap-e" class="chart-wrap">
+                <div class="chart-placeholder" id="placeholder-e">
+                  <div>
+                    <div style="font-size:2rem; margin-bottom:8px;">⏱️</div>
+                    Click <strong>'Simulate'</strong> to get started.<br>
+                    <span style="font-size:0.85rem;">The histogram of inter-arrival times will be shown against the theoretical exponential PDF.</span>
+                  </div>
+                </div>
+                <canvas id="chart-tiempos" style="display:none;"></canvas>
+              </div>
+          </section>
+          <div class="interp-box" id="interp-e"></div>
         </div>
       </div>
     </div>
