@@ -49,11 +49,6 @@
             .replace(/⁻¹/g, " inv ");
     }
 
-    function csvEscape(value) {
-        const normalized = (value || "").replace(/\s+/g, " ").trim();
-        // El separador es «;», así que la coma decimal no necesita comillas
-        return /["\n;]/.test(normalized) ? `"${normalized.replace(/"/g, '""')}"` : normalized;
-    }
 
     // Separador decimal de la configuración regional del navegador, que suele
     // coincidir con la de Excel: con coma decimal, «0.9750» se importaría
@@ -66,6 +61,18 @@
             return ".";
         }
     })();
+
+    // Separador de campos: el que usa Excel en esa configuración regional,
+    // «;» donde la coma es el separador decimal y «,» en el resto. No se
+    // escribe la línea «sep=;»: con ella Excel ignora la marca BOM y lee el
+    // UTF-8 como ANSI («distribuciÃ³n», «Î¦» en lugar de «Φ»).
+    const FIELD_SEP = DECIMAL === "," ? ";" : ",";
+
+    function csvEscape(value) {
+        const normalized = (value || "").replace(/\s+/g, " ").trim();
+        const needsQuotes = normalized.includes('"') || normalized.includes(FIELD_SEP);
+        return needsQuotes ? `"${normalized.replace(/"/g, '""')}"` : normalized;
+    }
 
     // 6 decimales, o notación científica si el valor es menor que 0.001,
     // para no perder las colas (P(Z > 4) = 3.16712E-05 en lugar de 0.0000).
@@ -104,7 +111,7 @@
         return rows
             .map(row => Array.from(row.querySelectorAll("th, td"))
                 .map(cell => csvEscape(cellCsvValue(cell)))
-                .join(";"))
+                .join(FIELD_SEP))
             .join("\n");
     }
 
@@ -112,10 +119,10 @@
         const title = getTableTitle(table);
         const heading = document.querySelector("h1");
         const page = heading ? heading.textContent.trim() : STR.fallbackTitle;
-        // Primera línea tras «sep=;»: qué tabla es, ya que el nombre del
+        // Primera línea: qué tabla es, ya que el nombre del
         // archivo no siempre se ve al abrirlo
         const caption = title && title !== page ? `${page} — ${title}` : page;
-        const csv = `sep=;\n${csvEscape(caption)}\n${tableToCsv(table)}`;
+        const csv = `${csvEscape(caption)}\n${tableToCsv(table)}`;
         const blob = new Blob(["\ufeff", csv], { type: "text/csv;charset=utf-8;" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
