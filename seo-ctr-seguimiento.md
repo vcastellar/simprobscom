@@ -57,6 +57,41 @@ Fecha de despliegue: anotar la fecha en que se publique en producción.
 
 ## Lotes siguientes
 
-- **Calculadoras inglesas de tamaño muestral** (población finita, correlación, ANOVA, dos proporciones): no cambiar el title hasta disponer del desglose de consultas de cada URL. Títulos candidatos: «Finite Population Sample Size Calculator», «Correlation Sample Size Calculator», «ANOVA Sample Size Calculator», «Two Proportions Sample Size Calculator». En población finita, el title debe seguir indicando que es para una proporción.
+- **Calculadoras inglesas de tamaño muestral** (población finita, correlación, ANOVA, dos proporciones): hechas en el lote 2, con el informe de consultas de todo el sitio porque no se disponía del desglose por URL. Nota original: no cambiar el title hasta disponer del desglose de consultas de cada URL. Títulos candidatos: «Finite Population Sample Size Calculator», «Correlation Sample Size Calculator», «ANOVA Sample Size Calculator», «Two Proportions Sample Size Calculator». En población finita, el title debe seguir indicando que es para una proporción.
 - **Tablas Poisson y binomial en inglés:** ambas páginas ya ofrecen dos pestañas, P(X = k) y P(X ≤ k), y sus titles dicen «(Cumulative)». Falta comprobar si las consultas piden más «poisson table» / «binomial table» a secas o la versión acumulada, para decidir si el title debe nombrar las dos.
-- **Beta en inglés:** dejar para el final e identificar primero la intención dominante (calculadora, PDF, CDF o uso bayesiano).
+- **Beta en inglés:** incluida en el lote 2 con un title de calculadora (PDF, CDF y cuantiles). Nota original: dejar para el final e identificar primero la intención dominante (calculadora, PDF, CDF o uso bayesiano).
+
+## Lote 2: páginas en inglés (title y description)
+
+Fecha de despliegue: anotar la fecha en que se publique en producción.
+
+Solo cambian el `<title>`, la meta description y sus copias en Open Graph y Twitter. No cambian el H1, el contenido ni las URLs. Se descartó traducir las URLs al inglés: la sección `/en/` ya aporta un tercio de los clics y posiciona bien con las URLs actuales, y el problema es el CTR.
+
+**Situación de partida:** export de Search Console del 01/08/2026 al 31/10/2026 (92 días). Las quince URLs suman 98.439 impresiones y 722 clics (CTR 0,73 %).
+
+| Página | Impresiones | Clics | CTR | Posición | Title nuevo |
+|---|---:|---:|---:|---:|---|
+| `/en/tabla-normal.html` | 15.130 | 61 | 0,40 % | 12,46 | Z Table: Standard Normal Distribution Table \| ProbLab |
+| `/en/tamano-muestral-proporcion-poblacion-finita.html` | 11.835 | 47 | 0,40 % | 8,25 | Finite Population Sample Size Calculator (Proportion) |
+| `/en/tabla-poisson.html` | 8.635 | 120 | 1,39 % | 7,65 | Poisson Distribution Table (Cumulative) – Free & Printable |
+| `/en/tamano-muestral-correlacion.html` | 8.605 | 61 | 0,71 % | 6,46 | Sample Size Calculator for Correlation (Pearson r) \| ProbLab |
+| `/en/tabla-t-student.html` | 8.013 | 27 | 0,34 % | 28,01 | t Table: Student's t Distribution Critical Values \| ProbLab |
+| `/en/tamano-muestral-anova.html` | 7.809 | 53 | 0,68 % | 6,68 | ANOVA Sample Size Calculator (Cohen's f, Power) \| ProbLab |
+| `/en/beta.html` | 5.478 | 51 | 0,93 % | 10,79 | Beta Distribution Calculator: PDF, CDF & Quantiles \| ProbLab |
+| `/en/tabla-binomial.html` | 5.225 | 91 | 1,74 % | 9,56 | Binomial Distribution Table (Cumulative) – Free & Printable |
+| `/en/normal.html` | 5.144 | 36 | 0,70 % | 19,62 | Normal Distribution Calculator: Probability & Percentiles |
+| `/en/uniform.html` | 4.341 | 15 | 0,35 % | 8,80 | Uniform Distribution Calculator: PDF, CDF & Quantiles |
+| `/en/studentt.html` | 3.903 | 29 | 0,74 % | 10,03 | Student's t Distribution Calculator: p-Values & Critical t |
+| `/en/tamano-muestral-dos-proporciones.html` | 3.903 | 18 | 0,46 % | 9,14 | Sample Size Calculator for Two Proportions \| ProbLab |
+| `/en/gamma.html` | 3.799 | 58 | 1,53 % | 9,19 | Gamma Distribution Calculator: PDF, CDF & Quantiles |
+| `/en/shapiro-wilk-normalidad.html` | 3.640 | 45 | 1,24 % | 12,15 | Shapiro-Wilk Test Calculator (Normality, W & p-Value) |
+| `/en/binomial.html` | 2.979 | 10 | 0,34 % | 17,48 | Binomial Distribution Calculator: P(X = k), P(X ≤ k) |
+
+**Criterios:**
+
+- El title empieza por el término que más se busca en inglés según el informe de consultas («z table», «t table», «poisson table», «… calculator») y se mantiene en unos 60 caracteres. Cuando la marca no cabe, se quita; Google suele añadir el nombre del sitio.
+- La description (unos 130–160 caracteres) dice qué valores da la página y qué se puede hacer con ellos (CSV, impresión, gráfico, curva de potencia), sin prometer nada que la página no tenga.
+
+**Hipótesis:** subir el CTR de las páginas que ya están entre las posiciones 6 y 10 (Poisson, correlación, ANOVA, población finita, binomial, uniforme). En las que están peor posicionadas (`tabla-t-student`, `normal`, `binomial`), un cambio de snippet tendrá poco efecto si no mejora la posición.
+
+**Evaluación:** a las 4–6 semanas del despliegue, con el método de «Cómo evaluar», filtrando por los mercados en inglés (Estados Unidos, India, Reino Unido, Canadá, Australia, Filipinas). Meta orientativa: pasar del 0,73 % a un 1,0–1,2 % de CTR en el conjunto, a posición similar.
