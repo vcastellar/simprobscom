@@ -30,6 +30,8 @@
  *   xLabel      título del eje.
  *   topAxis     { label, map, inverse } opcional: segundo eje arriba (p. ej.
  *               σ = √σ²), con marcas en valores redondos de la magnitud.
+ *   custom      true si el nivel viene del deslizador personalizado: el eje
+ *               reserva sitio para el nivel máximo y no se reescala al arrastrar.
  *   sizeLabel   function (f) → texto del tamaño muestral escalado por f.
  *   maxFactor   factor máximo admisible (población finita: N / n).
  */
@@ -40,6 +42,29 @@
   var LOCALE = IS_EN ? 'en-US' : 'es-ES';
   var FONT = "'Inter', 'Inter-fallback', sans-serif";
   var STD_LEVELS = [0.90, 0.95, 0.99];
+
+  // Escala del deslizador del nivel personalizado: logarítmica en α = 1 − nivel,
+  // de α = 0,99 (nivel 1 %) a α = 0,001 (nivel 99,9 %), en 1000 posiciones.
+  // Así la zona habitual (80–99,9 %) ocupa unas tres cuartas partes del
+  // recorrido. α se redondea a dos cifras significativas, de modo que los
+  // valores redondos (95 %, 97,5 %, 99 %…) se alcanzan exactamente.
+  var SLIDER_STEPS = 1000;
+  var SLIDER_MAX = 0.999;
+  var LOG_A_HI = Math.log10(0.99);
+  var LOG_A_LO = Math.log10(1 - SLIDER_MAX);
+  function snapAlpha(a) {
+    var r = Number(a.toPrecision(2));
+    return Math.min(0.99, Math.max(1 - SLIDER_MAX, r));
+  }
+  function posToLevel(pos) {
+    var t = Math.min(1, Math.max(0, pos / SLIDER_STEPS));
+    var a = snapAlpha(Math.pow(10, LOG_A_HI + t * (LOG_A_LO - LOG_A_HI)));
+    return Number((1 - a).toFixed(6));
+  }
+  function levelToPos(level) {
+    var a = Math.min(0.99, Math.max(1 - SLIDER_MAX, 1 - level));
+    return Math.round(SLIDER_STEPS * (Math.log10(a) - LOG_A_HI) / (LOG_A_LO - LOG_A_HI));
+  }
   var registry = {}; // canvasId → { kind, opts, chart }
 
   var STR = IS_EN ? {
@@ -155,25 +180,34 @@
     return r;
   }
 
+  // Filas en posiciones fijas (y = 0 abajo): las tres de referencia (90, 95
+  // y 99 %) siempre en el mismo sitio y, separada arriba, la fila del nivel
+  // elegido (con la del método de comparación justo debajo). Así nada salta
+  // de fila al mover el nivel.
+  var GROUP_GAP = 0.6;
   function buildRows(o) {
-    var levels = STD_LEVELS.slice();
     var chosen = o.confidence;
-    if (!levels.some(function (l) { return Math.abs(l - chosen) < 1e-9; })) levels.push(chosen);
-    levels.sort(function (a, b) { return a - b; });
-
     var prefix = o.method ? o.method : STR.ci;
     var rows = [];
-    if (o.compare) {
-      var cr = safeInterval(o.compare.interval, chosen, 1);
-      if (cr) rows.push({ label: o.compare.label + ' ' + fmtPct(chosen), lo: cr[0], hi: cr[1], kind: 'compare' });
-    }
-    levels.forEach(function (l) {
+    STD_LEVELS.forEach(function (l, i) {
       var r = safeInterval(o.interval, l, 1);
-      if (!r) return;
-      var isChosen = Math.abs(l - chosen) < 1e-9;
-      rows.push({ label: prefix + ' ' + fmtPct(l), lo: r[0], hi: r[1], kind: isChosen ? 'chosen' : 'other' });
+      if (r) rows.push({ label: prefix + ' ' + fmtPct(l), lo: r[0], hi: r[1], kind: 'other', level: l, y: i });
     });
+    var top = STD_LEVELS.length - 1 + GROUP_GAP;
+    if (o.compare) {
+      top += 1;
+      var cr = safeInterval(o.compare.interval, chosen, 1);
+      if (cr) rows.push({ label: o.compare.label + ' ' + fmtPct(chosen), lo: cr[0], hi: cr[1], kind: 'compare', y: top });
+    }
+    top += 1;
+    var c = safeInterval(o.interval, chosen, 1);
+    if (c) rows.push({ label: prefix + ' ' + fmtPct(chosen), lo: c[0], hi: c[1], kind: 'chosen', y: top });
+    rows.top = top;
     return rows;
+  }
+  function rowAt(rows, y) {
+    for (var i = 0; i < rows.length; i++) if (Math.abs(rows[i].y - y) < 1e-6) return rows[i];
+    return null;
   }
 
   // Frase "¿y si…?": amplitud con el doble de muestra y muestra para
@@ -243,9 +277,18 @@
         }
       }
 
+      // Separador entre el nivel elegido y las filas de referencia
+      var sy = ys.getPixelForValue(STD_LEVELS.length - 1 + (GROUP_GAP + 1) / 2);
+      ctx.strokeStyle = a.grid;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(area.left, sy);
+      ctx.lineTo(area.right, sy);
+      ctx.stroke();
+
       // Barras, cifras de los extremos y estimación
-      a.rows.forEach(function (r, i) {
-        var y = ys.getPixelForValue(i);
+      a.rows.forEach(function (r) {
+        var y = ys.getPixelForValue(r.y);
         var x1 = xs.getPixelForValue(r.lo);
         var x2 = xs.getPixelForValue(r.hi);
         var color = r.kind === 'chosen' ? a.chosen : (r.kind === 'compare' ? a.compare : a.other);
@@ -294,14 +337,25 @@
   // ── Construcción del gráfico ──────────────────────────────────────────
   function buildIntervals(o, pal) {
     var rows = buildRows(o);
-    if (!rows.length) throw new Error('sin intervalos válidos');
-    var chosenRow = rows.filter(function (r) { return r.kind === 'chosen'; })[0] || rows[rows.length - 1];
-    var decimals = decimalsFor(chosenRow.hi - chosenRow.lo);
+    var chosenRow = rows.filter(function (r) { return r.kind === 'chosen'; })[0];
+    if (!chosenRow) throw new Error('sin intervalos válidos');
+    // Decimales fijados por la barra del 95 %, para que no cambien al mover
+    // el nivel elegido.
+    var refRow = rows.filter(function (r) { return r.level === 0.95; })[0] || chosenRow;
+    var decimals = decimalsFor(refRow.hi - refRow.lo);
 
     // Rango del eje: todos los intervalos, la estimación y la referencia.
+    // Con nivel personalizado se incluye además el intervalo al nivel máximo
+    // del deslizador, para que el eje no se reescale al arrastrar.
     var vals = [o.estimate];
     rows.forEach(function (r) { vals.push(r.lo, r.hi); });
     if (o.reference != null) vals.push(o.reference);
+    if (o.custom) {
+      [o.interval, o.compare && o.compare.interval].forEach(function (fn) {
+        var widest = fn ? safeInterval(fn, SLIDER_MAX, 1) : null;
+        if (widest) vals.push(widest[0], widest[1]);
+      });
+    }
     // Límites redondeados hacia fuera a valores "redondos".
     var lo, hi;
     if (o.log) {
@@ -318,8 +372,9 @@
       if (o.xMax != null) hi = Math.min(hi, o.xMax);
     }
 
+    var tickRow = function (ctx) { return ctx.tick ? rowAt(rows, ctx.tick.value) : null; };
     var tickFont = function (ctx) {
-      var r = rows[ctx.tick && ctx.tick.value];
+      var r = tickRow(ctx);
       return { size: 12, weight: r && r.kind === 'chosen' ? '700' : '500' };
     };
     var scales = {
@@ -336,16 +391,16 @@
       y: {
         type: 'linear',
         min: -0.7,
-        max: rows.length - 0.3,
+        max: rows.top + 0.7,
         afterBuildTicks: function (axis) {
-          axis.ticks = rows.map(function (_, i) { return { value: i }; });
+          axis.ticks = rows.map(function (r) { return { value: r.y }; });
         },
         ticks: {
           autoSkip: false,
-          color: function (ctx) { var r = rows[ctx.tick && ctx.tick.value]; return r && r.kind === 'chosen' ? pal.text : pal.muted; },
+          color: function (ctx) { var r = tickRow(ctx); return r && r.kind === 'chosen' ? pal.text : pal.muted; },
           font: tickFont,
           callback: function (v) {
-            var r = rows[v];
+            var r = rowAt(rows, v);
             if (!r) return '';
             return r.kind === 'chosen' ? r.label + ' (' + STR.chosen + ')' : r.label;
           }
@@ -395,6 +450,7 @@
           other: pal.other,
           compare: pal.compare,
           refColor: pal.ref,
+          grid: pal.grid,
           text: pal.text,
           muted: pal.muted,
           surface: pal.surface
@@ -406,7 +462,7 @@
     // Conjunto de datos invisible: solo fija las escalas.
     var data = {
       datasets: [{
-        data: rows.map(function (r, i) { return { x: r.lo, y: i }; }).concat(rows.map(function (r, i) { return { x: r.hi, y: i }; })),
+        data: rows.map(function (r) { return { x: r.lo, y: r.y }; }).concat(rows.map(function (r) { return { x: r.hi, y: r.y }; })),
         pointRadius: 0,
         showLine: false
       }]
@@ -525,6 +581,22 @@
     var out = document.getElementById(o.output || 'customConfOut');
     if (!sel || !row || !range || !input) return;
     var pending = false;
+    range.min = '0';
+    range.max = String(SLIDER_STEPS);
+    range.step = '1';
+
+    // Marcas de la escala en su posición real (descontando medio pulgar).
+    var scale = row.querySelector('.custom-level-scale');
+    if (scale) {
+      scale.textContent = '';
+      [[0, '0'], [0.5, null], [0.9, null], [0.95, null], [0.99, null], [SLIDER_MAX, null]].forEach(function (m) {
+        var span = document.createElement('span');
+        var t = m[0] === 0 ? 0 : levelToPos(m[0]) / SLIDER_STEPS;
+        span.textContent = m[1] || (m[0] * 100).toLocaleString(LOCALE, { maximumFractionDigits: 1 });
+        span.style.left = 'calc(8px + ' + t + ' * (100% - 16px))';
+        scale.appendChild(span);
+      });
+    }
 
     function show(v) {
       var text = fmtPct(Math.round(v * 10000) / 10000) + ' · α = ' + fmtAlpha(Math.round((1 - v) * 10000) / 10000);
@@ -534,13 +606,13 @@
     function fromInput() {
       var v = parseFloat(input.value);
       if (v > 0 && v < 1) {
-        range.value = String(v);
+        range.value = String(levelToPos(v));
         show(v);
       }
     }
-    range.addEventListener('input', function () {
-      var v = parseFloat(range.value);
-      input.value = String(Math.round(v * 1000) / 1000);
+    function commit(pos) {
+      var v = posToLevel(pos);
+      input.value = String(v);
       show(v);
       if (pending || typeof o.onChange !== 'function') return;
       pending = true;
@@ -548,6 +620,20 @@
         pending = false;
         o.onChange();
       });
+    }
+    range.addEventListener('input', function () { commit(parseInt(range.value, 10)); });
+    // Flechas: saltan al siguiente valor redondo distinto (con α a dos
+    // cifras, varias posiciones pueden dar el mismo nivel).
+    range.addEventListener('keydown', function (e) {
+      var dir = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[e.key];
+      if (!dir) return;
+      e.preventDefault();
+      var pos = parseInt(range.value, 10);
+      var cur = posToLevel(pos);
+      do { pos += dir; } while (pos > 0 && pos < SLIDER_STEPS && posToLevel(pos) === cur);
+      pos = Math.min(SLIDER_STEPS, Math.max(0, pos));
+      range.value = String(pos);
+      commit(pos);
     });
     input.addEventListener('input', fromInput);
     sel.addEventListener('change', function () {
@@ -570,6 +656,8 @@
     note: renderNote,
     clear: clear,
     clearNote: function (canvasId) { setNote(canvasId, ''); },
-    customLevel: customLevel
+    customLevel: customLevel,
+    // Conversión entre posición del deslizador y nivel (útil en pruebas).
+    sliderScale: { toLevel: posToLevel, toPos: levelToPos, steps: SLIDER_STEPS }
   };
 }());

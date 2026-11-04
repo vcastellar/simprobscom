@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261104-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261104-2">
 
     <script type="application/ld+json">
 {
@@ -160,8 +160,8 @@
                                     <label for="customConfRange">Custom confidence level</label>
                                     <output id="customConfOut" for="customConfRange customConf">95% · α = 0.05</output>
                                 </div>
-                                <input type="range" id="customConfRange" min="0.001" max="0.999" step="0.001" value="0.95">
-                                <div class="custom-level-scale" aria-hidden="true"><span>0</span><span>0.5</span><span>1</span></div>
+                                <input type="range" id="customConfRange" min="0" max="1000" step="1" value="433">
+                                <div class="custom-level-scale" aria-hidden="true"></div>
                                 <div class="custom-level-exact">
                                     <label for="customConf">Exact value (0–1)</label>
                                     <input type="number" id="customConf" value="0.95" step="any" min="0.0001" max="0.9999" inputmode="decimal">
@@ -338,7 +338,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../ci-charts.js?v=20261104-2"></script>
+<script src="../ci-charts.js?v=20261104-3"></script>
 <script>
 
 document.getElementById('conf').addEventListener('change', function () {
@@ -406,7 +406,7 @@ function calculate() {
         return [Math.max(0, mid - half), Math.min(1, mid + half)];
     };
     window.CICharts && CICharts.intervals({
-        canvas: 'ciChart', estimate: pHat, confidence: conf, xLabel: 'p', xMin: 0, xMax: 1,
+        canvas: 'ciChart', estimate: pHat, confidence: conf, custom: document.getElementById('conf').value === 'custom', xLabel: 'p', xMin: 0, xMax: 1,
         method: method === 'wald' ? 'Wald' : 'Wilson',
         interval: method === 'wald' ? waldFn : wilsonFn,
         compare: method === 'both' ? { label: 'Wald', interval: waldFn } : null,
