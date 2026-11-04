@@ -9,6 +9,10 @@
  *     muestral, para las calculadoras que conservan su propio gráfico.
  *   CICharts.clear(canvasId) → borra el gráfico y la frase (entrada no válida).
  *   CICharts.clearNote(canvasId) → borra solo la frase.
+ *   CICharts.customLevel(opts) → deslizador del nivel de confianza
+ *     personalizado: lo sincroniza con la casilla numérica, muestra el nivel
+ *     y su α, recalcula al arrastrar (opts.onChange) y resalta el panel al
+ *     aparecer.
  *
  * opts de intervals():
  *   canvas      id del <canvas>; la frase va en el elemento id + 'Note'.
@@ -505,10 +509,67 @@
     });
   }
 
+  // ── Nivel de confianza personalizado: deslizador + valor exacto ───────
+  // Sincroniza el deslizador con la casilla numérica (que es la que leen
+  // las páginas), muestra el nivel y su α, recalcula en tiempo real al
+  // arrastrar y hace un pulso en el panel cuando aparece.
+  function fmtAlpha(a) {
+    return Number(a).toLocaleString(LOCALE, { maximumFractionDigits: 4 });
+  }
+  function customLevel(o) {
+    o = o || {};
+    var sel = document.getElementById(o.select || 'conf');
+    var row = document.getElementById(o.row || 'customConfRow');
+    var range = document.getElementById(o.range || 'customConfRange');
+    var input = document.getElementById(o.input || 'customConf');
+    var out = document.getElementById(o.output || 'customConfOut');
+    if (!sel || !row || !range || !input) return;
+    var pending = false;
+
+    function show(v) {
+      var text = fmtPct(Math.round(v * 10000) / 10000) + ' · α = ' + fmtAlpha(Math.round((1 - v) * 10000) / 10000);
+      if (out) out.textContent = text;
+      range.setAttribute('aria-valuetext', text);
+    }
+    function fromInput() {
+      var v = parseFloat(input.value);
+      if (v > 0 && v < 1) {
+        range.value = String(v);
+        show(v);
+      }
+    }
+    range.addEventListener('input', function () {
+      var v = parseFloat(range.value);
+      input.value = String(Math.round(v * 1000) / 1000);
+      show(v);
+      if (pending || typeof o.onChange !== 'function') return;
+      pending = true;
+      (window.requestAnimationFrame || setTimeout)(function () {
+        pending = false;
+        o.onChange();
+      });
+    });
+    input.addEventListener('input', fromInput);
+    sel.addEventListener('change', function () {
+      if (sel.value !== 'custom') return;
+      row.classList.remove('is-revealed');
+      void row.offsetWidth; // reinicia la animación
+      row.classList.add('is-revealed');
+      var r = row.getBoundingClientRect();
+      if (r.bottom > window.innerHeight || r.top < 0) {
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        row.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
+      }
+    });
+    row.addEventListener('animationend', function () { row.classList.remove('is-revealed'); });
+    fromInput();
+  }
+
   window.CICharts = {
     intervals: renderIntervals,
     note: renderNote,
     clear: clear,
-    clearNote: function (canvasId) { setNote(canvasId, ''); }
+    clearNote: function (canvasId) { setNote(canvasId, ''); },
+    customLevel: customLevel
   };
 }());

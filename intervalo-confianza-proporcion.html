@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261102-2">
+    <link rel="stylesheet" href="style_new.css?v=20261104-1">
 
     <script type="application/ld+json">
 {
@@ -159,6 +159,18 @@
                                 <option value="0.99">99 %</option>
                                 <option value="custom">Personalizado…</option>
                             </select>
+                            <div class="custom-level" id="customConfRow" style="display:none">
+                                <div class="custom-level-head">
+                                    <label for="customConfRange">Nivel de confianza personalizado</label>
+                                    <output id="customConfOut" for="customConfRange customConf">95 % · α = 0,05</output>
+                                </div>
+                                <input type="range" id="customConfRange" min="0.001" max="0.999" step="0.001" value="0.95">
+                                <div class="custom-level-scale" aria-hidden="true"><span>0</span><span>0,5</span><span>1</span></div>
+                                <div class="custom-level-exact">
+                                    <label for="customConf">Valor exacto (0–1)</label>
+                                    <input type="number" id="customConf" value="0.95" step="any" min="0.0001" max="0.9999" inputmode="decimal">
+                                </div>
+                            </div>
                             <p class="field-hint" hidden>Probabilidad de que el procedimiento produzca un intervalo que contenga el valor real de p. <strong>95 %</strong> es el estándar habitual en encuestas y estudios de salud.</p>
                         </div>
                         <div class="form-group">
@@ -169,13 +181,6 @@
                                 <option value="wilson">Solo Wilson</option>
                             </select>
                             <p class="field-hint" hidden><strong>Wilson</strong> es el método recomendado por defecto: mantiene mejor la cobertura real con muestras pequeñas o proporciones extremas. <strong>Wald</strong> es más simple pero puede fallar cuando hay pocos éxitos o fracasos.</p>
-                        </div>
-                    </div>
-                    <div class="inline-inputs" id="customConfRow" style="display:none">
-                        <div class="form-group">
-                            <label for="customConf">Nivel de confianza personalizado (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                            <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
-                            <p class="field-hint" hidden>Introduce el nivel de confianza deseado como valor decimal entre 0 y 1 (ej.: 0,975 para un 97,5 %).</p>
                         </div>
                     </div>
                 </div>
@@ -337,7 +342,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="ci-charts.js?v=20261104-1"></script>
+<script src="ci-charts.js?v=20261104-2"></script>
 <script>
 
 document.getElementById('conf').addEventListener('change', function () {
@@ -417,6 +422,7 @@ document.getElementById('calcBtn').addEventListener('click', calculate);
 document.getElementById('conf').addEventListener('change', calculate);
 document.getElementById('method').addEventListener('change', calculate);
 document.getElementById('customConf').addEventListener('input', calculate);
+window.CICharts && CICharts.customLevel({ onChange: calculate });
 calculate();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

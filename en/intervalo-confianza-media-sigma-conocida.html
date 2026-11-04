@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261104-1">
 
     <script type="application/ld+json">
 {
@@ -160,14 +160,19 @@
                                 <option value="0.99">99%</option>
                                 <option value="custom">Custom…</option>
                             </select>
+                            <div class="custom-level" id="customConfRow" style="display:none">
+                                <div class="custom-level-head">
+                                    <label for="customConfRange">Custom confidence level</label>
+                                    <output id="customConfOut" for="customConfRange customConf">95% · α = 0.05</output>
+                                </div>
+                                <input type="range" id="customConfRange" min="0.001" max="0.999" step="0.001" value="0.95">
+                                <div class="custom-level-scale" aria-hidden="true"><span>0</span><span>0.5</span><span>1</span></div>
+                                <div class="custom-level-exact">
+                                    <label for="customConf">Exact value (0–1)</label>
+                                    <input type="number" id="customConf" value="0.95" step="any" min="0.0001" max="0.9999" inputmode="decimal">
+                                </div>
+                            </div>
                             <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true mean. <strong>95%</strong> is the usual standard.</p>
-                        </div>
-                    </div>
-                    <div class="inline-inputs" id="customConfRow" style="display:none">
-                        <div class="form-group">
-                            <label for="customConf">Custom confidence level (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                            <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
-                            <p class="field-hint" hidden>Custom confidence level, on a 0–1 scale (for example 0.98 for 98%); it is only used if you pick “Custom…” above.</p>
                         </div>
                     </div>
                 </div>
@@ -277,7 +282,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../ci-charts.js?v=20261104-1"></script>
+<script src="../ci-charts.js?v=20261104-2"></script>
 <script>
 
 document.getElementById('conf').addEventListener('change', function () {
@@ -328,6 +333,7 @@ function calculate() {
 document.getElementById('calcBtn').addEventListener('click', calculate);
 document.getElementById('conf').addEventListener('change', calculate);
 document.getElementById('customConf').addEventListener('input', calculate);
+window.CICharts && CICharts.customLevel({ onChange: calculate });
 calculate();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
