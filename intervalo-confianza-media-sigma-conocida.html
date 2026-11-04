@@ -182,11 +182,12 @@
             <div id="result" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
 
             <section class="card ss-chart-panel">
-                <h2 class="ss-chart-title">Intervalo de confianza sobre la distribución normal estándar</h2>
+                <h2 class="ss-chart-title">Intervalo de confianza para la media (σ conocida)</h2>
                 <div class="chart-wrap ss-chart">
                     <div class="ss-canvas">
-                        <canvas id="ciChart" aria-label="Gráfico del intervalo de confianza sobre la distribución normal estándar" role="img"></canvas>
+                        <canvas id="ciChart" aria-label="Gráfico de barras horizontales: intervalos de confianza al 90, 95 y 99 % y al nivel elegido, con la estimación puntual" role="img"></canvas>
                     </div>
+                    <p class="ss-chart-note" id="ciChartNote"></p>
                 </div>
             </section>
         </section>
@@ -280,8 +281,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="ci-charts.js?v=20261104-1"></script>
 <script>
-let ciChart;
 
 document.getElementById('conf').addEventListener('change', function () {
     document.getElementById('customConfRow').style.display = this.value === 'custom' ? '' : 'none';
@@ -293,62 +294,6 @@ function getConfLevel() {
     return parseFloat(sel);
 }
 
-function renderChart(zCrit, statValue) {
-    const ctx = document.getElementById('ciChart');
-    if (!ctx) return;
-
-    const bound = Math.max(4, Math.abs(zCrit) + 0.8);
-    const minX = -bound, maxX = bound;
-    const step = 0.02;
-
-    const curve = [], inside = [], outside = [];
-    for (let x = minX; x <= maxX; x += step) {
-        const y = jStat.normal.pdf(x, 0, 1);
-        curve.push({ x, y });
-        if (x >= -zCrit && x <= zCrit) {
-            inside.push({ x, y });
-            outside.push({ x, y: null });
-        } else {
-            inside.push({ x, y: null });
-            outside.push({ x, y });
-        }
-    }
-
-    const maxY = Math.max(...curve.map(p => p.y));
-    const statLine = Number.isFinite(statValue)
-        ? [{ x: statValue, y: 0 }, { x: statValue, y: maxY * 1.05 }]
-        : [];
-
-    if (ciChart) ciChart.destroy();
-    ciChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            datasets: [
-                { label: 'Región de confianza', data: inside, borderColor: 'rgba(34,197,94,0)', backgroundColor: 'rgba(34,197,94,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: 'Colas (α/2 cada una)', data: outside, borderColor: 'rgba(239,68,68,0)', backgroundColor: 'rgba(239,68,68,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: 'Distribución Normal estándar', data: curve, borderColor: '#1d4ed8', borderWidth: 2, pointRadius: 0, fill: false, parsing: false },
-                { label: 'Estadístico z observado', data: statLine, borderColor: '#f59e0b', borderWidth: 2, pointRadius: 0, fill: false, parsing: false }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: { type: 'linear', min: minX, max: maxX, title: { display: true, text: 'z' } },
-                y: { beginAtZero: true, title: { display: true, text: 'Densidad' } }
-            },
-            plugins: {
-                annotation: {
-                    annotations: {
-                        leftCrit: { type: 'line', xMin: -zCrit, xMax: -zCrit, borderColor: '#6366f1', borderWidth: 2, borderDash: [6, 3], label: { content: `-z${String.fromCharCode(0x03B1)}/2`, display: true, position: 'end' } },
-                        rightCrit: { type: 'line', xMin: zCrit, xMax: zCrit, borderColor: '#6366f1', borderWidth: 2, borderDash: [6, 3], label: { content: `+z${String.fromCharCode(0x03B1)}/2`, display: true, position: 'end' } }
-                    }
-                }
-            }
-        }
-    });
-}
-
 function calculate() {
     const xbar = parseFloat(document.getElementById('xbar').value);
     const sigma = parseFloat(document.getElementById('sigma').value);
@@ -358,7 +303,7 @@ function calculate() {
 
     if (![xbar, sigma, n, conf].every(Number.isFinite) || sigma <= 0 || n < 1 || conf <= 0 || conf >= 1) {
         resultEl.innerText = 'Error: revisa que σ > 0, n ≥ 1 y 0 < confianza < 1.';
-        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        window.CICharts && CICharts.clear('ciChart');
         return;
     }
 
@@ -374,7 +319,14 @@ function calculate() {
         `Error estándar: ${se.toFixed(6)}  |  Margen de error: ±${margin.toFixed(6)}\n` +
         `Intervalo de confianza: [${lower.toFixed(6)}, ${upper.toFixed(6)}]`;
 
-    renderChart(zCrit, 0);
+    window.CICharts && CICharts.intervals({
+        canvas: 'ciChart', estimate: xbar, confidence: conf, xLabel: 'μ',
+        interval: function (c, f) {
+            const m = jStat.normal.inv(1 - (1 - c) / 2, 0, 1) * sigma / Math.sqrt(n * f);
+            return [xbar - m, xbar + m];
+        },
+        sizeLabel: function (f) { return 'n = ' + Math.ceil(n * f); }
+    });
 }
 
 document.getElementById('calcBtn').addEventListener('click', calculate);

@@ -198,11 +198,12 @@
             <div id="result" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
 
             <section class="card ss-chart-panel">
-                <h2 class="ss-chart-title">Intervalo de confianza para odds ratio en escala logarítmica</h2>
+                <h2 class="ss-chart-title">Intervalo de confianza para la odds ratio</h2>
                 <div class="chart-wrap ss-chart">
                     <div class="ss-canvas">
-                        <canvas id="ciChart" aria-label="Gráfico del intervalo de confianza para odds ratio en escala logarítmica" role="img"></canvas>
+                        <canvas id="ciChart" aria-label="Gráfico de barras horizontales: intervalos de confianza al 90, 95 y 99 % y al nivel elegido, con la estimación puntual" role="img"></canvas>
                     </div>
+                    <p class="ss-chart-note" id="ciChartNote"></p>
                 </div>
             </section>
         </section>
@@ -362,8 +363,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="ci-charts.js?v=20261104-1"></script>
 <script>
-let ciChart;
 
 document.getElementById('conf').addEventListener('change', function () {
     document.getElementById('customConfRow').style.display = this.value === 'custom' ? '' : 'none';
@@ -381,49 +382,6 @@ function formatNumber(value, digits = 6) {
     return value.toFixed(digits);
 }
 
-function renderChart(logOr, lowerLog, upperLog, zCrit, seLog) {
-    const ctx = document.getElementById('ciChart');
-    if (!ctx) return;
-
-    const margin = Math.max(0.2, (zCrit + 0.8) * seLog);
-    const minX = logOr - margin;
-    const maxX = logOr + margin;
-    const step = (maxX - minX) / 300;
-    const curve = [], inside = [], outside = [];
-
-    for (let x = minX; x <= maxX; x += step) {
-        const y = jStat.normal.pdf(x, logOr, seLog);
-        curve.push({ x, y });
-        if (x >= lowerLog && x <= upperLog) {
-            inside.push({ x, y });
-            outside.push({ x, y: null });
-        } else {
-            inside.push({ x, y: null });
-            outside.push({ x, y });
-        }
-    }
-
-    if (ciChart) ciChart.destroy();
-    ciChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            datasets: [
-                { label: 'Región de confianza', data: inside, borderColor: 'rgba(34,197,94,0)', backgroundColor: 'rgba(34,197,94,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: 'Colas (α/2 cada una)', data: outside, borderColor: 'rgba(239,68,68,0)', backgroundColor: 'rgba(239,68,68,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: 'Normal sobre log(OR)', data: curve, borderColor: '#1d4ed8', borderWidth: 2, pointRadius: 0, fill: false, parsing: false }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: { type: 'linear', min: minX, max: maxX, title: { display: true, text: 'log(OR)' } },
-                y: { beginAtZero: true, title: { display: true, text: 'Densidad aproximada' } }
-            }
-        }
-    });
-}
-
 function calculate() {
     const raw = ['a', 'b', 'c', 'd'].map(id => parseFloat(document.getElementById(id).value));
     const conf = getConfLevel();
@@ -432,7 +390,7 @@ function calculate() {
 
     if (![...raw, conf].every(Number.isFinite) || raw.some(v => v < 0) || conf <= 0 || conf >= 1) {
         resultEl.innerText = 'Error: revisa que todas las celdas sean recuentos ≥ 0 y que 0 < confianza < 1.';
-        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        window.CICharts && CICharts.clear('ciChart');
         return;
     }
 
@@ -441,14 +399,14 @@ function calculate() {
 
     if (hasZero && correction === 'none') {
         resultEl.innerText = 'Error: hay al menos una celda con valor 0. Aplica la corrección 0,5 o introduce recuentos positivos.';
-        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        window.CICharts && CICharts.clear('ciChart');
         return;
     }
 
     const [a, b, c, d] = raw.map(v => addHalf ? v + 0.5 : v);
     if ([a, b, c, d].some(v => v <= 0)) {
         resultEl.innerText = 'Error: para calcular log(OR), todas las celdas utilizadas deben ser positivas.';
-        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        window.CICharts && CICharts.clear('ciChart');
         return;
     }
 
@@ -485,7 +443,17 @@ function calculate() {
         interpretation + smallCounts
     ].join('\n');
 
-    renderChart(logOr, lowerLog, upperLog, zCrit, seLog);
+    const L = document.documentElement.lang === 'en';
+    const totalRaw = raw.reduce(function (acc, v) { return acc + v; }, 0);
+    window.CICharts && CICharts.intervals({
+        canvas: 'ciChart', estimate: orValue, confidence: conf, xLabel: 'OR', log: true,
+        reference: 1, referenceLabel: L ? 'No association (1)' : 'Sin asociación (1)',
+        interval: function (c, f) {
+            const m = jStat.normal.inv(1 - (1 - c) / 2, 0, 1) * seLog / Math.sqrt(f);
+            return [Math.exp(logOr - m), Math.exp(logOr + m)];
+        },
+        sizeLabel: function (f) { return 'N = ' + Math.ceil(totalRaw * f); }
+    });
 }
 
 document.getElementById('calcBtn').addEventListener('click', calculate);

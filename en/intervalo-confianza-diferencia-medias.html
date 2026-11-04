@@ -205,11 +205,12 @@
             <div id="result" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
 
             <section class="card ss-chart-panel">
-                <h2 class="ss-chart-title">Confidence interval for the difference of means</h2>
+                <h2 class="ss-chart-title">Confidence interval for μ₁ − μ₂</h2>
                 <div class="chart-wrap ss-chart">
                     <div class="ss-canvas">
-                        <canvas id="ciChart" aria-label="Chart of the confidence interval for the difference of means" role="img"></canvas>
+                        <canvas id="ciChart" aria-label="Horizontal bar chart: confidence intervals at 90, 95 and 99% and at the chosen level, with the point estimate" role="img"></canvas>
                     </div>
+                    <p class="ss-chart-note" id="ciChartNote"></p>
                 </div>
             </section>
         </section>
@@ -307,8 +308,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../ci-charts.js?v=20261104-1"></script>
 <script>
-let ciChart;
 
 document.getElementById('conf').addEventListener('change', function () {
     document.getElementById('customConfRow').style.display = this.value === 'custom' ? '' : 'none';
@@ -318,48 +319,6 @@ function getConfLevel() {
     const sel = document.getElementById('conf').value;
     if (sel === 'custom') return parseFloat(document.getElementById('customConf').value);
     return parseFloat(sel);
-}
-
-function renderChart(tCrit, df) {
-    const ctx = document.getElementById('ciChart');
-    if (!ctx) return;
-
-    const bound = Math.max(4, Math.abs(tCrit) + 0.8);
-    const minX = -bound, maxX = bound;
-    const step = 0.02;
-
-    const curve = [], inside = [], outside = [];
-    for (let x = minX; x <= maxX; x += step) {
-        const y = jStat.studentt.pdf(x, df);
-        curve.push({ x, y });
-        if (x >= -tCrit && x <= tCrit) {
-            inside.push({ x, y });
-            outside.push({ x, y: null });
-        } else {
-            inside.push({ x, y: null });
-            outside.push({ x, y });
-        }
-    }
-
-    if (ciChart) ciChart.destroy();
-    ciChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            datasets: [
-                { label: 'Confidence region', data: inside, borderColor: 'rgba(34,197,94,0)', backgroundColor: 'rgba(34,197,94,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: 'Tails (α/2 each)', data: outside, borderColor: 'rgba(239,68,68,0)', backgroundColor: 'rgba(239,68,68,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: `Student's t (df = ${Math.round(df * 100) / 100})`, data: curve, borderColor: '#1d4ed8', borderWidth: 2, pointRadius: 0, fill: false, parsing: false }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: { type: 'linear', min: minX, max: maxX, title: { display: true, text: `t (df ≈ ${Math.round(df * 10) / 10})` } },
-                y: { beginAtZero: true, title: { display: true, text: 'Density' } }
-            }
-        }
-    });
 }
 
 function calculate() {
@@ -376,7 +335,7 @@ function calculate() {
     if (![xbar1, xbar2, s1, s2, n1, n2, conf].every(Number.isFinite) ||
         s1 <= 0 || s2 <= 0 || n1 < 2 || n2 < 2 || conf <= 0 || conf >= 1) {
         resultEl.innerText = 'Error: check that s₁,s₂ > 0, n₁,n₂ ≥ 2 and 0 < confidence < 1.';
-        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        window.CICharts && CICharts.clear('ciChart');
         return;
     }
 
@@ -410,7 +369,26 @@ function calculate() {
         `Confidence interval: [${lower.toFixed(6)}, ${upper.toFixed(6)}]\n` +
         (zeroIncluded ? 'ℹ The interval includes 0: no evidence of a significant difference.' : '✓ The interval does not include 0: there is evidence of a significant difference.');
 
-    renderChart(tCrit, df);
+    const L = document.documentElement.lang === 'en';
+    window.CICharts && CICharts.intervals({
+        canvas: 'ciChart', estimate: diff, confidence: conf, xLabel: 'μ₁ − μ₂',
+        reference: 0, referenceLabel: L ? 'No difference (0)' : 'Sin diferencia (0)',
+        interval: function (c, f) {
+            const a = n1 * f, b = n2 * f;
+            let seF, dfF;
+            if (varType === 'welch') {
+                const v1 = s1 * s1 / a, v2 = s2 * s2 / b;
+                seF = Math.sqrt(v1 + v2);
+                dfF = (v1 + v2) * (v1 + v2) / ((v1 * v1) / (a - 1) + (v2 * v2) / (b - 1));
+            } else {
+                seF = Math.sqrt(((a - 1) * s1 * s1 + (b - 1) * s2 * s2) / (a + b - 2) * (1 / a + 1 / b));
+                dfF = a + b - 2;
+            }
+            const m = jStat.studentt.inv(1 - (1 - c) / 2, dfF) * seF;
+            return [diff - m, diff + m];
+        },
+        sizeLabel: function (f) { return 'n₁ = ' + Math.ceil(n1 * f) + ', n₂ = ' + Math.ceil(n2 * f); }
+    });
 }
 
 document.getElementById('calcBtn').addEventListener('click', calculate);

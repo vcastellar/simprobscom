@@ -194,11 +194,12 @@
             <div id="result" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
 
             <section class="card ss-chart-panel">
-                <h2 class="ss-chart-title">Confidence interval for the difference of proportions</h2>
+                <h2 class="ss-chart-title">Confidence interval for p₁ − p₂</h2>
                 <div class="chart-wrap ss-chart">
                     <div class="ss-canvas">
-                        <canvas id="ciChart" aria-label="Chart of the confidence interval for the difference of proportions" role="img"></canvas>
+                        <canvas id="ciChart" aria-label="Horizontal bar chart: confidence intervals at 90, 95 and 99% and at the chosen level, with the point estimate" role="img"></canvas>
                     </div>
+                    <p class="ss-chart-note" id="ciChartNote"></p>
                 </div>
             </section>
         </section>
@@ -297,8 +298,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../ci-charts.js?v=20261104-1"></script>
 <script>
-let ciChart;
 
 document.getElementById('conf').addEventListener('change', function () {
     document.getElementById('customConfRow').style.display = this.value === 'custom' ? '' : 'none';
@@ -318,48 +319,6 @@ function wilsonInterval(x, n, zCrit) {
     return [Math.max(0, center - halfWidth), Math.min(1, center + halfWidth)];
 }
 
-function renderChart(zCrit) {
-    const ctx = document.getElementById('ciChart');
-    if (!ctx) return;
-
-    const bound = Math.max(4, zCrit + 0.8);
-    const minX = -bound, maxX = bound;
-    const step = 0.02;
-
-    const curve = [], inside = [], outside = [];
-    for (let x = minX; x <= maxX; x += step) {
-        const y = jStat.normal.pdf(x, 0, 1);
-        curve.push({ x, y });
-        if (x >= -zCrit && x <= zCrit) {
-            inside.push({ x, y });
-            outside.push({ x, y: null });
-        } else {
-            inside.push({ x, y: null });
-            outside.push({ x, y });
-        }
-    }
-
-    if (ciChart) ciChart.destroy();
-    ciChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            datasets: [
-                { label: 'Confidence region', data: inside, borderColor: 'rgba(34,197,94,0)', backgroundColor: 'rgba(34,197,94,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: 'Tails (α/2 each)', data: outside, borderColor: 'rgba(239,68,68,0)', backgroundColor: 'rgba(239,68,68,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: 'Standard normal distribution', data: curve, borderColor: '#1d4ed8', borderWidth: 2, pointRadius: 0, fill: false, parsing: false }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: { type: 'linear', min: minX, max: maxX, title: { display: true, text: 'z' } },
-                y: { beginAtZero: true, title: { display: true, text: 'Density' } }
-            }
-        }
-    });
-}
-
 function calculate() {
     const x1 = parseFloat(document.getElementById('x1').value);
     const n1 = parseFloat(document.getElementById('n1').value);
@@ -372,7 +331,7 @@ function calculate() {
     if (![x1, n1, x2, n2, conf].every(Number.isFinite) ||
         x1 < 0 || x2 < 0 || n1 < 1 || n2 < 1 || x1 > n1 || x2 > n2 || conf <= 0 || conf >= 1) {
         resultEl.innerText = 'Error: check that 0 ≤ x₁ ≤ n₁, 0 ≤ x₂ ≤ n₂, n₁,n₂ ≥ 1 and 0 < confidence < 1.';
-        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        window.CICharts && CICharts.clear('ciChart');
         return;
     }
 
@@ -424,7 +383,26 @@ function calculate() {
     if (warning) lines.push(warning);
 
     resultEl.innerText = lines.join('\n');
-    renderChart(zCrit);
+    const L = document.documentElement.lang === 'en';
+    const zOf = function (c) { return jStat.normal.inv(1 - (1 - c) / 2, 0, 1); };
+    const waldFn = function (c, f) {
+        const m = zOf(c) * Math.sqrt(p1 * (1 - p1) / (n1 * f) + p2 * (1 - p2) / (n2 * f));
+        return [Math.max(-1, diff - m), Math.min(1, diff + m)];
+    };
+    const newcombeFn = function (c, f) {
+        const z = zOf(c);
+        const w1 = wilsonInterval(x1 * f, n1 * f, z), w2 = wilsonInterval(x2 * f, n2 * f, z);
+        return [Math.max(-1, diff - Math.sqrt((p1 - w1[0]) ** 2 + (w2[1] - p2) ** 2)),
+                Math.min(1, diff + Math.sqrt((w1[1] - p1) ** 2 + (p2 - w2[0]) ** 2))];
+    };
+    window.CICharts && CICharts.intervals({
+        canvas: 'ciChart', estimate: diff, confidence: conf, xLabel: 'p₁ − p₂', xMin: -1, xMax: 1,
+        reference: 0, referenceLabel: L ? 'No difference (0)' : 'Sin diferencia (0)',
+        method: method === 'wald' ? 'Wald' : 'Newcombe',
+        interval: method === 'wald' ? waldFn : newcombeFn,
+        compare: method === 'both' ? { label: 'Wald', interval: waldFn } : null,
+        sizeLabel: function (f) { return 'n₁ = ' + Math.ceil(n1 * f) + ', n₂ = ' + Math.ceil(n2 * f); }
+    });
 }
 
 document.getElementById('calcBtn').addEventListener('click', calculate);

@@ -188,6 +188,7 @@
                     <div class="ss-canvas">
                         <canvas id="fpChart" aria-label="Gráfico del intervalo de confianza para la proporción" role="img"></canvas>
                     </div>
+                    <p class="ss-chart-note" id="fpChartNote"></p>
                 </div>
             </section>
         </section>
@@ -275,6 +276,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="ci-charts.js?v=20261104-1"></script>
 <script>
 let fpChart;
 
@@ -347,6 +349,7 @@ function renderFpChart(pHat, corrL, corrU, stdL, stdU) {
 }
 
 function calculateFp() {
+    window.CICharts && CICharts.clearNote('fpChart');
     const x = parseFloat(document.getElementById('fpX').value);
     const n = parseFloat(document.getElementById('fpN').value);
     const bigN = parseFloat(document.getElementById('fpBigN').value);
@@ -386,6 +389,17 @@ function calculateFp() {
         `Reducción de amplitud: ${((1 - (corrU - corrL) / (stdU - stdL)) * 100).toFixed(2)} %${warning}`;
 
     renderFpChart(pHat, corrL, corrU, stdL, stdU);
+
+    window.CICharts && CICharts.note({
+        canvas: 'fpChart', confidence: conf, maxFactor: bigN / n,
+        width: function (f) {
+            const nf = n * f;
+            if (nf > bigN) return null;
+            const m = z * Math.sqrt(pHat * (1 - pHat) / nf) * Math.sqrt((bigN - nf) / (bigN - 1));
+            return Math.min(1, pHat + m) - Math.max(0, pHat - m);
+        },
+        sizeLabel: function (f) { return 'n = ' + Math.ceil(n * f); }
+    });
 }
 
 document.getElementById('fpCalcBtn').addEventListener('click', calculateFp);

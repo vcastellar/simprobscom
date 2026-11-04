@@ -173,11 +173,12 @@
             <div id="result" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
 
             <section class="card ss-chart-panel">
-                <h2 class="ss-chart-title">Confidence interval for the variance over the chi-square distribution</h2>
+                <h2 class="ss-chart-title">Confidence interval for σ² (and σ)</h2>
                 <div class="chart-wrap ss-chart">
                     <div class="ss-canvas">
-                        <canvas id="ciChart" aria-label="Chart of the confidence interval for the variance over the chi-square distribution" role="img"></canvas>
+                        <canvas id="ciChart" aria-label="Horizontal bar chart: confidence intervals at 90, 95 and 99% and at the chosen level, with the point estimate" role="img"></canvas>
                     </div>
+                    <p class="ss-chart-note" id="ciChartNote"></p>
                 </div>
             </section>
         </section>
@@ -261,8 +262,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../ci-charts.js?v=20261104-1"></script>
 <script>
-let ciChart;
 
 document.getElementById('conf').addEventListener('change', function () {
     document.getElementById('customConfRow').style.display = this.value === 'custom' ? '' : 'none';
@@ -274,55 +275,6 @@ function getConfLevel() {
     return parseFloat(sel);
 }
 
-function renderChart(df, chiLow, chiHigh) {
-    const ctx = document.getElementById('ciChart');
-    if (!ctx) return;
-
-    const maxX = Math.min(chiHigh * 1.6, df + 5 * Math.sqrt(2 * df));
-    const minX = 0;
-    const step = maxX / 300;
-
-    const curve = [], inside = [], outsideLeft = [], outsideRight = [];
-    for (let x = minX + step; x <= maxX; x += step) {
-        const y = jStat.chisquare.pdf(x, df);
-        curve.push({ x, y });
-        if (x >= chiLow && x <= chiHigh) {
-            inside.push({ x, y });
-            outsideLeft.push({ x, y: null });
-            outsideRight.push({ x, y: null });
-        } else if (x < chiLow) {
-            inside.push({ x, y: null });
-            outsideLeft.push({ x, y });
-            outsideRight.push({ x, y: null });
-        } else {
-            inside.push({ x, y: null });
-            outsideLeft.push({ x, y: null });
-            outsideRight.push({ x, y });
-        }
-    }
-
-    if (ciChart) ciChart.destroy();
-    ciChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            datasets: [
-                { label: 'Confidence region', data: inside, borderColor: 'rgba(34,197,94,0)', backgroundColor: 'rgba(34,197,94,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: 'Left tail (α/2)', data: outsideLeft, borderColor: 'rgba(239,68,68,0)', backgroundColor: 'rgba(239,68,68,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: 'Right tail (α/2)', data: outsideRight, borderColor: 'rgba(239,68,68,0)', backgroundColor: 'rgba(239,68,68,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: `Chi-square (df = ${df})`, data: curve, borderColor: '#1d4ed8', borderWidth: 2, pointRadius: 0, fill: false, parsing: false }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: { type: 'linear', min: minX, max: maxX, title: { display: true, text: `χ² (df = ${df})` } },
-                y: { beginAtZero: true, title: { display: true, text: 'Density' } }
-            }
-        }
-    });
-}
-
 function calculate() {
     const s = parseFloat(document.getElementById('s').value);
     const n = parseFloat(document.getElementById('n').value);
@@ -331,7 +283,7 @@ function calculate() {
 
     if (![s, n, conf].every(Number.isFinite) || s <= 0 || n < 2 || conf <= 0 || conf >= 1) {
         resultEl.innerText = 'Error: check that s > 0, n ≥ 2 and 0 < confidence < 1.';
-        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        window.CICharts && CICharts.clear('ciChart');
         return;
     }
 
@@ -354,7 +306,15 @@ function calculate() {
         `CI for σ²: [${varLow.toFixed(6)}, ${varHigh.toFixed(6)}]\n` +
         `CI for σ:  [${sdLow.toFixed(6)}, ${sdHigh.toFixed(6)}]`;
 
-    renderChart(df, chiLow, chiHigh);
+    window.CICharts && CICharts.intervals({
+        canvas: 'ciChart', estimate: s2, confidence: conf, xLabel: 'σ²', xMin: 0,
+        topAxis: { label: 'σ', map: Math.sqrt, inverse: function (v) { return v * v; } },
+        interval: function (c, f) {
+            const g = n * f - 1, a = 1 - c;
+            return [g * s2 / jStat.chisquare.inv(1 - a / 2, g), g * s2 / jStat.chisquare.inv(a / 2, g)];
+        },
+        sizeLabel: function (f) { return 'n = ' + Math.ceil(n * f); }
+    });
 }
 
 document.getElementById('calcBtn').addEventListener('click', calculate);
