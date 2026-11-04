@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261102-2">
 
     <script type="application/ld+json">
 {
@@ -126,51 +126,60 @@
     </header>
 
     <main>
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Enter the sample standard deviation and sample size to get the intervals for variance and standard deviation.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Enter the sample standard deviation and sample size to get the intervals for variance and standard deviation.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="s">Sample standard deviation (s) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="s" value="2.3" step="0.001" min="0.0001">
-                        <p class="field-hint" hidden>Standard deviation calculated from the sample (with divisor n−1); s² is derived from it to build the interval.</p>
+                <div class="form-grid sample-grid">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="s">Sample standard deviation (s) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="s" value="2.3" step="0.001" min="0.0001">
+                            <p class="field-hint" hidden>Standard deviation calculated from the sample (with divisor n−1); s² is derived from it to build the interval.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="n">Sample size (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="n" value="25" step="1" min="2">
+                            <p class="field-hint" hidden>Number of observations in the sample. It determines the degrees of freedom of the chi-square (df = n − 1).</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="n">Sample size (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="n" value="25" step="1" min="2">
-                        <p class="field-hint" hidden>Number of observations in the sample. It determines the degrees of freedom of the chi-square (df = n − 1).</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="conf">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <select id="conf">
+                                <option value="0.90">90%</option>
+                                <option value="0.95" selected>95%</option>
+                                <option value="0.99">99%</option>
+                                <option value="custom">Custom…</option>
+                            </select>
+                            <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true population variance. <strong>95%</strong> is the usual standard.</p>
+                        </div>
+                    </div>
+                    <div class="inline-inputs" id="customConfRow" style="display:none">
+                        <div class="form-group">
+                            <label for="customConf">Custom confidence level (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
+                            <p class="field-hint" hidden>Enter the confidence level as a proportion between 0 and 1 (for example, 0.98 for 98%).</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="conf">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <select id="conf">
-                            <option value="0.90">90%</option>
-                            <option value="0.95" selected>95%</option>
-                            <option value="0.99">99%</option>
-                            <option value="custom">Custom…</option>
-                        </select>
-                        <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true population variance. <strong>95%</strong> is the usual standard.</p>
-                    </div>
-                </div>
-                <div class="inline-inputs" id="customConfRow" style="display:none">
-                    <div class="form-group">
-                        <label for="customConf">Custom confidence level (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
-                        <p class="field-hint" hidden>Enter the confidence level as a proportion between 0 and 1 (for example, 0.98 for 98%).</p>
-                    </div>
-                </div>
-            </div>
 
-            <button class="calculate-btn" id="calcBtn">Calculate interval</button>
-            <div id="result" class="result-box">Result pending…</div>
-            <div class="chart-wrap">
-                <canvas id="ciChart" aria-label="Chart of the confidence interval for the variance over the chi-square distribution" role="img"></canvas>
-            </div>
+                <button class="calculate-btn" id="calcBtn">Calculate interval</button>
+            </section>
+
+            <div id="result" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Confidence interval for the variance over the chi-square distribution</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="ciChart" aria-label="Chart of the confidence interval for the variance over the chi-square distribution" role="img"></canvas>
+                    </div>
+                </div>
+            </section>
         </section>
 
         <section class="card content-card">

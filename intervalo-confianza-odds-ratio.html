@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="style_new.css?v=20261102-2">
 
     <script type="application/ld+json">
     {
@@ -130,72 +130,81 @@
     </header>
 
     <main>
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Introduce los cuatro recuentos de la tabla 2x2 para estimar la odds ratio y su intervalo de confianza.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Introduce los cuatro recuentos de la tabla 2x2 para estimar la odds ratio y su intervalo de confianza.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="a">Expuestos con evento (a) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="a" value="35" step="1" min="0">
-                        <p class="field-hint" hidden>Número de sujetos expuestos al factor de interés que presentaron el evento.</p>
+                <div class="form-grid sample-grid">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="a">Expuestos con evento (a) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="a" value="35" step="1" min="0">
+                            <p class="field-hint" hidden>Número de sujetos expuestos al factor de interés que presentaron el evento.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="b">Expuestos sin evento (b) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="b" value="65" step="1" min="0">
+                            <p class="field-hint" hidden>Número de sujetos expuestos al factor de interés que NO presentaron el evento.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="b">Expuestos sin evento (b) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="b" value="65" step="1" min="0">
-                        <p class="field-hint" hidden>Número de sujetos expuestos al factor de interés que NO presentaron el evento.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="c">No expuestos con evento (c) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="c" value="20" step="1" min="0">
+                            <p class="field-hint" hidden>Número de sujetos no expuestos que presentaron el evento.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="d">No expuestos sin evento (d) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="d" value="80" step="1" min="0">
+                            <p class="field-hint" hidden>Número de sujetos no expuestos que NO presentaron el evento.</p>
+                        </div>
+                    </div>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="conf">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <select id="conf">
+                                <option value="0.90">90 %</option>
+                                <option value="0.95" selected>95 %</option>
+                                <option value="0.99">99 %</option>
+                                <option value="custom">Personalizado…</option>
+                            </select>
+                            <p class="field-hint" hidden>Probabilidad de que el procedimiento produzca un intervalo que contenga la odds ratio real. <strong>95 %</strong> es el estándar habitual.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="correction">Celdas cero <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <select id="correction">
+                                <option value="auto" selected>Corrección 0,5 automática</option>
+                                <option value="always">Aplicar siempre 0,5</option>
+                                <option value="none">No aplicar corrección</option>
+                            </select>
+                            <p class="field-hint" hidden>La corrección de Haldane-Anscombe suma <strong>0,5</strong> a las cuatro celdas cuando alguna vale 0, para poder calcular el logaritmo del OR y su error estándar.</p>
+                        </div>
+                    </div>
+                    <div class="inline-inputs" id="customConfRow" style="display:none">
+                        <div class="form-group">
+                            <label for="customConf">Nivel de confianza personalizado (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
+                            <p class="field-hint" hidden>Introduce un nivel de confianza entre 0 y 1, por ejemplo <strong>0,95</strong> para un 95 %.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="c">No expuestos con evento (c) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="c" value="20" step="1" min="0">
-                        <p class="field-hint" hidden>Número de sujetos no expuestos que presentaron el evento.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="d">No expuestos sin evento (d) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="d" value="80" step="1" min="0">
-                        <p class="field-hint" hidden>Número de sujetos no expuestos que NO presentaron el evento.</p>
-                    </div>
-                </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="conf">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <select id="conf">
-                            <option value="0.90">90 %</option>
-                            <option value="0.95" selected>95 %</option>
-                            <option value="0.99">99 %</option>
-                            <option value="custom">Personalizado…</option>
-                        </select>
-                        <p class="field-hint" hidden>Probabilidad de que el procedimiento produzca un intervalo que contenga la odds ratio real. <strong>95 %</strong> es el estándar habitual.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="correction">Celdas cero <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <select id="correction">
-                            <option value="auto" selected>Corrección 0,5 automática</option>
-                            <option value="always">Aplicar siempre 0,5</option>
-                            <option value="none">No aplicar corrección</option>
-                        </select>
-                        <p class="field-hint" hidden>La corrección de Haldane-Anscombe suma <strong>0,5</strong> a las cuatro celdas cuando alguna vale 0, para poder calcular el logaritmo del OR y su error estándar.</p>
-                    </div>
-                </div>
-                <div class="inline-inputs" id="customConfRow" style="display:none">
-                    <div class="form-group">
-                        <label for="customConf">Nivel de confianza personalizado (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
-                        <p class="field-hint" hidden>Introduce un nivel de confianza entre 0 y 1, por ejemplo <strong>0,95</strong> para un 95 %.</p>
-                    </div>
-                </div>
-            </div>
 
-            <button class="calculate-btn" id="calcBtn">Calcular intervalo</button>
-            <div id="result" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap">
-                <canvas id="ciChart" aria-label="Gráfico del intervalo de confianza para odds ratio en escala logarítmica" role="img"></canvas>
-            </div>
+                <button class="calculate-btn" id="calcBtn">Calcular intervalo</button>
+            </section>
+
+            <div id="result" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Intervalo de confianza para odds ratio en escala logarítmica</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="ciChart" aria-label="Gráfico del intervalo de confianza para odds ratio en escala logarítmica" role="img"></canvas>
+                    </div>
+                </div>
+            </section>
         </section>
 
         <section class="card content-card">

@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261102-2">
 
     <script type="application/ld+json">
     {
@@ -126,67 +126,76 @@
     </header>
 
     <main>
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Enter the mean and standard deviation of the individual differences, along with the number of pairs.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Enter the mean and standard deviation of the individual differences, along with the number of pairs.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="meanDiff">Mean of the differences (d̄) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="meanDiff" value="4.2" step="0.01">
-                        <p class="field-hint" hidden>Sample mean of the individual differences \(d_i\) = after − before (or whichever definition you pick below).</p>
+                <div class="form-grid sample-grid">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="meanDiff">Mean of the differences (d̄) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="meanDiff" value="4.2" step="0.01">
+                            <p class="field-hint" hidden>Sample mean of the individual differences \(d_i\) = after − before (or whichever definition you pick below).</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="sdDiff">Standard deviation of the differences (s<sub>d</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="sdDiff" value="6.1" step="0.001" min="0.0001">
+                            <p class="field-hint" hidden>Standard deviation of the individual differences, <strong>not</strong> that of the before or after measurements taken separately.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="sdDiff">Standard deviation of the differences (s<sub>d</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="sdDiff" value="6.1" step="0.001" min="0.0001">
-                        <p class="field-hint" hidden>Standard deviation of the individual differences, <strong>not</strong> that of the before or after measurements taken separately.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="n">Number of pairs (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="n" value="18" step="1" min="2">
+                            <p class="field-hint" hidden>Number of observed pairs (not the total number of individual measurements).</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="conf">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <select id="conf">
+                                <option value="0.90">90%</option>
+                                <option value="0.95" selected>95%</option>
+                                <option value="0.99">99%</option>
+                                <option value="custom">Custom…</option>
+                            </select>
+                            <p class="field-hint" hidden>Probability that the procedure captures the true mean of the differences \(\mu_d\). <strong>95%</strong> is the usual standard.</p>
+                        </div>
+                    </div>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="direction">Definition of the difference <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <select id="direction">
+                                <option value="after-before" selected>After − before</option>
+                                <option value="before-after">Before − after</option>
+                                <option value="method1-method2">Method 1 − method 2</option>
+                            </select>
+                            <p class="field-hint" hidden>How each individual difference \(d_i\) is calculated. Changing the definition flips the sign of the whole interval.</p>
+                        </div>
+                    </div>
+                    <div class="inline-inputs" id="customConfRow" style="display:none">
+                        <div class="form-group">
+                            <label for="customConf">Custom confidence level (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
+                            <p class="field-hint" hidden>Enter the confidence level as a proportion between 0 and 1, for example <strong>0.90</strong> for 90%.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="n">Number of pairs (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="n" value="18" step="1" min="2">
-                        <p class="field-hint" hidden>Number of observed pairs (not the total number of individual measurements).</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="conf">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <select id="conf">
-                            <option value="0.90">90%</option>
-                            <option value="0.95" selected>95%</option>
-                            <option value="0.99">99%</option>
-                            <option value="custom">Custom…</option>
-                        </select>
-                        <p class="field-hint" hidden>Probability that the procedure captures the true mean of the differences \(\mu_d\). <strong>95%</strong> is the usual standard.</p>
-                    </div>
-                </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="direction">Definition of the difference <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <select id="direction">
-                            <option value="after-before" selected>After − before</option>
-                            <option value="before-after">Before − after</option>
-                            <option value="method1-method2">Method 1 − method 2</option>
-                        </select>
-                        <p class="field-hint" hidden>How each individual difference \(d_i\) is calculated. Changing the definition flips the sign of the whole interval.</p>
-                    </div>
-                </div>
-                <div class="inline-inputs" id="customConfRow" style="display:none">
-                    <div class="form-group">
-                        <label for="customConf">Custom confidence level (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
-                        <p class="field-hint" hidden>Enter the confidence level as a proportion between 0 and 1, for example <strong>0.90</strong> for 90%.</p>
-                    </div>
-                </div>
-            </div>
 
-            <button class="calculate-btn" id="calcBtn">Calculate interval</button>
-            <div id="result" class="result-box">Result pending…</div>
-            <div class="chart-wrap">
-                <canvas id="ciChart" aria-label="Chart of the confidence interval for paired means" role="img"></canvas>
-            </div>
+                <button class="calculate-btn" id="calcBtn">Calculate interval</button>
+            </section>
+
+            <div id="result" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Confidence interval for paired means</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="ciChart" aria-label="Chart of the confidence interval for paired means" role="img"></canvas>
+                    </div>
+                </div>
+            </section>
         </section>
 
         <section class="card content-card">

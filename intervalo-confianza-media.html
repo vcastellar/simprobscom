@@ -130,56 +130,65 @@
     </header>
 
     <main>
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Introduce los datos para obtener el intervalo de confianza usando la distribución t de Student.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Introduce los datos para obtener el intervalo de confianza usando la distribución t de Student.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="xbar">Media muestral (x̄) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="xbar" value="245.3" step="0.01">
-                        <p class="field-hint" hidden>Media observada en tu muestra; es el centro del intervalo de confianza. Ej.: 245,3 ms de tiempo de respuesta medio.</p>
+                <div class="form-grid sample-grid">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="xbar">Media muestral (x̄) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="xbar" value="245.3" step="0.01">
+                            <p class="field-hint" hidden>Media observada en tu muestra; es el centro del intervalo de confianza. Ej.: 245,3 ms de tiempo de respuesta medio.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="s">Desviación estándar muestral (s) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="s" value="38.7" step="0.001" min="0.0001">
+                            <p class="field-hint" hidden>Desviación estándar calculada en la muestra (con divisor n−1); mide cuánto varían los datos respecto a x̄.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="s">Desviación estándar muestral (s) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="s" value="38.7" step="0.001" min="0.0001">
-                        <p class="field-hint" hidden>Desviación estándar calculada en la muestra (con divisor n−1); mide cuánto varían los datos respecto a x̄.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="n">Tamaño muestral (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="n" value="15" step="1" min="2">
+                            <p class="field-hint" hidden>Número de observaciones de la muestra. Determina los grados de libertad de la t de Student (gl = n − 1) y el error estándar.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="conf">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <select id="conf">
+                                <option value="0.90">90 %</option>
+                                <option value="0.95" selected>95 %</option>
+                                <option value="0.99">99 %</option>
+                                <option value="custom">Personalizado…</option>
+                            </select>
+                            <p class="field-hint" hidden>Probabilidad de que el procedimiento produzca un intervalo que contenga la media poblacional real. <strong>95 %</strong> es el estándar habitual.</p>
+                        </div>
+                    </div>
+                    <div class="inline-inputs" id="customConfRow" style="display:none">
+                        <div class="form-group">
+                            <label for="customConf">Nivel de confianza personalizado (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
+                            <p class="field-hint" hidden>Introduce el nivel de confianza como proporción entre 0 y 1 (por ejemplo, 0,98 para un 98 %).</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="n">Tamaño muestral (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="n" value="15" step="1" min="2">
-                        <p class="field-hint" hidden>Número de observaciones de la muestra. Determina los grados de libertad de la t de Student (gl = n − 1) y el error estándar.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="conf">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <select id="conf">
-                            <option value="0.90">90 %</option>
-                            <option value="0.95" selected>95 %</option>
-                            <option value="0.99">99 %</option>
-                            <option value="custom">Personalizado…</option>
-                        </select>
-                        <p class="field-hint" hidden>Probabilidad de que el procedimiento produzca un intervalo que contenga la media poblacional real. <strong>95 %</strong> es el estándar habitual.</p>
-                    </div>
-                </div>
-                <div class="inline-inputs" id="customConfRow" style="display:none">
-                    <div class="form-group">
-                        <label for="customConf">Nivel de confianza personalizado (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
-                        <p class="field-hint" hidden>Introduce el nivel de confianza como proporción entre 0 y 1 (por ejemplo, 0,98 para un 98 %).</p>
-                    </div>
-                </div>
-            </div>
 
-            <button class="calculate-btn" id="calcBtn">Calcular intervalo</button>
-            <div id="result" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap">
-                <canvas id="ciChart" aria-label="Gráfico del intervalo de confianza sobre la distribución t de Student" role="img"></canvas>
-            </div>
+                <button class="calculate-btn" id="calcBtn">Calcular intervalo</button>
+            </section>
+
+            <div id="result" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Intervalo de confianza sobre la distribución t de Student</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="ciChart" aria-label="Gráfico del intervalo de confianza sobre la distribución t de Student" role="img"></canvas>
+                    </div>
+                </div>
+            </section>
         </section>
 
         <aside class="sim-callout" aria-label="Simulación relacionada">

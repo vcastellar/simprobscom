@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261102-2">
 
     <script type="application/ld+json">
     {
@@ -126,72 +126,81 @@
     </header>
 
     <main>
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Enter events and sample sizes for two independent groups to estimate the ratio \(p_1/p_2\).</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Enter events and sample sizes for two independent groups to estimate the ratio \(p_1/p_2\).</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="x1">Events group 1 (x₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="x1" value="35" step="1" min="0">
-                        <p class="field-hint" hidden>Number of cases with the event in group 1 (exposed). Together with n₁ it gives the proportion p̂₁ = x₁/n₁.</p>
+                <div class="form-grid sample-grid">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="x1">Events group 1 (x₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="x1" value="35" step="1" min="0">
+                            <p class="field-hint" hidden>Number of cases with the event in group 1 (exposed). Together with n₁ it gives the proportion p̂₁ = x₁/n₁.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="n1">Sample size group 1 (n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="n1" value="100" step="1" min="1">
+                            <p class="field-hint" hidden>Total number of observations in group 1.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="n1">Sample size group 1 (n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="n1" value="100" step="1" min="1">
-                        <p class="field-hint" hidden>Total number of observations in group 1.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="x2">Events group 2 (x₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="x2" value="20" step="1" min="0">
+                            <p class="field-hint" hidden>Number of cases with the event in group 2 (unexposed or reference). Together with n₂ it gives the proportion p̂₂ = x₂/n₂.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="n2">Sample size group 2 (n₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="n2" value="100" step="1" min="1">
+                            <p class="field-hint" hidden>Total number of observations in group 2.</p>
+                        </div>
+                    </div>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="conf">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <select id="conf">
+                                <option value="0.90">90%</option>
+                                <option value="0.95" selected>95%</option>
+                                <option value="0.99">99%</option>
+                                <option value="custom">Custom…</option>
+                            </select>
+                            <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true ratio of proportions. <strong>95%</strong> is the usual standard.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="correction">Zero cells <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <select id="correction">
+                                <option value="auto" selected>Automatic 0.5 correction</option>
+                                <option value="always">Always apply 0.5</option>
+                                <option value="none">Do not apply correction</option>
+                            </select>
+                            <p class="field-hint" hidden>If x₁ or x₂ is 0, the logarithm of the ratio cannot be calculated. The correction adds 0.5 to the four cells of the 2x2 table before computing the interval.</p>
+                        </div>
+                    </div>
+                    <div class="inline-inputs" id="customConfRow" style="display:none">
+                        <div class="form-group">
+                            <label for="customConf">Custom confidence level (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
+                            <p class="field-hint" hidden>Custom confidence level, on a 0–1 scale (for example 0.98 for 98%); it is only used if you pick “Custom…” above.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="x2">Events group 2 (x₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="x2" value="20" step="1" min="0">
-                        <p class="field-hint" hidden>Number of cases with the event in group 2 (unexposed or reference). Together with n₂ it gives the proportion p̂₂ = x₂/n₂.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="n2">Sample size group 2 (n₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="n2" value="100" step="1" min="1">
-                        <p class="field-hint" hidden>Total number of observations in group 2.</p>
-                    </div>
-                </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="conf">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <select id="conf">
-                            <option value="0.90">90%</option>
-                            <option value="0.95" selected>95%</option>
-                            <option value="0.99">99%</option>
-                            <option value="custom">Custom…</option>
-                        </select>
-                        <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true ratio of proportions. <strong>95%</strong> is the usual standard.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="correction">Zero cells <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <select id="correction">
-                            <option value="auto" selected>Automatic 0.5 correction</option>
-                            <option value="always">Always apply 0.5</option>
-                            <option value="none">Do not apply correction</option>
-                        </select>
-                        <p class="field-hint" hidden>If x₁ or x₂ is 0, the logarithm of the ratio cannot be calculated. The correction adds 0.5 to the four cells of the 2x2 table before computing the interval.</p>
-                    </div>
-                </div>
-                <div class="inline-inputs" id="customConfRow" style="display:none">
-                    <div class="form-group">
-                        <label for="customConf">Custom confidence level (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
-                        <p class="field-hint" hidden>Custom confidence level, on a 0–1 scale (for example 0.98 for 98%); it is only used if you pick “Custom…” above.</p>
-                    </div>
-                </div>
-            </div>
 
-            <button class="calculate-btn" id="calcBtn">Calculate interval</button>
-            <div id="result" class="result-box">Result pending…</div>
-            <div class="chart-wrap">
-                <canvas id="ciChart" aria-label="Chart of the confidence interval for the ratio of proportions on a logarithmic scale" role="img"></canvas>
-            </div>
+                <button class="calculate-btn" id="calcBtn">Calculate interval</button>
+            </section>
+
+            <div id="result" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Confidence interval for the ratio of proportions on a logarithmic scale</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="ciChart" aria-label="Chart of the confidence interval for the ratio of proportions on a logarithmic scale" role="img"></canvas>
+                    </div>
+                </div>
+            </section>
         </section>
 
         <section class="card content-card">
