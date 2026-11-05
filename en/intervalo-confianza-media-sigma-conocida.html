@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261104-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261105-1">
 
     <script type="application/ld+json">
 {
@@ -282,7 +282,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../ci-charts.js?v=20261104-3"></script>
+<script src="../ci-charts.js?v=20261105-2"></script>
 <script>
 
 document.getElementById('conf').addEventListener('change', function () {
@@ -314,11 +314,20 @@ function calculate() {
     const margin = zCrit * se;
     const lower = xbar - margin;
     const upper = xbar + margin;
-
-    resultEl.innerText =
-        `Confidence level: ${(conf * 100).toFixed(1)}%  |  Critical z: ±${zCrit.toFixed(4)}\n` +
-        `Standard error: ${se.toFixed(6)}  |  Margin of error: ±${margin.toFixed(6)}\n` +
-        `Confidence interval: [${lower.toFixed(6)}, ${upper.toFixed(6)}]`;
+    const EN = document.documentElement.lang === 'en';
+    window.CICharts && CICharts.result(resultEl, {
+        label: EN ? CICharts.pct(conf) + ' confidence interval for the mean μ (known σ)' : 'Intervalo de confianza al ' + CICharts.pct(conf) + ' para la media μ (σ conocida)',
+        main: { lo: lower, hi: upper },
+        details: [
+            [EN ? 'Confidence level' : 'Nivel de confianza', CICharts.confDetail(conf)],
+            [EN ? 'Critical z' : 'z crítico', '±' + CICharts.num(zCrit, 4)],
+            [EN ? 'Sample mean (x̄)' : 'Media muestral (x̄)', xbar],
+            [EN ? 'Population standard deviation (σ)' : 'Desviación estándar poblacional (σ)', sigma],
+            [EN ? 'Sample size (n)' : 'Tamaño muestral (n)', n],
+            [EN ? 'Standard error' : 'Error estándar', se],
+            [EN ? 'Margin of error' : 'Margen de error', '±' + CICharts.num(margin)]
+        ]
+    });
 
     window.CICharts && CICharts.intervals({
         canvas: 'ciChart', estimate: xbar, confidence: conf, custom: document.getElementById('conf').value === 'custom', xLabel: 'μ',

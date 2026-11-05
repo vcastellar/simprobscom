@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261104-2">
+    <link rel="stylesheet" href="style_new.css?v=20261105-1">
 
     <script type="application/ld+json">
 {
@@ -342,7 +342,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="ci-charts.js?v=20261104-3"></script>
+<script src="ci-charts.js?v=20261105-2"></script>
 <script>
 
 document.getElementById('conf').addEventListener('change', function () {
@@ -387,18 +387,21 @@ function calculate() {
     const waldOk = n * pHat >= 5 && n * (1 - pHat) >= 5;
     const warning = waldOk ? '' : '\n⚠ Condición de normalidad no cumplida (n·p̂ < 5 o n·(1−p̂) < 5). Se recomienda usar Wilson.';
 
-    let lines = [
-        `p̂ = ${pHat.toFixed(6)}  |  Nivel de confianza: ${(conf * 100).toFixed(1)} %  |  z crítico: ±${zCrit.toFixed(4)}`
-    ];
-    if (method === 'both' || method === 'wald') {
-        lines.push(`Wald:   [${waldL.toFixed(6)}, ${waldU.toFixed(6)}]  (amplitud: ${(waldU - waldL).toFixed(6)})`);
-    }
-    if (method === 'both' || method === 'wilson') {
-        lines.push(`Wilson: [${wilsonL.toFixed(6)}, ${wilsonU.toFixed(6)}]  (amplitud: ${(wilsonU - wilsonL).toFixed(6)})`);
-    }
-    if (warning) lines.push(warning);
-
-    resultEl.innerText = lines.join('\n');
+    const EN = document.documentElement.lang === 'en';
+    const mainWald = method === 'wald';
+    window.CICharts && CICharts.result(resultEl, {
+        label: (EN ? CICharts.pct(conf) + ' confidence interval for the proportion p' : 'Intervalo de confianza al ' + CICharts.pct(conf) + ' para la proporción p') + (mainWald ? ' (Wald)' : ' (Wilson)'),
+        main: mainWald ? { lo: waldL, hi: waldU } : { lo: wilsonL, hi: wilsonU },
+        secondary: method === 'both' ? [{ label: 'Wald', lo: waldL, hi: waldU }] : [],
+        notes: [warning],
+        details: [
+            [EN ? 'Confidence level' : 'Nivel de confianza', CICharts.confDetail(conf)],
+            [EN ? 'Critical z' : 'z crítico', '±' + CICharts.num(zCrit, 4)],
+            [EN ? 'Sample proportion (p̂)' : 'Proporción muestral (p̂)', CICharts.num(pHat, 4) + ' (' + x + (EN ? ' of ' : ' de ') + n + ')'],
+            [EN ? 'Standard error (Wald)' : 'Error estándar (Wald)', seWald],
+            [EN ? 'Margin of error (Wald)' : 'Margen de error (Wald)', '±' + CICharts.num(zCrit * seWald)]
+        ]
+    });
     const waldFn = function (c, f) {
         const m = jStat.normal.inv(1 - (1 - c) / 2, 0, 1) * Math.sqrt(pHat * (1 - pHat) / (n * f));
         return [Math.max(0, pHat - m), Math.min(1, pHat + m)];

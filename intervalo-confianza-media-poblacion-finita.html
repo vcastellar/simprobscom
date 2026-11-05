@@ -90,7 +90,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261102-2">
+    <link rel="stylesheet" href="style_new.css?v=20261105-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -287,7 +287,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="ci-charts.js?v=20261104-1"></script>
+<script src="ci-charts.js?v=20261105-2"></script>
 <script>
 let fmChart;
 
@@ -389,15 +389,24 @@ function calculateFm() {
     const corrU = mean + t * seFpc;
 
     const fpcMsg = fraction < 0.05 ? ' (fracción < 5 %; FPC marginal)' : '';
-
-    resultEl.innerText =
-        `x̄ = ${mean}  |  s = ${s}  |  n = ${n}  |  N = ${bigN}\n` +
-        `Nivel: ${(conf * 100).toFixed(0)} %  |  gl = ${df}  |  t = ±${t.toFixed(4)}\n` +
-        `Fracción de muestreo f = n/N = ${(fraction * 100).toFixed(2)} %${fpcMsg}\n` +
-        `FPC = ${fpc.toFixed(6)}\n` +
-        `IC con FPC:   [${corrL.toFixed(4)}, ${corrU.toFixed(4)}]  (amplitud: ${(corrU - corrL).toFixed(4)})\n` +
-        `IC sin FPC:   [${stdL.toFixed(4)}, ${stdU.toFixed(4)}]  (amplitud: ${(stdU - stdL).toFixed(4)})\n` +
-        `Reducción de amplitud: ${((1 - (corrU - corrL) / (stdU - stdL)) * 100).toFixed(2)} %`;
+    const EN = document.documentElement.lang === 'en';
+    window.CICharts && CICharts.result(resultEl, {
+        label: EN ? CICharts.pct(conf) + ' confidence interval for the mean μ (with finite population correction)' : 'Intervalo de confianza al ' + CICharts.pct(conf) + ' para la media μ (con corrección por población finita)',
+        main: { lo: corrL, hi: corrU },
+        secondary: [{ label: EN ? 'Without the correction' : 'Sin la corrección', lo: stdL, hi: stdU }],
+        notes: [fraction < 0.05 ? (EN ? 'ℹ The sampling fraction is below 5%: the correction barely changes the interval.' : 'ℹ La fracción de muestreo es menor del 5 %: la corrección apenas cambia el intervalo.') : ''],
+        details: [
+            [EN ? 'Confidence level' : 'Nivel de confianza', CICharts.confDetail(conf)],
+            [EN ? 'Degrees of freedom' : 'Grados de libertad', df],
+            [EN ? 'Critical t' : 't crítico', '±' + CICharts.num(t, 4)],
+            [EN ? 'Sample mean (x̄)' : 'Media muestral (x̄)', mean],
+            [EN ? 'Sample standard deviation (s)' : 'Desviación estándar muestral (s)', s],
+            [EN ? 'Sample size (n); population size (N)' : 'Tamaño muestral (n); tamaño poblacional (N)', CICharts.num(n) + '; ' + CICharts.num(bigN)],
+            [EN ? 'Sampling fraction (n/N)' : 'Fracción de muestreo (n/N)', CICharts.pct(fraction)],
+            [EN ? 'Correction factor (FPC)' : 'Factor de corrección (FPC)', fpc],
+            [EN ? 'Width reduction' : 'Reducción de la amplitud', CICharts.pct(1 - (corrU - corrL) / (stdU - stdL))]
+        ]
+    });
 
     renderFmChart(mean, corrL, corrU, stdL, stdU);
 

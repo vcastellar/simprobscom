@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261104-2">
+    <link rel="stylesheet" href="style_new.css?v=20261105-1">
 
     <script type="application/ld+json">
     {
@@ -333,7 +333,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="ci-charts.js?v=20261104-3"></script>
+<script src="ci-charts.js?v=20261105-2"></script>
 <script>
 
 document.getElementById('conf').addEventListener('change', function () {
@@ -387,14 +387,24 @@ function calculate() {
     const normalityWarning = n < 30
         ? '\n⚠ Con menos de 30 pares conviene revisar que las diferencias no se alejen mucho de la normalidad.'
         : '';
-
-    resultEl.innerText = [
-        `Definición de la diferencia: ${directionLabel(direction)}  |  d̄ = ${formatNumber(meanDiff)}  |  s_d = ${formatNumber(sdDiff)}  |  n = ${n}`,
-        `Nivel de confianza: ${(conf * 100).toFixed(1)} %  |  gl = ${df}  |  t crítico: ±${tCrit.toFixed(4)}`,
-        `Error estándar: ${formatNumber(se)}  |  Margen de error: ±${formatNumber(margin)}`,
-        `Intervalo de confianza para μ_d: [${formatNumber(lower)}, ${formatNumber(upper)}]`,
-        interpretation + normalityWarning
-    ].join('\n');
+    const EN = document.documentElement.lang === 'en';
+    window.CICharts && CICharts.result(resultEl, {
+        label: EN ? CICharts.pct(conf) + ' confidence interval for the mean difference μ_d' : 'Intervalo de confianza al ' + CICharts.pct(conf) + ' para la diferencia media μ_d',
+        main: { lo: lower, hi: upper },
+        verdict: interpretation,
+        notes: [normalityWarning],
+        details: [
+            [EN ? 'Confidence level' : 'Nivel de confianza', CICharts.confDetail(conf)],
+            [EN ? 'Difference definition' : 'Definición de la diferencia', directionLabel(direction)],
+            [EN ? 'Degrees of freedom' : 'Grados de libertad', df],
+            [EN ? 'Critical t' : 't crítico', '±' + CICharts.num(tCrit, 4)],
+            [EN ? 'Mean difference (d̄)' : 'Diferencia media (d̄)', meanDiff],
+            [EN ? 'Standard deviation of the differences (s_d)' : 'Desviación estándar de las diferencias (s_d)', sdDiff],
+            [EN ? 'Number of pairs (n)' : 'Número de pares (n)', n],
+            [EN ? 'Standard error' : 'Error estándar', se],
+            [EN ? 'Margin of error' : 'Margen de error', '±' + CICharts.num(margin)]
+        ]
+    });
 
     const L = document.documentElement.lang === 'en';
     window.CICharts && CICharts.intervals({

@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261104-2">
+    <link rel="stylesheet" href="style_new.css?v=20261105-1">
 
     <script type="application/ld+json">
 {
@@ -307,7 +307,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="ci-charts.js?v=20261104-3"></script>
+<script src="ci-charts.js?v=20261105-2"></script>
 <script>
 
 document.getElementById('conf').addEventListener('change', function () {
@@ -367,31 +367,35 @@ function calculate() {
     const waldIncludesZero = waldL <= 0 && waldU >= 0;
     const newcombeIncludesZero = newcombeL <= 0 && newcombeU >= 0;
 
-    let lines = [
-        `p̂₁ = ${p1.toFixed(6)}  |  p̂₂ = ${p2.toFixed(6)}  |  Diferencia p̂₁ − p̂₂ = ${diff.toFixed(6)}`,
-        `Nivel de confianza: ${(conf * 100).toFixed(1)} %  |  z crítico: ±${zCrit.toFixed(4)}  |  Error estándar Wald: ${seWald.toFixed(6)}`
-    ];
-    if (method === 'both' || method === 'wald') {
-        lines.push(`Wald:             [${waldL.toFixed(6)}, ${waldU.toFixed(6)}]  (margen: ±${margin.toFixed(6)})`);
-    }
-    if (method === 'both' || method === 'newcombe') {
-        lines.push(`Newcombe-Wilson:  [${newcombeL.toFixed(6)}, ${newcombeU.toFixed(6)}]  (amplitud: ${(newcombeU - newcombeL).toFixed(6)})`);
-    }
+    const EN = document.documentElement.lang === 'en';
+    let verdict;
     if (method === 'both') {
-        if (waldIncludesZero && newcombeIncludesZero) {
-            lines.push('ℹ Ambos intervalos incluyen el 0: no hay evidencia de diferencia significativa.');
-        } else if (!waldIncludesZero && !newcombeIncludesZero) {
-            lines.push('✓ Ambos intervalos excluyen el 0: hay evidencia de diferencia significativa.');
-        } else {
-            lines.push('ℹ Los métodos difieren sobre la inclusión del 0; revisa supuestos y prioriza Newcombe-Wilson si Wald no cumple la condición normal.');
-        }
+        if (waldIncludesZero && newcombeIncludesZero) verdict = EN ? 'ℹ Both intervals include 0: no evidence of a significant difference.' : 'ℹ Ambos intervalos incluyen el 0: no hay evidencia de diferencia significativa.';
+        else if (!waldIncludesZero && !newcombeIncludesZero) verdict = EN ? '✓ Both intervals exclude 0: there is evidence of a significant difference.' : '✓ Ambos intervalos excluyen el 0: hay evidencia de diferencia significativa.';
+        else verdict = EN ? 'ℹ The methods disagree on whether 0 is included; review the assumptions and prioritize Newcombe-Wilson if Wald does not meet the normality condition.' : 'ℹ Los métodos difieren sobre la inclusión del 0; revisa supuestos y prioriza Newcombe-Wilson si Wald no cumple la condición normal.';
     } else {
         const zeroIncluded = method === 'newcombe' ? newcombeIncludesZero : waldIncludesZero;
-        lines.push(zeroIncluded ? 'ℹ El intervalo seleccionado incluye el 0: no hay evidencia de diferencia significativa.' : '✓ El intervalo seleccionado no incluye el 0: hay evidencia de diferencia significativa.');
+        verdict = zeroIncluded
+            ? (EN ? 'ℹ The selected interval includes 0: no evidence of a significant difference.' : 'ℹ El intervalo seleccionado incluye el 0: no hay evidencia de diferencia significativa.')
+            : (EN ? '✓ The selected interval does not include 0: there is evidence of a significant difference.' : '✓ El intervalo seleccionado no incluye el 0: hay evidencia de diferencia significativa.');
     }
-    if (warning) lines.push(warning);
-
-    resultEl.innerText = lines.join('\n');
+    const mainWald = method === 'wald';
+    window.CICharts && CICharts.result(resultEl, {
+        label: (EN ? CICharts.pct(conf) + ' confidence interval for p₁ − p₂' : 'Intervalo de confianza al ' + CICharts.pct(conf) + ' para p₁ − p₂') + (mainWald ? ' (Wald)' : ' (Newcombe-Wilson)'),
+        main: mainWald ? { lo: waldL, hi: waldU } : { lo: newcombeL, hi: newcombeU },
+        secondary: method === 'both' ? [{ label: 'Wald', lo: waldL, hi: waldU }] : [],
+        verdict: verdict,
+        notes: [warning],
+        details: [
+            [EN ? 'Confidence level' : 'Nivel de confianza', CICharts.confDetail(conf)],
+            [EN ? 'Critical z' : 'z crítico', '±' + CICharts.num(zCrit, 4)],
+            [EN ? 'Proportion group 1 (p̂₁)' : 'Proporción del grupo 1 (p̂₁)', CICharts.num(p1, 4) + ' (' + x1 + (EN ? ' of ' : ' de ') + n1 + ')'],
+            [EN ? 'Proportion group 2 (p̂₂)' : 'Proporción del grupo 2 (p̂₂)', CICharts.num(p2, 4) + ' (' + x2 + (EN ? ' of ' : ' de ') + n2 + ')'],
+            [EN ? 'Difference p̂₁ − p̂₂' : 'Diferencia p̂₁ − p̂₂', CICharts.num(diff, 4)],
+            [EN ? 'Standard error (Wald)' : 'Error estándar (Wald)', seWald],
+            [EN ? 'Margin of error (Wald)' : 'Margen de error (Wald)', '±' + CICharts.num(margin)]
+        ]
+    });
     const L = document.documentElement.lang === 'en';
     const zOf = function (c) { return jStat.normal.inv(1 - (1 - c) / 2, 0, 1); };
     const waldFn = function (c, f) {

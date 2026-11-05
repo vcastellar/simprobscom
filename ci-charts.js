@@ -9,6 +9,9 @@
  *     muestral, para las calculadoras que conservan su propio gráfico.
  *   CICharts.clear(canvasId) → borra el gráfico y la frase (entrada no válida).
  *   CICharts.clearNote(canvasId) → borra solo la frase.
+ *   CICharts.result(el, opts) → presenta el resultado numérico: el intervalo
+ *     principal destacado con su amplitud, otros intervalos debajo, la
+ *     conclusión y un desplegable con los detalles del cálculo.
  *   CICharts.customLevel(opts) → deslizador del nivel de confianza
  *     personalizado: lo sincroniza con la casilla numérica, muestra el nivel
  *     y su α, recalcula al arrastrar (opts.onChange) y resalta el panel al
@@ -651,7 +654,82 @@
     fromInput();
   }
 
+  // ── Presentación del resultado numérico ───────────────────────────────
+  // Intervalo principal destacado con su amplitud; debajo, otros intervalos
+  // (otro método, otra escala) y la conclusión; los valores del cálculo, en
+  // un desplegable que conserva su estado al recalcular.
+  //   opts: { label, main: {lo, hi}, secondary: [{label, lo, hi}],
+  //           verdict, notes: [..], details: [[etiqueta, valor], ...] }
+  // Los textos que empiezan por ✓, ℹ o ⚠ se colorean según ese signo.
+  var RES = IS_EN
+    ? { width: 'width', details: 'Calculation details', sep: ', ' }
+    : { width: 'amplitud', details: 'Detalles del cálculo', sep: '; ' };
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+  // Cifras de los detalles: con `d`, decimales fijos (valores críticos,
+  // proporciones); sin él, hasta 4 decimales sin ceros sobrantes, para que
+  // los datos introducidos se vean tal como se escribieron.
+  function fmtNum(v, d) {
+    if (typeof v !== 'number') return String(v);
+    if (!Number.isFinite(v)) return '—';
+    if (d != null) return fmtFixed(v, d);
+    if (Number.isInteger(v)) return v.toLocaleString(LOCALE);
+    if (Math.abs(v) < 0.001) return v.toLocaleString(LOCALE, { maximumSignificantDigits: 3 });
+    return v.toLocaleString(LOCALE, { maximumFractionDigits: 4 });
+  }
+  function fmtInterval(lo, hi, d) {
+    return '[' + fmtFixed(lo, d) + RES.sep + fmtFixed(hi, d) + ']';
+  }
+  function toneOf(text) {
+    var t = String(text).trim();
+    if (t.charAt(0) === '✓') return 'ok';
+    if (t.charAt(0) === '⚠') return 'warn';
+    return 'info';
+  }
+  function renderResult(el, o) {
+    if (typeof el === 'string') el = document.getElementById(el);
+    if (!el || !o || !o.main) return;
+    var prev = el.querySelector('details.ci-res-details');
+    var wasOpen = !!(prev && prev.open);
+    var d = decimalsFor(o.main.hi - o.main.lo) + 1;
+    var h = '<div class="ci-res">';
+    if (o.label) h += '<div class="ci-res-label">' + esc(o.label) + '</div>';
+    h += '<div class="ci-res-main"><span class="ci-res-int" data-lo="' + o.main.lo + '" data-hi="' + o.main.hi + '">' +
+      fmtInterval(o.main.lo, o.main.hi, d) + '</span> <span class="ci-res-width">' + RES.width + ' ' +
+      fmtFixed(o.main.hi - o.main.lo, d) + '</span></div>';
+    (o.secondary || []).forEach(function (s) {
+      if (!s || !Number.isFinite(s.lo) || !Number.isFinite(s.hi)) return;
+      var sd = decimalsFor(s.hi - s.lo) + 1;
+      h += '<div class="ci-res-sec" data-lo="' + s.lo + '" data-hi="' + s.hi + '">' + esc(s.label) + ': ' +
+        fmtInterval(s.lo, s.hi, sd) + '; ' + RES.width + ' ' + fmtFixed(s.hi - s.lo, sd) + '</div>';
+    });
+    [o.verdict].concat(o.notes || []).forEach(function (t) {
+      if (!t || !String(t).trim()) return;
+      h += '<div class="ci-res-note ci-res-' + toneOf(t) + '">' + esc(String(t).trim()) + '</div>';
+    });
+    if (o.details && o.details.length) {
+      h += '<details class="ci-res-details"' + (wasOpen ? ' open' : '') + '><summary>' + RES.details + '</summary><dl>';
+      o.details.forEach(function (row) {
+        if (!row || row[1] == null || row[1] === '') return;
+        h += '<dt>' + esc(row[0]) + '</dt><dd>' + esc(fmtNum(row[1])) + '</dd>';
+      });
+      h += '</dl></details>';
+    }
+    el.innerHTML = h + '</div>';
+  }
+  // Ayudas de formato para los valores que las páginas pasan en `details`.
+  function confDetail(conf) {
+    return fmtPct(Math.round(conf * 10000) / 10000) + '; α = ' + fmtAlpha(Math.round((1 - conf) * 10000) / 10000);
+  }
+
   window.CICharts = {
+    result: renderResult,
+    num: fmtNum,
+    pct: function (v) { return fmtPct(Math.round(v * 10000) / 10000); },
+    confDetail: confDetail,
     intervals: renderIntervals,
     note: renderNote,
     clear: clear,

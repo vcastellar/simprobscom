@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261104-2">
+    <link rel="stylesheet" href="style_new.css?v=20261105-1">
 
     <script type="application/ld+json">
     {
@@ -368,7 +368,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="ci-charts.js?v=20261104-3"></script>
+<script src="ci-charts.js?v=20261105-2"></script>
 <script>
 
 document.getElementById('conf').addEventListener('change', function () {
@@ -438,15 +438,23 @@ function calculate() {
     const smallCounts = [a, b, c, d].some(v => v < 5)
         ? '\n⚠ Hay celdas utilizadas menores que 5. Interpreta el intervalo normal con cautela.'
         : '';
-
-    resultEl.innerText = [
-        `OR = ${formatNumber(orValue)}  |  log(OR) = ${formatNumber(logOr)}  |  SE[log(OR)] = ${formatNumber(seLog)}`,
-        `Nivel de confianza: ${(conf * 100).toFixed(1)} %  |  z crítico: ±${zCrit.toFixed(4)}  |  Margen en log(OR): ±${formatNumber(marginLog)}`,
-        `IC para OR: [${formatNumber(lower)}, ${formatNumber(upper)}]`,
-        `IC en escala log(OR): [${formatNumber(lowerLog)}, ${formatNumber(upperLog)}]`,
-        `Corrección 0,5: ${correctionText}`,
-        interpretation + smallCounts
-    ].join('\n');
+    const EN = document.documentElement.lang === 'en';
+    window.CICharts && CICharts.result(resultEl, {
+        label: EN ? CICharts.pct(conf) + ' confidence interval for the odds ratio (OR)' : 'Intervalo de confianza al ' + CICharts.pct(conf) + ' para la odds ratio (OR)',
+        main: { lo: lower, hi: upper },
+        secondary: [{ label: EN ? 'On the log(OR) scale' : 'En escala log(OR)', lo: lowerLog, hi: upperLog }],
+        verdict: interpretation,
+        notes: [smallCounts],
+        details: [
+            [EN ? 'Confidence level' : 'Nivel de confianza', CICharts.confDetail(conf)],
+            [EN ? 'Critical z' : 'z crítico', '±' + CICharts.num(zCrit, 4)],
+            ['OR', orValue],
+            ['log(OR)', logOr],
+            ['SE[log(OR)]', seLog],
+            [EN ? 'Margin on the log(OR) scale' : 'Margen en escala log(OR)', '±' + CICharts.num(marginLog)],
+            [EN ? '0.5 correction' : 'Corrección 0,5', correctionText]
+        ]
+    });
 
     const L = document.documentElement.lang === 'en';
     const totalRaw = raw.reduce(function (acc, v) { return acc + v; }, 0);
