@@ -899,6 +899,266 @@ canvas {
     margin-top: 0;
 }
 
+/* Resultado de las calculadoras de intervalos (CICharts.result): intervalo
+   principal destacado, otros intervalos y conclusión debajo, y detalles del
+   cálculo en un desplegable. */
+.ci-res {
+    white-space: normal;
+    line-height: 1.5;
+}
+
+.ci-res-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #6366f1;
+}
+
+.ci-res-main {
+    margin-top: 2px;
+    color: #1e1b4b;
+}
+
+.ci-res-int {
+    font-size: 1.65rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+}
+
+.ci-res-width {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #4338ca;
+    white-space: nowrap;
+}
+
+.ci-res-sec {
+    margin-top: 4px;
+    font-size: 0.95rem;
+    color: #4338ca;
+}
+
+.ci-res-note {
+    margin-top: 6px;
+    font-size: 0.9rem;
+}
+
+.ci-res-ok {
+    color: #166534;
+}
+
+.ci-res-warn {
+    color: #92400e;
+}
+
+.ci-res-info {
+    color: #4338ca;
+}
+
+.ci-res-details {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(79, 70, 229, 0.2);
+    font-size: 0.88rem;
+}
+
+.ci-res-details summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #4338ca;
+}
+
+.ci-res-details dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 3px 18px;
+    margin: 8px 0 2px;
+}
+
+.ci-res-details dt {
+    color: #6366f1;
+}
+
+.ci-res-details dd {
+    margin: 0;
+    font-weight: 600;
+    color: #1e1b4b;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+    .ci-res-int {
+        font-size: 1.35rem;
+    }
+
+    .ci-res-details dl {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .ci-res-details dd {
+        margin-bottom: 6px;
+    }
+}
+
+html.dark-mode .ci-res-label,
+html.dark-mode .ci-res-details dt {
+    color: #a5b4fc;
+}
+
+html.dark-mode .ci-res-main,
+html.dark-mode .ci-res-details dd {
+    color: #f1f5f9;
+}
+
+html.dark-mode .ci-res-width,
+html.dark-mode .ci-res-sec,
+html.dark-mode .ci-res-info,
+html.dark-mode .ci-res-details summary {
+    color: #c7d2fe;
+}
+
+html.dark-mode .ci-res-ok {
+    color: #86efac;
+}
+
+html.dark-mode .ci-res-warn {
+    color: #fcd34d;
+}
+
+html.dark-mode .ci-res-details {
+    border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Nivel de confianza personalizado (intervalos): panel resaltado justo bajo
+   el desplegable, con deslizador y valor exacto. Al aparecer emite un pulso
+   para que se note. */
+.custom-level {
+    display: grid;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 12px 14px 14px;
+    border: 1px solid rgba(37, 99, 235, 0.32);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    background: rgba(37, 99, 235, 0.06);
+}
+
+.custom-level-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px 12px;
+    flex-wrap: wrap;
+}
+
+.custom-level-head label {
+    margin: 0;
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.custom-level output {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--accent-dark);
+    font-variant-numeric: tabular-nums;
+}
+
+.custom-level input[type="range"] {
+    width: 100%;
+    height: 26px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+.custom-level input[type="range"]:focus {
+    box-shadow: none;
+}
+
+.custom-level input[type="range"]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+/* Marcas de la escala (logarítmica en α): ci-charts.js coloca cada etiqueta
+   en su posición real del deslizador. */
+.custom-level-scale {
+    position: relative;
+    height: 1.1rem;
+    margin-top: -6px;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.custom-level-scale span {
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+.custom-level-exact {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.custom-level-exact label {
+    margin: 0;
+    white-space: nowrap;
+    color: var(--text-muted);
+}
+
+.custom-level-exact input {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 11px;
+}
+
+.custom-level.is-revealed {
+    animation: custom-level-pulse 1.2s ease-out 2;
+}
+
+@keyframes custom-level-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.5); }
+    70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .custom-level.is-revealed {
+        animation: none;
+    }
+}
+
+html.dark-mode .custom-level {
+    background: rgba(59, 130, 246, 0.12);
+    border-color: rgba(96, 165, 250, 0.38);
+    border-left-color: #3b82f6;
+}
+
+html.dark-mode .form-group .custom-level-head label {
+    color: #e2e8f0;
+}
+
+html.dark-mode .custom-level output {
+    color: #93c5fd;
+}
+
+html.dark-mode .custom-level input[type="range"] {
+    background: transparent;
+    border: 0;
+}
+
 @media (max-width: 1024px) {
     .ss-shell {
         grid-template-columns: minmax(0, 1fr);

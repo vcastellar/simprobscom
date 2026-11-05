@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261105-1">
 
     <script type="application/ld+json">
 {
@@ -126,72 +126,87 @@
     </header>
 
     <main>
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Enter the successes and sample sizes of each group to get the confidence interval for p₁ − p₂.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Enter the successes and sample sizes of each group to get the confidence interval for p₁ − p₂.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="x1">Successes group 1 (x₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="x1" value="84" step="1" min="0">
-                        <p class="field-hint" hidden>Number of successes observed in group 1 (numerator of p̂₁ = x₁/n₁).</p>
+                <div class="form-grid sample-grid">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="x1">Successes group 1 (x₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="x1" value="84" step="1" min="0">
+                            <p class="field-hint" hidden>Number of successes observed in group 1 (numerator of p̂₁ = x₁/n₁).</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="n1">Sample size group 1 (n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="n1" value="120" step="1" min="1">
+                            <p class="field-hint" hidden>Total number of observations in group 1.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="n1">Sample size group 1 (n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="n1" value="120" step="1" min="1">
-                        <p class="field-hint" hidden>Total number of observations in group 1.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="x2">Successes group 2 (x₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="x2" value="57" step="1" min="0">
+                            <p class="field-hint" hidden>Number of successes observed in group 2 (numerator of p̂₂ = x₂/n₂).</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="n2">Sample size group 2 (n₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="n2" value="110" step="1" min="1">
+                            <p class="field-hint" hidden>Total number of observations in group 2.</p>
+                        </div>
+                    </div>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="conf">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <select id="conf">
+                                <option value="0.90">90%</option>
+                                <option value="0.95" selected>95%</option>
+                                <option value="0.99">99%</option>
+                                <option value="custom">Custom…</option>
+                            </select>
+                            <div class="custom-level" id="customConfRow" style="display:none">
+                                <div class="custom-level-head">
+                                    <label for="customConfRange">Custom confidence level</label>
+                                    <output id="customConfOut" for="customConfRange customConf">95% · α = 0.05</output>
+                                </div>
+                                <input type="range" id="customConfRange" min="0" max="1000" step="1" value="433">
+                                <div class="custom-level-scale" aria-hidden="true"></div>
+                                <div class="custom-level-exact">
+                                    <label for="customConf">Exact value (0–1)</label>
+                                    <input type="number" id="customConf" value="0.95" step="any" min="0.0001" max="0.9999" inputmode="decimal">
+                                </div>
+                            </div>
+                            <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true difference p₁ − p₂. 95% is the usual standard.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="method">Method <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <select id="method">
+                                <option value="both" selected>Both (Wald + Newcombe-Wilson)</option>
+                                <option value="wald">Wald only</option>
+                                <option value="newcombe">Newcombe-Wilson only</option>
+                            </select>
+                            <p class="field-hint" hidden><strong>Wald</strong> is the classic method, suitable when there are enough successes and failures in both groups. <strong>Newcombe-Wilson</strong> is preferable when the samples are small or the proportions are close to 0 or 1.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="x2">Successes group 2 (x₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="x2" value="57" step="1" min="0">
-                        <p class="field-hint" hidden>Number of successes observed in group 2 (numerator of p̂₂ = x₂/n₂).</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="n2">Sample size group 2 (n₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="n2" value="110" step="1" min="1">
-                        <p class="field-hint" hidden>Total number of observations in group 2.</p>
-                    </div>
-                </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="conf">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <select id="conf">
-                            <option value="0.90">90%</option>
-                            <option value="0.95" selected>95%</option>
-                            <option value="0.99">99%</option>
-                            <option value="custom">Custom…</option>
-                        </select>
-                        <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true difference p₁ − p₂. 95% is the usual standard.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="method">Method <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <select id="method">
-                            <option value="both" selected>Both (Wald + Newcombe-Wilson)</option>
-                            <option value="wald">Wald only</option>
-                            <option value="newcombe">Newcombe-Wilson only</option>
-                        </select>
-                        <p class="field-hint" hidden><strong>Wald</strong> is the classic method, suitable when there are enough successes and failures in both groups. <strong>Newcombe-Wilson</strong> is preferable when the samples are small or the proportions are close to 0 or 1.</p>
-                    </div>
-                </div>
-                <div class="inline-inputs" id="customConfRow" style="display:none">
-                    <div class="form-group">
-                        <label for="customConf">Custom confidence level (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
-                        <p class="field-hint" hidden>Confidence level as a value between 0 and 1 (e.g. 0.975 for 97.5%). It is only used when you pick “Custom…” above.</p>
-                    </div>
-                </div>
-            </div>
 
-            <button class="calculate-btn" id="calcBtn">Calculate interval</button>
-            <div id="result" class="result-box">Result pending…</div>
-            <div class="chart-wrap">
-                <canvas id="ciChart" aria-label="Chart of the confidence interval for the difference of proportions" role="img"></canvas>
-            </div>
+                <button class="calculate-btn" id="calcBtn">Calculate interval</button>
+            </section>
+
+            <div id="result" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Confidence interval for p₁ − p₂</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="ciChart" aria-label="Horizontal bar chart: confidence intervals at 90, 95 and 99% and at the chosen level, with the point estimate" role="img"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="ciChartNote"></p>
+                </div>
+            </section>
         </section>
 
         <section class="card content-card">
@@ -288,8 +303,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../ci-charts.js?v=20261105-2"></script>
 <script>
-let ciChart;
 
 document.getElementById('conf').addEventListener('change', function () {
     document.getElementById('customConfRow').style.display = this.value === 'custom' ? '' : 'none';
@@ -309,48 +324,6 @@ function wilsonInterval(x, n, zCrit) {
     return [Math.max(0, center - halfWidth), Math.min(1, center + halfWidth)];
 }
 
-function renderChart(zCrit) {
-    const ctx = document.getElementById('ciChart');
-    if (!ctx) return;
-
-    const bound = Math.max(4, zCrit + 0.8);
-    const minX = -bound, maxX = bound;
-    const step = 0.02;
-
-    const curve = [], inside = [], outside = [];
-    for (let x = minX; x <= maxX; x += step) {
-        const y = jStat.normal.pdf(x, 0, 1);
-        curve.push({ x, y });
-        if (x >= -zCrit && x <= zCrit) {
-            inside.push({ x, y });
-            outside.push({ x, y: null });
-        } else {
-            inside.push({ x, y: null });
-            outside.push({ x, y });
-        }
-    }
-
-    if (ciChart) ciChart.destroy();
-    ciChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            datasets: [
-                { label: 'Confidence region', data: inside, borderColor: 'rgba(34,197,94,0)', backgroundColor: 'rgba(34,197,94,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: 'Tails (α/2 each)', data: outside, borderColor: 'rgba(239,68,68,0)', backgroundColor: 'rgba(239,68,68,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: 'Standard normal distribution', data: curve, borderColor: '#1d4ed8', borderWidth: 2, pointRadius: 0, fill: false, parsing: false }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: { type: 'linear', min: minX, max: maxX, title: { display: true, text: 'z' } },
-                y: { beginAtZero: true, title: { display: true, text: 'Density' } }
-            }
-        }
-    });
-}
-
 function calculate() {
     const x1 = parseFloat(document.getElementById('x1').value);
     const n1 = parseFloat(document.getElementById('n1').value);
@@ -363,7 +336,7 @@ function calculate() {
     if (![x1, n1, x2, n2, conf].every(Number.isFinite) ||
         x1 < 0 || x2 < 0 || n1 < 1 || n2 < 1 || x1 > n1 || x2 > n2 || conf <= 0 || conf >= 1) {
         resultEl.innerText = 'Error: check that 0 ≤ x₁ ≤ n₁, 0 ≤ x₂ ≤ n₂, n₁,n₂ ≥ 1 and 0 < confidence < 1.';
-        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        window.CICharts && CICharts.clear('ciChart');
         return;
     }
 
@@ -390,38 +363,62 @@ function calculate() {
     const waldIncludesZero = waldL <= 0 && waldU >= 0;
     const newcombeIncludesZero = newcombeL <= 0 && newcombeU >= 0;
 
-    let lines = [
-        `p̂₁ = ${p1.toFixed(6)}  |  p̂₂ = ${p2.toFixed(6)}  |  Difference p̂₁ − p̂₂ = ${diff.toFixed(6)}`,
-        `Confidence level: ${(conf * 100).toFixed(1)}%  |  Critical z: ±${zCrit.toFixed(4)}  |  Wald standard error: ${seWald.toFixed(6)}`
-    ];
-    if (method === 'both' || method === 'wald') {
-        lines.push(`Wald:             [${waldL.toFixed(6)}, ${waldU.toFixed(6)}]  (margin: ±${margin.toFixed(6)})`);
-    }
-    if (method === 'both' || method === 'newcombe') {
-        lines.push(`Newcombe-Wilson:  [${newcombeL.toFixed(6)}, ${newcombeU.toFixed(6)}]  (width: ${(newcombeU - newcombeL).toFixed(6)})`);
-    }
+    const EN = document.documentElement.lang === 'en';
+    let verdict;
     if (method === 'both') {
-        if (waldIncludesZero && newcombeIncludesZero) {
-            lines.push('ℹ Both intervals include 0: no evidence of a significant difference.');
-        } else if (!waldIncludesZero && !newcombeIncludesZero) {
-            lines.push('✓ Both intervals exclude 0: there is evidence of a significant difference.');
-        } else {
-            lines.push('ℹ The methods disagree on whether 0 is included; review the assumptions and prioritize Newcombe-Wilson if Wald does not meet the normality condition.');
-        }
+        if (waldIncludesZero && newcombeIncludesZero) verdict = EN ? 'ℹ Both intervals include 0: no evidence of a significant difference.' : 'ℹ Ambos intervalos incluyen el 0: no hay evidencia de diferencia significativa.';
+        else if (!waldIncludesZero && !newcombeIncludesZero) verdict = EN ? '✓ Both intervals exclude 0: there is evidence of a significant difference.' : '✓ Ambos intervalos excluyen el 0: hay evidencia de diferencia significativa.';
+        else verdict = EN ? 'ℹ The methods disagree on whether 0 is included; review the assumptions and prioritize Newcombe-Wilson if Wald does not meet the normality condition.' : 'ℹ Los métodos difieren sobre la inclusión del 0; revisa supuestos y prioriza Newcombe-Wilson si Wald no cumple la condición normal.';
     } else {
         const zeroIncluded = method === 'newcombe' ? newcombeIncludesZero : waldIncludesZero;
-        lines.push(zeroIncluded ? 'ℹ The selected interval includes 0: no evidence of a significant difference.' : '✓ The selected interval does not include 0: there is evidence of a significant difference.');
+        verdict = zeroIncluded
+            ? (EN ? 'ℹ The selected interval includes 0: no evidence of a significant difference.' : 'ℹ El intervalo seleccionado incluye el 0: no hay evidencia de diferencia significativa.')
+            : (EN ? '✓ The selected interval does not include 0: there is evidence of a significant difference.' : '✓ El intervalo seleccionado no incluye el 0: hay evidencia de diferencia significativa.');
     }
-    if (warning) lines.push(warning);
-
-    resultEl.innerText = lines.join('\n');
-    renderChart(zCrit);
+    const mainWald = method === 'wald';
+    window.CICharts && CICharts.result(resultEl, {
+        label: (EN ? CICharts.pct(conf) + ' confidence interval for p₁ − p₂' : 'Intervalo de confianza al ' + CICharts.pct(conf) + ' para p₁ − p₂') + (mainWald ? ' (Wald)' : ' (Newcombe-Wilson)'),
+        main: mainWald ? { lo: waldL, hi: waldU } : { lo: newcombeL, hi: newcombeU },
+        secondary: method === 'both' ? [{ label: 'Wald', lo: waldL, hi: waldU }] : [],
+        verdict: verdict,
+        notes: [warning],
+        details: [
+            [EN ? 'Confidence level' : 'Nivel de confianza', CICharts.confDetail(conf)],
+            [EN ? 'Critical z' : 'z crítico', '±' + CICharts.num(zCrit, 4)],
+            [EN ? 'Proportion group 1 (p̂₁)' : 'Proporción del grupo 1 (p̂₁)', CICharts.num(p1, 4) + ' (' + x1 + (EN ? ' of ' : ' de ') + n1 + ')'],
+            [EN ? 'Proportion group 2 (p̂₂)' : 'Proporción del grupo 2 (p̂₂)', CICharts.num(p2, 4) + ' (' + x2 + (EN ? ' of ' : ' de ') + n2 + ')'],
+            [EN ? 'Difference p̂₁ − p̂₂' : 'Diferencia p̂₁ − p̂₂', CICharts.num(diff, 4)],
+            [EN ? 'Standard error (Wald)' : 'Error estándar (Wald)', seWald],
+            [EN ? 'Margin of error (Wald)' : 'Margen de error (Wald)', '±' + CICharts.num(margin)]
+        ]
+    });
+    const L = document.documentElement.lang === 'en';
+    const zOf = function (c) { return jStat.normal.inv(1 - (1 - c) / 2, 0, 1); };
+    const waldFn = function (c, f) {
+        const m = zOf(c) * Math.sqrt(p1 * (1 - p1) / (n1 * f) + p2 * (1 - p2) / (n2 * f));
+        return [Math.max(-1, diff - m), Math.min(1, diff + m)];
+    };
+    const newcombeFn = function (c, f) {
+        const z = zOf(c);
+        const w1 = wilsonInterval(x1 * f, n1 * f, z), w2 = wilsonInterval(x2 * f, n2 * f, z);
+        return [Math.max(-1, diff - Math.sqrt((p1 - w1[0]) ** 2 + (w2[1] - p2) ** 2)),
+                Math.min(1, diff + Math.sqrt((w1[1] - p1) ** 2 + (p2 - w2[0]) ** 2))];
+    };
+    window.CICharts && CICharts.intervals({
+        canvas: 'ciChart', estimate: diff, confidence: conf, custom: document.getElementById('conf').value === 'custom', xLabel: 'p₁ − p₂', xMin: -1, xMax: 1,
+        reference: 0, referenceLabel: L ? 'No difference (0)' : 'Sin diferencia (0)',
+        method: method === 'wald' ? 'Wald' : 'Newcombe',
+        interval: method === 'wald' ? waldFn : newcombeFn,
+        compare: method === 'both' ? { label: 'Wald', interval: waldFn } : null,
+        sizeLabel: function (f) { return 'n₁ = ' + Math.ceil(n1 * f) + ', n₂ = ' + Math.ceil(n2 * f); }
+    });
 }
 
 document.getElementById('calcBtn').addEventListener('click', calculate);
 document.getElementById('conf').addEventListener('change', calculate);
 document.getElementById('method').addEventListener('change', calculate);
 document.getElementById('customConf').addEventListener('input', calculate);
+window.CICharts && CICharts.customLevel({ onChange: calculate });
 calculate();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>

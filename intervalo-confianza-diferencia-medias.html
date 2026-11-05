@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="style_new.css?v=20261105-1">
 
     <script type="application/ld+json">
 {
@@ -130,83 +130,98 @@
     </header>
 
     <main>
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Introduce los estadísticos de cada grupo para obtener el intervalo de confianza para μ₁ − μ₂.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Introduce los estadísticos de cada grupo para obtener el intervalo de confianza para μ₁ − μ₂.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="xbar1">Media muestral grupo 1 (x̄₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="xbar1" value="5.2" step="0.01">
-                        <p class="field-hint" hidden>Media observada en la muestra del grupo 1 (por ejemplo, el grupo de tratamiento).</p>
+                <div class="form-grid sample-grid">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="xbar1">Media muestral grupo 1 (x̄₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="xbar1" value="5.2" step="0.01">
+                            <p class="field-hint" hidden>Media observada en la muestra del grupo 1 (por ejemplo, el grupo de tratamiento).</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="xbar2">Media muestral grupo 2 (x̄₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="xbar2" value="4.7" step="0.01">
+                            <p class="field-hint" hidden>Media observada en la muestra del grupo 2 (por ejemplo, el grupo de control o placebo).</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="xbar2">Media muestral grupo 2 (x̄₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="xbar2" value="4.7" step="0.01">
-                        <p class="field-hint" hidden>Media observada en la muestra del grupo 2 (por ejemplo, el grupo de control o placebo).</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="s1">Desviación estándar grupo 1 (s₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="s1" value="1.4" step="0.001" min="0.0001">
+                            <p class="field-hint" hidden>Desviación estándar muestral del grupo 1. A mayor variabilidad, más ancho será el intervalo.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="s2">Desviación estándar grupo 2 (s₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="s2" value="1.6" step="0.001" min="0.0001">
+                            <p class="field-hint" hidden>Desviación estándar muestral del grupo 2. A mayor variabilidad, más ancho será el intervalo.</p>
+                        </div>
+                    </div>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="n1">Tamaño muestral grupo 1 (n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="n1" value="20" step="1" min="2">
+                            <p class="field-hint" hidden>Número de observaciones del grupo 1. Se requiere <strong>n₁ ≥ 2</strong>.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="n2">Tamaño muestral grupo 2 (n₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="n2" value="22" step="1" min="2">
+                            <p class="field-hint" hidden>Número de observaciones del grupo 2. Se requiere <strong>n₂ ≥ 2</strong>.</p>
+                        </div>
+                    </div>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="conf">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <select id="conf">
+                                <option value="0.90">90 %</option>
+                                <option value="0.95" selected>95 %</option>
+                                <option value="0.99">99 %</option>
+                                <option value="custom">Personalizado…</option>
+                            </select>
+                            <div class="custom-level" id="customConfRow" style="display:none">
+                                <div class="custom-level-head">
+                                    <label for="customConfRange">Nivel de confianza personalizado</label>
+                                    <output id="customConfOut" for="customConfRange customConf">95 % · α = 0,05</output>
+                                </div>
+                                <input type="range" id="customConfRange" min="0" max="1000" step="1" value="433">
+                                <div class="custom-level-scale" aria-hidden="true"></div>
+                                <div class="custom-level-exact">
+                                    <label for="customConf">Valor exacto (0–1)</label>
+                                    <input type="number" id="customConf" value="0.95" step="any" min="0.0001" max="0.9999" inputmode="decimal">
+                                </div>
+                            </div>
+                            <p class="field-hint" hidden>Probabilidad de que el procedimiento produzca un intervalo que contenga la diferencia real de medias. <strong>95 %</strong> es el estándar habitual.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="varType">Supuesto de varianzas <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <select id="varType">
+                                <option value="welch" selected>Varianzas distintas (Welch)</option>
+                                <option value="pooled">Varianzas iguales (pooled)</option>
+                            </select>
+                            <p class="field-hint" hidden><strong>Welch</strong> es la opción recomendada por defecto: funciona bien tanto si las varianzas son iguales como distintas. Usa <strong>pooled</strong> solo si hay evidencia clara de que ambos grupos comparten varianza.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="s1">Desviación estándar grupo 1 (s₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="s1" value="1.4" step="0.001" min="0.0001">
-                        <p class="field-hint" hidden>Desviación estándar muestral del grupo 1. A mayor variabilidad, más ancho será el intervalo.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="s2">Desviación estándar grupo 2 (s₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="s2" value="1.6" step="0.001" min="0.0001">
-                        <p class="field-hint" hidden>Desviación estándar muestral del grupo 2. A mayor variabilidad, más ancho será el intervalo.</p>
-                    </div>
-                </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="n1">Tamaño muestral grupo 1 (n₁) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="n1" value="20" step="1" min="2">
-                        <p class="field-hint" hidden>Número de observaciones del grupo 1. Se requiere <strong>n₁ ≥ 2</strong>.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="n2">Tamaño muestral grupo 2 (n₂) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="n2" value="22" step="1" min="2">
-                        <p class="field-hint" hidden>Número de observaciones del grupo 2. Se requiere <strong>n₂ ≥ 2</strong>.</p>
-                    </div>
-                </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="conf">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <select id="conf">
-                            <option value="0.90">90 %</option>
-                            <option value="0.95" selected>95 %</option>
-                            <option value="0.99">99 %</option>
-                            <option value="custom">Personalizado…</option>
-                        </select>
-                        <p class="field-hint" hidden>Probabilidad de que el procedimiento produzca un intervalo que contenga la diferencia real de medias. <strong>95 %</strong> es el estándar habitual.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="varType">Supuesto de varianzas <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <select id="varType">
-                            <option value="welch" selected>Varianzas distintas (Welch)</option>
-                            <option value="pooled">Varianzas iguales (pooled)</option>
-                        </select>
-                        <p class="field-hint" hidden><strong>Welch</strong> es la opción recomendada por defecto: funciona bien tanto si las varianzas son iguales como distintas. Usa <strong>pooled</strong> solo si hay evidencia clara de que ambos grupos comparten varianza.</p>
-                    </div>
-                </div>
-                <div class="inline-inputs" id="customConfRow" style="display:none">
-                    <div class="form-group">
-                        <label for="customConf">Nivel de confianza personalizado (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
-                        <p class="field-hint" hidden>Introduce un nivel de confianza entre 0 y 1, por ejemplo <strong>0,95</strong> para un 95 %.</p>
-                    </div>
-                </div>
-            </div>
 
-            <button class="calculate-btn" id="calcBtn">Calcular intervalo</button>
-            <div id="result" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap">
-                <canvas id="ciChart" aria-label="Gráfico del intervalo de confianza para la diferencia de medias" role="img"></canvas>
-            </div>
+                <button class="calculate-btn" id="calcBtn">Calcular intervalo</button>
+            </section>
+
+            <div id="result" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Intervalo de confianza para μ₁ − μ₂</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="ciChart" aria-label="Gráfico de barras horizontales: intervalos de confianza al 90, 95 y 99 % y al nivel elegido, con la estimación puntual" role="img"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="ciChartNote"></p>
+                </div>
+            </section>
         </section>
 
         <section class="card content-card">
@@ -302,8 +317,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="ci-charts.js?v=20261105-2"></script>
 <script>
-let ciChart;
 
 document.getElementById('conf').addEventListener('change', function () {
     document.getElementById('customConfRow').style.display = this.value === 'custom' ? '' : 'none';
@@ -313,48 +328,6 @@ function getConfLevel() {
     const sel = document.getElementById('conf').value;
     if (sel === 'custom') return parseFloat(document.getElementById('customConf').value);
     return parseFloat(sel);
-}
-
-function renderChart(tCrit, df) {
-    const ctx = document.getElementById('ciChart');
-    if (!ctx) return;
-
-    const bound = Math.max(4, Math.abs(tCrit) + 0.8);
-    const minX = -bound, maxX = bound;
-    const step = 0.02;
-
-    const curve = [], inside = [], outside = [];
-    for (let x = minX; x <= maxX; x += step) {
-        const y = jStat.studentt.pdf(x, df);
-        curve.push({ x, y });
-        if (x >= -tCrit && x <= tCrit) {
-            inside.push({ x, y });
-            outside.push({ x, y: null });
-        } else {
-            inside.push({ x, y: null });
-            outside.push({ x, y });
-        }
-    }
-
-    if (ciChart) ciChart.destroy();
-    ciChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            datasets: [
-                { label: 'Región de confianza', data: inside, borderColor: 'rgba(34,197,94,0)', backgroundColor: 'rgba(34,197,94,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: 'Colas (α/2 cada una)', data: outside, borderColor: 'rgba(239,68,68,0)', backgroundColor: 'rgba(239,68,68,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: `t de Student (gl = ${Math.round(df * 100) / 100})`, data: curve, borderColor: '#1d4ed8', borderWidth: 2, pointRadius: 0, fill: false, parsing: false }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: { type: 'linear', min: minX, max: maxX, title: { display: true, text: `t (gl ≈ ${Math.round(df * 10) / 10})` } },
-                y: { beginAtZero: true, title: { display: true, text: 'Densidad' } }
-            }
-        }
-    });
 }
 
 function calculate() {
@@ -371,7 +344,7 @@ function calculate() {
     if (![xbar1, xbar2, s1, s2, n1, n2, conf].every(Number.isFinite) ||
         s1 <= 0 || s2 <= 0 || n1 < 2 || n2 < 2 || conf <= 0 || conf >= 1) {
         resultEl.innerText = 'Error: revisa que s₁,s₂ > 0, n₁,n₂ ≥ 2 y 0 < confianza < 1.';
-        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        window.CICharts && CICharts.clear('ciChart');
         return;
     }
 
@@ -398,20 +371,55 @@ function calculate() {
     const lower = diff - margin;
     const upper = diff + margin;
     const zeroIncluded = lower <= 0 && upper >= 0;
+    const EN = document.documentElement.lang === 'en';
+    window.CICharts && CICharts.result(resultEl, {
+        label: (EN ? CICharts.pct(conf) + ' confidence interval for μ₁ − μ₂' : 'Intervalo de confianza al ' + CICharts.pct(conf) + ' para μ₁ − μ₂') +
+            (varType === 'welch' ? ' (Welch)' : (EN ? ' (pooled variance)' : ' (varianza combinada)')),
+        main: { lo: lower, hi: upper },
+        verdict: zeroIncluded
+            ? (EN ? 'ℹ The interval includes 0: no evidence of a significant difference.' : 'ℹ El intervalo incluye el 0: no hay evidencia de diferencia significativa.')
+            : (EN ? '✓ The interval does not include 0: there is evidence of a significant difference.' : '✓ El intervalo no incluye el 0: hay evidencia de diferencia significativa.'),
+        details: [
+            [EN ? 'Confidence level' : 'Nivel de confianza', CICharts.confDetail(conf)],
+            [EN ? 'Degrees of freedom' : 'Grados de libertad', df],
+            [EN ? 'Critical t' : 't crítico', '±' + CICharts.num(tCrit, 4)],
+            [EN ? 'Difference x̄₁ − x̄₂' : 'Diferencia x̄₁ − x̄₂', diff],
+            [EN ? 'Mean group 1 (x̄₁)' : 'Media del grupo 1 (x̄₁)', xbar1],
+            [EN ? 'Mean group 2 (x̄₂)' : 'Media del grupo 2 (x̄₂)', xbar2],
+            [EN ? 'Standard deviations (s₁; s₂)' : 'Desviaciones estándar (s₁; s₂)', CICharts.num(s1) + '; ' + CICharts.num(s2)],
+            [EN ? 'Sample sizes (n₁; n₂)' : 'Tamaños muestrales (n₁; n₂)', CICharts.num(n1) + '; ' + CICharts.num(n2)],
+            [EN ? 'Standard error' : 'Error estándar', se],
+            [EN ? 'Margin of error' : 'Margen de error', '±' + CICharts.num(margin)]
+        ]
+    });
 
-    resultEl.innerText =
-        `Diferencia x̄₁ − x̄₂: ${diff.toFixed(6)}  |  Método: ${label}\n` +
-        `t crítico: ±${tCrit.toFixed(4)}  |  Error estándar: ${se.toFixed(6)}  |  Margen: ±${margin.toFixed(6)}\n` +
-        `Intervalo de confianza: [${lower.toFixed(6)}, ${upper.toFixed(6)}]\n` +
-        (zeroIncluded ? 'ℹ El intervalo incluye el 0: no hay evidencia de diferencia significativa.' : '✓ El intervalo no incluye el 0: hay evidencia de diferencia significativa.');
-
-    renderChart(tCrit, df);
+    const L = document.documentElement.lang === 'en';
+    window.CICharts && CICharts.intervals({
+        canvas: 'ciChart', estimate: diff, confidence: conf, custom: document.getElementById('conf').value === 'custom', xLabel: 'μ₁ − μ₂',
+        reference: 0, referenceLabel: L ? 'No difference (0)' : 'Sin diferencia (0)',
+        interval: function (c, f) {
+            const a = n1 * f, b = n2 * f;
+            let seF, dfF;
+            if (varType === 'welch') {
+                const v1 = s1 * s1 / a, v2 = s2 * s2 / b;
+                seF = Math.sqrt(v1 + v2);
+                dfF = (v1 + v2) * (v1 + v2) / ((v1 * v1) / (a - 1) + (v2 * v2) / (b - 1));
+            } else {
+                seF = Math.sqrt(((a - 1) * s1 * s1 + (b - 1) * s2 * s2) / (a + b - 2) * (1 / a + 1 / b));
+                dfF = a + b - 2;
+            }
+            const m = jStat.studentt.inv(1 - (1 - c) / 2, dfF) * seF;
+            return [diff - m, diff + m];
+        },
+        sizeLabel: function (f) { return 'n₁ = ' + Math.ceil(n1 * f) + ', n₂ = ' + Math.ceil(n2 * f); }
+    });
 }
 
 document.getElementById('calcBtn').addEventListener('click', calculate);
 document.getElementById('conf').addEventListener('change', calculate);
 document.getElementById('varType').addEventListener('change', calculate);
 document.getElementById('customConf').addEventListener('input', calculate);
+window.CICharts && CICharts.customLevel({ onChange: calculate });
 calculate();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

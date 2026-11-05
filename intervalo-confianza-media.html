@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261102-2">
+    <link rel="stylesheet" href="style_new.css?v=20261105-1">
 
     <script type="application/ld+json">
 {
@@ -130,56 +130,71 @@
     </header>
 
     <main>
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Introduce los datos para obtener el intervalo de confianza usando la distribución t de Student.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Introduce los datos para obtener el intervalo de confianza usando la distribución t de Student.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="xbar">Media muestral (x̄) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="xbar" value="245.3" step="0.01">
-                        <p class="field-hint" hidden>Media observada en tu muestra; es el centro del intervalo de confianza. Ej.: 245,3 ms de tiempo de respuesta medio.</p>
+                <div class="form-grid sample-grid">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="xbar">Media muestral (x̄) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="xbar" value="245.3" step="0.01">
+                            <p class="field-hint" hidden>Media observada en tu muestra; es el centro del intervalo de confianza. Ej.: 245,3 ms de tiempo de respuesta medio.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="s">Desviación estándar muestral (s) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="s" value="38.7" step="0.001" min="0.0001">
+                            <p class="field-hint" hidden>Desviación estándar calculada en la muestra (con divisor n−1); mide cuánto varían los datos respecto a x̄.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="s">Desviación estándar muestral (s) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="s" value="38.7" step="0.001" min="0.0001">
-                        <p class="field-hint" hidden>Desviación estándar calculada en la muestra (con divisor n−1); mide cuánto varían los datos respecto a x̄.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="n">Tamaño muestral (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="n" value="15" step="1" min="2">
+                            <p class="field-hint" hidden>Número de observaciones de la muestra. Determina los grados de libertad de la t de Student (gl = n − 1) y el error estándar.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="conf">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <select id="conf">
+                                <option value="0.90">90 %</option>
+                                <option value="0.95" selected>95 %</option>
+                                <option value="0.99">99 %</option>
+                                <option value="custom">Personalizado…</option>
+                            </select>
+                            <div class="custom-level" id="customConfRow" style="display:none">
+                                <div class="custom-level-head">
+                                    <label for="customConfRange">Nivel de confianza personalizado</label>
+                                    <output id="customConfOut" for="customConfRange customConf">95 % · α = 0,05</output>
+                                </div>
+                                <input type="range" id="customConfRange" min="0" max="1000" step="1" value="433">
+                                <div class="custom-level-scale" aria-hidden="true"></div>
+                                <div class="custom-level-exact">
+                                    <label for="customConf">Valor exacto (0–1)</label>
+                                    <input type="number" id="customConf" value="0.95" step="any" min="0.0001" max="0.9999" inputmode="decimal">
+                                </div>
+                            </div>
+                            <p class="field-hint" hidden>Probabilidad de que el procedimiento produzca un intervalo que contenga la media poblacional real. <strong>95 %</strong> es el estándar habitual.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="n">Tamaño muestral (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="n" value="15" step="1" min="2">
-                        <p class="field-hint" hidden>Número de observaciones de la muestra. Determina los grados de libertad de la t de Student (gl = n − 1) y el error estándar.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="conf">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <select id="conf">
-                            <option value="0.90">90 %</option>
-                            <option value="0.95" selected>95 %</option>
-                            <option value="0.99">99 %</option>
-                            <option value="custom">Personalizado…</option>
-                        </select>
-                        <p class="field-hint" hidden>Probabilidad de que el procedimiento produzca un intervalo que contenga la media poblacional real. <strong>95 %</strong> es el estándar habitual.</p>
-                    </div>
-                </div>
-                <div class="inline-inputs" id="customConfRow" style="display:none">
-                    <div class="form-group">
-                        <label for="customConf">Nivel de confianza personalizado (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
-                        <p class="field-hint" hidden>Introduce el nivel de confianza como proporción entre 0 y 1 (por ejemplo, 0,98 para un 98 %).</p>
-                    </div>
-                </div>
-            </div>
 
-            <button class="calculate-btn" id="calcBtn">Calcular intervalo</button>
-            <div id="result" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap">
-                <canvas id="ciChart" aria-label="Gráfico del intervalo de confianza sobre la distribución t de Student" role="img"></canvas>
-            </div>
+                <button class="calculate-btn" id="calcBtn">Calcular intervalo</button>
+            </section>
+
+            <div id="result" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Intervalo de confianza para la media (μ)</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="ciChart" aria-label="Gráfico de barras horizontales: intervalos de confianza al 90, 95 y 99 % y al nivel elegido, con la estimación puntual" role="img"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="ciChartNote"></p>
+                </div>
+            </section>
         </section>
 
         <aside class="sim-callout" aria-label="Simulación relacionada">
@@ -268,8 +283,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="ci-charts.js?v=20261105-2"></script>
 <script>
-let ciChart;
 
 document.getElementById('conf').addEventListener('change', function () {
     document.getElementById('customConfRow').style.display = this.value === 'custom' ? '' : 'none';
@@ -281,48 +296,6 @@ function getConfLevel() {
     return parseFloat(sel);
 }
 
-function renderChart(tCrit, df) {
-    const ctx = document.getElementById('ciChart');
-    if (!ctx) return;
-
-    const bound = Math.max(4, Math.abs(tCrit) + 0.8);
-    const minX = -bound, maxX = bound;
-    const step = 0.02;
-
-    const curve = [], inside = [], outside = [];
-    for (let x = minX; x <= maxX; x += step) {
-        const y = jStat.studentt.pdf(x, df);
-        curve.push({ x, y });
-        if (x >= -tCrit && x <= tCrit) {
-            inside.push({ x, y });
-            outside.push({ x, y: null });
-        } else {
-            inside.push({ x, y: null });
-            outside.push({ x, y });
-        }
-    }
-
-    if (ciChart) ciChart.destroy();
-    ciChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            datasets: [
-                { label: 'Región de confianza', data: inside, borderColor: 'rgba(34,197,94,0)', backgroundColor: 'rgba(34,197,94,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: 'Colas (α/2 cada una)', data: outside, borderColor: 'rgba(239,68,68,0)', backgroundColor: 'rgba(239,68,68,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: `t de Student (gl = ${df})`, data: curve, borderColor: '#1d4ed8', borderWidth: 2, pointRadius: 0, fill: false, parsing: false }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: { type: 'linear', min: minX, max: maxX, title: { display: true, text: `t (gl = ${df})` } },
-                y: { beginAtZero: true, title: { display: true, text: 'Densidad' } }
-            }
-        }
-    });
-}
-
 function calculate() {
     const xbar = parseFloat(document.getElementById('xbar').value);
     const s = parseFloat(document.getElementById('s').value);
@@ -332,7 +305,7 @@ function calculate() {
 
     if (![xbar, s, n, conf].every(Number.isFinite) || s <= 0 || n < 2 || conf <= 0 || conf >= 1) {
         resultEl.innerText = 'Error: revisa que s > 0, n ≥ 2 y 0 < confianza < 1.';
-        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        window.CICharts && CICharts.clear('ciChart');
         return;
     }
 
@@ -343,18 +316,36 @@ function calculate() {
     const margin = tCrit * se;
     const lower = xbar - margin;
     const upper = xbar + margin;
+    const EN = document.documentElement.lang === 'en';
+    window.CICharts && CICharts.result(resultEl, {
+        label: EN ? CICharts.pct(conf) + ' confidence interval for the mean μ' : 'Intervalo de confianza al ' + CICharts.pct(conf) + ' para la media μ',
+        main: { lo: lower, hi: upper },
+        details: [
+            [EN ? 'Confidence level' : 'Nivel de confianza', CICharts.confDetail(conf)],
+            [EN ? 'Degrees of freedom' : 'Grados de libertad', df],
+            [EN ? 'Critical t' : 't crítico', '±' + CICharts.num(tCrit, 4)],
+            [EN ? 'Sample mean (x̄)' : 'Media muestral (x̄)', xbar],
+            [EN ? 'Sample standard deviation (s)' : 'Desviación estándar muestral (s)', s],
+            [EN ? 'Sample size (n)' : 'Tamaño muestral (n)', n],
+            [EN ? 'Standard error' : 'Error estándar', se],
+            [EN ? 'Margin of error' : 'Margen de error', '±' + CICharts.num(margin)]
+        ]
+    });
 
-    resultEl.innerText =
-        `Nivel de confianza: ${(conf * 100).toFixed(1)} %  |  gl = ${df}  |  t crítico: ±${tCrit.toFixed(4)}\n` +
-        `Error estándar: ${se.toFixed(6)}  |  Margen de error: ±${margin.toFixed(6)}\n` +
-        `Intervalo de confianza: [${lower.toFixed(6)}, ${upper.toFixed(6)}]`;
-
-    renderChart(tCrit, df);
+    window.CICharts && CICharts.intervals({
+        canvas: 'ciChart', estimate: xbar, confidence: conf, custom: document.getElementById('conf').value === 'custom', xLabel: 'μ',
+        interval: function (c, f) {
+            const m = jStat.studentt.inv(1 - (1 - c) / 2, n * f - 1) * s / Math.sqrt(n * f);
+            return [xbar - m, xbar + m];
+        },
+        sizeLabel: function (f) { return 'n = ' + Math.ceil(n * f); }
+    });
 }
 
 document.getElementById('calcBtn').addEventListener('click', calculate);
 document.getElementById('conf').addEventListener('change', calculate);
 document.getElementById('customConf').addEventListener('input', calculate);
+window.CICharts && CICharts.customLevel({ onChange: calculate });
 calculate();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261105-1">
 
     <script type="application/ld+json">
     {
@@ -126,72 +126,87 @@
     </header>
 
     <main>
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Enter the four counts of the 2x2 table to estimate the odds ratio and its confidence interval.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Enter the four counts of the 2x2 table to estimate the odds ratio and its confidence interval.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="a">Exposed with event (a) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="a" value="35" step="1" min="0">
-                        <p class="field-hint" hidden>Number of subjects exposed to the factor of interest who experienced the event.</p>
+                <div class="form-grid sample-grid">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="a">Exposed with event (a) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="a" value="35" step="1" min="0">
+                            <p class="field-hint" hidden>Number of subjects exposed to the factor of interest who experienced the event.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="b">Exposed without event (b) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="b" value="65" step="1" min="0">
+                            <p class="field-hint" hidden>Number of subjects exposed to the factor of interest who did NOT experience the event.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="b">Exposed without event (b) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="b" value="65" step="1" min="0">
-                        <p class="field-hint" hidden>Number of subjects exposed to the factor of interest who did NOT experience the event.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="c">Unexposed with event (c) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="c" value="20" step="1" min="0">
+                            <p class="field-hint" hidden>Number of unexposed subjects who experienced the event.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="d">Unexposed without event (d) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="d" value="80" step="1" min="0">
+                            <p class="field-hint" hidden>Number of unexposed subjects who did NOT experience the event.</p>
+                        </div>
+                    </div>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="conf">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <select id="conf">
+                                <option value="0.90">90%</option>
+                                <option value="0.95" selected>95%</option>
+                                <option value="0.99">99%</option>
+                                <option value="custom">Custom…</option>
+                            </select>
+                            <div class="custom-level" id="customConfRow" style="display:none">
+                                <div class="custom-level-head">
+                                    <label for="customConfRange">Custom confidence level</label>
+                                    <output id="customConfOut" for="customConfRange customConf">95% · α = 0.05</output>
+                                </div>
+                                <input type="range" id="customConfRange" min="0" max="1000" step="1" value="433">
+                                <div class="custom-level-scale" aria-hidden="true"></div>
+                                <div class="custom-level-exact">
+                                    <label for="customConf">Exact value (0–1)</label>
+                                    <input type="number" id="customConf" value="0.95" step="any" min="0.0001" max="0.9999" inputmode="decimal">
+                                </div>
+                            </div>
+                            <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true odds ratio. <strong>95%</strong> is the usual standard.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="correction">Zero cells <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <select id="correction">
+                                <option value="auto" selected>Automatic 0.5 correction</option>
+                                <option value="always">Always apply 0.5</option>
+                                <option value="none">No correction</option>
+                            </select>
+                            <p class="field-hint" hidden>The Haldane-Anscombe correction adds <strong>0.5</strong> to all four cells when any of them is 0, so that the logarithm of the OR and its standard error can be calculated.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="c">Unexposed with event (c) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="c" value="20" step="1" min="0">
-                        <p class="field-hint" hidden>Number of unexposed subjects who experienced the event.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="d">Unexposed without event (d) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="d" value="80" step="1" min="0">
-                        <p class="field-hint" hidden>Number of unexposed subjects who did NOT experience the event.</p>
-                    </div>
-                </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="conf">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <select id="conf">
-                            <option value="0.90">90%</option>
-                            <option value="0.95" selected>95%</option>
-                            <option value="0.99">99%</option>
-                            <option value="custom">Custom…</option>
-                        </select>
-                        <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true odds ratio. <strong>95%</strong> is the usual standard.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="correction">Zero cells <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <select id="correction">
-                            <option value="auto" selected>Automatic 0.5 correction</option>
-                            <option value="always">Always apply 0.5</option>
-                            <option value="none">No correction</option>
-                        </select>
-                        <p class="field-hint" hidden>The Haldane-Anscombe correction adds <strong>0.5</strong> to all four cells when any of them is 0, so that the logarithm of the OR and its standard error can be calculated.</p>
-                    </div>
-                </div>
-                <div class="inline-inputs" id="customConfRow" style="display:none">
-                    <div class="form-group">
-                        <label for="customConf">Custom confidence level (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
-                        <p class="field-hint" hidden>Enter a confidence level between 0 and 1, for example <strong>0.95</strong> for 95%.</p>
-                    </div>
-                </div>
-            </div>
 
-            <button class="calculate-btn" id="calcBtn">Calculate interval</button>
-            <div id="result" class="result-box">Result pending…</div>
-            <div class="chart-wrap">
-                <canvas id="ciChart" aria-label="Chart of the confidence interval for the odds ratio on a logarithmic scale" role="img"></canvas>
-            </div>
+                <button class="calculate-btn" id="calcBtn">Calculate interval</button>
+            </section>
+
+            <div id="result" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Confidence interval for the odds ratio</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="ciChart" aria-label="Horizontal bar chart: confidence intervals at 90, 95 and 99% and at the chosen level, with the point estimate" role="img"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="ciChartNote"></p>
+                </div>
+            </section>
         </section>
 
         <section class="card content-card">
@@ -349,8 +364,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../ci-charts.js?v=20261105-2"></script>
 <script>
-let ciChart;
 
 document.getElementById('conf').addEventListener('change', function () {
     document.getElementById('customConfRow').style.display = this.value === 'custom' ? '' : 'none';
@@ -368,49 +383,6 @@ function formatNumber(value, digits = 6) {
     return value.toFixed(digits);
 }
 
-function renderChart(logOr, lowerLog, upperLog, zCrit, seLog) {
-    const ctx = document.getElementById('ciChart');
-    if (!ctx) return;
-
-    const margin = Math.max(0.2, (zCrit + 0.8) * seLog);
-    const minX = logOr - margin;
-    const maxX = logOr + margin;
-    const step = (maxX - minX) / 300;
-    const curve = [], inside = [], outside = [];
-
-    for (let x = minX; x <= maxX; x += step) {
-        const y = jStat.normal.pdf(x, logOr, seLog);
-        curve.push({ x, y });
-        if (x >= lowerLog && x <= upperLog) {
-            inside.push({ x, y });
-            outside.push({ x, y: null });
-        } else {
-            inside.push({ x, y: null });
-            outside.push({ x, y });
-        }
-    }
-
-    if (ciChart) ciChart.destroy();
-    ciChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            datasets: [
-                { label: 'Confidence region', data: inside, borderColor: 'rgba(34,197,94,0)', backgroundColor: 'rgba(34,197,94,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: 'Tails (α/2 each)', data: outside, borderColor: 'rgba(239,68,68,0)', backgroundColor: 'rgba(239,68,68,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-                { label: 'Normal over log(OR)', data: curve, borderColor: '#1d4ed8', borderWidth: 2, pointRadius: 0, fill: false, parsing: false }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: { type: 'linear', min: minX, max: maxX, title: { display: true, text: 'log(OR)' } },
-                y: { beginAtZero: true, title: { display: true, text: 'Approximate density' } }
-            }
-        }
-    });
-}
-
 function calculate() {
     const raw = ['a', 'b', 'c', 'd'].map(id => parseFloat(document.getElementById(id).value));
     const conf = getConfLevel();
@@ -419,7 +391,7 @@ function calculate() {
 
     if (![...raw, conf].every(Number.isFinite) || raw.some(v => v < 0) || conf <= 0 || conf >= 1) {
         resultEl.innerText = 'Error: check that all cells are counts ≥ 0 and that 0 < confidence < 1.';
-        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        window.CICharts && CICharts.clear('ciChart');
         return;
     }
 
@@ -428,14 +400,14 @@ function calculate() {
 
     if (hasZero && correction === 'none') {
         resultEl.innerText = 'Error: at least one cell has a value of 0. Apply the 0.5 correction or enter positive counts.';
-        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        window.CICharts && CICharts.clear('ciChart');
         return;
     }
 
     const [a, b, c, d] = raw.map(v => addHalf ? v + 0.5 : v);
     if ([a, b, c, d].some(v => v <= 0)) {
         resultEl.innerText = 'Error: to calculate log(OR), all cells used must be positive.';
-        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        window.CICharts && CICharts.clear('ciChart');
         return;
     }
 
@@ -462,23 +434,42 @@ function calculate() {
     const smallCounts = [a, b, c, d].some(v => v < 5)
         ? '\n⚠ Some cells used are smaller than 5. Interpret the normal interval with caution.'
         : '';
+    const EN = document.documentElement.lang === 'en';
+    window.CICharts && CICharts.result(resultEl, {
+        label: EN ? CICharts.pct(conf) + ' confidence interval for the odds ratio (OR)' : 'Intervalo de confianza al ' + CICharts.pct(conf) + ' para la odds ratio (OR)',
+        main: { lo: lower, hi: upper },
+        secondary: [{ label: EN ? 'On the log(OR) scale' : 'En escala log(OR)', lo: lowerLog, hi: upperLog }],
+        verdict: interpretation,
+        notes: [smallCounts],
+        details: [
+            [EN ? 'Confidence level' : 'Nivel de confianza', CICharts.confDetail(conf)],
+            [EN ? 'Critical z' : 'z crítico', '±' + CICharts.num(zCrit, 4)],
+            ['OR', orValue],
+            ['log(OR)', logOr],
+            ['SE[log(OR)]', seLog],
+            [EN ? 'Margin on the log(OR) scale' : 'Margen en escala log(OR)', '±' + CICharts.num(marginLog)],
+            [EN ? '0.5 correction' : 'Corrección 0,5', correctionText]
+        ]
+    });
 
-    resultEl.innerText = [
-        `OR = ${formatNumber(orValue)}  |  log(OR) = ${formatNumber(logOr)}  |  SE[log(OR)] = ${formatNumber(seLog)}`,
-        `Confidence level: ${(conf * 100).toFixed(1)}%  |  Critical z: ±${zCrit.toFixed(4)}  |  Margin in log(OR): ±${formatNumber(marginLog)}`,
-        `CI for OR: [${formatNumber(lower)}, ${formatNumber(upper)}]`,
-        `CI on log(OR) scale: [${formatNumber(lowerLog)}, ${formatNumber(upperLog)}]`,
-        `0.5 correction: ${correctionText}`,
-        interpretation + smallCounts
-    ].join('\n');
-
-    renderChart(logOr, lowerLog, upperLog, zCrit, seLog);
+    const L = document.documentElement.lang === 'en';
+    const totalRaw = raw.reduce(function (acc, v) { return acc + v; }, 0);
+    window.CICharts && CICharts.intervals({
+        canvas: 'ciChart', estimate: orValue, confidence: conf, custom: document.getElementById('conf').value === 'custom', xLabel: 'OR', log: true,
+        reference: 1, referenceLabel: L ? 'No association (1)' : 'Sin asociación (1)',
+        interval: function (c, f) {
+            const m = jStat.normal.inv(1 - (1 - c) / 2, 0, 1) * seLog / Math.sqrt(f);
+            return [Math.exp(logOr - m), Math.exp(logOr + m)];
+        },
+        sizeLabel: function (f) { return 'N = ' + Math.ceil(totalRaw * f); }
+    });
 }
 
 document.getElementById('calcBtn').addEventListener('click', calculate);
 document.getElementById('conf').addEventListener('change', calculate);
 document.getElementById('correction').addEventListener('change', calculate);
 document.getElementById('customConf').addEventListener('input', calculate);
+window.CICharts && CICharts.customLevel({ onChange: calculate });
 calculate();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>

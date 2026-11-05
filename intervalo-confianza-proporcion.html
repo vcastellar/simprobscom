@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261102-2">
+    <link rel="stylesheet" href="style_new.css?v=20261105-1">
 
     <script type="application/ld+json">
 {
@@ -130,60 +130,75 @@
     </header>
 
     <main>
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Introduce el número de éxitos y el tamaño muestral para obtener ambos intervalos.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Introduce el número de éxitos y el tamaño muestral para obtener ambos intervalos.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="x">Número de éxitos (x) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="x" value="134" step="1" min="0">
-                        <p class="field-hint" hidden>Número de observaciones que cumplen la característica de interés (p. ej., clientes satisfechos). Junto con n forma la proporción muestral \(\hat{p} = x/n\).</p>
+                <div class="form-grid sample-grid">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="x">Número de éxitos (x) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="x" value="134" step="1" min="0">
+                            <p class="field-hint" hidden>Número de observaciones que cumplen la característica de interés (p. ej., clientes satisfechos). Junto con n forma la proporción muestral \(\hat{p} = x/n\).</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="n">Tamaño muestral (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <input type="number" id="n" value="200" step="1" min="1">
+                            <p class="field-hint" hidden>Número total de observaciones de la muestra.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="n">Tamaño muestral (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="n" value="200" step="1" min="1">
-                        <p class="field-hint" hidden>Número total de observaciones de la muestra.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="conf">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <select id="conf">
+                                <option value="0.90">90 %</option>
+                                <option value="0.95" selected>95 %</option>
+                                <option value="0.99">99 %</option>
+                                <option value="custom">Personalizado…</option>
+                            </select>
+                            <div class="custom-level" id="customConfRow" style="display:none">
+                                <div class="custom-level-head">
+                                    <label for="customConfRange">Nivel de confianza personalizado</label>
+                                    <output id="customConfOut" for="customConfRange customConf">95 % · α = 0,05</output>
+                                </div>
+                                <input type="range" id="customConfRange" min="0" max="1000" step="1" value="433">
+                                <div class="custom-level-scale" aria-hidden="true"></div>
+                                <div class="custom-level-exact">
+                                    <label for="customConf">Valor exacto (0–1)</label>
+                                    <input type="number" id="customConf" value="0.95" step="any" min="0.0001" max="0.9999" inputmode="decimal">
+                                </div>
+                            </div>
+                            <p class="field-hint" hidden>Probabilidad de que el procedimiento produzca un intervalo que contenga el valor real de p. <strong>95 %</strong> es el estándar habitual en encuestas y estudios de salud.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="method">Método <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                            <select id="method">
+                                <option value="both" selected>Ambos (Wald + Wilson)</option>
+                                <option value="wald">Solo Wald</option>
+                                <option value="wilson">Solo Wilson</option>
+                            </select>
+                            <p class="field-hint" hidden><strong>Wilson</strong> es el método recomendado por defecto: mantiene mejor la cobertura real con muestras pequeñas o proporciones extremas. <strong>Wald</strong> es más simple pero puede fallar cuando hay pocos éxitos o fracasos.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="conf">Nivel de confianza <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <select id="conf">
-                            <option value="0.90">90 %</option>
-                            <option value="0.95" selected>95 %</option>
-                            <option value="0.99">99 %</option>
-                            <option value="custom">Personalizado…</option>
-                        </select>
-                        <p class="field-hint" hidden>Probabilidad de que el procedimiento produzca un intervalo que contenga el valor real de p. <strong>95 %</strong> es el estándar habitual en encuestas y estudios de salud.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="method">Método <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <select id="method">
-                            <option value="both" selected>Ambos (Wald + Wilson)</option>
-                            <option value="wald">Solo Wald</option>
-                            <option value="wilson">Solo Wilson</option>
-                        </select>
-                        <p class="field-hint" hidden><strong>Wilson</strong> es el método recomendado por defecto: mantiene mejor la cobertura real con muestras pequeñas o proporciones extremas. <strong>Wald</strong> es más simple pero puede fallar cuando hay pocos éxitos o fracasos.</p>
-                    </div>
-                </div>
-                <div class="inline-inputs" id="customConfRow" style="display:none">
-                    <div class="form-group">
-                        <label for="customConf">Nivel de confianza personalizado (0–1) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                        <input type="number" id="customConf" value="0.95" step="0.01" min="0.01" max="0.9999">
-                        <p class="field-hint" hidden>Introduce el nivel de confianza deseado como valor decimal entre 0 y 1 (ej.: 0,975 para un 97,5 %).</p>
-                    </div>
-                </div>
-            </div>
 
-            <button class="calculate-btn" id="calcBtn">Calcular intervalo</button>
-            <div id="result" class="result-box">Resultado pendiente…</div>
-            <div class="chart-wrap">
-                <canvas id="ciChart" aria-label="Gráfico del intervalo de confianza para la proporción" role="img"></canvas>
-            </div>
+                <button class="calculate-btn" id="calcBtn">Calcular intervalo</button>
+            </section>
+
+            <div id="result" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Intervalo de confianza para la proporción (p)</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="ciChart" aria-label="Gráfico de barras horizontales: intervalos de confianza al 90, 95 y 99 % y al nivel elegido, con la estimación puntual" role="img"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="ciChartNote"></p>
+                </div>
+            </section>
         </section>
 
         <aside class="sim-callout" aria-label="Simulación relacionada">
@@ -327,8 +342,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="ci-charts.js?v=20261105-2"></script>
 <script>
-let ciChart;
 
 document.getElementById('conf').addEventListener('change', function () {
     document.getElementById('customConfRow').style.display = this.value === 'custom' ? '' : 'none';
@@ -340,48 +355,6 @@ function getConfLevel() {
     return parseFloat(sel);
 }
 
-function renderChart(zCrit, pHat, waldL, waldU, wilsonL, wilsonU, method) {
-    const ctx = document.getElementById('ciChart');
-    if (!ctx) return;
-
-    const bound = Math.max(4, zCrit + 0.8);
-    const minX = -bound, maxX = bound;
-    const step = 0.02;
-
-    const curve = [], inside = [], outside = [];
-    for (let x = minX; x <= maxX; x += step) {
-        const y = jStat.normal.pdf(x, 0, 1);
-        curve.push({ x, y });
-        if (x >= -zCrit && x <= zCrit) {
-            inside.push({ x, y });
-            outside.push({ x, y: null });
-        } else {
-            inside.push({ x, y: null });
-            outside.push({ x, y });
-        }
-    }
-
-    const datasets = [
-        { label: 'Región de confianza', data: inside, borderColor: 'rgba(34,197,94,0)', backgroundColor: 'rgba(34,197,94,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-        { label: 'Colas (α/2 cada una)', data: outside, borderColor: 'rgba(239,68,68,0)', backgroundColor: 'rgba(239,68,68,0.3)', fill: 'origin', pointRadius: 0, parsing: false },
-        { label: 'Distribución Normal estándar', data: curve, borderColor: '#1d4ed8', borderWidth: 2, pointRadius: 0, fill: false, parsing: false }
-    ];
-
-    if (ciChart) ciChart.destroy();
-    ciChart = new Chart(ctx, {
-        type: 'line',
-        data: { datasets },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: { type: 'linear', min: minX, max: maxX, title: { display: true, text: 'z' } },
-                y: { beginAtZero: true, title: { display: true, text: 'Densidad' } }
-            }
-        }
-    });
-}
-
 function calculate() {
     const x = parseFloat(document.getElementById('x').value);
     const n = parseFloat(document.getElementById('n').value);
@@ -391,7 +364,7 @@ function calculate() {
 
     if (![x, n, conf].every(Number.isFinite) || x < 0 || n < 1 || x > n || conf <= 0 || conf >= 1) {
         resultEl.innerText = 'Error: revisa que 0 ≤ x ≤ n, n ≥ 1 y 0 < confianza < 1.';
-        if (ciChart) { ciChart.destroy(); ciChart = null; }
+        window.CICharts && CICharts.clear('ciChart');
         return;
     }
 
@@ -414,25 +387,45 @@ function calculate() {
     const waldOk = n * pHat >= 5 && n * (1 - pHat) >= 5;
     const warning = waldOk ? '' : '\n⚠ Condición de normalidad no cumplida (n·p̂ < 5 o n·(1−p̂) < 5). Se recomienda usar Wilson.';
 
-    let lines = [
-        `p̂ = ${pHat.toFixed(6)}  |  Nivel de confianza: ${(conf * 100).toFixed(1)} %  |  z crítico: ±${zCrit.toFixed(4)}`
-    ];
-    if (method === 'both' || method === 'wald') {
-        lines.push(`Wald:   [${waldL.toFixed(6)}, ${waldU.toFixed(6)}]  (amplitud: ${(waldU - waldL).toFixed(6)})`);
-    }
-    if (method === 'both' || method === 'wilson') {
-        lines.push(`Wilson: [${wilsonL.toFixed(6)}, ${wilsonU.toFixed(6)}]  (amplitud: ${(wilsonU - wilsonL).toFixed(6)})`);
-    }
-    if (warning) lines.push(warning);
-
-    resultEl.innerText = lines.join('\n');
-    renderChart(zCrit, pHat, waldL, waldU, wilsonL, wilsonU, method);
+    const EN = document.documentElement.lang === 'en';
+    const mainWald = method === 'wald';
+    window.CICharts && CICharts.result(resultEl, {
+        label: (EN ? CICharts.pct(conf) + ' confidence interval for the proportion p' : 'Intervalo de confianza al ' + CICharts.pct(conf) + ' para la proporción p') + (mainWald ? ' (Wald)' : ' (Wilson)'),
+        main: mainWald ? { lo: waldL, hi: waldU } : { lo: wilsonL, hi: wilsonU },
+        secondary: method === 'both' ? [{ label: 'Wald', lo: waldL, hi: waldU }] : [],
+        notes: [warning],
+        details: [
+            [EN ? 'Confidence level' : 'Nivel de confianza', CICharts.confDetail(conf)],
+            [EN ? 'Critical z' : 'z crítico', '±' + CICharts.num(zCrit, 4)],
+            [EN ? 'Sample proportion (p̂)' : 'Proporción muestral (p̂)', CICharts.num(pHat, 4) + ' (' + x + (EN ? ' of ' : ' de ') + n + ')'],
+            [EN ? 'Standard error (Wald)' : 'Error estándar (Wald)', seWald],
+            [EN ? 'Margin of error (Wald)' : 'Margen de error (Wald)', '±' + CICharts.num(zCrit * seWald)]
+        ]
+    });
+    const waldFn = function (c, f) {
+        const m = jStat.normal.inv(1 - (1 - c) / 2, 0, 1) * Math.sqrt(pHat * (1 - pHat) / (n * f));
+        return [Math.max(0, pHat - m), Math.min(1, pHat + m)];
+    };
+    const wilsonFn = function (c, f) {
+        const z = jStat.normal.inv(1 - (1 - c) / 2, 0, 1), nf = n * f, z2 = z * z;
+        const mid = (pHat + z2 / (2 * nf)) / (1 + z2 / nf);
+        const half = (z / (1 + z2 / nf)) * Math.sqrt(pHat * (1 - pHat) / nf + z2 / (4 * nf * nf));
+        return [Math.max(0, mid - half), Math.min(1, mid + half)];
+    };
+    window.CICharts && CICharts.intervals({
+        canvas: 'ciChart', estimate: pHat, confidence: conf, custom: document.getElementById('conf').value === 'custom', xLabel: 'p', xMin: 0, xMax: 1,
+        method: method === 'wald' ? 'Wald' : 'Wilson',
+        interval: method === 'wald' ? waldFn : wilsonFn,
+        compare: method === 'both' ? { label: 'Wald', interval: waldFn } : null,
+        sizeLabel: function (f) { return 'n = ' + Math.ceil(n * f); }
+    });
 }
 
 document.getElementById('calcBtn').addEventListener('click', calculate);
 document.getElementById('conf').addEventListener('change', calculate);
 document.getElementById('method').addEventListener('change', calculate);
 document.getElementById('customConf').addEventListener('input', calculate);
+window.CICharts && CICharts.customLevel({ onChange: calculate });
 calculate();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

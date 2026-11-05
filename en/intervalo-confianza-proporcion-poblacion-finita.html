@@ -90,7 +90,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261105-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -135,48 +135,58 @@
     </header>
 
     <main>
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Enter the successes, the sample size, the population size and the confidence level.</p>
-            </div>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Enter the successes, the sample size, the population size and the confidence level.</p>
+                </div>
 
-            <div class="form-grid sample-grid">
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="fpX">Number of successes (x) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="fpX" value="134" step="1" min="0">
-                        <p class="field-hint" hidden>Number of successes observed in the sample (numerator of p̂ = x/n).</p>
+                <div class="form-grid sample-grid">
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="fpX">Number of successes (x) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="fpX" value="134" step="1" min="0">
+                            <p class="field-hint" hidden>Number of successes observed in the sample (numerator of p̂ = x/n).</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="fpN">Sample size (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="fpN" value="200" step="1" min="1">
+                            <p class="field-hint" hidden>Number of units sampled from the population, without replacement.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="fpN">Sample size (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="fpN" value="200" step="1" min="1">
-                        <p class="field-hint" hidden>Number of units sampled from the population, without replacement.</p>
+                    <div class="inline-inputs">
+                        <div class="form-group">
+                            <label for="fpBigN">Population size (N) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="fpBigN" value="800" step="1" min="2">
+                            <p class="field-hint" hidden>Total size of the population the sample comes from, fixed and known in advance. If the fraction n/N exceeds 5%, the FPC correction shrinks the interval noticeably.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="fpConf">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <select id="fpConf">
+                                <option value="0.90">90%</option>
+                                <option value="0.95" selected>95%</option>
+                                <option value="0.99">99%</option>
+                            </select>
+                            <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true population proportion. 95% is the usual standard.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="inline-inputs">
-                    <div class="form-group">
-                        <label for="fpBigN">Population size (N) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <input type="number" id="fpBigN" value="800" step="1" min="2">
-                        <p class="field-hint" hidden>Total size of the population the sample comes from, fixed and known in advance. If the fraction n/N exceeds 5%, the FPC correction shrinks the interval noticeably.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="fpConf">Confidence level <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                        <select id="fpConf">
-                            <option value="0.90">90%</option>
-                            <option value="0.95" selected>95%</option>
-                            <option value="0.99">99%</option>
-                        </select>
-                        <p class="field-hint" hidden>Probability that the procedure produces an interval containing the true population proportion. 95% is the usual standard.</p>
-                    </div>
-                </div>
-            </div>
 
-            <button class="calculate-btn" id="fpCalcBtn">Calculate interval</button>
-            <div id="fpResult" class="result-box">Result pending…</div>
-            <div class="chart-wrap">
-                <canvas id="fpChart" aria-label="Chart of the confidence interval for the proportion" role="img"></canvas>
-            </div>
+                <button class="calculate-btn" id="fpCalcBtn">Calculate interval</button>
+            </section>
+
+            <div id="fpResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Confidence interval for the proportion</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="fpChart" aria-label="Chart of the confidence interval for the proportion" role="img"></canvas>
+                    </div>
+                    <p class="ss-chart-note" id="fpChartNote"></p>
+                </div>
+            </section>
         </section>
 
         <section class="card content-card">
@@ -262,6 +272,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../ci-charts.js?v=20261105-2"></script>
 <script>
 let fpChart;
 
@@ -334,6 +345,7 @@ function renderFpChart(pHat, corrL, corrU, stdL, stdU) {
 }
 
 function calculateFp() {
+    window.CICharts && CICharts.clearNote('fpChart');
     const x = parseFloat(document.getElementById('fpX').value);
     const n = parseFloat(document.getElementById('fpN').value);
     const bigN = parseFloat(document.getElementById('fpBigN').value);
@@ -363,16 +375,35 @@ function calculateFp() {
     const normOk = n * pHat >= 5 && n * (1 - pHat) >= 5;
     const warning = normOk ? '' : '\n⚠ Normality condition not met (n·p̂ < 5 or n·(1−p̂) < 5). Interpret the CI with caution.';
     const fpcMsg = fraction < 0.05 ? ' (fraction < 5%; FPC marginal)' : '';
-
-    resultEl.innerText =
-        `p̂ = ${pHat.toFixed(6)}  |  Level: ${(conf * 100).toFixed(0)}%  |  z = ±${z.toFixed(4)}\n` +
-        `Sampling fraction f = n/N = ${(fraction * 100).toFixed(2)}%${fpcMsg}\n` +
-        `FPC = ${fpc.toFixed(6)}\n` +
-        `CI with FPC:      [${corrL.toFixed(6)}, ${corrU.toFixed(6)}]  (width: ${(corrU - corrL).toFixed(6)})\n` +
-        `CI without FPC:   [${stdL.toFixed(6)}, ${stdU.toFixed(6)}]  (width: ${(stdU - stdL).toFixed(6)})\n` +
-        `Width reduction: ${((1 - (corrU - corrL) / (stdU - stdL)) * 100).toFixed(2)}%${warning}`;
+    const EN = document.documentElement.lang === 'en';
+    window.CICharts && CICharts.result(resultEl, {
+        label: EN ? CICharts.pct(conf) + ' confidence interval for the proportion p (with finite population correction)' : 'Intervalo de confianza al ' + CICharts.pct(conf) + ' para la proporción p (con corrección por población finita)',
+        main: { lo: corrL, hi: corrU },
+        secondary: [{ label: EN ? 'Without the correction' : 'Sin la corrección', lo: stdL, hi: stdU }],
+        notes: [fraction < 0.05 ? (EN ? 'ℹ The sampling fraction is below 5%: the correction barely changes the interval.' : 'ℹ La fracción de muestreo es menor del 5 %: la corrección apenas cambia el intervalo.') : '', warning],
+        details: [
+            [EN ? 'Confidence level' : 'Nivel de confianza', CICharts.confDetail(conf)],
+            [EN ? 'Critical z' : 'z crítico', '±' + CICharts.num(z, 4)],
+            [EN ? 'Sample proportion (p̂)' : 'Proporción muestral (p̂)', CICharts.num(pHat, 4) + ' (' + x + (EN ? ' of ' : ' de ') + n + ')'],
+            [EN ? 'Population size (N)' : 'Tamaño poblacional (N)', bigN],
+            [EN ? 'Sampling fraction (n/N)' : 'Fracción de muestreo (n/N)', CICharts.pct(fraction)],
+            [EN ? 'Correction factor (FPC)' : 'Factor de corrección (FPC)', fpc],
+            [EN ? 'Width reduction' : 'Reducción de la amplitud', CICharts.pct(1 - (corrU - corrL) / (stdU - stdL))]
+        ]
+    });
 
     renderFpChart(pHat, corrL, corrU, stdL, stdU);
+
+    window.CICharts && CICharts.note({
+        canvas: 'fpChart', confidence: conf, maxFactor: bigN / n,
+        width: function (f) {
+            const nf = n * f;
+            if (nf > bigN) return null;
+            const m = z * Math.sqrt(pHat * (1 - pHat) / nf) * Math.sqrt((bigN - nf) / (bigN - 1));
+            return Math.min(1, pHat + m) - Math.max(0, pHat - m);
+        },
+        sizeLabel: function (f) { return 'n = ' + Math.ceil(n * f); }
+    });
 }
 
 document.getElementById('fpCalcBtn').addEventListener('click', calculateFp);
