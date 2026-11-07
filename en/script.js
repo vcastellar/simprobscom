@@ -254,7 +254,7 @@ function resolveCdfResult(dist, cdfMode, x, b, p1, p2) {
 
     if (cdfMode === "right") {
         if (["binomial", "poisson", "negbin", "geometric", "hypergeometric", "bernoulli"].includes(dist)) {
-            const adjusted = x - 1;
+            const adjusted = Math.ceil(x) - 1;
             return { value: 1 - getCdfValue(dist, adjusted, p1, p2), label: `P(X ≥ ${x})` };
         }
 
@@ -271,7 +271,7 @@ function resolveCdfResult(dist, cdfMode, x, b, p1, p2) {
         }
 
         if (["binomial", "poisson", "negbin", "geometric", "hypergeometric", "bernoulli"].includes(dist)) {
-            const lower = x - 1;
+            const lower = Math.ceil(x) - 1;
             return {
                 value: getCdfValue(dist, b, p1, p2) - getCdfValue(dist, lower, p1, p2),
                 label: `P(${x} ≤ X ≤ ${b})`
@@ -705,6 +705,211 @@ function loadParameters() {
     }
 }
 
+// ── Presentación del resultado de las distribuciones ──────────────────
+// Etiqueta con la distribución y sus parámetros, el resultado en grande con
+// la notación correcta (P(X = x) en las discretas, f(x) en las continuas,
+// P(X ≤ x)…, o el cuantil con su definición), una línea con el
+// complementario o la aclaración del cuantil, avisos (valor fuera del
+// soporte, densidad) y un desplegable con media, varianza y soporte.
+const DIST_EN = document.documentElement.lang === "en";
+const DIST_LOCALE = DIST_EN ? "en-US" : "es-ES";
+const DISCRETE_DISTS = ["binomial", "poisson", "negbin", "geometric", "hypergeometric", "bernoulli"];
+const DIST_TXT = DIST_EN ? {
+    names: { normal: "Normal", binomial: "Binomial", poisson: "Poisson", studentt: "Student's t", chisquare: "Chi-square", centralf: "Snedecor's F", exponential: "Exponential", negbin: "Negative binomial", geometric: "Geometric", uniform: "Uniform", gamma: "Gamma", beta: "Beta", lognormal: "Log-normal", weibull: "Weibull", hypergeometric: "Hypergeometric", bernoulli: "Bernoulli" },
+    sep: ", ", percentile: "percentile", pct: (v) => v + "%",
+    asPct: (s) => "That is, " + s,
+    density: (x) => "ℹ This is a density, not a probability: for a continuous variable P(X = " + x + ") = 0. Use the cumulative probability for probabilities.",
+    outside: (x, sup) => "⚠ " + x + " is not a possible value of X (possible values: " + sup + ").",
+    complement: "Complement: ",
+    outsideInterval: "Outside the interval: ",
+    qCont: (q) => "Value such that P(X ≤ x) = " + q,
+    qDisc: (q, x, p) => "It is the smallest value with P(X ≤ x) ≥ " + q + "; at it, P(X ≤ " + x + ") = " + p,
+    qDiscNote: (q, x, p) => "ℹ In a discrete distribution there is rarely an x with P(X ≤ x) exactly " + q + ": P(X ≤ " + x + ") = " + p + ".",
+    details: "Distribution details", mean: "Mean E[X]", variance: "Variance Var(X)", sd: "Standard deviation", support: "Possible values",
+    undef: "undefined", infinite: "infinite", reals: "all real numbers"
+} : {
+    names: { normal: "Normal", binomial: "Binomial", poisson: "Poisson", studentt: "t de Student", chisquare: "Chi-cuadrado", centralf: "F de Snedecor", exponential: "Exponencial", negbin: "Binomial negativa", geometric: "Geométrica", uniform: "Uniforme", gamma: "Gamma", beta: "Beta", lognormal: "Log-normal", weibull: "Weibull", hypergeometric: "Hipergeométrica", bernoulli: "Bernoulli" },
+    sep: "; ", percentile: "percentil", pct: (v) => v + " %",
+    asPct: (s) => "Es decir, un " + s,
+    density: (x) => "ℹ Es una densidad, no una probabilidad: en una variable continua P(X = " + x + ") = 0. Para probabilidades usa la acumulada.",
+    outside: (x, sup) => "⚠ " + x + " no es un valor posible de X (valores posibles: " + sup + ").",
+    complement: "Complementaria: ",
+    outsideInterval: "Fuera del intervalo: ",
+    qCont: (q) => "Valor tal que P(X ≤ x) = " + q,
+    qDisc: (q, x, p) => "Es el menor valor con P(X ≤ x) ≥ " + q + "; en él, P(X ≤ " + x + ") = " + p,
+    qDiscNote: (q, x, p) => "ℹ En una distribución discreta casi nunca hay un x con P(X ≤ x) = " + q + " exacto: P(X ≤ " + x + ") = " + p + ".",
+    details: "Detalles de la distribución", mean: "Media E[X]", variance: "Varianza Var(X)", sd: "Desviación típica", support: "Valores posibles",
+    undef: "no definida", infinite: "infinita", reals: "todos los números reales"
+};
+
+function distEsc(s) {
+    return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[c]));
+}
+
+// Valor introducido por el usuario o parámetro: tal cual, con el separador local.
+function fmtInput(v) {
+    if (!Number.isFinite(v)) return v > 0 ? "∞" : "−∞";
+    return v.toLocaleString(DIST_LOCALE, { maximumFractionDigits: 8 });
+}
+
+const SUPERSCRIPT = { "-": "⁻", "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹" };
+function fmtSci(v) {
+    const e = Math.floor(Math.log10(Math.abs(v)));
+    const m = v / Math.pow(10, e);
+    const exp = String(e).split("").map((c) => SUPERSCRIPT[c] || c).join("");
+    return m.toLocaleString(DIST_LOCALE, { minimumFractionDigits: 3, maximumFractionDigits: 3 }) + " · 10" + exp;
+}
+
+// Probabilidades: 5 decimales; notación científica si es muy pequeña y
+// "≈ 1" si solo difiere de 1 más allá de la quinta cifra decimal.
+function fmtProb(v) {
+    if (v === 0) return "0";
+    if (v === 1) return "1";
+    if (v > 0 && v < 1e-5) return fmtSci(v);
+    if (v < 1 && v > 1 - 5e-6) return "≈ 1";
+    return v.toLocaleString(DIST_LOCALE, { minimumFractionDigits: 5, maximumFractionDigits: 5 });
+}
+
+// " = 0,1234", o " ≈ 1" sin el signo igual cuando la probabilidad casi es 1.
+function eqProb(v) {
+    const t = fmtProb(v);
+    return t.charAt(0) === "≈" ? " " + t : " = " + t;
+}
+
+// Resultado principal no probabilístico (densidad, cuantil continuo):
+// 5 decimales fijos; enteros tal cual y notación científica si es muy pequeño.
+function fmtMain(v) {
+    if (!Number.isFinite(v)) return v > 0 ? "∞" : "−∞";
+    if (v === 0) return "0";
+    if (Math.abs(v) < 1e-5) return fmtSci(v);
+    if (Number.isInteger(v)) return v.toLocaleString(DIST_LOCALE);
+    return v.toLocaleString(DIST_LOCALE, { minimumFractionDigits: 5, maximumFractionDigits: 5 });
+}
+
+// Medias, varianzas y otros valores de los detalles: hasta 4 decimales.
+function fmtValue(v) {
+    if (!Number.isFinite(v)) return v > 0 ? "∞" : "−∞";
+    if (v === 0) return "0";
+    if (Math.abs(v) < 1e-4) return fmtSci(v);
+    if (Number.isInteger(v)) return v.toLocaleString(DIST_LOCALE);
+    return v.toLocaleString(DIST_LOCALE, { maximumFractionDigits: 4 });
+}
+
+function distParams(dist, p1, p2, p3) {
+    const P = {
+        normal: [["μ", p1], ["σ", p2]], binomial: [["n", p1], ["p", p2]], poisson: [["λ", p1]],
+        studentt: [["ν", p1]], chisquare: [["k", p1]], centralf: [["d₁", p1], ["d₂", p2]],
+        exponential: [["λ", p1]], negbin: [["r", p1], ["p", p2]], geometric: [["p", p1]],
+        uniform: [["a", p1], ["b", p2]], gamma: [["k", p1], ["θ", p2]], beta: [["α", p1], ["β", p2]],
+        lognormal: [["μ", p1], ["σ", p2]], weibull: [["k", p1], ["λ", p2]],
+        hypergeometric: [["N", p1], ["K", p2], ["n", p3]], bernoulli: [["p", p1]]
+    }[dist] || [];
+    return "X ~ " + DIST_TXT.names[dist] + "(" + P.map(([s, v]) => s + " = " + fmtInput(v)).join(DIST_TXT.sep) + ")";
+}
+
+// Media, varianza y soporte de cada distribución (con la parametrización
+// que usa esta calculadora).
+function distMoments(dist, p1, p2, p3) {
+    const T = DIST_TXT, inf = Infinity;
+    const list = (a, b) => (b - a <= 3 ? Array.from({ length: b - a + 1 }, (_, i) => a + i).join(", ") : a + ", " + (a + 1) + ", …, " + b);
+    switch (dist) {
+        case "normal": return { mean: p1, variance: p2 * p2, support: T.reals };
+        case "binomial": return { mean: p1 * p2, variance: p1 * p2 * (1 - p2), support: list(0, p1), min: 0, max: p1 };
+        case "poisson": return { mean: p1, variance: p1, support: "0, 1, 2, …", min: 0, max: inf };
+        case "studentt": return { mean: p1 > 1 ? 0 : NaN, variance: p1 > 2 ? p1 / (p1 - 2) : (p1 > 1 ? inf : NaN), support: T.reals };
+        case "chisquare": return { mean: p1, variance: 2 * p1, support: "[0, ∞)" };
+        case "centralf": return { mean: p2 > 2 ? p2 / (p2 - 2) : NaN, variance: p2 > 4 ? (2 * p2 * p2 * (p1 + p2 - 2)) / (p1 * (p2 - 2) ** 2 * (p2 - 4)) : (p2 > 2 ? inf : NaN), support: "[0, ∞)" };
+        case "exponential": return { mean: 1 / p1, variance: 1 / (p1 * p1), support: "[0, ∞)" };
+        case "negbin": return { mean: p1 * (1 - p2) / p2, variance: p1 * (1 - p2) / (p2 * p2), support: "0, 1, 2, …", min: 0, max: inf };
+        case "geometric": return { mean: 1 / p1, variance: (1 - p1) / (p1 * p1), support: "1, 2, 3, …", min: 1, max: inf };
+        case "uniform": return { mean: (p1 + p2) / 2, variance: (p2 - p1) ** 2 / 12, support: "[" + fmtInput(p1) + DIST_TXT.sep + fmtInput(p2) + "]" };
+        case "gamma": return { mean: p1 * p2, variance: p1 * p2 * p2, support: "[0, ∞)" };
+        case "beta": return { mean: p1 / (p1 + p2), variance: (p1 * p2) / ((p1 + p2) ** 2 * (p1 + p2 + 1)), support: "[0" + DIST_TXT.sep + "1]" };
+        case "lognormal": return { mean: Math.exp(p1 + p2 * p2 / 2), variance: (Math.exp(p2 * p2) - 1) * Math.exp(2 * p1 + p2 * p2), support: "(0, ∞)" };
+        case "weibull": {
+            const g1 = jStat.gammafn(1 + 1 / p1), g2 = jStat.gammafn(1 + 2 / p1);
+            return { mean: p2 * g1, variance: p2 * p2 * (g2 - g1 * g1), support: "[0, ∞)" };
+        }
+        case "hypergeometric": {
+            const lo = Math.max(0, p3 - (p1 - p2)), hi = Math.min(p3, p2);
+            return { mean: p3 * p2 / p1, variance: p3 * (p2 / p1) * ((p1 - p2) / p1) * ((p1 - p3) / (p1 - 1)), support: list(lo, hi), min: lo, max: hi };
+        }
+        case "bernoulli": return { mean: p1, variance: p1 * (1 - p1), support: "0, 1", min: 0, max: 1 };
+        default: return null;
+    }
+}
+
+function renderDistributionResult(o) {
+    const el = document.getElementById("result");
+    if (!el) return;
+    const T = DIST_TXT;
+    const discrete = DISCRETE_DISTS.includes(o.dist);
+    const m = distMoments(o.dist, o.p1, o.p2, o.p3);
+    const prev = el.querySelector("details.ci-res-details");
+    const wasOpen = !!(prev && prev.open);
+    let label = distParams(o.dist, o.p1, o.p2, o.p3);
+    let main = "";
+    const sec = [];
+    const notes = [];
+    const xs = fmtInput(o.x);
+
+    if (o.calc === "pdf") {
+        if (discrete) {
+            main = "P(X = " + xs + ")" + eqProb(o.result);
+            const inSupport = m && Number.isInteger(o.x) && o.x >= m.min && o.x <= m.max;
+            if (!inSupport && m) notes.push(T.outside(xs, m.support));
+            else if (o.result > 0) sec.push(T.asPct(T.pct((o.result * 100).toLocaleString(DIST_LOCALE, { maximumFractionDigits: 2 }))));
+        } else {
+            main = "f(" + xs + ") = " + fmtMain(o.result);
+            notes.push(T.density(xs));
+        }
+    } else if (o.calc === "cdf") {
+        if (o.cdfMode === "left") {
+            main = "P(X ≤ " + xs + ")" + eqProb(o.result);
+            const comp = 1 - o.result;
+            const next = Math.floor(o.x) + 1;
+            sec.push(T.complement + "P(X > " + xs + ")" + (discrete ? " = P(X ≥ " + fmtInput(next) + ")" : "") + eqProb(comp));
+        } else if (o.cdfMode === "right") {
+            main = "P(X ≥ " + xs + ")" + eqProb(o.result);
+            const prevV = Math.ceil(o.x) - 1;
+            sec.push(T.complement + "P(X < " + xs + ")" + (discrete ? " = P(X ≤ " + fmtInput(prevV) + ")" : "") + eqProb(1 - o.result));
+        } else {
+            main = "P(" + xs + " ≤ X ≤ " + fmtInput(o.b) + ")" + eqProb(o.result);
+            sec.push(T.outsideInterval + fmtProb(1 - o.result));
+        }
+    } else if (o.calc === "quantile") {
+        const q = fmtInput(o.x);
+        label += " · " + T.percentile + " " + fmtInput(Math.round(o.x * 100 * 1e6) / 1e6);
+        if (discrete) {
+            main = "x = " + fmtValue(o.result);
+            if (Number.isFinite(o.result)) {
+                const at = getCdfValue(o.dist, o.result, o.p1, o.p2);
+                sec.push(T.qDisc(q, fmtValue(o.result), fmtProb(at)));
+                if (m && o.result - 1 >= m.min && at > o.x + 1e-12) {
+                    notes.push(T.qDiscNote(q, fmtValue(o.result - 1), fmtProb(getCdfValue(o.dist, o.result - 1, o.p1, o.p2))));
+                }
+            }
+        } else {
+            main = "x = " + fmtMain(o.result);
+            sec.push(T.qCont(q));
+        }
+    }
+
+    let h = '<div class="ci-res"><div class="ci-res-label">' + distEsc(label) + "</div>";
+    h += '<div class="ci-res-main"><span class="ci-res-int">' + distEsc(main) + "</span></div>";
+    sec.forEach((s) => { h += '<div class="ci-res-sec">' + distEsc(s) + "</div>"; });
+    notes.forEach((n) => { h += '<div class="ci-res-note ' + (n.charAt(0) === "⚠" ? "ci-res-warn" : "ci-res-info") + '">' + distEsc(n) + "</div>"; });
+    if (m) {
+        const show = (v) => (Number.isNaN(v) ? T.undef : (v === Infinity ? T.infinite : fmtValue(v)));
+        h += '<details class="ci-res-details"' + (wasOpen ? " open" : "") + "><summary>" + T.details + "</summary><dl>";
+        [[T.mean, show(m.mean)], [T.variance, show(m.variance)], [T.sd, show(Math.sqrt(m.variance))], [T.support, m.support]].forEach(([k, v]) => {
+            h += "<dt>" + distEsc(k) + "</dt><dd>" + distEsc(v) + "</dd>";
+        });
+        h += "</dl></details>";
+    }
+    el.innerHTML = h + "</div>";
+}
+
 function calculate() {
 
     const dist = document.getElementById("distribution").value;
@@ -841,14 +1046,7 @@ function calculate() {
 
         if (result === null || isNaN(result)) throw "Invalid values";
 
-        let resultLabel = "Result";
-
-        if (calc === "cdf") {
-            resultLabel = resolveCdfResult(dist, cdfMode, x, b, p1, p2).label;
-        }
-
-        document.getElementById("result").innerText =
-            `${resultLabel}: ${result.toFixed(6)}`;
+        renderDistributionResult({ dist, calc, x, b, cdfMode, p1, p2, p3, result });
 
         drawChart(dist, p1, p2, calc, x, cdfMode, b, calc === "quantile" ? result : null);
 
