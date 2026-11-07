@@ -97,7 +97,7 @@
   }
   </script>
 
-  <link rel="stylesheet" href="style_new.css?v=20261031-1">
+  <link rel="stylesheet" href="style_new.css?v=20261107-1">
   <style>
     .mode-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
     .mode-tab {
@@ -167,120 +167,130 @@
   </header>
 
   <main>
-    <section class="card sample-size-panel">
-      <div class="panel-heading">
-        <h2>Calculadora</h2>
-        <p>Selecciona el modo según lo que quieras calcular.</p>
-      </div>
-
-      <div class="mode-tabs" role="tablist" aria-label="Modo de cálculo">
-        <button class="mode-tab active" data-target="modePower" role="tab" aria-selected="true">Potencia</button>
-        <button class="mode-tab" data-target="modeN" role="tab" aria-selected="false">Tamaño muestral</button>
-      </div>
-
-      <!-- MODE: Potencia -->
-      <div id="modePower" class="mode-section active">
-        <p class="tab-intro"><strong>Qué calcula esta pestaña:</strong> a partir de las tasas de conversión de A y B y el tamaño de muestra por grupo, calcula la potencia estadística del experimento y el efecto mínimo detectable (MDE). Úsala para comprobar si un experimento ya diseñado tiene muestra suficiente.</p>
-        <div class="form-grid sample-grid">
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="pwPA">Conversión grupo A (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="pwPA" value="0.12" step="0.001" min="0.001" max="0.999">
-              <p class="field-hint" hidden>Tasa de conversión actual del grupo de control (A), como proporción entre 0 y 1. Ej.: 0,12 equivale al 12 %.</p>
-            </div>
-            <div class="form-group">
-              <label for="pwPB">Conversión esperada grupo B (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="pwPB" value="0.138" step="0.001" min="0.001" max="0.999">
-              <p class="field-hint" hidden>Tasa de conversión que esperas o quieres poder detectar en la variante B. La diferencia p_B − p_A es el efecto Δ que se evalúa.</p>
-            </div>
-          </div>
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="pwN">Muestra por grupo (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="pwN" value="1500" step="1" min="1">
-              <p class="field-hint" hidden>Número de usuarios que tendrá cada grupo (A y B) en el experimento. A mayor n, mayor potencia para detectar la misma diferencia.</p>
-            </div>
-            <div class="form-group">
-              <label for="pwAlpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="pwAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
-              <p class="field-hint" hidden>Riesgo de falso positivo que aceptas (rechazar H₀ cuando en realidad no hay diferencia). El valor estándar es 0,05.</p>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="pwTail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-            <select id="pwTail">
-              <option value="two-sided" selected>Bilateral — H₀: pA = pB</option>
-              <option value="greater">Unilateral — H₀: pB ≤ pA (solo detecta mejoras)</option>
-            </select>
-            <p class="field-hint" hidden>El <strong>bilateral</strong> se recomienda en A/B testing porque B puede ser mejor o peor que A. El <strong>unilateral</strong> solo es válido si puedes garantizar a priori que B nunca empeora la métrica.</p>
-          </div>
+    <div class="ss-shell ss-sim">
+      <section class="card ss-controls" aria-label="Calculadora">
+        <div class="panel-heading">
+          <h2>Parámetros</h2>
+          <p>Selecciona el modo según lo que quieras calcular.</p>
         </div>
-        <button class="calculate-btn" id="calcPwBtn">Calcular potencia</button>
-        <div id="pwResult" class="result-box" style="line-height:1.9;">Resultado pendiente…</div>
-      </div>
 
-      <!-- MODE: Tamaño muestral -->
-      <div id="modeN" class="mode-section">
-        <p class="tab-intro"><strong>Qué calcula esta pestaña:</strong> a partir de las tasas de conversión de A y B y la potencia objetivo, calcula el tamaño de muestra mínimo por grupo necesario para detectar esa diferencia. Úsala para dimensionar un experimento antes de lanzarlo.</p>
-        <div class="form-grid sample-grid">
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="nPA">Conversión grupo A (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="nPA" value="0.12" step="0.001" min="0.001" max="0.999">
-              <p class="field-hint" hidden>Tasa de conversión actual del grupo de control (A), como proporción entre 0 y 1. Ej.: 0,12 equivale al 12 %.</p>
-            </div>
-            <div class="form-group">
-              <label for="nPB">Conversión esperada grupo B (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="nPB" value="0.138" step="0.001" min="0.001" max="0.999">
-              <p class="field-hint" hidden>Tasa de conversión mínima que quieres poder detectar en la variante B. La diferencia p_B − p_A es el efecto Δ a dimensionar.</p>
-            </div>
-          </div>
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="nAlpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="nAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
-              <p class="field-hint" hidden>Riesgo de falso positivo que aceptas (rechazar H₀ cuando en realidad no hay diferencia). El valor estándar es 0,05.</p>
-            </div>
-            <div class="form-group">
-              <label for="nTargetPower">Potencia objetivo (1−β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="nTargetPower" value="0.80" step="0.01" min="0.5" max="0.999">
-              <p class="field-hint" hidden>Probabilidad mínima que quieres de detectar la diferencia si realmente existe. 80 % es el estándar habitual; por debajo del 70 % el experimento corre alto riesgo de no detectar efectos reales.</p>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="nTail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-            <select id="nTail">
-              <option value="two-sided" selected>Bilateral</option>
-              <option value="greater">Unilateral</option>
-            </select>
-            <p class="field-hint" hidden>El <strong>bilateral</strong> se recomienda en A/B testing porque B puede ser mejor o peor que A. El <strong>unilateral</strong> solo es válido si puedes garantizar a priori que B nunca empeora la métrica.</p>
-          </div>
+        <div class="mode-tabs" role="tablist" aria-label="Modo de cálculo">
+          <button class="mode-tab active" data-target="modePower" role="tab" aria-selected="true">Potencia</button>
+          <button class="mode-tab" data-target="modeN" role="tab" aria-selected="false">Tamaño muestral</button>
         </div>
-        <button class="calculate-btn" id="calcNBtn">Calcular tamaño muestral</button>
-        <div id="nResult" class="result-box" style="line-height:1.9;">Resultado pendiente…</div>
-      </div>
 
-      <!-- Critical regions chart -->
-      <div class="chart-wrap">
-        <canvas id="critRegionsChart" aria-label="Distribuciones bajo H₀ y H₁ con regiones críticas para test A/B" role="img"></canvas>
-      </div>
-      <div class="chart-legend">
-        <span class="legend-item"><span class="legend-swatch" style="background:#2563eb;"></span> H₀: no hay diferencia entre grupos</span>
-        <span class="legend-item"><span class="legend-swatch" style="background:rgba(239,68,68,0.5);"></span> Región crítica (α)</span>
-        <span class="legend-item"><span class="legend-swatch" style="background:#f59e0b;"></span> H₁: pB − pA = efecto real</span>
-        <span class="legend-item"><span class="legend-swatch" style="background:rgba(16,185,129,0.5);"></span> Potencia (1−β)</span>
-      </div>
+        <!-- MODE: Potencia -->
+        <div id="modePower" class="mode-section active">
+          <p class="tab-intro"><strong>Qué calcula esta pestaña:</strong> a partir de las tasas de conversión de A y B y el tamaño de muestra por grupo, calcula la potencia estadística del experimento y el efecto mínimo detectable (MDE). Úsala para comprobar si un experimento ya diseñado tiene muestra suficiente.</p>
+          <div class="form-grid sample-grid">
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="pwPA">Conversión grupo A (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="pwPA" value="0.12" step="0.001" min="0.001" max="0.999">
+                <p class="field-hint" hidden>Tasa de conversión actual del grupo de control (A), como proporción entre 0 y 1. Ej.: 0,12 equivale al 12 %.</p>
+              </div>
+              <div class="form-group">
+                <label for="pwPB">Conversión esperada grupo B (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="pwPB" value="0.138" step="0.001" min="0.001" max="0.999">
+                <p class="field-hint" hidden>Tasa de conversión que esperas o quieres poder detectar en la variante B. La diferencia p_B − p_A es el efecto Δ que se evalúa.</p>
+              </div>
+            </div>
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="pwN">Muestra por grupo (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="pwN" value="1500" step="1" min="1">
+                <p class="field-hint" hidden>Número de usuarios que tendrá cada grupo (A y B) en el experimento. A mayor n, mayor potencia para detectar la misma diferencia.</p>
+              </div>
+              <div class="form-group">
+                <label for="pwAlpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="pwAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+                <p class="field-hint" hidden>Riesgo de falso positivo que aceptas (rechazar H₀ cuando en realidad no hay diferencia). El valor estándar es 0,05.</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="pwTail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+              <select id="pwTail">
+                <option value="two-sided" selected>Bilateral — H₀: pA = pB</option>
+                <option value="greater">Unilateral — H₀: pB ≤ pA (solo detecta mejoras)</option>
+              </select>
+              <p class="field-hint" hidden>El <strong>bilateral</strong> se recomienda en A/B testing porque B puede ser mejor o peor que A. El <strong>unilateral</strong> solo es válido si puedes garantizar a priori que B nunca empeora la métrica.</p>
+            </div>
+          </div>
+          <button class="calculate-btn" id="calcPwBtn">Calcular potencia</button>
+        </div>
 
-      <div style="margin-top:20px;">
-        <h3 style="margin-top:0;">Cómo leer el gráfico</h3>
-        <p>El eje horizontal representa el estadístico Z estandarizado \(Z = (\hat{p}_B - \hat{p}_A)/SE_0\), donde \(SE_0 = \sqrt{2\bar{p}(1-\bar{p})/n}\) y \(\bar{p}=(p_A+p_B)/2\).</p>
-        <ul>
-          <li><strong>Curva azul (H₀)</strong>: distribución de Z si no hubiera diferencia real entre grupos. Sigue una N(0,1). Las <strong>zonas rojas</strong> son las regiones de rechazo; su área total es α.</li>
-          <li><strong>Curva naranja punteada (H₁)</strong>: distribución de Z si la diferencia real fuera p_B − p_A. Está desplazada respecto a H₀. La <strong>zona verde</strong> —área bajo H₁ dentro de la región de rechazo— es la potencia (1−β). La zona sin sombrear bajo la curva naranja dentro de la región de aceptación es β.</li>
-        </ul>
-        <p>Cuanto mayor es la diferencia |p_B − p_A| o el tamaño muestral n, más se separan las curvas y mayor es la potencia.</p>
+        <!-- MODE: Tamaño muestral -->
+        <div id="modeN" class="mode-section">
+          <p class="tab-intro"><strong>Qué calcula esta pestaña:</strong> a partir de las tasas de conversión de A y B y la potencia objetivo, calcula el tamaño de muestra mínimo por grupo necesario para detectar esa diferencia. Úsala para dimensionar un experimento antes de lanzarlo.</p>
+          <div class="form-grid sample-grid">
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="nPA">Conversión grupo A (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="nPA" value="0.12" step="0.001" min="0.001" max="0.999">
+                <p class="field-hint" hidden>Tasa de conversión actual del grupo de control (A), como proporción entre 0 y 1. Ej.: 0,12 equivale al 12 %.</p>
+              </div>
+              <div class="form-group">
+                <label for="nPB">Conversión esperada grupo B (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="nPB" value="0.138" step="0.001" min="0.001" max="0.999">
+                <p class="field-hint" hidden>Tasa de conversión mínima que quieres poder detectar en la variante B. La diferencia p_B − p_A es el efecto Δ a dimensionar.</p>
+              </div>
+            </div>
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="nAlpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="nAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+                <p class="field-hint" hidden>Riesgo de falso positivo que aceptas (rechazar H₀ cuando en realidad no hay diferencia). El valor estándar es 0,05.</p>
+              </div>
+              <div class="form-group">
+                <label for="nTargetPower">Potencia objetivo (1−β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="nTargetPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                <p class="field-hint" hidden>Probabilidad mínima que quieres de detectar la diferencia si realmente existe. 80 % es el estándar habitual; por debajo del 70 % el experimento corre alto riesgo de no detectar efectos reales.</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="nTail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+              <select id="nTail">
+                <option value="two-sided" selected>Bilateral</option>
+                <option value="greater">Unilateral</option>
+              </select>
+              <p class="field-hint" hidden>El <strong>bilateral</strong> se recomienda en A/B testing porque B puede ser mejor o peor que A. El <strong>unilateral</strong> solo es válido si puedes garantizar a priori que B nunca empeora la métrica.</p>
+            </div>
+          </div>
+          <button class="calculate-btn" id="calcNBtn">Calcular tamaño muestral</button>
+        </div>
+
+        <!-- Critical regions chart -->
+      </section>
+
+      <div class="ss-main">
+        <div id="pwResult" class="result-box mode-result active" data-mode="modePower" role="status" aria-live="polite">Resultado pendiente…</div>
+        <div id="nResult" class="result-box mode-result" data-mode="modeN" role="status" aria-live="polite">Resultado pendiente…</div>
+
+        <section class="card ss-sim-chart">
+          <h2 class="ss-chart-title">Distribuciones bajo H₀ y H₁ y regiones críticas</h2>
+
+          <div class="chart-wrap">
+            <canvas id="critRegionsChart" aria-label="Distribuciones bajo H₀ y H₁ con regiones críticas para test A/B" role="img"></canvas>
+          </div>
+          <div class="chart-legend">
+            <span class="legend-item"><span class="legend-swatch" style="background:#2563eb;"></span> H₀: no hay diferencia entre grupos</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:rgba(239,68,68,0.5);"></span> Región crítica (α)</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:#f59e0b;"></span> H₁: pB − pA = efecto real</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:rgba(16,185,129,0.5);"></span> Potencia (1−β)</span>
+          </div>
+
+          <div style="margin-top:20px;">
+            <h3 style="margin-top:0;">Cómo leer el gráfico</h3>
+            <p>El eje horizontal representa el estadístico Z estandarizado \(Z = (\hat{p}_B - \hat{p}_A)/SE_0\), donde \(SE_0 = \sqrt{2\bar{p}(1-\bar{p})/n}\) y \(\bar{p}=(p_A+p_B)/2\).</p>
+            <ul>
+              <li><strong>Curva azul (H₀)</strong>: distribución de Z si no hubiera diferencia real entre grupos. Sigue una N(0,1). Las <strong>zonas rojas</strong> son las regiones de rechazo; su área total es α.</li>
+              <li><strong>Curva naranja punteada (H₁)</strong>: distribución de Z si la diferencia real fuera p_B − p_A. Está desplazada respecto a H₀. La <strong>zona verde</strong> —área bajo H₁ dentro de la región de rechazo— es la potencia (1−β). La zona sin sombrear bajo la curva naranja dentro de la región de aceptación es β.</li>
+            </ul>
+            <p>Cuanto mayor es la diferencia |p_B − p_A| o el tamaño muestral n, más se separan las curvas y mayor es la potencia.</p>
+          </div>
+        </section>
       </div>
-    </section>
+    </div>
 
     <section class="card content-card">
       <h3>Fundamento estadístico</h3>
@@ -636,6 +646,7 @@ document.querySelectorAll('.mode-tab').forEach(btn => {
     btn.classList.add('active');
     btn.setAttribute('aria-selected', 'true');
     document.getElementById(btn.dataset.target).classList.add('active');
+    document.querySelectorAll('.mode-result').forEach(r => r.classList.toggle('active', r.dataset.mode === btn.dataset.target));
   });
 });
 

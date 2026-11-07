@@ -97,7 +97,7 @@
   }
   </script>
 
-  <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261107-1">
   <style>
     .mode-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
     .mode-tab {
@@ -163,118 +163,128 @@
   </header>
 
   <main>
-    <section class="card sample-size-panel">
-      <div class="panel-heading">
-        <h2>Calculator</h2>
-        <p>Select the mode based on what you want to compute.</p>
-      </div>
-
-      <div class="mode-tabs" role="tablist" aria-label="Calculation mode">
-        <button class="mode-tab active" data-target="modePower" role="tab" aria-selected="true">Power</button>
-        <button class="mode-tab" data-target="modeN" role="tab" aria-selected="false">Sample size</button>
-      </div>
-
-      <!-- MODE: Power -->
-      <div id="modePower" class="mode-section active">
-        <div class="form-grid sample-grid">
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="pwPA">Group A conversion rate (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="pwPA" value="0.12" step="0.001" min="0.001" max="0.999">
-                <p class="field-hint" hidden>Current conversion rate of the control group (A), as a proportion between 0 and 1. E.g. 0.12 is equivalent to 12%.</p>
-            </div>
-            <div class="form-group">
-              <label for="pwPB">Expected group B conversion rate (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="pwPB" value="0.138" step="0.001" min="0.001" max="0.999">
-                <p class="field-hint" hidden>Conversion rate you expect or want to be able to detect in variant B. The difference p_B − p_A is the effect Δ being evaluated.</p>
-            </div>
-          </div>
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="pwN">Sample size per group (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="pwN" value="1500" step="1" min="1">
-                <p class="field-hint" hidden>Number of users each group (A and B) will have in the experiment. The larger n is, the greater the power to detect the same difference.</p>
-            </div>
-            <div class="form-group">
-              <label for="pwAlpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="pwAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
-                <p class="field-hint" hidden>False-positive risk you accept (rejecting H₀ when there is in fact no difference). The standard value is 0.05.</p>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="pwTail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-            <select id="pwTail">
-              <option value="two-sided" selected>Two-tailed — H₀: pA = pB</option>
-              <option value="greater">One-tailed — H₀: pB ≤ pA (detects improvements only)</option>
-            </select>
-              <p class="field-hint" hidden>The <strong>two-tailed</strong> test is recommended in A/B testing because B may be better or worse than A. The <strong>one-tailed</strong> test is only valid if you can guarantee a priori that B never worsens the metric.</p>
-          </div>
+    <div class="ss-shell ss-sim">
+      <section class="card ss-controls" aria-label="Calculator">
+        <div class="panel-heading">
+          <h2>Parameters</h2>
+          <p>Select the mode based on what you want to compute.</p>
         </div>
-        <button class="calculate-btn" id="calcPwBtn">Calculate power</button>
-        <div id="pwResult" class="result-box" style="line-height:1.9;">Result pending…</div>
-      </div>
 
-      <!-- MODE: Sample size -->
-      <div id="modeN" class="mode-section">
-        <div class="form-grid sample-grid">
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="nPA">Group A conversion rate (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="nPA" value="0.12" step="0.001" min="0.001" max="0.999">
-                <p class="field-hint" hidden>Current conversion rate of the control group (A), as a proportion between 0 and 1. E.g. 0.12 is equivalent to 12%.</p>
-            </div>
-            <div class="form-group">
-              <label for="nPB">Expected group B conversion rate (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="nPB" value="0.138" step="0.001" min="0.001" max="0.999">
-                <p class="field-hint" hidden>Minimum conversion rate you want to be able to detect in variant B. The difference p_B − p_A is the effect Δ to size the experiment for.</p>
-            </div>
-          </div>
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="nAlpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="nAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
-                <p class="field-hint" hidden>False-positive risk you accept (rejecting H₀ when there is in fact no difference). The standard value is 0.05.</p>
-            </div>
-            <div class="form-group">
-              <label for="nTargetPower">Target power (1−β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="nTargetPower" value="0.80" step="0.01" min="0.5" max="0.999">
-                <p class="field-hint" hidden>Minimum probability you want of detecting the difference if it really exists. 80% is the usual standard; below 70% the experiment runs a high risk of missing real effects.</p>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="nTail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-            <select id="nTail">
-              <option value="two-sided" selected>Two-tailed</option>
-              <option value="greater">One-tailed</option>
-            </select>
-              <p class="field-hint" hidden>The <strong>two-tailed</strong> test is recommended in A/B testing because B may be better or worse than A. The <strong>one-tailed</strong> test is only valid if you can guarantee a priori that B never worsens the metric.</p>
-          </div>
+        <div class="mode-tabs" role="tablist" aria-label="Calculation mode">
+          <button class="mode-tab active" data-target="modePower" role="tab" aria-selected="true">Power</button>
+          <button class="mode-tab" data-target="modeN" role="tab" aria-selected="false">Sample size</button>
         </div>
-        <button class="calculate-btn" id="calcNBtn">Calculate sample size</button>
-        <div id="nResult" class="result-box" style="line-height:1.9;">Result pending…</div>
-      </div>
 
-      <!-- Critical regions chart -->
-      <div class="chart-wrap">
-        <canvas id="critRegionsChart" aria-label="Distributions under H₀ and H₁ with critical regions for an A/B test" role="img"></canvas>
-      </div>
-      <div class="chart-legend">
-        <span class="legend-item"><span class="legend-swatch" style="background:#2563eb;"></span> H₀: no difference between groups</span>
-        <span class="legend-item"><span class="legend-swatch" style="background:rgba(239,68,68,0.5);"></span> Critical region (α)</span>
-        <span class="legend-item"><span class="legend-swatch" style="background:#f59e0b;"></span> H₁: pB − pA = real effect</span>
-        <span class="legend-item"><span class="legend-swatch" style="background:rgba(16,185,129,0.5);"></span> Power (1−β)</span>
-      </div>
+        <!-- MODE: Power -->
+        <div id="modePower" class="mode-section active">
+          <div class="form-grid sample-grid">
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="pwPA">Group A conversion rate (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="pwPA" value="0.12" step="0.001" min="0.001" max="0.999">
+                  <p class="field-hint" hidden>Current conversion rate of the control group (A), as a proportion between 0 and 1. E.g. 0.12 is equivalent to 12%.</p>
+              </div>
+              <div class="form-group">
+                <label for="pwPB">Expected group B conversion rate (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="pwPB" value="0.138" step="0.001" min="0.001" max="0.999">
+                  <p class="field-hint" hidden>Conversion rate you expect or want to be able to detect in variant B. The difference p_B − p_A is the effect Δ being evaluated.</p>
+              </div>
+            </div>
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="pwN">Sample size per group (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="pwN" value="1500" step="1" min="1">
+                  <p class="field-hint" hidden>Number of users each group (A and B) will have in the experiment. The larger n is, the greater the power to detect the same difference.</p>
+              </div>
+              <div class="form-group">
+                <label for="pwAlpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="pwAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+                  <p class="field-hint" hidden>False-positive risk you accept (rejecting H₀ when there is in fact no difference). The standard value is 0.05.</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="pwTail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+              <select id="pwTail">
+                <option value="two-sided" selected>Two-tailed — H₀: pA = pB</option>
+                <option value="greater">One-tailed — H₀: pB ≤ pA (detects improvements only)</option>
+              </select>
+                <p class="field-hint" hidden>The <strong>two-tailed</strong> test is recommended in A/B testing because B may be better or worse than A. The <strong>one-tailed</strong> test is only valid if you can guarantee a priori that B never worsens the metric.</p>
+            </div>
+          </div>
+          <button class="calculate-btn" id="calcPwBtn">Calculate power</button>
+        </div>
 
-      <div style="margin-top:20px;">
-        <h3 style="margin-top:0;">How to read the chart</h3>
-        <p>The horizontal axis represents the standardized Z statistic \(Z = (\hat{p}_B - \hat{p}_A)/SE_0\), where \(SE_0 = \sqrt{2\bar{p}(1-\bar{p})/n}\) and \(\bar{p}=(p_A+p_B)/2\).</p>
-        <ul>
-          <li><strong>Blue curve (H₀)</strong>: distribution of Z if there were no real difference between groups. It follows an N(0,1). The <strong>red zones</strong> are the rejection regions; their total area is α.</li>
-          <li><strong>Dashed orange curve (H₁)</strong>: distribution of Z if the real difference were p_B − p_A. It is shifted relative to H₀. The <strong>green zone</strong> — the area under H₁ within the rejection region — is the power (1−β). The unshaded area under the orange curve within the acceptance region is β.</li>
-        </ul>
-        <p>The larger the difference |p_B − p_A| or the sample size n, the more the curves separate and the greater the power.</p>
+        <!-- MODE: Sample size -->
+        <div id="modeN" class="mode-section">
+          <div class="form-grid sample-grid">
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="nPA">Group A conversion rate (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="nPA" value="0.12" step="0.001" min="0.001" max="0.999">
+                  <p class="field-hint" hidden>Current conversion rate of the control group (A), as a proportion between 0 and 1. E.g. 0.12 is equivalent to 12%.</p>
+              </div>
+              <div class="form-group">
+                <label for="nPB">Expected group B conversion rate (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="nPB" value="0.138" step="0.001" min="0.001" max="0.999">
+                  <p class="field-hint" hidden>Minimum conversion rate you want to be able to detect in variant B. The difference p_B − p_A is the effect Δ to size the experiment for.</p>
+              </div>
+            </div>
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="nAlpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="nAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+                  <p class="field-hint" hidden>False-positive risk you accept (rejecting H₀ when there is in fact no difference). The standard value is 0.05.</p>
+              </div>
+              <div class="form-group">
+                <label for="nTargetPower">Target power (1−β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="nTargetPower" value="0.80" step="0.01" min="0.5" max="0.999">
+                  <p class="field-hint" hidden>Minimum probability you want of detecting the difference if it really exists. 80% is the usual standard; below 70% the experiment runs a high risk of missing real effects.</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="nTail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+              <select id="nTail">
+                <option value="two-sided" selected>Two-tailed</option>
+                <option value="greater">One-tailed</option>
+              </select>
+                <p class="field-hint" hidden>The <strong>two-tailed</strong> test is recommended in A/B testing because B may be better or worse than A. The <strong>one-tailed</strong> test is only valid if you can guarantee a priori that B never worsens the metric.</p>
+            </div>
+          </div>
+          <button class="calculate-btn" id="calcNBtn">Calculate sample size</button>
+        </div>
+
+        <!-- Critical regions chart -->
+      </section>
+
+      <div class="ss-main">
+        <div id="pwResult" class="result-box mode-result active" data-mode="modePower" role="status" aria-live="polite">Result pending…</div>
+        <div id="nResult" class="result-box mode-result" data-mode="modeN" role="status" aria-live="polite">Result pending…</div>
+
+        <section class="card ss-sim-chart">
+          <h2 class="ss-chart-title">Distributions under H₀ and H₁ and critical regions</h2>
+
+          <div class="chart-wrap">
+            <canvas id="critRegionsChart" aria-label="Distributions under H₀ and H₁ with critical regions for an A/B test" role="img"></canvas>
+          </div>
+          <div class="chart-legend">
+            <span class="legend-item"><span class="legend-swatch" style="background:#2563eb;"></span> H₀: no difference between groups</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:rgba(239,68,68,0.5);"></span> Critical region (α)</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:#f59e0b;"></span> H₁: pB − pA = real effect</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:rgba(16,185,129,0.5);"></span> Power (1−β)</span>
+          </div>
+
+          <div style="margin-top:20px;">
+            <h3 style="margin-top:0;">How to read the chart</h3>
+            <p>The horizontal axis represents the standardized Z statistic \(Z = (\hat{p}_B - \hat{p}_A)/SE_0\), where \(SE_0 = \sqrt{2\bar{p}(1-\bar{p})/n}\) and \(\bar{p}=(p_A+p_B)/2\).</p>
+            <ul>
+              <li><strong>Blue curve (H₀)</strong>: distribution of Z if there were no real difference between groups. It follows an N(0,1). The <strong>red zones</strong> are the rejection regions; their total area is α.</li>
+              <li><strong>Dashed orange curve (H₁)</strong>: distribution of Z if the real difference were p_B − p_A. It is shifted relative to H₀. The <strong>green zone</strong> — the area under H₁ within the rejection region — is the power (1−β). The unshaded area under the orange curve within the acceptance region is β.</li>
+            </ul>
+            <p>The larger the difference |p_B − p_A| or the sample size n, the more the curves separate and the greater the power.</p>
+          </div>
+        </section>
       </div>
-    </section>
+    </div>
 
     <section class="card content-card">
       <h3>Statistical foundation</h3>
@@ -630,6 +640,7 @@ document.querySelectorAll('.mode-tab').forEach(btn => {
     btn.classList.add('active');
     btn.setAttribute('aria-selected', 'true');
     document.getElementById(btn.dataset.target).classList.add('active');
+    document.querySelectorAll('.mode-result').forEach(r => r.classList.toggle('active', r.dataset.mode === btn.dataset.target));
   });
 });
 

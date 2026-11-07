@@ -49,7 +49,7 @@
     ]
   }
   </script>
-  <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261107-1">
   <style>
     .sim-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
     .sim-tab {
@@ -184,106 +184,114 @@
   </header>
 
   <main>
-    <section class="card sample-size-panel">
-      <div class="panel-heading">
-        <h2>Simulation parameters</h2>
-        <p>Define the true conversion rates, the sample size per group, and the number of replicates.</p>
-      </div>
+    <div class="ss-shell ss-sim">
+      <section class="card ss-controls" aria-label="Calculator">
+        <div class="panel-heading">
+          <h2>Simulation parameters</h2>
+          <p>Define the true conversion rates, the sample size per group, and the number of replicates.</p>
+        </div>
 
-      <div class="form-grid sample-grid">
-        <div class="inline-inputs">
-          <div class="form-group">
-            <label for="simPA">True group A rate (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-            <input type="number" id="simPA" value="0.12" step="0.001" min="0.001" max="0.999">
-              <p class="field-hint" hidden>The true conversion rate the simulation uses to generate the group A data in each replication.</p>
+        <div class="form-grid sample-grid">
+          <div class="inline-inputs">
+            <div class="form-group">
+              <label for="simPA">True group A rate (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+              <input type="number" id="simPA" value="0.12" step="0.001" min="0.001" max="0.999">
+                <p class="field-hint" hidden>The true conversion rate the simulation uses to generate the group A data in each replication.</p>
+            </div>
+            <div class="form-group">
+              <label for="simPB">True group B rate (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+              <input type="number" id="simPB" value="0.138" step="0.001" min="0.001" max="0.999">
+                <p class="field-hint" hidden>The true conversion rate of group B. The difference p<sub>B</sub> − p<sub>A</sub> is the effect the simulation tries to detect; use the same value as p<sub>A</sub> to check the type I error.</p>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="simPB">True group B rate (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-            <input type="number" id="simPB" value="0.138" step="0.001" min="0.001" max="0.999">
-              <p class="field-hint" hidden>The true conversion rate of group B. The difference p<sub>B</sub> − p<sub>A</sub> is the effect the simulation tries to detect; use the same value as p<sub>A</sub> to check the type I error.</p>
+          <div class="inline-inputs">
+            <div class="form-group">
+              <label for="simN">Visitors per group (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+              <input type="number" id="simN" value="1500" step="10" min="10" max="50000">
+                <p class="field-hint" hidden>Number of visitors (observations) simulated in each group, in each replication.</p>
+            </div>
+            <div class="form-group">
+              <label for="simReps">Number of replicates <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+              <select id="simReps">
+                <option value="1000">1,000</option>
+                <option value="3000">3,000</option>
+                <option value="5000" selected>5,000</option>
+                <option value="10000">10,000</option>
+              </select>
+                <p class="field-hint" hidden>Number of independent experiments that are simulated. With more replications the empirical power is estimated more precisely: its standard error is approximately √(p(1−p)/N), which with 5,000 replications is ±0.006 for powers around 80% and ±0.003 for rates around 5%.</p>
+            </div>
+          </div>
+          <div class="inline-inputs">
+            <div class="form-group">
+              <label for="simAlpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+              <input type="number" id="simAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+                <p class="field-hint" hidden>False-positive risk accepted in each replication when deciding to reject H₀. The usual standard value is <strong>0.05</strong>.</p>
+            </div>
+            <div class="form-group">
+              <label for="simTail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+              <select id="simTail">
+                <option value="two" selected>Two-tailed</option>
+                <option value="right">Right tail (B &gt; A)</option>
+                <option value="left">Left tail (B &lt; A)</option>
+              </select>
+                <p class="field-hint" hidden>Two-tailed detects differences in either direction; one-tailed (right or left) only detects the effect in the stated direction.</p>
+            </div>
           </div>
         </div>
-        <div class="inline-inputs">
-          <div class="form-group">
-            <label for="simN">Visitors per group (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-            <input type="number" id="simN" value="1500" step="10" min="10" max="50000">
-              <p class="field-hint" hidden>Number of visitors (observations) simulated in each group, in each replication.</p>
-          </div>
-          <div class="form-group">
-            <label for="simReps">Number of replicates <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-            <select id="simReps">
-              <option value="1000">1,000</option>
-              <option value="3000">3,000</option>
-              <option value="5000" selected>5,000</option>
-              <option value="10000">10,000</option>
-            </select>
-              <p class="field-hint" hidden>Number of independent experiments that are simulated. With more replications the empirical power is estimated more precisely: its standard error is approximately √(p(1−p)/N), which with 5,000 replications is ±0.006 for powers around 80% and ±0.003 for rates around 5%.</p>
-          </div>
-        </div>
-        <div class="inline-inputs">
-          <div class="form-group">
-            <label for="simAlpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-            <input type="number" id="simAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
-              <p class="field-hint" hidden>False-positive risk accepted in each replication when deciding to reject H₀. The usual standard value is <strong>0.05</strong>.</p>
-          </div>
-          <div class="form-group">
-            <label for="simTail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-            <select id="simTail">
-              <option value="two" selected>Two-tailed</option>
-              <option value="right">Right tail (B &gt; A)</option>
-              <option value="left">Left tail (B &lt; A)</option>
-            </select>
-              <p class="field-hint" hidden>Two-tailed detects differences in either direction; one-tailed (right or left) only detects the effect in the stated direction.</p>
-          </div>
-        </div>
-      </div>
 
-      <button class="calculate-btn" id="simRunBtn">Run simulation</button>
-      <div id="simResult" class="result-box" style="line-height:1.7;">Result pending…</div>
+        <button class="calculate-btn" id="simRunBtn">Run simulation</button>
+      </section>
 
-      <div id="simStats" class="stats-summary" hidden>
-        <div class="stat-card">
-          <span class="sc-value" id="scEmpPower">—</span>
-          <span class="sc-label">Empirical power</span>
-        </div>
-        <div class="stat-card">
-          <span class="sc-value" id="scThPower">—</span>
-          <span class="sc-label">Theoretical power</span>
-        </div>
-        <div class="stat-card">
-          <span class="sc-value" id="scMeanZ">—</span>
-          <span class="sc-label">Mean z</span>
-        </div>
-        <div class="stat-card">
-          <span class="sc-value" id="scStdZ">—</span>
-          <span class="sc-label">Std. dev. z</span>
-        </div>
-        <div class="stat-card">
-          <span class="sc-value" id="scMedianP">—</span>
-          <span class="sc-label">Median p-value</span>
-        </div>
-        <div class="stat-card">
-          <span class="sc-value" id="scReps">—</span>
-          <span class="sc-label">Valid replicates</span>
-        </div>
-      </div>
+      <div class="ss-main">
+        <div id="simResult" class="result-box" role="status" aria-live="polite">Result pending…</div>
 
-      <div class="sim-tabs" id="simTabs" hidden role="tablist">
-        <button class="sim-tab active" data-target="chartZ" role="tab" aria-selected="true">z histogram</button>
-        <button class="sim-tab" data-target="chartP" role="tab" aria-selected="false">p-value distribution</button>
-      </div>
+        <div id="simStats" class="stats-summary" hidden>
+          <div class="stat-card">
+            <span class="sc-value" id="scEmpPower">—</span>
+            <span class="sc-label">Empirical power</span>
+          </div>
+          <div class="stat-card">
+            <span class="sc-value" id="scThPower">—</span>
+            <span class="sc-label">Theoretical power</span>
+          </div>
+          <div class="stat-card">
+            <span class="sc-value" id="scMeanZ">—</span>
+            <span class="sc-label">Mean z</span>
+          </div>
+          <div class="stat-card">
+            <span class="sc-value" id="scStdZ">—</span>
+            <span class="sc-label">Std. dev. z</span>
+          </div>
+          <div class="stat-card">
+            <span class="sc-value" id="scMedianP">—</span>
+            <span class="sc-label">Median p-value</span>
+          </div>
+          <div class="stat-card">
+            <span class="sc-value" id="scReps">—</span>
+            <span class="sc-label">Valid replicates</span>
+          </div>
+        </div>
 
-      <div id="chartZ" class="sim-chart-panel active">
-        <div class="chart-wrap">
-          <canvas id="histZCanvas" aria-label="Histogram of the z statistic across simulated replicates" role="img"></canvas>
-        </div>
+        <section class="card ss-sim-chart">
+          <h2 class="ss-chart-title">Simulation charts</h2>
+          <div class="sim-tabs" id="simTabs" hidden role="tablist">
+            <button class="sim-tab active" data-target="chartZ" role="tab" aria-selected="true">z histogram</button>
+            <button class="sim-tab" data-target="chartP" role="tab" aria-selected="false">p-value distribution</button>
+          </div>
+
+          <div id="chartZ" class="sim-chart-panel active">
+            <div class="chart-wrap">
+              <canvas id="histZCanvas" aria-label="Histogram of the z statistic across simulated replicates" role="img"></canvas>
+            </div>
+          </div>
+          <div id="chartP" class="sim-chart-panel">
+            <div class="chart-wrap">
+              <canvas id="histPCanvas" aria-label="Distribution of p-values across simulated replicates" role="img"></canvas>
+            </div>
+          </div>
+        </section>
       </div>
-      <div id="chartP" class="sim-chart-panel">
-        <div class="chart-wrap">
-          <canvas id="histPCanvas" aria-label="Distribution of p-values across simulated replicates" role="img"></canvas>
-        </div>
-      </div>
-    </section>
+    </div>
 
         <section class="card content-card">
       <h3>What this tool simulates</h3>

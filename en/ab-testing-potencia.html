@@ -49,7 +49,7 @@
     ]
   }
   </script>
-  <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261107-1">
   <style>
     .mode-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
     .mode-tab {
@@ -152,155 +152,165 @@
   </header>
 
   <main>
-    <section class="card sample-size-panel">
-      <div class="panel-heading">
-        <h2>Calculator</h2>
-        <p>Select the mode based on what you want to calculate and enter the remaining parameters.</p>
-      </div>
-
-      <div class="mode-tabs" role="tablist" aria-label="Calculation mode">
-        <button class="mode-tab active" data-target="modeN" role="tab" aria-selected="true">Sample size</button>
-        <button class="mode-tab" data-target="modePower" role="tab" aria-selected="false">Power</button>
-        <button class="mode-tab" data-target="modeMDE" role="tab" aria-selected="false">MDE</button>
-      </div>
-
-      <!-- MODE: Sample size -->
-      <div id="modeN" class="mode-section active">
-        <div class="form-grid sample-grid">
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="nPA">Group A baseline rate (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="nPA" value="0.12" step="0.001" min="0.001" max="0.999">
-                <p class="field-hint" hidden>Current conversion rate of the control group. E.g. if 12% of visits convert, enter <strong>0.12</strong>.</p>
-            </div>
-            <div class="form-group">
-              <label for="nPB">Expected group B rate (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="nPB" value="0.138" step="0.001" min="0.001" max="0.999">
-                <p class="field-hint" hidden>The rate you expect in the variant, or the smallest improvement you would care to detect. The difference from p<sub>A</sub> is the effect the experiment must be able to detect.</p>
-            </div>
-          </div>
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="nAlpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="nAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
-                <p class="field-hint" hidden>False-positive risk you accept (concluding that B is better when it actually is not). <strong>0.05</strong> is the usual standard.</p>
-            </div>
-            <div class="form-group">
-              <label for="nPower">Desired power (1−β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="nPower" value="0.8" step="0.01" min="0.5" max="0.999">
-                <p class="field-hint" hidden>Probability of detecting the effect if it really exists. <strong>0.80</strong> is the recommended minimum; use 0.90 for critical decisions.</p>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="nTail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-            <select id="nTail">
-              <option value="two" selected>Two-tailed</option>
-              <option value="one">One-tailed</option>
-            </select>
-              <p class="field-hint" hidden>The <strong>two-tailed</strong> test detects that B is better or worse than A and is the most widely used. The <strong>one-tailed</strong> test needs a smaller sample, but it is only valid if you know in advance that the variant can only improve, never worsen.</p>
-          </div>
+    <div class="ss-shell ss-sim">
+      <section class="card ss-controls" aria-label="Calculator">
+        <div class="panel-heading">
+          <h2>Parameters</h2>
+          <p>Select the mode based on what you want to calculate and enter the remaining parameters.</p>
         </div>
-        <button class="calculate-btn" id="calcNBtn">Calculate sample size</button>
-        <div id="nResult" class="result-box" style="line-height:1.9;">Result pending…</div>
-      </div>
 
-      <!-- MODE: Power -->
-      <div id="modePower" class="mode-section">
-        <div class="form-grid sample-grid">
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="pwPA">Group A baseline rate (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="pwPA" value="0.12" step="0.001" min="0.001" max="0.999">
-                <p class="field-hint" hidden>Current conversion rate of the control group. E.g. if 12% of visits convert, enter <strong>0.12</strong>.</p>
-            </div>
-            <div class="form-group">
-              <label for="pwPB">Group B rate (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="pwPB" value="0.138" step="0.001" min="0.001" max="0.999">
-                <p class="field-hint" hidden>The conversion rate you want to check the experiment is able to detect in the variant.</p>
-            </div>
-          </div>
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="pwN">Sample size per group (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="pwN" value="1500" step="1" min="1">
-                <p class="field-hint" hidden>Users you have or plan to assign to <strong>each</strong> variant, not the total for the experiment.</p>
-            </div>
-            <div class="form-group">
-              <label for="pwAlpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="pwAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
-                <p class="field-hint" hidden>False-positive risk you accept. <strong>0.05</strong> is the usual standard.</p>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="pwTail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-            <select id="pwTail">
-              <option value="two" selected>Two-tailed</option>
-              <option value="one">One-tailed</option>
-            </select>
-              <p class="field-hint" hidden>The <strong>two-tailed</strong> test detects that B is better or worse than A. The <strong>one-tailed</strong> test needs a smaller sample, but it is only valid if you know in advance that the variant can only improve.</p>
-          </div>
+        <div class="mode-tabs" role="tablist" aria-label="Calculation mode">
+          <button class="mode-tab active" data-target="modeN" role="tab" aria-selected="true">Sample size</button>
+          <button class="mode-tab" data-target="modePower" role="tab" aria-selected="false">Power</button>
+          <button class="mode-tab" data-target="modeMDE" role="tab" aria-selected="false">MDE</button>
         </div>
-        <button class="calculate-btn" id="calcPwBtn">Calculate power</button>
-        <div id="pwResult" class="result-box" style="line-height:1.9;">Result pending…</div>
-      </div>
 
-      <!-- MODE: MDE -->
-      <div id="modeMDE" class="mode-section">
-        <div class="form-grid sample-grid">
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="mPA">Group A baseline rate (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="mPA" value="0.12" step="0.001" min="0.001" max="0.999">
-                <p class="field-hint" hidden>Current conversion rate of the control group. E.g. if 12% of visits convert, enter <strong>0.12</strong>.</p>
+        <!-- MODE: Sample size -->
+        <div id="modeN" class="mode-section active">
+          <div class="form-grid sample-grid">
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="nPA">Group A baseline rate (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="nPA" value="0.12" step="0.001" min="0.001" max="0.999">
+                  <p class="field-hint" hidden>Current conversion rate of the control group. E.g. if 12% of visits convert, enter <strong>0.12</strong>.</p>
+              </div>
+              <div class="form-group">
+                <label for="nPB">Expected group B rate (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="nPB" value="0.138" step="0.001" min="0.001" max="0.999">
+                  <p class="field-hint" hidden>The rate you expect in the variant, or the smallest improvement you would care to detect. The difference from p<sub>A</sub> is the effect the experiment must be able to detect.</p>
+              </div>
+            </div>
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="nAlpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="nAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+                  <p class="field-hint" hidden>False-positive risk you accept (concluding that B is better when it actually is not). <strong>0.05</strong> is the usual standard.</p>
+              </div>
+              <div class="form-group">
+                <label for="nPower">Desired power (1−β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="nPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                  <p class="field-hint" hidden>Probability of detecting the effect if it really exists. <strong>0.80</strong> is the recommended minimum; use 0.90 for critical decisions.</p>
+              </div>
             </div>
             <div class="form-group">
-              <label for="mN">Sample size per group (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="mN" value="1500" step="1" min="1">
-                <p class="field-hint" hidden>Users you have or plan to assign to <strong>each</strong> variant, not the total for the experiment.</p>
+              <label for="nTail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+              <select id="nTail">
+                <option value="two" selected>Two-tailed</option>
+                <option value="one">One-tailed</option>
+              </select>
+                <p class="field-hint" hidden>The <strong>two-tailed</strong> test detects that B is better or worse than A and is the most widely used. The <strong>one-tailed</strong> test needs a smaller sample, but it is only valid if you know in advance that the variant can only improve, never worsen.</p>
             </div>
           </div>
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="mAlpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="mAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
-                <p class="field-hint" hidden>False-positive risk you accept. <strong>0.05</strong> is the usual standard.</p>
-            </div>
-            <div class="form-group">
-              <label for="mPower">Target power (1−β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-              <input type="number" id="mPower" value="0.8" step="0.01" min="0.5" max="0.999">
-                <p class="field-hint" hidden>Probability of detecting the effect if it really exists. <strong>0.80</strong> is the recommended minimum; use 0.90 for critical decisions.</p>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="mTail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-            <select id="mTail">
-              <option value="two" selected>Two-tailed</option>
-              <option value="one">One-tailed</option>
-            </select>
-              <p class="field-hint" hidden>The <strong>two-tailed</strong> test detects that B is better or worse than A. The <strong>one-tailed</strong> test needs a smaller sample, but it is only valid if you know in advance that the variant can only improve.</p>
-          </div>
+          <button class="calculate-btn" id="calcNBtn">Calculate sample size</button>
         </div>
-        <button class="calculate-btn" id="calcMDEBtn">Calculate MDE</button>
-        <div id="mdeResult" class="result-box" style="line-height:1.9;">Result pending…</div>
-      </div>
 
-      <div class="chart-wrap" style="margin-top:24px;">
-        <canvas id="powerChart" aria-label="Power curve as a function of sample size" role="img"></canvas>
-      </div>
+        <!-- MODE: Power -->
+        <div id="modePower" class="mode-section">
+          <div class="form-grid sample-grid">
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="pwPA">Group A baseline rate (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="pwPA" value="0.12" step="0.001" min="0.001" max="0.999">
+                  <p class="field-hint" hidden>Current conversion rate of the control group. E.g. if 12% of visits convert, enter <strong>0.12</strong>.</p>
+              </div>
+              <div class="form-group">
+                <label for="pwPB">Group B rate (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="pwPB" value="0.138" step="0.001" min="0.001" max="0.999">
+                  <p class="field-hint" hidden>The conversion rate you want to check the experiment is able to detect in the variant.</p>
+              </div>
+            </div>
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="pwN">Sample size per group (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="pwN" value="1500" step="1" min="1">
+                  <p class="field-hint" hidden>Users you have or plan to assign to <strong>each</strong> variant, not the total for the experiment.</p>
+              </div>
+              <div class="form-group">
+                <label for="pwAlpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="pwAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+                  <p class="field-hint" hidden>False-positive risk you accept. <strong>0.05</strong> is the usual standard.</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="pwTail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+              <select id="pwTail">
+                <option value="two" selected>Two-tailed</option>
+                <option value="one">One-tailed</option>
+              </select>
+                <p class="field-hint" hidden>The <strong>two-tailed</strong> test detects that B is better or worse than A. The <strong>one-tailed</strong> test needs a smaller sample, but it is only valid if you know in advance that the variant can only improve.</p>
+            </div>
+          </div>
+          <button class="calculate-btn" id="calcPwBtn">Calculate power</button>
+        </div>
 
-      <div style="margin-top:20px;">
-        <h3 style="margin-top:0;">How to read the chart</h3>
-        <p>The chart shows the <strong>power curve</strong>: how the probability of detecting the effect varies as the sample size per group increases.</p>
-        <ul>
-          <li><strong>X axis (horizontal)</strong> — sample size per group (n). The further right, the more users per variant.</li>
-          <li><strong>Y axis (vertical)</strong> — power (1−β), between 0 and 1. The usual target is at least 0.80.</li>
-          <li><strong>Each colored line</strong> represents a different effect size expressed as a relative lift over p_A (+5%, +10%, +20%). Larger effects (yellow line) are detected with smaller samples; small effects (blue line) require many more users.</li>
-          <li><strong>Dashed vertical line</strong> — appears when you calculate with a fixed n (Power and MDE modes) and marks exactly where your current sample sits on the curves.</li>
-        </ul>
-        <p><strong>How to use it in practice:</strong> if your n falls on the steep part of the curve, adding more users noticeably improves power. If you're already in the flat zone (top part), adding more sample barely helps. If the curves for the effect you care about are all below 0.80 at your current n, the experiment is too small to be reliable.</p>
-      </div>
+        <!-- MODE: MDE -->
+        <div id="modeMDE" class="mode-section">
+          <div class="form-grid sample-grid">
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="mPA">Group A baseline rate (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="mPA" value="0.12" step="0.001" min="0.001" max="0.999">
+                  <p class="field-hint" hidden>Current conversion rate of the control group. E.g. if 12% of visits convert, enter <strong>0.12</strong>.</p>
+              </div>
+              <div class="form-group">
+                <label for="mN">Sample size per group (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="mN" value="1500" step="1" min="1">
+                  <p class="field-hint" hidden>Users you have or plan to assign to <strong>each</strong> variant, not the total for the experiment.</p>
+              </div>
+            </div>
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="mAlpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="mAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+                  <p class="field-hint" hidden>False-positive risk you accept. <strong>0.05</strong> is the usual standard.</p>
+              </div>
+              <div class="form-group">
+                <label for="mPower">Target power (1−β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <input type="number" id="mPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                  <p class="field-hint" hidden>Probability of detecting the effect if it really exists. <strong>0.80</strong> is the recommended minimum; use 0.90 for critical decisions.</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="mTail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+              <select id="mTail">
+                <option value="two" selected>Two-tailed</option>
+                <option value="one">One-tailed</option>
+              </select>
+                <p class="field-hint" hidden>The <strong>two-tailed</strong> test detects that B is better or worse than A. The <strong>one-tailed</strong> test needs a smaller sample, but it is only valid if you know in advance that the variant can only improve.</p>
+            </div>
+          </div>
+          <button class="calculate-btn" id="calcMDEBtn">Calculate MDE</button>
+        </div>
 
-    </section>
+      </section>
+
+      <div class="ss-main">
+        <div id="nResult" class="result-box mode-result active" data-mode="modeN" role="status" aria-live="polite">Result pending…</div>
+        <div id="pwResult" class="result-box mode-result" data-mode="modePower" role="status" aria-live="polite">Result pending…</div>
+        <div id="mdeResult" class="result-box mode-result" data-mode="modeMDE" role="status" aria-live="polite">Result pending…</div>
+
+        <section class="card ss-sim-chart">
+          <h2 class="ss-chart-title">Power curve by sample size</h2>
+
+          <div class="chart-wrap">
+            <canvas id="powerChart" aria-label="Power curve as a function of sample size" role="img"></canvas>
+          </div>
+
+          <div style="margin-top:20px;">
+            <h3 style="margin-top:0;">How to read the chart</h3>
+            <p>The chart shows the <strong>power curve</strong>: how the probability of detecting the effect varies as the sample size per group increases.</p>
+            <ul>
+              <li><strong>X axis (horizontal)</strong> — sample size per group (n). The further right, the more users per variant.</li>
+              <li><strong>Y axis (vertical)</strong> — power (1−β), between 0 and 1. The usual target is at least 0.80.</li>
+              <li><strong>Each colored line</strong> represents a different effect size expressed as a relative lift over p_A (+5%, +10%, +20%). Larger effects (yellow line) are detected with smaller samples; small effects (blue line) require many more users.</li>
+              <li><strong>Dashed vertical line</strong> — appears when you calculate with a fixed n (Power and MDE modes) and marks exactly where your current sample sits on the curves.</li>
+            </ul>
+            <p><strong>How to use it in practice:</strong> if your n falls on the steep part of the curve, adding more users noticeably improves power. If you're already in the flat zone (top part), adding more sample barely helps. If the curves for the effect you care about are all below 0.80 at your current n, the experiment is too small to be reliable.</p>
+          </div>
+
+        </section>
+      </div>
+    </div>
 
         <section class="card content-card">
       <h3>Key concepts before you start</h3>
@@ -609,6 +619,7 @@ document.querySelectorAll('.mode-tab').forEach(tab => {
     tab.classList.add('active');
     tab.setAttribute('aria-selected', 'true');
     document.getElementById(tab.dataset.target).classList.add('active');
+    document.querySelectorAll('.mode-result').forEach(r => r.classList.toggle('active', r.dataset.mode === tab.dataset.target));
   });
 });
 
