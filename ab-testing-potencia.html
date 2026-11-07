@@ -49,7 +49,7 @@
     ]
   }
   </script>
-  <link rel="stylesheet" href="style_new.css?v=20261031-1">
+  <link rel="stylesheet" href="style_new.css?v=20261107-1">
   <style>
     .mode-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
     .mode-tab {
@@ -156,158 +156,168 @@
   </header>
 
   <main>
-    <section class="card sample-size-panel">
-      <div class="panel-heading">
-        <h2>Calculadora</h2>
-        <p>Selecciona el modo según lo que quieras calcular e introduce los parámetros restantes.</p>
-      </div>
-
-      <div class="mode-tabs" role="tablist" aria-label="Modo de cálculo">
-        <button class="mode-tab active" data-target="modeN" role="tab" aria-selected="true">Tamaño muestral</button>
-        <button class="mode-tab" data-target="modePower" role="tab" aria-selected="false">Potencia</button>
-        <button class="mode-tab" data-target="modeMDE" role="tab" aria-selected="false">MDE</button>
-      </div>
-
-      <!-- MODE: Sample size -->
-      <div id="modeN" class="mode-section active">
-        <p class="tab-intro"><strong>Qué calcula esta pestaña:</strong> cuántos usuarios por grupo necesitas para alcanzar la potencia deseada, dado el efecto que quieres detectar. Elige este modo cuando estés diseñando el experimento antes de lanzarlo.</p>
-        <div class="form-grid sample-grid">
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="nPA">Tasa base grupo A (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="nPA" value="0.12" step="0.001" min="0.001" max="0.999">
-              <p class="field-hint" hidden>Tasa de conversión actual del grupo de control. Ej.: si convierte el 12 % de las visitas, introduce <strong>0,12</strong>.</p>
-            </div>
-            <div class="form-group">
-              <label for="nPB">Tasa esperada grupo B (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="nPB" value="0.138" step="0.001" min="0.001" max="0.999">
-              <p class="field-hint" hidden>Tasa que esperas en la variante, o la mínima mejora que te importaría detectar. La diferencia con p<sub>A</sub> es el efecto que el experimento debe ser capaz de detectar.</p>
-            </div>
-          </div>
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="nAlpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="nAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
-              <p class="field-hint" hidden>Riesgo de falso positivo que aceptas (concluir que B es mejor cuando en realidad no lo es). <strong>0,05</strong> es el estándar habitual.</p>
-            </div>
-            <div class="form-group">
-              <label for="nPower">Potencia deseada (1−β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="nPower" value="0.8" step="0.01" min="0.5" max="0.999">
-              <p class="field-hint" hidden>Probabilidad de detectar el efecto si realmente existe. <strong>0,80</strong> es el mínimo recomendado; usa 0,90 para decisiones críticas.</p>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="nTail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-            <select id="nTail">
-              <option value="two" selected>Bilateral</option>
-              <option value="one">Unilateral</option>
-            </select>
-            <p class="field-hint" hidden>El <strong>bilateral</strong> detecta que B es mejor o peor que A y es el más usado. El <strong>unilateral</strong> necesita menos muestra, pero solo es válido si sabes de antemano que la variante solo puede mejorar, nunca empeorar.</p>
-          </div>
+    <div class="ss-shell ss-sim">
+      <section class="card ss-controls" aria-label="Calculadora">
+        <div class="panel-heading">
+          <h2>Parámetros</h2>
+          <p>Selecciona el modo según lo que quieras calcular e introduce los parámetros restantes.</p>
         </div>
-        <button class="calculate-btn" id="calcNBtn">Calcular tamaño muestral</button>
-        <div id="nResult" class="result-box" style="line-height:1.9;">Resultado pendiente…</div>
-      </div>
 
-      <!-- MODE: Power -->
-      <div id="modePower" class="mode-section">
-        <p class="tab-intro"><strong>Qué calcula esta pestaña:</strong> la probabilidad de detectar el efecto especificado con un tamaño muestral fijo (por ejemplo, el tráfico que ya tienes o vas a tener). Elige este modo cuando ya sepas cuántos usuarios tendrás y quieras evaluar si el experimento tendrá suficiente potencia.</p>
-        <div class="form-grid sample-grid">
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="pwPA">Tasa base grupo A (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="pwPA" value="0.12" step="0.001" min="0.001" max="0.999">
-              <p class="field-hint" hidden>Tasa de conversión actual del grupo de control. Ej.: si convierte el 12 % de las visitas, introduce <strong>0,12</strong>.</p>
-            </div>
-            <div class="form-group">
-              <label for="pwPB">Tasa grupo B (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="pwPB" value="0.138" step="0.001" min="0.001" max="0.999">
-              <p class="field-hint" hidden>Tasa de conversión que quieres comprobar si el experimento es capaz de detectar en la variante.</p>
-            </div>
-          </div>
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="pwN">Muestra por grupo (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="pwN" value="1500" step="1" min="1">
-              <p class="field-hint" hidden>Usuarios que tienes o planeas asignar a <strong>cada</strong> variante, no el total del experimento.</p>
-            </div>
-            <div class="form-group">
-              <label for="pwAlpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="pwAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
-              <p class="field-hint" hidden>Riesgo de falso positivo que aceptas. <strong>0,05</strong> es el estándar habitual.</p>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="pwTail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-            <select id="pwTail">
-              <option value="two" selected>Bilateral</option>
-              <option value="one">Unilateral</option>
-            </select>
-            <p class="field-hint" hidden>El <strong>bilateral</strong> detecta que B es mejor o peor que A. El <strong>unilateral</strong> necesita menos muestra, pero solo es válido si sabes de antemano que la variante solo puede mejorar.</p>
-          </div>
+        <div class="mode-tabs" role="tablist" aria-label="Modo de cálculo">
+          <button class="mode-tab active" data-target="modeN" role="tab" aria-selected="true">Tamaño muestral</button>
+          <button class="mode-tab" data-target="modePower" role="tab" aria-selected="false">Potencia</button>
+          <button class="mode-tab" data-target="modeMDE" role="tab" aria-selected="false">MDE</button>
         </div>
-        <button class="calculate-btn" id="calcPwBtn">Calcular potencia</button>
-        <div id="pwResult" class="result-box" style="line-height:1.9;">Resultado pendiente…</div>
-      </div>
 
-      <!-- MODE: MDE -->
-      <div id="modeMDE" class="mode-section">
-        <p class="tab-intro"><strong>Qué calcula esta pestaña:</strong> el menor efecto que tu experimento podrá detectar de forma fiable dado el tamaño muestral disponible. Elige este modo para saber si tu muestra es suficiente para el efecto mínimo que te interesa detectar.</p>
-        <div class="form-grid sample-grid">
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="mPA">Tasa base grupo A (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="mPA" value="0.12" step="0.001" min="0.001" max="0.999">
-              <p class="field-hint" hidden>Tasa de conversión actual del grupo de control. Ej.: si convierte el 12 % de las visitas, introduce <strong>0,12</strong>.</p>
+        <!-- MODE: Sample size -->
+        <div id="modeN" class="mode-section active">
+          <p class="tab-intro"><strong>Qué calcula esta pestaña:</strong> cuántos usuarios por grupo necesitas para alcanzar la potencia deseada, dado el efecto que quieres detectar. Elige este modo cuando estés diseñando el experimento antes de lanzarlo.</p>
+          <div class="form-grid sample-grid">
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="nPA">Tasa base grupo A (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="nPA" value="0.12" step="0.001" min="0.001" max="0.999">
+                <p class="field-hint" hidden>Tasa de conversión actual del grupo de control. Ej.: si convierte el 12 % de las visitas, introduce <strong>0,12</strong>.</p>
+              </div>
+              <div class="form-group">
+                <label for="nPB">Tasa esperada grupo B (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="nPB" value="0.138" step="0.001" min="0.001" max="0.999">
+                <p class="field-hint" hidden>Tasa que esperas en la variante, o la mínima mejora que te importaría detectar. La diferencia con p<sub>A</sub> es el efecto que el experimento debe ser capaz de detectar.</p>
+              </div>
+            </div>
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="nAlpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="nAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+                <p class="field-hint" hidden>Riesgo de falso positivo que aceptas (concluir que B es mejor cuando en realidad no lo es). <strong>0,05</strong> es el estándar habitual.</p>
+              </div>
+              <div class="form-group">
+                <label for="nPower">Potencia deseada (1−β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="nPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                <p class="field-hint" hidden>Probabilidad de detectar el efecto si realmente existe. <strong>0,80</strong> es el mínimo recomendado; usa 0,90 para decisiones críticas.</p>
+              </div>
             </div>
             <div class="form-group">
-              <label for="mN">Muestra por grupo (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="mN" value="1500" step="1" min="1">
-              <p class="field-hint" hidden>Usuarios que tienes o planeas asignar a <strong>cada</strong> variante, no el total del experimento.</p>
+              <label for="nTail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+              <select id="nTail">
+                <option value="two" selected>Bilateral</option>
+                <option value="one">Unilateral</option>
+              </select>
+              <p class="field-hint" hidden>El <strong>bilateral</strong> detecta que B es mejor o peor que A y es el más usado. El <strong>unilateral</strong> necesita menos muestra, pero solo es válido si sabes de antemano que la variante solo puede mejorar, nunca empeorar.</p>
             </div>
           </div>
-          <div class="inline-inputs">
-            <div class="form-group">
-              <label for="mAlpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="mAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
-              <p class="field-hint" hidden>Riesgo de falso positivo que aceptas. <strong>0,05</strong> es el estándar habitual.</p>
-            </div>
-            <div class="form-group">
-              <label for="mPower">Potencia objetivo (1−β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-              <input type="number" id="mPower" value="0.8" step="0.01" min="0.5" max="0.999">
-              <p class="field-hint" hidden>Probabilidad de detectar el efecto si realmente existe. <strong>0,80</strong> es el mínimo recomendado; usa 0,90 para decisiones críticas.</p>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="mTail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-            <select id="mTail">
-              <option value="two" selected>Bilateral</option>
-              <option value="one">Unilateral</option>
-            </select>
-            <p class="field-hint" hidden>El <strong>bilateral</strong> detecta que B es mejor o peor que A. El <strong>unilateral</strong> necesita menos muestra, pero solo es válido si sabes de antemano que la variante solo puede mejorar.</p>
-          </div>
+          <button class="calculate-btn" id="calcNBtn">Calcular tamaño muestral</button>
         </div>
-        <button class="calculate-btn" id="calcMDEBtn">Calcular MDE</button>
-        <div id="mdeResult" class="result-box" style="line-height:1.9;">Resultado pendiente…</div>
-      </div>
 
-      <div class="chart-wrap" style="margin-top:24px;">
-        <canvas id="powerChart" aria-label="Curva de potencia en función del tamaño muestral" role="img"></canvas>
-      </div>
+        <!-- MODE: Power -->
+        <div id="modePower" class="mode-section">
+          <p class="tab-intro"><strong>Qué calcula esta pestaña:</strong> la probabilidad de detectar el efecto especificado con un tamaño muestral fijo (por ejemplo, el tráfico que ya tienes o vas a tener). Elige este modo cuando ya sepas cuántos usuarios tendrás y quieras evaluar si el experimento tendrá suficiente potencia.</p>
+          <div class="form-grid sample-grid">
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="pwPA">Tasa base grupo A (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="pwPA" value="0.12" step="0.001" min="0.001" max="0.999">
+                <p class="field-hint" hidden>Tasa de conversión actual del grupo de control. Ej.: si convierte el 12 % de las visitas, introduce <strong>0,12</strong>.</p>
+              </div>
+              <div class="form-group">
+                <label for="pwPB">Tasa grupo B (p<sub>B</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="pwPB" value="0.138" step="0.001" min="0.001" max="0.999">
+                <p class="field-hint" hidden>Tasa de conversión que quieres comprobar si el experimento es capaz de detectar en la variante.</p>
+              </div>
+            </div>
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="pwN">Muestra por grupo (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="pwN" value="1500" step="1" min="1">
+                <p class="field-hint" hidden>Usuarios que tienes o planeas asignar a <strong>cada</strong> variante, no el total del experimento.</p>
+              </div>
+              <div class="form-group">
+                <label for="pwAlpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="pwAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+                <p class="field-hint" hidden>Riesgo de falso positivo que aceptas. <strong>0,05</strong> es el estándar habitual.</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="pwTail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+              <select id="pwTail">
+                <option value="two" selected>Bilateral</option>
+                <option value="one">Unilateral</option>
+              </select>
+              <p class="field-hint" hidden>El <strong>bilateral</strong> detecta que B es mejor o peor que A. El <strong>unilateral</strong> necesita menos muestra, pero solo es válido si sabes de antemano que la variante solo puede mejorar.</p>
+            </div>
+          </div>
+          <button class="calculate-btn" id="calcPwBtn">Calcular potencia</button>
+        </div>
 
-      <div style="margin-top:20px;">
-        <h3 style="margin-top:0;">Cómo leer el gráfico</h3>
-        <p>El gráfico muestra la <strong>curva de potencia</strong>: cómo varía la probabilidad de detectar el efecto a medida que aumenta el tamaño muestral por grupo.</p>
-        <ul>
-          <li><strong>Eje X (horizontal)</strong> — tamaño muestral por grupo (n). Cuanto más a la derecha, más usuarios por variante.</li>
-          <li><strong>Eje Y (vertical)</strong> — potencia (1−β), entre 0 y 1. El objetivo habitual es alcanzar al menos 0.80.</li>
-          <li><strong>Cada línea de color</strong> representa un tamaño de efecto diferente expresado como lift relativo sobre p_A (+5 %, +10 %, +20 %). Efectos mayores (línea amarilla) se detectan con menos muestra; efectos pequeños (línea azul) requieren muchos más usuarios.</li>
-          <li><strong>Línea vertical discontinua</strong> — aparece cuando calculas con un n fijo (modos Potencia y MDE) y marca exactamente dónde está tu muestra actual en las curvas.</li>
-        </ul>
-        <p><strong>Cómo usarlo en la práctica:</strong> si tu n cae en la parte empinada de la curva, añadir más usuarios mejora la potencia notablemente. Si ya estás en la zona plana (parte alta), agregar muestra apenas aporta. Si las curvas del efecto que te interesa están todas por debajo de 0.80 en tu n actual, el experimento es demasiado pequeño para ser fiable.</p>
-      </div>
+        <!-- MODE: MDE -->
+        <div id="modeMDE" class="mode-section">
+          <p class="tab-intro"><strong>Qué calcula esta pestaña:</strong> el menor efecto que tu experimento podrá detectar de forma fiable dado el tamaño muestral disponible. Elige este modo para saber si tu muestra es suficiente para el efecto mínimo que te interesa detectar.</p>
+          <div class="form-grid sample-grid">
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="mPA">Tasa base grupo A (p<sub>A</sub>) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="mPA" value="0.12" step="0.001" min="0.001" max="0.999">
+                <p class="field-hint" hidden>Tasa de conversión actual del grupo de control. Ej.: si convierte el 12 % de las visitas, introduce <strong>0,12</strong>.</p>
+              </div>
+              <div class="form-group">
+                <label for="mN">Muestra por grupo (n) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="mN" value="1500" step="1" min="1">
+                <p class="field-hint" hidden>Usuarios que tienes o planeas asignar a <strong>cada</strong> variante, no el total del experimento.</p>
+              </div>
+            </div>
+            <div class="inline-inputs">
+              <div class="form-group">
+                <label for="mAlpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="mAlpha" value="0.05" step="0.001" min="0.001" max="0.2">
+                <p class="field-hint" hidden>Riesgo de falso positivo que aceptas. <strong>0,05</strong> es el estándar habitual.</p>
+              </div>
+              <div class="form-group">
+                <label for="mPower">Potencia objetivo (1−β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <input type="number" id="mPower" value="0.8" step="0.01" min="0.5" max="0.999">
+                <p class="field-hint" hidden>Probabilidad de detectar el efecto si realmente existe. <strong>0,80</strong> es el mínimo recomendado; usa 0,90 para decisiones críticas.</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="mTail">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+              <select id="mTail">
+                <option value="two" selected>Bilateral</option>
+                <option value="one">Unilateral</option>
+              </select>
+              <p class="field-hint" hidden>El <strong>bilateral</strong> detecta que B es mejor o peor que A. El <strong>unilateral</strong> necesita menos muestra, pero solo es válido si sabes de antemano que la variante solo puede mejorar.</p>
+            </div>
+          </div>
+          <button class="calculate-btn" id="calcMDEBtn">Calcular MDE</button>
+        </div>
 
-    </section>
+      </section>
+
+      <div class="ss-main">
+        <div id="nResult" class="result-box mode-result active" data-mode="modeN" role="status" aria-live="polite">Resultado pendiente…</div>
+        <div id="pwResult" class="result-box mode-result" data-mode="modePower" role="status" aria-live="polite">Resultado pendiente…</div>
+        <div id="mdeResult" class="result-box mode-result" data-mode="modeMDE" role="status" aria-live="polite">Resultado pendiente…</div>
+
+        <section class="card ss-sim-chart">
+          <h2 class="ss-chart-title">Curva de potencia según el tamaño muestral</h2>
+
+          <div class="chart-wrap">
+            <canvas id="powerChart" aria-label="Curva de potencia en función del tamaño muestral" role="img"></canvas>
+          </div>
+
+          <div style="margin-top:20px;">
+            <h3 style="margin-top:0;">Cómo leer el gráfico</h3>
+            <p>El gráfico muestra la <strong>curva de potencia</strong>: cómo varía la probabilidad de detectar el efecto a medida que aumenta el tamaño muestral por grupo.</p>
+            <ul>
+              <li><strong>Eje X (horizontal)</strong> — tamaño muestral por grupo (n). Cuanto más a la derecha, más usuarios por variante.</li>
+              <li><strong>Eje Y (vertical)</strong> — potencia (1−β), entre 0 y 1. El objetivo habitual es alcanzar al menos 0.80.</li>
+              <li><strong>Cada línea de color</strong> representa un tamaño de efecto diferente expresado como lift relativo sobre p_A (+5 %, +10 %, +20 %). Efectos mayores (línea amarilla) se detectan con menos muestra; efectos pequeños (línea azul) requieren muchos más usuarios.</li>
+              <li><strong>Línea vertical discontinua</strong> — aparece cuando calculas con un n fijo (modos Potencia y MDE) y marca exactamente dónde está tu muestra actual en las curvas.</li>
+            </ul>
+            <p><strong>Cómo usarlo en la práctica:</strong> si tu n cae en la parte empinada de la curva, añadir más usuarios mejora la potencia notablemente. Si ya estás en la zona plana (parte alta), agregar muestra apenas aporta. Si las curvas del efecto que te interesa están todas por debajo de 0.80 en tu n actual, el experimento es demasiado pequeño para ser fiable.</p>
+          </div>
+
+        </section>
+      </div>
+    </div>
 
         <section class="card content-card">
       <h3>Conceptos clave antes de empezar</h3>
@@ -616,6 +626,7 @@ document.querySelectorAll('.mode-tab').forEach(tab => {
     tab.classList.add('active');
     tab.setAttribute('aria-selected', 'true');
     document.getElementById(tab.dataset.target).classList.add('active');
+    document.querySelectorAll('.mode-result').forEach(r => r.classList.toggle('active', r.dataset.mode === tab.dataset.target));
   });
 });
 
