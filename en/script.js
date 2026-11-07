@@ -760,14 +760,14 @@ function fmtSci(v) {
     return m.toLocaleString(DIST_LOCALE, { minimumFractionDigits: 3, maximumFractionDigits: 3 }) + " · 10" + exp;
 }
 
-// Probabilidades: 4 decimales; notación científica si es muy pequeña y
-// "≈ 1" si solo difiere de 1 en la quinta cifra decimal o más allá.
+// Probabilidades: 5 decimales; notación científica si es muy pequeña y
+// "≈ 1" si solo difiere de 1 más allá de la quinta cifra decimal.
 function fmtProb(v) {
     if (v === 0) return "0";
     if (v === 1) return "1";
-    if (v > 0 && v < 1e-4) return fmtSci(v);
-    if (v < 1 && v > 1 - 5e-5) return "≈ 1";
-    return v.toLocaleString(DIST_LOCALE, { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+    if (v > 0 && v < 1e-5) return fmtSci(v);
+    if (v < 1 && v > 1 - 5e-6) return "≈ 1";
+    return v.toLocaleString(DIST_LOCALE, { minimumFractionDigits: 5, maximumFractionDigits: 5 });
 }
 
 // " = 0,1234", o " ≈ 1" sin el signo igual cuando la probabilidad casi es 1.
@@ -776,7 +776,17 @@ function eqProb(v) {
     return t.charAt(0) === "≈" ? " " + t : " = " + t;
 }
 
-// Densidades, cuantiles continuos, medias y varianzas.
+// Resultado principal no probabilístico (densidad, cuantil continuo):
+// 5 decimales fijos; enteros tal cual y notación científica si es muy pequeño.
+function fmtMain(v) {
+    if (!Number.isFinite(v)) return v > 0 ? "∞" : "−∞";
+    if (v === 0) return "0";
+    if (Math.abs(v) < 1e-5) return fmtSci(v);
+    if (Number.isInteger(v)) return v.toLocaleString(DIST_LOCALE);
+    return v.toLocaleString(DIST_LOCALE, { minimumFractionDigits: 5, maximumFractionDigits: 5 });
+}
+
+// Medias, varianzas y otros valores de los detalles: hasta 4 decimales.
 function fmtValue(v) {
     if (!Number.isFinite(v)) return v > 0 ? "∞" : "−∞";
     if (v === 0) return "0";
@@ -850,7 +860,7 @@ function renderDistributionResult(o) {
             if (!inSupport && m) notes.push(T.outside(xs, m.support));
             else if (o.result > 0) sec.push(T.asPct(T.pct((o.result * 100).toLocaleString(DIST_LOCALE, { maximumFractionDigits: 2 }))));
         } else {
-            main = "f(" + xs + ") = " + fmtValue(o.result);
+            main = "f(" + xs + ") = " + fmtMain(o.result);
             notes.push(T.density(xs));
         }
     } else if (o.calc === "cdf") {
@@ -880,7 +890,7 @@ function renderDistributionResult(o) {
                 }
             }
         } else {
-            main = "x = " + fmtValue(o.result);
+            main = "x = " + fmtMain(o.result);
             sec.push(T.qCont(q));
         }
     }
