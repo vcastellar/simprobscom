@@ -644,6 +644,8 @@ function renderMeanTestResult(o) {
         power: (d, p) => 'Power to detect a difference of ' + d + ': ' + p + '.',
         need: (n) => ' Reaching ' + mtPct0(MT_TARGET) + ' would take about n = ' + n + ': ',
         link: 'open the sample size calculator with these values',
+        linkCap: 'Open the sample size calculator with these values',
+        linkOther: 'Work out the sample size needed for another difference',
         enough: ' The sample is large enough for that difference.',
         details: 'Calculation details',
         rows: { diff: 'Observed difference (x̄ − μ₀)', se: 'Standard error', stat: 'Test statistic', df: 'Degrees of freedom', crit: 'Critical value', p: 'p-value', ci: 'confidence interval for μ', d: "Effect size (Cohen's d)", mde: 'Minimum detectable difference (power ' + mtPct0(MT_TARGET) + ')', pw: 'Power for Δ = ' }
@@ -658,6 +660,8 @@ function renderMeanTestResult(o) {
         power: (d, p) => 'Potencia para detectar una diferencia de ' + d + ': ' + p + '.',
         need: (n) => ' Para llegar al ' + mtPct0(MT_TARGET) + ' harían falta unas n = ' + n + ' observaciones: ',
         link: 'abrir la calculadora de tamaño muestral con estos valores',
+        linkCap: 'Abrir la calculadora de tamaño muestral con estos valores',
+        linkOther: 'Calcular el tamaño muestral necesario para otra diferencia',
         enough: ' La muestra es suficiente para esa diferencia.',
         details: 'Detalles del cálculo',
         rows: { diff: 'Diferencia observada (x̄ − μ₀)', se: 'Error estándar', stat: 'Estadístico', df: 'Grados de libertad', crit: 'Valor crítico', p: 'p-valor', ci: 'para μ', d: 'Tamaño del efecto (d de Cohen)', mde: 'Diferencia mínima detectable (potencia ' + mtPct0(MT_TARGET) + ')', pw: 'Potencia para Δ = ' }
@@ -675,21 +679,25 @@ function renderMeanTestResult(o) {
     h += '<div class="ci-res-sec">' + mtEsc(T.stat) + '</div>';
     h += '<div class="ci-res-note ' + (rejected ? 'ci-res-ok' : 'ci-res-info') + '">' + mtEsc(rejected ? T.yes(T.evid) : T.no(T.evid)) + '</div>';
 
+    // Enlace a la calculadora de tamaño muestral con los valores actuales.
+    const sizeLink = (d, text) => {
+        const alt = { two: 'two-sided', right: 'greater', left: 'less' }[o.tail];
+        const url = 'tamano-muestral-contraste-una-media.html?sigma=' + o.s + '&delta=' + d + '&alpha=' + o.alpha + '&power=' + MT_TARGET + '&h0=' + o.mu0 + '&alt=' + alt;
+        return '<a href="' + mtEsc(url) + '">' + text + '</a>.';
+    };
     let powerDelta = null;
     if (Number.isFinite(o.delta) && o.delta > 0) {
         powerDelta = meanTestPower(o.delta, o.se, o.alpha, o.tail, o.isT, o.df);
         let line = mtEsc(T.power(mtAuto(o.delta), mtPct(powerDelta)));
         if (powerDelta < MT_TARGET) {
             const need = sampleSizeFor(o.delta, o.s, o.alpha, o.tail);
-            const alt = { two: 'two-sided', right: 'greater', left: 'less' }[o.tail];
-            const url = 'tamano-muestral-contraste-una-media.html?sigma=' + o.s + '&delta=' + o.delta + '&alpha=' + o.alpha + '&power=' + MT_TARGET + '&h0=' + o.mu0 + '&alt=' + alt;
-            line += mtEsc(T.need(need.toLocaleString(MT_LOCALE))) + '<a href="' + mtEsc(url) + '">' + T.link + '</a>.';
+            line += mtEsc(T.need(need.toLocaleString(MT_LOCALE))) + sizeLink(o.delta, T.link);
         } else {
-            line += T.enough;
+            line += T.enough + ' ' + sizeLink(o.delta, T.linkCap);
         }
         h += '<div class="ci-res-note ' + (powerDelta < MT_TARGET ? 'ci-res-warn' : 'ci-res-ok') + '">' + line + '</div>';
     } else {
-        h += '<div class="ci-res-note ci-res-info">' + mtEsc(T.mde(mdeTxt)) + '</div>';
+        h += '<div class="ci-res-note ci-res-info">' + mtEsc(T.mde(mdeTxt)) + ' ' + sizeLink(Number(mde.toPrecision(3)), T.linkOther) + '</div>';
     }
 
     const rows = [
