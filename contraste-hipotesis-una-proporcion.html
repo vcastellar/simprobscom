@@ -416,7 +416,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="test-results.js?v=20261111-3"></script>
+<script src="test-results.js?v=20261111-4"></script>
 <script>
 let propTestChart;
 
@@ -550,7 +550,6 @@ function renderPropResult(o) {
         '&alt=' + { two: 'two-sided', right: 'greater', left: 'less' }[o.tail];
     notes.push(R.esc(T.mde) + (mde == null ? '' : ' ' + R.link(sizeUrl, T.link)));
     notes.push(R.ciLink('intervalo-confianza-proporcion.html?x=' + x + '&n=' + o.n + '&conf=' + R.sig(1 - o.alpha, 6), 1 - o.alpha));
-    if (mde != null) notes.push(R.simLink(mde / Math.sqrt(o.p0 * (1 - o.p0)), o.n, o.alpha, o.tail, 'prop', Math.sqrt(o.p0 * (1 - o.p0)), o.p0));
     R.render(document.getElementById('propResult'), {
         label: T.label + ' · H₀: p = ' + p0 + ' · α = ' + R.auto(o.alpha),
         decision: T.decision, p: o.p, sec: ['z = ' + R.num(o.z, 4)],

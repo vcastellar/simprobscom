@@ -735,7 +735,7 @@ function fmtDiff(v) {
 // Con σ, el gráfico y el texto se leen en las unidades de los datos:
 // valor = μ₀ + z·σ/√n (si no se conoce μ₀, como diferencia respecto a μ₀).
 let simH0 = null, simKind = 'mean';
-const U = { mean: 'Sample mean x̄', prop: 'Sample proportion p̂', diff: 'Observed difference from μ₀', h0: 'H₀: true value = ', h1: 'H₁: true value = ', h0d: 'H₀: no difference', h1d: 'H₁: true difference = ', sep: (dl, se) => `the two curves are δ = <strong>${dl}</strong> standard errors apart (each one is σ/√n = ${se})`, rejR: (c, w) => `H₀ is rejected if ${w} exceeds <strong>${c}</strong>`, rejT: (a, b, w) => `H₀ is rejected if ${w} falls outside the interval from <strong>${a}</strong> to <strong>${b}</strong>`, wMean: 'the sample mean', wProp: 'the sample proportion', wDiff: 'the observed difference' };
+const U = { mean: 'Sample mean x̄', prop: 'Sample proportion p̂', diff: 'Observed difference from μ₀', h0: 'H₀: true value = ', h1: 'H₁: true value = ', h0d: 'H₀: no difference', h1d: 'H₁: true difference = ', sep: (dl, se) => `the two curves are δ = <strong>${dl}</strong> standard errors apart (each one is σ/√n = ${se})`, rejR: (c, w) => `H₀ is rejected if ${w} exceeds <strong>${c}</strong>`, rejT: (a, b, w) => `H₀ is rejected if ${w} falls outside the interval from <strong>${a}</strong> to <strong>${b}</strong>`, wMean: 'the sample mean', wProp: 'the sample proportion', wDiff: 'the observed difference', pMean: 'Sample mean difference d̄', pH0: 'H₀: true mean difference = ', pH1: 'H₁: true mean difference = ', wPaired: 'the sample mean difference' };
 function unitScale() {
   const s = sigmaUnits();
   if (!s) return null;
@@ -825,11 +825,11 @@ function updateChart(params, stats) {
 
   // --- H0 FULL CURVE ---
   const units = unitScale();
-  datasets.push(makePdfCurve(0, xMin, xMax, 'rgba(79,70,229,0.90)', !units ? 'H₀: Z ~ N(0, 1)' : units.known ? U.h0 + fmtUnit(units.h0) : U.h0d));
+  datasets.push(makePdfCurve(0, xMin, xMax, 'rgba(79,70,229,0.90)', !units ? 'H₀: Z ~ N(0, 1)' : units.known ? (simKind === 'paired' ? U.pH0 : U.h0) + fmtUnit(units.h0) : U.h0d));
 
   // --- H1 FULL CURVE ---
   const deltaLabel = delta.toFixed(2);
-  datasets.push(makePdfCurve(delta, xMin, xMax, 'rgba(220,38,38,0.90)', !units ? `H₁: Z ~ N(${deltaLabel}, 1)` : (units.known ? U.h1 : U.h1d) + fmtUnit(units.at(delta))));
+  datasets.push(makePdfCurve(delta, xMin, xMax, 'rgba(220,38,38,0.90)', !units ? `H₁: Z ~ N(${deltaLabel}, 1)` : (units.known ? (simKind === 'paired' ? U.pH1 : U.h1) : U.h1d) + fmtUnit(units.at(delta))));
 
   // deduplicate legend (keep first occurrence per label)
   const seenLabels = new Set();
@@ -853,7 +853,7 @@ function updateChart(params, stats) {
   errorChart.data.datasets = datasets;
   errorChart.options.scales.x.min = xMin;
   errorChart.options.scales.x.max = xMax;
-  errorChart.options.scales.x.title.text = !units ? 'Z (standardized statistic)' : !units.known ? U.diff : simKind === 'prop' ? U.prop : U.mean;
+  errorChart.options.scales.x.title.text = !units ? 'Z (standardized statistic)' : !units.known ? U.diff : simKind === 'prop' ? U.prop : simKind === 'paired' ? U.pMean : U.mean;
   errorChart.options.plugins.verticalLines.lines = vLines;
   errorChart.update('none');
 }
@@ -903,7 +903,7 @@ function updateInterpretation(params, stats) {
     : `the critical values are z = ±${zCritRight.toFixed(3)}`;
 
   const units = unitScale();
-  const what = !units ? '' : !units.known ? U.wDiff : simKind === 'prop' ? U.wProp : U.wMean;
+  const what = !units ? '' : !units.known ? U.wDiff : simKind === 'prop' ? U.wProp : simKind === 'paired' ? U.wPaired : U.wMean;
   const critUnits = !units ? '' : testType === 'right' ? U.rejR(fmtUnit(units.at(zCritRight)), what) : U.rejT(fmtUnit(units.at(zCritLeft)), fmtUnit(units.at(zCritRight)), what);
   const html = `
     With a <strong>${typeStr}</strong> test at level α = <strong>${alpha.toFixed(3)}</strong>,
@@ -961,6 +961,14 @@ document.getElementById('sampleSize').addEventListener('change', update);
   const h0 = parseFloat(q.get('h0'));
   if (Number.isFinite(h0) && q.get('mirror') !== '1') simH0 = h0;
   if (q.get('approx') === 'prop') simKind = 'prop';
+  if (q.get('kind') === 'paired') {
+    simKind = 'paired';
+    // Los rótulos del formulario pasan a hablar de la diferencia media.
+    const subs = [['True difference from μ₀', 'True mean difference from μd0'], ['Standard deviation σ (optional)', 'Standard deviation of the differences (s_d)'], ['μ ≠ μ₀', 'μd ≠ μd0'], ['μ > μ₀', 'μd > μd0']];
+    document.querySelectorAll('.ss-controls label, .ss-controls option').forEach((el) => {
+      el.childNodes.forEach((nd) => { if (nd.nodeType === 3) subs.forEach(([a, b]) => { if (nd.nodeValue.includes(a)) nd.nodeValue = nd.nodeValue.replace(a, b); }); });
+    });
+  }
   document.getElementById('effectSizeVal').textContent = effectLabel(d);
   if (alpha > 0 && alpha < 1) {
     aEl.step = 'any'; aEl.min = String(Math.min(0.005, alpha)); aEl.max = String(Math.max(0.25, alpha)); aEl.value = alpha;
@@ -971,7 +979,7 @@ document.getElementById('sampleSize').addEventListener('change', update);
   nEl.value = opt.value;
   if (['right', 'two'].includes(q.get('tail'))) document.getElementById('testType').value = q.get('tail');
   const note = document.getElementById('fromTestNote');
-  note.textContent = 'Values received from your test: the difference Δ is the smallest one it detects with 80% probability, so power is around 80%.' + (q.get('approx') === 't' ? ' The simulator uses the normal approximation: with small samples, the exact power of the t-test is slightly lower than what you see here.' : q.get('approx') === 'prop' ? ' The simulator uses the same standard deviation under H₀ and H₁, so power may differ slightly from that of the calculator.' : '') + (q.get('mirror') === '1' ? ' Your test is left-tailed; by symmetry, it is shown here as right-tailed.' : '');
+  note.textContent = 'Values received from your test: the difference Δ is the smallest one it detects with 80% probability, so power is around 80%.' + (q.get('approx') === 't' ? ' The simulator uses the normal approximation: with small samples, the exact power of the t-test is slightly lower than what you see here.' : q.get('approx') === 'prop' ? ' The simulator uses the same standard deviation under H₀ and H₁, so power may differ slightly from that of the calculator.' : '') + (q.get('kind') === 'paired' ? ' You come from a paired test: here the "mean" is the mean difference between the two measurements.' : '') + (q.get('mirror') === '1' ? ' Your test is left-tailed; by symmetry, it is shown here as right-tailed.' : '');
   note.hidden = false;
 }());
 initChart();

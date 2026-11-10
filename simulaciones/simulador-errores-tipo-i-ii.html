@@ -739,7 +739,7 @@ function fmtDiff(v) {
 // Con σ, el gráfico y el texto se leen en las unidades de los datos:
 // valor = μ₀ + z·σ/√n (si no se conoce μ₀, como diferencia respecto a μ₀).
 let simH0 = null, simKind = 'mean';
-const U = { mean: 'Media muestral x̄', prop: 'Proporción muestral p̂', diff: 'Diferencia observada respecto a μ₀', h0: 'H₀: valor real = ', h1: 'H₁: valor real = ', h0d: 'H₀: sin diferencia', h1d: 'H₁: diferencia real = ', sep: (dl, se) => `las dos curvas quedan separadas δ = <strong>${dl}</strong> errores estándar (cada uno vale σ/√n = ${se})`, rejR: (c, w) => `se rechaza H₀ si ${w} supera <strong>${c}</strong>`, rejT: (a, b, w) => `se rechaza H₀ si ${w} queda fuera del intervalo de <strong>${a}</strong> a <strong>${b}</strong>`, wMean: 'la media muestral', wProp: 'la proporción muestral', wDiff: 'la diferencia observada' };
+const U = { mean: 'Media muestral x̄', prop: 'Proporción muestral p̂', diff: 'Diferencia observada respecto a μ₀', h0: 'H₀: valor real = ', h1: 'H₁: valor real = ', h0d: 'H₀: sin diferencia', h1d: 'H₁: diferencia real = ', sep: (dl, se) => `las dos curvas quedan separadas δ = <strong>${dl}</strong> errores estándar (cada uno vale σ/√n = ${se})`, rejR: (c, w) => `se rechaza H₀ si ${w} supera <strong>${c}</strong>`, rejT: (a, b, w) => `se rechaza H₀ si ${w} queda fuera del intervalo de <strong>${a}</strong> a <strong>${b}</strong>`, wMean: 'la media muestral', wProp: 'la proporción muestral', wDiff: 'la diferencia observada', pMean: 'Diferencia media muestral d̄', pH0: 'H₀: diferencia media real = ', pH1: 'H₁: diferencia media real = ', wPaired: 'la diferencia media muestral' };
 function unitScale() {
   const s = sigmaUnits();
   if (!s) return null;
@@ -829,11 +829,11 @@ function updateChart(params, stats) {
 
   // --- H0 FULL CURVE ---
   const units = unitScale();
-  datasets.push(makePdfCurve(0, xMin, xMax, 'rgba(79,70,229,0.90)', !units ? 'H₀: Z ~ N(0, 1)' : units.known ? U.h0 + fmtUnit(units.h0) : U.h0d));
+  datasets.push(makePdfCurve(0, xMin, xMax, 'rgba(79,70,229,0.90)', !units ? 'H₀: Z ~ N(0, 1)' : units.known ? (simKind === 'paired' ? U.pH0 : U.h0) + fmtUnit(units.h0) : U.h0d));
 
   // --- H1 FULL CURVE ---
   const deltaLabel = delta.toFixed(2);
-  datasets.push(makePdfCurve(delta, xMin, xMax, 'rgba(220,38,38,0.90)', !units ? `H₁: Z ~ N(${deltaLabel}, 1)` : (units.known ? U.h1 : U.h1d) + fmtUnit(units.at(delta))));
+  datasets.push(makePdfCurve(delta, xMin, xMax, 'rgba(220,38,38,0.90)', !units ? `H₁: Z ~ N(${deltaLabel}, 1)` : (units.known ? (simKind === 'paired' ? U.pH1 : U.h1) : U.h1d) + fmtUnit(units.at(delta))));
 
   // deduplicate legend (keep first occurrence per label)
   const seenLabels = new Set();
@@ -857,7 +857,7 @@ function updateChart(params, stats) {
   errorChart.data.datasets = datasets;
   errorChart.options.scales.x.min = xMin;
   errorChart.options.scales.x.max = xMax;
-  errorChart.options.scales.x.title.text = !units ? 'Z (estadístico estandarizado)' : !units.known ? U.diff : simKind === 'prop' ? U.prop : U.mean;
+  errorChart.options.scales.x.title.text = !units ? 'Z (estadístico estandarizado)' : !units.known ? U.diff : simKind === 'prop' ? U.prop : simKind === 'paired' ? U.pMean : U.mean;
   errorChart.options.plugins.verticalLines.lines = vLines;
   errorChart.update('none');
 }
@@ -907,7 +907,7 @@ function updateInterpretation(params, stats) {
     : `los valores críticos son z = ±${zCritRight.toFixed(3)}`;
 
   const units = unitScale();
-  const what = !units ? '' : !units.known ? U.wDiff : simKind === 'prop' ? U.wProp : U.wMean;
+  const what = !units ? '' : !units.known ? U.wDiff : simKind === 'prop' ? U.wProp : simKind === 'paired' ? U.wPaired : U.wMean;
   const critUnits = !units ? '' : testType === 'right' ? U.rejR(fmtUnit(units.at(zCritRight)), what) : U.rejT(fmtUnit(units.at(zCritLeft)), fmtUnit(units.at(zCritRight)), what);
   const html = `
     Con un contraste <strong>${typeStr}</strong> al nivel α = <strong>${alpha.toFixed(3)}</strong>,
@@ -965,6 +965,14 @@ document.getElementById('sampleSize').addEventListener('change', update);
   const h0 = parseFloat(q.get('h0'));
   if (Number.isFinite(h0) && q.get('mirror') !== '1') simH0 = h0;
   if (q.get('approx') === 'prop') simKind = 'prop';
+  if (q.get('kind') === 'paired') {
+    simKind = 'paired';
+    // Los rótulos del formulario pasan a hablar de la diferencia media.
+    const subs = [['Diferencia real respecto a μ₀', 'Diferencia media real respecto a μd0'], ['Desviación típica σ (opcional)', 'Desviación típica de las diferencias (s_d)'], ['μ ≠ μ₀', 'μd ≠ μd0'], ['μ > μ₀', 'μd > μd0']];
+    document.querySelectorAll('.ss-controls label, .ss-controls option').forEach((el) => {
+      el.childNodes.forEach((nd) => { if (nd.nodeType === 3) subs.forEach(([a, b]) => { if (nd.nodeValue.includes(a)) nd.nodeValue = nd.nodeValue.replace(a, b); }); });
+    });
+  }
   document.getElementById('effectSizeVal').textContent = effectLabel(d);
   if (alpha > 0 && alpha < 1) {
     aEl.step = 'any'; aEl.min = String(Math.min(0.005, alpha)); aEl.max = String(Math.max(0.25, alpha)); aEl.value = alpha;
@@ -975,7 +983,7 @@ document.getElementById('sampleSize').addEventListener('change', update);
   nEl.value = opt.value;
   if (['right', 'two'].includes(q.get('tail'))) document.getElementById('testType').value = q.get('tail');
   const note = document.getElementById('fromTestNote');
-  note.textContent = 'Valores recibidos de tu contraste: la diferencia Δ es la mínima que detecta con un 80 % de probabilidad, así que la potencia ronda el 80 %.' + (q.get('approx') === 't' ? ' El simulador usa la aproximación normal: con muestras pequeñas, la potencia exacta del contraste t es algo menor que la que ves aquí.' : q.get('approx') === 'prop' ? ' El simulador usa la misma desviación bajo H₀ y H₁, así que la potencia puede diferir ligeramente de la de la calculadora.' : '') + (q.get('mirror') === '1' ? ' Tu contraste es de cola izquierda; por simetría, aquí se muestra como cola derecha.' : '');
+  note.textContent = 'Valores recibidos de tu contraste: la diferencia Δ es la mínima que detecta con un 80 % de probabilidad, así que la potencia ronda el 80 %.' + (q.get('approx') === 't' ? ' El simulador usa la aproximación normal: con muestras pequeñas, la potencia exacta del contraste t es algo menor que la que ves aquí.' : q.get('approx') === 'prop' ? ' El simulador usa la misma desviación bajo H₀ y H₁, así que la potencia puede diferir ligeramente de la de la calculadora.' : '') + (q.get('kind') === 'paired' ? ' Vienes de un contraste apareado: aquí la «media» es la diferencia media entre las dos mediciones.' : '') + (q.get('mirror') === '1' ? ' Tu contraste es de cola izquierda; por simetría, aquí se muestra como cola derecha.' : '');
   note.hidden = false;
 }());
 initChart();
