@@ -439,7 +439,7 @@
         </div>
         <div class="chart-outer">
           <h3>Distributions under H₀ and H₁</h3>
-          <p class="chart-sub">Standardized Z statistic. The shaded regions represent the probabilities of each type of error and the power of the test.</p>
+          <p class="chart-sub">Where the sample result falls if H₀ is true (blue) and if the difference is real (red). The shaded regions represent the probabilities of each type of error and the power of the test.</p>
           <div class="chart-wrap">
             <canvas id="errorChart" aria-label="Chart of H0 and H1 distributions with type I error, type II error and power regions"></canvas>
           </div>
@@ -709,7 +709,7 @@ function initChart() {
         x: {
           type: 'linear',
           title: { display: true, text: 'Z (standardized statistic)', font: { size: 11 } },
-          ticks: { maxTicksLimit: 10, font: { size: 10 } }
+          ticks: { maxTicksLimit: 10, font: { size: 10 }, callback: (v) => { const u = unitScale(); return u ? fmtUnit(u.at(v)) : Number(v.toFixed(2)); } }
         },
         y: {
           title: { display: true, text: 'Density', font: { size: 11 } },
@@ -731,6 +731,20 @@ function sigmaUnits() {
 }
 function fmtDiff(v) {
   return String(Number(v.toPrecision(3)));
+}
+// Con σ, el gráfico y el texto se leen en las unidades de los datos:
+// valor = μ₀ + z·σ/√n (si no se conoce μ₀, como diferencia respecto a μ₀).
+let simH0 = null, simKind = 'mean';
+const U = { mean: 'Sample mean x̄', prop: 'Sample proportion p̂', diff: 'Observed difference from μ₀', h0: 'H₀: true value = ', h1: 'H₁: true value = ', h0d: 'H₀: no difference', h1d: 'H₁: true difference = ', sep: (dl, se) => `the two curves are δ = <strong>${dl}</strong> standard errors apart (each one is σ/√n = ${se})`, rejR: (c, w) => `H₀ is rejected if ${w} exceeds <strong>${c}</strong>`, rejT: (a, b, w) => `H₀ is rejected if ${w} falls outside the interval from <strong>${a}</strong> to <strong>${b}</strong>`, wMean: 'the sample mean', wProp: 'the sample proportion', wDiff: 'the observed difference' };
+function unitScale() {
+  const s = sigmaUnits();
+  if (!s) return null;
+  const n = parseInt(document.getElementById('sampleSize').value, 10);
+  const se = s / Math.sqrt(n), h0 = simH0 == null ? 0 : simH0;
+  return { se, h0, known: simH0 != null, at: (z) => h0 + z * se };
+}
+function fmtUnit(v) {
+  return String(Number(v.toPrecision(4)));
 }
 function effectLabel(d) {
   const s = sigmaUnits();
@@ -810,11 +824,12 @@ function updateChart(params, stats) {
   }
 
   // --- H0 FULL CURVE ---
-  datasets.push(makePdfCurve(0, xMin, xMax, 'rgba(79,70,229,0.90)', 'H₀: Z ~ N(0, 1)'));
+  const units = unitScale();
+  datasets.push(makePdfCurve(0, xMin, xMax, 'rgba(79,70,229,0.90)', !units ? 'H₀: Z ~ N(0, 1)' : units.known ? U.h0 + fmtUnit(units.h0) : U.h0d));
 
   // --- H1 FULL CURVE ---
   const deltaLabel = delta.toFixed(2);
-  datasets.push(makePdfCurve(delta, xMin, xMax, 'rgba(220,38,38,0.90)', `H₁: Z ~ N(${deltaLabel}, 1)`));
+  datasets.push(makePdfCurve(delta, xMin, xMax, 'rgba(220,38,38,0.90)', !units ? `H₁: Z ~ N(${deltaLabel}, 1)` : (units.known ? U.h1 : U.h1d) + fmtUnit(units.at(delta))));
 
   // deduplicate legend (keep first occurrence per label)
   const seenLabels = new Set();
@@ -829,15 +844,16 @@ function updateChart(params, stats) {
   // vertical lines
   const vLines = [];
   if (testType === 'right') {
-    vLines.push({ x: zCritRight, label: `z = ${zCritRight.toFixed(3)}`, color: 'rgba(220,38,38,0.75)', dash: [6, 4] });
+    vLines.push({ x: zCritRight, label: units ? fmtUnit(units.at(zCritRight)) : `z = ${zCritRight.toFixed(3)}`, color: 'rgba(220,38,38,0.75)', dash: [6, 4] });
   } else {
-    vLines.push({ x: zCritRight, label: `z = ${zCritRight.toFixed(3)}`, color: 'rgba(220,38,38,0.75)', dash: [6, 4] });
-    vLines.push({ x: zCritLeft,  label: `z = ${zCritLeft.toFixed(3)}`,  color: 'rgba(220,38,38,0.75)', dash: [6, 4] });
+    vLines.push({ x: zCritRight, label: units ? fmtUnit(units.at(zCritRight)) : `z = ${zCritRight.toFixed(3)}`, color: 'rgba(220,38,38,0.75)', dash: [6, 4] });
+    vLines.push({ x: zCritLeft,  label: units ? fmtUnit(units.at(zCritLeft)) : `z = ${zCritLeft.toFixed(3)}`,  color: 'rgba(220,38,38,0.75)', dash: [6, 4] });
   }
 
   errorChart.data.datasets = datasets;
   errorChart.options.scales.x.min = xMin;
   errorChart.options.scales.x.max = xMax;
+  errorChart.options.scales.x.title.text = !units ? 'Z (standardized statistic)' : !units.known ? U.diff : simKind === 'prop' ? U.prop : U.mean;
   errorChart.options.plugins.verticalLines.lines = vLines;
   errorChart.update('none');
 }
@@ -886,10 +902,13 @@ function updateInterpretation(params, stats) {
     ? `the critical value is z = ${zCritRight.toFixed(3)}`
     : `the critical values are z = ±${zCritRight.toFixed(3)}`;
 
+  const units = unitScale();
+  const what = !units ? '' : !units.known ? U.wDiff : simKind === 'prop' ? U.wProp : U.wMean;
+  const critUnits = !units ? '' : testType === 'right' ? U.rejR(fmtUnit(units.at(zCritRight)), what) : U.rejT(fmtUnit(units.at(zCritLeft)), fmtUnit(units.at(zCritRight)), what);
   const html = `
     With a <strong>${typeStr}</strong> test at level α = <strong>${alpha.toFixed(3)}</strong>,
-    ${critStr}. Under H₁ with ${effectText(d)} and n = ${n} observations,
-    the non-centrality parameter is δ = d × √n = <strong>${delta.toFixed(3)}</strong>.
+    ${units ? critUnits : critStr}. Under H₁ with ${effectText(d)} and n = ${n} observations,
+    ${units ? U.sep(delta.toFixed(2), fmtDiff(units.se)) : 'the non-centrality parameter is δ = d × √n = <strong>' + delta.toFixed(3) + '</strong>'}.
     <br><br>
     The probability of a type II error is β = <strong>${beta.toFixed(3)}</strong>,
     which corresponds to a power of 1 − β = <strong>${power.toFixed(3)}</strong> —
@@ -939,6 +958,9 @@ document.getElementById('sampleSize').addEventListener('change', update);
   dEl.step = 'any'; dEl.max = String(Math.max(3, Math.ceil(d))); dEl.value = d;
   const sigma = parseFloat(q.get('sigma'));
   if (sigma > 0) document.getElementById('sigmaUnits').value = sigma;
+  const h0 = parseFloat(q.get('h0'));
+  if (Number.isFinite(h0) && q.get('mirror') !== '1') simH0 = h0;
+  if (q.get('approx') === 'prop') simKind = 'prop';
   document.getElementById('effectSizeVal').textContent = effectLabel(d);
   if (alpha > 0 && alpha < 1) {
     aEl.step = 'any'; aEl.min = String(Math.min(0.005, alpha)); aEl.max = String(Math.max(0.25, alpha)); aEl.value = alpha;
