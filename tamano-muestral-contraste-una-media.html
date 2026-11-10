@@ -335,6 +335,19 @@ function calculateOneMeanSampleSize() {
 }
 
 document.getElementById("oneMeanCalculateBtn").addEventListener("click", calculateOneMeanSampleSize);
+// Valores iniciales desde la URL (enlaces desde otras calculadoras), p. ej.
+// ?sigma=8&delta=3&alpha=0.05&power=0.8&h0=500&alt=two-sided
+(function () {
+    let params;
+    try { params = new URLSearchParams(location.search); } catch (e) { return; }
+    const fields = { sigma: "oneMeanSigma", delta: "oneMeanDelta", alpha: "oneMeanAlpha", power: "oneMeanPower", h0: "oneMeanH0" };
+    Object.keys(fields).forEach(function (key) {
+        const value = parseFloat(params.get(key));
+        if (Number.isFinite(value)) document.getElementById(fields[key]).value = value;
+    });
+    const alt = params.get("alt");
+    if (["two-sided", "greater", "less"].includes(alt)) document.getElementById("oneMeanAlternative").value = alt;
+}());
 calculateOneMeanSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

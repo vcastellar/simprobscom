@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
 
     <script type="application/ld+json">
 {
@@ -257,6 +257,11 @@
                             <input type="number" id="alpha" value="0.05" step="0.001" min="0.0001" max="0.2">
                             <p class="field-hint" hidden>Probability of wrongly rejecting \(H_0\) when it is actually true. Many analyses use <strong>0.05</strong>; in critical contexts 0.01 may be preferred.</p>
                         </div>
+                        <div class="form-group">
+                            <label for="delta">Relevant difference (Δ), optional <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <input type="number" id="delta" value="" step="any" min="0" placeholder="—">
+                            <p class="field-hint" hidden>The smallest difference from μ₀ you would care to detect, in the units of the variable (for example, 3 g). If you enter it, the <strong>power</strong> of the test against it is computed. If you leave it empty, you get the smallest difference your sample detects with 80% probability.</p>
+                        </div>
                     </div>
                 </div>
 
@@ -396,7 +401,7 @@
             <p>The p-value associated with the two-tailed test is \(p \approx 0.073\). Since \(p = 0.073 > \alpha = 0.05\), <strong>\(H_0\) is not rejected</strong>.</p>
             <p>Conclusion: with the available data there is not enough evidence to claim that the mean weight departs from 500 g at the 5% significance level. The machine may be correctly calibrated.</p>
             <p><strong>What else to look at.</strong> The 95% confidence interval for the mean is \(497 \pm 2.064 \times 1.6\), that is, from 493.70 to 500.30 g: it contains 500, consistent with not rejecting \(H_0\), but also values such as 494 g. So the result does not prove that the machine is well calibrated. In fact, with only 25 parts, the probability of detecting a real 3 g shift (the power) is about 44%; reaching 80% would take about 56 parts, as you can check with the <a href="tamano-muestral-contraste-una-media.html">sample size calculator for a one-mean test</a>.</p>
-            <p><strong>In the calculator:</strong> μ₀ = 500, x̄ = 497, deviation = 8, n = 25, "I only know the sample s (t-test)" and "Two-tailed (≠)".</p>
+            <p><strong>In the calculator:</strong> μ₀ = 500, x̄ = 497, deviation = 8, n = 25, "I only know the sample s (t-test)" and "Two-tailed (≠)". If you also enter 3 in "Relevant difference (Δ)", the result shows that power and a link to the sample size calculator with your values.</p>
 
             <h3>Worked example 2: one-tailed z-test</h3>
             <p>An aptitude test is designed so that scores in the general population have mean 100 and standard deviation \(\sigma = 15\). A training centre wants to know whether its students score <em>above</em> average. A random sample of \(n = 36\) students obtains a mean score of \(\bar{x} = 105\). The test uses \(\alpha = 0.05\).</p>
@@ -562,6 +567,150 @@ function renderMeanTestChart(alpha, tail, statValue, testType, df) {
     });
 }
 
+// ── Potencia y presentación del resultado ─────────────────────────────
+const MT_EN = document.documentElement.lang === 'en';
+const MT_LOCALE = MT_EN ? 'en-US' : 'es-ES';
+const MT_TARGET = 0.8; // potencia de referencia para la diferencia mínima detectable
+
+function mtNum(v, d) {
+    return Number(v).toLocaleString(MT_LOCALE, { minimumFractionDigits: d, maximumFractionDigits: d }).replace('-', '−');
+}
+function mtAuto(v) {
+    const o = Number.isInteger(v) ? {} : { maximumFractionDigits: 4 };
+    return v.toLocaleString(MT_LOCALE, o).replace('-', '−');
+}
+function mtProb(v) {
+    if (v > 0 && v < 1e-5) return v.toExponential(2).replace('.', MT_EN ? '.' : ',');
+    return mtNum(v, 5);
+}
+function mtPct(v) {
+    return mtNum(v * 100, 1) + (MT_EN ? '%' : ' %');
+}
+function mtPct0(v) {
+    return mtNum(v * 100, 0) + (MT_EN ? '%' : ' %');
+}
+function mtEsc(s) {
+    return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+}
+
+// Potencia del contraste frente a una diferencia real |μ − μ₀| = delta
+// (en el sentido de la alternativa, si es de una cola). Exacta: normal en
+// el contraste z y t no central en el contraste t.
+function meanTestPower(delta, se, alpha, tail, isT, df) {
+    const ncp = delta / se;
+    const q = tail === 'two' ? 1 - alpha / 2 : 1 - alpha;
+    const zPower = () => {
+        const zc = jStat.normal.inv(q, 0, 1);
+        const upper = 1 - jStat.normal.cdf(zc - ncp, 0, 1);
+        return tail === 'two' ? upper + jStat.normal.cdf(-zc - ncp, 0, 1) : upper;
+    };
+    if (!isT) return zPower();
+    const tc = jStat.studentt.inv(q, df);
+    let pw = 1 - jStat.noncentralt.cdf(tc, df, ncp);
+    if (tail === 'two') pw += jStat.noncentralt.cdf(-tc, df, ncp);
+    return Number.isFinite(pw) && pw >= 0 && pw <= 1 ? pw : zPower();
+}
+
+// Menor diferencia que el contraste detecta con la potencia de referencia.
+function minimumDetectableDifference(se, alpha, tail, isT, df) {
+    let lo = 0, hi = 20 * se;
+    for (let i = 0; i < 60; i++) {
+        const mid = (lo + hi) / 2;
+        if (meanTestPower(mid, se, alpha, tail, isT, df) < MT_TARGET) lo = mid; else hi = mid;
+    }
+    return hi;
+}
+
+// Tamaño muestral para la potencia de referencia, con la misma fórmula que
+// la calculadora de tamaño muestral a la que se enlaza.
+function sampleSizeFor(delta, s, alpha, tail) {
+    const zA = jStat.normal.inv(tail === 'two' ? 1 - alpha / 2 : 1 - alpha, 0, 1);
+    const zB = jStat.normal.inv(MT_TARGET, 0, 1);
+    return Math.ceil(Math.pow(((zA + zB) * s) / delta, 2));
+}
+
+function renderMeanTestResult(o) {
+    const el = document.getElementById('meanResult');
+    const prev = el.querySelector('details.ci-res-details');
+    const wasOpen = !!(prev && prev.open);
+    const T = MT_EN ? {
+        test: (o.isT ? 't-test' : 'z-test') + ', ' + { two: 'two-tailed', right: 'right-tailed', left: 'left-tailed' }[o.tail],
+        reject: 'H₀ is rejected', keep: 'H₀ is not rejected', pval: 'p-value',
+        stat: o.isT ? 't = ' + mtNum(o.stat, 4) + ' with ' + o.df + ' degrees of freedom' : 'z = ' + mtNum(o.stat, 4),
+        evid: { two: 'the mean differs from ', right: 'the mean is greater than ', left: 'the mean is less than ' }[o.tail],
+        yes: (a) => '✓ There is statistical evidence that ' + a + mtAuto(o.mu0) + '.',
+        no: (a) => 'ℹ There is not enough evidence that ' + a + mtAuto(o.mu0) + '. This does not prove that the mean equals ' + mtAuto(o.mu0) + '.',
+        mde: (d) => 'With this sample, the test detects with ' + mtPct0(MT_TARGET) + ' probability only differences of ' + d + ' or more from μ₀.',
+        power: (d, p) => 'Power to detect a difference of ' + d + ': ' + p + '.',
+        need: (n) => ' Reaching ' + mtPct0(MT_TARGET) + ' would take about n = ' + n + ': ',
+        link: 'open the sample size calculator with these values',
+        enough: ' The sample is large enough for that difference.',
+        details: 'Calculation details',
+        rows: { diff: 'Observed difference (x̄ − μ₀)', se: 'Standard error', stat: 'Test statistic', df: 'Degrees of freedom', crit: 'Critical value', p: 'p-value', ci: 'confidence interval for μ', d: "Effect size (Cohen's d)", mde: 'Minimum detectable difference (power ' + mtPct0(MT_TARGET) + ')', pw: 'Power for Δ = ' }
+    } : {
+        test: 'Contraste ' + (o.isT ? 't' : 'z') + ' ' + { two: 'bilateral', right: 'de cola derecha', left: 'de cola izquierda' }[o.tail],
+        reject: 'Se rechaza H₀', keep: 'No se rechaza H₀', pval: 'p-valor',
+        stat: o.isT ? 't = ' + mtNum(o.stat, 4) + ' con ' + o.df + ' grados de libertad' : 'z = ' + mtNum(o.stat, 4),
+        evid: { two: 'la media es distinta de ', right: 'la media es mayor que ', left: 'la media es menor que ' }[o.tail],
+        yes: (a) => '✓ Hay evidencia estadística de que ' + a + mtAuto(o.mu0) + '.',
+        no: () => 'ℹ No hay evidencia suficiente de que ' + { two: 'la media sea distinta de ', right: 'la media sea mayor que ', left: 'la media sea menor que ' }[o.tail] + mtAuto(o.mu0) + '. Esto no demuestra que la media sea ' + mtAuto(o.mu0) + '.',
+        mde: (d) => 'Con esta muestra, el contraste solo detecta con un ' + mtPct0(MT_TARGET) + ' de probabilidad diferencias de ' + d + ' o mayores respecto a μ₀.',
+        power: (d, p) => 'Potencia para detectar una diferencia de ' + d + ': ' + p + '.',
+        need: (n) => ' Para llegar al ' + mtPct0(MT_TARGET) + ' harían falta unas n = ' + n + ' observaciones: ',
+        link: 'abrir la calculadora de tamaño muestral con estos valores',
+        enough: ' La muestra es suficiente para esa diferencia.',
+        details: 'Detalles del cálculo',
+        rows: { diff: 'Diferencia observada (x̄ − μ₀)', se: 'Error estándar', stat: 'Estadístico', df: 'Grados de libertad', crit: 'Valor crítico', p: 'p-valor', ci: 'para μ', d: 'Tamaño del efecto (d de Cohen)', mde: 'Diferencia mínima detectable (potencia ' + mtPct0(MT_TARGET) + ')', pw: 'Potencia para Δ = ' }
+    };
+    const rejected = o.p < o.alpha;
+    const mde = minimumDetectableDifference(o.se, o.alpha, o.tail, o.isT, o.df);
+    const mdeTxt = (o.tail === 'two' ? '±' : '') + mtAuto(Number(mde.toPrecision(3)));
+    const q = o.tail === 'two' ? 1 - o.alpha / 2 : 1 - o.alpha;
+    const crit = o.isT ? jStat.studentt.inv(q, o.df) : jStat.normal.inv(q, 0, 1);
+    const critTxt = (o.tail === 'two' ? '±' : (o.tail === 'left' ? '−' : '')) + mtNum(crit, 4);
+
+    let h = '<div class="ci-res">';
+    h += '<div class="ci-res-label">' + mtEsc(T.test + ' · H₀: μ = ' + mtAuto(o.mu0) + ' · α = ' + mtAuto(o.alpha)) + '</div>';
+    h += '<div class="ci-res-main"><span class="ci-res-int">' + (rejected ? T.reject : T.keep) + '</span> <span class="ci-res-width">' + T.pval + ' = ' + mtProb(o.p) + '</span></div>';
+    h += '<div class="ci-res-sec">' + mtEsc(T.stat) + '</div>';
+    h += '<div class="ci-res-note ' + (rejected ? 'ci-res-ok' : 'ci-res-info') + '">' + mtEsc(rejected ? T.yes(T.evid) : T.no(T.evid)) + '</div>';
+
+    let powerDelta = null;
+    if (Number.isFinite(o.delta) && o.delta > 0) {
+        powerDelta = meanTestPower(o.delta, o.se, o.alpha, o.tail, o.isT, o.df);
+        let line = mtEsc(T.power(mtAuto(o.delta), mtPct(powerDelta)));
+        if (powerDelta < MT_TARGET) {
+            const need = sampleSizeFor(o.delta, o.s, o.alpha, o.tail);
+            const alt = { two: 'two-sided', right: 'greater', left: 'less' }[o.tail];
+            const url = 'tamano-muestral-contraste-una-media.html?sigma=' + o.s + '&delta=' + o.delta + '&alpha=' + o.alpha + '&power=' + MT_TARGET + '&h0=' + o.mu0 + '&alt=' + alt;
+            line += mtEsc(T.need(need.toLocaleString(MT_LOCALE))) + '<a href="' + mtEsc(url) + '">' + T.link + '</a>.';
+        } else {
+            line += T.enough;
+        }
+        h += '<div class="ci-res-note ' + (powerDelta < MT_TARGET ? 'ci-res-warn' : 'ci-res-ok') + '">' + line + '</div>';
+    } else {
+        h += '<div class="ci-res-note ci-res-info">' + mtEsc(T.mde(mdeTxt)) + '</div>';
+    }
+
+    const rows = [
+        [T.rows.diff, mtAuto(Number((o.xbar - o.mu0).toPrecision(6)))],
+        [T.rows.se, mtNum(o.se, 4)],
+        [T.rows.stat, (o.isT ? 't = ' : 'z = ') + mtNum(o.stat, 4)]
+    ];
+    if (o.isT) rows.push([T.rows.df, String(o.df)]);
+    rows.push([T.rows.crit, critTxt], [T.rows.p, mtProb(o.p)]);
+    if (o.tail === 'two') {
+        const m = crit * o.se;
+        const ci = '[' + mtNum(o.xbar - m, 4) + (MT_EN ? ', ' : '; ') + mtNum(o.xbar + m, 4) + ']';
+        rows.push([MT_EN ? mtPct(1 - o.alpha) + ' ' + T.rows.ci : 'Intervalo de confianza al ' + mtPct(1 - o.alpha) + ' ' + T.rows.ci, ci]);
+    }
+    rows.push([T.rows.d, mtNum((o.xbar - o.mu0) / o.s, 3)], [T.rows.mde, mdeTxt]);
+    if (powerDelta != null) rows.push([T.rows.pw + mtAuto(o.delta), mtPct(powerDelta)]);
+    h += '<details class="ci-res-details"' + (wasOpen ? ' open' : '') + '><summary>' + T.details + '</summary><dl>';
+    rows.forEach(([k, v]) => { h += '<dt>' + mtEsc(k) + '</dt><dd>' + mtEsc(v) + '</dd>'; });
+    el.innerHTML = h + '</dl></details></div>';
+}
+
 function calculateMeanTest() {
     const mu0 = parseFloat(document.getElementById('mu0').value);
     const xbar = parseFloat(document.getElementById('xbar').value);
@@ -591,10 +740,8 @@ function calculateMeanTest() {
     else if (tail === "right") p = 1 - (isT ? jStat.studentt.cdf(stat, df) : jStat.normal.cdf(stat, 0, 1));
     else p = isT ? jStat.studentt.cdf(stat, df) : jStat.normal.cdf(stat, 0, 1);
 
-    const decision = p < alpha ? "Reject H₀." : "Fail to reject H₀.";
-    const statName = isT ? "t" : "z";
-    const extra = isT ? ` | df = ${df}` : "";
-    resultEl.innerText = `${statName} = ${stat.toFixed(4)}${extra} | p-value = ${p.toFixed(6)} | ${decision}`;
+    const deltaRaw = parseFloat(document.getElementById('delta').value);
+    renderMeanTestResult({ mu0, xbar, s, n, alpha, tail, isT, df, stat, p, se: s / Math.sqrt(n), delta: deltaRaw });
     renderMeanTestChart(alpha, tail, stat, testType, df);
 }
 
