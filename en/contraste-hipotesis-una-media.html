@@ -663,6 +663,11 @@ function renderMeanTestResult(o) {
         return '<a href="' + mtEsc(url) + '">' + text + '</a>.';
     };
     h += '<div class="ci-res-note ci-res-info">' + mtEsc(T.mde(mdeTxt)) + ' ' + sizeLink(Number(mde.toPrecision(3)), T.linkOther) + '</div>';
+    // Enlace al intervalo de confianza con los mismos datos.
+    const conf = Number((1 - o.alpha).toFixed(6));
+    const ciUrl = (o.isT ? 'intervalo-confianza-media.html?xbar=' + o.xbar + '&s=' : 'intervalo-confianza-media-sigma-conocida.html?xbar=' + o.xbar + '&sigma=') + o.s + '&n=' + o.n + '&conf=' + conf;
+    const lvl = mtAuto(Number((conf * 100).toFixed(2))) + (MT_EN ? '%' : ' %');
+    h += '<div class="ci-res-note ci-res-info"><a href="' + mtEsc(ciUrl) + '">' + (MT_EN ? 'Open the ' + lvl + ' confidence interval with these data' : 'Abrir el intervalo de confianza al ' + lvl + ' con estos datos') + '</a>.</div>';
 
     const rows = [
         [T.rows.diff, mtAuto(Number((o.xbar - o.mu0).toPrecision(6)))],

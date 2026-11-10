@@ -553,7 +553,8 @@ function renderPairedResult(o) {
         label: T.label + ' · H₀: μd = ' + h0 + ' · α = ' + R.auto(o.alpha),
         decision: T.decision, p: o.p, sec: [T.sec],
         ok: rejected, verdict: rejected ? T.yes : T.no,
-        notes: [R.esc(T.mde) + ' ' + R.link(url, T.link)],
+        notes: [R.esc(T.mde) + ' ' + R.link(url, T.link),
+            R.ciLink('intervalo-confianza-medias-apareadas.html?mean=' + o.dbar + '&sd=' + o.sd + '&n=' + o.n + '&conf=' + R.sig(1 - o.alpha, 6), 1 - o.alpha)],
         rows: rows
     });
 }

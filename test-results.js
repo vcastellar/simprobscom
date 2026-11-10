@@ -37,6 +37,12 @@
         return '<a href="' + esc(url) + '">' + esc(text) + '</a>.';
     }
 
+    // Enlace a la calculadora del intervalo de confianza con los mismos datos.
+    function ciLink(url, conf) {
+        const lvl = auto(Number((conf * 100).toFixed(2))) + (EN ? '%' : ' %');
+        return link(url, EN ? 'Open the ' + lvl + ' confidence interval with these data' : 'Abrir el intervalo de confianza al ' + lvl + ' con estos datos');
+    }
+
     // Potencia de un contraste t (o z si df no es finito) cuando la diferencia
     // real es de `ncp` errores estándar en el sentido de la alternativa.
     function tPower(ncp, alpha, tail, df) {
@@ -115,7 +121,7 @@
 
     global.TestResult = {
         EN, LOCALE, TARGET,
-        num, auto, sig, prob, pct, esc, interval, link,
+        num, auto, sig, prob, pct, esc, interval, link, ciLink,
         tPower, mdeT, noncentralFCDF, anovaPower, mdeF, render
     };
 }(window));

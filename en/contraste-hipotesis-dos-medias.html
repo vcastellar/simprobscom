@@ -577,7 +577,9 @@ function renderTwoMeansResult(o) {
         label: T.label + ' · H₀: μ₁ = μ₂ · α = ' + R.auto(o.alpha),
         decision: T.decision, p: o.p, sec: [T.sec],
         ok: rejected, verdict: rejected ? T.yes : T.no,
-        notes: [R.esc(T.mde) + ' ' + R.link(url, T.link)],
+        notes: [R.esc(T.mde) + ' ' + R.link(url, T.link),
+            R.ciLink('intervalo-confianza-diferencia-medias.html?xbar1=' + o.mean1 + '&xbar2=' + o.mean2 + '&s1=' + o.sd1 + '&s2=' + o.sd2 +
+                '&n1=' + o.n1 + '&n2=' + o.n2 + '&var=welch&conf=' + R.sig(1 - o.alpha, 6), 1 - o.alpha)],
         rows: rows
     });
 }

@@ -628,7 +628,11 @@ function renderNIResult(o) {
         label: T.name + ' · ' + T.what + ' · δ = ' + d + ' · α = ' + R.auto(o.alpha),
         decision: T.decision, p: o.p, pLabel: T.pLabel, sec: [stat],
         ok: declared, verdict: declared ? T.yes : T.no,
-        notes: [R.esc(T.power) + (o.varType === 'means' ? ' ' + R.link(url, T.link) : '')],
+        notes: [R.esc(T.power) + (o.varType === 'means' ? ' ' + R.link(url, T.link) : ''),
+            R.ciLink((o.varType === 'means'
+                ? 'intervalo-confianza-diferencia-medias.html?xbar1=' + o.xbar1 + '&xbar2=' + o.xbar2 + '&s1=' + o.s1 + '&s2=' + o.s2 + '&n1=' + o.n1 + '&n2=' + o.n2 + '&var=welch'
+                : 'intervalo-confianza-diferencia-proporciones.html?x1=' + Math.round(o.p1 * o.n1) + '&n1=' + o.n1 + '&x2=' + Math.round(o.p2 * o.n2) + '&n2=' + o.n2) +
+                '&conf=' + R.sig(1 - 2 * o.alpha, 6), 1 - 2 * o.alpha)],
         rows: rows
     });
 }
@@ -657,7 +661,7 @@ function calculate() {
         const n1 = parseFloat(document.getElementById('n1p').value);
         const n2 = parseFloat(document.getElementById('n2p').value);
         if (![p1, p2, n1, n2].every(Number.isFinite) || p1 <= 0 || p1 >= 1 || p2 <= 0 || p2 >= 1 || n1 < 2 || n2 < 2) return fail(E.prop);
-        Object.assign(o, { p1, p2, deltaHat: p1 - p2, se: Math.sqrt(p1 * (1 - p1) / n1 + p2 * (1 - p2) / n2) });
+        Object.assign(o, { p1, p2, n1, n2, deltaHat: p1 - p2, se: Math.sqrt(p1 * (1 - p1) / n1 + p2 * (1 - p2) / n2) });
     } else {
         const xbar1 = parseFloat(document.getElementById('xbar1').value);
         const xbar2 = parseFloat(document.getElementById('xbar2').value);
@@ -666,7 +670,7 @@ function calculate() {
         const n1 = parseFloat(document.getElementById('n1m').value);
         const n2 = parseFloat(document.getElementById('n2m').value);
         if (![xbar1, xbar2, s1, s2, n1, n2].every(Number.isFinite) || s1 <= 0 || s2 <= 0 || n1 < 2 || n2 < 2) return fail(E.means);
-        Object.assign(o, { s1, s2, deltaHat: xbar1 - xbar2, se: Math.sqrt(s1 * s1 / n1 + s2 * s2 / n2) });
+        Object.assign(o, { xbar1, xbar2, s1, s2, n1, n2, deltaHat: xbar1 - xbar2, se: Math.sqrt(s1 * s1 / n1 + s2 * s2 / n2) });
     }
 
     // No inferioridad: H0: Δ ≤ −δ. No superioridad: H0: Δ ≥ +δ. TOST: las dos.
