@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="style_new.css?v=20261107-1">
 
     <script type="application/ld+json">
 {
@@ -75,26 +75,42 @@
   "mainEntity": [
     {
       "@type": "Question",
+      "name": "¿Qué contrasta?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Si la proporción de una población que cumple una condición es igual a un valor de referencia p₀, a partir de la proporción observada en una muestra."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Por qué el error estándar usa p₀ y no p̂?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Porque el contraste evalúa qué variabilidad cabría esperar si la hipótesis nula fuera cierta, es decir, si la proporción fuera p₀."
+      }
+    },
+    {
+      "@type": "Question",
       "name": "¿Cuándo es válida la aproximación normal?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Cuando el tamaño muestral permite esperar suficientes éxitos y fracasos bajo \\(H_0\\)."
+        "text": "Cuando se esperan suficientes éxitos y fracasos bajo H₀: como regla práctica, n·p₀ ≥ 10 y n·(1 − p₀) ≥ 10. Si no se cumple, usa un contraste binomial exacto."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Puedo usar porcentaje en lugar de proporción?",
+      "name": "¿Puedo usar porcentajes?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Sí, pero conviértelo a escala 0–1 para el cálculo."
+        "text": "Sí, pero escríbelos como proporciones entre 0 y 1: 65 % es 0.65."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Qué cola debo elegir?",
+      "name": "¿Bilateral o de una cola?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Bilateral si buscas cualquier diferencia; unilateral si solo te interesa aumento o disminución."
+        "text": "Bilateral si te interesa cualquier diferencia respecto a p₀; de una cola solo si, antes de ver los datos, únicamente te importa un sentido."
       }
     },
     {
@@ -102,15 +118,31 @@
       "name": "¿Significativo equivale a importante?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No siempre; valora también el tamaño del cambio en términos de negocio o impacto real."
+        "text": "No. Con muestras grandes, diferencias pequeñas son significativas. Valora la diferencia en puntos porcentuales y su intervalo de confianza."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Aquí se distingue entre desviación muestral y poblacional?",
+      "name": "¿Qué es la diferencia mínima detectable?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No de la misma forma que en medias. En proporciones el error estándar se construye con \\(p_0\\) (o con proporción combinada en dos proporciones), no con una \\(\\sigma\\) introducida por el usuario."
+        "text": "La menor diferencia real respecto a p₀ que el contraste detectaría con un 80 % de probabilidad con tu tamaño de muestra."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué tamaño de muestra necesito?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Depende de la diferencia que quieras detectar, de p₀ y de la potencia deseada. Calcúlalo con la calculadora de tamaño muestral para el contraste de una proporción."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Y si quiero comparar dos grupos?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Usa el contraste de dos proporciones; si los datos están emparejados, el test de McNemar."
       }
     }
   ]
@@ -164,11 +196,6 @@
     </header>
 
     <main>
-        <!-- Orden de secciones: 1) Conceptos clave, 2) Descripción, 3) Calculadora, 4) Contraste rápido, 5) Resto -->
-
-
-
-
         <section class="ss-shell" aria-label="Calculadora">
             <section class="card ss-controls">
                 <div class="panel-heading">
@@ -227,65 +254,147 @@
             </section>
         </section>
 
+        <aside class="sim-callout" aria-label="Simulación relacionada">
+            <p class="sim-callout-kicker">Simulación interactiva</p>
+            <p class="sim-callout-text"><strong>Visualiza α, β y la potencia</strong> Mueve el nivel de significación, el tamaño del efecto y el tamaño de muestra, y mira en el gráfico cómo cambian el error tipo I, el error tipo II y la potencia del contraste.</p>
+            <a class="sim-callout-link" href="simulaciones/simulador-errores-tipo-i-ii.html">Abrir el simulador de errores tipo I y II →</a>
+        </aside>
+
         <section class="card content-card">
-            <h3>Explicación</h3>
-            <p>El contraste para una proporción se aplica cuando cada observación tiene dos resultados posibles (éxito/fracaso) y quieres evaluar si la proporción poblacional es \(p_0\). Es una prueba habitual en validación de campañas, calidad de producción, ensayos clínicos y estudios de opinión.</p>
-            <p>El método se apoya en la aproximación normal de la proporción muestral bajo \(H_0\), por lo que la calidad de la aproximación mejora con tamaños muestrales adecuados.</p>
+            <h3>¿Qué es el contraste de hipótesis para una proporción?</h3>
+            <p>Es el procedimiento que permite decidir, a partir de una muestra, si la proporción de una población que cumple una condición es igual a un valor de referencia \(p_0\). Se usa cuando cada observación tiene solo dos resultados posibles —sí o no, defectuosa o correcta, compra o no compra— y lo que interesa es el porcentaje de «síes»: ¿sigue siendo del 65 % la satisfacción de los clientes? ¿Supera el 5 % la tasa de piezas defectuosas que garantiza el proveedor? ¿Ha alcanzado una campaña el 30 % de respuesta que se fijó como objetivo?</p>
+            <p>La lógica es la de cualquier contraste. Se parte de la <strong>hipótesis nula</strong> de que la proporción es \(p_0\) y se mira cuánto se aleja de ella la proporción muestral \(\hat{p}\). Una muestra nunca reproduce exactamente la proporción de la población: la pregunta es si la diferencia observada es mayor de lo que el azar del muestreo explica razonablemente. Si lo es, se rechaza \(H_0\) en favor de la <strong>hipótesis alternativa</strong>.</p>
 
             <h3>Hipótesis y estadístico</h3>
             <p class="formula-line">\(H_0: p = p_0\)</p>
-            <p class="formula-line">\( z = \frac{\hat{p} - p_0}{\sqrt{p_0(1-p_0)/n}} \)</p>
+            <p class="formula-line">\(H_1: p \neq p_0\), \(p > p_0\) o \(p < p_0\)</p>
+            <p class="formula-line">\( z = \dfrac{\hat{p} - p_0}{\sqrt{p_0(1-p_0)/n}} \)</p>
             <ul>
-                <li><strong>\(\hat{p}\)</strong>: proporción muestral observada (éxitos / n).</li>
-                <li><strong>\(p_0\)</strong>: proporción planteada en la hipótesis nula.</li>
+                <li><strong>\(\hat{p} = x/n\)</strong>: proporción muestral, el número de éxitos \(x\) dividido entre el tamaño de la muestra.</li>
+                <li><strong>\(p_0\)</strong>: proporción que plantea la hipótesis nula.</li>
                 <li><strong>\(n\)</strong>: tamaño de la muestra.</li>
+            </ul>
+            <p>El denominador es el <strong>error estándar</strong> de la proporción muestral si \(H_0\) fuera cierta. Fíjate en que se calcula con \(p_0\), no con \(\hat{p}\): el contraste pregunta qué variabilidad cabría esperar si la proporción fuera de verdad \(p_0\). Por eso, a diferencia del contraste de una media, aquí no hay que introducir ninguna desviación típica: en una variable de sí o no, la variabilidad queda determinada por la propia proporción.</p>
+            <p>Gracias al teorema central del límite, con muestras suficientemente grandes el estadístico z sigue aproximadamente una <a href="normal.html">normal estándar</a> bajo \(H_0\). El estadístico mide a cuántos errores estándar queda \(\hat{p}\) de \(p_0\).</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Cómo se hace el contraste, paso a paso</h3>
+            <ol>
+                <li><strong>Plantea las hipótesis</strong> antes de ver los datos: el valor \(p_0\) y si te interesa cualquier diferencia o solo un sentido.</li>
+                <li><strong>Fija el nivel de significación</strong> \(\alpha\), normalmente 0,05.</li>
+                <li><strong>Calcula la proporción muestral</strong> \(\hat{p} = x/n\) y comprueba que la aproximación normal es aceptable.</li>
+                <li><strong>Calcula el estadístico z</strong> y el p-valor, o compáralo con el valor crítico de la <a href="tabla-normal.html">tabla normal</a> (1,96 en el bilateral con \(\alpha = 0{,}05\)).</li>
+                <li><strong>Decide e interpreta</strong>, acompañando la decisión con el intervalo de confianza para \(p\).</li>
+            </ol>
+
+            <h3>Regla de decisión</h3>
+            <ul>
+                <li>Si el <strong>p-valor</strong> es menor que \(\alpha\), se rechaza \(H_0\).</li>
+                <li>Si el p-valor es mayor o igual que \(\alpha\), no hay evidencia suficiente para rechazar \(H_0\).</li>
+                <li>No rechazar \(H_0\) no demuestra que la proporción sea \(p_0\).</li>
+            </ul>
+
+            <h3>¿Bilateral o de una cola?</h3>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Tipo</th><th>Hipótesis alternativa</th><th>Ejemplo de pregunta</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Bilateral</td><td>\(H_1: p \neq p_0\)</td><td>¿Ha cambiado la satisfacción, en cualquier sentido?</td></tr>
+                        <tr><td>Cola derecha</td><td>\(H_1: p > p_0\)</td><td>¿Supera la tasa de defectos el 5 % garantizado?</td></tr>
+                        <tr><td>Cola izquierda</td><td>\(H_1: p < p_0\)</td><td>¿Ha bajado la tasa de abandono del 20 %?</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>La cola debe elegirse antes de ver los datos y por una razón del problema. Si la eliges después de ver hacia dónde apunta \(\hat{p}\), el riesgo real de falso positivo se duplica. En caso de duda, usa el bilateral.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Cuándo vale la aproximación normal</h3>
+            <p>El contraste z es una aproximación: el número de éxitos sigue en realidad una <a href="binomial.html">distribución binomial</a>, que se parece a una normal cuando se esperan bastantes éxitos y bastantes fracasos. La regla práctica habitual es</p>
+            <p class="formula-line">\( n\,p_0 \geq 10 \quad \text{y} \quad n\,(1-p_0) \geq 10 \)</p>
+            <p>(algunos textos aceptan 5). Con \(p_0\) cercano a 0 o a 1 hacen falta muestras grandes: para \(p_0 = 0{,}02\), al menos 500 observaciones. Si no se cumple, el p-valor del contraste z puede ser bastante inexacto y conviene un contraste binomial exacto. La calculadora te avisa cuando la regla no se cumple.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Supuestos del contraste</h3>
+            <ul>
+                <li><strong>Variable dicotómica</strong>: cada observación es un éxito o un fracaso. Si tu variable es numérica, usa el <a href="contraste-hipotesis-una-media.html">contraste para una media</a>.</li>
+                <li><strong>Observaciones independientes</strong>: la respuesta de una no condiciona la de otra. No se cumple, por ejemplo, si se encuesta a varias personas de un mismo hogar como si fueran independientes.</li>
+                <li><strong>Muestra aleatoria</strong> de la población sobre la que quieres concluir. Con muestras de conveniencia (voluntarios, quienes responden a una encuesta online) el contraste puede ser correcto y la conclusión, errónea.</li>
+                <li><strong>Tamaño suficiente</strong> para la aproximación normal, como se explica arriba.</li>
             </ul>
         </section>
 
-
-
-
-
         <section class="card content-card">
-            <h3>Contraste rápido</h3>
-            <p>Bajo \(H_0\), la variabilidad de \(\hat{p}\) viene dada por \(p_0(1-p_0)/n\). Por eso el denominador usa \(p_0\): estamos evaluando compatibilidad con la hipótesis nula concreta.</p>
-            <p>La aproximación normal es razonable cuando \(n p_0\) y \(n(1-p_0)\) son suficientemente grandes (regla práctica: al menos 5 o 10).</p>
+            <h3>Ejemplo resuelto 1: contraste bilateral</h3>
+            <p>Según estudios anteriores, el 65 % de los clientes de una empresa están satisfechos con el servicio. Tras una campaña de mejora, se encuesta a \(n = 120\) clientes y 85 se declaran satisfechos: \(\hat{p} = 85/120 \approx 0{,}708\). ¿Ha cambiado la proporción? Se contrasta \(H_0\colon p = 0{,}65\) frente a \(H_1\colon p \neq 0{,}65\) con \(\alpha = 0{,}05\).</p>
+            <p>La aproximación normal es válida: \(n p_0 = 78\) y \(n(1-p_0) = 42\). El error estándar bajo \(H_0\) es</p>
+            <p class="formula-line">\( SE = \sqrt{\dfrac{0{,}65 \times 0{,}35}{120}} \approx 0{,}0435 \)</p>
+            <p>y el estadístico</p>
+            <p class="formula-line">\( z = \dfrac{0{,}708 - 0{,}65}{0{,}0435} \approx 1{,}34 \)</p>
+            <p>Como \(|z| = 1{,}34 < 1{,}96\), el estadístico no cae en la región de rechazo; el p-valor bilateral es \(p \approx 0{,}180\). <strong>No se rechaza \(H_0\)</strong>.</p>
+            <p>Conclusión: con estos datos no hay evidencia suficiente de que la satisfacción haya cambiado. Pero tampoco se puede afirmar que la campaña no haya servido: el intervalo de Wilson del 95 % para \(p\) va del 62,2 % al 78,2 %, compatible con no haber cambiado y también con una mejora de más de 10 puntos. Con 120 clientes, el contraste solo detecta con un 80 % de probabilidad cambios de unos 12 puntos o mayores.</p>
+            <p><strong>En la calculadora:</strong> p₀ = 0.65, p̂ = 0.7083, n = 120 y «Bilateral (≠)».</p>
+
+            <h3>Ejemplo resuelto 2: contraste de una cola</h3>
+            <p>Un proveedor garantiza que como máximo el 5 % de sus piezas son defectuosas. Un cliente revisa una muestra aleatoria de \(n = 400\) piezas y encuentra 30 defectuosas: \(\hat{p} = 0{,}075\). Solo le preocupa que la tasa supere lo garantizado, así que contrasta \(H_0\colon p = 0{,}05\) frente a \(H_1\colon p > 0{,}05\) con \(\alpha = 0{,}05\).</p>
+            <p class="formula-line">\( SE = \sqrt{\dfrac{0{,}05 \times 0{,}95}{400}} \approx 0{,}0109, \qquad z = \dfrac{0{,}075 - 0{,}05}{0{,}0109} \approx 2{,}29 \)</p>
+            <p>La aproximación es válida (\(n p_0 = 20\)). El valor crítico de cola derecha es 1,645 y el p-valor, \(P(Z \geq 2{,}29) \approx 0{,}011\). <strong>Se rechaza \(H_0\)</strong>: hay evidencia de que la tasa de defectos supera el 5 % garantizado. El intervalo de Wilson del 95 % para la tasa real va del 5,3 % al 10,5 %.</p>
+            <p><strong>En la calculadora:</strong> p₀ = 0.05, p̂ = 0.075, n = 400 y «Cola derecha (>)».</p>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto</h3>
-            <p>Según estudios anteriores, el 65 % de los clientes de una empresa están satisfechos con el servicio (\(p_0 = 0{,}65\)). Tras una campaña de mejora, se encuesta a \(n = 120\) clientes y se obtiene que 85 manifiestan satisfacción, es decir, \(\hat{p} = 85/120 \approx 0{,}708\). ¿Ha cambiado significativamente la proporción? Se contrasta con \(\alpha = 0{,}05\) bilateral.</p>
-            <p>Las hipótesis son \(H_0\colon p = 0{,}65\) frente a \(H_1\colon p \neq 0{,}65\). El error estándar bajo la hipótesis nula es:</p>
-            <p class="formula-line">\( SE = \sqrt{\dfrac{p_0(1-p_0)}{n}} = \sqrt{\dfrac{0{,}65 \cdot 0{,}35}{120}} = \sqrt{0{,}001896} \approx 0{,}04354 \)</p>
-            <p>El estadístico z vale:</p>
-            <p class="formula-line">\( z = \dfrac{\hat{p} - p_0}{SE} = \dfrac{0{,}708 - 0{,}65}{0{,}04354} \approx 1{,}33 \)</p>
-            <p>Para un contraste bilateral con \(\alpha = 0{,}05\), el valor crítico es \(z_{0{,}025} \approx 1{,}96\). Como \(|z| = 1{,}33 < 1{,}96\), no se alcanza la región de rechazo. El p-valor bilateral es \(p \approx 0{,}183 > 0{,}05\).</p>
-            <p>Conclusión: <strong>no se rechaza \(H_0\)</strong>. Con estos datos, la diferencia entre la proporción observada (70{,}8 %) y la de referencia (65 %) no es estadísticamente significativa al 5 %. La mejora podría deberse al azar muestral.</p>
+            <h3>Cómo interpretar el resultado</h3>
+            <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) significa que, si la proporción fuera realmente \(p_0\), sería muy improbable obtener una proporción muestral tan alejada como la observada. Pero significativo no es lo mismo que importante: con muestras muy grandes, diferencias de un punto porcentual resultan significativas. Mira siempre cuánto se aleja \(\hat{p}\) de \(p_0\), en puntos porcentuales, y su intervalo de confianza.</p>
+            <p><strong>No rechazar \(H_0\)</strong> (p-valor ≥ α) no demuestra que la proporción sea \(p_0\): los datos son compatibles con ese valor y, a menudo, también con otros bastante distintos, como en el ejemplo 1.</p>
+            <p>En la calculadora, el resultado muestra la decisión con el p-valor, el estadístico z y una frase con la conclusión. En el gráfico, la zona verde es la región de no rechazo, las rojas son las regiones críticas y la línea ámbar marca el estadístico observado. En «Detalles del cálculo» tienes la proporción muestral, la diferencia observada en puntos, el error estándar, el valor crítico y el intervalo de Wilson.</p>
+
+            <h3>Potencia y diferencia mínima detectable</h3>
+            <p>Debajo de la conclusión, la calculadora indica la <strong>diferencia mínima detectable</strong>: la menor diferencia real respecto a \(p_0\) que, con tu tamaño de muestra, el contraste detectaría con un 80 % de probabilidad. Si es mayor que el cambio que te importaría, el estudio tiene poca potencia y un resultado no significativo dice poco. El enlace abre la <a href="tamano-muestral-contraste-una-proporcion.html">calculadora de tamaño muestral para el contraste de una proporción</a> con tu \(p_0\), tu α y el tipo de contraste, para que calcules cuántas observaciones necesitarías para la diferencia que te interese.</p>
+
+            <h3>Relación con el intervalo de confianza</h3>
+            <p>El otro enlace del resultado abre el <a href="intervalo-confianza-proporcion.html">intervalo de confianza para una proporción</a> con tus datos. En el contraste bilateral, se rechaza \(H_0\) cuando \(p_0\) queda fuera del intervalo. La correspondencia es exacta con el intervalo de Wilson, que usa el mismo error estándar que el contraste; con el de Wald puede fallar en casos límite. El intervalo, además, dice qué valores de la proporción son compatibles con los datos.</p>
         </section>
 
-                <section class="card content-card">
-                    <h3>Cómo interpretar el resultado</h3>
-                        <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) significa que la proporción muestral \(\hat{p}\) se aleja de \(p_0\) más de lo esperable por azar. Se concluye que hay evidencia estadística de que la proporción poblacional es distinta de \(p_0\) (o mayor/menor, si el contraste es unilateral). Sin embargo, la significación no equivale a importancia: una diferencia de 1 punto porcentual puede ser muy significativa con \(n\) grande aunque sea irrelevante en la práctica. Accompaña siempre el resultado con el intervalo de confianza para \(p\) y una valoración del tamaño del cambio en el contexto del problema.</p>
-                        <p><strong>No rechazar \(H_0\)</strong> (p-valor ≥ α) no demuestra que \(p = p_0\); solo indica que los datos son compatibles con ese valor al nivel de significación elegido. Si la muestra es pequeña, la potencia puede ser insuficiente para detectar desviaciones reales. Un intervalo de confianza amplio que incluya valores alejados de \(p_0\) es señal de que el estudio no permite conclusiones definitivas.</p>
-                        <p>El <strong>estadístico z</strong> que muestra la herramienta mide cuántos errores estándar se aleja \(\hat{p}\) de \(p_0\). En la visualización, la zona verde es la región de no rechazo, las zonas rojas son las regiones críticas y la línea ámbar representa el estadístico observado. Valores de \(|z|\) superiores al valor crítico (p. ej., 1,96 para α = 0,05 bilateral) llevan a rechazar \(H_0\). Verifica siempre que se cumplen las condiciones de validez de la aproximación normal: \(np_0 \geq 5\) y \(n(1-p_0) \geq 5\).</p>
-                </section>
-                <section id="seo-support-content" class="card content-card">
+        <section class="card content-card">
+            <h3>Errores frecuentes</h3>
+            <ul>
+                <li><strong>Introducir porcentajes en lugar de proporciones</strong>: 65 % se escribe 0.65.</li>
+                <li><strong>Usar el contraste z con muy pocos éxitos o fracasos esperados</strong>, sin comprobar \(n p_0 \geq 10\).</li>
+                <li><strong>Concluir que la proporción no ha cambiado</strong> porque el contraste no es significativo.</li>
+                <li><strong>Elegir la cola después de ver los datos</strong>.</li>
+                <li><strong>Olvidar cómo se obtuvo la muestra</strong>: con una encuesta voluntaria, la proporción muestral puede estar sesgada aunque el cálculo sea correcto.</li>
+                <li><strong>Comparar dos proporciones muestrales con este contraste</strong>, tratando una de ellas como si fuera \(p_0\). Para dos grupos, usa el <a href="contraste-hipotesis-dos-proporciones.html">contraste de dos proporciones</a>.</li>
+            </ul>
+        </section>
+
+        <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
               <h3>Calculadoras relacionadas</h3>
               <ul>
+                <li><a href="tamano-muestral-contraste-una-proporcion.html">Tamaño muestral para el contraste de una proporción</a></li>
+                <li><a href="intervalo-confianza-proporcion.html">Intervalo de confianza para una proporción</a></li>
                 <li><a href="contraste-hipotesis-dos-proporciones.html">Contraste para dos proporciones</a></li>
-                <li><a href="tamano-muestral-una-proporcion.html">Tamaño muestral para una proporción</a></li>
                 <li><a href="binomial.html">Distribución binomial</a></li>
+                <li><a href="tabla-normal.html">Tabla de la normal</a></li>
               </ul>
             </section>
             <h3>Preguntas frecuentes</h3>
             <ul>
-                <li><strong>¿Cuándo es válida la aproximación normal?</strong> Cuando el tamaño muestral permite esperar suficientes éxitos y fracasos bajo \(H_0\).</li>
-                <li><strong>¿Puedo usar porcentaje en lugar de proporción?</strong> Sí, pero conviértelo a escala 0–1 para el cálculo.</li>
-                <li><strong>¿Qué cola debo elegir?</strong> Bilateral si buscas cualquier diferencia; unilateral si solo te interesa aumento o disminución.</li>
-                <li><strong>¿Significativo equivale a importante?</strong> No siempre; valora también el tamaño del cambio en términos de negocio o impacto real.</li>
-                <li><strong>¿Aquí se distingue entre desviación muestral y poblacional?</strong> No de la misma forma que en medias. En proporciones el error estándar se construye con \(p_0\) (o con proporción combinada en dos proporciones), no con una \(\sigma\) introducida por el usuario.</li>
+                <li><strong>¿Qué contrasta?</strong> Si la proporción de una población que cumple una condición es igual a un valor de referencia p₀, a partir de la proporción observada en una muestra.</li>
+                <li><strong>¿Por qué el error estándar usa p₀ y no p̂?</strong> Porque el contraste evalúa qué variabilidad cabría esperar si la hipótesis nula fuera cierta, es decir, si la proporción fuera p₀.</li>
+                <li><strong>¿Cuándo es válida la aproximación normal?</strong> Cuando se esperan suficientes éxitos y fracasos bajo H₀: como regla práctica, n·p₀ ≥ 10 y n·(1 − p₀) ≥ 10. Si no se cumple, usa un contraste binomial exacto.</li>
+                <li><strong>¿Puedo usar porcentajes?</strong> Sí, pero escríbelos como proporciones entre 0 y 1: 65 % es 0.65.</li>
+                <li><strong>¿Bilateral o de una cola?</strong> Bilateral si te interesa cualquier diferencia respecto a p₀; de una cola solo si, antes de ver los datos, únicamente te importa un sentido.</li>
+                <li><strong>¿Significativo equivale a importante?</strong> No. Con muestras grandes, diferencias pequeñas son significativas. Valora la diferencia en puntos porcentuales y su intervalo de confianza.</li>
+                <li><strong>¿Qué es la diferencia mínima detectable?</strong> La menor diferencia real respecto a p₀ que el contraste detectaría con un 80 % de probabilidad con tu tamaño de muestra.</li>
+                <li><strong>¿Qué tamaño de muestra necesito?</strong> Depende de la diferencia que quieras detectar, de p₀ y de la potencia deseada. Calcúlalo con la calculadora de tamaño muestral para el contraste de una proporción.</li>
+                <li><strong>¿Y si quiero comparar dos grupos?</strong> Usa el contraste de dos proporciones; si los datos están emparejados, el test de McNemar.</li>
             </ul>
+            <p class="external-ref">Referencia: <a href="https://es.wikipedia.org/wiki/Contraste_de_hip%C3%B3tesis" target="_blank" rel="noopener noreferrer">Contraste de hipótesis</a> — Wikipedia</p>
         </section>
 
     </main>
@@ -307,6 +416,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="test-results.js?v=20261110-3"></script>
 <script>
 let propTestChart;
 
@@ -383,6 +493,81 @@ function renderPropTestChart(alpha, tail, zValue) {
     });
 }
 
+// Tamaño muestral con la misma fórmula que la calculadora de tamaño muestral
+// para el contraste de una proporción (diferencia d respecto a p₀).
+function onePropSampleSize(p0, d, alpha, tail, power) {
+    const clamp = (v) => Math.min(0.9999, Math.max(0.0001, v));
+    const zA = jStat.normal.inv(tail === 'two' ? 1 - alpha / 2 : 1 - alpha, 0, 1);
+    const zB = jStat.normal.inv(power, 0, 1);
+    const nFor = (p1) => Math.pow((zA * Math.sqrt(p0 * (1 - p0)) + zB * Math.sqrt(p1 * (1 - p1))) / d, 2);
+    if (tail === 'two') return Math.max(nFor(clamp(p0 + d)), nFor(clamp(p0 - d)));
+    return nFor(clamp(p0 + (tail === 'left' ? -d : d)));
+}
+
+// Resultado: decisión, conclusión, diferencia mínima detectable y detalles.
+function renderPropResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const q = o.tail === 'two' ? 1 - o.alpha / 2 : 1 - o.alpha;
+    const crit = jStat.normal.inv(q, 0, 1);
+    const room = o.tail === 'right' ? 1 - o.p0 : o.tail === 'left' ? o.p0 : Math.max(o.p0, 1 - o.p0);
+    const mdeRaw = R.solveMin((d) => onePropSampleSize(o.p0, d, o.alpha, o.tail, R.TARGET) <= o.n, 1e-6, room - 1e-6);
+    const mde = mdeRaw == null ? null : R.sigUp(mdeRaw, 3);
+    const sign = o.tail === 'two' ? '±' : (o.tail === 'left' ? '−' : '+');
+    const p0 = R.auto(o.p0);
+    const x = Math.round(o.phat * o.n);
+    const T = EN ? {
+        label: 'z-test for one proportion, ' + { two: 'two-tailed', right: 'right-tailed', left: 'left-tailed' }[o.tail],
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        yes: '✓ There is statistical evidence that the proportion is ' + { two: 'different from ', right: 'greater than ', left: 'less than ' }[o.tail] + p0 + '.',
+        no: 'ℹ There is not enough evidence that the proportion is ' + { two: 'different from ', right: 'greater than ', left: 'less than ' }[o.tail] + p0 + '. This does not prove that it equals ' + p0 + '.',
+        mde: mde == null
+            ? 'With n = ' + o.n + ', the test does not reach ' + R.pct(R.TARGET) + ' power even for the largest possible difference from p₀.'
+            : 'With n = ' + o.n + ', the test detects with ' + R.pct(R.TARGET) + ' probability only differences of ' + sign + R.auto(mde) + ' (' + R.points(mde) + ') or more from p₀.',
+        link: 'Work out the sample size needed for another difference',
+        warn: 'ℹ The normal approximation needs n·p₀ ≥ 10 and n·(1 − p₀) ≥ 10; here they are ' + R.num(o.n * o.p0, 1) + ' and ' + R.num(o.n * (1 - o.p0), 1) + '. The p-value may be inaccurate; an exact binomial test is preferable.',
+        rows: ['Sample proportion (p̂)', 'Observed difference (p̂ − p₀)', 'Standard error under H₀', 'Test statistic', 'Critical value', 'p-value', R.pctLevel(1 - o.alpha) + ' Wilson interval for p', 'Minimum detectable difference (power ' + R.pct(R.TARGET) + ')']
+    } : {
+        label: 'Contraste z para una proporción, ' + { two: 'bilateral', right: 'de cola derecha', left: 'de cola izquierda' }[o.tail],
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        yes: '✓ Hay evidencia estadística de que la proporción es ' + { two: 'distinta de ', right: 'mayor que ', left: 'menor que ' }[o.tail] + p0 + '.',
+        no: 'ℹ No hay evidencia suficiente de que la proporción sea ' + { two: 'distinta de ', right: 'mayor que ', left: 'menor que ' }[o.tail] + p0 + '. Esto no demuestra que sea ' + p0 + '.',
+        mde: mde == null
+            ? 'Con n = ' + o.n + ', el contraste no llega a un ' + R.pct(R.TARGET) + ' de potencia ni con la mayor diferencia posible respecto a p₀.'
+            : 'Con n = ' + o.n + ', el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad diferencias de ' + sign + R.auto(mde) + ' (' + R.points(mde) + ') o mayores respecto a p₀.',
+        link: 'Calcular el tamaño muestral necesario para otra diferencia',
+        warn: 'ℹ La aproximación normal necesita n·p₀ ≥ 10 y n·(1 − p₀) ≥ 10; aquí valen ' + R.num(o.n * o.p0, 1) + ' y ' + R.num(o.n * (1 - o.p0), 1) + '. El p-valor puede ser poco preciso; conviene un contraste binomial exacto.',
+        rows: ['Proporción muestral (p̂)', 'Diferencia observada (p̂ − p₀)', 'Error estándar bajo H₀', 'Estadístico', 'Valor crítico', 'p-valor', 'Intervalo de Wilson al ' + R.pctLevel(1 - o.alpha) + ' para p', 'Diferencia mínima detectable (potencia ' + R.pct(R.TARGET) + ')']
+    };
+    // Intervalo de Wilson al 100(1 − α) %.
+    const zc = jStat.normal.inv(1 - o.alpha / 2, 0, 1);
+    const den = 1 + zc * zc / o.n;
+    const ctr = (o.phat + zc * zc / (2 * o.n)) / den;
+    const half = zc * Math.sqrt(o.phat * (1 - o.phat) / o.n + zc * zc / (4 * o.n * o.n)) / den;
+    const notes = [];
+    if (o.n * o.p0 < 10 || o.n * (1 - o.p0) < 10) notes.push(R.esc(T.warn));
+    const sizeUrl = 'tamano-muestral-contraste-una-proporcion.html?h0=' + o.p0 + '&delta=' + mde + '&alpha=' + o.alpha + '&power=' + R.TARGET +
+        '&alt=' + { two: 'two-sided', right: 'greater', left: 'less' }[o.tail];
+    notes.push(R.esc(T.mde) + (mde == null ? '' : ' ' + R.link(sizeUrl, T.link)));
+    notes.push(R.ciLink('intervalo-confianza-proporcion.html?x=' + x + '&n=' + o.n + '&conf=' + R.sig(1 - o.alpha, 6), 1 - o.alpha));
+    R.render(document.getElementById('propResult'), {
+        label: T.label + ' · H₀: p = ' + p0 + ' · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, sec: ['z = ' + R.num(o.z, 4)],
+        ok: rejected, verdict: rejected ? T.yes : T.no,
+        notes: notes,
+        rows: [
+            [T.rows[0], R.num(o.phat, 4)],
+            [T.rows[1], R.num(o.phat - o.p0, 4) + ' (' + R.points(Math.abs(o.phat - o.p0)) + ')'],
+            [T.rows[2], R.num(o.se, 4)],
+            [T.rows[3], 'z = ' + R.num(o.z, 4)],
+            [T.rows[4], (o.tail === 'two' ? '±' : (o.tail === 'left' ? '−' : '')) + R.num(crit, 4)],
+            [T.rows[5], R.prob(o.p)],
+            [T.rows[6], R.interval(Math.max(0, ctr - half), Math.min(1, ctr + half), 4)],
+            [T.rows[7], mde == null ? '—' : sign + R.auto(mde)]
+        ]
+    });
+}
+
 function calculatePropTest() {
     const p0 = parseFloat(document.getElementById('p0').value);
     const phat = parseFloat(document.getElementById('phat').value);
@@ -407,8 +592,7 @@ function calculatePropTest() {
     else if (tail === 'right') p = 1 - jStat.normal.cdf(z, 0, 1);
     else p = jStat.normal.cdf(z, 0, 1);
 
-    const decision = p < alpha ? 'Se rechaza H₀.' : 'No se rechaza H₀.';
-    resultEl.innerText = `z = ${z.toFixed(4)} | p-valor = ${p.toFixed(6)} | ${decision}`;
+    renderPropResult({ p0, phat, n, alpha, tail, z, p, se });
     renderPropTestChart(alpha, tail, z);
 }
 

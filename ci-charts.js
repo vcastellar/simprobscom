@@ -725,6 +725,37 @@
     return fmtPct(Math.round(conf * 10000) / 10000) + '; α = ' + fmtAlpha(Math.round((1 - conf) * 10000) / 10000);
   }
 
+  // Valores iniciales recibidos por la URL (por ejemplo, desde un contraste):
+  // `fields` relaciona cada parámetro con el id de su campo; `conf` elige el
+  // nivel de confianza, con el nivel personalizado si no es 90, 95 o 99 %.
+  // Hay que llamarla antes de customLevel() para que el deslizador se sincronice.
+  function prefill(fields) {
+    var params;
+    try { params = new URLSearchParams(location.search); } catch (e) { return; }
+    Object.keys(fields || {}).forEach(function (key) {
+      var el = document.getElementById(fields[key]);
+      if (!el || !params.has(key)) return;
+      var raw = params.get(key);
+      if (el.tagName === 'SELECT') {
+        if ([].some.call(el.options, function (op) { return op.value === raw; })) el.value = raw;
+        return;
+      }
+      var v = parseFloat(raw);
+      if (isFinite(v)) el.value = v;
+    });
+    var conf = parseFloat(params.get('conf'));
+    var sel = document.getElementById('conf');
+    if (!sel || !(conf > 0 && conf < 1)) return;
+    var std = [].filter.call(sel.options, function (op) { return Math.abs(parseFloat(op.value) - conf) < 1e-9; })[0];
+    if (std) { sel.value = std.value; return; }
+    var input = document.getElementById('customConf');
+    var row = document.getElementById('customConfRow');
+    if (!input) return;
+    sel.value = 'custom';
+    input.value = conf;
+    if (row) row.style.display = '';
+  }
+
   window.CICharts = {
     result: renderResult,
     num: fmtNum,
@@ -735,6 +766,7 @@
     clear: clear,
     clearNote: function (canvasId) { setNote(canvasId, ''); },
     customLevel: customLevel,
+    prefill: prefill,
     // Conversión entre posición del deslizador y nivel (útil en pruebas).
     sliderScale: { toLevel: posToLevel, toPos: levelToPos, steps: SLIDER_STEPS }
   };

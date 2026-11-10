@@ -201,14 +201,15 @@
             <h3>Fórmulas</h3>
             <p><strong>No inferioridad</strong> — con \(\delta = \mu_T - \mu_C\) asumido:</p>
             <p class="formula-line">\( n = \left\lceil \frac{2\,\sigma^2\,(Z_\alpha + Z_\beta)^2}{(M + \delta)^2} \right\rceil \)</p>
-            <p><strong>Equivalencia (TOST)</strong> — con \(\delta\) asumido:</p>
-            <p class="formula-line">\( n = \left\lceil \frac{2\,\sigma^2\,(Z_\alpha + Z_\beta)^2}{(M - |\delta|)^2} \right\rceil \)</p>
+            <p><strong>Equivalencia (TOST)</strong> — con \(\delta = 0\):</p>
+            <p class="formula-line">\( n = \left\lceil \frac{2\,\sigma^2\,(Z_\alpha + Z_{\beta/2})^2}{M^2} \right\rceil \)</p>
+            <p>Con \(\delta \neq 0\), la calculadora busca el menor \(n\) cuya potencia, \(\Phi\!\left(\frac{M-\delta}{SE} - Z_\alpha\right) + \Phi\!\left(\frac{M+\delta}{SE} - Z_\alpha\right) - 1\) con \(SE = \sigma\sqrt{2/n}\), alcanza la deseada. La fórmula con \(Z_\beta\) y \(M - |\delta|\) es solo una cota inferior.</p>
             <ul>
                 <li><strong>M</strong>: margen de no inferioridad o equivalencia (definido clínicamente, siempre positivo).</li>
                 <li><strong>δ</strong>: diferencia verdadera asumida (\(\mu_T - \mu_C\)); el supuesto más conservador es δ = 0.</li>
                 <li><strong>σ</strong>: desviación estándar común de la variable principal (tomada de estudios previos o piloto).</li>
                 <li><strong>Z<sub>α</sub></strong>: cuantil normal unilateral. Para α = 0,025 corresponde a Z = 1,96.</li>
-                <li>La fórmula de equivalencia exige \(M > |\delta|\); si δ = 0 ambas fórmulas producen el mismo n.</li>
+                <li>La equivalencia exige \(M > |\delta|\) y necesita más muestra que la no inferioridad: hay que superar los dos contrastes unilaterales a la vez, y por eso, con δ = 0, aparece \(Z_{\beta/2}\) en lugar de \(Z_\beta\).</li>
             </ul>
             <h3>Configuración rápida</h3>
             <ul>
@@ -267,7 +268,7 @@
             </section>
             <h3>Preguntas frecuentes</h3>
             <ul>
-                <li><strong>¿Qué diferencia hay entre NI y equivalencia?</strong> No inferioridad es unilateral: basta con demostrar que T no es peor en más de M (solo un límite). Equivalencia (TOST) es bilateral: hay que demostrar que la diferencia cae dentro de ±M en ambas direcciones, lo que requiere mayor muestra cuando δ ≠ 0.</li>
+                <li><strong>¿Qué diferencia hay entre NI y equivalencia?</strong> No inferioridad es unilateral: basta con demostrar que T no es peor en más de M (solo un límite). Equivalencia (TOST) es bilateral: hay que demostrar que la diferencia cae dentro de ±M en ambas direcciones, lo que requiere mayor muestra.</li>
                 <li><strong>¿Por qué α unilateral = 0,025?</strong> Es el estándar regulatorio EMA/FDA: usar α = 0,025 unilateral equivale a un IC del 95 % para la diferencia, garantizando el mismo control del error de tipo I que en un ensayo de superioridad.</li>
                 <li><strong>¿Cómo elijo M?</strong> Siguiendo las guías regulatorias (EMA, FDA), M suele fijarse como fracción (50–80 %) del efecto del comparador frente a placebo. Debe determinarse antes del estudio y justificarse clínica y estadísticamente en el protocolo.</li>
                 <li><strong>¿Qué pasa si δ ≠ 0?</strong> Si esperas que el nuevo tratamiento sea algo inferior (δ negativo en NI), el denominador M+δ se reduce y n aumenta; si esperas que sea algo superior, n disminuye. En equivalencia, |δ| debe ser estrictamente menor que M.</li>
@@ -324,7 +325,15 @@ function calculateNISampleSize() {
             if (denom <= 0) throw new Error("Para equivalencia se requiere M > |δ|. El efecto asumido supera el margen.");
         }
 
-        const n = Math.ceil(2 * sigma * sigma * Math.pow(zAlpha + zBeta, 2) / (denom * denom));
+        // Potencia con n por grupo (aproximación normal). En la equivalencia hay que
+        // superar los dos contrastes, así que la fórmula con Z_β solo es una cota inferior.
+        const powerAt = function (m) {
+            const se = sigma * Math.sqrt(2 / m);
+            if (type === "ni") return jStat.normal.cdf(denom / se - zAlpha, 0, 1);
+            return Math.max(0, jStat.normal.cdf((margin - delta) / se - zAlpha, 0, 1) + jStat.normal.cdf((margin + delta) / se - zAlpha, 0, 1) - 1);
+        };
+        let n = Math.max(2, Math.ceil(2 * sigma * sigma * Math.pow(zAlpha + zBeta, 2) / (denom * denom)));
+        while (type !== "ni" && powerAt(n) < power && n < 1e7) n++;
         const typeLabel = type === "ni" ? "no inferioridad" : "equivalencia (TOST)";
 
         resultEl.innerText =
@@ -333,7 +342,7 @@ function calculateNISampleSize() {
         window.SampleSizeCharts && SampleSizeCharts.power({
             canvas: 'niChart', n: n, target: power,
             xLabel: 'n por grupo',
-            powerFn: function (m) { return jStat.normal.cdf((denom * Math.sqrt(m / 2)) / sigma - zAlpha, 0, 1); }
+            powerFn: powerAt
         });
     } catch (e) {
         resultEl.innerText = `Error: ${e.message}`;
@@ -341,6 +350,18 @@ function calculateNISampleSize() {
 }
 
 document.getElementById("niCalculateBtn").addEventListener("click", calculateNISampleSize);
+(function () {
+    // Valores recibidos por la URL, por ejemplo desde la calculadora del contraste.
+    let params;
+    try { params = new URLSearchParams(location.search); } catch (e) { return; }
+    const fields = { sigma: "niSigma", margin: "niMargin", delta: "niDelta", alpha: "niAlpha", power: "niPower" };
+    Object.keys(fields).forEach(function (key) {
+        const value = parseFloat(params.get(key));
+        if (Number.isFinite(value)) document.getElementById(fields[key]).value = value;
+    });
+    const type = params.get("type");
+    if (["ni", "eq"].includes(type)) document.getElementById("niType").value = type;
+}());
 calculateNISampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
 
     <script type="application/ld+json">
 {
@@ -78,7 +78,15 @@
       "name": "When should I use z and when t?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Use z if you know the population \\(\\sigma\\); use t if \\(\\sigma\\) is unknown and you estimate it from the sample."
+        "text": "Use z if you know the population σ; use t if σ is unknown and you estimate it from the sample, which is the most common case."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this the same as the one-sample t-test?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. \"Hypothesis test for a mean with unknown σ\" and \"one-sample t-test\" are names for the same procedure."
       }
     },
     {
@@ -86,7 +94,7 @@
       "name": "What does the p-value represent in this mean test?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The probability, under \\(H_0\\), of observing a result as extreme as the one obtained."
+        "text": "The probability, if H₀ is true, of observing a result as extreme as the one obtained, or more. It is not the probability that H₀ is true."
       }
     },
     {
@@ -95,6 +103,38 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Many analyses use 0.05, although 0.01 may be preferred in critical contexts."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use the test with fewer than 30 observations?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, with Student's t, as long as the data are approximately normal and there are no marked outliers. With small samples and strongly skewed data, a non-parametric test is preferable."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if my data are not normal?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "With large samples the test remains valid thanks to the central limit theorem. With small samples, check normality with the Shapiro-Wilk test and consider a non-parametric test such as Wilcoxon's."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Two-tailed or one-tailed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Two-tailed if any difference from μ₀ matters; one-tailed only if, before seeing the data, a single direction is all you care about. When in doubt, two-tailed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What sample size do I need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It depends on the difference you want to detect, the variability and the desired power. Work it out with the sample size calculator for a one-mean test."
       }
     },
     {
@@ -110,7 +150,7 @@
       "name": "What is the minimum detectable effect (MDE)?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It is the smallest difference from μ0 that your study is designed to detect with a given power (for example, 80%) and a fixed significance level α. If the true effect is smaller than the MDE, the test is likely underpowered to detect it."
+        "text": "It is the smallest difference from μ₀ that your study is designed to detect with a given power (for example, 80%) and a fixed significance level α. If the true effect is smaller than the MDE, the test may fail to detect it due to lack of power."
       }
     }
   ]
@@ -160,11 +200,6 @@
     </header>
 
     <main>
-        <!-- Section order: 1) Key concepts, 2) Description, 3) Calculator, 4) Quick check, 5) Rest -->
-
-
-
-
         <section class="ss-shell" aria-label="Calculator">
             <section class="card ss-controls">
                 <div class="panel-heading">
@@ -247,9 +282,10 @@
         </aside>
 
         <section class="card content-card">
-            <h3>Explanation</h3>
-            <p>This test is used when you want to check whether the population mean equals a reference value \(\mu_0\). It is one of the most widely used procedures in process control, biomedical research, education and business analytics, because it lets you test a specific claim against quantitative evidence.</p>
-            <p>In practice there are two scenarios: if you know the population standard deviation \(\sigma\), you use a z-test; if \(\sigma\) is unknown and is estimated with the sample standard deviation \(s\), you use a Student's t-test. This distinction matters because it reflects the extra uncertainty introduced when estimating variability from the sample itself.</p>
+            <h3>What is a hypothesis test for a mean?</h3>
+            <p>It is the procedure that lets you decide, from a sample, whether a population mean can equal a reference value \(\mu_0\) or whether the data indicate that it is different. It is also known as the <strong>one-sample t-test</strong> (or z-test, when the population standard deviation is known). It is one of the most widely used tests in quality control, biomedical research, education and business analytics: do the parts weigh 500 g on average, as the manufacturer claims? Has the mean waiting time changed? Do my students score above the national average?</p>
+            <p>The logic resembles a trial. You start from a <strong>null hypothesis</strong> \(H_0\) ("the mean is \(\mu_0\)"), which stands as long as there is no evidence against it, just like the presumption of innocence. Then you look at how far the sample mean \(\bar{x}\) is from \(\mu_0\) and ask: if \(H_0\) were true, would a difference like this be unusual by chance alone? If it would be very unusual, \(H_0\) is rejected in favour of the <strong>alternative hypothesis</strong> \(H_1\); if not, the data are compatible with \(H_0\) and it is not rejected.</p>
+            <p>There are two scenarios. If you know the population standard deviation \(\sigma\), you use the <strong>z-test</strong>; if \(\sigma\) is unknown and is estimated with the sample standard deviation \(s\) — the usual case in practice — you use <strong>Student's t-test</strong>, which accounts for the extra uncertainty of estimating variability from the sample itself.</p>
 
             <h3>Hypotheses and test statistic</h3>
             <p class="formula-line">\(H_0: \mu = \mu_0\)</p>
@@ -263,64 +299,172 @@
                 <li><strong>\(s\)</strong>: sample standard deviation (if \(\sigma\) is unknown).</li>
                 <li><strong>\(n\)</strong>: sample size.</li>
             </ul>
+            <p>The denominator, \(\sigma/\sqrt{n}\) or \(s/\sqrt{n}\), is the <strong>standard error</strong> of the mean: it measures how much \(\bar{x}\) varies from one sample to another. The statistic therefore expresses <em>how many standard errors</em> the observed mean lies from the hypothesized value. A statistic close to 0 means the data fit \(H_0\); the larger it is in absolute value, the harder it is to attribute the difference to chance. That is why the same difference \(\bar{x}-\mu_0\) carries more weight with a large sample or with tightly clustered data.</p>
         </section>
 
-
-
-
-
         <section class="card content-card">
-            <h3>Quick check</h3>
+            <h3>How to run the test, step by step</h3>
+            <ol>
+                <li><strong>State the hypotheses</strong> before looking at the data: \(H_0: \mu = \mu_0\) and the alternative you care about (different, greater or less).</li>
+                <li><strong>Set the significance level</strong> \(\alpha\): the risk you accept of rejecting \(H_0\) when it is true. The usual choice is 0.05.</li>
+                <li><strong>Compute the z or t statistic</strong> from the mean, the standard deviation and the sample size.</li>
+                <li><strong>Get the p-value</strong> (or compare the statistic with the critical value from the <a href="tabla-normal.html">normal</a> or <a href="tabla-t-student.html">Student's t</a> table).</li>
+                <li><strong>Decide and interpret</strong> in the context of the problem, and report the confidence interval and the effect size alongside the decision.</li>
+            </ol>
+            <p>The calculator above does steps 3 and 4 for you and draws the result on the distribution.</p>
+
+            <h3>Decision rule</h3>
             <ul>
                 <li>If the <strong>p-value</strong> is less than \(\alpha\), \(H_0\) is rejected.</li>
                 <li>If the p-value is greater than or equal to \(\alpha\), there isn't enough evidence to reject \(H_0\).</li>
                 <li>A non-significant result does not prove that \(H_0\) is true.</li>
             </ul>
-        </section>
-
-
-
-        <section class="card content-card">
-            <h3>Why are there two formulas for this test?</h3>
-            <p><strong>z-test</strong>: used when the population \(\sigma\) is known. The statistic follows a standard normal distribution under \(H_0\).</p>
-            <p><strong>t-test</strong>: used when \(\sigma\) is unknown and is replaced by \(s\). That extra uncertainty is modeled with Student's t distribution with \(n-1\) degrees of freedom.</p>
-            <p>As \(n\) grows, the t distribution gets very close to the normal, which is why both methods converge for large samples.</p>
+            <p>Deciding with the p-value or with the critical value is equivalent: the p-value is below \(\alpha\) exactly when the statistic falls in the rejection region.</p>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example</h3>
+            <h3>Two-tailed or one-tailed test?</h3>
+            <p>It depends on the question. If you want to know whether the mean is <em>different</em> from \(\mu_0\), in either direction, the test is two-tailed. If only one direction matters — greater, or less — it is one-tailed.</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Type</th><th>Alternative hypothesis</th><th>\(H_0\) is rejected if…</th><th>p-value</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Two-tailed</td><td>\(H_1: \mu \neq \mu_0\)</td><td>the statistic is very large or very small</td><td>both tails: \(2\,P(T \geq |t|)\)</td></tr>
+                        <tr><td>Right-tailed</td><td>\(H_1: \mu > \mu_0\)</td><td>the statistic is very large</td><td>the right tail: \(P(T \geq t)\)</td></tr>
+                        <tr><td>Left-tailed</td><td>\(H_1: \mu < \mu_0\)</td><td>the statistic is very small (negative)</td><td>the left tail: \(P(T \leq t)\)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>A one-tailed test puts all of \(\alpha\) on one side, so it detects a difference in that direction more easily; in exchange, it cannot detect a difference in the opposite direction. When the statistic falls in the expected direction, its p-value is half the two-tailed one.</p>
+            <p>The direction must be chosen <strong>before seeing the data</strong> and for a reason grounded in the problem (for example, "I only care whether the mean weight is below the stated one"). Choosing the tail after seeing which way the data point effectively doubles the false-positive risk. When in doubt, use the two-tailed test.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>z-test or t-test?</h3>
+            <p><strong>z-test</strong>: used when the population \(\sigma\) is known, which is uncommon; it happens, for example, with industrial processes that have a long track record or with standardized tests designed with a fixed standard deviation. The statistic follows a standard normal distribution under \(H_0\).</p>
+            <p><strong>t-test</strong>: used when \(\sigma\) is unknown and is replaced by \(s\). Because \(s\) is only an estimate and changes from sample to sample, the statistic is more variable than a normal: it follows Student's t distribution with \(n-1\) degrees of freedom, which has heavier tails. This makes the critical value larger and demands somewhat more evidence to reject \(H_0\), especially with small samples.</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Sample size</th><th>Critical t value (two-tailed, \(\alpha = 0.05\))</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>\(n = 5\)</td><td>2.776</td></tr>
+                        <tr><td>\(n = 10\)</td><td>2.262</td></tr>
+                        <tr><td>\(n = 30\)</td><td>2.045</td></tr>
+                        <tr><td>\(n = 100\)</td><td>1.984</td></tr>
+                        <tr><td>Normal (z)</td><td>1.960</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>As \(n\) grows, the t distribution gets closer and closer to the normal, which is why both methods converge for large samples. Even so, if you estimated the standard deviation from the sample, the right choice is always t, whatever the sample size: using z with \(s\) in a small sample produces more false positives than \(\alpha\) indicates. The well-known "\(n \geq 30\)" rule is about something else: when non-normal data stop being a concern (see the assumptions).</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>What the p-value is (and what it is not)</h3>
+            <p>The <strong>p-value</strong> is the probability of obtaining a result as far from \(\mu_0\) as the one observed, or farther, <em>assuming that \(H_0\) is true</em>. It measures how surprising your data would be if the mean really were \(\mu_0\): the smaller it is, the worse the data fit the null hypothesis.</p>
+            <p>For example, a p-value of 0.073 means that, if the mean really were \(\mu_0\), about 7 in every 100 samples of the same size would give a mean as far off as yours, or farther. That is not exceptional, which is why \(H_0\) is not rejected at \(\alpha = 0.05\).</p>
+            <p>The p-value is <strong>not</strong>:</p>
+            <ul>
+                <li>The probability that \(H_0\) is true. With \(p = 0.03\) there is no "3% chance that the mean is \(\mu_0\)".</li>
+                <li>The probability that the result "is due to chance".</li>
+                <li>A measure of the size or importance of the difference: a tiny difference can give a very small p-value if the sample is huge.</li>
+            </ul>
+            <p>Nor should it be confused with \(\alpha\). The significance level is set <em>before</em> collecting the data and is the decision threshold; the p-value is computed <em>afterwards</em>, from the data. Report the exact p-value (\(p = 0.073\)) rather than just "significant" or "not significant".</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Assumptions of the test</h3>
+            <ul>
+                <li><strong>A random sample</strong> from the population you want to draw conclusions about.</li>
+                <li><strong>Independent observations</strong>: the value of one does not affect another. This fails with repeated measurements on the same individuals or with data clustered in batches or families.</li>
+                <li><strong>A quantitative variable</strong> (weight, time, score…). For percentages or yes/no data, use the <a href="contraste-hipotesis-una-proporcion.html">test for one proportion</a>.</li>
+                <li><strong>Normality</strong>: the variable is approximately normally distributed, or the sample is large enough for the sample mean to be approximately normal by the <a href="simulaciones/teorema-central-limite.html">central limit theorem</a>. As a guide, \(n \geq 30\) is usually enough unless the distribution is strongly skewed.</li>
+            </ul>
+            <p>With small samples, normality matters more. You can check it with a histogram or with the <a href="shapiro-wilk-normalidad.html">Shapiro-Wilk test</a>, and you should look for outliers, because a single extreme value can drag the mean and inflate the standard deviation. If the data are clearly skewed and the sample is small, a non-parametric test such as the Wilcoxon signed-rank test is preferable.</p>
+            <p>If you have two measurements on the same individual (before and after), the right test is the one for <a href="contraste-hipotesis-medias-apareadas.html">paired means</a>; if you are comparing two different groups, the one for <a href="contraste-hipotesis-dos-medias.html">two independent means</a>.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Worked example 1: two-tailed t-test</h3>
             <p>A factory claims that its machine produces parts with an average weight of \(\mu_0 = 500\) g. To verify this, an inspector takes a sample of \(n = 25\) parts and obtains \(\bar{x} = 497\) g and sample standard deviation \(s = 8\) g. The goal is to test whether the mean weight differs significantly from 500 g with \(\alpha = 0.05\) (two-tailed).</p>
             <p>The hypotheses are \(H_0\colon \mu = 500\) versus \(H_1\colon \mu \neq 500\). Since \(\sigma\) is unknown, the Student's t statistic is used with \(df = n - 1 = 24\) degrees of freedom:</p>
             <p class="formula-line">\( t = \dfrac{\bar{x} - \mu_0}{s/\sqrt{n}} = \dfrac{497 - 500}{8/\sqrt{25}} = \dfrac{-3}{1.6} = -1.875 \)</p>
             <p>For a two-tailed test with \(\alpha = 0.05\) and 24 degrees of freedom, the critical value is \(t_{0.025,\,24} \approx 2.064\). Since \(|t| = 1.875 < 2.064\), the statistic does not fall in the rejection region.</p>
             <p>The p-value associated with the two-tailed test is \(p \approx 0.073\). Since \(p = 0.073 > \alpha = 0.05\), <strong>\(H_0\) is not rejected</strong>.</p>
             <p>Conclusion: with the available data there is not enough evidence to claim that the mean weight departs from 500 g at the 5% significance level. The machine may be correctly calibrated.</p>
+            <p><strong>What else to look at.</strong> The 95% confidence interval for the mean is \(497 \pm 2.064 \times 1.6\), that is, from 493.70 to 500.30 g: it contains 500, consistent with not rejecting \(H_0\), but also values such as 494 g. So the result does not prove that the machine is well calibrated. In fact, with only 25 parts, the probability of detecting a real 3 g shift (the power) is about 44%; reaching 80% would take about 56 parts, as you can check with the <a href="tamano-muestral-contraste-una-media.html">sample size calculator for a one-mean test</a>.</p>
+            <p><strong>In the calculator:</strong> μ₀ = 500, x̄ = 497, deviation = 8, n = 25, "I only know the sample s (t-test)" and "Two-tailed (≠)".</p>
+
+            <h3>Worked example 2: one-tailed z-test</h3>
+            <p>An aptitude test is designed so that scores in the general population have mean 100 and standard deviation \(\sigma = 15\). A training centre wants to know whether its students score <em>above</em> average. A random sample of \(n = 36\) students obtains a mean score of \(\bar{x} = 105\). The test uses \(\alpha = 0.05\).</p>
+            <p>Only one direction matters, so the test is right-tailed: \(H_0\colon \mu = 100\) versus \(H_1\colon \mu > 100\). Since \(\sigma\) is known, the z statistic is used:</p>
+            <p class="formula-line">\( z = \dfrac{\bar{x} - \mu_0}{\sigma/\sqrt{n}} = \dfrac{105 - 100}{15/\sqrt{36}} = \dfrac{5}{2.5} = 2.00 \)</p>
+            <p>The right-tailed critical value with \(\alpha = 0.05\) is \(z_{0.95} \approx 1.645\). Since \(z = 2.00 > 1.645\), the statistic falls in the rejection region. The p-value is \(P(Z \geq 2.00) \approx 0.0228\), below \(\alpha\): <strong>\(H_0\) is rejected</strong>.</p>
+            <p>Conclusion: there is statistical evidence that the mean score of the centre's students exceeds 100. The observed difference is 5 points, a third of a standard deviation (\(d = 5/15 \approx 0.33\)): a real effect, but small to moderate in size. With a two-tailed test, the p-value would have been twice as large, 0.0455.</p>
+            <p><strong>In the calculator:</strong> μ₀ = 100, x̄ = 105, deviation = 15, n = 36, "I know the population σ (z-test)" and "Right-tailed (>)".</p>
         </section>
 
-                <section class="card content-card">
-                    <h3>How to interpret the result</h3>
-                        <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) means that, if the population mean were really \(\mu_0\), it would be very unlikely to have observed a sample value as far off as the one obtained. It is concluded that there is statistical evidence that \(\mu \neq \mu_0\) (or &gt; / &lt;, depending on the chosen alternative). However, rejecting \(H_0\) does not mean the difference is large or important: with very large samples even a difference of a few tenths can turn out to be significant.</p>
-                        <p><strong>Failing to reject \(H_0\)</strong> (p-value ≥ α) does not prove that the mean equals \(\mu_0\); it only indicates that the data are compatible with that value at the chosen significance level. Low power — due to a small sample or high variance — can prevent detecting real differences. Before concluding "there is no effect," check the power of the test and the confidence interval.</p>
-                        <p>Regarding the <strong>z or t statistic</strong> shown by the tool: its magnitude indicates how many standard errors \(\bar{x}\) is away from \(\mu_0\). In the chart, the green zone is the non-rejection region, the red zones are the critical regions and the amber line marks the observed statistic. If the amber line falls in red, p-value &lt; α. To assess practical relevance, always complement the result with the confidence interval for \(\mu\) and the effect size (Cohen's d = \((\bar{x}-\mu_0)/s\)).</p>
-                </section>
-                <section id="seo-support-content" class="card content-card">
+        <section class="card content-card">
+            <h3>How to interpret the result</h3>
+            <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) means that, if the population mean were really \(\mu_0\), it would be very unlikely to have observed a sample value as far off as the one obtained. It is concluded that there is statistical evidence that \(\mu \neq \mu_0\) (or &gt; / &lt;, depending on the chosen alternative). However, rejecting \(H_0\) does not mean the difference is large or important: with very large samples even a difference of a few tenths can turn out to be significant.</p>
+            <p><strong>Failing to reject \(H_0\)</strong> (p-value ≥ α) does not prove that the mean equals \(\mu_0\); it only indicates that the data are compatible with that value at the chosen significance level. Low power — due to a small sample or high variance — can prevent detecting real differences. Before concluding "there is no effect," check the power of the test and the confidence interval.</p>
+            <p>Regarding the <strong>z or t statistic</strong> shown by the tool: its magnitude indicates how many standard errors \(\bar{x}\) is away from \(\mu_0\). In the chart, the green zone is the non-rejection region, the red zones are the critical regions and the amber line marks the observed statistic. If the amber line falls in red, p-value &lt; α.</p>
+
+            <h3>The two possible errors</h3>
+            <p>The decision is made from a sample, so it can be wrong in two ways:</p>
+            <ul>
+                <li><strong>Type I error</strong> (false positive): rejecting \(H_0\) when it is true. Its probability is \(\alpha\), and you choose it.</li>
+                <li><strong>Type II error</strong> (false negative): failing to reject \(H_0\) when it is false. Its probability is called \(\beta\), and \(1-\beta\) is the <strong>power</strong> of the test.</li>
+            </ul>
+            <p>Lowering \(\alpha\) makes it harder to reject \(H_0\) and, with the same sample, raises \(\beta\). The way to reduce both at once is to increase the sample size. You can see this trade-off in the <a href="simulaciones/simulador-errores-tipo-i-ii.html">type I and type II error simulator</a>.</p>
+
+            <h3>Relationship with the confidence interval</h3>
+            <p>The two-tailed test and the confidence interval are two sides of the same calculation: \(H_0\) is rejected at level \(\alpha\) exactly when \(\mu_0\) lies <em>outside</em> the \(100(1-\alpha)\%\) confidence interval for the mean. The interval also tells you what the test does not: which values of the mean are compatible with the data, and how precisely it has been estimated. Compute it with the <a href="intervalo-confianza-media.html">confidence interval for a mean</a> (or its <a href="intervalo-confianza-media-sigma-conocida.html">known-σ version</a>).</p>
+
+            <h3>Statistical significance and practical relevance</h3>
+            <p>A statistically significant difference is not necessarily one that matters. To judge its magnitude, use the <strong>effect size</strong>; the most common one here is Cohen's d, \(d = (\bar{x}-\mu_0)/s\), which expresses the difference in standard deviations. As a rough guide, 0.2 is considered a small effect, 0.5 medium and 0.8 large, although what counts is which difference is relevant in your problem: 3 g may be irrelevant in a bag of cement and critical in a medicine.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Common mistakes</h3>
+            <ul>
+                <li><strong>Reading "\(H_0\) is not rejected" as "\(H_0\) is true".</strong> Absence of evidence is not evidence of absence, especially with small samples.</li>
+                <li><strong>Choosing a tail after seeing the data</strong>, or switching from two-tailed to one-tailed to "achieve" significance.</li>
+                <li><strong>Confusing significant with important.</strong> Always report the observed difference and its confidence interval.</li>
+                <li><strong>Using z with the sample standard deviation</strong> in small samples, instead of Student's t.</li>
+                <li><strong>Applying it to data that are not independent</strong>, such as before/after measurements on the same individuals.</li>
+                <li><strong>Repeating the test many times</strong> (with different variables or subgroups) and keeping the one that comes out significant: with \(\alpha = 0.05\), 1 in every 20 tests of true null hypotheses will be significant by chance alone.</li>
+            </ul>
+        </section>
+
+        <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
               <h3>Related calculators</h3>
               <ul>
+                <li><a href="intervalo-confianza-media.html">Confidence interval for a mean</a></li>
+                <li><a href="tamano-muestral-contraste-una-media.html">Sample size for a one-mean test</a></li>
                 <li><a href="contraste-hipotesis-dos-medias.html">Test for two independent means</a></li>
-                <li><a href="tamano-muestral-diferencia-medias.html">Sample size for two means</a></li>
-                <li><a href="studentt.html">Student's t distribution</a></li>
+                <li><a href="contraste-hipotesis-medias-apareadas.html">Test for paired means</a></li>
+                <li><a href="studentt.html">Student's t distribution</a> and <a href="tabla-t-student.html">t table</a></li>
               </ul>
             </section>
             <h3>Frequently asked questions</h3>
             <ul>
-                <li><strong>When should I use z and when t?</strong> Use z if you know the population \(\sigma\); use t if \(\sigma\) is unknown and you estimate it from the sample.</li>
-                <li><strong>What does the p-value represent in this mean test?</strong> The probability, under \(H_0\), of observing a result as extreme as the one obtained.</li>
+                <li><strong>When should I use z and when t?</strong> Use z if you know the population \(\sigma\); use t if \(\sigma\) is unknown and you estimate it from the sample, which is the most common case.</li>
+                <li><strong>Is this the same as the one-sample t-test?</strong> Yes. "Hypothesis test for a mean with unknown \(\sigma\)" and "one-sample t-test" are names for the same procedure.</li>
+                <li><strong>What does the p-value represent in this mean test?</strong> The probability, if \(H_0\) is true, of observing a result as extreme as the one obtained, or more. It is not the probability that \(H_0\) is true.</li>
                 <li><strong>What is a typical α?</strong> Many analyses use 0.05, although 0.01 may be preferred in critical contexts.</li>
+                <li><strong>Can I use the test with fewer than 30 observations?</strong> Yes, with Student's t, as long as the data are approximately normal and there are no marked outliers. With small samples and strongly skewed data, a non-parametric test is preferable.</li>
+                <li><strong>What if my data are not normal?</strong> With large samples the test remains valid thanks to the central limit theorem. With small samples, check normality with the Shapiro-Wilk test and consider a non-parametric test such as Wilcoxon's.</li>
+                <li><strong>Two-tailed or one-tailed?</strong> Two-tailed if any difference from \(\mu_0\) matters; one-tailed only if, before seeing the data, a single direction is all you care about. When in doubt, two-tailed.</li>
+                <li><strong>What sample size do I need?</strong> It depends on the difference you want to detect, the variability and the desired power. Work it out with the <a href="tamano-muestral-contraste-una-media.html">sample size calculator for a one-mean test</a>.</li>
                 <li><strong>Should I report anything else?</strong> Yes: add a confidence interval and an effect size to interpret the practical relevance.</li>
                 <li><strong>What is the minimum detectable effect (MDE)?</strong> It is the smallest difference from \(\mu_0\) that your study is designed to detect with a given power (for example, 80%) and a fixed significance level \(\alpha\). If the true effect is smaller than the MDE, the test may fail to detect it due to lack of power.</li>
             </ul>
-            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Student%27s_t-test" target="_blank" rel="noopener noreferrer">Student's t-test</a> — Wikipedia</p>
+            <p class="external-ref">References: <a href="https://en.wikipedia.org/wiki/Student%27s_t-test" target="_blank" rel="noopener noreferrer">Student's t-test</a> and <a href="https://en.wikipedia.org/wiki/Statistical_hypothesis_testing" target="_blank" rel="noopener noreferrer">Statistical hypothesis testing</a> — Wikipedia</p>
         </section>
 
     </main>
@@ -418,6 +562,131 @@ function renderMeanTestChart(alpha, tail, statValue, testType, df) {
     });
 }
 
+// ── Potencia y presentación del resultado ─────────────────────────────
+const MT_EN = document.documentElement.lang === 'en';
+const MT_LOCALE = MT_EN ? 'en-US' : 'es-ES';
+const MT_TARGET = 0.8; // potencia de referencia para la diferencia mínima detectable
+
+function mtNum(v, d) {
+    return Number(v).toLocaleString(MT_LOCALE, { minimumFractionDigits: d, maximumFractionDigits: d }).replace('-', '−');
+}
+function mtAuto(v) {
+    const o = Number.isInteger(v) ? {} : { maximumFractionDigits: 4 };
+    return v.toLocaleString(MT_LOCALE, o).replace('-', '−');
+}
+function mtProb(v) {
+    if (v > 0 && v < 1e-5) return v.toExponential(2).replace('.', MT_EN ? '.' : ',');
+    return mtNum(v, 5);
+}
+function mtPct(v) {
+    return mtNum(v * 100, 1) + (MT_EN ? '%' : ' %');
+}
+function mtPct0(v) {
+    return mtNum(v * 100, 0) + (MT_EN ? '%' : ' %');
+}
+function mtEsc(s) {
+    return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+}
+
+// Potencia del contraste frente a una diferencia real |μ − μ₀| = delta
+// (en el sentido de la alternativa, si es de una cola). Exacta: normal en
+// el contraste z y t no central en el contraste t.
+function meanTestPower(delta, se, alpha, tail, isT, df) {
+    const ncp = delta / se;
+    const q = tail === 'two' ? 1 - alpha / 2 : 1 - alpha;
+    const zPower = () => {
+        const zc = jStat.normal.inv(q, 0, 1);
+        const upper = 1 - jStat.normal.cdf(zc - ncp, 0, 1);
+        return tail === 'two' ? upper + jStat.normal.cdf(-zc - ncp, 0, 1) : upper;
+    };
+    if (!isT) return zPower();
+    const tc = jStat.studentt.inv(q, df);
+    let pw = 1 - jStat.noncentralt.cdf(tc, df, ncp);
+    if (tail === 'two') pw += jStat.noncentralt.cdf(-tc, df, ncp);
+    return Number.isFinite(pw) && pw >= 0 && pw <= 1 ? pw : zPower();
+}
+
+// Menor diferencia que el contraste detecta con la potencia de referencia.
+function minimumDetectableDifference(se, alpha, tail, isT, df) {
+    let lo = 0, hi = 20 * se;
+    for (let i = 0; i < 60; i++) {
+        const mid = (lo + hi) / 2;
+        if (meanTestPower(mid, se, alpha, tail, isT, df) < MT_TARGET) lo = mid; else hi = mid;
+    }
+    return hi;
+}
+
+function renderMeanTestResult(o) {
+    const el = document.getElementById('meanResult');
+    const prev = el.querySelector('details.ci-res-details');
+    const wasOpen = !!(prev && prev.open);
+    const T = MT_EN ? {
+        test: (o.isT ? 't-test' : 'z-test') + ', ' + { two: 'two-tailed', right: 'right-tailed', left: 'left-tailed' }[o.tail],
+        reject: 'H₀ is rejected', keep: 'H₀ is not rejected', pval: 'p-value',
+        stat: o.isT ? 't = ' + mtNum(o.stat, 4) + ' with ' + o.df + ' degrees of freedom' : 'z = ' + mtNum(o.stat, 4),
+        evid: { two: 'the mean differs from ', right: 'the mean is greater than ', left: 'the mean is less than ' }[o.tail],
+        yes: (a) => '✓ There is statistical evidence that ' + a + mtAuto(o.mu0) + '.',
+        no: (a) => 'ℹ There is not enough evidence that ' + a + mtAuto(o.mu0) + '. This does not prove that the mean equals ' + mtAuto(o.mu0) + '.',
+        mde: (d) => 'With this sample, the test detects with ' + mtPct0(MT_TARGET) + ' probability only differences of ' + d + ' or more from μ₀.',
+        linkOther: 'Work out the sample size needed for another difference',
+        details: 'Calculation details',
+        rows: { diff: 'Observed difference (x̄ − μ₀)', se: 'Standard error', stat: 'Test statistic', df: 'Degrees of freedom', crit: 'Critical value', p: 'p-value', ci: 'confidence interval for μ', d: "Effect size (Cohen's d)", mde: 'Minimum detectable difference (power ' + mtPct0(MT_TARGET) + ')' }
+    } : {
+        test: 'Contraste ' + (o.isT ? 't' : 'z') + ' ' + { two: 'bilateral', right: 'de cola derecha', left: 'de cola izquierda' }[o.tail],
+        reject: 'Se rechaza H₀', keep: 'No se rechaza H₀', pval: 'p-valor',
+        stat: o.isT ? 't = ' + mtNum(o.stat, 4) + ' con ' + o.df + ' grados de libertad' : 'z = ' + mtNum(o.stat, 4),
+        evid: { two: 'la media es distinta de ', right: 'la media es mayor que ', left: 'la media es menor que ' }[o.tail],
+        yes: (a) => '✓ Hay evidencia estadística de que ' + a + mtAuto(o.mu0) + '.',
+        no: () => 'ℹ No hay evidencia suficiente de que ' + { two: 'la media sea distinta de ', right: 'la media sea mayor que ', left: 'la media sea menor que ' }[o.tail] + mtAuto(o.mu0) + '. Esto no demuestra que la media sea ' + mtAuto(o.mu0) + '.',
+        mde: (d) => 'Con esta muestra, el contraste solo detecta con un ' + mtPct0(MT_TARGET) + ' de probabilidad diferencias de ' + d + ' o mayores respecto a μ₀.',
+        linkOther: 'Calcular el tamaño muestral necesario para otra diferencia',
+        details: 'Detalles del cálculo',
+        rows: { diff: 'Diferencia observada (x̄ − μ₀)', se: 'Error estándar', stat: 'Estadístico', df: 'Grados de libertad', crit: 'Valor crítico', p: 'p-valor', ci: 'para μ', d: 'Tamaño del efecto (d de Cohen)', mde: 'Diferencia mínima detectable (potencia ' + mtPct0(MT_TARGET) + ')' }
+    };
+    const rejected = o.p < o.alpha;
+    const mde = minimumDetectableDifference(o.se, o.alpha, o.tail, o.isT, o.df);
+    const mdeTxt = (o.tail === 'two' ? '±' : '') + mtAuto(Number(mde.toPrecision(3)));
+    const q = o.tail === 'two' ? 1 - o.alpha / 2 : 1 - o.alpha;
+    const crit = o.isT ? jStat.studentt.inv(q, o.df) : jStat.normal.inv(q, 0, 1);
+    const critTxt = (o.tail === 'two' ? '±' : (o.tail === 'left' ? '−' : '')) + mtNum(crit, 4);
+
+    let h = '<div class="ci-res">';
+    h += '<div class="ci-res-label">' + mtEsc(T.test + ' · H₀: μ = ' + mtAuto(o.mu0) + ' · α = ' + mtAuto(o.alpha)) + '</div>';
+    h += '<div class="ci-res-main"><span class="ci-res-int">' + (rejected ? T.reject : T.keep) + '</span> <span class="ci-res-width">' + T.pval + ' = ' + mtProb(o.p) + '</span></div>';
+    h += '<div class="ci-res-sec">' + mtEsc(T.stat) + '</div>';
+    h += '<div class="ci-res-note ' + (rejected ? 'ci-res-ok' : 'ci-res-info') + '">' + mtEsc(rejected ? T.yes(T.evid) : T.no(T.evid)) + '</div>';
+
+    // Enlace a la calculadora de tamaño muestral con los valores actuales.
+    const sizeLink = (d, text) => {
+        const alt = { two: 'two-sided', right: 'greater', left: 'less' }[o.tail];
+        const url = 'tamano-muestral-contraste-una-media.html?sigma=' + o.s + '&delta=' + d + '&alpha=' + o.alpha + '&power=' + MT_TARGET + '&h0=' + o.mu0 + '&alt=' + alt;
+        return '<a href="' + mtEsc(url) + '">' + text + '</a>.';
+    };
+    h += '<div class="ci-res-note ci-res-info">' + mtEsc(T.mde(mdeTxt)) + ' ' + sizeLink(Number(mde.toPrecision(3)), T.linkOther) + '</div>';
+    // Enlace al intervalo de confianza con los mismos datos.
+    const conf = Number((1 - o.alpha).toFixed(6));
+    const ciUrl = (o.isT ? 'intervalo-confianza-media.html?xbar=' + o.xbar + '&s=' : 'intervalo-confianza-media-sigma-conocida.html?xbar=' + o.xbar + '&sigma=') + o.s + '&n=' + o.n + '&conf=' + conf;
+    const lvl = mtAuto(Number((conf * 100).toFixed(2))) + (MT_EN ? '%' : ' %');
+    h += '<div class="ci-res-note ci-res-info"><a href="' + mtEsc(ciUrl) + '">' + (MT_EN ? 'Open the ' + lvl + ' confidence interval with these data' : 'Abrir el intervalo de confianza al ' + lvl + ' con estos datos') + '</a>.</div>';
+
+    const rows = [
+        [T.rows.diff, mtAuto(Number((o.xbar - o.mu0).toPrecision(6)))],
+        [T.rows.se, mtNum(o.se, 4)],
+        [T.rows.stat, (o.isT ? 't = ' : 'z = ') + mtNum(o.stat, 4)]
+    ];
+    if (o.isT) rows.push([T.rows.df, String(o.df)]);
+    rows.push([T.rows.crit, critTxt], [T.rows.p, mtProb(o.p)]);
+    if (o.tail === 'two') {
+        const m = crit * o.se;
+        const ci = '[' + mtNum(o.xbar - m, 4) + (MT_EN ? ', ' : '; ') + mtNum(o.xbar + m, 4) + ']';
+        rows.push([MT_EN ? mtPct(1 - o.alpha) + ' ' + T.rows.ci : 'Intervalo de confianza al ' + mtPct(1 - o.alpha) + ' ' + T.rows.ci, ci]);
+    }
+    rows.push([T.rows.d, mtNum((o.xbar - o.mu0) / o.s, 3)], [T.rows.mde, mdeTxt]);
+    h += '<details class="ci-res-details"' + (wasOpen ? ' open' : '') + '><summary>' + T.details + '</summary><dl>';
+    rows.forEach(([k, v]) => { h += '<dt>' + mtEsc(k) + '</dt><dd>' + mtEsc(v) + '</dd>'; });
+    el.innerHTML = h + '</dl></details></div>';
+}
+
 function calculateMeanTest() {
     const mu0 = parseFloat(document.getElementById('mu0').value);
     const xbar = parseFloat(document.getElementById('xbar').value);
@@ -447,10 +716,7 @@ function calculateMeanTest() {
     else if (tail === "right") p = 1 - (isT ? jStat.studentt.cdf(stat, df) : jStat.normal.cdf(stat, 0, 1));
     else p = isT ? jStat.studentt.cdf(stat, df) : jStat.normal.cdf(stat, 0, 1);
 
-    const decision = p < alpha ? "Reject H₀." : "Fail to reject H₀.";
-    const statName = isT ? "t" : "z";
-    const extra = isT ? ` | df = ${df}` : "";
-    resultEl.innerText = `${statName} = ${stat.toFixed(4)}${extra} | p-value = ${p.toFixed(6)} | ${decision}`;
+    renderMeanTestResult({ mu0, xbar, s, n, alpha, tail, isT, df, stat, p, se: s / Math.sqrt(n) });
     renderMeanTestChart(alpha, tail, stat, testType, df);
 }
 

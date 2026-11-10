@@ -347,6 +347,16 @@ function calculateAnovaSampleSize() {
 }
 
 document.getElementById("anovaCalculateBtn").addEventListener("click", calculateAnovaSampleSize);
+(function () {
+    // Valores recibidos por la URL, por ejemplo desde la calculadora del contraste.
+    let params;
+    try { params = new URLSearchParams(location.search); } catch (e) { return; }
+    const fields = { k: "anovaK", f: "anovaF", alpha: "anovaAlpha", power: "anovaPower" };
+    Object.keys(fields).forEach(function (key) {
+        const value = parseFloat(params.get(key));
+        if (Number.isFinite(value)) document.getElementById(fields[key]).value = value;
+    });
+}());
 calculateAnovaSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

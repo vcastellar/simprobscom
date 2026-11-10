@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="style_new.css?v=20261107-1">
 
     <script type="application/ld+json">
 {
@@ -75,26 +75,10 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "¿Puedo usar ANOVA con solo dos grupos?",
+      "name": "¿Qué contrasta el ANOVA de un factor?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Matemáticamente sí, pero normalmente es más directo usar el contraste para dos medias."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "¿Qué significa η²?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Es una medida de tamaño de efecto: proporción de variabilidad total explicada por la pertenencia al grupo."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "¿Qué es el tamaño mínimo detectable (MDE) en ANOVA?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Es el tamaño de efecto más pequeño (por ejemplo en términos de f de Cohen o η²) que tu diseño puede detectar con una potencia dada y un α fijado. Si el efecto real es inferior al MDE, el ANOVA puede no encontrar diferencias significativas aunque existan."
+        "text": "Si las medias de tres o más grupos independientes son iguales. La hipótesis alternativa es que al menos una media es distinta de las demás."
       }
     },
     {
@@ -102,7 +86,63 @@
       "name": "¿El ANOVA prueba que todas las medias son distintas?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No. Solo prueba si hay evidencia de que al menos una media no coincide con las demás."
+        "text": "No. Un resultado significativo solo indica que al menos una media difiere. Para saber cuáles, aplica comparaciones post hoc como la prueba de Tukey."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Puedo usar ANOVA con solo dos grupos?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí, y equivale al contraste t con varianzas iguales (F = t²). Aun así, para dos grupos es más directo el contraste de dos medias, que además permite contrastes de una cola."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Por qué no hacer varios contrastes t por parejas?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Porque el riesgo de algún falso positivo crece con cada comparación. Con 10 comparaciones a α = 0,05, la probabilidad de al menos una falsa diferencia ronda el 40 %."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué significa η²?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "La proporción de la variabilidad total que explica la pertenencia al grupo. Como orientación, 0,01 es un efecto pequeño, 0,06 mediano y 0,14 grande."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué supuestos tiene el ANOVA?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Independencia, normalidad aproximada en cada grupo y varianzas parecidas. Si las varianzas difieren mucho, usa el ANOVA de Welch; si los datos son muy asimétricos y hay pocos, la prueba de Kruskal-Wallis."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Pueden los grupos tener tamaños distintos?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí. El ANOVA de un factor funciona con grupos desiguales, aunque entonces es más sensible a que las varianzas sean distintas."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué es el tamaño mínimo detectable en ANOVA?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El menor tamaño del efecto, medido con la f de Cohen, que el ANOVA detectaría con un 80 % de probabilidad con tus tamaños de grupo. Si el efecto real es menor, el ANOVA probablemente no lo detecte."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cuántos datos por grupo necesito?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Depende del tamaño del efecto que quieras detectar y de la potencia deseada. Para un efecto mediano (f = 0,25) con 3 grupos, α = 0,05 y potencia del 80 %, unos 53 por grupo. Calcúlalo con la calculadora de tamaño muestral para ANOVA."
       }
     }
   ]
@@ -156,106 +196,185 @@
     </header>
 
     <main>
-        <section class="card content-card">
-            <h3>¿Qué contrasta el ANOVA?</h3>
-            <p>El <strong>ANOVA de un factor</strong> contrasta si varias poblaciones tienen la misma media. Es la extensión natural del contraste de dos medias cuando existen tres o más grupos independientes.</p>
-            <p>La hipótesis nula es \(H_0: \mu_1=\mu_2=\cdots=\mu_k\). La alternativa indica que al menos una media difiere, pero el ANOVA no especifica por sí solo qué par de grupos es diferente.</p>
-        </section>
-
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculadora</h2>
-                <p>Introduce un grupo por línea. Dentro de cada línea separa observaciones con comas, espacios o punto y coma. Usa punto decimal si necesitas decimales.</p>
-            </div>
-
-            <div class="form-grid sample-grid">
-                <div class="form-group" style="grid-column: 1 / -1;">
-                    <label for="anovaData">Datos por grupos <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                    <textarea id="anovaData" rows="8" class="wide-textarea" aria-describedby="anovaHelp">12, 15, 14, 13, 16
-10, 11, 9, 12, 10
-17, 18, 16, 19, 20</textarea>
-                    <small id="anovaHelp">Ejemplo: cada línea representa un tratamiento, segmento o grupo independiente.</small>
-                    <p class="field-hint" hidden>Escribe un grupo por línea (mínimo dos grupos) separando las observaciones de cada línea con comas, espacios o punto y coma; cada grupo necesita al menos dos observaciones.</p>
+        <section class="ss-shell" aria-label="Calculadora">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parámetros</h2>
+                    <p>Introduce un grupo por línea. Dentro de cada línea separa las observaciones con comas, espacios o punto y coma, y usa el punto para los decimales.</p>
                 </div>
-                <div class="form-group">
-                    <label for="alpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
-                    <input type="number" id="alpha" value="0.05" min="0.001" max="0.2" step="0.001">
-                    <p class="field-hint" hidden>Probabilidad de rechazar \(H_0\) por error cuando en realidad es cierta. El valor habitual es <strong>0,05</strong>.</p>
+
+                <div class="form-grid sample-grid">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label for="anovaData">Datos por grupos <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                        <textarea id="anovaData" rows="6" class="wide-textarea">32, 34, 31, 33, 35
+28, 30, 27, 29, 31
+36, 38, 35, 37, 39</textarea>
+                        <p class="field-hint" hidden>Escribe un grupo por línea (mínimo dos grupos) separando las observaciones de cada línea con comas, espacios o punto y coma; cada grupo necesita al menos dos observaciones. Los datos de ejemplo son los del ejemplo resuelto de más abajo.</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="alpha">Nivel de significación (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                        <input type="number" id="alpha" value="0.05" min="0.001" max="0.2" step="0.001">
+                        <p class="field-hint" hidden>Probabilidad de rechazar \(H_0\) por error cuando en realidad es cierta. El valor habitual es <strong>0,05</strong>.</p>
+                    </div>
                 </div>
-            </div>
 
-            <button id="calcAnovaBtn">Calcular ANOVA</button>
-            <div id="anovaResult" class="result-box" aria-live="polite"></div>
+                <button class="calculate-btn" id="calcAnovaBtn">Calcular ANOVA</button>
+            </section>
+
+            <div id="anovaResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">Distribución F, región de rechazo y F observado</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="anovaChart" aria-label="Distribución F del ANOVA con la región de rechazo y el estadístico observado" role="img"></canvas>
+                    </div>
+                </div>
+            </section>
         </section>
 
         <section class="card content-card">
-            <h3>Visualización del contraste F</h3>
-            <p>La zona roja representa la región de rechazo de cola derecha para el nivel α elegido. La línea naranja marca el estadístico F observado.</p>
-            <div class="chart-wrap"><canvas id="anovaChart" aria-label="Distribución F del ANOVA" role="img"></canvas></div>
+            <h3>¿Qué es el ANOVA de un factor?</h3>
+            <p>El <strong>análisis de la varianza (ANOVA) de un factor</strong> contrasta si tres o más poblaciones independientes tienen la misma media. Es la extensión natural del <a href="contraste-hipotesis-dos-medias.html">contraste de dos medias</a> cuando hay más grupos: ¿dan el mismo rendimiento tres fertilizantes? ¿Tardan lo mismo cuatro proveedores en entregar un pedido? ¿Puntúan igual los alumnos de cinco métodos de estudio? El «factor» es la variable que define los grupos (el fertilizante, el proveedor, el método), y cada valor del factor es un nivel o tratamiento.</p>
+            <p>La hipótesis nula es que todas las medias son iguales; la alternativa, que <strong>al menos una</strong> es distinta:</p>
+            <p class="formula-line">\(H_0: \mu_1 = \mu_2 = \cdots = \mu_k\)</p>
+            <p class="formula-line">\(H_1\): no todas las \(\mu_j\) son iguales</p>
+            <p>El ANOVA no dice cuál o cuáles difieren, ni en qué sentido: es una pregunta global. Para saber qué parejas de grupos son distintas, se completa con comparaciones post hoc.</p>
+
+            <h3>¿Por qué no hacer varios contrastes t?</h3>
+            <p>Con tres grupos habría que hacer 3 comparaciones por parejas; con cinco, 10. Cada una tiene un 5 % de riesgo de falso positivo, y los riesgos se acumulan: con 10 comparaciones independientes, la probabilidad de encontrar al menos una diferencia «significativa» por puro azar ronda el 40 %. El ANOVA responde a la pregunta global con un único contraste que mantiene ese riesgo en \(\alpha\).</p>
         </section>
 
         <section class="card content-card">
-            <h3>Fórmulas del ANOVA de un factor</h3>
-            <p>El ANOVA descompone la variabilidad total en variabilidad <strong>entre grupos</strong> y variabilidad <strong>dentro de los grupos</strong>:</p>
+            <h3>La idea: comparar dos fuentes de variabilidad</h3>
+            <p>Aunque su objetivo es comparar medias, el ANOVA lo hace comparando varianzas, de ahí su nombre. La variabilidad total de los datos se descompone en dos partes:</p>
+            <ul>
+                <li><strong>Variabilidad entre grupos</strong>: cuánto se separan las medias de los grupos de la media global. Refleja el efecto del factor, más el ruido.</li>
+                <li><strong>Variabilidad dentro de los grupos</strong>: cuánto se dispersan los datos alrededor de la media de su propio grupo. Es el ruido, la variabilidad que el factor no explica.</li>
+            </ul>
+            <p>Si \(H_0\) es cierta, las medias de los grupos solo difieren por azar, y las dos fuentes estiman la misma varianza: su cociente debería rondar 1. Si el factor tiene efecto, las medias se separan más de lo que el ruido explica, y la variabilidad entre grupos crece.</p>
             <div class="formula-box">
-                <p class="formula-line">\(SC_T = SC_{entre} + SC_{dentro}\)</p>
-                <p class="formula-line">\(F = \dfrac{CM_{entre}}{CM_{dentro}} = \dfrac{SC_{entre}/(k-1)}{SC_{dentro}/(N-k)}\)</p>
-                <p class="formula-line">\(\eta^2 = SC_{entre}/SC_T\)</p>
+                <p class="formula-line">\(SC_{T} = SC_{\text{entre}} + SC_{\text{dentro}}\)</p>
+                <p class="formula-line">\(SC_{\text{entre}} = \sum_{j=1}^{k} n_j(\bar{x}_j - \bar{x})^2, \qquad SC_{\text{dentro}} = \sum_{j=1}^{k}\sum_{i=1}^{n_j}(x_{ij} - \bar{x}_j)^2\)</p>
+                <p class="formula-line">\(F = \dfrac{CM_{\text{entre}}}{CM_{\text{dentro}}} = \dfrac{SC_{\text{entre}}/(k-1)}{SC_{\text{dentro}}/(N-k)}\)</p>
             </div>
-            <p>Bajo \(H_0\), el estadístico F sigue aproximadamente una distribución F de Snedecor con \(k-1\) y \(N-k\) grados de libertad.</p>
+            <p>Aquí \(k\) es el número de grupos, \(n_j\) el tamaño del grupo \(j\), \(N\) el total de datos, \(\bar{x}_j\) la media del grupo \(j\) y \(\bar{x}\) la media global. Las <strong>medias cuadráticas</strong> (CM) son las sumas de cuadrados divididas por sus grados de libertad. Bajo \(H_0\), el estadístico sigue una distribución F de Snedecor (puedes consultar sus valores críticos en la <a href="tabla-f-snedecor.html">tabla F</a>) con \(k-1\) y \(N-k\) grados de libertad. El contraste es siempre de cola derecha: solo un F grande es evidencia contra \(H_0\).</p>
+
+            <h3>La tabla ANOVA</h3>
+            <p>Los resultados se presentan en una tabla con una fila por fuente de variabilidad. La calculadora la incluye en «Detalles del cálculo»:</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Fuente</th><th>SC</th><th>gl</th><th>CM</th><th>F</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Entre grupos</td><td>\(SC_{\text{entre}}\)</td><td>\(k-1\)</td><td>\(SC_{\text{entre}}/(k-1)\)</td><td>\(CM_{\text{entre}}/CM_{\text{dentro}}\)</td></tr>
+                        <tr><td>Dentro de grupos</td><td>\(SC_{\text{dentro}}\)</td><td>\(N-k\)</td><td>\(SC_{\text{dentro}}/(N-k)\)</td><td></td></tr>
+                        <tr><td>Total</td><td>\(SC_T\)</td><td>\(N-1\)</td><td></td><td></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>\(CM_{\text{dentro}}\) es la varianza combinada de todos los grupos: estima la varianza común \(\sigma^2\) tanto si \(H_0\) es cierta como si no.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Supuestos del ANOVA</h3>
+            <ul>
+                <li><strong>Independencia</strong>: grupos independientes entre sí y observaciones independientes dentro de cada grupo. Si los mismos sujetos pasan por todas las condiciones, hace falta un ANOVA de medidas repetidas.</li>
+                <li><strong>Normalidad aproximada</strong> de los datos de cada grupo (o de los residuos). Con grupos de tamaño moderado y parecido, el ANOVA es bastante robusto a desviaciones leves.</li>
+                <li><strong>Homogeneidad de varianzas</strong>: las varianzas de los grupos deberían ser parecidas. Es el supuesto más delicado cuando los grupos tienen tamaños distintos.</li>
+            </ul>
+            <p>Una regla práctica: si la mayor desviación típica no llega al doble de la menor y los grupos tienen tamaños parecidos, el ANOVA clásico funciona bien. Si no, usa el <strong>ANOVA de Welch</strong>, que no supone varianzas iguales; si los datos son muy asimétricos o hay valores atípicos con grupos pequeños, la alternativa no paramétrica es la prueba de Kruskal-Wallis. La calculadora muestra la desviación típica de cada grupo en «Detalles del cálculo» para que puedas comprobarlo, y puedes revisar la normalidad con el <a href="shapiro-wilk-normalidad.html">test de Shapiro-Wilk</a>.</p>
         </section>
 
         <section class="card content-card">
             <h3>Ejemplo resuelto</h3>
-            <p>Un agrónomo evalúa el efecto de tres tipos de fertilizante sobre el rendimiento (kg) de parcelas agrícolas. Se asignan aleatoriamente 5 parcelas a cada fertilizante, obteniéndose los siguientes datos: Fertilizante A: 32, 34, 31, 33, 35 (media \(\bar{x}_1 = 33\)); Fertilizante B: 28, 30, 27, 29, 31 (media \(\bar{x}_2 = 29\)); Fertilizante C: 36, 38, 35, 37, 39 (media \(\bar{x}_3 = 37\)).</p>
-            <p>La hipótesis nula es \(H_0: \mu_1 = \mu_2 = \mu_3\) (los tres fertilizantes producen el mismo rendimiento medio) frente a \(H_1\): al menos dos medias difieren. Se usa \(\alpha = 0{,}05\).</p>
-            <p>La media global es \(\bar{x} = (33 + 29 + 37)/3 = 33\) kg. La suma de cuadrados entre grupos (variación debida al fertilizante) es:</p>
-            <p class="formula-line">\( SC_{\text{entre}} = n \sum_{j=1}^{k}(\bar{x}_j - \bar{x})^2 = 5\left[(33-33)^2 + (29-33)^2 + (37-33)^2\right] = 5(0 + 16 + 16) = 160 \)</p>
-            <p>La varianza intragrupo de cada grupo es \(s^2 = 2{,}5\). La suma de cuadrados dentro de grupos es:</p>
-            <p class="formula-line">\( SC_{\text{dentro}} = \sum_{j=1}^{k}(n_j - 1)\,s_j^2 = 3 \times 4 \times 2{,}5 = 30 \)</p>
-            <p>Los grados de libertad son \(gl_{\text{entre}} = k - 1 = 2\) y \(gl_{\text{dentro}} = N - k = 15 - 3 = 12\). Las medias cuadráticas son \(CM_{\text{entre}} = 160/2 = 80\) y \(CM_{\text{dentro}} = 30/12 = 2{,}5\). El estadístico F resulta:</p>
-            <p class="formula-line">\( F = \frac{CM_{\text{entre}}}{CM_{\text{dentro}}} = \frac{80}{2{,}5} = 32 \)</p>
-            <p>El valor crítico para \(\alpha = 0{,}05\) con \((2,\, 12)\) grados de libertad es \(F_{0{,}05;\,2,\,12} \approx 3{,}89\), y el p-valor correspondiente a \(F = 32\) es \(p < 0{,}001\). Dado que \(F = 32 \gg 3{,}89\), se rechaza \(H_0\).</p>
-            <p>Conclusión: hay diferencias estadísticamente muy significativas entre los rendimientos medios producidos por los tres fertilizantes (\(p < 0{,}001\)). El tamaño del efecto es grande (\(\eta^2 = 160/190 \approx 0{,}84\)). Para determinar qué pares de fertilizantes difieren significativamente, se recomienda una prueba post hoc (Tukey HSD o Bonferroni).</p>
+            <p>Un agrónomo evalúa el efecto de tres fertilizantes sobre el rendimiento (kg) de parcelas agrícolas. Asigna al azar 5 parcelas a cada fertilizante y obtiene:</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Fertilizante</th><th>Rendimientos (kg)</th><th>Media</th><th>Varianza</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>A</td><td>32, 34, 31, 33, 35</td><td>33</td><td>2,5</td></tr>
+                        <tr><td>B</td><td>28, 30, 27, 29, 31</td><td>29</td><td>2,5</td></tr>
+                        <tr><td>C</td><td>36, 38, 35, 37, 39</td><td>37</td><td>2,5</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Se contrasta \(H_0: \mu_A = \mu_B = \mu_C\) con \(\alpha = 0{,}05\). La media global es \(\bar{x} = 33\) kg. La suma de cuadrados entre grupos es</p>
+            <p class="formula-line">\( SC_{\text{entre}} = 5\left[(33-33)^2 + (29-33)^2 + (37-33)^2\right] = 5(0 + 16 + 16) = 160 \)</p>
+            <p>y, como cada grupo tiene varianza 2,5 con 4 grados de libertad, la suma de cuadrados dentro de los grupos es \(SC_{\text{dentro}} = 3 \times 4 \times 2{,}5 = 30\). Con \(gl_{\text{entre}} = 2\) y \(gl_{\text{dentro}} = 15 - 3 = 12\):</p>
+            <p class="formula-line">\( CM_{\text{entre}} = \dfrac{160}{2} = 80, \qquad CM_{\text{dentro}} = \dfrac{30}{12} = 2{,}5, \qquad F = \dfrac{80}{2{,}5} = 32 \)</p>
+            <p>El valor crítico es \(F_{0{,}05;\,2,\,12} \approx 3{,}89\) y el p-valor, \(p \approx 0{,}000015\). Como \(F = 32\) supera con creces el valor crítico, <strong>se rechaza \(H_0\)</strong>: hay evidencia de que no todos los fertilizantes dan el mismo rendimiento medio.</p>
+            <p>El tamaño del efecto es enorme: \(\eta^2 = 160/190 \approx 0{,}84\), es decir, el fertilizante explica el 84 % de la variabilidad del rendimiento en estas parcelas. Para saber qué fertilizantes difieren entre sí, el siguiente paso es una comparación post hoc. Fíjate también en que, con solo 5 parcelas por grupo, el ANOVA únicamente detecta con un 80 % de probabilidad efectos muy grandes (f ≈ 0,91): aquí ha funcionado porque el efecto real es grandísimo, pero para efectos moderados harían falta muchas más parcelas.</p>
+            <p><strong>En la calculadora:</strong> los datos de ejemplo que aparecen al cargar la página son estos.</p>
         </section>
-<section class="card content-card">
-            <h3>Supuestos importantes</h3>
-            <ul>
-            <li><strong>Independencia:</strong> las observaciones deben ser independientes dentro y entre grupos.</li>
-            <li><strong>Normalidad aproximada:</strong> los residuos de cada grupo deberían ser razonablemente normales, especialmente con muestras pequeñas.</li>
-            <li><strong>Homogeneidad de varianzas:</strong> las varianzas poblacionales deberían ser similares. Si no se cumple, considera alternativas como Welch ANOVA.</li>
-            </ul>
-        </section>
-<section class="card content-card">
-            <h3>Después de un ANOVA significativo</h3>
-            <p>Un ANOVA significativo indica que existe alguna diferencia, pero no cuál. Para identificar pares concretos se suelen aplicar comparaciones post hoc, como Tukey HSD, ajustando por comparaciones múltiples.</p>
-        </section>
-
 
         <section class="card content-card">
             <h3>Cómo interpretar el resultado</h3>
-                <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que al menos una media grupal es distinta de las demás, pero el ANOVA no revela cuáles pares difieren ni en qué dirección. Para eso es necesario aplicar comparaciones post hoc (Tukey HSD, Bonferroni, Scheffé, etc.) que controlan el error de tipo I acumulado por comparaciones múltiples. La significación estadística no equivale a relevancia práctica: con muestras grandes, diferencias pequeñas entre medias pueden producir un F significativo. Reporta el tamaño del efecto \(\eta^2 = SS_\text{entre}/SS_\text{total}\) para cuantificar qué proporción de la variabilidad total explica el factor.</p>
-                <p><strong>No rechazar \(H_0\)</strong> (p-valor ≥ α) no demuestra que todas las medias sean iguales; solo indica que los datos son compatibles con la igualdad al nivel elegido. Una potencia insuficiente —causada por pocos sujetos por grupo, alta variabilidad intragrupo o diferencias reales pequeñas— puede impedir detectar efectos reales. Examina los intervalos de confianza por grupo y el tamaño muestral para valorar si el estudio tenía potencia adecuada.</p>
-                <p>El <strong>estadístico F</strong> es el cociente entre la varianza explicada por el factor (media cuadrática entre grupos, \(MS_\text{entre}\)) y la varianza residual no explicada (media cuadrática dentro de grupos, \(MS_\text{dentro}\)). Un \(F\) próximo a 1 indica que la variabilidad entre medias es similar a la variabilidad aleatoria dentro de los grupos. En la visualización, la zona verde es la región de no rechazo, la zona roja es la cola crítica derecha y la línea ámbar señala el F observado. El ANOVA asume independencia, normalidad aproximada de los residuos y homogeneidad de varianzas (homocedasticidad); si esta última no se cumple, considera el ANOVA de Welch.</p>
+            <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que al menos una media es distinta de las demás, pero no cuál ni en qué sentido. Mira las medias de cada grupo y aplica una comparación post hoc. Recuerda también que significativo no es lo mismo que importante: con grupos grandes, diferencias pequeñas entre medias dan un F significativo.</p>
+            <p><strong>No rechazar \(H_0\)</strong> (p-valor ≥ α) no demuestra que las medias sean iguales: los datos son compatibles con la igualdad, pero puede que el estudio no tuviera potencia suficiente. Pocos datos por grupo o mucha variabilidad dentro de los grupos impiden detectar diferencias reales.</p>
+            <p>El <strong>estadístico F</strong> compara la variabilidad entre grupos con la variabilidad dentro de ellos. Un F cercano a 1 indica que las medias se separan lo que cabría esperar por azar; cuanto mayor, más evidencia de que el factor influye. En el gráfico, la zona verde es la región de no rechazo, la roja es la cola crítica y la línea ámbar marca el F observado.</p>
+
+            <h3>Tamaño del efecto: η² y f de Cohen</h3>
+            <p>\(\eta^2 = SC_{\text{entre}}/SC_T\) es la proporción de la variabilidad total que explica el factor. Como orientación, 0,01 es un efecto pequeño, 0,06 mediano y 0,14 grande. Con muestras pequeñas, \(\eta^2\) tiende a sobrestimar el efecto real; el omega cuadrado (\(\omega^2\)) corrige ese sesgo.</p>
+            <p>Para calcular la potencia y el tamaño muestral se usa la <strong>f de Cohen</strong>, que se obtiene de \(\eta^2\) como \(f = \sqrt{\eta^2/(1-\eta^2)}\) y mide cuánto se separan las medias de los grupos en unidades de la desviación típica dentro de ellos. Las referencias de Cohen son 0,10 (pequeño), 0,25 (mediano) y 0,40 (grande).</p>
+
+            <h3>Potencia y efecto mínimo detectable</h3>
+            <p>Debajo de la conclusión, la calculadora indica el <strong>tamaño del efecto mínimo detectable</strong>: el menor f de Cohen que, con tus tamaños de grupo, el ANOVA detectaría con un 80 % de probabilidad. Si es mayor que el efecto que te parecería relevante, un resultado no significativo dice poco. Como referencia, con 3 grupos de 20 datos solo se detectan con esa probabilidad efectos grandes (f ≈ 0,41), y para efectos medianos (f = 0,25) hacen falta unos 53 datos por grupo. El enlace del resultado abre la <a href="tamano-muestral-anova.html">calculadora de tamaño muestral para ANOVA</a> con tu número de grupos y tu α, para que calcules el tamaño necesario para el efecto que te interese.</p>
         </section>
+
+        <section class="card content-card">
+            <h3>Después de un ANOVA significativo: comparaciones post hoc</h3>
+            <p>Si el ANOVA rechaza \(H_0\), las comparaciones post hoc indican qué parejas de grupos difieren, controlando el riesgo acumulado de falsos positivos:</p>
+            <ul>
+                <li><strong>Tukey (HSD)</strong>: compara todas las parejas entre sí. Es la opción habitual cuando no hay hipótesis previas.</li>
+                <li><strong>Bonferroni</strong>: hace contrastes t usando \(\alpha\) dividido entre el número de comparaciones. Es sencillo y adecuado si solo te interesan unas pocas comparaciones.</li>
+                <li><strong>Dunnett</strong>: compara cada tratamiento solo con un grupo de control.</li>
+                <li><strong>Games-Howell</strong>: como Tukey, pero sin suponer varianzas iguales.</li>
+            </ul>
+            <p>En el ejemplo de los fertilizantes, las tres diferencias (C − A = 4, A − B = 4 y C − B = 8 kg) son significativas con la prueba de Tukey.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Errores frecuentes</h3>
+            <ul>
+                <li><strong>Hacer todos los contrastes t por parejas</strong> en lugar de un ANOVA seguido de comparaciones post hoc.</li>
+                <li><strong>Interpretar un ANOVA significativo como «todas las medias son distintas»</strong>: basta con que una difiera.</li>
+                <li><strong>Concluir que las medias son iguales</strong> porque el ANOVA no es significativo.</li>
+                <li><strong>Aplicarlo a medidas repetidas</strong> de los mismos sujetos, que no son grupos independientes.</li>
+                <li><strong>Ignorar varianzas muy distintas</strong> cuando los grupos tienen tamaños distintos: en ese caso, usa el ANOVA de Welch.</li>
+                <li><strong>Informar solo del p-valor</strong>, sin las medias de los grupos ni el tamaño del efecto.</li>
+            </ul>
+        </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
               <h3>Calculadoras relacionadas</h3>
               <ul>
-                <li><a href="contraste-hipotesis-dos-medias.html">Contraste para dos medias</a></li>
-                <li><a href="contraste-hipotesis-varianzas.html">Contrastes sobre varianzas</a></li>
+                <li><a href="tamano-muestral-anova.html">Tamaño muestral para ANOVA</a></li>
+                <li><a href="contraste-hipotesis-dos-medias.html">Contraste para dos medias independientes</a></li>
+                <li><a href="contraste-hipotesis-dos-varianzas.html">Contraste de dos varianzas</a></li>
                 <li><a href="tabla-f-snedecor.html">Tabla F de Snedecor</a></li>
+                <li><a href="shapiro-wilk-normalidad.html">Test de normalidad de Shapiro-Wilk</a></li>
               </ul>
             </section>
             <h3>Preguntas frecuentes</h3>
             <ul>
-                <li><strong>¿Puedo usar ANOVA con solo dos grupos?</strong> Matemáticamente sí, pero normalmente es más directo usar el contraste para dos medias.</li>
-                <li><strong>¿Qué significa η²?</strong> Es una medida de tamaño de efecto: proporción de variabilidad total explicada por la pertenencia al grupo.</li>
-                <li><strong>¿Qué es el tamaño mínimo detectable (MDE) en ANOVA?</strong> Es el tamaño de efecto más pequeño (por ejemplo en términos de \(f\) de Cohen o \(\eta^2\)) que el diseño puede detectar con potencia y \(\alpha\) fijados. Efectos menores al MDE suelen requerir más muestra para hacerse detectables.</li>
-                <li><strong>¿El ANOVA prueba que todas las medias son distintas?</strong> No. Solo prueba si hay evidencia de que al menos una media no coincide con las demás.</li>
+                <li><strong>¿Qué contrasta el ANOVA de un factor?</strong> Si las medias de tres o más grupos independientes son iguales. La hipótesis alternativa es que al menos una media es distinta de las demás.</li>
+                <li><strong>¿El ANOVA prueba que todas las medias son distintas?</strong> No. Un resultado significativo solo indica que al menos una media difiere. Para saber cuáles, aplica comparaciones post hoc como la prueba de Tukey.</li>
+                <li><strong>¿Puedo usar ANOVA con solo dos grupos?</strong> Sí, y equivale al contraste t con varianzas iguales (F = t²). Aun así, para dos grupos es más directo el contraste de dos medias, que además permite contrastes de una cola.</li>
+                <li><strong>¿Por qué no hacer varios contrastes t por parejas?</strong> Porque el riesgo de algún falso positivo crece con cada comparación. Con 10 comparaciones a α = 0,05, la probabilidad de al menos una falsa diferencia ronda el 40 %.</li>
+                <li><strong>¿Qué significa η²?</strong> La proporción de la variabilidad total que explica la pertenencia al grupo. Como orientación, 0,01 es un efecto pequeño, 0,06 mediano y 0,14 grande.</li>
+                <li><strong>¿Qué supuestos tiene el ANOVA?</strong> Independencia, normalidad aproximada en cada grupo y varianzas parecidas. Si las varianzas difieren mucho, usa el ANOVA de Welch; si los datos son muy asimétricos y hay pocos, la prueba de Kruskal-Wallis.</li>
+                <li><strong>¿Pueden los grupos tener tamaños distintos?</strong> Sí. El ANOVA de un factor funciona con grupos desiguales, aunque entonces es más sensible a que las varianzas sean distintas.</li>
+                <li><strong>¿Qué es el tamaño mínimo detectable en ANOVA?</strong> El menor tamaño del efecto, medido con la f de Cohen, que el ANOVA detectaría con un 80 % de probabilidad con tus tamaños de grupo. Si el efecto real es menor, el ANOVA probablemente no lo detecte.</li>
+                <li><strong>¿Cuántos datos por grupo necesito?</strong> Depende del tamaño del efecto que quieras detectar y de la potencia deseada. Para un efecto mediano (f = 0,25) con 3 grupos, α = 0,05 y potencia del 80 %, unos 53 por grupo. Calcúlalo con la calculadora de tamaño muestral para ANOVA.</li>
             </ul>
             <p class="external-ref">Referencia: <a href="https://es.wikipedia.org/wiki/An%C3%A1lisis_de_la_varianza" target="_blank" rel="noopener noreferrer">Análisis de la varianza (ANOVA)</a> — Wikipedia</p>
         </section>
+
     </main>
 
     <footer class="legal-footer">
@@ -275,6 +394,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="test-results.js?v=20261110-3"></script>
 <script>
 let anovaChart;
 
@@ -299,9 +419,6 @@ function sumSquares(values, center) {
     return values.reduce((sum, value) => sum + (value - center) ** 2, 0);
 }
 
-function formatNumber(value, digits = 4) {
-    return Number.isFinite(value) ? value.toFixed(digits) : '—';
-}
 
 function renderAnovaChart(alpha, dfBetween, dfWithin, fObserved) {
     const ctx = document.getElementById('anovaChart');
@@ -353,68 +470,109 @@ function renderAnovaChart(alpha, dfBetween, dfWithin, fObserved) {
     });
 }
 
+// Resultado: decisión, conclusión, efecto mínimo detectable y detalles.
+function renderAnovaResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const fHat = o.eta2 < 1 ? Math.sqrt(o.eta2 / (1 - o.eta2)) : Infinity;
+    const mdeF = R.mdeF(o.N, o.k, o.alpha);
+    const size = (f) => EN
+        ? (f < 0.1 ? 'a very small effect' : f < 0.25 ? 'a small effect' : f < 0.4 ? 'a medium effect' : 'a large effect')
+        : (f < 0.1 ? 'un efecto muy pequeño' : f < 0.25 ? 'un efecto pequeño' : f < 0.4 ? 'un efecto mediano' : 'un efecto grande');
+    const url = 'tamano-muestral-anova.html?k=' + o.k + '&f=' + R.sig(mdeF, 3) + '&alpha=' + o.alpha + '&power=' + R.TARGET;
+    const T = EN ? {
+        label: 'One-way ANOVA · ' + o.k + ' groups, N = ' + o.N + ' · H₀: all means are equal · α = ' + R.auto(o.alpha),
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        yes: '✓ There is statistical evidence that at least one of the group means differs from the others.',
+        no: 'ℹ There is not enough evidence that the group means differ. This does not prove that they are equal.',
+        posthoc: 'ANOVA does not say which groups differ: to find out, use a post hoc comparison such as Tukey\'s test.',
+        mde: 'With these group sizes, the ANOVA detects with ' + R.pct(R.TARGET) + ' probability only effects of size f = ' + R.num(mdeF, 2) + ' or more (' + size(mdeF) + ', by Cohen\'s benchmarks).',
+        link: 'Work out the sample size needed for another effect size',
+        rows: ['F statistic', 'Degrees of freedom (between, within)', 'Critical F', 'p-value', 'Effect size (η²)', "Effect size (Cohen's f)", 'Minimum detectable f (power ' + R.pct(R.TARGET) + ')'],
+        groups: ['Group', 'n', 'Mean', 'Standard deviation'], group: 'Group ',
+        table: ['Source', 'SS', 'df', 'MS', 'F', 'p-value'], src: ['Between groups', 'Within groups', 'Total']
+    } : {
+        label: 'ANOVA de un factor · ' + o.k + ' grupos, N = ' + o.N + ' · H₀: todas las medias son iguales · α = ' + R.auto(o.alpha),
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        yes: '✓ Hay evidencia estadística de que al menos una de las medias es distinta de las demás.',
+        no: 'ℹ No hay evidencia suficiente de que las medias de los grupos difieran. Esto no demuestra que sean iguales.',
+        posthoc: 'El ANOVA no dice qué grupos difieren: para saberlo, aplica una comparación post hoc, como la prueba de Tukey.',
+        mde: 'Con estos tamaños de grupo, el ANOVA solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad efectos de tamaño f = ' + R.num(mdeF, 2) + ' o mayores (' + size(mdeF) + ', según las referencias de Cohen).',
+        link: 'Calcular el tamaño muestral necesario para otro tamaño del efecto',
+        rows: ['Estadístico F', 'Grados de libertad (entre, dentro)', 'F crítico', 'p-valor', 'Tamaño del efecto (η²)', 'Tamaño del efecto (f de Cohen)', 'f mínimo detectable (potencia ' + R.pct(R.TARGET) + ')'],
+        groups: ['Grupo', 'n', 'Media', 'Desv. típica'], group: 'Grupo ',
+        table: ['Fuente', 'SC', 'gl', 'CM', 'F', 'p-valor'], src: ['Entre grupos', 'Dentro de grupos', 'Total']
+    };
+    const td = (v) => '<td>' + R.esc(v) + '</td>';
+    const th = (v) => '<th>' + R.esc(v) + '</th>';
+    let extra = '<div class="result-table-wrap"><table><thead><tr>' + T.groups.map(th).join('') + '</tr></thead><tbody>';
+    o.groups.forEach((g, i) => {
+        extra += '<tr>' + td(T.group + (i + 1)) + td(String(g.n)) + td(R.num(g.mean, 4)) + td(R.num(g.sd, 4)) + '</tr>';
+    });
+    extra += '</tbody></table></div>';
+    extra += '<div class="result-table-wrap"><table><thead><tr>' + T.table.map(th).join('') + '</tr></thead><tbody>' +
+        '<tr>' + td(T.src[0]) + td(R.num(o.ssB, 4)) + td(String(o.dfB)) + td(R.num(o.msB, 4)) + td(R.num(o.F, 4)) + td(R.prob(o.p)) + '</tr>' +
+        '<tr>' + td(T.src[1]) + td(R.num(o.ssW, 4)) + td(String(o.dfW)) + td(R.num(o.msW, 4)) + td('—') + td('—') + '</tr>' +
+        '<tr>' + td(T.src[2]) + td(R.num(o.ssB + o.ssW, 4)) + td(String(o.N - 1)) + td('—') + td('—') + td('—') + '</tr>' +
+        '</tbody></table></div>';
+    const notes = [];
+    if (rejected) notes.push(R.esc(T.posthoc));
+    notes.push(R.esc(T.mde) + ' ' + R.link(url, T.link));
+    R.render(document.getElementById('anovaResult'), {
+        label: T.label,
+        decision: T.decision, p: o.p, sec: ['F(' + o.dfB + ', ' + o.dfW + ') = ' + R.num(o.F, 4)],
+        ok: rejected, verdict: rejected ? T.yes : T.no,
+        notes: notes,
+        rows: [
+            [T.rows[0], 'F = ' + R.num(o.F, 4)],
+            [T.rows[1], o.dfB + ', ' + o.dfW],
+            [T.rows[2], R.num(o.crit, 4)],
+            [T.rows[3], R.prob(o.p)],
+            [T.rows[4], R.num(o.eta2, 3)],
+            [T.rows[5], Number.isFinite(fHat) ? R.num(fHat, 3) : '∞'],
+            [T.rows[6], R.num(mdeF, 3)]
+        ],
+        extraHtml: extra
+    });
+}
+
 function calculateAnova() {
     const groups = parseAnovaGroups(document.getElementById('anovaData').value);
     const alpha = parseFloat(document.getElementById('alpha').value);
     const resultEl = document.getElementById('anovaResult');
+    const E = TestResult.EN
+        ? { alpha: 'Error: α must be between 0 and 1.', groups: 'Error: enter at least two groups with a minimum of two observations per group.', within: 'Error: there is not enough variability within groups to compute the F statistic.' }
+        : { alpha: 'Error: α debe estar entre 0 y 1.', groups: 'Error: introduce al menos dos grupos y un mínimo de dos observaciones por grupo.', within: 'Error: no hay variabilidad suficiente dentro de los grupos para calcular el estadístico F.' };
+    const fail = (msg) => {
+        resultEl.innerText = msg;
+        if (anovaChart) { anovaChart.destroy(); anovaChart = null; }
+    };
 
-    if (!Number.isFinite(alpha) || alpha <= 0 || alpha >= 1) {
-        resultEl.innerText = 'Error: α debe estar entre 0 y 1.';
-        return;
-    }
-
-    if (groups.length < 2 || groups.some((group) => group.length < 2)) {
-        resultEl.innerText = 'Error: introduce al menos dos grupos y un mínimo de dos observaciones por grupo.';
-        if (anovaChart) {
-            anovaChart.destroy();
-            anovaChart = null;
-        }
-        return;
-    }
+    if (!Number.isFinite(alpha) || alpha <= 0 || alpha >= 1) return fail(E.alpha);
+    if (groups.length < 2 || groups.some((group) => group.length < 2)) return fail(E.groups);
 
     const allValues = groups.flat();
-    const totalN = allValues.length;
+    const N = allValues.length;
     const k = groups.length;
     const grandMean = mean(allValues);
     const groupMeans = groups.map(mean);
-    const ssBetween = groups.reduce((sum, group, index) => sum + group.length * (groupMeans[index] - grandMean) ** 2, 0);
-    const ssWithin = groups.reduce((sum, group, index) => sum + sumSquares(group, groupMeans[index]), 0);
-    const ssTotal = ssBetween + ssWithin;
-    const dfBetween = k - 1;
-    const dfWithin = totalN - k;
+    const ssB = groups.reduce((sum, group, i) => sum + group.length * (groupMeans[i] - grandMean) ** 2, 0);
+    const ssW = groups.reduce((sum, group, i) => sum + sumSquares(group, groupMeans[i]), 0);
+    const dfB = k - 1;
+    const dfW = N - k;
+    if (dfW <= 0 || ssW <= 0) return fail(E.within);
 
-    if (dfWithin <= 0 || ssWithin <= 0) {
-        resultEl.innerText = 'Error: no hay variabilidad suficiente dentro de los grupos para calcular el estadístico F.';
-        return;
-    }
-
-    const msBetween = ssBetween / dfBetween;
-    const msWithin = ssWithin / dfWithin;
-    const fObserved = msBetween / msWithin;
-    const pValue = 1 - jStat.centralF.cdf(fObserved, dfBetween, dfWithin);
-    const etaSquared = ssTotal > 0 ? ssBetween / ssTotal : NaN;
-    const critical = jStat.centralF.inv(1 - alpha, dfBetween, dfWithin);
-    const decision = pValue < alpha ? 'Se rechaza H₀: hay evidencia de diferencias entre medias.' : 'No se rechaza H₀: la evidencia no basta para afirmar diferencias entre medias.';
-
-    const summaries = groups.map((group, index) => `Grupo ${index + 1}: n=${group.length}, media=${formatNumber(groupMeans[index])}`).join('<br>');
-
-    resultEl.innerHTML = `
-        <p><strong>Resultado:</strong> F(${dfBetween}, ${dfWithin}) = ${formatNumber(fObserved)} | p-valor = ${formatNumber(pValue, 6)} | F crítico = ${formatNumber(critical)} | η² = ${formatNumber(etaSquared)}</p>
-        <p>${decision}</p>
-        <p><strong>Resumen de grupos</strong><br>${summaries}</p>
-        <div class="result-table-wrap">
-            <table>
-                <thead><tr><th>Fuente</th><th>SC</th><th>gl</th><th>CM</th><th>F</th><th>p-valor</th></tr></thead>
-                <tbody>
-                    <tr><td>Entre grupos</td><td>${formatNumber(ssBetween)}</td><td>${dfBetween}</td><td>${formatNumber(msBetween)}</td><td>${formatNumber(fObserved)}</td><td>${formatNumber(pValue, 6)}</td></tr>
-                    <tr><td>Dentro de grupos</td><td>${formatNumber(ssWithin)}</td><td>${dfWithin}</td><td>${formatNumber(msWithin)}</td><td>—</td><td>—</td></tr>
-                    <tr><td>Total</td><td>${formatNumber(ssTotal)}</td><td>${totalN - 1}</td><td>—</td><td>—</td><td>—</td></tr>
-                </tbody>
-            </table>
-        </div>
-    `;
-
-    renderAnovaChart(alpha, dfBetween, dfWithin, fObserved);
+    const msB = ssB / dfB;
+    const msW = ssW / dfW;
+    const F = msB / msW;
+    const p = 1 - jStat.centralF.cdf(F, dfB, dfW);
+    renderAnovaResult({
+        k, N, alpha, F, p, dfB, dfW, ssB, ssW, msB, msW,
+        eta2: ssB / (ssB + ssW),
+        crit: jStat.centralF.inv(1 - alpha, dfB, dfW),
+        groups: groups.map((g, i) => ({ n: g.length, mean: groupMeans[i], sd: Math.sqrt(sumSquares(g, groupMeans[i]) / (g.length - 1)) }))
+    });
+    renderAnovaChart(alpha, dfB, dfW, F);
 }
 
 document.getElementById('calcAnovaBtn').addEventListener('click', calculateAnova);

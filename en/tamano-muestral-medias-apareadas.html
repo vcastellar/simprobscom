@@ -179,13 +179,21 @@
                         <div class="form-group">
                             <label for="pairedMeanAlpha">Alpha (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                             <input type="number" id="pairedMeanAlpha" value="0.05" step="0.001" min="0.0001" max="0.2">
-                            <p class="field-hint" hidden>Two-tailed significance level. The standard value is <strong>0.05</strong>.</p>
+                            <p class="field-hint" hidden>Significance level of the test. The standard value is <strong>0.05</strong>.</p>
                         </div>
                         <div class="form-group">
                             <label for="pairedMeanPower">Power (1-β) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                             <input type="number" id="pairedMeanPower" value="0.8" step="0.01" min="0.5" max="0.999">
                             <p class="field-hint" hidden>Probability of detecting the change Δ if it really exists. <strong>0.80</strong> is the usual baseline; 0.90 if false negatives are costly.</p>
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pairedMeanTail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                        <select id="pairedMeanTail">
+                            <option value="two-sided" selected>Two-tailed (≠)</option>
+                            <option value="one-sided">One-tailed (&gt; or &lt;)</option>
+                        </select>
+                        <p class="field-hint" hidden>A <strong>two-tailed</strong> test detects differences in both directions and is the usual choice. Choose <strong>one-tailed</strong> only if, before the study, you are interested in just one direction: it needs a smaller sample because it uses \(Z_{\alpha}\) instead of \(Z_{\alpha/2}\).</p>
                     </div>
                 </div>
 
@@ -217,7 +225,7 @@
                 <li><strong>n</strong>: number of pairs (individuals or units, not total observations).</li>
                 <li><strong>\(\sigma_d\)</strong>: standard deviation of the within-subject differences (not of each group).</li>
                 <li><strong>\(\Delta\)</strong>: the smallest mean difference you want to detect.</li>
-                <li><strong>\(Z_{\alpha/2}\)</strong> and <strong>\(Z_\beta\)</strong>: normal quantiles for two-sided alpha and power.</li>
+                <li><strong>\(Z_{\alpha/2}\)</strong> and <strong>\(Z_\beta\)</strong>: normal quantiles for two-sided alpha and power; with a one-tailed test, \(Z_{\alpha}\) replaces \(Z_{\alpha/2}\).</li>
             </ul>
             <h3>Quick setup</h3>
             <ul>
@@ -312,7 +320,8 @@ function calculatePairedMeanSampleSize(){
  if(!Number.isFinite(alpha)||alpha<=0||alpha>=1) return resultEl.innerText='Error: α must be between 0 and 1.';
  if(!Number.isFinite(power)||power<=0||power>=1) return resultEl.innerText='Error: invalid power.';
 
- const zAlpha=jStat.normal.inv(1-(alpha/2),0,1);
+ const oneSided=document.getElementById('pairedMeanTail').value==='one-sided';
+ const zAlpha=jStat.normal.inv(oneSided?1-alpha:1-(alpha/2),0,1);
  const zBeta=jStat.normal.inv(power,0,1);
  const n=Math.ceil(Math.pow(((zAlpha+zBeta)*sigmaD)/delta,2));
 
@@ -325,6 +334,18 @@ function calculatePairedMeanSampleSize(){
 }
 
 document.getElementById('pairedMeanCalculateBtn').addEventListener('click', calculatePairedMeanSampleSize);
+(function () {
+    // Valores recibidos por la URL, por ejemplo desde la calculadora del contraste.
+    let params;
+    try { params = new URLSearchParams(location.search); } catch (e) { return; }
+    const fields = { sigma: "pairedMeanSigmaD", delta: "pairedMeanDelta", alpha: "pairedMeanAlpha", power: "pairedMeanPower" };
+    Object.keys(fields).forEach(function (key) {
+        const value = parseFloat(params.get(key));
+        if (Number.isFinite(value)) document.getElementById(fields[key]).value = value;
+    });
+    const alt = params.get("alt");
+    if (["two-sided", "one-sided"].includes(alt)) document.getElementById("pairedMeanTail").value = alt;
+}());
 calculatePairedMeanSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>

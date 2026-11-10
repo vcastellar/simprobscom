@@ -67,54 +67,78 @@
     }
     </script>
     <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
     {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "¿Qué es un margen de no inferioridad δ?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Es la diferencia máxima tolerable a favor del control frente al nuevo tratamiento. Se define antes del estudio con criterio clínico o práctico. Si la diferencia observada está dentro del margen (tratamiento no es peor que δ respecto al control), se declara no inferioridad."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿En qué se diferencia no inferioridad de equivalencia?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No inferioridad (unilateral): el nuevo tratamiento no es inaceptablemente peor que el control. Equivalencia (TOST, bilateral): el nuevo tratamiento es tan bueno como el control, ni mejor ni peor de forma relevante. TOST requiere dos tests unilaterales simultáneos."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Por qué se usa el IC al 90% en el TOST?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "El TOST con nivel α equivale a verificar que el IC al 100(1-2α)% de Δ̂ está contenido en [-δ, +δ]. Con α=0,05 eso corresponde al IC al 90%. Si el IC al 90% cabe dentro de [-δ, +δ], se declara equivalencia."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Cómo se elige el margen δ?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "El margen debe definirse a priori con criterio clínico o regulatorio, no estadístico. En ensayos clínicos, habitualmente representa una fracción (por ejemplo, 50%) de la diferencia mínima clínicamente importante o del efecto demostrado del comparador activo."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Puede rechazarse la hipótesis de superioridad y aun así declararse no inferioridad?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Sí. El contraste de no inferioridad y el de superioridad tienen distintas hipótesis nulas. Es perfectamente coherente que un ensayo no demuestre superioridad pero sí no inferioridad, si la diferencia observada es pequeña y está bien acotada."
-          }
-        }
-      ]
+      "@type": "Question",
+      "name": "¿Qué es el margen δ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "La mayor diferencia entre tratamiento y control que se considera irrelevante en la práctica. Se fija antes del estudio con criterio clínico, técnico o regulatorio, no estadístico."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿En qué se diferencia la no inferioridad de la equivalencia?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "La no inferioridad es de una cola: demuestra que el tratamiento no es peor que el control en más de δ. La equivalencia (TOST) demuestra que no es ni peor ni mejor en más de δ, con dos contrastes de una cola a la vez."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Por qué se usa el intervalo de confianza del 90 %?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Porque el TOST con α = 0,05 por cola equivale a comprobar que el intervalo al 100(1 − 2α) %, es decir, al 90 %, cabe dentro de [−δ, +δ]."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué α debo usar?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "En muchos ámbitos, 0,05 por cola. En ensayos clínicos con fines regulatorios suele exigirse 0,025 por cola, que equivale a un intervalo del 95 %."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Puedo concluir equivalencia si un contraste t no es significativo?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Un contraste no significativo puede deberse a una muestra pequeña. Para demostrar equivalencia hace falta un contraste de equivalencia con un margen fijado de antemano."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Puede un tratamiento ser no inferior y no superior a la vez?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí: eso es precisamente la equivalencia. También puede ser no inferior sin demostrar superioridad, que es el resultado más habitual en estos estudios."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué significa la potencia que muestra la calculadora?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "La probabilidad de demostrar la no inferioridad o la equivalencia con tus tamaños de muestra si en realidad no hubiera diferencia entre tratamiento y control."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cuántos sujetos necesito?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Depende del margen, de la variabilidad, de la diferencia real esperada y de la potencia deseada. Para medias, calcúlalo con la calculadora de tamaño muestral para no inferioridad y equivalencia."
+      }
     }
+  ]
+}
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="style_new.css?v=20261107-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -301,66 +325,125 @@
         </section>
 
         <section class="card content-card">
-            <h3>Explicación</h3>
-            <p>Los contrastes de no inferioridad y equivalencia invierten la lógica habitual del contraste de hipótesis. En lugar de intentar demostrar que dos tratamientos difieren, buscan demostrar que son suficientemente similares dentro de un margen clínico o práctico predefinido \(\delta\).</p>
-            <p><strong>No inferioridad</strong>: se quiere demostrar que el nuevo tratamiento (más barato, menos invasivo, etc.) no es inaceptablemente peor que el control. La hipótesis nula es que el tratamiento sí es inferior de forma relevante: \(H_0\colon \Delta \leq -\delta\).</p>
-            <p><strong>Equivalencia (TOST)</strong>: se quiere demostrar que el nuevo tratamiento no es ni mejor ni peor de forma relevante. Requiere dos tests unilaterales simultáneos (Two One-Sided Tests), uno de no inferioridad y uno de no superioridad. Se declara equivalencia cuando ambos se rechazan.</p>
-
-            <h3>Hipótesis y estadísticos</h3>
-            <p>Sea \(\hat{\Delta} = \hat{\theta}_1 - \hat{\theta}_2\) la diferencia estimada (de medias o proporciones) y \(\text{SE}\) su error estándar:</p>
-            <p class="formula-line">\( \hat{\Delta} = \bar{x}_1 - \bar{x}_2 \quad \text{o} \quad \hat{\Delta} = \hat{p}_1 - \hat{p}_2 \)</p>
-            <p class="formula-line">\( \text{SE} = \sqrt{\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}} \quad \text{(medias)} \)</p>
-            <p class="formula-line">\( \text{SE} = \sqrt{\dfrac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \dfrac{\hat{p}_2(1-\hat{p}_2)}{n_2}} \quad \text{(proporciones)} \)</p>
-            <p><strong>No inferioridad</strong> (\(H_0\colon \Delta \leq -\delta\), \(H_1\colon \Delta > -\delta\)):</p>
-            <p class="formula-line">\( z_{\text{NI}} = \dfrac{\hat{\Delta} + \delta}{\text{SE}}, \quad p_{\text{NI}} = 1 - \Phi(z_{\text{NI}}) \)</p>
-            <p><strong>No superioridad</strong> (\(H_0\colon \Delta \geq +\delta\), \(H_1\colon \Delta &lt; +\delta\)):</p>
-            <p class="formula-line">\( z_{\text{NS}} = \dfrac{\delta - \hat{\Delta}}{\text{SE}}, \quad p_{\text{NS}} = 1 - \Phi(z_{\text{NS}}) \)</p>
-            <p><strong>Equivalencia TOST</strong>: \(p_{\text{TOST}} = \max(p_{\text{NI}}, p_{\text{NS}})\). Se declara equivalencia si \(p_{\text{TOST}} &lt; \alpha\).</p>
-        </section>
-
-        <section class="card content-card">
-            <h3>Guía rápida de interpretación</h3>
+            <h3>¿Qué son los contrastes de no inferioridad y de equivalencia?</h3>
+            <p>En un contraste clásico se intenta demostrar que dos tratamientos <em>son distintos</em>. Pero muchas veces la pregunta es la contraria: ¿es el genérico tan eficaz como el fármaco de marca? ¿Funciona igual de bien una cirugía menos invasiva, un tratamiento más barato o una nueva versión de un proceso? Un contraste clásico no sirve para eso, porque no rechazar \(H_0\) no demuestra que los tratamientos sean iguales: puede deberse simplemente a una muestra pequeña.</p>
+            <p>Los contrastes de no inferioridad y de equivalencia <strong>invierten la carga de la prueba</strong>. La hipótesis nula pasa a ser que hay una diferencia relevante, y lo que hay que demostrar con los datos es que la diferencia es pequeña. Para eso hace falta fijar antes un <strong>margen \(\delta\)</strong>: la mayor diferencia que se consideraría irrelevante en la práctica.</p>
             <ul>
-                <li><strong>No inferioridad</strong>: si \(p_{\text{NI}} &lt; \alpha\), se rechaza \(H_0\) y se declara no inferioridad. El IC \(100(1-2\alpha)\%\) de \(\hat{\Delta}\) debe estar completamente por encima de \(-\delta\).</li>
-                <li><strong>TOST</strong>: si \(p_{\text{TOST}} &lt; \alpha\), se declara equivalencia. Equivale a verificar que el IC \(100(1-2\alpha)\%\) de \(\hat{\Delta}\) está contenido en \([-\delta, +\delta\)].</li>
-                <li>Con \(\alpha=0{,}05\), el criterio del IC para TOST usa el IC al 90% (no al 95%).</li>
-                <li>El margen \(\delta\) debe definirse <em>a priori</em> con criterio clínico, no estadístico.</li>
+                <li><strong>No inferioridad</strong>: demostrar que el tratamiento nuevo no es peor que el control en más de \(\delta\). Es un contraste de una cola. Se usa, por ejemplo, cuando el tratamiento nuevo tiene otras ventajas (precio, comodidad, menos efectos adversos) y basta con que no pierda eficacia de forma relevante.</li>
+                <li><strong>No superioridad</strong>: lo simétrico, demostrar que no es mejor en más de \(\delta\). Es útil, por ejemplo, para demostrar que un efecto adverso no aumenta de forma relevante.</li>
+                <li><strong>Equivalencia</strong>: demostrar que no es ni peor ni mejor en más de \(\delta\). Se hacen los dos contrastes de una cola a la vez, el procedimiento <strong>TOST</strong> (<em>two one-sided tests</em>). Es el planteamiento de los estudios de bioequivalencia y de comparación de métodos de medida.</li>
             </ul>
+            <p>En todos los casos, \(\Delta = \theta_1 - \theta_2\) es la diferencia entre el tratamiento (grupo 1) y el control (grupo 2), de medias o de proporciones, y los valores positivos de \(\Delta\) son favorables al tratamiento.</p>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto: no inferioridad de proporciones</h3>
-            <p>Un nuevo tratamiento tiene una tasa de éxito \(\hat{p}_1 = 0{,}72\) en \(n_1 = 200\) pacientes. El tratamiento de referencia tiene \(\hat{p}_2 = 0{,}75\) en \(n_2 = 200\) pacientes. El margen de no inferioridad es \(\delta = 0{,}10\) con \(\alpha = 0{,}05\).</p>
+            <h3>Hipótesis y estadísticos</h3>
+            <p>Sea \(\hat{\Delta} = \hat{\theta}_1 - \hat{\theta}_2\) la diferencia observada y \(SE\) su error estándar:</p>
+            <p class="formula-line">\( \hat{\Delta} = \bar{x}_1 - \bar{x}_2, \qquad SE = \sqrt{\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}} \quad \text{(medias)} \)</p>
+            <p class="formula-line">\( \hat{\Delta} = \hat{p}_1 - \hat{p}_2, \qquad SE = \sqrt{\dfrac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \dfrac{\hat{p}_2(1-\hat{p}_2)}{n_2}} \quad \text{(proporciones)} \)</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Contraste</th><th>\(H_0\)</th><th>\(H_1\)</th><th>Estadístico</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>No inferioridad</td><td>\(\Delta \leq -\delta\)</td><td>\(\Delta > -\delta\)</td><td>\(z_1 = (\hat{\Delta} + \delta)/SE\)</td></tr>
+                        <tr><td>No superioridad</td><td>\(\Delta \geq +\delta\)</td><td>\(\Delta &lt; +\delta\)</td><td>\(z_2 = (\delta - \hat{\Delta})/SE\)</td></tr>
+                        <tr><td>Equivalencia (TOST)</td><td>\(|\Delta| \geq \delta\)</td><td>\(-\delta &lt; \Delta &lt; +\delta\)</td><td>\(z_1\) y \(z_2\)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Cada contraste de una cola tiene p-valor \(p = 1 - \Phi(z)\), donde \(\Phi\) es la función de distribución de la <a href="normal.html">normal estándar</a>. En el TOST se rechaza \(H_0\) solo si se rechazan los dos contrastes, así que su p-valor es el mayor de los dos: \(p_{\text{TOST}} = \max(p_1, p_2)\). La calculadora usa la aproximación normal, adecuada con muestras moderadas o grandes, que son las habituales en este tipo de estudios.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>La regla del intervalo de confianza</h3>
+            <p>La forma más clara de entender estos contrastes es con el intervalo de confianza de la diferencia al nivel \(100(1-2\alpha)\,\%\). Con \(\alpha = 0{,}05\), es el intervalo del 90 %:</p>
+            <ul>
+                <li><strong>No inferioridad</strong>: se declara si el límite inferior del intervalo queda por encima de \(-\delta\).</li>
+                <li><strong>No superioridad</strong>: si el límite superior queda por debajo de \(+\delta\).</li>
+                <li><strong>Equivalencia</strong>: si el intervalo completo cabe dentro de \([-\delta, +\delta]\).</li>
+            </ul>
+            <p>¿Por qué el 90 % y no el 95 %? Porque cada contraste de una cola usa \(\alpha = 0{,}05\) en un solo extremo, y un intervalo del 90 % deja precisamente un 5 % en cada extremo. Las guías regulatorias de ensayos clínicos (ICH E9, EMA, FDA) suelen exigir \(\alpha = 0{,}025\) por cada cola, lo que equivale a comprobar el intervalo del 95 %; si trabajas en ese contexto, escribe 0,025 en la calculadora.</p>
+            <p>Este enfoque también aclara los posibles resultados. Un intervalo puede quedar entero por encima de \(-\delta\) (no inferior), cruzar \(-\delta\) (no concluyente) o incluso quedar entero por encima de 0 (no inferior y, además, superior). Lo que nunca permite es concluir equivalencia solo porque el intervalo contenga el 0.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Cómo elegir el margen δ</h3>
+            <p>El margen es la decisión más importante del diseño y debe fijarse <strong>antes de ver los datos</strong>, con criterio clínico, técnico o de negocio, no estadístico. Algunas pautas habituales:</p>
+            <ul>
+                <li>En ensayos clínicos frente a un control activo, el margen suele ser una fracción (por ejemplo, la mitad) del efecto que el control ha demostrado frente a placebo, para asegurar que el tratamiento nuevo conserva buena parte de ese efecto.</li>
+                <li>En bioequivalencia de fármacos, el estándar es que el cociente de medias geométricas esté entre 0,80 y 1,25, lo que en escala logarítmica es un margen simétrico.</li>
+                <li>En comparación de métodos o procesos, el margen es la diferencia que no cambiaría ninguna decisión técnica.</li>
+            </ul>
+            <p>Un margen demasiado amplio hace que casi cualquier tratamiento «demuestre» no inferioridad; uno demasiado estrecho exige muestras enormes. Cambiar el margen después de ver los resultados invalida el análisis.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Ejemplo resuelto 1: no inferioridad de proporciones</h3>
+            <p>Un tratamiento nuevo, más barato, cura a 144 de 200 pacientes (\(\hat{p}_1 = 0{,}72\)); el de referencia, a 150 de 200 (\(\hat{p}_2 = 0{,}75\)). Se fijó de antemano un margen de no inferioridad de 10 puntos porcentuales (\(\delta = 0{,}10\)) y \(\alpha = 0{,}05\).</p>
             <p class="formula-line">\( \hat{\Delta} = 0{,}72 - 0{,}75 = -0{,}03 \)</p>
-            <p class="formula-line">\( \text{SE} = \sqrt{\dfrac{0{,}72\cdot0{,}28}{200} + \dfrac{0{,}75\cdot0{,}25}{200}} = \sqrt{0{,}001008 + 0{,}0009375} = \sqrt{0{,}0019455} \approx 0{,}04411 \)</p>
-            <p class="formula-line">\( z_{\text{NI}} = \dfrac{-0{,}03 + 0{,}10}{0{,}04411} \approx 1{,}587, \quad p \approx 0{,}056 \)</p>
-            <p>Como \(p = 0{,}057 > \alpha = 0{,}05\), <strong>no se declara no inferioridad</strong> al nivel del 5 % (resultado limítrofe). El IC al 90 % de \(\hat{\Delta}\) no cabe completamente por encima de \(-0{,}10\).</p>
+            <p class="formula-line">\( SE = \sqrt{\dfrac{0{,}72 \cdot 0{,}28}{200} + \dfrac{0{,}75 \cdot 0{,}25}{200}} = \sqrt{0{,}001008 + 0{,}000938} \approx 0{,}0441 \)</p>
+            <p class="formula-line">\( z_1 = \dfrac{-0{,}03 + 0{,}10}{0{,}0441} \approx 1{,}587, \qquad p = 1 - \Phi(1{,}587) \approx 0{,}056 \)</p>
+            <p>Como \(p \approx 0{,}056 > 0{,}05\), <strong>no se declara la no inferioridad</strong>. Con la regla del intervalo se ve igual: el intervalo del 90 % para la diferencia, \(-0{,}03 \pm 1{,}645 \times 0{,}0441\), va de −0,103 a 0,043, y su límite inferior queda justo por debajo de −0,10.</p>
+            <p>Conclusión: no se puede descartar que el tratamiento nuevo cure hasta algo más de 10 puntos menos que el de referencia. Ojo: esto no demuestra que sea inferior; el resultado es simplemente no concluyente. Si en realidad los dos tratamientos fueran igual de eficaces, un estudio de este tamaño demostraría la no inferioridad con una probabilidad de solo un 73 %.</p>
+            <p><strong>En la calculadora:</strong> «No inferioridad», «Proporciones», p̂₁ = 0,72, p̂₂ = 0,75, n₁ = n₂ = 200, δ = 0,10 y dirección «Tratamiento no inferior». Son los valores con los que se abre la página.</p>
+
+            <h3>Ejemplo resuelto 2: equivalencia de medias (TOST)</h3>
+            <p>Un laboratorio compara un método de medida nuevo con el de referencia. Con 100 muestras en cada método, obtiene medias de \(\bar{x}_1 = 48\) y \(\bar{x}_2 = 50\) unidades, ambas con desviación típica 10. Se considera que los métodos son intercambiables si la diferencia real es menor de 5 unidades (\(\delta = 5\)), con \(\alpha = 0{,}05\).</p>
+            <p class="formula-line">\( \hat{\Delta} = -2, \qquad SE = \sqrt{\dfrac{100}{100} + \dfrac{100}{100}} = \sqrt{2} \approx 1{,}414 \)</p>
+            <p class="formula-line">\( z_1 = \dfrac{-2 + 5}{1{,}414} \approx 2{,}121 \;(p_1 \approx 0{,}017), \qquad z_2 = \dfrac{5 - (-2)}{1{,}414} \approx 4{,}950 \;(p_2 \approx 0{,}0000004) \)</p>
+            <p>Los dos contrastes rechazan su hipótesis nula, y \(p_{\text{TOST}} = \max(0{,}017;\ 0{,}0000004) = 0{,}017 &lt; 0{,}05\): <strong>se declara la equivalencia</strong>. El intervalo del 90 %, \(-2 \pm 1{,}645 \times 1{,}414\), va de −4,33 a 0,33 y cabe entero dentro de \([-5, 5]\).</p>
+            <p>Conclusión: la diferencia entre los dos métodos es, con un 90 % de confianza, menor de 5 unidades en cualquier sentido. Fíjate en que un contraste clásico de dos medias tampoco habría encontrado diferencias significativas (\(p \approx 0{,}16\)), pero eso, por sí solo, no habría permitido afirmar que los métodos son intercambiables.</p>
+            <p><strong>En la calculadora:</strong> «Equivalencia (TOST)», «Medias», x̄₁ = 48, x̄₂ = 50, s₁ = s₂ = 10, n₁ = n₂ = 100 y δ = 5.</p>
         </section>
 
         <section class="card content-card">
             <h3>Cómo interpretar el resultado</h3>
-                <p><strong>No inferioridad (test unilateral):</strong> rechazar \(H_0\) (p-valor &lt; α) significa que el límite inferior del intervalo de confianza al \((1-2\alpha)\cdot100\%\) para la diferencia \(\Delta = \mu_T - \mu_C\) supera el margen de no inferioridad \(-\delta\). En términos prácticos, se concluye que el tratamiento experimental no es peor que el control en más de la cantidad clínicamente tolerable. No rechazar \(H_0\) (p-valor ≥ α) indica que los datos no excluyen que el tratamiento sea peor que el control más allá del margen definido.</p>
-                <p><strong>Equivalencia (TOST):</strong> se declara equivalencia si ambos tests unilaterales rechazan \(H_0\) simultáneamente (p_TOST &lt; α) y el intervalo de confianza al 90% para \(\Delta\) queda completamente dentro de \([-\delta, +\delta]\). Un resultado de equivalencia no afirma que los tratamientos sean idénticos, sino que cualquier diferencia es lo bastante pequeña para ser clínicamente aceptable. Si solo uno de los dos tests unilaterales rechaza, la conclusión es unidireccional: no inferioridad, pero no equivalencia.</p>
-                <p>La elección del margen \(\delta\) es la decisión más crítica del diseño: debe fijarse a priori con criterio clínico o regulatorio, no estadístico. En la visualización, la zona verde corresponde a la región de equivalencia o no inferioridad, la zona roja es la región de inferioridad inaceptable y la línea ámbar muestra la diferencia estimada con su intervalo de confianza. Un intervalo estrecho centrado cerca de cero es evidencia tanto de no inferioridad como de equivalencia práctica; un intervalo ancho señala incertidumbre y posiblemente insuficiencia muestral.</p>
+            <p><strong>Si se declara la no inferioridad</strong> (p-valor &lt; α), los datos indican que el tratamiento no es peor que el control en más de \(\delta\). No significa que sea igual ni mejor: solo que la posible pérdida es menor que el margen. Si, además, el intervalo completo queda por encima de 0, también hay evidencia de superioridad; pasar de no inferioridad a superioridad es aceptable, pero no al revés.</p>
+            <p><strong>Si se declara la equivalencia</strong>, la diferencia es, con la confianza indicada, menor que \(\delta\) en los dos sentidos. No afirma que los tratamientos sean idénticos, sino que cualquier diferencia es demasiado pequeña para importar.</p>
+            <p><strong>Si no se declara</strong>, el resultado es no concluyente: los datos no permiten descartar una diferencia mayor que el margen. No demuestra que el tratamiento sea inferior ni que los tratamientos sean distintos. Lo más habitual es que la muestra fuera pequeña para el margen elegido.</p>
+            <p>En la calculadora, el resultado muestra la decisión con el p-valor (el del TOST, en el caso de la equivalencia), los estadísticos z y una frase que explica la conclusión con el intervalo de confianza y el margen. En el gráfico, la zona roja es la región de rechazo de \(H_0\) sobre la normal estándar y las líneas marcan los estadísticos observados. En «Detalles del cálculo» están la diferencia observada, el error estándar, los p-valores de cada contraste, el valor crítico y el intervalo.</p>
+
+            <h3>Potencia del estudio</h3>
+            <p>Debajo de la conclusión, la calculadora indica la <strong>potencia</strong> del contraste bajo el supuesto habitual del diseño: que tratamiento y control sean en realidad igual de eficaces (\(\Delta = 0\)). Es la probabilidad de que un estudio con tus tamaños de muestra y tu variabilidad demuestre la no inferioridad o la equivalencia cuando de verdad la hay. Si es baja, un resultado no concluyente era esperable.</p>
+            <p>Para medias, el enlace abre la <a href="tamano-muestral-no-inferioridad.html">calculadora de tamaño muestral para no inferioridad y equivalencia</a> con tu margen, tu α y una desviación típica común calculada a partir de tus datos, para ver cuántos sujetos por grupo harían falta para alcanzar una potencia del 80 %. La equivalencia necesita más muestra que la no inferioridad, porque hay que superar los dos contrastes a la vez.</p>
         </section>
+
+        <section class="card content-card">
+            <h3>Errores frecuentes</h3>
+            <ul>
+                <li><strong>Concluir equivalencia porque un contraste clásico no es significativo.</strong> La ausencia de diferencias significativas no demuestra igualdad.</li>
+                <li><strong>Elegir o cambiar el margen después de ver los datos.</strong></li>
+                <li><strong>Usar el intervalo del 95 % con α = 0,05 por cola</strong>, o el del 90 % cuando la norma exige 0,025 por cola. El nivel del intervalo es \(1 - 2\alpha\).</li>
+                <li><strong>Invertir el orden de los grupos</strong>: la diferencia es tratamiento − control, y la no inferioridad se refiere a que no sea demasiado negativa.</li>
+                <li><strong>Olvidar la calidad del estudio</strong>: la mala adherencia, las pérdidas o una medición imprecisa acercan los dos grupos y favorecen falsas conclusiones de no inferioridad. Por eso se recomienda analizar tanto por intención de tratar como por protocolo.</li>
+            </ul>
+        </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
               <h3>Calculadoras relacionadas</h3>
               <ul>
-                <li><a href="tamano-muestral-no-inferioridad.html">Tamaño muestral para no inferioridad</a></li>
+                <li><a href="tamano-muestral-no-inferioridad.html">Tamaño muestral para no inferioridad y equivalencia</a></li>
                 <li><a href="contraste-hipotesis-dos-medias.html">Contraste para dos medias independientes</a></li>
                 <li><a href="contraste-hipotesis-dos-proporciones.html">Contraste para dos proporciones independientes</a></li>
+                <li><a href="intervalo-confianza-diferencia-medias.html">Intervalo de confianza para la diferencia de medias</a></li>
+                <li><a href="intervalo-confianza-diferencia-proporciones.html">Intervalo de confianza para la diferencia de proporciones</a></li>
               </ul>
             </section>
             <h3>Preguntas frecuentes</h3>
             <ul>
-                <li><strong>¿Qué es el margen δ?</strong> La diferencia máxima tolerable a favor del control. Debe definirse a priori con criterio clínico o regulatorio.</li>
-                <li><strong>¿En qué se diferencia no inferioridad de equivalencia?</strong> No inferioridad es unilateral (el tratamiento no es peor). Equivalencia (TOST) es bilateral (no es ni mejor ni peor de forma relevante).</li>
-                <li><strong>¿Por qué el IC al 90% en TOST?</strong> Con α=0,05, el TOST equivale a verificar que el IC al 90% de Δ̂ está dentro de [−δ, +δ].</li>
-                <li><strong>¿Cómo se elige δ?</strong> Con criterio clínico o regulatorio, no estadístico. Suele ser una fracción del efecto del comparador activo.</li>
-                <li><strong>¿Puede coexistir no inferioridad con no superioridad?</strong> Sí, eso equivale a declarar equivalencia (TOST).</li>
+                <li><strong>¿Qué es el margen δ?</strong> La mayor diferencia entre tratamiento y control que se considera irrelevante en la práctica. Se fija antes del estudio con criterio clínico, técnico o regulatorio, no estadístico.</li>
+                <li><strong>¿En qué se diferencia la no inferioridad de la equivalencia?</strong> La no inferioridad es de una cola: demuestra que el tratamiento no es peor que el control en más de δ. La equivalencia (TOST) demuestra que no es ni peor ni mejor en más de δ, con dos contrastes de una cola a la vez.</li>
+                <li><strong>¿Por qué se usa el intervalo de confianza del 90 %?</strong> Porque el TOST con α = 0,05 por cola equivale a comprobar que el intervalo al 100(1 − 2α) %, es decir, al 90 %, cabe dentro de [−δ, +δ].</li>
+                <li><strong>¿Qué α debo usar?</strong> En muchos ámbitos, 0,05 por cola. En ensayos clínicos con fines regulatorios suele exigirse 0,025 por cola, que equivale a un intervalo del 95 %.</li>
+                <li><strong>¿Puedo concluir equivalencia si un contraste t no es significativo?</strong> No. Un contraste no significativo puede deberse a una muestra pequeña. Para demostrar equivalencia hace falta un contraste de equivalencia con un margen fijado de antemano.</li>
+                <li><strong>¿Puede un tratamiento ser no inferior y no superior a la vez?</strong> Sí: eso es precisamente la equivalencia. También puede ser no inferior sin demostrar superioridad, que es el resultado más habitual en estos estudios.</li>
+                <li><strong>¿Qué significa la potencia que muestra la calculadora?</strong> La probabilidad de demostrar la no inferioridad o la equivalencia con tus tamaños de muestra si en realidad no hubiera diferencia entre tratamiento y control.</li>
+                <li><strong>¿Cuántos sujetos necesito?</strong> Depende del margen, de la variabilidad, de la diferencia real esperada y de la potencia deseada. Para medias, calcúlalo con la calculadora de tamaño muestral para no inferioridad y equivalencia.</li>
             </ul>
-            <p class="external-ref">Referencia: <a href="https://es.wikipedia.org/wiki/Ensayo_de_no_inferioridad" target="_blank" rel="noopener noreferrer">Ensayo de no inferioridad</a> — Wikipedia</p>
+            <p class="external-ref">Referencias: <a href="https://es.wikipedia.org/wiki/Ensayo_de_no_inferioridad" target="_blank" rel="noopener noreferrer">Ensayo de no inferioridad</a> — Wikipedia; ICH E9 y E10, guías internacionales de diseño de ensayos clínicos</p>
         </section>
 
     </main>
@@ -382,6 +465,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="test-results.js?v=20261110-3"></script>
 <script>
 let niChart;
 
@@ -437,14 +521,8 @@ function renderNIChart(alpha, zNI, testType, zNS) {
     const minX = -(maxAbsZ + 0.8);
     const maxX =  (maxAbsZ + 0.8);
 
-    let isAcceptanceFn;
-    if (testType === 'ni') {
-        // NI: reject H0 if z > z_alpha → acceptance zone is left of zCrit
-        isAcceptanceFn = (x) => x < zCrit;
-    } else {
-        // TOST: both tests must be significant → acceptance zone between -zCrit and +zCrit
-        isAcceptanceFn = (x) => x > -zCrit && x < zCrit;
-    }
+    // Cada contraste de una cola rechaza H₀ si su estadístico supera z₁₋α.
+    const isAcceptanceFn = (x) => x < zCrit;
 
     const { curve, acceptance, rejection } = buildCurvePoints(
         minX, maxX, 0.02,
@@ -481,6 +559,84 @@ function renderNIChart(alpha, zNI, testType, zNS) {
     });
 }
 
+// Resultado: decisión, conclusión con el intervalo, potencia del diseño y detalles.
+function renderNIResult(o) {
+    const R = TestResult, EN = R.EN;
+    const kind = o.testType === 'tost' ? 'tost' : o.direction; // 'ni' | 'ns' | 'tost'
+    const declared = o.p < o.alpha;
+    const zc = jStat.normal.inv(1 - o.alpha, 0, 1);
+    const lo = o.deltaHat - zc * o.se, hi = o.deltaHat + zc * o.se;
+    const lvl = R.auto(Number(((1 - 2 * o.alpha) * 100).toFixed(1)), 1) + (EN ? '%' : ' %');
+    const ci = R.interval(lo, hi, 4);
+    const d = R.auto(o.delta), md = '−' + d, pd = '+' + d;
+    const edge = (v) => R.num(v, 4);
+    // Potencia si en realidad no hay diferencia (Δ = 0): supuesto habitual del diseño.
+    const g = o.delta / o.se - zc;
+    const power0 = kind === 'tost' ? Math.max(0, 2 * jStat.normal.cdf(g, 0, 1) - 1) : jStat.normal.cdf(g, 0, 1);
+    const sigma = R.sig(o.varType === 'means' ? Math.sqrt((o.s1 * o.s1 + o.s2 * o.s2) / 2) : Math.sqrt((o.p1 * (1 - o.p1) + o.p2 * (1 - o.p2)) / 2), 4);
+    const url = 'tamano-muestral-no-inferioridad.html?type=' + (kind === 'tost' ? 'eq' : 'ni') + '&sigma=' + sigma + '&margin=' + o.delta +
+        '&delta=0&alpha=' + o.alpha + '&power=' + R.TARGET;
+    const T = EN ? {
+        name: { ni: 'Non-inferiority', ns: 'Non-superiority', tost: 'Equivalence (TOST)' }[kind],
+        what: o.varType === 'means' ? 'difference in means' : 'difference in proportions',
+        decision: (declared ? '' : 'Not ') + { ni: 'non-inferior', ns: 'non-superior', tost: 'equivalent' }[kind],
+        pLabel: kind === 'tost' ? 'p-value (TOST)' : 'p-value',
+        yes: {
+            ni: '✓ The treatment is not worse than the control by more than δ = ' + d + ': the lower limit of the ' + lvl + ' CI (' + edge(lo) + ') is above ' + md + '.',
+            ns: '✓ The treatment is not better than the control by more than δ = ' + d + ': the upper limit of the ' + lvl + ' CI (' + edge(hi) + ') is below ' + pd + '.',
+            tost: '✓ The difference between treatment and control is smaller than δ = ' + d + ' in both directions: the ' + lvl + ' CI ' + ci + ' lies within [' + md + ', ' + pd + '].'
+        }[kind],
+        no: {
+            ni: 'ℹ It cannot be ruled out that the treatment is worse than the control by more than δ = ' + d + ': the ' + lvl + ' CI reaches ' + edge(lo) + ', below ' + md + '. This does not prove that it is inferior.',
+            ns: 'ℹ It cannot be ruled out that the treatment is better than the control by more than δ = ' + d + ': the ' + lvl + ' CI reaches ' + edge(hi) + ', above ' + pd + '. This does not prove that it is superior.',
+            tost: 'ℹ It cannot be claimed that the difference is smaller than δ = ' + d + ' in both directions: the ' + lvl + ' CI ' + ci + ' does not lie within [' + md + ', ' + pd + ']. This does not prove that the treatments differ.'
+        }[kind],
+        power: 'If treatment and control were truly equal (Δ = 0), with these samples the test would show ' + { ni: 'non-inferiority', ns: 'non-superiority', tost: 'equivalence' }[kind] + ' with ' + R.pct(power0) + ' probability (its power).',
+        link: 'Work out the sample size for ' + R.pct(R.TARGET) + ' power',
+        rows: ['Observed difference (Δ̂)', 'Standard error', 'Margin δ', 'Critical value (one-sided)', lvl + ' confidence interval for Δ', 'Power if Δ = 0']
+    } : {
+        name: { ni: 'No inferioridad', ns: 'No superioridad', tost: 'Equivalencia (TOST)' }[kind],
+        what: o.varType === 'means' ? 'diferencia de medias' : 'diferencia de proporciones',
+        decision: (declared ? 'Se declara la ' : 'No se declara la ') + { ni: 'no inferioridad', ns: 'no superioridad', tost: 'equivalencia' }[kind],
+        pLabel: kind === 'tost' ? 'p-valor (TOST)' : 'p-valor',
+        yes: {
+            ni: '✓ El tratamiento no es peor que el control en más de δ = ' + d + ': el límite inferior del IC al ' + lvl + ' (' + edge(lo) + ') queda por encima de ' + md + '.',
+            ns: '✓ El tratamiento no es mejor que el control en más de δ = ' + d + ': el límite superior del IC al ' + lvl + ' (' + edge(hi) + ') queda por debajo de ' + pd + '.',
+            tost: '✓ La diferencia entre tratamiento y control es menor que δ = ' + d + ' en los dos sentidos: el IC al ' + lvl + ' ' + ci + ' cabe dentro de [' + md + '; ' + pd + '].'
+        }[kind],
+        no: {
+            ni: 'ℹ No se puede descartar que el tratamiento sea peor que el control en más de δ = ' + d + ': el IC al ' + lvl + ' llega hasta ' + edge(lo) + ', por debajo de ' + md + '. Esto no demuestra que sea inferior.',
+            ns: 'ℹ No se puede descartar que el tratamiento sea mejor que el control en más de δ = ' + d + ': el IC al ' + lvl + ' llega hasta ' + edge(hi) + ', por encima de ' + pd + '. Esto no demuestra que sea superior.',
+            tost: 'ℹ No se puede afirmar que la diferencia sea menor que δ = ' + d + ' en los dos sentidos: el IC al ' + lvl + ' ' + ci + ' no cabe dentro de [' + md + '; ' + pd + ']. Esto no demuestra que los tratamientos sean distintos.'
+        }[kind],
+        power: 'Si tratamiento y control fueran en realidad iguales (Δ = 0), con estas muestras el contraste demostraría la ' + { ni: 'no inferioridad', ns: 'no superioridad', tost: 'equivalencia' }[kind] + ' con una probabilidad del ' + R.pct(power0) + ' (su potencia).',
+        link: 'Calcular el tamaño muestral para una potencia del ' + R.pct(R.TARGET),
+        rows: ['Diferencia observada (Δ̂)', 'Error estándar', 'Margen δ', 'Valor crítico (unilateral)', 'Intervalo de confianza al ' + lvl + ' para Δ', 'Potencia si Δ = 0']
+    };
+    const stat = kind === 'tost'
+        ? 'z₁ = ' + R.num(o.z1, 4) + ' (p₁ = ' + R.prob(o.p1v) + ')' + (EN ? ', ' : '; ') + 'z₂ = ' + R.num(o.z2, 4) + ' (p₂ = ' + R.prob(o.p2v) + ')'
+        : 'z = ' + R.num(o.z, 4);
+    const rows = [
+        [T.rows[0], R.num(o.deltaHat, 4)],
+        [T.rows[1], R.num(o.se, 4)],
+        [T.rows[2], d],
+        [kind === 'tost' ? 'z₁' : (EN ? 'Test statistic' : 'Estadístico'), 'z = ' + R.num(kind === 'tost' ? o.z1 : o.z, 4)]
+    ];
+    if (kind === 'tost') rows.push(['z₂', 'z = ' + R.num(o.z2, 4)], ['p₁', R.prob(o.p1v)], ['p₂', R.prob(o.p2v)]);
+    rows.push([T.rows[3], R.num(zc, 4)], [T.pLabel, R.prob(o.p)], [T.rows[4], ci], [T.rows[5], R.pct(power0)]);
+    R.render(document.getElementById('result'), {
+        label: T.name + ' · ' + T.what + ' · δ = ' + d + ' · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, pLabel: T.pLabel, sec: [stat],
+        ok: declared, verdict: declared ? T.yes : T.no,
+        notes: [R.esc(T.power) + (o.varType === 'means' ? ' ' + R.link(url, T.link) : ''),
+            R.ciLink((o.varType === 'means'
+                ? 'intervalo-confianza-diferencia-medias.html?xbar1=' + o.xbar1 + '&xbar2=' + o.xbar2 + '&s1=' + o.s1 + '&s2=' + o.s2 + '&n1=' + o.n1 + '&n2=' + o.n2 + '&var=welch'
+                : 'intervalo-confianza-diferencia-proporciones.html?x1=' + Math.round(o.p1 * o.n1) + '&n1=' + o.n1 + '&x2=' + Math.round(o.p2 * o.n2) + '&n2=' + o.n2) +
+                '&conf=' + R.sig(1 - 2 * o.alpha, 6), 1 - 2 * o.alpha)],
+        rows: rows
+    });
+}
+
 function calculate() {
     const testType    = document.getElementById('testType').value;
     const varType     = document.getElementById('varType').value;
@@ -488,93 +644,50 @@ function calculate() {
     const alpha       = parseFloat(document.getElementById('alpha').value);
     const niDirection = document.getElementById('niDirection').value;
     const resultEl    = document.getElementById('result');
-
-    if (!Number.isFinite(delta) || delta <= 0 || !Number.isFinite(alpha) || alpha <= 0 || alpha >= 1) {
-        resultEl.innerText = 'Error: δ > 0 y 0 < α < 1.';
+    const E = TestResult.EN
+        ? { base: 'Error: δ > 0 and 0 < α < 0.5.', prop: 'Error: 0 < p̂ < 1 and n ≥ 2 for proportions.', means: 'Error: s > 0 and n ≥ 2 for means.' }
+        : { base: 'Error: δ > 0 y 0 < α < 0,5.', prop: 'Error: 0 < p̂ < 1 y n ≥ 2 para proporciones.', means: 'Error: s > 0 y n ≥ 2 para medias.' };
+    const fail = (msg) => {
+        resultEl.innerText = msg;
         if (niChart) { niChart.destroy(); niChart = null; }
-        return;
-    }
+    };
 
-    let deltaHat, SE;
+    if (!Number.isFinite(delta) || delta <= 0 || !Number.isFinite(alpha) || alpha <= 0 || alpha >= 0.5) return fail(E.base);
 
+    const o = { testType, varType, delta, alpha, direction: niDirection };
     if (varType === 'prop') {
-        const p1  = parseFloat(document.getElementById('p1').value);
-        const p2  = parseFloat(document.getElementById('p2').value);
-        const n1  = parseFloat(document.getElementById('n1p').value);
-        const n2  = parseFloat(document.getElementById('n2p').value);
-        if (![p1, p2, n1, n2].every(Number.isFinite) || p1 <= 0 || p1 >= 1 || p2 <= 0 || p2 >= 1 || n1 < 2 || n2 < 2) {
-            resultEl.innerText = 'Error: 0 < p̂ < 1 y n ≥ 2 para proporciones.';
-            if (niChart) { niChart.destroy(); niChart = null; }
-            return;
-        }
-        deltaHat = p1 - p2;
-        SE = Math.sqrt(p1 * (1 - p1) / n1 + p2 * (1 - p2) / n2);
+        const p1 = parseFloat(document.getElementById('p1').value);
+        const p2 = parseFloat(document.getElementById('p2').value);
+        const n1 = parseFloat(document.getElementById('n1p').value);
+        const n2 = parseFloat(document.getElementById('n2p').value);
+        if (![p1, p2, n1, n2].every(Number.isFinite) || p1 <= 0 || p1 >= 1 || p2 <= 0 || p2 >= 1 || n1 < 2 || n2 < 2) return fail(E.prop);
+        Object.assign(o, { p1, p2, n1, n2, deltaHat: p1 - p2, se: Math.sqrt(p1 * (1 - p1) / n1 + p2 * (1 - p2) / n2) });
     } else {
         const xbar1 = parseFloat(document.getElementById('xbar1').value);
         const xbar2 = parseFloat(document.getElementById('xbar2').value);
-        const s1    = parseFloat(document.getElementById('s1').value);
-        const s2    = parseFloat(document.getElementById('s2').value);
-        const n1    = parseFloat(document.getElementById('n1m').value);
-        const n2    = parseFloat(document.getElementById('n2m').value);
-        if (![xbar1, xbar2, s1, s2, n1, n2].every(Number.isFinite) || s1 <= 0 || s2 <= 0 || n1 < 2 || n2 < 2) {
-            resultEl.innerText = 'Error: s > 0 y n ≥ 2 para medias.';
-            if (niChart) { niChart.destroy(); niChart = null; }
-            return;
-        }
-        deltaHat = xbar1 - xbar2;
-        SE = Math.sqrt(s1 * s1 / n1 + s2 * s2 / n2);
+        const s1 = parseFloat(document.getElementById('s1').value);
+        const s2 = parseFloat(document.getElementById('s2').value);
+        const n1 = parseFloat(document.getElementById('n1m').value);
+        const n2 = parseFloat(document.getElementById('n2m').value);
+        if (![xbar1, xbar2, s1, s2, n1, n2].every(Number.isFinite) || s1 <= 0 || s2 <= 0 || n1 < 2 || n2 < 2) return fail(E.means);
+        Object.assign(o, { xbar1, xbar2, s1, s2, n1, n2, deltaHat: xbar1 - xbar2, se: Math.sqrt(s1 * s1 / n1 + s2 * s2 / n2) });
     }
 
-    // CI at (1 - 2*alpha) level for TOST / NI
-    const zCI = jStat.normal.inv(1 - alpha, 0, 1); // one-sided z
-    const zCI2 = jStat.normal.inv(1 - alpha / 2, 0, 1); // for 95% CI
-    const ciLevel = Math.round((1 - 2 * alpha) * 100);
-    const lowerCI = deltaHat - zCI * SE;
-    const upperCI = deltaHat + zCI * SE;
-    // Full (1-alpha) CI for display
-    const lower95 = deltaHat - zCI2 * SE;
-    const upper95 = deltaHat + zCI2 * SE;
-
-    let resultText = `Δ̂ = ${deltaHat.toFixed(4)} | SE = ${SE.toFixed(4)}\n`;
-
-    if (testType === 'ni') {
-        let zStat, pVal, decisionLabel;
-        if (niDirection === 'ni') {
-            // H0: Δ ≤ -δ, H1: Δ > -δ
-            zStat = (deltaHat + delta) / SE;
-            pVal  = 1 - jStat.normal.cdf(zStat, 0, 1);
-            const declared = pVal < alpha;
-            decisionLabel = declared ? 'Declarado no inferior.' : 'No se declara no inferioridad.';
-            resultText += `z_NI = ${zStat.toFixed(4)} | p = ${pVal.toFixed(6)} | ${decisionLabel}\n`;
-            resultText += `IC ${ciLevel}% de Δ̂: [${lowerCI.toFixed(4)}, ∞) | Margen inferior: −δ = ${(-delta).toFixed(4)}`;
-            renderNIChart(alpha, zStat, 'ni', null);
-        } else {
-            // H0: Δ ≥ +δ, H1: Δ < +δ
-            zStat = (delta - deltaHat) / SE;
-            pVal  = 1 - jStat.normal.cdf(zStat, 0, 1);
-            const declared = pVal < alpha;
-            decisionLabel = declared ? 'Declarado no superior.' : 'No se declara no superioridad.';
-            resultText += `z_NS = ${zStat.toFixed(4)} | p = ${pVal.toFixed(6)} | ${decisionLabel}\n`;
-            resultText += `IC ${ciLevel}% de Δ̂: (−∞, ${upperCI.toFixed(4)}] | Margen superior: +δ = ${delta.toFixed(4)}`;
-            renderNIChart(alpha, zStat, 'ni', null);
-        }
+    // No inferioridad: H0: Δ ≤ −δ. No superioridad: H0: Δ ≥ +δ. TOST: las dos.
+    o.z1 = (o.deltaHat + delta) / o.se;
+    o.z2 = (delta - o.deltaHat) / o.se;
+    o.p1v = 1 - jStat.normal.cdf(o.z1, 0, 1);
+    o.p2v = 1 - jStat.normal.cdf(o.z2, 0, 1);
+    if (testType === 'tost') {
+        o.p = Math.max(o.p1v, o.p2v);
+        renderNIResult(o);
+        renderNIChart(alpha, o.z1, 'tost', o.z2);
     } else {
-        // TOST
-        const z1 = (deltaHat + delta) / SE; // NI part
-        const z2 = (delta - deltaHat) / SE;  // NS part
-        const p1 = 1 - jStat.normal.cdf(z1, 0, 1);
-        const p2 = 1 - jStat.normal.cdf(z2, 0, 1);
-        const pTOST = Math.max(p1, p2);
-        const equivalent = pTOST < alpha;
-        const decisionLabel = equivalent ? 'Equivalencia declarada.' : 'No se declara equivalencia.';
-        resultText +=
-            `z₁ (NI) = ${z1.toFixed(4)} (p₁ = ${p1.toFixed(4)}) | z₂ (NS) = ${z2.toFixed(4)} (p₂ = ${p2.toFixed(4)})\n` +
-            `p_TOST = ${pTOST.toFixed(6)} | ${decisionLabel}\n` +
-            `IC ${ciLevel}% de Δ̂: [${lowerCI.toFixed(4)}, ${upperCI.toFixed(4)}] | Margen: [${(-delta).toFixed(4)}, ${delta.toFixed(4)}]`;
-        renderNIChart(alpha, z1, 'tost', z2);
+        o.z = niDirection === 'ni' ? o.z1 : o.z2;
+        o.p = niDirection === 'ni' ? o.p1v : o.p2v;
+        renderNIResult(o);
+        renderNIChart(alpha, o.z, 'ni', null);
     }
-
-    resultEl.innerText = resultText;
 }
 
 document.getElementById('calcBtn').addEventListener('click', calculate);
