@@ -368,6 +368,7 @@
       <!-- Control panel -->
       <aside class="card ss-controls" aria-label="Parámetros del contraste">
         <h2 class="panel-heading">Parámetros</h2>
+        <p class="example-hint" id="fromTestNote" hidden></p>
 
         <div class="form-group">
           <label for="testType">Tipo de contraste <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
@@ -904,6 +905,27 @@ document.getElementById('sampleSize').addEventListener('change', update);
 /* ════════════════════════════════════════════
    INIT
 ════════════════════════════════════════════ */
+// Valores recibidos por la URL desde un contraste: se rellenan antes de dibujar.
+(function () {
+  let q;
+  try { q = new URLSearchParams(location.search); } catch (e) { return; }
+  const d = parseFloat(q.get('d')), n = Math.round(parseFloat(q.get('n'))), alpha = parseFloat(q.get('alpha'));
+  if (!(d >= 0) || !(n >= 2)) return;
+  const dEl = document.getElementById('effectSize'), aEl = document.getElementById('alpha'), nEl = document.getElementById('sampleSize');
+  dEl.step = 'any'; dEl.max = String(Math.max(3, Math.ceil(d))); dEl.value = d;
+  document.getElementById('effectSizeVal').textContent = 'd = ' + d.toFixed(2);
+  if (alpha > 0 && alpha < 1) {
+    aEl.step = 'any'; aEl.min = String(Math.min(0.005, alpha)); aEl.max = String(Math.max(0.25, alpha)); aEl.value = alpha;
+    document.getElementById('alphaVal').textContent = 'α = ' + alpha.toFixed(3);
+  }
+  let opt = Array.prototype.find.call(nEl.options, (o) => parseInt(o.value, 10) === n);
+  if (!opt) { opt = new Option(String(n), String(n)); nEl.add(opt); }
+  nEl.value = opt.value;
+  if (['right', 'two'].includes(q.get('tail'))) document.getElementById('testType').value = q.get('tail');
+  const note = document.getElementById('fromTestNote');
+  note.textContent = 'Valores recibidos de tu contraste: d es la diferencia mínima detectable dividida entre la desviación típica, así que la potencia ronda el 80 %.' + (q.get('approx') === 't' ? ' El simulador usa la aproximación normal: con muestras pequeñas, la potencia exacta del contraste t es algo menor que la que ves aquí.' : q.get('approx') === 'prop' ? ' El simulador usa la misma desviación bajo H₀ y H₁, así que la potencia puede diferir ligeramente de la de la calculadora.' : '') + (q.get('mirror') === '1' ? ' Tu contraste es de cola izquierda; por simetría, aquí se muestra como cola derecha.' : '');
+  note.hidden = false;
+}());
 initChart();
 update();
 </script>

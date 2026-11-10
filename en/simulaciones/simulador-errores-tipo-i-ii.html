@@ -364,6 +364,7 @@
       <!-- Control panel -->
       <aside class="card ss-controls" aria-label="Test parameters">
         <h2 class="panel-heading">Parameters</h2>
+        <p class="example-hint" id="fromTestNote" hidden></p>
 
         <div class="form-group">
           <label for="testType">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
@@ -900,6 +901,27 @@ document.getElementById('sampleSize').addEventListener('change', update);
 /* ════════════════════════════════════════════
    INIT
 ════════════════════════════════════════════ */
+// Valores recibidos por la URL desde un contraste: se rellenan antes de dibujar.
+(function () {
+  let q;
+  try { q = new URLSearchParams(location.search); } catch (e) { return; }
+  const d = parseFloat(q.get('d')), n = Math.round(parseFloat(q.get('n'))), alpha = parseFloat(q.get('alpha'));
+  if (!(d >= 0) || !(n >= 2)) return;
+  const dEl = document.getElementById('effectSize'), aEl = document.getElementById('alpha'), nEl = document.getElementById('sampleSize');
+  dEl.step = 'any'; dEl.max = String(Math.max(3, Math.ceil(d))); dEl.value = d;
+  document.getElementById('effectSizeVal').textContent = 'd = ' + d.toFixed(2);
+  if (alpha > 0 && alpha < 1) {
+    aEl.step = 'any'; aEl.min = String(Math.min(0.005, alpha)); aEl.max = String(Math.max(0.25, alpha)); aEl.value = alpha;
+    document.getElementById('alphaVal').textContent = 'α = ' + alpha.toFixed(3);
+  }
+  let opt = Array.prototype.find.call(nEl.options, (o) => parseInt(o.value, 10) === n);
+  if (!opt) { opt = new Option(String(n), String(n)); nEl.add(opt); }
+  nEl.value = opt.value;
+  if (['right', 'two'].includes(q.get('tail'))) document.getElementById('testType').value = q.get('tail');
+  const note = document.getElementById('fromTestNote');
+  note.textContent = 'Values received from your test: d is the minimum detectable difference divided by the standard deviation, so power is around 80%.' + (q.get('approx') === 't' ? ' The simulator uses the normal approximation: with small samples, the exact power of the t-test is slightly lower than what you see here.' : q.get('approx') === 'prop' ? ' The simulator uses the same standard deviation under H₀ and H₁, so power may differ slightly from that of the calculator.' : '') + (q.get('mirror') === '1' ? ' Your test is left-tailed; by symmetry, it is shown here as right-tailed.' : '');
+  note.hidden = false;
+}());
 initChart();
 update();
 </script>
