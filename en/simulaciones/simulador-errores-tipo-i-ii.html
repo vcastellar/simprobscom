@@ -364,6 +364,7 @@
       <!-- Control panel -->
       <aside class="card ss-controls" aria-label="Test parameters">
         <h2 class="panel-heading">Parameters</h2>
+        <p class="example-hint" id="fromTestNote" hidden></p>
 
         <div class="form-group">
           <label for="testType">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
@@ -375,12 +376,18 @@
         </div>
 
         <div class="form-group">
-          <label for="effectSize">Effect size <em>d</em> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+          <label for="effectSize">True difference from μ₀ <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
           <div class="slider-row">
             <input type="range" id="effectSize" min="0" max="3" step="0.05" value="0.5">
             <span class="slider-val" id="effectSizeVal">d = 0.50</span>
           </div>
-            <p class="field-hint" hidden>True difference between means in standard deviation units (Cohen's d). <strong>d = 0.2</strong> is considered a small effect, <strong>d = 0.5</strong> medium and <strong>d = 0.8</strong> large.</p>
+            <p class="field-hint" hidden>How far the true mean is from μ₀. If you enter the standard deviation of your data, it is shown in their units (Δ); otherwise, in standard deviations (Cohen's d). <strong>d = 0.2</strong> is considered a small effect, <strong>d = 0.5</strong> medium and <strong>d = 0.8</strong> large.</p>
+        </div>
+
+        <div class="form-group">
+          <label for="sigmaUnits">Standard deviation σ (optional) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+          <input type="number" id="sigmaUnits" min="0" step="any" placeholder="—">
+          <p class="field-hint" hidden>The standard deviation of your data. With it, the difference is shown in the original units: Δ = d × σ. For example, with σ = 8 g, d = 0.5 is a true difference of 4 g. If you leave it empty, only d is used.</p>
         </div>
 
         <div class="form-group">
@@ -425,14 +432,14 @@
             <div class="stat-sub">Prob. detecting the real effect</div>
           </div>
           <div class="stat-cell" style="background:rgba(79,70,229,0.05); border-color:rgba(79,70,229,0.12);">
-            <div class="stat-label">Non-centrality δ</div>
+            <div class="stat-label">Separation between curves</div>
             <div class="stat-val" id="statDelta">—</div>
-            <div class="stat-sub">δ = d × √n</div>
+            <div class="stat-sub">in standard errors (δ = d × √n)</div>
           </div>
         </div>
         <div class="chart-outer">
           <h3>Distributions under H₀ and H₁</h3>
-          <p class="chart-sub">Standardized Z statistic. The shaded regions represent the probabilities of each type of error and the power of the test.</p>
+          <p class="chart-sub">Where the sample result falls if H₀ is true (blue) and if the difference is real (red). The shaded regions represent the probabilities of each type of error and the power of the test.</p>
           <div class="chart-wrap">
             <canvas id="errorChart" aria-label="Chart of H0 and H1 distributions with type I error, type II error and power regions"></canvas>
           </div>
@@ -702,7 +709,7 @@ function initChart() {
         x: {
           type: 'linear',
           title: { display: true, text: 'Z (standardized statistic)', font: { size: 11 } },
-          ticks: { maxTicksLimit: 10, font: { size: 10 } }
+          ticks: { maxTicksLimit: 10, font: { size: 10 }, callback: (v) => { const u = unitScale(); return u ? fmtUnit(u.at(v)) : Number(v.toFixed(2)); } }
         },
         y: {
           title: { display: true, text: 'Density', font: { size: 11 } },
@@ -717,6 +724,38 @@ function initChart() {
 /* ════════════════════════════════════════════
    COMPUTE & RENDER
 ════════════════════════════════════════════ */
+// La diferencia se muestra en las unidades de los datos si se conoce σ.
+function sigmaUnits() {
+  const v = parseFloat(document.getElementById('sigmaUnits').value);
+  return v > 0 ? v : null;
+}
+function fmtDiff(v) {
+  return String(Number(v.toPrecision(3)));
+}
+// Con σ, el gráfico y el texto se leen en las unidades de los datos:
+// valor = μ₀ + z·σ/√n (si no se conoce μ₀, como diferencia respecto a μ₀).
+let simH0 = null, simKind = 'mean';
+const U = { mean: 'Sample mean x̄', prop: 'Sample proportion p̂', diff: 'Observed difference from μ₀', h0: 'H₀: true value = ', h1: 'H₁: true value = ', h0d: 'H₀: no difference', h1d: 'H₁: true difference = ', sep: (dl, se) => `the two curves are δ = <strong>${dl}</strong> standard errors apart (each one is σ/√n = ${se})`, rejR: (c, w) => `H₀ is rejected if ${w} exceeds <strong>${c}</strong>`, rejT: (a, b, w) => `H₀ is rejected if ${w} falls outside the interval from <strong>${a}</strong> to <strong>${b}</strong>`, wMean: 'the sample mean', wProp: 'the sample proportion', wDiff: 'the observed difference', pMean: 'Sample mean difference d̄', pH0: 'H₀: true mean difference = ', pH1: 'H₁: true mean difference = ', wPaired: 'the sample mean difference' };
+function unitScale() {
+  const s = sigmaUnits();
+  if (!s) return null;
+  const n = parseInt(document.getElementById('sampleSize').value, 10);
+  const se = s / Math.sqrt(n), h0 = simH0 == null ? 0 : simH0;
+  return { se, h0, known: simH0 != null, at: (z) => h0 + z * se };
+}
+function fmtUnit(v) {
+  return String(Number(v.toPrecision(4)));
+}
+function effectLabel(d) {
+  const s = sigmaUnits();
+  return s ? 'Δ = ' + fmtDiff(d * s) + ' · d = ' + d.toFixed(2) : 'd = ' + d.toFixed(2);
+}
+function effectText(d) {
+  const s = sigmaUnits();
+  if (s) return 'a true difference of Δ = ' + fmtDiff(d * s) + ' (d = Δ/σ = ' + d.toFixed(2) + ')';
+  return 'effect size d = ' + d.toFixed(2);
+}
+
 function getParams() {
   const testType  = document.getElementById('testType').value;
   const d         = parseFloat(document.getElementById('effectSize').value);
@@ -785,11 +824,12 @@ function updateChart(params, stats) {
   }
 
   // --- H0 FULL CURVE ---
-  datasets.push(makePdfCurve(0, xMin, xMax, 'rgba(79,70,229,0.90)', 'H₀: Z ~ N(0, 1)'));
+  const units = unitScale();
+  datasets.push(makePdfCurve(0, xMin, xMax, 'rgba(79,70,229,0.90)', !units ? 'H₀: Z ~ N(0, 1)' : units.known ? (simKind === 'paired' ? U.pH0 : U.h0) + fmtUnit(units.h0) : U.h0d));
 
   // --- H1 FULL CURVE ---
   const deltaLabel = delta.toFixed(2);
-  datasets.push(makePdfCurve(delta, xMin, xMax, 'rgba(220,38,38,0.90)', `H₁: Z ~ N(${deltaLabel}, 1)`));
+  datasets.push(makePdfCurve(delta, xMin, xMax, 'rgba(220,38,38,0.90)', !units ? `H₁: Z ~ N(${deltaLabel}, 1)` : (units.known ? (simKind === 'paired' ? U.pH1 : U.h1) : U.h1d) + fmtUnit(units.at(delta))));
 
   // deduplicate legend (keep first occurrence per label)
   const seenLabels = new Set();
@@ -804,15 +844,16 @@ function updateChart(params, stats) {
   // vertical lines
   const vLines = [];
   if (testType === 'right') {
-    vLines.push({ x: zCritRight, label: `z = ${zCritRight.toFixed(3)}`, color: 'rgba(220,38,38,0.75)', dash: [6, 4] });
+    vLines.push({ x: zCritRight, label: units ? fmtUnit(units.at(zCritRight)) : `z = ${zCritRight.toFixed(3)}`, color: 'rgba(220,38,38,0.75)', dash: [6, 4] });
   } else {
-    vLines.push({ x: zCritRight, label: `z = ${zCritRight.toFixed(3)}`, color: 'rgba(220,38,38,0.75)', dash: [6, 4] });
-    vLines.push({ x: zCritLeft,  label: `z = ${zCritLeft.toFixed(3)}`,  color: 'rgba(220,38,38,0.75)', dash: [6, 4] });
+    vLines.push({ x: zCritRight, label: units ? fmtUnit(units.at(zCritRight)) : `z = ${zCritRight.toFixed(3)}`, color: 'rgba(220,38,38,0.75)', dash: [6, 4] });
+    vLines.push({ x: zCritLeft,  label: units ? fmtUnit(units.at(zCritLeft)) : `z = ${zCritLeft.toFixed(3)}`,  color: 'rgba(220,38,38,0.75)', dash: [6, 4] });
   }
 
   errorChart.data.datasets = datasets;
   errorChart.options.scales.x.min = xMin;
   errorChart.options.scales.x.max = xMax;
+  errorChart.options.scales.x.title.text = !units ? 'Z (standardized statistic)' : !units.known ? U.diff : simKind === 'prop' ? U.prop : simKind === 'paired' ? U.pMean : U.mean;
   errorChart.options.plugins.verticalLines.lines = vLines;
   errorChart.update('none');
 }
@@ -861,10 +902,13 @@ function updateInterpretation(params, stats) {
     ? `the critical value is z = ${zCritRight.toFixed(3)}`
     : `the critical values are z = ±${zCritRight.toFixed(3)}`;
 
+  const units = unitScale();
+  const what = !units ? '' : !units.known ? U.wDiff : simKind === 'prop' ? U.wProp : simKind === 'paired' ? U.wPaired : U.wMean;
+  const critUnits = !units ? '' : testType === 'right' ? U.rejR(fmtUnit(units.at(zCritRight)), what) : U.rejT(fmtUnit(units.at(zCritLeft)), fmtUnit(units.at(zCritRight)), what);
   const html = `
     With a <strong>${typeStr}</strong> test at level α = <strong>${alpha.toFixed(3)}</strong>,
-    ${critStr}. Under H₁ with effect size d = ${d.toFixed(2)} and n = ${n} observations,
-    the non-centrality parameter is δ = d × √n = <strong>${delta.toFixed(3)}</strong>.
+    ${units ? critUnits : critStr}. Under H₁ with ${effectText(d)} and n = ${n} observations,
+    ${units ? U.sep(delta.toFixed(2), fmtDiff(units.se)) : 'the non-centrality parameter is δ = d × √n = <strong>' + delta.toFixed(3) + '</strong>'}.
     <br><br>
     The probability of a type II error is β = <strong>${beta.toFixed(3)}</strong>,
     which corresponds to a power of 1 − β = <strong>${power.toFixed(3)}</strong> —
@@ -887,11 +931,15 @@ function update() {
    SLIDER LABELS
 ════════════════════════════════════════════ */
 document.getElementById('effectSize').addEventListener('input', function () {
-  document.getElementById('effectSizeVal').textContent = 'd = ' + parseFloat(this.value).toFixed(2);
+  document.getElementById('effectSizeVal').textContent = effectLabel(parseFloat(this.value));
   update();
 });
 document.getElementById('alpha').addEventListener('input', function () {
   document.getElementById('alphaVal').textContent = 'α = ' + parseFloat(this.value).toFixed(3);
+  update();
+});
+document.getElementById('sigmaUnits').addEventListener('input', function () {
+  document.getElementById('effectSizeVal').textContent = effectLabel(parseFloat(document.getElementById('effectSize').value));
   update();
 });
 document.getElementById('testType').addEventListener('change', update);
@@ -900,6 +948,40 @@ document.getElementById('sampleSize').addEventListener('change', update);
 /* ════════════════════════════════════════════
    INIT
 ════════════════════════════════════════════ */
+// Valores recibidos por la URL desde un contraste: se rellenan antes de dibujar.
+(function () {
+  let q;
+  try { q = new URLSearchParams(location.search); } catch (e) { return; }
+  const d = parseFloat(q.get('d')), n = Math.round(parseFloat(q.get('n'))), alpha = parseFloat(q.get('alpha'));
+  if (!(d >= 0) || !(n >= 2)) return;
+  const dEl = document.getElementById('effectSize'), aEl = document.getElementById('alpha'), nEl = document.getElementById('sampleSize');
+  dEl.step = 'any'; dEl.max = String(Math.max(3, Math.ceil(d))); dEl.value = d;
+  const sigma = parseFloat(q.get('sigma'));
+  if (sigma > 0) document.getElementById('sigmaUnits').value = sigma;
+  const h0 = parseFloat(q.get('h0'));
+  if (Number.isFinite(h0) && q.get('mirror') !== '1') simH0 = h0;
+  if (q.get('approx') === 'prop') simKind = 'prop';
+  if (q.get('kind') === 'paired') {
+    simKind = 'paired';
+    // Los rótulos del formulario pasan a hablar de la diferencia media.
+    const subs = [['True difference from μ₀', 'True mean difference from μd0'], ['Standard deviation σ (optional)', 'Standard deviation of the differences (s_d)'], ['μ ≠ μ₀', 'μd ≠ μd0'], ['μ > μ₀', 'μd > μd0']];
+    document.querySelectorAll('.ss-controls label, .ss-controls option').forEach((el) => {
+      el.childNodes.forEach((nd) => { if (nd.nodeType === 3) subs.forEach(([a, b]) => { if (nd.nodeValue.includes(a)) nd.nodeValue = nd.nodeValue.replace(a, b); }); });
+    });
+  }
+  document.getElementById('effectSizeVal').textContent = effectLabel(d);
+  if (alpha > 0 && alpha < 1) {
+    aEl.step = 'any'; aEl.min = String(Math.min(0.005, alpha)); aEl.max = String(Math.max(0.25, alpha)); aEl.value = alpha;
+    document.getElementById('alphaVal').textContent = 'α = ' + alpha.toFixed(3);
+  }
+  let opt = Array.prototype.find.call(nEl.options, (o) => parseInt(o.value, 10) === n);
+  if (!opt) { opt = new Option(String(n), String(n)); nEl.add(opt); }
+  nEl.value = opt.value;
+  if (['right', 'two'].includes(q.get('tail'))) document.getElementById('testType').value = q.get('tail');
+  const note = document.getElementById('fromTestNote');
+  note.textContent = 'Values received from your test: the difference Δ is the smallest one it detects with 80% probability, so power is around 80%.' + (q.get('approx') === 't' ? ' The simulator uses the normal approximation: with small samples, the exact power of the t-test is slightly lower than what you see here.' : q.get('approx') === 'prop' ? ' The simulator uses the same standard deviation under H₀ and H₁, so power may differ slightly from that of the calculator.' : '') + (q.get('kind') === 'paired' ? ' You come from a paired test: here the "mean" is the mean difference between the two measurements.' : '') + (q.get('mirror') === '1' ? ' Your test is left-tailed; by symmetry, it is shown here as right-tailed.' : '');
+  note.hidden = false;
+}());
 initChart();
 update();
 </script>

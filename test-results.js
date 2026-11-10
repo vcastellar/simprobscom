@@ -89,6 +89,15 @@
         return 1 - noncentralChi2CDF(jStat.chisquare.inv(1 - alpha, df), df, N * w * w);
     }
 
+    // Enlace al simulador de errores tipo I y II con el contraste actual:
+    // d = diferencia mínima detectable en desviaciones típicas. El simulador
+    // solo tiene cola derecha y bilateral; la cola izquierda se muestra reflejada.
+    function simLink(d, n, alpha, tail, approx, sigma, h0, kind) {
+        const url = 'simulaciones/simulador-errores-tipo-i-ii.html?d=' + sig(d, 4) + '&n=' + n + '&alpha=' + alpha +
+            '&tail=' + (tail === 'two' ? 'two' : 'right') + (tail === 'left' ? '&mirror=1' : '') + (approx ? '&approx=' + approx : '') + (sigma > 0 ? '&sigma=' + sig(sigma, 4) : '') + (Number.isFinite(h0) ? '&h0=' + h0 : '') + (kind ? '&kind=' + kind : '');
+        return link(url, EN ? 'See α, β and the power of this test in the type I and II error simulator' : 'Ver α, β y la potencia de este contraste en el simulador de errores tipo I y II');
+    }
+
     // Potencia de un contraste t (o z si df no es finito) cuando la diferencia
     // real es de `ncp` errores estándar en el sentido de la alternativa.
     function tPower(ncp, alpha, tail, df) {
@@ -167,7 +176,7 @@
 
     global.TestResult = {
         EN, LOCALE, TARGET,
-        num, auto, sig, sigUp, pctLevel, solveMin, points, chi2Power, prob, pct, esc, interval, link, ciLink,
+        num, auto, sig, sigUp, pctLevel, solveMin, points, chi2Power, prob, pct, esc, interval, link, ciLink, simLink,
         tPower, mdeT, noncentralFCDF, anovaPower, mdeF, render
     };
 }(window));

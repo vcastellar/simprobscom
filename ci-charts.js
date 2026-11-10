@@ -710,6 +710,10 @@
       if (!t || !String(t).trim()) return;
       h += '<div class="ci-res-note ci-res-' + toneOf(t) + '">' + esc(String(t).trim()) + '</div>';
     });
+    // Enlace opcional (por ejemplo, al simulador con estos mismos datos).
+    if (o.link && o.link.href) {
+      h += '<div class="ci-res-note ci-res-info">' + esc(o.link.before || '') + ' <a href="' + esc(o.link.href) + '">' + esc(o.link.text) + '</a>.</div>';
+    }
     if (o.details && o.details.length) {
       h += '<details class="ci-res-details"' + (wasOpen ? ' open' : '') + '><summary>' + RES.details + '</summary><dl>';
       o.details.forEach(function (row) {

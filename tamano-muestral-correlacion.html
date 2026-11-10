@@ -340,6 +340,18 @@ document.getElementById("corrPreset").addEventListener("change", function () {
     }
 });
 document.getElementById("corrCalculateBtn").addEventListener("click", calculateCorrSampleSize);
+(function () {
+    // Valores recibidos por la URL, por ejemplo desde la calculadora del contraste.
+    let params;
+    try { params = new URLSearchParams(location.search); } catch (e) { return; }
+    const fields = { rho: "corrRho", alpha: "corrAlpha", power: "corrPower" };
+    Object.keys(fields).forEach(function (key) {
+        const value = parseFloat(params.get(key));
+        if (Number.isFinite(value)) document.getElementById(fields[key]).value = value;
+    });
+    const tail = params.get("tail");
+    if (["two", "one"].includes(tail)) document.getElementById("corrTail").value = tail;
+}());
 calculateCorrSampleSize();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

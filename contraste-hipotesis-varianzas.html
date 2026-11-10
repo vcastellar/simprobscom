@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="style_new.css?v=20261107-1">
 
     <script type="application/ld+json">
 {
@@ -75,42 +75,58 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "¿Cuándo uso el contraste de una varianza?",
+      "name": "¿Cuándo se contrasta una varianza?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Cuando quieres comprobar si la varianza poblacional es compatible con un valor\n                    teórico o de referencia."
+        "text": "Cuando lo que interesa es la variabilidad: la regularidad de un proceso, la precisión de un instrumento o el cumplimiento de una tolerancia."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Cuándo uso el contraste de dos varianzas?",
+      "name": "¿Qué distribución se usa?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Cuando quieres comparar si dos poblaciones o condiciones tienen la misma dispersión."
+        "text": "La chi-cuadrado con n − 1 grados de libertad para una varianza, y la F de Snedecor para comparar dos."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Qué supuesto es importante?",
+      "name": "¿Varianza o desviación típica?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Los contrastes clásicos de varianza asumen que los datos proceden de poblaciones\n                    aproximadamente normales."
+        "text": "La calculadora pide varianzas. Si tienes la desviación típica, elévala al cuadrado. Contrastar σ² = σ₀² es lo mismo que contrastar σ = σ₀."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Puede haber la misma media y distinta varianza?",
+      "name": "¿Qué pasa si los datos no son normales?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Sí. Dos procesos pueden tener el mismo promedio y, sin embargo, una variabilidad\n                    muy diferente."
+        "text": "Estos contrastes dejan de ser fiables, incluso con muestras grandes. Para comparar varianzas, usa el test de Levene."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Qué cola debo elegir?",
+      "name": "¿Por qué hay dos valores críticos distintos en el bilateral?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Bilateral si buscas cualquier diferencia; cola derecha si quieres comprobar si\n                    la varianza es mayor; cola izquierda si quieres comprobar si la varianza es menor."
+        "text": "Porque la chi-cuadrado y la F no son simétricas: el valor crítico de cada cola se calcula por separado."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué es la razón mínima detectable?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Cuántas veces mayor o menor que la de referencia tiene que ser la desviación típica real para que el contraste lo detecte con un 80 % de probabilidad."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cuántos datos necesito?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Más que para una media: para detectar una desviación típica un 50 % mayor que la de referencia, unas 24 observaciones; para una un 20 % mayor, más de 100."
       }
     }
   ]
@@ -166,8 +182,6 @@
     </header>
 
     <main>
-        <!-- Orden de secciones: 1) Conceptos clave, 2) Descripción, 3) Calculadora, 4) Contraste rápido, 5) Resto -->
-
         <section class="ss-shell" aria-label="Calculadora">
             <section class="card ss-controls">
                 <div class="panel-heading">
@@ -272,164 +286,120 @@
         </section>
 
         <section class="card content-card">
-            <h3>Explicación</h3>
-
-            <p>
-                El contraste de varianza se utiliza para comprobar si la variabilidad de una población
-                es compatible con un valor teórico o de referencia. A diferencia de los contrastes sobre
-                la media, este contraste no analiza si los datos son más altos o más bajos en promedio,
-                sino si son más o menos dispersos de lo esperado.
-            </p>
-
-            <p>
-                En industria, laboratorio y control de calidad no solo importa el promedio: la varianza
-                define riesgo, consistencia y estabilidad. Un proceso puede tener una media correcta y,
-                aun así, ser demasiado irregular.
-            </p>
-
-            <p>
-                Por ejemplo, una máquina puede llenar botellas con una cantidad media correcta de líquido,
-                pero hacerlo con demasiada variabilidad. Aunque el promedio sea adecuado, una varianza
-                excesiva implicaría que algunas botellas se llenan demasiado y otras demasiado poco.
-                El contraste de varianza permite comprobar si la dispersión observada en una muestra es
-                compatible con la variabilidad considerada aceptable.
-            </p>
-
-            <p>
-                Para una única varianza se utiliza un contraste basado en la distribución chi-cuadrado.
-                Para comparar dos varianzas se utiliza habitualmente un contraste basado en la distribución F.
-                En ambos casos, los contrastes clásicos asumen que los datos proceden de poblaciones
-                aproximadamente normales.
-            </p>
-
-            <h3>Hipótesis y estadístico</h3>
-            <p class="formula-line">\(H_0: \sigma^2 = \sigma_0^2\)</p>
-            <p class="formula-line">\( \chi^2 = \frac{(n-1)s^2}{\sigma_0^2} \)</p>
-            <p class="formula-line">\(H_0: \sigma_1^2 = \sigma_2^2\)</p>
-            <p class="formula-line">\( F = \frac{s_1^2}{s_2^2} \)</p>
+            <h3>¿Qué son los contrastes sobre varianzas?</h3>
+            <p>Son los contrastes que se ocupan de la <strong>variabilidad</strong> de los datos, no de su valor medio. En muchos problemas, lo que importa es precisamente la dispersión: una máquina envasadora puede llenar de media los 500 g correctos y, aun así, ser inaceptable si unas bolsas salen con 480 g y otras con 520 g. La variabilidad mide la regularidad de un proceso, la precisión de un instrumento de medida o el riesgo de una inversión.</p>
+            <p>Esta calculadora cubre los dos casos básicos:</p>
             <ul>
-                <li><strong>\(s^2\)</strong>: varianza muestral observada (test chi-cuadrado).</li>
-                <li><strong>\(\sigma_0^2\)</strong>: varianza de referencia bajo \(H_0\) (test chi-cuadrado).</li>
-                <li><strong>\(n\)</strong>: tamaño de la muestra; \(gl = n-1\) grados de libertad (test chi-cuadrado).</li>
-                <li><strong>\(s_1^2, s_2^2\)</strong>: varianzas muestrales de los dos grupos (test F).</li>
-                <li><strong>\(n_1, n_2\)</strong>: tamaños de los dos grupos; \(gl_1 = n_1-1\), \(gl_2 = n_2-1\) (test F).</li>
+                <li><strong>Una varianza</strong>: ¿la varianza de una población es igual a un valor de referencia \(\sigma_0^2\)? Se usa la distribución chi-cuadrado.</li>
+                <li><strong>Dos varianzas</strong>: ¿tienen dos poblaciones la misma varianza? Se usa la distribución F de Snedecor. Tienes una explicación más detallada en el <a href="contraste-hipotesis-dos-varianzas.html">contraste de dos varianzas</a>.</li>
+            </ul>
+            <p>Recuerda que la varianza está en unidades al cuadrado (g², mm²); la desviación típica, su raíz cuadrada, está en las unidades originales. La calculadora pide varianzas: si tienes la desviación típica \(s\), introduce \(s^2\).</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Contraste para una varianza</h3>
+            <p class="formula-line">\(H_0: \sigma^2 = \sigma_0^2\)</p>
+            <p class="formula-line">\(H_1: \sigma^2 \neq \sigma_0^2\), \(\sigma^2 > \sigma_0^2\) o \(\sigma^2 &lt; \sigma_0^2\)</p>
+            <p class="formula-line">\( \chi^2 = \dfrac{(n-1)\,s^2}{\sigma_0^2}, \quad gl = n - 1 \)</p>
+            <ul>
+                <li><strong>\(s^2\)</strong>: varianza muestral.</li>
+                <li><strong>\(\sigma_0^2\)</strong>: varianza que plantea la hipótesis nula.</li>
+                <li><strong>\(n\)</strong>: tamaño de la muestra.</li>
+            </ul>
+            <p>El estadístico compara la varianza observada con la de referencia: si \(H_0\) es cierta, \(s^2/\sigma_0^2\) ronda 1 y el estadístico ronda sus grados de libertad, \(n-1\). Si los datos son normales, sigue una distribución <a href="chisquare.html">chi-cuadrado</a> con \(n-1\) grados de libertad.</p>
+            <p>La chi-cuadrado <strong>no es simétrica</strong>, así que en el contraste bilateral hay dos valores críticos distintos, uno en cada cola, que se consultan en la <a href="tabla-chi-cuadrado.html">tabla chi-cuadrado</a>. En la práctica, el contraste más frecuente es el de <strong>cola derecha</strong>: lo que suele preocupar es que la variabilidad sea mayor de lo permitido.</p>
+
+            <h3>Contraste para dos varianzas</h3>
+            <p class="formula-line">\(H_0: \sigma_1^2 = \sigma_2^2\)</p>
+            <p class="formula-line">\( F = \dfrac{s_1^2}{s_2^2}, \quad gl_1 = n_1 - 1, \quad gl_2 = n_2 - 1 \)</p>
+            <p>Si las dos poblaciones tienen la misma varianza, el cociente de las varianzas muestrales ronda 1; cuanto más se aleja de 1, más evidencia contra \(H_0\). Con datos normales, el cociente sigue una distribución F de Snedecor, cuyos valores críticos están en la <a href="tabla-f-snedecor.html">tabla F</a>.</p>
+
+            <h3>Regla de decisión</h3>
+            <ul>
+                <li>Si el <strong>p-valor</strong> es menor que \(\alpha\), se rechaza \(H_0\).</li>
+                <li>Si el p-valor es mayor o igual que \(\alpha\), no hay evidencia suficiente para rechazar \(H_0\).</li>
+                <li>No rechazar \(H_0\) no demuestra que la varianza sea la de referencia, ni que dos varianzas sean iguales.</li>
             </ul>
         </section>
 
-
-
         <section class="card content-card">
-            <h3>Contraste rápido</h3>
-
-            <p>
-                En el contraste de una varianza, el estadístico compara la varianza muestral \(s^2\)
-                con una varianza de referencia \(\sigma_0^2\). Bajo \(H_0\), el estadístico sigue
-                una distribución chi-cuadrado con \(n-1\) grados de libertad:
-            </p>
-
-            <p class="formula-line">
-                \( \chi^2 = \frac{(n-1)s^2}{\sigma_0^2} \sim \chi^2_{n-1} \)
-            </p>
-
-            <p>
-                En la comparación de dos varianzas, el estadístico compara el cociente entre las
-                dos varianzas muestrales. Bajo \(H_0\), sigue una distribución F:
-            </p>
-
-            <p class="formula-line">
-                \( F = \frac{s_1^2}{s_2^2} \sim F_{n_1-1,\;n_2-1} \)
-            </p>
-
-            <p>
-                Si el resultado es significativo, conviene revisar posibles fuentes de variación:
-                lotes, turnos, instrumentación, cambios de proveedor, condiciones de medición o
-                diferencias entre grupos.
-            </p>
+            <h3>El supuesto de normalidad importa mucho</h3>
+            <p>Los contrastes sobre medias toleran bien que los datos no sean normales, gracias al teorema central del límite. Los contrastes sobre varianzas, <strong>no</strong>: tanto el chi-cuadrado como el F dependen de que los datos sigan una distribución normal, y esa dependencia no desaparece al aumentar la muestra. Con distribuciones de colas pesadas (más valores extremos que una normal), rechazan \(H_0\) mucho más a menudo de lo que indica \(\alpha\), aunque la varianza sea la correcta.</p>
+            <ul>
+                <li><strong>Comprueba la normalidad</strong> antes de usarlos, con un histograma o con el <a href="shapiro-wilk-normalidad.html">test de Shapiro-Wilk</a>.</li>
+                <li><strong>Revisa los valores atípicos</strong>: al elevar al cuadrado, un solo dato extremo dispara la varianza.</li>
+                <li>Para comparar dos o más varianzas con datos no normales, es preferible el <strong>test de Levene</strong> (o su variante de Brown-Forsythe, basada en la mediana), que es mucho más robusto.</li>
+            </ul>
+            <p>Los demás supuestos son los habituales: muestra aleatoria, observaciones independientes y, en el caso de dos varianzas, grupos independientes entre sí.</p>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto</h3>
-            <p>Se desea comparar la variabilidad de dos procesos de fabricación de tornillos. Proceso A: varianza muestral \(s_1^2 = 25\) mm², \(n_1 = 21\) piezas. Proceso B: varianza muestral \(s_2^2 = 16\) mm², \(n_2 = 16\) piezas. Se contrasta \(H_0\colon \sigma_1^2 = \sigma_2^2\) frente a \(H_1\colon \sigma_1^2 \neq \sigma_2^2\) con \(\alpha = 0{,}05\) bilateral, usando el test F de Snedecor.</p>
-            <p>El estadístico F se calcula como cociente de varianzas (mayor entre menor):</p>
-            <p class="formula-line">\( F = \dfrac{s_1^2}{s_2^2} = \dfrac{25}{16} = 1{,}5625 \)</p>
-            <p>Los grados de libertad son \(gl_1 = n_1 - 1 = 20\) y \(gl_2 = n_2 - 1 = 15\). Para un contraste bilateral con \(\alpha = 0{,}05\), el valor crítico superior es \(F_{0{,}025;\,20,\,15} \approx 2{,}76\). El valor crítico inferior es \(F_{0{,}975;\,20,\,15} \approx 1/F_{0{,}025;\,15,\,20} \approx 0{,}39\).</p>
-            <p>Como \(0{,}39 < F = 1{,}5625 < 2{,}76\), el estadístico no cae en ninguna de las dos colas de rechazo. El p-valor bilateral es \(p \approx 0{,}38 > 0{,}05\).</p>
-            <p>Conclusión: <strong>no se rechaza \(H_0\)</strong>. Los datos no aportan evidencia significativa de que los dos procesos tengan varianzas distintas. Ambos procesos presentan una dispersión comparable al nivel de significación del 5 %.</p>
+            <h3>Ejemplo resuelto 1: una varianza, contraste bilateral</h3>
+            <p>Un proceso está ajustado para producir piezas con una varianza de \(\sigma_0^2 = 10\) mm². En una muestra de \(n = 25\) piezas se obtiene \(s^2 = 14\) mm². ¿Ha cambiado la variabilidad? Se contrasta \(H_0\colon \sigma^2 = 10\) frente a \(H_1\colon \sigma^2 \neq 10\) con \(\alpha = 0{,}05\).</p>
+            <p class="formula-line">\( \chi^2 = \dfrac{24 \times 14}{10} = 33{,}6 \)</p>
+            <p>Con 24 grados de libertad, los valores críticos son 12,40 y 39,36. Como \(12{,}40 < 33{,}6 < 39{,}36\), el estadístico no cae en la región de rechazo; el p-valor es \(p \approx 0{,}184\). <strong>No se rechaza \(H_0\)</strong>.</p>
+            <p>Conclusión: no hay evidencia suficiente de que la varianza haya cambiado. Pero el intervalo de confianza del 95 % para \(\sigma^2\) va de 8,5 a 27,1 mm²: es compatible con 10 y también con una varianza casi tres veces mayor. Las varianzas se estiman con mucha menos precisión que las medias: con 25 piezas, el contraste solo detecta con un 80 % de probabilidad una desviación típica al menos 1,48 veces mayor que la de referencia (o 0,65 veces menor).</p>
+            <p><strong>En la calculadora:</strong> «Una varianza frente a un valor de referencia», n = 25, s² = 14, σ₀² = 10 y «Bilateral (≠)». Son los valores con los que se abre la página.</p>
+
+            <h3>Ejemplo resuelto 2: una varianza, cola derecha</h3>
+            <p>Una envasadora debe llenar bolsas con una desviación típica de 2 g como máximo (\(\sigma_0^2 = 4\) g²). En una muestra de \(n = 30\) bolsas se obtiene \(s^2 = 6{,}5\) g² (\(s \approx 2{,}55\) g). Solo preocupa que la variabilidad sea mayor de lo permitido: \(H_0\colon \sigma^2 = 4\) frente a \(H_1\colon \sigma^2 > 4\), con \(\alpha = 0{,}05\).</p>
+            <p class="formula-line">\( \chi^2 = \dfrac{29 \times 6{,}5}{4} = 47{,}125 \)</p>
+            <p>El valor crítico de cola derecha con 29 grados de libertad es 42,56 y el p-valor, \(p \approx 0{,}018\). <strong>Se rechaza \(H_0\)</strong>: hay evidencia de que la variabilidad supera lo permitido. El intervalo del 95 % para la desviación típica va de 2,03 a 3,43 g.</p>
+            <p><strong>En la calculadora:</strong> n = 30, s² = 6.5, σ₀² = 4 y «Cola derecha (>)».</p>
+
+            <h3>Ejemplo resuelto 3: dos varianzas</h3>
+            <p>Se compara la variabilidad de dos líneas de producción. Línea 1: \(s_1^2 = 16\) con \(n_1 = 20\). Línea 2: \(s_2^2 = 9\) con \(n_2 = 18\). El estadístico es \(F = 16/9 \approx 1{,}78\) con 19 y 17 grados de libertad; los valores críticos bilaterales son 0,39 y 2,63, y el p-valor, \(p \approx 0{,}238\). <strong>No se rechaza \(H_0\)</strong>: no hay evidencia de que las varianzas difieran, aunque con estos tamaños el contraste solo detecta con seguridad desviaciones típicas que difieran casi en un factor 2.</p>
+            <p><strong>En la calculadora:</strong> «Comparación de dos varianzas», n₁ = 20, n₂ = 18, s₁² = 16 y s₂² = 9.</p>
         </section>
 
         <section class="card content-card">
             <h3>Cómo interpretar el resultado</h3>
+            <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que la variabilidad es distinta de la de referencia, o distinta entre los dos grupos. Para valorar cuánto, mira el cociente de varianzas y, mejor aún, el de desviaciones típicas, que está en las unidades de los datos: una varianza doble equivale a una desviación típica solo un 41 % mayor.</p>
+            <p><strong>No rechazar \(H_0\)</strong> no demuestra que la variabilidad sea la esperada. Los intervalos de confianza para una varianza son muy anchos con muestras pequeñas, como en el ejemplo 1.</p>
+            <p>En la calculadora, el resultado muestra la decisión con el p-valor, el estadístico con sus grados de libertad y una frase con la conclusión. En el gráfico, la zona verde es la región de no rechazo, las rojas son las regiones críticas y la línea ámbar marca el estadístico. En «Detalles del cálculo» tienes los valores críticos y los intervalos de confianza para la varianza y para la desviación típica.</p>
 
-                <p>
-                <strong>Rechazar \(H_0\)</strong> (p-valor &lt; \(\alpha\)) significa que la varianza
-                muestral \(s^2\) es estadísticamente incompatible con el valor hipotético \(\sigma^2_0\).
-                En términos prácticos, hay evidencia de que la variabilidad del proceso o población
-                es distinta de la de referencia. Sin embargo, el test chi-cuadrado para una varianza
-                es notablemente sensible a desviaciones de la normalidad: un rechazo puede reflejar
-                una distribución asimétrica o con colas pesadas en lugar de una varianza genuinamente
-                distinta. Complementa siempre con un gráfico de los datos (histograma, Q-Q plot) y
-                considera el contexto del problema.
-                </p>
+            <h3>Potencia y razón mínima detectable</h3>
+            <p>Debajo de la conclusión, la calculadora indica la <strong>razón mínima detectable</strong>: cuántas veces mayor (o menor) que la de referencia tiene que ser la desviación típica real para que el contraste lo detecte con un 80 % de probabilidad. El enlace abre la calculadora de tamaño muestral para <a href="tamano-muestral-una-varianza.html">una varianza</a> o para <a href="tamano-muestral-dos-varianzas.html">dos varianzas</a> con tu α y el tipo de contraste. Como referencia, para detectar una desviación típica un 50 % mayor que la de referencia hacen falta unas 24 observaciones; para una un 20 % mayor, más de 100.</p>
 
-                <p>
-                <strong>No rechazar \(H_0\)</strong> (p-valor ≥ \(\alpha\)) no prueba que
-                \(\sigma^2 = \sigma^2_0\); solo indica que los datos son compatibles con ese valor
-                al nivel elegido. Con muestras pequeñas la potencia para detectar cambios en varianza
-                es generalmente baja. El intervalo de confianza para \(\sigma^2\) —basado en
-                percentiles de la distribución chi-cuadrado con \(n-1\) grados de libertad— ofrece
-                una perspectiva más completa del rango de valores plausibles.
-                </p>
-
-                <p>
-                El <strong>estadístico chi-cuadrado</strong> \(\chi^2 = (n-1)s^2/\sigma^2_0\) mide
-                cuánto se aleja la varianza muestral de la hipotética. En la visualización, la zona
-                verde representa la región de no rechazo y las zonas rojas las regiones críticas
-                (unilateral o bilateral según la alternativa elegida); la línea ámbar marca el
-                estadístico observado. A diferencia de los tests de media, la distribución
-                chi-cuadrado no es simétrica, por lo que los valores críticos difieren en las dos
-                colas incluso para el mismo \(\alpha\).
-                </p>
+            <h3>Intervalo de confianza</h3>
+            <p>En el contraste de una varianza, el otro enlace abre el <a href="intervalo-confianza-varianza.html">intervalo de confianza para la varianza</a> con tus datos. En el contraste bilateral, se rechaza \(H_0\) exactamente cuando \(\sigma_0^2\) queda fuera del intervalo.</p>
         </section>
+
+        <section class="card content-card">
+            <h3>Errores frecuentes</h3>
+            <ul>
+                <li><strong>Introducir desviaciones típicas en lugar de varianzas</strong>: la calculadora pide \(s^2\) y \(\sigma_0^2\).</li>
+                <li><strong>Aplicar estos contrastes a datos no normales</strong> sin comprobarlo.</li>
+                <li><strong>Usar el test F para decidir entre la t de Student y la de Welch</strong>: no es buena práctica; usa <a href="contraste-hipotesis-dos-medias.html">Welch</a> directamente.</li>
+                <li><strong>Concluir que la variabilidad es la correcta</strong> porque el contraste no es significativo.</li>
+                <li><strong>Olvidar que la chi-cuadrado y la F no son simétricas</strong> al buscar valores críticos bilaterales.</li>
+            </ul>
+        </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
-                <h3>Calculadoras relacionadas</h3>
-                <ul>
-                    <li><a href="chisquare.html">Distribución chi-cuadrado</a></li>
-                    <li><a href="centralf.html">Distribución F</a></li>
-                    <li><a href="contrastes-hipotesis/">Contrastes de hipótesis</a></li>
-                </ul>
+              <h3>Calculadoras relacionadas</h3>
+              <ul>
+                <li><a href="contraste-hipotesis-dos-varianzas.html">Contraste de dos varianzas (F de Snedecor)</a></li>
+                <li><a href="intervalo-confianza-varianza.html">Intervalo de confianza para la varianza</a></li>
+                <li><a href="tamano-muestral-una-varianza.html">Tamaño muestral para una varianza</a></li>
+                <li><a href="tamano-muestral-dos-varianzas.html">Tamaño muestral para dos varianzas</a></li>
+                <li><a href="tabla-chi-cuadrado.html">Tabla chi-cuadrado</a> y <a href="tabla-f-snedecor.html">tabla F</a></li>
+              </ul>
             </section>
-
             <h3>Preguntas frecuentes</h3>
-
             <ul>
-                <li>
-                    <strong>¿Cuándo uso el contraste de una varianza?</strong>
-                    Cuando quieres comprobar si la varianza poblacional es compatible con un valor
-                    teórico o de referencia.
-                </li>
-                <li>
-                    <strong>¿Cuándo uso el contraste de dos varianzas?</strong>
-                    Cuando quieres comparar si dos poblaciones o condiciones tienen la misma dispersión.
-                </li>
-                <li>
-                    <strong>¿Qué supuesto es importante?</strong>
-                    Los contrastes clásicos de varianza asumen que los datos proceden de poblaciones
-                    aproximadamente normales.
-                </li>
-                <li>
-                    <strong>¿Puede haber la misma media y distinta varianza?</strong>
-                    Sí. Dos procesos pueden tener el mismo promedio y, sin embargo, una variabilidad
-                    muy diferente.
-                </li>
-                <li>
-                    <strong>¿Qué cola debo elegir?</strong>
-                    Bilateral si buscas cualquier diferencia; cola derecha si quieres comprobar si
-                    la varianza es mayor; cola izquierda si quieres comprobar si la varianza es menor.
-                </li>
+                <li><strong>¿Cuándo se contrasta una varianza?</strong> Cuando lo que interesa es la variabilidad: la regularidad de un proceso, la precisión de un instrumento o el cumplimiento de una tolerancia.</li>
+                <li><strong>¿Qué distribución se usa?</strong> La chi-cuadrado con n − 1 grados de libertad para una varianza, y la F de Snedecor para comparar dos.</li>
+                <li><strong>¿Varianza o desviación típica?</strong> La calculadora pide varianzas. Si tienes la desviación típica, elévala al cuadrado. Contrastar σ² = σ₀² es lo mismo que contrastar σ = σ₀.</li>
+                <li><strong>¿Qué pasa si los datos no son normales?</strong> Estos contrastes dejan de ser fiables, incluso con muestras grandes. Para comparar varianzas, usa el test de Levene.</li>
+                <li><strong>¿Por qué hay dos valores críticos distintos en el bilateral?</strong> Porque la chi-cuadrado y la F no son simétricas: el valor crítico de cada cola se calcula por separado.</li>
+                <li><strong>¿Qué es la razón mínima detectable?</strong> Cuántas veces mayor o menor que la de referencia tiene que ser la desviación típica real para que el contraste lo detecte con un 80 % de probabilidad.</li>
+                <li><strong>¿Cuántos datos necesito?</strong> Más que para una media: para detectar una desviación típica un 50 % mayor que la de referencia, unas 24 observaciones; para una un 20 % mayor, más de 100.</li>
             </ul>
-            <p class="external-ref">Referencia: <a href="https://es.wikipedia.org/wiki/Prueba_F" target="_blank" rel="noopener noreferrer">Prueba F de igualdad de varianzas</a> — Wikipedia</p>
+            <p class="external-ref">Referencia: <a href="https://es.wikipedia.org/wiki/Varianza" target="_blank" rel="noopener noreferrer">Varianza</a> — Wikipedia</p>
         </section>
+
     </main>
 
     <footer class="legal-footer">
@@ -449,6 +419,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="test-results.js?v=20261111-4"></script>
 
 <script>
 let varianceTestChart;
@@ -687,6 +658,152 @@ function updateVarianceInputVisibility() {
     }
 }
 
+// Potencia exacta del contraste de una varianza si la desviación típica real
+// es R veces σ₀ (misma fórmula que la calculadora de tamaño muestral).
+function oneVariancePower(n, R, alpha, tail) {
+    const df = n - 1, R2 = R * R;
+    if (tail === 'two') return jStat.chisquare.cdf(jStat.chisquare.inv(alpha / 2, df) / R2, df) + (1 - jStat.chisquare.cdf(jStat.chisquare.inv(1 - alpha / 2, df) / R2, df));
+    if (tail === 'right') return 1 - jStat.chisquare.cdf(jStat.chisquare.inv(1 - alpha, df) / R2, df);
+    return jStat.chisquare.cdf(jStat.chisquare.inv(alpha, df) / R2, df);
+}
+
+// Razones mínimas detectables (hacia arriba y hacia abajo) con la potencia de referencia.
+function ratioMde(powerFn, tail) {
+    const R = TestResult;
+    const upLn = tail === 'left' ? null : R.solveMin((t) => powerFn(Math.exp(t)) >= R.TARGET, 1e-6, Math.log(100));
+    const downLn = tail === 'right' ? null : R.solveMin((t) => powerFn(Math.exp(-t)) >= R.TARGET, 1e-6, Math.log(100));
+    return {
+        up: upLn == null ? null : R.sigUp(Math.exp(upLn), 3),
+        down: downLn == null ? null : Math.floor(Math.exp(-downLn) * 1000) / 1000
+    };
+}
+
+function renderOneVarianceResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const m = ratioMde((r) => oneVariancePower(o.n, r, o.alpha, o.tail), o.tail);
+    const f2 = (v) => R.num(v, 2);
+    const v0 = R.auto(o.sigma0sq);
+    const none = m.up == null && m.down == null;
+    const mdeTxt = none ? null : EN
+        ? (o.tail === 'right' ? 'at least ' + f2(m.up) + ' times σ₀' : o.tail === 'left' ? f2(m.down) + ' times σ₀ or less' : 'at least ' + f2(m.up) + ' times σ₀ (or ' + f2(m.down) + ' times σ₀ or less)')
+        : (o.tail === 'right' ? 'de al menos ' + f2(m.up) + ' veces σ₀' : o.tail === 'left' ? 'de ' + f2(m.down) + ' veces σ₀ o menos' : 'de al menos ' + f2(m.up) + ' veces σ₀ (o de ' + f2(m.down) + ' veces σ₀ o menos)');
+    const T = EN ? {
+        label: 'χ² test for one variance, ' + { two: 'two-tailed', right: 'right-tailed', left: 'left-tailed' }[o.tail],
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        sec: 'χ² = ' + R.num(o.stat, 4) + ' with ' + o.df + ' degrees of freedom',
+        yes: '✓ There is statistical evidence that the variance is ' + { two: 'different from ', right: 'greater than ', left: 'less than ' }[o.tail] + v0 + '.',
+        no: 'ℹ There is not enough evidence that the variance is ' + { two: 'different from ', right: 'greater than ', left: 'less than ' }[o.tail] + v0 + '. This does not prove that it equals ' + v0 + '.',
+        mde: none ? 'With n = ' + o.n + ', the test does not reach ' + R.pct(R.TARGET) + ' power even for very large changes in variability.'
+            : 'With n = ' + o.n + ', the test detects with ' + R.pct(R.TARGET) + ' probability only true standard deviations of ' + mdeTxt + '.',
+        link: 'Work out the sample size needed for another ratio',
+        rows: ['Sample variance (s²)', 'Sample standard deviation (s)', 'Ratio s²/σ₀²', 'Test statistic', 'Degrees of freedom', 'Critical value', 'p-value', R.pctLevel(1 - o.alpha) + ' confidence interval for σ²', R.pctLevel(1 - o.alpha) + ' confidence interval for σ', 'Minimum detectable ratio σ/σ₀ (power ' + R.pct(R.TARGET) + ')']
+    } : {
+        label: 'Contraste χ² para una varianza, ' + { two: 'bilateral', right: 'de cola derecha', left: 'de cola izquierda' }[o.tail],
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        sec: 'χ² = ' + R.num(o.stat, 4) + ' con ' + o.df + ' grados de libertad',
+        yes: '✓ Hay evidencia estadística de que la varianza es ' + { two: 'distinta de ', right: 'mayor que ', left: 'menor que ' }[o.tail] + v0 + '.',
+        no: 'ℹ No hay evidencia suficiente de que la varianza sea ' + { two: 'distinta de ', right: 'mayor que ', left: 'menor que ' }[o.tail] + v0 + '. Esto no demuestra que sea ' + v0 + '.',
+        mde: none ? 'Con n = ' + o.n + ', el contraste no llega a un ' + R.pct(R.TARGET) + ' de potencia ni con cambios muy grandes de variabilidad.'
+            : 'Con n = ' + o.n + ', el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad desviaciones típicas reales ' + mdeTxt + '.',
+        link: 'Calcular el tamaño muestral necesario para otra razón',
+        rows: ['Varianza muestral (s²)', 'Desviación típica muestral (s)', 'Cociente s²/σ₀²', 'Estadístico', 'Grados de libertad', 'Valor crítico', 'p-valor', 'Intervalo de confianza al ' + R.pctLevel(1 - o.alpha) + ' para σ²', 'Intervalo de confianza al ' + R.pctLevel(1 - o.alpha) + ' para σ', 'Razón σ/σ₀ mínima detectable (potencia ' + R.pct(R.TARGET) + ')']
+    };
+    const cLo = jStat.chisquare.inv(o.tail === 'two' ? o.alpha / 2 : o.alpha, o.df);
+    const cHi = jStat.chisquare.inv(o.tail === 'two' ? 1 - o.alpha / 2 : 1 - o.alpha, o.df);
+    const crit = o.tail === 'two' ? R.num(cLo, 4) + (EN ? ' and ' : ' y ') + R.num(cHi, 4) : R.num(o.tail === 'right' ? cHi : cLo, 4);
+    const lo = o.df * o.s2 / jStat.chisquare.inv(1 - o.alpha / 2, o.df), hi = o.df * o.s2 / jStat.chisquare.inv(o.alpha / 2, o.df);
+    const notes = [];
+    if (!none) {
+        const rLink = o.tail === 'left' || (o.tail === 'two' && o.s2 < o.sigma0sq) ? m.down : m.up;
+        const url = 'tamano-muestral-una-varianza.html?r=' + rLink + '&alpha=' + o.alpha + '&power=' + R.TARGET + '&alt=' + { two: 'two-sided', right: 'greater', left: 'less' }[o.tail];
+        notes.push(R.esc(T.mde) + ' ' + R.link(url, T.link));
+    } else notes.push(R.esc(T.mde));
+    notes.push(R.ciLink('intervalo-confianza-varianza.html?s=' + R.sig(Math.sqrt(o.s2), 6) + '&n=' + o.n + '&conf=' + R.sig(1 - o.alpha, 6), 1 - o.alpha));
+    R.render(document.getElementById('varianceResult'), {
+        label: T.label + ' · H₀: σ² = ' + v0 + ' · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, sec: [T.sec],
+        ok: rejected, verdict: rejected ? T.yes : T.no, notes: notes,
+        rows: [
+            [T.rows[0], R.auto(o.s2)], [T.rows[1], R.num(Math.sqrt(o.s2), 4)], [T.rows[2], R.num(o.s2 / o.sigma0sq, 4)],
+            [T.rows[3], 'χ² = ' + R.num(o.stat, 4)], [T.rows[4], String(o.df)], [T.rows[5], crit], [T.rows[6], R.prob(o.p)],
+            [T.rows[7], R.interval(lo, hi, 4)], [T.rows[8], R.interval(Math.sqrt(lo), Math.sqrt(hi), 4)],
+            [T.rows[9], none ? '—' : (o.tail === 'right' ? '≥ ' + f2(m.up) : o.tail === 'left' ? '≤ ' + f2(m.down) : '≥ ' + f2(m.up) + (EN ? ' or ≤ ' : ' o ≤ ') + f2(m.down))]
+        ]
+    });
+}
+
+// Potencia exacta del contraste F si la razón real de desviaciones típicas es R = σ₁/σ₂.
+function twoVariancesPower(df1, df2, R, alpha, tail) {
+    const R2 = R * R, F = jStat.centralF;
+    if (tail === 'two') return F.cdf(F.inv(alpha / 2, df1, df2) / R2, df1, df2) + (1 - F.cdf(F.inv(1 - alpha / 2, df1, df2) / R2, df1, df2));
+    if (tail === 'right') return 1 - F.cdf(F.inv(1 - alpha, df1, df2) / R2, df1, df2);
+    return F.cdf(F.inv(alpha, df1, df2) / R2, df1, df2);
+}
+
+function twoVarRatioMde(powerFn, tail) {
+    const R = TestResult;
+    const upLn = tail === 'left' ? null : R.solveMin((t) => powerFn(Math.exp(t)) >= R.TARGET, 1e-6, Math.log(100));
+    const downLn = tail === 'right' ? null : R.solveMin((t) => powerFn(Math.exp(-t)) >= R.TARGET, 1e-6, Math.log(100));
+    return {
+        up: upLn == null ? null : R.sigUp(Math.exp(upLn), 3),
+        down: downLn == null ? null : Math.floor(Math.exp(-downLn) * 1000) / 1000
+    };
+}
+
+function renderTwoVariancesResult(elId, o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const m = twoVarRatioMde((r) => twoVariancesPower(o.df1, o.df2, r, o.alpha, o.tail), o.tail);
+    const f2 = (v) => R.num(v, 2);
+    const none = m.up == null && m.down == null;
+    const mdeTxt = none ? null : EN
+        ? (o.tail === 'right' ? f2(m.up) + ' or more' : o.tail === 'left' ? f2(m.down) + ' or less' : f2(m.up) + ' or more (or ' + f2(m.down) + ' or less)')
+        : (o.tail === 'right' ? 'de ' + f2(m.up) + ' o mayores' : o.tail === 'left' ? 'de ' + f2(m.down) + ' o menores' : 'de ' + f2(m.up) + ' o mayores (o de ' + f2(m.down) + ' o menores)');
+    const T = EN ? {
+        label: 'F test for two variances, ' + { two: 'two-tailed', right: 'right-tailed', left: 'left-tailed' }[o.tail],
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        sec: 'F = ' + R.num(o.stat, 4) + ' with ' + o.df1 + ' and ' + o.df2 + ' degrees of freedom',
+        yes: '✓ There is statistical evidence that ' + { two: 'the variances of the two groups differ.', right: 'the variance of group 1 is greater than that of group 2.', left: 'the variance of group 1 is less than that of group 2.' }[o.tail],
+        no: 'ℹ There is not enough evidence that ' + { two: 'the variances of the two groups differ', right: 'the variance of group 1 is greater than that of group 2', left: 'the variance of group 1 is less than that of group 2' }[o.tail] + '. This does not prove that they are equal.',
+        mde: none ? 'With these sample sizes, the test does not reach ' + R.pct(R.TARGET) + ' power even for very different variabilities.'
+            : 'With these sample sizes, the test detects with ' + R.pct(R.TARGET) + ' probability only ratios of standard deviations σ₁/σ₂ of ' + mdeTxt + '.',
+        link: 'Work out the sample size needed for another ratio',
+        rows: ['Ratio of variances (s₁²/s₂²)', 'Ratio of standard deviations (s₁/s₂)', 'Test statistic', 'Degrees of freedom', 'Critical value', 'p-value', R.pctLevel(1 - o.alpha) + ' confidence interval for σ₁²/σ₂²', R.pctLevel(1 - o.alpha) + ' confidence interval for σ₁/σ₂', 'Minimum detectable ratio σ₁/σ₂ (power ' + R.pct(R.TARGET) + ')']
+    } : {
+        label: 'Contraste F para dos varianzas, ' + { two: 'bilateral', right: 'de cola derecha', left: 'de cola izquierda' }[o.tail],
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        sec: 'F = ' + R.num(o.stat, 4) + ' con ' + o.df1 + ' y ' + o.df2 + ' grados de libertad',
+        yes: '✓ Hay evidencia estadística de que ' + { two: 'las varianzas de los dos grupos son distintas.', right: 'la varianza del grupo 1 es mayor que la del grupo 2.', left: 'la varianza del grupo 1 es menor que la del grupo 2.' }[o.tail],
+        no: 'ℹ No hay evidencia suficiente de que ' + { two: 'las varianzas de los dos grupos sean distintas', right: 'la varianza del grupo 1 sea mayor que la del grupo 2', left: 'la varianza del grupo 1 sea menor que la del grupo 2' }[o.tail] + '. Esto no demuestra que sean iguales.',
+        mde: none ? 'Con estos tamaños de muestra, el contraste no llega a un ' + R.pct(R.TARGET) + ' de potencia ni con variabilidades muy distintas.'
+            : 'Con estos tamaños de muestra, el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad cocientes de desviaciones típicas σ₁/σ₂ ' + mdeTxt + '.',
+        link: 'Calcular el tamaño muestral necesario para otra razón',
+        rows: ['Cociente de varianzas (s₁²/s₂²)', 'Cociente de desviaciones típicas (s₁/s₂)', 'Estadístico', 'Grados de libertad', 'Valor crítico', 'p-valor', 'Intervalo de confianza al ' + R.pctLevel(1 - o.alpha) + ' para σ₁²/σ₂²', 'Intervalo de confianza al ' + R.pctLevel(1 - o.alpha) + ' para σ₁/σ₂', 'Razón σ₁/σ₂ mínima detectable (potencia ' + R.pct(R.TARGET) + ')']
+    };
+    const F = jStat.centralF;
+    const cLo = F.inv(o.tail === 'two' ? o.alpha / 2 : o.alpha, o.df1, o.df2), cHi = F.inv(o.tail === 'two' ? 1 - o.alpha / 2 : 1 - o.alpha, o.df1, o.df2);
+    const crit = o.tail === 'two' ? R.num(cLo, 4) + (EN ? ' and ' : ' y ') + R.num(cHi, 4) : R.num(o.tail === 'right' ? cHi : cLo, 4);
+    const lo = o.stat / F.inv(1 - o.alpha / 2, o.df1, o.df2), hi = o.stat / F.inv(o.alpha / 2, o.df1, o.df2);
+    const notes = [];
+    if (!none) {
+        const rLink = o.tail === 'left' || (o.tail === 'two' && o.stat < 1) ? m.down : m.up;
+        const url = 'tamano-muestral-dos-varianzas.html?r=' + rLink + '&alpha=' + o.alpha + '&power=' + R.TARGET + '&alt=' + (o.tail === 'two' ? 'two-sided' : 'one-sided');
+        notes.push(R.esc(T.mde) + ' ' + R.link(url, T.link));
+    } else notes.push(R.esc(T.mde));
+    R.render(document.getElementById(elId), {
+        label: T.label + ' · H₀: σ₁² = σ₂² · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, sec: [T.sec],
+        ok: rejected, verdict: rejected ? T.yes : T.no, notes: notes,
+        rows: [
+            [T.rows[0], R.num(o.stat, 4)], [T.rows[1], R.num(Math.sqrt(o.stat), 4)], [T.rows[2], 'F = ' + R.num(o.stat, 4)],
+            [T.rows[3], o.df1 + (EN ? ' and ' : ' y ') + o.df2], [T.rows[4], crit], [T.rows[5], R.prob(o.p)],
+            [T.rows[6], R.interval(lo, hi, 4)], [T.rows[7], R.interval(Math.sqrt(lo), Math.sqrt(hi), 4)],
+            [T.rows[8], none ? '—' : (o.tail === 'right' ? '≥ ' + f2(m.up) : o.tail === 'left' ? '≤ ' + f2(m.down) : '≥ ' + f2(m.up) + (EN ? ' or ≤ ' : ' o ≤ ') + f2(m.down))]
+        ]
+    });
+}
+
 function calculateVarianceTest() {
     const testType = document.getElementById('testType').value;
     const alpha = parseFloat(document.getElementById('alpha').value);
@@ -721,10 +838,7 @@ function calculateVarianceTest() {
         let pValue = calculatePValueChiSquare(statistic, df, tail);
         pValue = Math.min(Math.max(pValue, 0), 1);
 
-        const decision = pValue < alpha ? 'Se rechaza H₀.' : 'No se rechaza H₀.';
-
-        resultEl.innerText =
-            `χ² = ${statistic.toFixed(4)} | gl = ${df} | p-valor = ${pValue.toFixed(6)} | ${decision}`;
+        renderOneVarianceResult({ n: Math.round(n), s2: sampleVariance, sigma0sq: sigma0Squared, alpha, tail, stat: statistic, p: pValue, df });
 
         renderVarianceTestChart({
             distribution: 'chisquare',
@@ -755,10 +869,7 @@ function calculateVarianceTest() {
         let pValue = calculatePValueF(statistic, df1, df2, tail);
         pValue = Math.min(Math.max(pValue, 0), 1);
 
-        const decision = pValue < alpha ? 'Se rechaza H₀.' : 'No se rechaza H₀.';
-
-        resultEl.innerText =
-            `F = ${statistic.toFixed(4)} | gl₁ = ${df1}, gl₂ = ${df2} | p-valor = ${pValue.toFixed(6)} | ${decision}`;
+        renderTwoVariancesResult('varianceResult', { alpha, tail, stat: statistic, p: pValue, df1, df2 });
 
         renderVarianceTestChart({
             distribution: 'f',

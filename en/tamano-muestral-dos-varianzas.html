@@ -175,6 +175,14 @@
                             <input type="number" id="twoVarPower" value="0.8" step="0.01" min="0.5" max="0.999">
                             <p class="field-hint" hidden>Probability of detecting the difference in variances if it is real. <strong>0.80</strong> as the usual minimum; 0.90 for validation studies.</p>
                         </div>
+                        <div class="form-group">
+                            <label for="twoVarTail">Test type <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                            <select id="twoVarTail">
+                                <option value="two-sided" selected>Two-tailed (σ₁ ≠ σ₂)</option>
+                                <option value="one-sided">One-tailed (σ₁ &gt; σ₂)</option>
+                            </select>
+                            <p class="field-hint" hidden>A <strong>two-tailed</strong> test detects a difference in variability in either direction and is the usual choice. Choose <strong>one-tailed</strong> only if, before the study, you are interested in just one direction: it needs a smaller sample.</p>
+                        </div>
                     </div>
                 </div>
 
@@ -268,9 +276,10 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
 <script src="../sample-size-charts.js?v=20261101-2"></script>
 <script>
-function powerTwoVariances(n, R, alpha) {
+function powerTwoVariances(n, R, alpha, oneSided) {
     const df = n - 1;
     const R2 = R * R;
+    if (oneSided) return 1 - jStat.centralF.cdf(jStat.centralF.inv(1 - alpha, df, df) / R2, df, df);
     const fLow = jStat.centralF.inv(alpha / 2, df, df);
     const fHigh = jStat.centralF.inv(1 - alpha / 2, df, df);
     return jStat.centralF.cdf(fLow / R2, df, df) + (1 - jStat.centralF.cdf(fHigh / R2, df, df));
@@ -297,10 +306,11 @@ function calculateTwoVariancesSampleSize() {
     }
 
     const Ruse = R < 1 ? 1 / R : R;
+    const oneSided = document.getElementById('twoVarTail').value === 'one-sided';
     let n = 2;
     let actualPower = 0;
     while (n <= 100000) {
-        actualPower = powerTwoVariances(n, Ruse, alpha);
+        actualPower = powerTwoVariances(n, Ruse, alpha, oneSided);
         if (actualPower >= power) break;
         n++;
     }
@@ -313,15 +323,27 @@ function calculateTwoVariancesSampleSize() {
     resultEl.innerText =
         `Minimum n per group: ${n} observations (total: ${2 * n})\n` +
         `Power achieved: ${(actualPower * 100).toFixed(2)}% (target: ${(power * 100).toFixed(0)}%)\n` +
-        `R = ${R}  |  α = ${alpha}  |  Ha: σ₁ ≠ σ₂ (two-tailed)`;
+        `R = ${R}  |  α = ${alpha}  |  ${oneSided ? 'Ha: σ₁ > σ₂ (one-tailed)' : 'Ha: σ₁ ≠ σ₂ (two-tailed)'}`;
     window.SampleSizeCharts && SampleSizeCharts.power({
         canvas: 'twoVarChart', n: n, target: power,
         xLabel: 'n per group',
-        powerFn: function (m) { return powerTwoVariances(m, Ruse, alpha); }
+        powerFn: function (m) { return powerTwoVariances(m, Ruse, alpha, oneSided); }
     });
 }
 
 document.getElementById('twoVarCalculateBtn').addEventListener('click', calculateTwoVariancesSampleSize);
+(function () {
+    // Valores recibidos por la URL, por ejemplo desde la calculadora del contraste.
+    let params;
+    try { params = new URLSearchParams(location.search); } catch (e) { return; }
+    const fields = { r: "twoVarR", alpha: "twoVarAlpha", power: "twoVarPower" };
+    Object.keys(fields).forEach(function (key) {
+        const value = parseFloat(params.get(key));
+        if (Number.isFinite(value)) document.getElementById(fields[key]).value = value;
+    });
+    const alt = params.get("alt");
+    if (["two-sided", "one-sided"].includes(alt)) document.getElementById("twoVarTail").value = alt;
+}());
 calculateTwoVariancesSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
