@@ -55,7 +55,7 @@
         "applicationCategory": "EducationalApplication",
         "operatingSystem": "Web",
         "url": "https://problabtools.com/en/simulaciones/simulador-intervalos-confianza.html",
-        "description": "Interactive confidence interval simulator for the mean (known σ) and for a proportion (Wald / Wilson). Observe the empirical coverage against the nominal level.",
+        "description": "Interactive confidence interval simulator for the mean (known or unknown σ) and for a proportion (Wald / Wilson). Observe the empirical coverage against the nominal level.",
         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
       }
     ]
@@ -328,7 +328,7 @@
           <!-- Mode tabs -->
           <div class="mode-tabs" role="tablist" aria-label="Simulator mode">
             <button class="mode-tab active" id="tabMedia" role="tab" aria-selected="true" aria-controls="panelMedia" data-mode="media">
-              Mode: Mean (known σ)
+              Mode: Mean
             </button>
             <button class="mode-tab" id="tabProp" role="tab" aria-selected="false" aria-controls="panelProp" data-mode="proporcion">
               Mode: Proportion
@@ -346,7 +346,15 @@
               <div class="form-group">
                 <label for="trueSigma">True σ (population standard deviation) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                 <input type="number" id="trueSigma" value="10" step="0.1" min="0.1" max="1000">
-                  <p class="field-hint" hidden>Population standard deviation, assumed known in this mode. It determines the width of each simulated interval.</p>
+                  <p class="field-hint" hidden>Standard deviation of the population the samples are drawn from. With the z method it is used directly in each interval; with the t method it only generates the data, and each interval uses the standard deviation s of its own sample.</p>
+              </div>
+              <div class="form-group">
+                <label for="methodMedia">Method <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                <select id="methodMedia">
+                  <option value="z" selected>Known σ (z)</option>
+                  <option value="t">Unknown σ: s and Student's t</option>
+                </select>
+                <p class="field-hint" hidden>With <strong>known σ</strong>, all intervals have the same width. With <strong>unknown σ</strong>, each interval uses the standard deviation s of its sample and the Student's t critical value: widths change from sample to sample, but coverage is still nominal.</p>
               </div>
               <div class="form-group">
                 <label for="nMedia">Sample size n <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
@@ -498,7 +506,7 @@
     <section class="card content-card">
       <h2>Nominal coverage vs actual coverage</h2>
       <p>The <strong>nominal level</strong> is the confidence value we specify when constructing the CI (90%, 95%, 99%). The <strong>actual (or empirical) coverage</strong> is the fraction of intervals that actually cover the true parameter across a long series of repetitions.</p>
-      <p>For the CI of the mean with known σ and a normal population, as in this simulator, the actual coverage matches the nominal level exactly for any sample size, because the sample mean is exactly normal. If the population is not normal, the match is only approximate and improves with n by the CLT.</p>
+      <p>For the CI of the mean with a normal population, as in this simulator (both with known σ and with Student's t), the actual coverage matches the nominal level exactly for any sample size, because the sample mean is exactly normal. If the population is not normal, the match is only approximate and improves with n by the CLT.</p>
       <p>For proportions, the situation is more complicated. The parameter p is continuous, but the binomial variable X ~ Bin(n, p) is discrete, and this discretization causes the actual coverage to fluctuate around the nominal level:</p>
       <ul>
         <li><strong>Wald interval:</strong> uses the normal approximation directly, \(\hat{p} \pm z_{\alpha/2}\sqrt{\hat{p}(1-\hat{p})/n}\). It works well for large n and p away from 0 and 1, but its coverage can be noticeably below the nominal level when n is small or p is near the extremes.</li>
@@ -548,7 +556,7 @@
         </li>
         <li>
           <strong>Does the simulator use an exact normal distribution for the mean?</strong>
-          Yes: in Mean mode (known σ) each observation is generated from an N(μ, σ) using the Box-Muller method. The sample mean has an exactly N(μ, σ/√n) distribution for any n, so the actual coverage is exactly nominal even for small n; the empirical coverage only departs from it through simulation error.
+          Yes: in Mean mode each observation is generated from an N(μ, σ) using the Box-Muller method. The sample mean has an exactly N(μ, σ/√n) distribution for any n, so the actual coverage is exactly nominal even for small n; the empirical coverage only departs from it through simulation error.
         </li>
       </ul>
     </section>
@@ -592,6 +600,12 @@ function zCrit(alpha) {
 function ciMean(xbar, sigma, n, conf) {
   const z = zCrit(1 - conf);
   const margin = z * sigma / Math.sqrt(n);
+  return [xbar - margin, xbar + margin];
+}
+
+/** CI for mean with unknown sigma: sample s and Student's t */
+function ciMeanT(xbar, s, n, conf) {
+  const margin = jStat.studentt.inv(1 - (1 - conf) / 2, n - 1) * s / Math.sqrt(n);
   return [xbar - margin, xbar + margin];
 }
 
@@ -642,12 +656,14 @@ function runSimulation(mode, params) {
   const { conf, numIntervals } = params;
 
   if (mode === 'media') {
-    const { mu, sigma, n } = params;
+    const { mu, sigma, n, method } = params;
     for (let i = 0; i < numIntervals; i++) {
-      let sum = 0;
-      for (let j = 0; j < n; j++) sum += sampleNormal(mu, sigma);
+      let sum = 0, sumSq = 0;
+      for (let j = 0; j < n; j++) { const x = sampleNormal(mu, sigma); sum += x; sumSq += x * x; }
       const xbar = sum / n;
-      const [lo, hi] = ciMean(xbar, sigma, n, conf);
+      // Con σ desconocida, cada intervalo usa la desviación típica de su muestra.
+      const s = Math.sqrt(Math.max(0, sumSq - n * xbar * xbar) / (n - 1));
+      const [lo, hi] = method === 't' ? ciMeanT(xbar, s, n, conf) : ciMean(xbar, sigma, n, conf);
       results.push({ lo, hi, estimate: xbar, covers: lo <= mu && mu <= hi });
     }
   } else {
@@ -888,7 +904,7 @@ function runAndDisplay() {
       alert('Please enter valid values for μ and σ (σ must be > 0).');
       return;
     }
-    params = { mu, sigma, n, conf, numIntervals };
+    params = { mu, sigma, n, conf, numIntervals, method: document.getElementById('methodMedia').value };
   } else {
     mode = 'proporcion';
     const p            = parseFloat(document.getElementById('trueP').value);
@@ -906,7 +922,7 @@ function runAndDisplay() {
 
   const intervals = runSimulation(mode, params);
   const { n: total, covered, meanWidth } = computeStats(intervals);
-  const nominalPct  = params.conf * 100;
+  const nominalPct  = +(params.conf * 100).toFixed(2);
   const empiricalPct = (covered / total) * 100;
 
   // Show canvas
@@ -923,7 +939,7 @@ function runAndDisplay() {
 
   // Stats cards
   document.getElementById('ciStatsGrid').style.display = 'grid';
-  document.getElementById('scNominal').textContent        = nominalPct.toFixed(0) + '%';
+  document.getElementById('scNominal').textContent        = nominalPct + '%';
   document.getElementById('scEmpiricalPct').textContent   = empiricalPct.toFixed(1) + '%';
   document.getElementById('scCoveredFraction').textContent = `${covered} / ${total}`;
   document.getElementById('scMeanWidth').textContent      = '± ' + (meanWidth / 2).toFixed(4);
@@ -944,11 +960,43 @@ function runAndDisplay() {
   const axisNote = document.getElementById('axisNote');
   axisNote.style.display = 'block';
   axisNote.textContent = mode === 'media'
-    ? `Horizontal axis: mean scale. Dashed line: μ = ${trueParam}. Each row = one CI computed from n = ${params.n} observations.`
+    ? `Horizontal axis: mean scale. Dashed line: μ = ${trueParam}. Each row = one CI (${params.method === 't' ? "Student's t, with each sample's s" : 'z, with known σ'}) computed from n = ${params.n} observations.`
     : `Horizontal axis: proportion scale [0, 1]. Dashed line: p = ${trueParam}. Each row = one ${methodUsed === 'wilson' ? 'Wilson' : 'Wald'} CI computed from n = ${params.n} observations.`;
 }
 
 document.getElementById('simBtn').addEventListener('click', runAndDisplay);
+
+// Valores recibidos por la URL (por ejemplo, desde una calculadora de intervalos):
+// rellena los campos y lanza la simulación.
+(function () {
+  let q;
+  try { q = new URLSearchParams(location.search); } catch (e) { return; }
+  const mode = q.get('mode');
+  if (mode !== 'media' && mode !== 'prop') return;
+  const num = (k) => parseFloat(q.get(k));
+  // En los desplegables, si el valor no está entre las opciones, se añade.
+  const pick = (id, value, label) => {
+    const sel = document.getElementById(id);
+    let opt = Array.prototype.find.call(sel.options, (o) => Math.abs(parseFloat(o.value) - value) < 1e-9);
+    if (!opt) { opt = new Option(label, String(value)); sel.add(opt); }
+    sel.value = opt.value;
+  };
+  const n = Math.round(num('n')), conf = num('conf');
+  const sfx = mode === 'media' ? 'Media' : 'Prop';
+  if (n >= 2 && n <= 100000) pick('n' + sfx, n, String(n));
+  if (conf > 0 && conf < 1) pick('conf' + sfx, conf, (+(conf * 100).toFixed(2)) + '%');
+  if (mode === 'media') {
+    if (Number.isFinite(num('mu'))) document.getElementById('trueMu').value = num('mu');
+    if (num('sigma') > 0) document.getElementById('trueSigma').value = num('sigma');
+    if (['z', 't'].includes(q.get('method'))) document.getElementById('methodMedia').value = q.get('method');
+  } else {
+    if (num('p') > 0 && num('p') < 1) document.getElementById('trueP').value = num('p');
+    if (['wald', 'wilson'].includes(q.get('method'))) document.getElementById('methodProp').value = q.get('method');
+    document.getElementById('tabProp').click();
+  }
+  if (document.readyState === 'complete') runAndDisplay();
+  else window.addEventListener('load', runAndDisplay);
+}());
 
 // Responsive redraw on window resize (debounced)
 let resizeTimer;

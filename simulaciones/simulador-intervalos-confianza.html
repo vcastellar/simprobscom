@@ -55,7 +55,7 @@
         "applicationCategory": "EducationalApplication",
         "operatingSystem": "Web",
         "url": "https://problabtools.com/simulaciones/simulador-intervalos-confianza.html",
-        "description": "Simulador interactivo de intervalos de confianza para media (σ conocida) y proporción (Wald / Wilson). Observa la cobertura empírica frente al nivel nominal.",
+        "description": "Simulador interactivo de intervalos de confianza para media (σ conocida o desconocida) y proporción (Wald / Wilson). Observa la cobertura empírica frente al nivel nominal.",
         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"}
       }
     ]
@@ -332,7 +332,7 @@
           <!-- Mode tabs -->
           <div class="mode-tabs" role="tablist" aria-label="Modo del simulador">
             <button class="mode-tab active" id="tabMedia" role="tab" aria-selected="true" aria-controls="panelMedia" data-mode="media">
-              Modo: Media (σ conocida)
+              Modo: Media
             </button>
             <button class="mode-tab" id="tabProp" role="tab" aria-selected="false" aria-controls="panelProp" data-mode="proporcion">
               Modo: Proporción
@@ -341,7 +341,7 @@
 
           <!-- Panel: Media -->
           <div class="mode-panel active" id="panelMedia" role="tabpanel" aria-labelledby="tabMedia">
-            <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> simula repetidamente intervalos de confianza para la media de una población normal con σ conocida, y muestra qué fracción cubre realmente la μ verdadera. Elige este modo para comprobar que, con población normal y σ conocida, la cobertura real coincide con el nivel nominal para cualquier n (la empírica solo se aparta de ella por el error de simulación).</p>
+            <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> simula repetidamente intervalos de confianza para la media de una población normal y muestra qué fracción cubre realmente la μ verdadera. Puedes construirlos con σ conocida (z) o, como se hace casi siempre en la práctica, estimando la desviación con cada muestra (t de Student). En los dos casos la cobertura real coincide con el nivel nominal para cualquier n; la empírica solo se aparta de ella por el error de simulación.</p>
             <div class="form-grid-ci">
               <div class="form-group">
                 <label for="trueMu">Verdadera μ (media poblacional) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
@@ -351,7 +351,15 @@
               <div class="form-group">
                 <label for="trueSigma">Verdadera σ (desviación típica poblacional) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                 <input type="number" id="trueSigma" value="10" step="0.1" min="0.1" max="1000">
-                <p class="field-hint" hidden>Desviación típica poblacional, asumida conocida en este modo. Determina la anchura de cada intervalo simulado.</p>
+                <p class="field-hint" hidden>Desviación típica de la población de la que se extraen las muestras. Con el método z se usa directamente en cada intervalo; con el método t solo sirve para generar los datos, y cada intervalo usa la desviación s de su propia muestra.</p>
+              </div>
+              <div class="form-group">
+                <label for="methodMedia">Método <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+                <select id="methodMedia">
+                  <option value="z" selected>σ conocida (z)</option>
+                  <option value="t">σ desconocida: s y t de Student</option>
+                </select>
+                <p class="field-hint" hidden>Con <strong>σ conocida</strong>, todos los intervalos tienen la misma anchura. Con <strong>σ desconocida</strong>, cada intervalo usa la desviación típica s de su muestra y el valor crítico de la t de Student: las anchuras cambian de una muestra a otra, pero la cobertura sigue siendo la nominal.</p>
               </div>
               <div class="form-group">
                 <label for="nMedia">Tamaño muestral n <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
@@ -504,7 +512,7 @@
     <section class="card content-card">
       <h2>Cobertura nominal vs cobertura real</h2>
       <p>El <strong>nivel nominal</strong> es el valor de confianza que especificamos al construir el IC (90%, 95%, 99%). La <strong>cobertura real</strong> (o empírica) es la fracción de intervalos que efectivamente cubren el parámetro verdadero en una larga serie de repeticiones.</p>
-      <p>Para el IC de la media con σ conocida y una población normal, como en este simulador, la cobertura real coincide exactamente con la nominal para cualquier tamaño muestral, porque la media muestral es exactamente normal. Si la población no es normal, la coincidencia solo es aproximada y mejora con n por el TCL.</p>
+      <p>Para el IC de la media con una población normal, como en este simulador (tanto con σ conocida como con la t de Student), la cobertura real coincide exactamente con la nominal para cualquier tamaño muestral, porque la media muestral es exactamente normal. Si la población no es normal, la coincidencia solo es aproximada y mejora con n por el TCL.</p>
       <p>Para proporciones, la situación es más complicada. El parámetro p es continuo, pero la variable binomial X ~ Bin(n, p) es discreta, y esta discretización causa que la cobertura real fluctúe alrededor del nivel nominal:</p>
       <ul>
         <li><strong>Intervalo de Wald:</strong> usa directamente la aproximación normal \(\hat{p} \pm z_{\alpha/2}\sqrt{\hat{p}(1-\hat{p})/n}\). Funciona bien para n grande y p alejado de 0 y 1, pero su cobertura puede ser notablemente inferior al nivel nominal cuando n es pequeño o p está cerca de los extremos.</li>
@@ -554,7 +562,7 @@
         </li>
         <li>
           <strong>¿El simulador usa una distribución normal exacta para la media?</strong>
-          Sí: en el modo Media (σ conocida) cada observación se genera de una N(μ, σ) usando el método Box-Muller. La media muestral tiene distribución exactamente N(μ, σ/√n) para cualquier n, por lo que la cobertura real es exactamente la nominal incluso para n pequeño; la empírica solo se aparta de ella por el error de simulación.
+          Sí: en el modo Media cada observación se genera de una N(μ, σ) usando el método Box-Muller. La media muestral tiene distribución exactamente N(μ, σ/√n) para cualquier n, por lo que la cobertura real es exactamente la nominal incluso para n pequeño; la empírica solo se aparta de ella por el error de simulación.
         </li>
       </ul>
     </section>
@@ -598,6 +606,12 @@ function zCrit(alpha) {
 function ciMean(xbar, sigma, n, conf) {
   const z = zCrit(1 - conf);
   const margin = z * sigma / Math.sqrt(n);
+  return [xbar - margin, xbar + margin];
+}
+
+/** CI for mean with unknown sigma: sample s and Student's t */
+function ciMeanT(xbar, s, n, conf) {
+  const margin = jStat.studentt.inv(1 - (1 - conf) / 2, n - 1) * s / Math.sqrt(n);
   return [xbar - margin, xbar + margin];
 }
 
@@ -648,12 +662,14 @@ function runSimulation(mode, params) {
   const { conf, numIntervals } = params;
 
   if (mode === 'media') {
-    const { mu, sigma, n } = params;
+    const { mu, sigma, n, method } = params;
     for (let i = 0; i < numIntervals; i++) {
-      let sum = 0;
-      for (let j = 0; j < n; j++) sum += sampleNormal(mu, sigma);
+      let sum = 0, sumSq = 0;
+      for (let j = 0; j < n; j++) { const x = sampleNormal(mu, sigma); sum += x; sumSq += x * x; }
       const xbar = sum / n;
-      const [lo, hi] = ciMean(xbar, sigma, n, conf);
+      // Con σ desconocida, cada intervalo usa la desviación típica de su muestra.
+      const s = Math.sqrt(Math.max(0, sumSq - n * xbar * xbar) / (n - 1));
+      const [lo, hi] = method === 't' ? ciMeanT(xbar, s, n, conf) : ciMean(xbar, sigma, n, conf);
       results.push({ lo, hi, estimate: xbar, covers: lo <= mu && mu <= hi });
     }
   } else {
@@ -894,7 +910,7 @@ function runAndDisplay() {
       alert('Por favor introduce valores válidos para μ y σ (σ debe ser > 0).');
       return;
     }
-    params = { mu, sigma, n, conf, numIntervals };
+    params = { mu, sigma, n, conf, numIntervals, method: document.getElementById('methodMedia').value };
   } else {
     mode = 'proporcion';
     const p            = parseFloat(document.getElementById('trueP').value);
@@ -912,7 +928,7 @@ function runAndDisplay() {
 
   const intervals = runSimulation(mode, params);
   const { n: total, covered, meanWidth } = computeStats(intervals);
-  const nominalPct  = params.conf * 100;
+  const nominalPct  = +(params.conf * 100).toFixed(2);
   const empiricalPct = (covered / total) * 100;
 
   // Show canvas
@@ -929,7 +945,7 @@ function runAndDisplay() {
 
   // Stats cards
   document.getElementById('ciStatsGrid').style.display = 'grid';
-  document.getElementById('scNominal').textContent        = nominalPct.toFixed(0) + '%';
+  document.getElementById('scNominal').textContent        = nominalPct + '%';
   document.getElementById('scEmpiricalPct').textContent   = empiricalPct.toFixed(1) + '%';
   document.getElementById('scCoveredFraction').textContent = `${covered} / ${total}`;
   document.getElementById('scMeanWidth').textContent      = '± ' + (meanWidth / 2).toFixed(4);
@@ -950,11 +966,43 @@ function runAndDisplay() {
   const axisNote = document.getElementById('axisNote');
   axisNote.style.display = 'block';
   axisNote.textContent = mode === 'media'
-    ? `Eje horizontal: escala de la media. Línea discontinua: μ = ${trueParam}. Cada fila = un IC calculado a partir de n = ${params.n} observaciones.`
+    ? `Eje horizontal: escala de la media. Línea discontinua: μ = ${trueParam}. Cada fila = un IC (${params.method === 't' ? 't de Student, con la s de cada muestra' : 'z, con σ conocida'}) calculado a partir de n = ${params.n} observaciones.`
     : `Eje horizontal: escala de la proporción [0, 1]. Línea discontinua: p = ${trueParam}. Cada fila = un IC ${methodUsed === 'wilson' ? 'Wilson' : 'Wald'} calculado a partir de n = ${params.n} observaciones.`;
 }
 
 document.getElementById('simBtn').addEventListener('click', runAndDisplay);
+
+// Valores recibidos por la URL (por ejemplo, desde una calculadora de intervalos):
+// rellena los campos y lanza la simulación.
+(function () {
+  let q;
+  try { q = new URLSearchParams(location.search); } catch (e) { return; }
+  const mode = q.get('mode');
+  if (mode !== 'media' && mode !== 'prop') return;
+  const num = (k) => parseFloat(q.get(k));
+  // En los desplegables, si el valor no está entre las opciones, se añade.
+  const pick = (id, value, label) => {
+    const sel = document.getElementById(id);
+    let opt = Array.prototype.find.call(sel.options, (o) => Math.abs(parseFloat(o.value) - value) < 1e-9);
+    if (!opt) { opt = new Option(label, String(value)); sel.add(opt); }
+    sel.value = opt.value;
+  };
+  const n = Math.round(num('n')), conf = num('conf');
+  const sfx = mode === 'media' ? 'Media' : 'Prop';
+  if (n >= 2 && n <= 100000) pick('n' + sfx, n, String(n));
+  if (conf > 0 && conf < 1) pick('conf' + sfx, conf, (+(conf * 100).toFixed(2)) + '%');
+  if (mode === 'media') {
+    if (Number.isFinite(num('mu'))) document.getElementById('trueMu').value = num('mu');
+    if (num('sigma') > 0) document.getElementById('trueSigma').value = num('sigma');
+    if (['z', 't'].includes(q.get('method'))) document.getElementById('methodMedia').value = q.get('method');
+  } else {
+    if (num('p') > 0 && num('p') < 1) document.getElementById('trueP').value = num('p');
+    if (['wald', 'wilson'].includes(q.get('method'))) document.getElementById('methodProp').value = q.get('method');
+    document.getElementById('tabProp').click();
+  }
+  if (document.readyState === 'complete') runAndDisplay();
+  else window.addEventListener('load', runAndDisplay);
+}());
 
 // Responsive redraw on window resize (debounced)
 let resizeTimer;
