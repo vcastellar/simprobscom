@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
 
     <script type="application/ld+json">
 {
@@ -75,34 +75,66 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "When should I use the odds ratio test instead of chi-square?",
+      "name": "What is the odds ratio?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The OR test is preferable when the goal is to quantify the magnitude of the association and obtain an interpretable confidence interval. Chi-square only indicates whether there is a significant association, but not how strong it is. Both are equivalent in the rejection decision (the squared Z statistic of the OR test coincides with the Pearson chi-square)."
+        "text": "The ratio between two odds: in a case-control study, the odds of exposure among cases divided by that among controls. It equals 1 if there is no association."
       }
     },
     {
       "@type": "Question",
-      "name": "What does an OR of 2 mean?",
+      "name": "How is an OR of 2 interpreted?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "An OR of 2 means the odds of being exposed are twice as high among cases as among controls. In practical terms, it means the exposure is associated with a higher probability of being a case, although it does not imply causation."
+        "text": "The odds of exposure are twice as high among cases as among controls. If the disease is rare, it roughly means that the exposure doubles the risk."
       }
     },
     {
       "@type": "Question",
-      "name": "What is the assumption behind this test?",
+      "name": "Why work with the log of the OR?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The test relies on the normal approximation of the log odds ratio. All expected frequencies in the 2x2 table should be at least 5. With smaller frequencies, Fisher's exact test is preferable."
+        "text": "Because the OR is very skewed and its logarithm is much closer to a normal distribution. That is why the confidence interval is not symmetric around the OR."
       }
     },
     {
       "@type": "Question",
-      "name": "What is the difference between odds ratio and relative risk?",
+      "name": "How does it differ from relative risk?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Relative risk (RR) directly compares disease probabilities between exposed and unexposed groups, and can only be computed in cohort studies. The OR compares odds and can be computed in both cohort and case-control studies. When the disease is rare, OR ≈ RR."
+        "text": "Relative risk compares probabilities and requires a cohort study; the OR compares odds and can be estimated in case-control studies. They are similar only when the outcome is rare."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if a cell is zero or very small?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use Fisher's exact test. For the interval, the 0.5 correction allows it to be computed with zeros."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What hypothesis does it test?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "That the odds ratio equals 1, that is, that there is no association between exposure and outcome."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the minimum detectable odds ratio?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The OR closest to 1 that the test would detect with 80% probability given your numbers of cases and controls."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does a significant OR prove causation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. It may be due to selection bias or confounding variables. Logistic regression is used to adjust for them."
       }
     }
   ]
@@ -154,8 +186,6 @@
     </header>
 
     <main>
-        <!-- Section order: 1) Key concepts, 2) Description, 3) Calculator, 4) Quick test, 5) Rest -->
-
         <section class="ss-shell" aria-label="Calculator">
             <section class="card ss-controls">
                 <div class="panel-heading">
@@ -225,199 +255,126 @@
         </section>
 
         <section class="card content-card">
-            <h3>Explanation</h3>
+            <h3>What is the odds ratio test?</h3>
+            <p>It is the test used to decide whether there is an <strong>association between an exposure and an outcome</strong> from a 2×2 table, measuring that association with the odds ratio (OR). It is the standard tool of <strong>case-control studies</strong>: you gather a group of people with the disease (cases) and another without it (controls), and compare how often each group was exposed to a factor —tobacco, a drug, a pollutant.</p>
+            <p>If the exposure has nothing to do with the disease, the proportion exposed should be similar among cases and controls, and the OR close to 1. An OR greater than 1 indicates that the exposure is more frequent among cases (risk factor); less than 1, that it is less frequent (protective factor).</p>
 
-            <p>
-                The odds ratio (OR) is the standard measure of association in case-control studies.
-                In this design, people with the condition (cases) and without it (controls) are
-                selected, and whether they were exposed to the factor of interest is recorded
-                retrospectively. The 2×2 table summarizes the four possible combinations of
-                exposure and case status.
-            </p>
+            <h3>Odds and odds ratio</h3>
+            <p>The <em>odds</em> of an event is the ratio between the probability that it happens and the probability that it does not: with a probability of 40%, the odds are 0.4/0.6 = 0.67, that is, 2 to 3. The odds ratio compares two odds. With the table the calculator asks for:</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th></th><th>Exposed</th><th>Unexposed</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Cases</strong></td><td>a</td><td>b</td></tr>
+                        <tr><td><strong>Controls</strong></td><td>c</td><td>d</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="formula-line">\( \widehat{OR} = \dfrac{a/b}{c/d} = \dfrac{a \cdot d}{b \cdot c} \)</p>
+            <p>It is the odds of exposure among cases divided by the odds of exposure among controls. A very useful property is that it equals the odds ratio of disease between exposed and unexposed people, which is what really matters. That is why the OR can be estimated in a case-control study, where the proportion of cases is set by the researcher and risk cannot be computed.</p>
+        </section>
 
-            <p>
-                Under the null hypothesis \(H_0: \mathrm{OR} = 1\) there is no association between
-                exposure and disease: the odds of exposure are equal in cases and controls. An OR
-                greater than 1 suggests the exposure is a risk factor; an OR less than 1 suggests
-                it is a protective factor.
-            </p>
-
-            <p>
-                The test relies on the normal approximation of the log odds ratio. Since
-                \(\ln(\hat{\mathrm{OR}})\) is approximately normal with mean \(\ln(\mathrm{OR})\)
-                and standard error \(\mathrm{SE} = \sqrt{1/a + 1/b + 1/c + 1/d}\), under \(H_0\) the
-                statistic \(Z = \ln(\hat{\mathrm{OR}}) / \mathrm{SE}\) follows an \(N(0,1)\)
-                distribution. This approximation is reliable when all frequencies in the table are
-                at least 5; with smaller frequencies, use <a href="test-exacto-fisher.html">Fisher's exact test</a>.
-            </p>
-
+        <section class="card content-card">
             <h3>Hypotheses and test statistic</h3>
-            <p class="formula-line">\(H_0: \mathrm{OR} = 1 \quad \Leftrightarrow \quad H_0: \ln(\mathrm{OR}) = 0\)</p>
-            <p class="formula-line">
-                \( \widehat{\mathrm{OR}} = \frac{a \cdot d}{b \cdot c} \)
-            </p>
-            <p class="formula-line">
-                \( \mathrm{SE}\bigl(\ln\widehat{\mathrm{OR}}\bigr) = \sqrt{\frac{1}{a} + \frac{1}{b} + \frac{1}{c} + \frac{1}{d}} \)
-            </p>
-            <p class="formula-line">
-                \( Z = \frac{\ln\widehat{\mathrm{OR}}}{\mathrm{SE}\bigl(\ln\widehat{\mathrm{OR}}\bigr)} \sim N(0,1) \)
-            </p>
-        </section>
+            <p class="formula-line">\(H_0: OR = 1\) (no association)</p>
+            <p class="formula-line">\(H_1: OR \neq 1\), \(OR > 1\) or \(OR < 1\)</p>
+            <p>The OR has a very skewed distribution (it ranges from 0 to infinity, with 1 in the middle), so the test is carried out on its logarithm, which is well approximated by a normal distribution:</p>
+            <p class="formula-line">\( SE[\ln \widehat{OR}] = \sqrt{\dfrac{1}{a} + \dfrac{1}{b} + \dfrac{1}{c} + \dfrac{1}{d}}, \qquad z = \dfrac{\ln \widehat{OR}}{SE} \)</p>
+            <p>This is the <strong>Wald test</strong>. The same standard error gives Woolf's confidence interval: it is computed on the log scale, \(\ln \widehat{OR} \pm z_{1-\alpha/2}\,SE\), and then exponentiated. That is why the interval is not symmetric around the OR: an OR of 1.56 can have an interval from 0.87 to 2.79.</p>
+            <p>The standard error depends mainly on the smallest cell: if one has very few individuals, \(1/a\) shoots up and the test becomes unreliable. With any cell below 5, it is worth checking the result with <a href="test-exacto-fisher.html">Fisher's exact test</a>, which the calculator links to already filled in.</p>
 
-        <section class="card content-card">
-            <h3>Quick test</h3>
-
-            <p>
-                To quickly interpret an odds ratio, look at three elements: the point estimate of the
-                OR, the confidence interval and the p-value.
-            </p>
-
+            <h3>Decision rule</h3>
             <ul>
-                <li>
-                    <strong>OR = 1:</strong> no association between exposure and disease.
-                </li>
-                <li>
-                    <strong>OR &gt; 1:</strong> the exposure is associated with a higher risk of being
-                    a case (risk factor). The larger the OR, the stronger the association.
-                </li>
-                <li>
-                    <strong>OR &lt; 1:</strong> the exposure is associated with a lower risk of being
-                    a case (protective factor). An OR of 0.5 means the odds of exposure are half as
-                    high in cases as in controls.
-                </li>
+                <li>If the <strong>p-value</strong> is less than \(\alpha\), \(H_0\) is rejected: there is evidence of an association.</li>
+                <li>In the two-tailed test, this is equivalent to the OR confidence interval not containing 1.</li>
+                <li>Not rejecting \(H_0\) does not prove that there is no association.</li>
             </ul>
-
-            <p>
-                If the confidence interval for the OR does not include the value 1, the association is
-                statistically significant at the chosen level, which is equivalent to rejecting
-                \(H_0\) with that p-value. Along with the p-value, it is always worth reporting the OR
-                with its confidence interval, since statistical significance does not necessarily
-                imply clinical or practical relevance.
-            </p>
-
-            <p>
-                As an additional check, this calculator also shows the Pearson chi-square for the 2×2
-                table. Squared, the Z statistic of the OR test coincides (approximately) with the
-                Pearson chi-square, which allows cross-validating the results.
-            </p>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example</h3>
-            <p>
-                Consider the 2×2 table with the default values: \(a = 40\) (exposed-cases),
-                \(b = 60\) (unexposed-cases), \(c = 30\) (exposed-controls),
-                \(d = 70\) (unexposed-controls).
-            </p>
-            <p>The odds ratio is computed as:</p>
-            <p class="formula-line">
-                \( \widehat{\mathrm{OR}} = \frac{a \cdot d}{b \cdot c} = \frac{40 \times 70}{60 \times 30} = \frac{2800}{1800} \approx 1.5556 \)
-            </p>
-            <p>The natural logarithm of the OR and its standard error:</p>
-            <p class="formula-line">
-                \( \ln\widehat{\mathrm{OR}} = \ln(1.5556) \approx 0.4418 \)
-            </p>
-            <p class="formula-line">
-                \( \mathrm{SE} = \sqrt{\frac{1}{40} + \frac{1}{60} + \frac{1}{30} + \frac{1}{70}} \approx \sqrt{0.0250 + 0.0167 + 0.0333 + 0.0143} = \sqrt{0.0893} \approx 0.2988 \)
-            </p>
-            <p>The Z statistic:</p>
-            <p class="formula-line">
-                \( Z = \frac{0.4418}{0.2988} \approx 1.479 \)
-            </p>
-            <p>
-                For a two-tailed test with \(\alpha = 0.05\), the critical value is \(z_{0.025} \approx 1.96\).
-                Since \(|Z| = 1.479 &lt; 1.96\), <strong>\(H_0\) is not rejected</strong>.
-                The two-tailed p-value is \(p \approx 0.139 &gt; 0.05\).
-            </p>
-            <p>
-                The 95% confidence interval for the OR is:
-            </p>
-            <p class="formula-line">
-                \( \mathrm{CI}_{95\%}(\mathrm{OR}) = \bigl(e^{0.4418 - 1.96 \times 0.2988},\; e^{0.4418 + 1.96 \times 0.2988}\bigr) \approx (0.867;\; 2.793) \)
-            </p>
-            <p>
-                Since the interval includes 1, the conclusion is consistent: there is not enough
-                evidence of an association between the exposure and the disease at the 5% level.
-            </p>
+            <h3>Odds ratio and relative risk</h3>
+            <p>The relative risk (RR) compares probabilities: the risk of disease among the exposed divided by that among the unexposed. It is more intuitive, but it can only be computed in cohort studies or trials, which follow exposed and unexposed people. The OR approximates the RR when the disease is <strong>rare</strong> (below roughly 10% of the population): in that case, an OR of 2 means, in practice, that the risk doubles. When the outcome is common, the OR exaggerates the association compared with the RR, and the two should not be read as the same thing.</p>
+            <p>If your two groups are exposed and unexposed people and you measure the outcome, you can compare the proportions directly with the <a href="contraste-hipotesis-dos-proporciones.html">two-proportion test</a> or compute the <a href="intervalo-confianza-ratio-proporciones.html">interval for the ratio of proportions</a>.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Assumptions of the test</h3>
+            <ul>
+                <li><strong>Independent observations</strong>: each person appears only once in the table. If each case is matched to a specific control, you need an analysis for paired data (McNemar or conditional logistic regression).</li>
+                <li><strong>Cells that are not too small</strong>: the normal approximation of the log OR works well with all cells around 5 or more.</li>
+                <li><strong>No zero cells</strong>: with a zero, the OR is 0 or infinite. The calculator requires at least 1 in each cell; with zeros, use Fisher's exact test or the interval with a 0.5 correction.</li>
+                <li><strong>No selection bias or confounding</strong>: an OR different from 1 may be due to another variable related to both the exposure and the disease. The test measures association, not causation.</li>
+            </ul>
+        </section>
+
+        <section class="card content-card">
+            <h3>Worked example 1: a non-significant association</h3>
+            <p>In a study of 100 cases and 100 controls, 40 cases (a) and 30 controls (c) were exposed; 60 cases (b) and 70 controls (d) were not. We test \(H_0\colon OR = 1\) with \(\alpha = 0.05\), two-tailed.</p>
+            <p class="formula-line">\( \widehat{OR} = \dfrac{40 \times 70}{60 \times 30} \approx 1.556, \qquad \ln \widehat{OR} \approx 0.442 \)</p>
+            <p class="formula-line">\( SE = \sqrt{\dfrac{1}{40} + \dfrac{1}{60} + \dfrac{1}{30} + \dfrac{1}{70}} \approx 0.299, \qquad z = \dfrac{0.442}{0.299} \approx 1.48 \)</p>
+            <p>The two-tailed p-value is \(p \approx 0.139\): <strong>\(H_0\) is not rejected</strong>. The 95% confidence interval for the OR runs from 0.87 to 2.79 and contains 1.</p>
+            <p>Conclusion: there is not enough evidence of an association. But the interval is compatible both with no effect and with nearly tripling the odds. With 100 cases and 100 controls, and 30% of controls exposed, the test detects with 80% probability only odds ratios of 2.27 or more (or 0.37 or less).</p>
+            <p><strong>In the calculator:</strong> a = 40, b = 60, c = 30, d = 70. These are the values the page opens with.</p>
+
+            <h3>Worked example 2: a risk factor</h3>
+            <p>Another study with 100 cases and 100 controls finds 60 exposed cases (a) and 40 unexposed (b), against 35 exposed controls (c) and 65 unexposed (d).</p>
+            <p class="formula-line">\( \widehat{OR} = \dfrac{60 \times 65}{40 \times 35} \approx 2.79, \qquad SE \approx 0.293, \qquad z = \dfrac{\ln 2.79}{0.293} \approx 3.50 \)</p>
+            <p>The p-value is \(p \approx 0.0005\): <strong>\(H_0\) is rejected</strong>. The odds of exposure are about 2.8 times higher among cases, with a 95% confidence interval from 1.57 to 4.94. If the disease is rare, this can be read as the exposure multiplying the risk by just under 3.</p>
+            <p><strong>In the calculator:</strong> a = 60, b = 40, c = 35, d = 65.</p>
         </section>
 
         <section class="card content-card">
             <h3>How to interpret the result</h3>
+            <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that there is an association between the exposure and the outcome: with OR &gt; 1, the exposure behaves as a risk factor; with OR &lt; 1, as a protective factor. To judge its importance, look at the OR and its confidence interval: an OR of 1.2 can be significant in a huge study and have little practical relevance.</p>
+            <p><strong>Not rejecting \(H_0\)</strong> does not prove that there is no association: look at the interval, which tends to be very wide in small studies.</p>
+            <p>In the calculator, the result shows the decision with the p-value, the OR with the z statistic and a sentence stating the conclusion. On the chart, the green area is the non-rejection region on the standard normal, the red areas are the critical regions and the amber line marks the statistic. Under "Calculation details" you will find the log OR, its standard error, Woolf's interval, the proportion exposed among cases and controls, and Pearson's chi-square as a check.</p>
 
-                <p>
-                <strong>Rejecting \(H_0\)</strong> (p-value &lt; \(\alpha\)) indicates statistical
-                evidence that the population odds ratio \(\text{OR}\) differs from 1, that is, that
-                the exposure and the outcome are associated. An \(\widehat{\text{OR}} &gt; 1\)
-                suggests the exposure increases the odds of the event; an
-                \(\widehat{\text{OR}} &lt; 1\) suggests a protective effect. The magnitude of the OR
-                is as important as the significance: an OR of 1.05 can be statistically significant
-                with large samples but represent a trivial association in practice.
-                </p>
+            <h3>Power and minimum detectable odds ratio</h3>
+            <p>Below the conclusion, the calculator shows the <strong>minimum detectable odds ratio</strong>: the OR closest to 1 that, with your numbers of cases and controls and the proportion exposed among the controls, the test would detect with 80% probability. If it is more extreme than the effect that would matter to you, the study has low power. The link opens the <a href="tamano-muestral-odds-ratio.html">sample size calculator for the odds ratio</a> with your proportion exposed, your α, the number of controls per case and the type of test.</p>
 
-                <p>
-                <strong>Not rejecting \(H_0\)</strong> (p-value ≥ \(\alpha\)) does not prove that there
-                is no association; it only indicates that the data are compatible with
-                \(\text{OR} = 1\) at the chosen level. Small studies have little power to detect
-                moderate associations. A confidence interval for the OR that extends widely above
-                and below 1 signals that the estimate is very imprecise. In epidemiology it is common
-                to interpret the 95% CI this way: if it excludes the value 1, the association is
-                significant at the 5% level; if it includes it, it is not.
-                </p>
-
-                <p>
-                The <strong>Z statistic</strong> is obtained from the logarithmic transformation of
-                the OR (\(\ln\widehat{\text{OR}}\)), whose asymptotic distribution is normal under
-                \(H_0\). In the chart, the green zone is the non-rejection region, the red zones are
-                the critical regions and the amber line marks the observed statistic. Remember that
-                the OR estimates the odds ratio, not the risk ratio (RR): when the prevalence of the
-                event is high (&gt;10%), OR and RR can differ considerably, and the RR may be more
-                intuitive for communicating the results.
-                </p>
+            <h3>Confidence interval</h3>
+            <p>The other link opens the <a href="intervalo-confianza-odds-ratio.html">odds ratio confidence interval calculator</a> with your table. That calculator arranges the table by exposure (rows) and outcome (columns), so the link reorders the cells for you; the OR is the same.</p>
         </section>
+
+        <section class="card content-card">
+            <h3>Common mistakes</h3>
+            <ul>
+                <li><strong>Entering the cells in a different order</strong>: swapping b and c gives you the inverse of the OR.</li>
+                <li><strong>Reading the OR as a relative risk</strong> when the outcome is common.</li>
+                <li><strong>Interpreting the association as causation</strong> without controlling for confounding.</li>
+                <li><strong>Using the Wald test with very small cells</strong>: check with Fisher.</li>
+                <li><strong>Analysing one-to-one matched cases and controls as independent</strong>.</li>
+                <li><strong>Reporting the OR without a confidence interval</strong>.</li>
+            </ul>
+        </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Related calculators</h3>
                 <ul>
-                    <li><a href="tamano-muestral-odds-ratio.html">Sample size for odds ratio</a></li>
+                    <li><a href="intervalo-confianza-odds-ratio.html">Confidence interval for the odds ratio</a></li>
+                    <li><a href="tamano-muestral-odds-ratio.html">Sample size for the odds ratio</a></li>
                     <li><a href="test-exacto-fisher.html">Fisher's exact test</a></li>
                     <li><a href="contraste-independencia-chi-cuadrado.html">Chi-square test of independence</a></li>
-                    <li><a href="intervalo-confianza-odds-ratio.html">Confidence interval for odds ratio</a></li>
+                    <li><a href="contraste-hipotesis-dos-proporciones.html">Two-proportion test</a></li>
                 </ul>
             </section>
-
             <h3>Frequently asked questions</h3>
-
             <ul>
-                <li>
-                    <strong>When should I use the odds ratio test instead of chi-square?</strong>
-                    The OR test is preferable when the goal is to quantify the magnitude of the
-                    association and obtain an interpretable confidence interval. Chi-square only
-                    indicates whether there is a significant association, but not how strong it is.
-                    Both are equivalent in the rejection decision (the squared Z statistic of the OR
-                    test coincides with the Pearson chi-square).
-                </li>
-                <li>
-                    <strong>What does an OR of 2 mean?</strong>
-                    An OR of 2 means the odds of being exposed are twice as high among cases as among
-                    controls. In practical terms, it means the exposure is associated with a higher
-                    probability of being a case, although it does not imply causation.
-                </li>
-                <li>
-                    <strong>What is the assumption behind this test?</strong>
-                    The test relies on the normal approximation of the log odds ratio. All expected
-                    frequencies in the 2×2 table should be at least 5. With smaller frequencies, use
-                    <a href="test-exacto-fisher.html">Fisher's exact test</a>.
-                </li>
-                <li>
-                    <strong>What is the difference between odds ratio and relative risk?</strong>
-                    Relative risk (RR) directly compares disease probabilities between exposed and
-                    unexposed groups, and can only be computed in cohort studies. The OR compares odds
-                    and can be computed in both cohort and case-control studies. When the disease is
-                    rare, OR ≈ RR.
-                </li>
+                <li><strong>What is the odds ratio?</strong> The ratio between two odds: in a case-control study, the odds of exposure among cases divided by that among controls. It equals 1 if there is no association.</li>
+                <li><strong>How is an OR of 2 interpreted?</strong> The odds of exposure are twice as high among cases as among controls. If the disease is rare, it roughly means that the exposure doubles the risk.</li>
+                <li><strong>Why work with the log of the OR?</strong> Because the OR is very skewed and its logarithm is much closer to a normal distribution. That is why the confidence interval is not symmetric around the OR.</li>
+                <li><strong>How does it differ from relative risk?</strong> Relative risk compares probabilities and requires a cohort study; the OR compares odds and can be estimated in case-control studies. They are similar only when the outcome is rare.</li>
+                <li><strong>What if a cell is zero or very small?</strong> Use Fisher's exact test. For the interval, the 0.5 correction allows it to be computed with zeros.</li>
+                <li><strong>What hypothesis does it test?</strong> That the odds ratio equals 1, that is, that there is no association between exposure and outcome.</li>
+                <li><strong>What is the minimum detectable odds ratio?</strong> The OR closest to 1 that the test would detect with 80% probability given your numbers of cases and controls.</li>
+                <li><strong>Does a significant OR prove causation?</strong> No. It may be due to selection bias or confounding variables. Logistic regression is used to adjust for them.</li>
             </ul>
             <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Odds_ratio" target="_blank" rel="noopener noreferrer">Odds ratio</a> — Wikipedia</p>
         </section>
+
     </main>
 
     <footer class="legal-footer">
@@ -437,6 +394,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../test-results.js?v=20261110-3"></script>
 
 <script>
 let orTestChart;
@@ -565,6 +523,95 @@ function renderORTestChart(alpha, tail, zValue) {
     });
 }
 
+// Número de casos con la misma fórmula que la calculadora de tamaño muestral
+// para el odds ratio: p₀ = exposición en los controles, r = controles por caso.
+function orSampleSize(OR, p0, r, alpha, tail, power) {
+    const p1 = (OR * p0) / (1 + p0 * (OR - 1));
+    const pBar = (p1 + r * p0) / (1 + r);
+    const zA = jStat.normal.inv(tail === 'two' ? 1 - alpha / 2 : 1 - alpha, 0, 1);
+    const zB = jStat.normal.inv(power, 0, 1);
+    const num = Math.pow(zA * Math.sqrt((1 + 1 / r) * pBar * (1 - pBar)) + zB * Math.sqrt(p1 * (1 - p1) + p0 * (1 - p0) / r), 2);
+    return num / Math.pow(p1 - p0, 2);
+}
+
+function renderORResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const nCases = o.a + o.b, nCtrl = o.c + o.d;
+    const p0 = o.c / nCtrl, p1 = o.a / nCases, r = nCtrl / nCases;
+    const q = o.tail === 'two' ? 1 - o.alpha / 2 : 1 - o.alpha;
+    const crit = jStat.normal.inv(q, 0, 1);
+    const nFn = (OR) => orSampleSize(OR, p0, r, o.alpha, o.tail, R.TARGET);
+    // Se busca en escala logarítmica: ln OR entre 0 y ±ln 1000.
+    const upLn = o.tail === 'left' ? null : R.solveMin((t) => nFn(Math.exp(t)) <= nCases, 1e-6, Math.log(1000));
+    const downLn = o.tail === 'right' ? null : R.solveMin((t) => nFn(Math.exp(-t)) <= nCases, 1e-6, Math.log(1000));
+    const up = upLn == null ? null : R.sigUp(Math.exp(upLn), 3);
+    // Hacia abajo se redondea hacia 0, para que la calculadora de destino no pida más casos.
+    const downSafe = downLn == null ? null : Math.floor(Math.exp(-downLn) * 1000) / 1000;
+    const fmt = (v) => R.num(v, v >= 10 ? 1 : 2);
+    let mdeTxt;
+    if (o.tail === 'right') mdeTxt = up == null ? null : (EN ? fmt(up) + ' or more' : fmt(up) + ' o mayores');
+    else if (o.tail === 'left') mdeTxt = downSafe == null ? null : (EN ? fmt(downSafe) + ' or less' : fmt(downSafe) + ' o menores');
+    else if (up != null && downSafe != null) mdeTxt = EN ? fmt(up) + ' or more (or ' + fmt(downSafe) + ' or less)' : fmt(up) + ' o mayores (o de ' + fmt(downSafe) + ' o menores)';
+    else mdeTxt = null;
+    const linkOR = o.tail === 'left' || (o.tail === 'two' && o.OR < 1) ? downSafe : up;
+    const T = EN ? {
+        label: 'Odds ratio test (Wald), ' + { two: 'two-tailed', right: 'right-tailed', left: 'left-tailed' }[o.tail],
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        yes: '✓ There is statistical evidence of an association between exposure and disease: ' + (o.OR > 1 ? 'the exposure behaves as a risk factor.' : 'the exposure behaves as a protective factor.'),
+        no: 'ℹ There is not enough evidence of an association between exposure and disease. This does not prove that the odds ratio equals 1.',
+        mde: mdeTxt == null
+            ? 'With ' + nCases + ' cases and ' + nCtrl + ' controls, the test does not reach ' + R.pct(R.TARGET) + ' power even for very large odds ratios.'
+            : 'With ' + nCases + ' cases and ' + nCtrl + ' controls, the test detects with ' + R.pct(R.TARGET) + ' probability only odds ratios of ' + mdeTxt + '.',
+        link: 'Work out the sample size needed for another odds ratio',
+        small: 'ℹ Some cell is below 5: the Wald approximation may be inaccurate. Check the result with Fisher\'s exact test.',
+        rows: ['Odds ratio (a·d)/(b·c)', 'ln(OR)', 'Standard error of ln(OR)', 'Test statistic', 'Critical value', 'p-value', R.pctLevel(1 - o.alpha) + ' confidence interval for the OR (Woolf)', 'Exposure in cases', 'Exposure in controls', 'Pearson χ² (check)', 'Minimum detectable odds ratio (power ' + R.pct(R.TARGET) + ')']
+    } : {
+        label: 'Contraste del odds ratio (Wald), ' + { two: 'bilateral', right: 'de cola derecha', left: 'de cola izquierda' }[o.tail],
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        yes: '✓ Hay evidencia estadística de asociación entre la exposición y la enfermedad: ' + (o.OR > 1 ? 'la exposición se comporta como factor de riesgo.' : 'la exposición se comporta como factor protector.'),
+        no: 'ℹ No hay evidencia suficiente de asociación entre la exposición y la enfermedad. Esto no demuestra que el odds ratio sea 1.',
+        mde: mdeTxt == null
+            ? 'Con ' + nCases + ' casos y ' + nCtrl + ' controles, el contraste no llega a un ' + R.pct(R.TARGET) + ' de potencia ni con odds ratios muy grandes.'
+            : 'Con ' + nCases + ' casos y ' + nCtrl + ' controles, el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad odds ratios de ' + mdeTxt + '.',
+        link: 'Calcular el tamaño muestral necesario para otro odds ratio',
+        small: 'ℹ Alguna celda es menor que 5: la aproximación de Wald puede ser poco precisa. Comprueba el resultado con el test exacto de Fisher.',
+        rows: ['Odds ratio (a·d)/(b·c)', 'ln(OR)', 'Error estándar de ln(OR)', 'Estadístico', 'Valor crítico', 'p-valor', 'Intervalo de confianza al ' + R.pctLevel(1 - o.alpha) + ' para el OR (Woolf)', 'Exposición en los casos', 'Exposición en los controles', 'χ² de Pearson (verificación)', 'Odds ratio mínimo detectable (potencia ' + R.pct(R.TARGET) + ')']
+    };
+    const notes = [];
+    if (Math.min(o.a, o.b, o.c, o.d) < 5) {
+        const fisherUrl = 'test-exacto-fisher.html?a=' + o.a + '&b=' + o.c + '&c=' + o.b + '&d=' + o.d;
+        notes.push(R.esc(T.small).replace(EN ? 'Fisher\'s exact test' : 'test exacto de Fisher', '<a href="' + R.esc(fisherUrl) + '">' + (EN ? 'Fisher\'s exact test' : 'test exacto de Fisher') + '</a>'));
+    }
+    if (mdeTxt != null && linkOR != null) {
+        const url = 'tamano-muestral-odds-ratio.html?p0=' + R.sig(p0, 4) + '&or=' + linkOR + '&alpha=' + o.alpha + '&power=' + R.TARGET +
+            '&ratio=' + R.sig(r, 4) + '&alt=' + (o.tail === 'two' ? 'two-sided' : 'one-sided');
+        notes.push(R.esc(T.mde) + ' ' + R.link(url, T.link));
+    } else notes.push(R.esc(T.mde));
+    // La calculadora del intervalo ordena la tabla por exposición (filas) y evento (columnas).
+    notes.push(R.ciLink('intervalo-confianza-odds-ratio.html?a=' + o.a + '&b=' + o.c + '&c=' + o.b + '&d=' + o.d + '&conf=' + R.sig(1 - o.alpha, 6), 1 - o.alpha));
+    const zc = jStat.normal.inv(1 - o.alpha / 2, 0, 1);
+    R.render(document.getElementById('orResult'), {
+        label: T.label + ' · H₀: OR = 1 · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, sec: ['OR = ' + R.num(o.OR, 4) + ' · z = ' + R.num(o.z, 4)],
+        ok: rejected, verdict: rejected ? T.yes : T.no,
+        notes: notes,
+        rows: [
+            [T.rows[0], R.num(o.OR, 4)],
+            [T.rows[1], R.num(Math.log(o.OR), 4)],
+            [T.rows[2], R.num(o.se, 4)],
+            [T.rows[3], 'z = ' + R.num(o.z, 4)],
+            [T.rows[4], (o.tail === 'two' ? '±' : (o.tail === 'left' ? '−' : '')) + R.num(crit, 4)],
+            [T.rows[5], R.prob(o.p)],
+            [T.rows[6], R.interval(Math.exp(Math.log(o.OR) - zc * o.se), Math.exp(Math.log(o.OR) + zc * o.se), 4)],
+            [T.rows[7], R.pct(p1, 1)],
+            [T.rows[8], R.pct(p0, 1)],
+            [T.rows[9], R.num(o.chi2, 4)],
+            [T.rows[10], mdeTxt == null ? '—' : (o.tail === 'right' ? '≥ ' + fmt(up) : o.tail === 'left' ? '≤ ' + fmt(downSafe) : '≥ ' + fmt(up) + (EN ? ' or ≤ ' : ' o ≤ ') + fmt(downSafe))]
+        ]
+    });
+}
+
 function calculateORTest() {
     const a = parseFloat(document.getElementById('cellA').value);
     const b = parseFloat(document.getElementById('cellB').value);
@@ -605,21 +652,7 @@ function calculateORTest() {
     const n_total = a + b + c + d;
     const chiSq = n_total * Math.pow(a * d - b * c, 2) / ((a + b) * (c + d) * (a + c) * (b + d));
 
-    // OR interpretation
-    const orInterpretation = OR > 1
-        ? 'risk factor (OR > 1)'
-        : OR < 1
-            ? 'protective factor (OR < 1)'
-            : 'no association (OR = 1)';
-
-    const decision = pval < alpha ? 'H₀ is rejected.' : 'H₀ is not rejected.';
-    const confLevel = ((1 - alpha) * 100).toFixed(0);
-
-    resultEl.innerHTML =
-        `<strong>OR = ${OR.toFixed(4)}</strong> — ${orInterpretation}<br>` +
-        `Z = ${Z.toFixed(4)} | p-value = ${pval.toFixed(6)} | <strong>${decision}</strong><br>` +
-        `CI${confLevel}%(OR) = (${ciLow.toFixed(4)}; ${ciHigh.toFixed(4)})<br>` +
-        `Pearson χ² (cross-check) = ${chiSq.toFixed(4)}`;
+    renderORResult({ a, b, c, d, alpha, tail, OR, se: seLogOR, z: Z, p: pval, chi2: chiSq });
 
     renderORTestChart(alpha, tail, Z);
 }

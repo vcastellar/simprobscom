@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="style_new.css?v=20261107-1">
 
     <script type="application/ld+json">
 {
@@ -75,42 +75,66 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "¿Es válido para grupos dependientes?",
+      "name": "¿Qué contrasta?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No; para datos emparejados se necesita un método específico para proporciones apareadas."
+        "text": "Si la proporción de éxitos es la misma en dos grupos independientes (H₀: p₁ = p₂), frente a que sean distintas o a que una sea mayor que la otra."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Qué mide exactamente?",
+      "name": "¿Por qué se usa la proporción combinada?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Si la diferencia observada entre \\(p_1\\) y \\(p_2\\) puede explicarse por azar bajo \\(H_0\\)."
+        "text": "Porque, si H₀ es cierta, los dos grupos comparten la misma proporción, y la mejor estimación de esa proporción común junta los datos de ambos."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Qué tamaño de muestra se recomienda?",
+      "name": "¿Es lo mismo que el chi-cuadrado de una tabla 2×2?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Cuanto mayor, mejor precisión; con muestras pequeñas la potencia puede ser limitada."
+        "text": "Sí, en el contraste bilateral: z² es igual al χ² de Pearson y el p-valor coincide. El contraste z permite además contrastes de una cola."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Qué debo reportar además del p-valor?",
+      "name": "¿Sirve para datos emparejados?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Diferencia de proporciones, intervalo de confianza y contexto práctico de la decisión."
+        "text": "No. Si son las mismas personas en dos momentos o condiciones, usa el test de McNemar."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Aquí también hay caso de desviación típica poblacional conocida?",
+      "name": "¿Cuándo debo usar el test exacto de Fisher?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No como en contrastes de medias. En dos proporciones la variabilidad bajo \\(H_0\\) se estima con la proporción combinada \\(\\hat{p}\\), por eso no se elige entre test z o t según \\(\\sigma\\)."
+        "text": "Cuando algún grupo tiene menos de unos 5 éxitos o fracasos esperados; en ese caso la aproximación normal no es fiable."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué debo informar además del p-valor?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Las dos proporciones, la diferencia en puntos porcentuales y su intervalo de confianza; según el contexto, también el riesgo relativo o el odds ratio."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué es la diferencia mínima detectable?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "La menor diferencia real entre las proporciones que el contraste detectaría con un 80 % de probabilidad con tus tamaños de grupo."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué tamaño de muestra necesito?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Depende de las proporciones esperadas, de la diferencia que quieras detectar y de la potencia deseada. Calcúlalo con la calculadora de tamaño muestral para dos proporciones."
       }
     }
   ]
@@ -164,11 +188,6 @@
     </header>
 
     <main>
-        <!-- Orden de secciones: 1) Conceptos clave, 2) Descripción, 3) Calculadora, 4) Contraste rápido, 5) Resto -->
-
-
-
-
         <section class="ss-shell" aria-label="Calculadora">
             <section class="card ss-controls">
                 <div class="panel-heading">
@@ -214,63 +233,141 @@
             </section>
         </section>
 
+        <aside class="sim-callout" aria-label="Simulación relacionada">
+            <p class="sim-callout-kicker">Simulación interactiva</p>
+            <p class="sim-callout-text"><strong>Visualiza α, β y la potencia</strong> Mueve el nivel de significación, el tamaño del efecto y el tamaño de muestra, y mira en el gráfico cómo cambian el error tipo I, el error tipo II y la potencia del contraste.</p>
+            <a class="sim-callout-link" href="simulaciones/simulador-errores-tipo-i-ii.html">Abrir el simulador de errores tipo I y II →</a>
+        </aside>
+
         <section class="card content-card">
-            <h3>Explicación</h3>
-            <p>Se usa cuando comparas dos grupos independientes con resultados binarios. En \(H_0\), se asume \(p_1 = p_2\) y se utiliza una proporción combinada para el error estándar, porque bajo la hipótesis nula ambos grupos comparten la misma probabilidad de éxito.</p>
-            <p>Este planteamiento permite evaluar de forma coherente si la diferencia observada responde a una fluctuación muestral o a un cambio estructural entre condiciones.</p>
+            <h3>¿Qué es el contraste de hipótesis para dos proporciones?</h3>
+            <p>Es el procedimiento que permite decidir si la proporción de «éxitos» es la misma en dos grupos independientes. Es el contraste detrás de muchísimas preguntas prácticas: ¿convierte más la versión B de la web que la A? ¿Se curan más pacientes con el tratamiento nuevo que con el estándar? ¿Votan igual hombres y mujeres? ¿Hay más defectos en el turno de noche? En cada grupo se cuenta cuántos individuos cumplen la condición, y se compara el porcentaje.</p>
+            <p>Se parte de la <strong>hipótesis nula</strong> de que las dos proporciones poblacionales son iguales, \(H_0: p_1 = p_2\), y se mide cuánto se separan las proporciones muestrales \(\hat{p}_1\) y \(\hat{p}_2\). Aunque los grupos fueran idénticos, sus proporciones muestrales nunca coincidirían exactamente; la pregunta es si la diferencia observada es mayor de lo que el azar explica razonablemente.</p>
 
             <h3>Hipótesis y estadístico</h3>
-            <p class="formula-line">\(H_0: p_1 - p_2 = 0\)</p>
-            <p class="formula-line">\( z = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1-\hat{p})(1/n_1 + 1/n_2)}} \)</p>
-            <p class="formula-line">\(\hat{p}=\frac{x_1+x_2}{n_1+n_2}\)</p>
+            <p class="formula-line">\(H_0: p_1 = p_2\)</p>
+            <p class="formula-line">\(H_1: p_1 \neq p_2\), \(p_1 > p_2\) o \(p_1 < p_2\)</p>
+            <p class="formula-line">\( z = \dfrac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1-\hat{p})\left(\dfrac{1}{n_1} + \dfrac{1}{n_2}\right)}}, \qquad \hat{p} = \dfrac{x_1 + x_2}{n_1 + n_2} \)</p>
             <ul>
-                <li><strong>\(\hat{p}_1 = x_1/n_1\)</strong>: proporción muestral observada en el grupo 1.</li>
-                <li><strong>\(\hat{p}_2 = x_2/n_2\)</strong>: proporción muestral observada en el grupo 2.</li>
                 <li><strong>\(x_1, x_2\)</strong>: número de éxitos en cada grupo.</li>
-                <li><strong>\(n_1, n_2\)</strong>: tamaños de los grupos 1 y 2.</li>
-                <li><strong>\(\hat{p}\)</strong>: proporción combinada bajo \(H_0\) (estimación conjunta de la proporción común a ambos grupos).</li>
+                <li><strong>\(n_1, n_2\)</strong>: tamaños de los grupos.</li>
+                <li><strong>\(\hat{p}_1 = x_1/n_1\), \(\hat{p}_2 = x_2/n_2\)</strong>: proporciones muestrales.</li>
+                <li><strong>\(\hat{p}\)</strong>: proporción combinada de los dos grupos.</li>
+            </ul>
+            <p>El denominador es el error estándar de la diferencia <em>si \(H_0\) fuera cierta</em>. Bajo \(H_0\) los dos grupos comparten la misma proporción, y la mejor estimación de esa proporción común es la combinada \(\hat{p}\), que junta todos los éxitos y todos los individuos. Con muestras suficientemente grandes, el estadístico sigue aproximadamente una normal estándar.</p>
+            <p>Este contraste z es equivalente al <a href="contraste-independencia-chi-cuadrado.html">chi-cuadrado de independencia</a> en una tabla 2×2: en el bilateral, \(z^2 = \chi^2\) y los p-valores coinciden. La ventaja del z es que permite contrastes de una cola y da directamente el sentido de la diferencia.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Cómo se hace el contraste, paso a paso</h3>
+            <ol>
+                <li><strong>Define qué grupo es el 1 y cuál el 2</strong>, y qué cuenta como éxito. La diferencia se calcula siempre como grupo 1 − grupo 2.</li>
+                <li><strong>Plantea las hipótesis y fija \(\alpha\)</strong>, normalmente 0,05.</li>
+                <li><strong>Calcula las proporciones</strong> de cada grupo y la combinada.</li>
+                <li><strong>Calcula el estadístico z</strong> y el p-valor, o compáralo con el valor crítico (1,96 en el bilateral con \(\alpha = 0{,}05\)).</li>
+                <li><strong>Decide e interpreta</strong>, acompañando la decisión con la diferencia en puntos porcentuales y su intervalo de confianza.</li>
+            </ol>
+
+            <h3>Regla de decisión</h3>
+            <ul>
+                <li>Si el <strong>p-valor</strong> es menor que \(\alpha\), se rechaza \(H_0\): hay evidencia de que las proporciones difieren.</li>
+                <li>Si el p-valor es mayor o igual que \(\alpha\), no hay evidencia suficiente para rechazar \(H_0\).</li>
+                <li>No rechazar \(H_0\) no demuestra que las proporciones sean iguales.</li>
+            </ul>
+            <p>Con una cola, la dirección se fija antes de ver los datos: la cola derecha contrasta que la proporción del grupo 1 es mayor que la del grupo 2. En los tests A/B suele recomendarse el bilateral, porque un cambio también puede empeorar los resultados.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Diferencia, riesgo relativo y odds ratio</h3>
+            <p>Hay tres formas habituales de expresar cuánto difieren dos proporciones, y conviene no confundirlas:</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Medida</th><th>Fórmula</th><th>Con 51,7 % frente a 36,9 %</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Diferencia (absoluta)</td><td>\(\hat{p}_1 - \hat{p}_2\)</td><td>14,8 puntos porcentuales</td></tr>
+                        <tr><td>Riesgo relativo</td><td>\(\hat{p}_1 / \hat{p}_2\)</td><td>1,40 (un 40 % más)</td></tr>
+                        <tr><td>Odds ratio</td><td>\(\dfrac{\hat{p}_1/(1-\hat{p}_1)}{\hat{p}_2/(1-\hat{p}_2)}\)</td><td>1,83</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>La diferencia absoluta es la más útil para decidir: un aumento del 50 % suena espectacular, pero puede ser pasar del 2 % al 3 %. El riesgo relativo es intuitivo para comunicar, y el <a href="contraste-hipotesis-odds-ratio.html">odds ratio</a> es la medida natural en los estudios de casos y controles y en la regresión logística. Las tres son 0 o 1 a la vez, así que el contraste de igualdad es el mismo; lo que cambia es cómo se cuenta el tamaño del efecto.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Supuestos del contraste</h3>
+            <ul>
+                <li><strong>Dos grupos independientes</strong>: cada individuo está en un solo grupo. Si son los mismos individuos en dos momentos o condiciones, usa el <a href="contraste-hipotesis-proporciones-apareadas.html">test de McNemar</a>.</li>
+                <li><strong>Observaciones independientes dentro de cada grupo</strong>. En un test A/B, por ejemplo, conviene contar usuarios y no páginas vistas, porque las visitas de un mismo usuario no son independientes.</li>
+                <li><strong>Tamaño suficiente</strong>: como regla práctica, al menos 5 éxitos y 5 fracasos esperados en cada grupo (con la proporción combinada). Si no se cumple, usa el <a href="test-exacto-fisher.html">test exacto de Fisher</a>; la calculadora te avisa y enlaza con él ya rellenado.</li>
             </ul>
         </section>
 
-
-
-
-
         <section class="card content-card">
-            <h3>Contraste rápido</h3>
-            <p>Bajo \(H_0\), ambas muestras comparten la misma proporción poblacional desconocida. La estimación conjunta natural de esa proporción común es \(\hat{p}=(x_1+x_2)/(n_1+n_2)\).</p>
-            <p>Por eso el error estándar del contraste se construye con \(\hat{p}\), coherente con la hipótesis nula de igualdad \(p_1=p_2\).</p>
+            <h3>Ejemplo resuelto 1: un tratamiento frente a otro</h3>
+            <p>Con el tratamiento nuevo mejoran 62 de 120 pacientes (\(\hat{p}_1 = 0{,}517\)); con el estándar, 48 de 130 (\(\hat{p}_2 = 0{,}369\)). Se contrasta \(H_0\colon p_1 = p_2\) frente a \(H_1\colon p_1 \neq p_2\) con \(\alpha = 0{,}05\).</p>
+            <p>La proporción combinada es \(\hat{p} = 110/250 = 0{,}44\), y el error estándar bajo \(H_0\):</p>
+            <p class="formula-line">\( SE = \sqrt{0{,}44 \times 0{,}56 \left(\dfrac{1}{120} + \dfrac{1}{130}\right)} \approx 0{,}0628 \)</p>
+            <p class="formula-line">\( z = \dfrac{0{,}517 - 0{,}369}{0{,}0628} \approx 2{,}35 \)</p>
+            <p>Como \(|z| = 2{,}35 > 1{,}96\), el p-valor bilateral es \(p \approx 0{,}019\): <strong>se rechaza \(H_0\)</strong>. El tratamiento nuevo mejora a 14,8 puntos porcentuales más pacientes, con un intervalo de confianza del 95 % que va de 2,5 a 26,9 puntos. El efecto es real, pero su tamaño está muy poco determinado: podría ser modesto o muy grande.</p>
+            <p><strong>En la calculadora:</strong> x₁ = 62, n₁ = 120, x₂ = 48, n₂ = 130 y «Bilateral (≠)». Son los valores con los que se abre la página.</p>
+
+            <h3>Ejemplo resuelto 2: un test A/B con mucho tráfico</h3>
+            <p>Una web prueba dos versiones de su página de pago. La versión A consigue 420 compras en 10 000 visitantes (4,2 %) y la B, 480 en 10 000 (4,8 %). Se contrasta con \(\alpha = 0{,}05\), bilateral, tomando A como grupo 1.</p>
+            <p class="formula-line">\( \hat{p} = \dfrac{900}{20\,000} = 0{,}045, \qquad SE = \sqrt{0{,}045 \times 0{,}955 \times \dfrac{2}{10\,000}} \approx 0{,}00293, \qquad z = \dfrac{0{,}042 - 0{,}048}{0{,}00293} \approx -2{,}05 \)</p>
+            <p>El p-valor es \(p \approx 0{,}041\): <strong>se rechaza \(H_0\)</strong>, con la versión B por delante. Fíjate en el tamaño: 0,6 puntos porcentuales. Con 10 000 visitantes por versión, el contraste detecta con un 80 % de probabilidad diferencias de apenas 0,9 puntos, así que diferencias pequeñas salen significativas. Que sea significativa no significa que compense: hay que valorar si 0,6 puntos más de conversión justifican el cambio. Para este tipo de análisis tienes también las calculadoras de <a href="ab-testing/">test A/B</a>.</p>
+            <p><strong>En la calculadora:</strong> x₁ = 420, n₁ = 10000, x₂ = 480, n₂ = 10000 y «Bilateral (≠)».</p>
         </section>
 
-                <section class="card content-card">
-                    <h3>Ejemplo resuelto: comparación de conversiones</h3>
-                        <p>Una versión A consigue 420 conversiones de 10.000 visitas y una versión B consigue 480 de 10.000. Introduce éxitos y tamaños de ambos grupos para obtener z, p-valor y decisión. Además de significación, revisa la diferencia absoluta: 4,8% − 4,2% = 0,6 puntos porcentuales.</p>
-                </section>
-                <section class="card content-card">
-                    <h3>Cómo interpretar el resultado</h3>
-                        <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que la diferencia observada entre \(\hat{p}_1\) y \(\hat{p}_2\) es estadísticamente incompatible con la hipótesis de igualdad poblacional. En términos prácticos, hay evidencia de que las dos condiciones, grupos o versiones producen tasas de éxito distintas. Sin embargo, la magnitud de la diferencia importa tanto como su significación: en A/B testing, una diferencia de 0,5 puntos porcentuales puede ser estadísticamente significativa con tráfico masivo pero tener un impacto de negocio despreciable. Reporta la diferencia estimada \(\hat{p}_1 - \hat{p}_2\) y su intervalo de confianza para contextualizar el resultado.</p>
-                        <p><strong>No rechazar \(H_0\)</strong> (p-valor ≥ α) no prueba que las proporciones sean iguales: solo indica que los datos son compatibles con esa igualdad al nivel elegido. Con muestras pequeñas, el test puede no tener potencia suficiente para detectar diferencias reales. Antes de concluir que no existe efecto, comprueba que el tamaño muestral era adecuado para detectar la diferencia mínima de interés práctico.</p>
-                        <p>El <strong>estadístico z</strong> mide cuántos errores estándar se aleja la diferencia muestral de cero, usando la proporción combinada \(\hat{p}\) para estimar la varianza bajo \(H_0\). En la visualización, la zona verde corresponde a la región de no rechazo, las zonas rojas son las regiones críticas y la línea ámbar señala el estadístico observado. Para reforzar la interpretación, considera calcular el riesgo relativo o el número necesario a tratar (NNT), que ofrecen una perspectiva más directa del impacto práctico.</p>
-                </section>
-                <section id="seo-support-content" class="card content-card">
+        <section class="card content-card">
+            <h3>Cómo interpretar el resultado</h3>
+            <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que la diferencia entre las proporciones es demasiado grande para atribuirla al azar si los dos grupos fueran iguales. Para valorar si importa, mira la diferencia en puntos porcentuales y su intervalo de confianza.</p>
+            <p><strong>No rechazar \(H_0\)</strong> (p-valor ≥ α) no demuestra que las proporciones sean iguales. Si quieres demostrar precisamente que un tratamiento no es peor que otro, el planteamiento correcto es un <a href="contraste-hipotesis-no-inferioridad.html">contraste de no inferioridad</a>.</p>
+            <p>En la calculadora, el resultado muestra la decisión con el p-valor, el estadístico z con las dos proporciones y una frase con la conclusión. En el gráfico, la zona verde es la región de no rechazo, las rojas son las regiones críticas y la línea ámbar marca el estadístico observado. En «Detalles del cálculo» tienes la diferencia en puntos, la proporción combinada, el error estándar, el intervalo de confianza y el riesgo relativo.</p>
+
+            <h3>Potencia y diferencia mínima detectable</h3>
+            <p>Debajo de la conclusión, la calculadora indica la <strong>diferencia mínima detectable</strong>: la menor diferencia real respecto a la proporción del grupo 2 que, con tus tamaños de grupo, el contraste detectaría con un 80 % de probabilidad. Depende mucho de la proporción de partida y del tamaño: con 120 pacientes por grupo solo se detectan con seguridad diferencias de unos 18 puntos, y con 10 000 por grupo, de menos de un punto. El enlace abre la <a href="tamano-muestral-dos-proporciones.html">calculadora de tamaño muestral para dos proporciones</a> con tus proporciones, tu α, la proporción entre los grupos y el tipo de contraste.</p>
+
+            <h3>Relación con el intervalo de confianza</h3>
+            <p>El otro enlace abre el <a href="intervalo-confianza-diferencia-proporciones.html">intervalo de confianza para la diferencia de proporciones</a> con tus datos. Contraste e intervalo casi siempre coinciden: si el intervalo no contiene el 0, el contraste es significativo. Pueden discrepar en casos límite, porque el contraste usa el error estándar con la proporción combinada y el intervalo de Wald, el de cada grupo.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Errores frecuentes</h3>
+            <ul>
+                <li><strong>Usarlo con datos emparejados</strong>, como las respuestas de las mismas personas antes y después.</li>
+                <li><strong>Contar unidades que no son independientes</strong>, como páginas vistas en lugar de usuarios.</li>
+                <li><strong>Mirar el test A/B cada día y pararlo en cuanto sale significativo</strong>: esa práctica dispara los falsos positivos. Fija el tamaño de antemano o usa métodos secuenciales.</li>
+                <li><strong>Confundir puntos porcentuales con porcentajes</strong>: pasar del 4,2 % al 4,8 % son 0,6 puntos, o un 14 % más.</li>
+                <li><strong>Concluir que dos grupos son iguales</strong> porque el contraste no es significativo.</li>
+                <li><strong>Aplicar el contraste z con muy pocos éxitos</strong>; en ese caso, usa el test exacto de Fisher.</li>
+            </ul>
+        </section>
+
+        <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
               <h3>Calculadoras relacionadas</h3>
               <ul>
-                <li><a href="contraste-hipotesis-una-proporcion.html">Contraste para una proporción</a></li>
                 <li><a href="tamano-muestral-dos-proporciones.html">Tamaño muestral para dos proporciones</a></li>
-                <li><a href="binomial.html">Distribución binomial</a></li>
+                <li><a href="intervalo-confianza-diferencia-proporciones.html">Intervalo de confianza para la diferencia de proporciones</a></li>
+                <li><a href="test-exacto-fisher.html">Test exacto de Fisher</a></li>
+                <li><a href="contraste-hipotesis-proporciones-apareadas.html">Proporciones apareadas (McNemar)</a></li>
                 <li><a href="ab-testing-z-test.html">Test Z para A/B testing</a></li>
-                <li><a href="intervalo-confianza-proporcion.html">Intervalo de confianza para proporciones</a></li>
               </ul>
             </section>
             <h3>Preguntas frecuentes</h3>
             <ul>
-                <li><strong>¿Es válido para grupos dependientes?</strong> No; para datos emparejados se necesita un método específico para proporciones apareadas.</li>
-                <li><strong>¿Qué mide exactamente?</strong> Si la diferencia observada entre \(p_1\) y \(p_2\) puede explicarse por azar bajo \(H_0\).</li>
-                <li><strong>¿Qué tamaño de muestra se recomienda?</strong> Cuanto mayor, mejor precisión; con muestras pequeñas la potencia puede ser limitada.</li>
-                <li><strong>¿Qué debo reportar además del p-valor?</strong> Diferencia de proporciones, intervalo de confianza y contexto práctico de la decisión.</li>
-                <li><strong>¿Aquí también hay caso de desviación típica poblacional conocida?</strong> No como en contrastes de medias. En dos proporciones la variabilidad bajo \(H_0\) se estima con la proporción combinada \(\hat{p}\), por eso no se elige entre test z o t según \(\sigma\).</li>
+                <li><strong>¿Qué contrasta?</strong> Si la proporción de éxitos es la misma en dos grupos independientes (H₀: p₁ = p₂), frente a que sean distintas o a que una sea mayor que la otra.</li>
+                <li><strong>¿Por qué se usa la proporción combinada?</strong> Porque, si H₀ es cierta, los dos grupos comparten la misma proporción, y la mejor estimación de esa proporción común junta los datos de ambos.</li>
+                <li><strong>¿Es lo mismo que el chi-cuadrado de una tabla 2×2?</strong> Sí, en el contraste bilateral: z² es igual al χ² de Pearson y el p-valor coincide. El contraste z permite además contrastes de una cola.</li>
+                <li><strong>¿Sirve para datos emparejados?</strong> No. Si son las mismas personas en dos momentos o condiciones, usa el test de McNemar.</li>
+                <li><strong>¿Cuándo debo usar el test exacto de Fisher?</strong> Cuando algún grupo tiene menos de unos 5 éxitos o fracasos esperados; en ese caso la aproximación normal no es fiable.</li>
+                <li><strong>¿Qué debo informar además del p-valor?</strong> Las dos proporciones, la diferencia en puntos porcentuales y su intervalo de confianza; según el contexto, también el riesgo relativo o el odds ratio.</li>
+                <li><strong>¿Qué es la diferencia mínima detectable?</strong> La menor diferencia real entre las proporciones que el contraste detectaría con un 80 % de probabilidad con tus tamaños de grupo.</li>
+                <li><strong>¿Qué tamaño de muestra necesito?</strong> Depende de las proporciones esperadas, de la diferencia que quieras detectar y de la potencia deseada. Calcúlalo con la calculadora de tamaño muestral para dos proporciones.</li>
             </ul>
+            <p class="external-ref">Referencia: <a href="https://en.wikipedia.org/wiki/Two-proportion_Z-test" target="_blank" rel="noopener noreferrer">Two-proportion Z-test</a> — Wikipedia (en inglés)</p>
         </section>
 
     </main>
@@ -292,6 +389,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="test-results.js?v=20261110-3"></script>
 <script>
 let twoPropTestChart;
 
@@ -368,6 +466,104 @@ function renderTwoPropTestChart(alpha, tail, zValue) {
     });
 }
 
+// n₁ con la misma fórmula que la calculadora de tamaño muestral para dos
+// proporciones (k = n₂/n₁).
+function twoPropSampleSize(p1, p2, k, alpha, tail, power) {
+    const zA = jStat.normal.inv(tail === 'two' ? 1 - alpha / 2 : 1 - alpha, 0, 1);
+    const zB = jStat.normal.inv(power, 0, 1);
+    const pBar = (p1 + k * p2) / (1 + k);
+    const t1 = zA * Math.sqrt((1 + 1 / k) * pBar * (1 - pBar));
+    const t2 = zB * Math.sqrt(p1 * (1 - p1) + p2 * (1 - p2) / k);
+    return Math.pow(t1 + t2, 2) / Math.pow(p1 - p2, 2);
+}
+
+// Menor diferencia respecto a p₂ que alcanza la potencia de referencia con n₁,
+// hacia arriba (+1) o hacia abajo (−1); null si no existe.
+function twoGroupMde(nFn, p2, n1, dir) {
+    const room = dir > 0 ? 1 - p2 : p2;
+    if (room <= 2e-6) return null;
+    return TestResult.solveMin((d) => nFn(p2 + dir * d) <= n1, 1e-6, room - 1e-6);
+}
+
+function renderTwoPropResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const q = o.tail === 'two' ? 1 - o.alpha / 2 : 1 - o.alpha;
+    const crit = jStat.normal.inv(q, 0, 1);
+    const k = o.n2 / o.n1;
+    const nFn = (p1) => twoPropSampleSize(p1, o.p2, k, o.alpha, o.tail, R.TARGET);
+    const up = o.tail === 'left' ? null : twoGroupMde(nFn, o.p2, o.n1, 1);
+    const down = o.tail === 'right' ? null : twoGroupMde(nFn, o.p2, o.n1, -1);
+    let mde, dir;
+    if (o.tail === 'right') { mde = up; dir = 1; }
+    else if (o.tail === 'left') { mde = down; dir = -1; }
+    else {
+        mde = (up == null && down == null) ? null : Math.max(up == null ? 0 : up, down == null ? 0 : down);
+        dir = (o.p1 >= o.p2 && up != null) || down == null ? 1 : -1;
+    }
+    if (mde != null) mde = R.sigUp(mde, 3);
+    const sign = o.tail === 'two' ? '±' : (o.tail === 'left' ? '−' : '+');
+    const pp2 = R.pct(o.p2, 1);
+    const T = EN ? {
+        label: 'z-test for two proportions, ' + { two: 'two-tailed', right: 'right-tailed', left: 'left-tailed' }[o.tail],
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        yes: '✓ There is statistical evidence that ' + { two: 'the two proportions differ.', right: 'the proportion of group 1 is greater than that of group 2.', left: 'the proportion of group 1 is less than that of group 2.' }[o.tail],
+        no: 'ℹ There is not enough evidence that ' + { two: 'the two proportions differ', right: 'the proportion of group 1 is greater than that of group 2', left: 'the proportion of group 1 is less than that of group 2' }[o.tail] + '. This does not prove that they are equal.',
+        mde: mde == null
+            ? 'With these group sizes, the test does not reach ' + R.pct(R.TARGET) + ' power even for the largest possible difference.'
+            : 'With these group sizes, the test detects with ' + R.pct(R.TARGET) + ' probability only differences of ' + sign + R.auto(mde) + ' (' + R.points(mde) + ') or more from the proportion of group 2 (' + pp2 + ').',
+        link: 'Work out the sample size needed for another difference',
+        warn: 'ℹ Some group has fewer than 5 expected successes or failures: the normal approximation may be inaccurate. Use Fisher\'s exact test.',
+        rows: ['Proportion in group 1 (p̂₁)', 'Proportion in group 2 (p̂₂)', 'Observed difference (p̂₁ − p̂₂)', 'Pooled proportion (p̂)', 'Standard error under H₀', 'Test statistic', 'Critical value', 'p-value',
+            R.pctLevel(1 - o.alpha) + ' confidence interval for p₁ − p₂ (Wald)', 'Relative risk (p̂₁ / p̂₂)', 'Minimum detectable difference (power ' + R.pct(R.TARGET) + ')']
+    } : {
+        label: 'Contraste z para dos proporciones, ' + { two: 'bilateral', right: 'de cola derecha', left: 'de cola izquierda' }[o.tail],
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        yes: '✓ Hay evidencia estadística de que ' + { two: 'las dos proporciones son distintas.', right: 'la proporción del grupo 1 es mayor que la del grupo 2.', left: 'la proporción del grupo 1 es menor que la del grupo 2.' }[o.tail],
+        no: 'ℹ No hay evidencia suficiente de que ' + { two: 'las dos proporciones sean distintas', right: 'la proporción del grupo 1 sea mayor que la del grupo 2', left: 'la proporción del grupo 1 sea menor que la del grupo 2' }[o.tail] + '. Esto no demuestra que sean iguales.',
+        mde: mde == null
+            ? 'Con estos tamaños de grupo, el contraste no llega a un ' + R.pct(R.TARGET) + ' de potencia ni con la mayor diferencia posible.'
+            : 'Con estos tamaños de grupo, el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad diferencias de ' + sign + R.auto(mde) + ' (' + R.points(mde) + ') o mayores respecto a la proporción del grupo 2 (' + pp2 + ').',
+        link: 'Calcular el tamaño muestral necesario para otra diferencia',
+        warn: 'ℹ Algún grupo tiene menos de 5 éxitos o fracasos esperados: la aproximación normal puede ser poco precisa. Usa el test exacto de Fisher.',
+        rows: ['Proporción del grupo 1 (p̂₁)', 'Proporción del grupo 2 (p̂₂)', 'Diferencia observada (p̂₁ − p̂₂)', 'Proporción combinada (p̂)', 'Error estándar bajo H₀', 'Estadístico', 'Valor crítico', 'p-valor',
+            'Intervalo de confianza al ' + R.pctLevel(1 - o.alpha) + ' para p₁ − p₂ (Wald)', 'Riesgo relativo (p̂₁ / p̂₂)', 'Diferencia mínima detectable (potencia ' + R.pct(R.TARGET) + ')']
+    };
+    const notes = [];
+    const small = [o.n1 * o.pPool, o.n1 * (1 - o.pPool), o.n2 * o.pPool, o.n2 * (1 - o.pPool)].some((v) => v < 5);
+    if (small) notes.push(R.esc(T.warn).replace(EN ? 'Fisher\'s exact test' : 'test exacto de Fisher',
+        '<a href="test-exacto-fisher.html?a=' + o.x1 + '&amp;b=' + (o.n1 - o.x1) + '&amp;c=' + o.x2 + '&amp;d=' + (o.n2 - o.x2) + '">' + (EN ? 'Fisher\'s exact test' : 'test exacto de Fisher') + '</a>'));
+    if (mde != null) {
+        const p1Link = Number((o.p2 + dir * mde).toFixed(6));
+        const url = 'tamano-muestral-dos-proporciones.html?p1=' + p1Link + '&p2=' + Number(o.p2.toFixed(6)) + '&alpha=' + o.alpha + '&power=' + R.TARGET +
+            (Math.abs(k - 1) > 1e-9 ? '&ratio=' + R.sig(k, 4) : '') + '&alt=' + (o.tail === 'two' ? 'two-sided' : 'one-sided');
+        notes.push(R.esc(T.mde) + ' ' + R.link(url, T.link));
+    } else notes.push(R.esc(T.mde));
+    notes.push(R.ciLink('intervalo-confianza-diferencia-proporciones.html?x1=' + o.x1 + '&n1=' + o.n1 + '&x2=' + o.x2 + '&n2=' + o.n2 + '&conf=' + R.sig(1 - o.alpha, 6), 1 - o.alpha));
+    const zc = jStat.normal.inv(1 - o.alpha / 2, 0, 1);
+    const seW = Math.sqrt(o.p1 * (1 - o.p1) / o.n1 + o.p2 * (1 - o.p2) / o.n2);
+    const diff = o.p1 - o.p2;
+    R.render(document.getElementById('twoPropResult'), {
+        label: T.label + ' · H₀: p₁ = p₂ · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, sec: ['z = ' + R.num(o.z, 4) + (EN ? ' · p̂₁ = ' : ' · p̂₁ = ') + R.pct(o.p1, 1) + (EN ? ', p̂₂ = ' : '; p̂₂ = ') + R.pct(o.p2, 1)],
+        ok: rejected, verdict: rejected ? T.yes : T.no,
+        notes: notes,
+        rows: [
+            [T.rows[0], R.num(o.p1, 4)],
+            [T.rows[1], R.num(o.p2, 4)],
+            [T.rows[2], R.num(diff, 4) + ' (' + R.points(Math.abs(diff)) + ')'],
+            [T.rows[3], R.num(o.pPool, 4)],
+            [T.rows[4], R.num(o.se, 4)],
+            [T.rows[5], 'z = ' + R.num(o.z, 4)],
+            [T.rows[6], (o.tail === 'two' ? '±' : (o.tail === 'left' ? '−' : '')) + R.num(crit, 4)],
+            [T.rows[7], R.prob(o.p)],
+            [T.rows[8], R.interval(diff - zc * seW, diff + zc * seW, 4)],
+            [T.rows[9], o.p2 > 0 ? R.num(o.p1 / o.p2, 3) : '—'],
+            [T.rows[10], mde == null ? '—' : sign + R.auto(mde)]
+        ]
+    });
+}
+
 function calculateTwoPropTest() {
     const x1 = parseFloat(document.getElementById('x1').value);
     const n1 = parseFloat(document.getElementById('n1').value);
@@ -406,8 +602,7 @@ function calculateTwoPropTest() {
     else if (tail === 'right') p = 1 - jStat.normal.cdf(z, 0, 1);
     else p = jStat.normal.cdf(z, 0, 1);
 
-    const decision = p < alpha ? 'Se rechaza H₀.' : 'No se rechaza H₀.';
-    resultEl.innerText = `p̂1=${p1.toFixed(4)} | p̂2=${p2.toFixed(4)} | z=${z.toFixed(4)} | p-valor=${p.toFixed(6)} | ${decision}`;
+    renderTwoPropResult({ x1, n1, x2, n2, p1, p2, pPool, se, z, p, alpha, tail });
     renderTwoPropTestChart(alpha, tail, z);
 }
 

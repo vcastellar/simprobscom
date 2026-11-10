@@ -69,7 +69,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
     <style>
         .contingency-table {
             border-collapse: collapse;
@@ -109,34 +109,66 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "When should I choose Fisher's test over chi-square?",
+      "name": "When is Fisher's exact test used?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "When some expected frequency is below 5, or when the total sample size is smaller\n                    than 20."
+        "text": "For 2×2 tables with small samples, especially when an expected frequency is below 5 and chi-square is not reliable."
       }
     },
     {
       "@type": "Question",
-      "name": "Is Fisher's test conservative?",
+      "name": "Why is it called exact?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "In some scenarios it can be, compared with alternatives such as Barnard's\n                    test, but it's the most widely accepted standard for 2×2 tables with small samples."
+        "text": "Because it computes the p-value from the hypergeometric distribution, without normal or chi-square approximations."
       }
     },
     {
       "@type": "Question",
-      "name": "Can I use Fisher's test with large samples?",
+      "name": "Can I use it with large samples?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes, although with large samples Pearson's chi-square gives\n                    practically identical results and is computationally more direct."
+        "text": "Yes. It gives results very similar to chi-square; the latter is preferred then because it makes intervals and power calculations easier."
       }
     },
     {
       "@type": "Question",
-      "name": "What does it mean if the OR is 0 or infinite?",
+      "name": "Does it work with zero cells?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It happens when some cell equals 0. In that case the OR is undefined, although\n                    the exact p-value can still be calculated."
+        "text": "Yes. The odds ratio will be 0 or infinite, but the exact p-value is computed without problems."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is it conservative?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Because the distribution is discrete: there is not always a rejection region with probability exactly α, and the real risk ends up somewhat below it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Two-tailed or one-tailed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Two-tailed, unless before seeing the data you are interested in only one direction of the association."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the minimum detectable difference?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The smallest real difference between the proportions of the two rows that the test would detect with 80% probability given your sizes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it work for tables larger than 2×2?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "There is an extension (Fisher-Freeman-Halton), but this calculator is for 2×2 tables. For larger tables, use the chi-square test of independence."
       }
     }
   ]
@@ -189,7 +221,6 @@
     </header>
 
     <main>
-
         <section class="ss-shell" aria-label="Calculator">
             <section class="card ss-controls">
                 <div class="panel-heading">
@@ -270,149 +301,141 @@
         </section>
 
         <section class="card content-card">
-            <h3>Explanation</h3>
+            <h3>What is Fisher's exact test?</h3>
+            <p>It is the test for deciding whether there is an <strong>association between two dichotomous variables</strong> arranged in a 2×2 table —treatment or placebo against recovered or not, exposed or not against ill or not— when the sample is <strong>small</strong>. Unlike the <a href="contraste-independencia-chi-cuadrado.html">chi-square test</a> and the <a href="contraste-hipotesis-dos-proporciones.html">two-proportion z-test</a>, it does not rely on any normal approximation: it computes the exact probability of every possible table. That makes it the right choice for small trials, rare events, subgroup analyses and whenever an expected frequency is below 5.</p>
+            <p>Ronald Fisher devised it with the famous experiment of the lady who claimed she could tell whether the milk or the tea had been poured first into her cup: with only 8 cups, the question was how many correct answers were needed to rule out that she was guessing.</p>
 
-            <p>
-                Fisher's exact test lets you test whether there is an association between two binary
-                categorical variables organized in a 2×2 table. Unlike Pearson's chi-square, it needs
-                no asymptotic approximation: it calculates the exact probability of every possible
-                table with the same fixed margins using the hypergeometric distribution.
-            </p>
-
-            <p>
-                It's especially suited to cases where expected frequencies are low (for example,
-                below 5 in some cell), in small clinical trials, studies of rare events or subgroup
-                analyses. When the sample size is large, Pearson's chi-square tends to agree with
-                Fisher's test.
-            </p>
-
-            <p>
-                Under the null hypothesis of independence, the count in cell (1,1) follows a
-                hypergeometric distribution conditional on the table's margins:
-            </p>
-
-            <h3>Hypotheses and test statistic</h3>
-            <p class="formula-line">\(H_0\): independence between rows and columns (OR = 1)</p>
-            <p class="formula-line">\(H_1\): association (OR ≠ 1)</p>
-            <p class="formula-line">
-                \[P(X = k) = \frac{\dbinom{a+b}{k}\dbinom{c+d}{a+c-k}}{\dbinom{n}{a+c}}\]
-            </p>
-            <p class="formula-line">
-                \[\text{OR} = \frac{a \cdot d}{b \cdot c}\]
-            </p>
-        </section>
-
-
-
-        <section class="card content-card">
-            <h3>Quick test</h3>
-
-            <p>
-                The exact p-value is obtained by summing the hypergeometric probabilities of every
-                table with the same margins that is at least as extreme as the observed one.
-                For the two-tailed test, every table whose probability is less than or equal to
-                that of the observed table is summed.
-            </p>
-
-            <p class="formula-line">
-                Right tail: \(\displaystyle p = \sum_{k \geq a} P(X = k)\)
-            </p>
-            <p class="formula-line">
-                Left tail: \(\displaystyle p = \sum_{k \leq a} P(X = k)\)
-            </p>
-            <p class="formula-line">
-                Two-tailed: \(\displaystyle p = \sum_{P(X=k)\,\leq\,P(X=a)} P(X = k)\)
-            </p>
-
-            <p>
-                The odds ratio (OR) quantifies the strength of the association: OR = 1 indicates
-                independence, OR &gt; 1 indicates a higher frequency of the event in row 1, OR &lt; 1
-                indicates the opposite. To complete the analysis, it's a good idea to accompany the
-                p-value with a confidence interval for the OR.
-            </p>
+            <h3>The table and the hypothesis</h3>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th></th><th>Column A</th><th>Column B</th><th>Total</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Row 1</strong></td><td>a</td><td>b</td><td>a + b</td></tr>
+                        <tr><td><strong>Row 2</strong></td><td>c</td><td>d</td><td>c + d</td></tr>
+                        <tr><td><strong>Total</strong></td><td>a + c</td><td>b + d</td><td>n</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="formula-line">\(H_0\): rows and columns are independent (\(OR = 1\))</p>
+            <p class="formula-line">\(H_1\): there is an association (\(OR \neq 1\), \(OR > 1\) or \(OR < 1\))</p>
+            <p>Usually the rows are the groups (treatment and control) and the columns the outcome (yes and no). Then \(H_0\) says that the proportion of column A is the same in both rows: \(a/(a+b)\) against \(c/(c+d)\).</p>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example</h3>
-            <p>In a clinical trial, 20 patients are randomly assigned to two groups: 10 receive the treatment and 10 receive a placebo. In the treatment group, 7 patients recover and 3 don't recover. In the control group, 4 recover and 6 don't recover. The resulting \(2 \times 2\) contingency table is: treatment/recovered = 7, treatment/not recovered = 3, control/recovered = 4, control/not recovered = 6.</p>
-            <p>With small expected frequencies in some cell, the usual chi-square test can be imprecise, so Fisher's exact test is applied instead. The margins are: row 1 (treatment) = 10, row 2 (control) = 10, column 1 (recovered) = 11, column 2 (not recovered) = 9, total = 20.</p>
-            <p>The exact probability of obtaining the observed table under \(H_0\) (independence) is calculated with the hypergeometric distribution:</p>
-            <p class="formula-line">\( P = \frac{\binom{11}{7}\binom{9}{3}}{\binom{20}{10}} = \frac{330 \times 84}{184756} \approx 0.150 \)</p>
-            <p>The one-tailed p-value (is the treatment better than the placebo?) is obtained by summing the probabilities of every table that is just as extreme or more extreme in the direction favorable to the treatment: \(P(X \geq 7) = P(7)+P(8)+P(9)+P(10) \approx 0.150 + 0.032 + 0.003 + 0.0001 \approx 0.185\). The two-tailed p-value is \(p_{\text{two-tailed}} \approx 0.37\).</p>
-            <p>Since \(p_{\text{two-tailed}} = 0.37 > 0.05 = \alpha\), \(H_0\) is not rejected. The observed odds ratio is \(\widehat{OR} = (7 \times 6)/(3 \times 4) = 42/12 = 3.5\), suggesting a trend favorable to the treatment, but the sample (n = 20) isn't large enough to reach statistical significance.</p>
-            <p>Conclusion: at a 5% significance level, it can't be concluded that there is a statistically significant association between the treatment and recovery. It's recommended to replicate the study with a larger sample size to detect clinically relevant differences with adequate power.</p>
+            <h3>How the exact p-value is computed</h3>
+            <p>The test fixes the row and column totals and asks: if there were no association, how likely would each possible way of distributing the individuals within the table be? With fixed margins, knowing cell a is enough to know the whole table, and under \(H_0\) that cell follows a <strong>hypergeometric</strong> distribution:</p>
+            <p class="formula-line">\( P(X = k) = \dfrac{\dbinom{a+b}{k}\dbinom{c+d}{a+c-k}}{\dbinom{n}{a+c}} \)</p>
+            <p>The p-value adds up the probabilities of the tables at least as extreme as the observed one:</p>
+            <ul>
+                <li><strong>Right tail</strong> (\(OR > 1\)): \(p = \sum_{k \geq a} P(X = k)\).</li>
+                <li><strong>Left tail</strong> (\(OR < 1\)): \(p = \sum_{k \leq a} P(X = k)\).</li>
+                <li><strong>Two-tailed</strong>: sum of all the tables whose probability is less than or equal to that of the observed one.</li>
+            </ul>
+            <p>The calculator's chart shows exactly that distribution: one bar for each possible value of a, with those included in the p-value highlighted.</p>
+            <p>Because the distribution is discrete, the test is <strong>conservative</strong>: the real risk of a false positive usually ends up somewhat below \(\alpha\). That is the price of not relying on approximations. With large samples, Fisher and chi-square give very similar results.</p>
+
+            <h3>Decision rule</h3>
+            <ul>
+                <li>If the <strong>exact p-value</strong> is less than \(\alpha\), \(H_0\) is rejected: there is evidence of an association.</li>
+                <li>If it is greater than or equal to \(\alpha\), there is not enough evidence to reject independence.</li>
+                <li>The direction is given by the odds ratio: OR &gt; 1 indicates that column A is more frequent in row 1.</li>
+            </ul>
+        </section>
+
+        <section class="card content-card">
+            <h3>Fisher, chi-square or z-test?</h3>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Situation</th><th>Recommended test</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>2×2 table with an expected frequency &lt; 5</td><td>Fisher's exact test</td></tr>
+                        <tr><td>2×2 table with large samples</td><td>Chi-square or two-proportion z-test (Fisher also works)</td></tr>
+                        <tr><td>Table larger than 2×2</td><td>Chi-square test of independence (merging categories if needed)</td></tr>
+                        <tr><td>Paired data</td><td><a href="contraste-hipotesis-proporciones-apareadas.html">McNemar's test</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>With today's computers, Fisher can also be used with large samples. The reason for preferring chi-square or the z-test in that case is practical: they make confidence intervals and power easy to compute, and the results agree.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Assumptions of the test</h3>
+            <ul>
+                <li><strong>Independent observations</strong>, each classified into a single cell.</li>
+                <li><strong>Two dichotomous variables</strong>.</li>
+                <li><strong>Fixed margins</strong>: strictly speaking, the test assumes fixed row and column totals. In practice it is also used when they are not, and it is then somewhat conservative.</li>
+            </ul>
+            <p>It requires no minimum sample size: it is valid even with zero cells, which give an odds ratio of 0 or infinity.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Worked example 1: a small trial</h3>
+            <p>In a trial, 20 patients are randomly assigned to treatment or placebo, 10 in each group. With the treatment 7 of 10 recover; with placebo, 4 of 10. The table is a = 7, b = 3 (treatment) and c = 4, d = 6 (placebo). The margins are 10 and 10 per row, and 11 recovered and 9 not recovered in total.</p>
+            <p>The probability of the observed table under \(H_0\) is</p>
+            <p class="formula-line">\( P(X = 7) = \dfrac{\dbinom{10}{7}\dbinom{10}{4}}{\dbinom{20}{11}} \approx 0.150 \)</p>
+            <p>For the right tail (is the treatment better?) you add the tables with 7 or more recoveries in the treated group: \(P(X \geq 7) \approx 0.150 + 0.032 + 0.003 + 0.0001 \approx 0.185\). The two-tailed p-value adds the equally or less likely tables at both ends, \(p \approx 0.370\). <strong>\(H_0\) is not rejected</strong>.</p>
+            <p>The odds ratio is \((7 \times 6)/(3 \times 4) = 3.5\) and the difference in recovery is 30 percentage points: an effect that would be very relevant. The problem is the size. With 10 patients per group and 40% recovery on placebo, the test does not reach 80% power even for the largest possible difference: not even a treatment that cured everyone would be detected with that certainty. Here, a non-significant result says very little.</p>
+            <p><strong>In the calculator:</strong> a = 7, b = 3, c = 4, d = 6.</p>
+
+            <h3>Worked example 2: a large effect with little data</h3>
+            <p>With the table the calculator opens with, a = 8, b = 2, c = 1, d = 9, column A appears in 80% of row 1 and 10% of row 2. The two-tailed exact p-value is \(p \approx 0.0055\): <strong>\(H_0\) is rejected</strong>. The odds ratio is \((8 \times 9)/(2 \times 1) = 36\), with a very wide confidence interval, as expected from such a small sample.</p>
+            <p>Pearson's chi-square would give \(p \approx 0.0017\) here, considerably smaller, but it is not reliable: the expected frequencies of the four cells are 4.5 and 5.5, at the limit of Cochran's rule. Fisher is the correct reference.</p>
+            <p><strong>In the calculator:</strong> these are the values the page opens with.</p>
         </section>
 
         <section class="card content-card">
             <h3>How to interpret the result</h3>
+            <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that the two variables are associated. To judge the magnitude, look at the proportions in each row, their difference and the odds ratio with its confidence interval; in small samples, that interval tends to be very wide.</p>
+            <p><strong>Not rejecting \(H_0\)</strong> does not prove independence. With little data, the power of the test is low, as in example 1.</p>
+            <p>In the calculator, the result shows the decision with the exact p-value, the odds ratio, the proportion of column A in each row and a sentence stating the conclusion. Under "Calculation details" you will find the difference between rows in percentage points and the probability of the observed table.</p>
 
-                <p>
-                If the exact p-value is less than \(\alpha\), \(H_0\) is rejected: there is statistical
-                evidence of association between the rows and columns of the 2×2 table. If the p-value
-                is greater than or equal to \(\alpha\), there isn't enough evidence to reject independence
-                with the available data. Unlike chi-square, this p-value is <em>exact</em> (conditional on the
-                observed marginal totals): it doesn't depend on any asymptotic approximation and remains valid even
-                when expected frequencies are very small or some cell contains few cases. Because it is discrete,
-                the test tends to be conservative: its actual type I error rate is usually below \(\alpha\).
-                </p>
+            <h3>Power and minimum detectable difference</h3>
+            <p>Below the conclusion, the calculator shows the <strong>minimum detectable difference</strong>: the smallest real difference from the proportion of row 2 that, with your row totals, the test would detect with 80% probability. With small samples it is usually huge, or even impossible to reach. The link opens the <a href="tamano-muestral-fisher.html">sample size calculator for Fisher's test</a> with your proportions, your α, the ratio between the rows and the type of test.</p>
 
-                <p>
-                The <strong>odds ratio (OR)</strong> quantifies the magnitude and direction of the
-                association. An OR = 1 indicates perfect independence between the two variables. An
-                OR &gt; 1 indicates that the event in row 1 is more likely in column A than in column B;
-                OR &lt; 1 indicates the opposite. For example, OR = 3.5 means the probability of the event
-                is 3.5 times higher in the row 1 group. The exact direction and interpretation always
-                depend on how the rows and columns were labeled: it's best to describe the result in
-                substantive terms of the problem, not just numerically.
-                </p>
-
-                <p>
-                On choosing between <strong>Fisher and chi-square</strong>: Fisher's exact test is
-                preferable when some <em>expected</em> (not observed) frequency is below 5, or when the
-                total sample size is smaller than 20. With large samples, both tests converge and
-                Pearson's chi-square is computationally more direct. One limitation of Fisher's test
-                is that it conditions on the table's fixed margins, an assumption that isn't always
-                realistic in prospective studies; in those cases the use of alternatives such as
-                Barnard's test is discussed, although Fisher's test remains the standard in most
-                biomedical and experimental contexts.
-                </p>
+            <h3>Confidence interval for the odds ratio</h3>
+            <p>The other link opens the <a href="intervalo-confianza-odds-ratio.html">odds ratio confidence interval calculator</a> with your table. If a cell is zero, it applies the 0.5 correction automatically.</p>
         </section>
+
+        <section class="card content-card">
+            <h3>Common mistakes</h3>
+            <ul>
+                <li><strong>Using chi-square with very small expected frequencies</strong> instead of the exact test.</li>
+                <li><strong>Concluding that there is no effect</strong> in a small study because the test is not significant.</li>
+                <li><strong>Choosing the tail after seeing the data</strong>.</li>
+                <li><strong>Applying it to paired data</strong>: that is what McNemar's test is for.</li>
+                <li><strong>Reporting only the p-value</strong>, without the proportions or the odds ratio.</li>
+            </ul>
+        </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Related calculators</h3>
                 <ul>
-                    <li><a href="hypergeometric.html">Hypergeometric distribution</a></li>
+                    <li><a href="tamano-muestral-fisher.html">Sample size for Fisher's test</a></li>
+                    <li><a href="intervalo-confianza-odds-ratio.html">Confidence interval for the odds ratio</a></li>
                     <li><a href="contraste-independencia-chi-cuadrado.html">Chi-square test of independence</a></li>
-                    <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
+                    <li><a href="contraste-hipotesis-dos-proporciones.html">Two-proportion test</a></li>
+                    <li><a href="contraste-hipotesis-odds-ratio.html">Odds ratio test</a></li>
                 </ul>
             </section>
-
             <h3>Frequently asked questions</h3>
-
             <ul>
-                <li>
-                    <strong>When should I choose Fisher's test over chi-square?</strong>
-                    When some expected frequency is below 5, or when the total sample size
-                    is smaller than 20.
-                </li>
-                <li>
-                    <strong>Is Fisher's test conservative?</strong>
-                    In some scenarios it can be, compared with alternatives such as Barnard's
-                    test, but it's the most widely accepted standard for 2×2 tables with small samples.
-                </li>
-                <li>
-                    <strong>Can I use Fisher's test with large samples?</strong>
-                    Yes, although with large samples Pearson's chi-square gives results that are
-                    practically identical and is computationally more direct.
-                </li>
-                <li>
-                    <strong>What does it mean if the OR is 0 or infinite?</strong>
-                    It happens when some cell equals 0. In that case the OR is undefined, although
-                    the exact p-value can still be calculated.
-                </li>
+                <li><strong>When is Fisher's exact test used?</strong> For 2×2 tables with small samples, especially when an expected frequency is below 5 and chi-square is not reliable.</li>
+                <li><strong>Why is it called exact?</strong> Because it computes the p-value from the hypergeometric distribution, without normal or chi-square approximations.</li>
+                <li><strong>Can I use it with large samples?</strong> Yes. It gives results very similar to chi-square; the latter is preferred then because it makes intervals and power calculations easier.</li>
+                <li><strong>Does it work with zero cells?</strong> Yes. The odds ratio will be 0 or infinite, but the exact p-value is computed without problems.</li>
+                <li><strong>Why is it conservative?</strong> Because the distribution is discrete: there is not always a rejection region with probability exactly α, and the real risk ends up somewhat below it.</li>
+                <li><strong>Two-tailed or one-tailed?</strong> Two-tailed, unless before seeing the data you are interested in only one direction of the association.</li>
+                <li><strong>What is the minimum detectable difference?</strong> The smallest real difference between the proportions of the two rows that the test would detect with 80% probability given your sizes.</li>
+                <li><strong>Does it work for tables larger than 2×2?</strong> There is an extension (Fisher-Freeman-Halton), but this calculator is for 2×2 tables. For larger tables, use the chi-square test of independence.</li>
             </ul>
             <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Fisher%27s_exact_test" target="_blank" rel="noopener noreferrer">Fisher's exact test</a> — Wikipedia</p>
         </section>
+
     </main>
 
     <footer class="legal-footer">
@@ -432,6 +455,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../test-results.js?v=20261110-3"></script>
 
 <script>
 let fisherChart;
@@ -527,6 +551,89 @@ function renderFisherChart(a, probs, pObs, tail) {
     });
 }
 
+// n₁ con la misma fórmula que la calculadora de tamaño muestral para el test
+// de Fisher (Fleiss con corrección de continuidad de Casagrande y Pike).
+function fisherSampleSize(p1, p2, r, alpha, tail, power) {
+    const zA = jStat.normal.inv(tail === 'two' ? 1 - alpha / 2 : 1 - alpha, 0, 1);
+    const zB = jStat.normal.inv(power, 0, 1);
+    const pBar = (p1 + r * p2) / (1 + r);
+    const n = Math.pow(zA * Math.sqrt((1 + 1 / r) * pBar * (1 - pBar)) + zB * Math.sqrt(p1 * (1 - p1) + p2 * (1 - p2) / r), 2) / Math.pow(p1 - p2, 2);
+    return (n / 4) * Math.pow(1 + Math.sqrt(1 + 2 * (1 + 1 / r) / (n * Math.abs(p1 - p2))), 2);
+}
+
+function renderFisherResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const n1 = o.a + o.b, n2 = o.c + o.d;
+    const p1 = n1 ? o.a / n1 : NaN, p2 = n2 ? o.c / n2 : NaN;
+    const r = n2 / n1;
+    const ok = n1 > 0 && n2 > 0;
+    let mde = null, dir = 1;
+    if (ok) {
+        const nFn = (x) => fisherSampleSize(x, p2, r, o.alpha, o.tail, R.TARGET);
+        const search = (s) => {
+            const room = s > 0 ? 1 - p2 : p2;
+            return room <= 2e-6 ? null : R.solveMin((d) => nFn(p2 + s * d) <= n1, 1e-6, room - 1e-6);
+        };
+        const up = o.tail === 'left' ? null : search(1);
+        const down = o.tail === 'right' ? null : search(-1);
+        if (o.tail === 'right') { mde = up; dir = 1; }
+        else if (o.tail === 'left') { mde = down; dir = -1; }
+        else {
+            mde = (up == null && down == null) ? null : Math.max(up == null ? 0 : up, down == null ? 0 : down);
+            dir = (p1 >= p2 && up != null) || down == null ? 1 : -1;
+        }
+        if (mde != null) mde = R.sigUp(mde, 3);
+        if (mde != null && (p2 + dir * mde <= 0 || p2 + dir * mde >= 1)) mde = null;
+    }
+    const sign = o.tail === 'two' ? '±' : (o.tail === 'left' ? '−' : '+');
+    const orTxt = Number.isNaN(o.or) ? '—' : (Number.isFinite(o.or) ? R.num(o.or, 4) : '∞');
+    const T = EN ? {
+        label: 'Fisher\'s exact test, ' + { two: 'two-tailed', right: 'right-tailed', left: 'left-tailed' }[o.tail],
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        yes: '✓ There is statistical evidence of an association between rows and columns: ' + { two: 'the proportion of column A differs between the two rows.', right: 'the proportion of column A is higher in row 1.', left: 'the proportion of column A is lower in row 1.' }[o.tail],
+        no: 'ℹ There is not enough evidence of an association between rows and columns. This does not prove that they are independent.',
+        mde: mde == null
+            ? 'With these row totals, the test does not reach ' + R.pct(R.TARGET) + ' power even for the largest possible difference.'
+            : 'With these row totals, the test detects with ' + R.pct(R.TARGET) + ' probability only differences of ' + sign + R.auto(mde) + ' (' + R.points(mde) + ') or more from the proportion of row 2 (' + R.pct(p2, 1) + ').',
+        link: 'Work out the sample size needed for another difference',
+        rows: ['Proportion of column A in row 1', 'Proportion of column A in row 2', 'Difference', 'Odds ratio (a·d)/(b·c)', 'Probability of the observed table under H₀', 'Exact p-value', 'Minimum detectable difference (power ' + R.pct(R.TARGET) + ')']
+    } : {
+        label: 'Test exacto de Fisher, ' + { two: 'bilateral', right: 'de cola derecha', left: 'de cola izquierda' }[o.tail],
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        yes: '✓ Hay evidencia estadística de asociación entre filas y columnas: ' + { two: 'la proporción de la columna A es distinta en las dos filas.', right: 'la proporción de la columna A es mayor en la fila 1.', left: 'la proporción de la columna A es menor en la fila 1.' }[o.tail],
+        no: 'ℹ No hay evidencia suficiente de asociación entre filas y columnas. Esto no demuestra que sean independientes.',
+        mde: mde == null
+            ? 'Con estos totales por fila, el contraste no llega a un ' + R.pct(R.TARGET) + ' de potencia ni con la mayor diferencia posible.'
+            : 'Con estos totales por fila, el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad diferencias de ' + sign + R.auto(mde) + ' (' + R.points(mde) + ') o mayores respecto a la proporción de la fila 2 (' + R.pct(p2, 1) + ').',
+        link: 'Calcular el tamaño muestral necesario para otra diferencia',
+        rows: ['Proporción de la columna A en la fila 1', 'Proporción de la columna A en la fila 2', 'Diferencia', 'Odds ratio (a·d)/(b·c)', 'Probabilidad de la tabla observada bajo H₀', 'p-valor exacto', 'Diferencia mínima detectable (potencia ' + R.pct(R.TARGET) + ')']
+    };
+    const notes = [];
+    if (mde != null) {
+        const url = 'tamano-muestral-fisher.html?p1=' + Number((p2 + dir * mde).toFixed(6)) + '&p2=' + Number(p2.toFixed(6)) + '&alpha=' + o.alpha +
+            '&power=' + R.TARGET + '&ratio=' + R.sig(r, 4) + '&tail=' + (o.tail === 'two' ? 'two' : dir > 0 ? 'right' : 'left');
+        notes.push(R.esc(T.mde) + ' ' + R.link(url, T.link));
+    } else notes.push(R.esc(T.mde));
+    notes.push(R.ciLink('intervalo-confianza-odds-ratio.html?a=' + o.a + '&b=' + o.b + '&c=' + o.c + '&d=' + o.d + '&conf=' + R.sig(1 - o.alpha, 6), 1 - o.alpha));
+    R.render(document.getElementById('fisherResult'), {
+        label: T.label + ' · H₀: OR = 1 · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, pLabel: EN ? 'exact p-value' : 'p-valor exacto',
+        sec: ['OR = ' + orTxt + ' · ' + (EN ? 'row 1: ' : 'fila 1: ') + (ok ? R.pct(p1, 1) : '—') + (EN ? ', row 2: ' : '; fila 2: ') + (ok ? R.pct(p2, 1) : '—')],
+        ok: rejected, verdict: rejected ? T.yes : T.no,
+        notes: notes,
+        rows: [
+            [T.rows[0], ok ? R.num(p1, 4) : '—'],
+            [T.rows[1], ok ? R.num(p2, 4) : '—'],
+            [T.rows[2], ok ? R.num(p1 - p2, 4) + ' (' + R.points(Math.abs(p1 - p2)) + ')' : '—'],
+            [T.rows[3], orTxt],
+            [T.rows[4], R.prob(o.pObs)],
+            [T.rows[5], R.prob(o.p)],
+            [T.rows[6], mde == null ? '—' : sign + R.auto(mde)]
+        ]
+    });
+}
+
 function calculateFisher() {
     const a = parseInt(document.getElementById('cellA').value, 10);
     const b = parseInt(document.getElementById('cellB').value, 10);
@@ -550,21 +657,21 @@ function calculateFisher() {
     }
 
     const { pValue, or, probs, pObs } = computeFisher(a, b, c, d, tail);
-    const decision = pValue < alpha ? 'H₀ is rejected.' : 'H₀ is not rejected.';
-
-    let orStr;
-    if (Number.isNaN(or)) orStr = 'Undefined';
-    else if (!Number.isFinite(or)) orStr = '∞';
-    else orStr = or.toFixed(4);
-
-    resultEl.innerText =
-        `OR = ${orStr} | exact p-value = ${pValue.toFixed(6)} | ${decision}`;
+    renderFisherResult({ a, b, c, d, alpha, tail, p: pValue, or, pObs });
 
     renderFisherChart(a, probs, pObs, tail);
 }
 
 document.getElementById('calcFisherBtn').addEventListener('click', calculateFisher);
 
+(function () {
+    // Tabla recibida por la URL (?a=…&b=…&c=…&d=…), por ejemplo desde otro contraste.
+    let params;
+    try { params = new URLSearchParams(location.search); } catch (e) { return; }
+    const cells = { a: 'cellA', b: 'cellB', c: 'cellC', d: 'cellD' };
+    if (!Object.keys(cells).every((k) => /^\d+$/.test(params.get(k) || ''))) return;
+    Object.keys(cells).forEach((k) => { document.getElementById(cells[k]).value = params.get(k); });
+}());
 calculateFisher();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>

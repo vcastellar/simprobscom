@@ -328,7 +328,7 @@ function calculateFisherSampleSize() {
         const p2    = parseFloat(document.getElementById('fisherP2').value);
         const alpha = parseFloat(document.getElementById('fisherAlpha').value);
         const power = parseFloat(document.getElementById('fisherPower').value);
-        const r     = parseInt(document.getElementById('fisherRatio').value);
+        const r     = parseFloat(document.getElementById('fisherRatio').value);
         const tail  = document.getElementById('fisherTail').value;
 
         if (!Number.isFinite(p1) || p1 <= 0 || p1 >= 1) throw new Error('p₁ must be between 0 and 1 (exclusive).');
@@ -367,7 +367,7 @@ function calculateFisherSampleSize() {
 
         resultEl.innerText =
             `n₁ (group 1): ${n1_final}  |  n₂ (group 2): ${n2_cc}  |  N total: ${n_total}\n` +
-            `With α = ${alpha} (${tailLabel}), power = ${(power * 100).toFixed(0)} %, p₁ = ${p1}, p₂ = ${p2}, r = ${r}.\n` +
+            `With α = ${alpha} (${tailLabel}), power = ${(power * 100).toFixed(0)} %, p₁ = ${p1}, p₂ = ${p2}, r = ${+r.toFixed(3)}.\n` +
             `n₁ without continuity correction (basic Fleiss): ${Math.ceil(n1_approx)}`;
         window.SampleSizeCharts && SampleSizeCharts.power({
             canvas: 'fisherChart', n: n1_final, target: power,
@@ -392,6 +392,29 @@ function calculateFisherSampleSize() {
 }
 
 document.getElementById('fisherCalculateBtn').addEventListener('click', calculateFisherSampleSize);
+(function () {
+    // Valores recibidos por la URL, por ejemplo desde la calculadora del contraste.
+    let params;
+    try { params = new URLSearchParams(location.search); } catch (e) { return; }
+    const fields = { p1: "fisherP1", p2: "fisherP2", alpha: "fisherAlpha", power: "fisherPower" };
+    Object.keys(fields).forEach(function (key) {
+        const value = parseFloat(params.get(key));
+        if (Number.isFinite(value)) document.getElementById(fields[key]).value = value;
+    });
+    const ratio = parseFloat(params.get("ratio"));
+    if (Number.isFinite(ratio) && ratio > 0) {
+        const sel = document.getElementById("fisherRatio");
+        let opt = Array.prototype.find.call(sel.options, function (o) { return Math.abs(parseFloat(o.value) - ratio) < 1e-9; });
+        if (!opt) {
+            const shown = ratio.toLocaleString("en-US", { maximumFractionDigits: 3 });
+            opt = new Option("r = " + shown + " (from your study)", String(ratio));
+            sel.add(opt);
+        }
+        sel.value = opt.value;
+    }
+    const tail = params.get("tail");
+    if (["two", "right", "left"].includes(tail)) document.getElementById("fisherTail").value = tail;
+}());
 calculateFisherSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>

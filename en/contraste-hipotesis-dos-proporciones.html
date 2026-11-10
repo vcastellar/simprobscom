@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
 
     <script type="application/ld+json">
 {
@@ -75,26 +75,42 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Is it valid for dependent groups?",
+      "name": "What does it test?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No; for paired data you need a specific method for paired proportions."
+        "text": "Whether the proportion of successes is the same in two independent groups (H₀: p₁ = p₂), against the alternative that they differ or that one is greater than the other."
       }
     },
     {
       "@type": "Question",
-      "name": "What exactly does it measure?",
+      "name": "Why is the pooled proportion used?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Whether the observed difference between \\(p_1\\) and \\(p_2\\) can be explained by chance under \\(H_0\\)."
+        "text": "Because, if H₀ is true, both groups share the same proportion, and the best estimate of that common proportion combines the data from both."
       }
     },
     {
       "@type": "Question",
-      "name": "What sample size is recommended?",
+      "name": "Is it the same as the chi-square test on a 2×2 table?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The larger, the better the precision; with small samples the power can be limited."
+        "text": "Yes, for the two-tailed test: z² equals Pearson's χ² and the p-value is the same. The z-test also allows one-tailed tests."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can it be used with paired data?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. If they are the same people at two times or under two conditions, use McNemar's test."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When should I use Fisher's exact test?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "When some group has fewer than about 5 expected successes or failures; in that case the normal approximation is not reliable."
       }
     },
     {
@@ -102,15 +118,23 @@
       "name": "What should I report besides the p-value?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The difference of proportions, its confidence interval, and the practical context of the decision."
+        "text": "Both proportions, the difference in percentage points and its confidence interval; depending on the context, also the relative risk or the odds ratio."
       }
     },
     {
       "@type": "Question",
-      "name": "Is there also a case of known population standard deviation here?",
+      "name": "What is the minimum detectable difference?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Not like in tests for means. For two proportions, the variability under \\(H_0\\) is estimated with the pooled proportion \\(\\hat{p}\\), so there is no choice between a z-test or a t-test based on \\(\\sigma\\)."
+        "text": "The smallest real difference between the proportions that the test would detect with 80% probability given your group sizes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What sample size do I need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It depends on the expected proportions, the difference you want to detect and the desired power. Work it out with the sample size calculator for two proportions."
       }
     }
   ]
@@ -160,11 +184,6 @@
     </header>
 
     <main>
-        <!-- Section order: 1) Key concepts, 2) Description, 3) Calculator, 4) Quick test, 5) Rest -->
-
-
-
-
         <section class="ss-shell" aria-label="Calculator">
             <section class="card ss-controls">
                 <div class="panel-heading">
@@ -210,63 +229,141 @@
             </section>
         </section>
 
+        <aside class="sim-callout" aria-label="Related simulation">
+            <p class="sim-callout-kicker">Interactive simulation</p>
+            <p class="sim-callout-text"><strong>See α, β and power in action</strong> Move the significance level, the effect size and the sample size, and watch how the type I error, the type II error and the power of the test change on the chart.</p>
+            <a class="sim-callout-link" href="simulaciones/simulador-errores-tipo-i-ii.html">Open the type I and type II error simulator →</a>
+        </aside>
+
         <section class="card content-card">
-            <h3>Explanation</h3>
-            <p>This test is used when comparing two independent groups with binary outcomes. Under \(H_0\), it is assumed that \(p_1 = p_2\), and a pooled proportion is used for the standard error, because under the null hypothesis both groups share the same probability of success.</p>
-            <p>This approach makes it possible to evaluate consistently whether the observed difference reflects sampling fluctuation or a structural change between conditions.</p>
+            <h3>What is a hypothesis test for two proportions?</h3>
+            <p>It is the procedure for deciding whether the proportion of "successes" is the same in two independent groups. It lies behind a great many practical questions: does version B of the website convert more than version A? Do more patients recover with the new treatment than with the standard one? Do men and women vote the same way? Are there more defects on the night shift? In each group you count how many individuals meet the condition and compare the percentages.</p>
+            <p>You start from the <strong>null hypothesis</strong> that the two population proportions are equal, \(H_0: p_1 = p_2\), and measure how far apart the sample proportions \(\hat{p}_1\) and \(\hat{p}_2\) are. Even if the groups were identical, their sample proportions would never match exactly; the question is whether the observed difference is larger than chance can reasonably explain.</p>
 
             <h3>Hypotheses and test statistic</h3>
-            <p class="formula-line">\(H_0: p_1 - p_2 = 0\)</p>
-            <p class="formula-line">\( z = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1-\hat{p})(1/n_1 + 1/n_2)}} \)</p>
-            <p class="formula-line">\(\hat{p}=\frac{x_1+x_2}{n_1+n_2}\)</p>
+            <p class="formula-line">\(H_0: p_1 = p_2\)</p>
+            <p class="formula-line">\(H_1: p_1 \neq p_2\), \(p_1 > p_2\) or \(p_1 < p_2\)</p>
+            <p class="formula-line">\( z = \dfrac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1-\hat{p})\left(\dfrac{1}{n_1} + \dfrac{1}{n_2}\right)}}, \qquad \hat{p} = \dfrac{x_1 + x_2}{n_1 + n_2} \)</p>
             <ul>
-                <li><strong>\(\hat{p}_1 = x_1/n_1\)</strong>: observed sample proportion in group 1.</li>
-                <li><strong>\(\hat{p}_2 = x_2/n_2\)</strong>: observed sample proportion in group 2.</li>
                 <li><strong>\(x_1, x_2\)</strong>: number of successes in each group.</li>
-                <li><strong>\(n_1, n_2\)</strong>: sizes of groups 1 and 2.</li>
-                <li><strong>\(\hat{p}\)</strong>: pooled proportion under \(H_0\) (joint estimate of the proportion common to both groups).</li>
+                <li><strong>\(n_1, n_2\)</strong>: group sizes.</li>
+                <li><strong>\(\hat{p}_1 = x_1/n_1\), \(\hat{p}_2 = x_2/n_2\)</strong>: sample proportions.</li>
+                <li><strong>\(\hat{p}\)</strong>: pooled proportion of both groups.</li>
+            </ul>
+            <p>The denominator is the standard error of the difference <em>if \(H_0\) were true</em>. Under \(H_0\) both groups share the same proportion, and the best estimate of that common proportion is the pooled \(\hat{p}\), which combines all the successes and all the individuals. With large enough samples, the statistic approximately follows a standard normal distribution.</p>
+            <p>This z-test is equivalent to the <a href="contraste-independencia-chi-cuadrado.html">chi-square test of independence</a> on a 2×2 table: in the two-tailed case, \(z^2 = \chi^2\) and the p-values match. The advantage of z is that it allows one-tailed tests and directly gives the direction of the difference.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>How to carry out the test, step by step</h3>
+            <ol>
+                <li><strong>Decide which group is 1 and which is 2</strong>, and what counts as a success. The difference is always computed as group 1 − group 2.</li>
+                <li><strong>State the hypotheses and set \(\alpha\)</strong>, usually 0.05.</li>
+                <li><strong>Compute the proportions</strong> of each group and the pooled proportion.</li>
+                <li><strong>Compute the z statistic</strong> and the p-value, or compare it with the critical value (1.96 for a two-tailed test with \(\alpha = 0.05\)).</li>
+                <li><strong>Decide and interpret</strong>, reporting the decision together with the difference in percentage points and its confidence interval.</li>
+            </ol>
+
+            <h3>Decision rule</h3>
+            <ul>
+                <li>If the <strong>p-value</strong> is less than \(\alpha\), \(H_0\) is rejected: there is evidence that the proportions differ.</li>
+                <li>If the p-value is greater than or equal to \(\alpha\), there is not enough evidence to reject \(H_0\).</li>
+                <li>Not rejecting \(H_0\) does not prove that the proportions are equal.</li>
+            </ul>
+            <p>With a one-tailed test, the direction is fixed before seeing the data: the right tail tests whether the proportion of group 1 is greater than that of group 2. In A/B tests the two-tailed test is usually recommended, because a change can also make results worse.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Difference, relative risk and odds ratio</h3>
+            <p>There are three common ways of expressing how much two proportions differ, and they should not be confused:</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Measure</th><th>Formula</th><th>With 51.7% vs 36.9%</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Difference (absolute)</td><td>\(\hat{p}_1 - \hat{p}_2\)</td><td>14.8 percentage points</td></tr>
+                        <tr><td>Relative risk</td><td>\(\hat{p}_1 / \hat{p}_2\)</td><td>1.40 (40% more)</td></tr>
+                        <tr><td>Odds ratio</td><td>\(\dfrac{\hat{p}_1/(1-\hat{p}_1)}{\hat{p}_2/(1-\hat{p}_2)}\)</td><td>1.83</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>The absolute difference is the most useful for decisions: a 50% increase sounds spectacular, but it may mean going from 2% to 3%. Relative risk is intuitive for communicating results, and the <a href="contraste-hipotesis-odds-ratio.html">odds ratio</a> is the natural measure in case-control studies and logistic regression. All three indicate no difference at the same time (0 or 1), so the test of equality is the same; what changes is how the size of the effect is expressed.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Assumptions of the test</h3>
+            <ul>
+                <li><strong>Two independent groups</strong>: each individual is in only one group. If they are the same individuals at two times or under two conditions, use <a href="contraste-hipotesis-proporciones-apareadas.html">McNemar's test</a>.</li>
+                <li><strong>Independent observations within each group</strong>. In an A/B test, for example, count users rather than page views, because visits by the same user are not independent.</li>
+                <li><strong>A large enough sample</strong>: as a rule of thumb, at least 5 expected successes and 5 expected failures in each group (using the pooled proportion). If not, use <a href="test-exacto-fisher.html">Fisher's exact test</a>; the calculator warns you and links to it already filled in.</li>
             </ul>
         </section>
 
-
-
-
-
         <section class="card content-card">
-            <h3>Quick test</h3>
-            <p>Under \(H_0\), both samples share the same unknown population proportion. The natural joint estimate of that common proportion is \(\hat{p}=(x_1+x_2)/(n_1+n_2)\).</p>
-            <p>That is why the standard error of the test is built with \(\hat{p}\), consistent with the null hypothesis of equality \(p_1=p_2\).</p>
+            <h3>Worked example 1: one treatment against another</h3>
+            <p>With the new treatment, 62 of 120 patients improve (\(\hat{p}_1 = 0.517\)); with the standard one, 48 of 130 (\(\hat{p}_2 = 0.369\)). We test \(H_0\colon p_1 = p_2\) against \(H_1\colon p_1 \neq p_2\) with \(\alpha = 0.05\).</p>
+            <p>The pooled proportion is \(\hat{p} = 110/250 = 0.44\), and the standard error under \(H_0\) is:</p>
+            <p class="formula-line">\( SE = \sqrt{0.44 \times 0.56 \left(\dfrac{1}{120} + \dfrac{1}{130}\right)} \approx 0.0628 \)</p>
+            <p class="formula-line">\( z = \dfrac{0.517 - 0.369}{0.0628} \approx 2.35 \)</p>
+            <p>Since \(|z| = 2.35 > 1.96\), the two-tailed p-value is \(p \approx 0.019\): <strong>\(H_0\) is rejected</strong>. The new treatment helps 14.8 percentage points more patients, with a 95% confidence interval from 2.5 to 26.9 points. The effect is real, but its size is poorly determined: it could be modest or very large.</p>
+            <p><strong>In the calculator:</strong> x₁ = 62, n₁ = 120, x₂ = 48, n₂ = 130 and "Two-tailed (≠)". These are the values the page opens with.</p>
+
+            <h3>Worked example 2: an A/B test with lots of traffic</h3>
+            <p>A website tests two versions of its checkout page. Version A gets 420 purchases from 10,000 visitors (4.2%) and version B, 480 from 10,000 (4.8%). We test with \(\alpha = 0.05\), two-tailed, taking A as group 1.</p>
+            <p class="formula-line">\( \hat{p} = \dfrac{900}{20{,}000} = 0.045, \qquad SE = \sqrt{0.045 \times 0.955 \times \dfrac{2}{10{,}000}} \approx 0.00293, \qquad z = \dfrac{0.042 - 0.048}{0.00293} \approx -2.05 \)</p>
+            <p>The p-value is \(p \approx 0.041\): <strong>\(H_0\) is rejected</strong>, with version B ahead. Look at the size: 0.6 percentage points. With 10,000 visitors per version, the test detects with 80% probability differences of under 0.9 points, so small differences come out significant. Being significant does not mean it is worth it: you need to judge whether 0.6 more points of conversion justify the change. For this kind of analysis there are also the <a href="ab-testing/">A/B testing</a> calculators.</p>
+            <p><strong>In the calculator:</strong> x₁ = 420, n₁ = 10000, x₂ = 480, n₂ = 10000 and "Two-tailed (≠)".</p>
         </section>
 
-                <section class="card content-card">
-                    <h3>Worked example: comparing conversions</h3>
-                        <p>Version A gets 420 conversions out of 10,000 visits and version B gets 480 out of 10,000. Enter the successes and sizes of both groups to get z, the p-value and the decision. Besides significance, check the absolute difference: 4.8% − 4.2% = 0.6 percentage points.</p>
-                </section>
-                <section class="card content-card">
-                    <h3>How to interpret the result</h3>
-                        <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that the observed difference between \(\hat{p}_1\) and \(\hat{p}_2\) is statistically incompatible with the hypothesis of population equality. In practical terms, there is evidence that the two conditions, groups, or versions produce different success rates. However, the size of the difference matters as much as its significance: in A/B testing, a difference of 0.5 percentage points can be statistically significant with massive traffic but have a negligible business impact. Report the estimated difference \(\hat{p}_1 - \hat{p}_2\) and its confidence interval to give context to the result.</p>
-                        <p><strong>Not rejecting \(H_0\)</strong> (p-value ≥ α) does not prove that the proportions are equal: it only indicates that the data are compatible with that equality at the chosen level. With small samples, the test may not have enough power to detect real differences. Before concluding there is no effect, check that the sample size was adequate to detect the minimum difference of practical interest.</p>
-                        <p>The <strong>z statistic</strong> measures how many standard errors the sample difference is from zero, using the pooled proportion \(\hat{p}\) to estimate the variance under \(H_0\). In the chart, the green zone corresponds to the non-rejection region, the red zones are the critical regions, and the amber line marks the observed statistic. To strengthen the interpretation, consider computing the relative risk or the number needed to treat (NNT), which offer a more direct view of the practical impact.</p>
-                </section>
-                <section id="seo-support-content" class="card content-card">
+        <section class="card content-card">
+            <h3>How to interpret the result</h3>
+            <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that the difference between the proportions is too large to attribute to chance if both groups were equal. To judge whether it matters, look at the difference in percentage points and its confidence interval.</p>
+            <p><strong>Not rejecting \(H_0\)</strong> (p-value ≥ α) does not prove that the proportions are equal. If what you want to show is precisely that one treatment is not worse than another, the correct approach is a <a href="contraste-hipotesis-no-inferioridad.html">non-inferiority test</a>.</p>
+            <p>In the calculator, the result shows the decision with the p-value, the z statistic with both proportions and a sentence stating the conclusion. On the chart, the green area is the non-rejection region, the red areas are the critical regions and the amber line marks the observed statistic. Under "Calculation details" you will find the difference in points, the pooled proportion, the standard error, the confidence interval and the relative risk.</p>
+
+            <h3>Power and minimum detectable difference</h3>
+            <p>Below the conclusion, the calculator shows the <strong>minimum detectable difference</strong>: the smallest real difference from the proportion of group 2 that, with your group sizes, the test would detect with 80% probability. It depends heavily on the starting proportion and on the sample size: with 120 patients per group only differences of about 18 points are reliably detected, and with 10,000 per group, under one point. The link opens the <a href="tamano-muestral-dos-proporciones.html">sample size calculator for two proportions</a> with your proportions, your α, the ratio between the groups and the type of test.</p>
+
+            <h3>Relationship with the confidence interval</h3>
+            <p>The other link opens the <a href="intervalo-confianza-diferencia-proporciones.html">confidence interval for the difference in proportions</a> with your data. Test and interval almost always agree: if the interval does not contain 0, the test is significant. They can disagree in borderline cases, because the test uses the standard error with the pooled proportion and the Wald interval uses each group's own.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Common mistakes</h3>
+            <ul>
+                <li><strong>Using it with paired data</strong>, such as the answers of the same people before and after.</li>
+                <li><strong>Counting units that are not independent</strong>, such as page views instead of users.</li>
+                <li><strong>Checking the A/B test every day and stopping as soon as it is significant</strong>: that practice inflates false positives. Fix the sample size in advance or use sequential methods.</li>
+                <li><strong>Confusing percentage points with percentages</strong>: going from 4.2% to 4.8% is 0.6 points, or 14% more.</li>
+                <li><strong>Concluding that two groups are equal</strong> because the test is not significant.</li>
+                <li><strong>Applying the z-test with very few successes</strong>; in that case, use Fisher's exact test.</li>
+            </ul>
+        </section>
+
+        <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
               <h3>Related calculators</h3>
               <ul>
-                <li><a href="contraste-hipotesis-una-proporcion.html">Test for one proportion</a></li>
                 <li><a href="tamano-muestral-dos-proporciones.html">Sample size for two proportions</a></li>
-                <li><a href="binomial.html">Binomial distribution</a></li>
+                <li><a href="intervalo-confianza-diferencia-proporciones.html">Confidence interval for the difference in proportions</a></li>
+                <li><a href="test-exacto-fisher.html">Fisher's exact test</a></li>
+                <li><a href="contraste-hipotesis-proporciones-apareadas.html">Paired proportions (McNemar)</a></li>
                 <li><a href="ab-testing-z-test.html">Z-test for A/B testing</a></li>
-                <li><a href="intervalo-confianza-proporcion.html">Confidence interval for proportions</a></li>
               </ul>
             </section>
             <h3>Frequently asked questions</h3>
             <ul>
-                <li><strong>Is it valid for dependent groups?</strong> No; for paired data you need a specific method for paired proportions.</li>
-                <li><strong>What exactly does it measure?</strong> Whether the observed difference between \(p_1\) and \(p_2\) can be explained by chance under \(H_0\).</li>
-                <li><strong>What sample size is recommended?</strong> The larger, the better the precision; with small samples the power can be limited.</li>
-                <li><strong>What should I report besides the p-value?</strong> The difference of proportions, its confidence interval, and the practical context of the decision.</li>
-                <li><strong>Is there also a case of known population standard deviation here?</strong> Not like in tests for means. For two proportions, the variability under \(H_0\) is estimated with the pooled proportion \(\hat{p}\), so there is no choice between a z-test or a t-test based on \(\sigma\).</li>
+                <li><strong>What does it test?</strong> Whether the proportion of successes is the same in two independent groups (H₀: p₁ = p₂), against the alternative that they differ or that one is greater than the other.</li>
+                <li><strong>Why is the pooled proportion used?</strong> Because, if H₀ is true, both groups share the same proportion, and the best estimate of that common proportion combines the data from both.</li>
+                <li><strong>Is it the same as the chi-square test on a 2×2 table?</strong> Yes, for the two-tailed test: z² equals Pearson's χ² and the p-value is the same. The z-test also allows one-tailed tests.</li>
+                <li><strong>Can it be used with paired data?</strong> No. If they are the same people at two times or under two conditions, use McNemar's test.</li>
+                <li><strong>When should I use Fisher's exact test?</strong> When some group has fewer than about 5 expected successes or failures; in that case the normal approximation is not reliable.</li>
+                <li><strong>What should I report besides the p-value?</strong> Both proportions, the difference in percentage points and its confidence interval; depending on the context, also the relative risk or the odds ratio.</li>
+                <li><strong>What is the minimum detectable difference?</strong> The smallest real difference between the proportions that the test would detect with 80% probability given your group sizes.</li>
+                <li><strong>What sample size do I need?</strong> It depends on the expected proportions, the difference you want to detect and the desired power. Work it out with the sample size calculator for two proportions.</li>
             </ul>
+            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Two-proportion_Z-test" target="_blank" rel="noopener noreferrer">Two-proportion Z-test</a> — Wikipedia</p>
         </section>
 
     </main>
@@ -288,6 +385,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../test-results.js?v=20261110-3"></script>
 <script>
 let twoPropTestChart;
 
@@ -364,6 +462,104 @@ function renderTwoPropTestChart(alpha, tail, zValue) {
     });
 }
 
+// n₁ con la misma fórmula que la calculadora de tamaño muestral para dos
+// proporciones (k = n₂/n₁).
+function twoPropSampleSize(p1, p2, k, alpha, tail, power) {
+    const zA = jStat.normal.inv(tail === 'two' ? 1 - alpha / 2 : 1 - alpha, 0, 1);
+    const zB = jStat.normal.inv(power, 0, 1);
+    const pBar = (p1 + k * p2) / (1 + k);
+    const t1 = zA * Math.sqrt((1 + 1 / k) * pBar * (1 - pBar));
+    const t2 = zB * Math.sqrt(p1 * (1 - p1) + p2 * (1 - p2) / k);
+    return Math.pow(t1 + t2, 2) / Math.pow(p1 - p2, 2);
+}
+
+// Menor diferencia respecto a p₂ que alcanza la potencia de referencia con n₁,
+// hacia arriba (+1) o hacia abajo (−1); null si no existe.
+function twoGroupMde(nFn, p2, n1, dir) {
+    const room = dir > 0 ? 1 - p2 : p2;
+    if (room <= 2e-6) return null;
+    return TestResult.solveMin((d) => nFn(p2 + dir * d) <= n1, 1e-6, room - 1e-6);
+}
+
+function renderTwoPropResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const q = o.tail === 'two' ? 1 - o.alpha / 2 : 1 - o.alpha;
+    const crit = jStat.normal.inv(q, 0, 1);
+    const k = o.n2 / o.n1;
+    const nFn = (p1) => twoPropSampleSize(p1, o.p2, k, o.alpha, o.tail, R.TARGET);
+    const up = o.tail === 'left' ? null : twoGroupMde(nFn, o.p2, o.n1, 1);
+    const down = o.tail === 'right' ? null : twoGroupMde(nFn, o.p2, o.n1, -1);
+    let mde, dir;
+    if (o.tail === 'right') { mde = up; dir = 1; }
+    else if (o.tail === 'left') { mde = down; dir = -1; }
+    else {
+        mde = (up == null && down == null) ? null : Math.max(up == null ? 0 : up, down == null ? 0 : down);
+        dir = (o.p1 >= o.p2 && up != null) || down == null ? 1 : -1;
+    }
+    if (mde != null) mde = R.sigUp(mde, 3);
+    const sign = o.tail === 'two' ? '±' : (o.tail === 'left' ? '−' : '+');
+    const pp2 = R.pct(o.p2, 1);
+    const T = EN ? {
+        label: 'z-test for two proportions, ' + { two: 'two-tailed', right: 'right-tailed', left: 'left-tailed' }[o.tail],
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        yes: '✓ There is statistical evidence that ' + { two: 'the two proportions differ.', right: 'the proportion of group 1 is greater than that of group 2.', left: 'the proportion of group 1 is less than that of group 2.' }[o.tail],
+        no: 'ℹ There is not enough evidence that ' + { two: 'the two proportions differ', right: 'the proportion of group 1 is greater than that of group 2', left: 'the proportion of group 1 is less than that of group 2' }[o.tail] + '. This does not prove that they are equal.',
+        mde: mde == null
+            ? 'With these group sizes, the test does not reach ' + R.pct(R.TARGET) + ' power even for the largest possible difference.'
+            : 'With these group sizes, the test detects with ' + R.pct(R.TARGET) + ' probability only differences of ' + sign + R.auto(mde) + ' (' + R.points(mde) + ') or more from the proportion of group 2 (' + pp2 + ').',
+        link: 'Work out the sample size needed for another difference',
+        warn: 'ℹ Some group has fewer than 5 expected successes or failures: the normal approximation may be inaccurate. Use Fisher\'s exact test.',
+        rows: ['Proportion in group 1 (p̂₁)', 'Proportion in group 2 (p̂₂)', 'Observed difference (p̂₁ − p̂₂)', 'Pooled proportion (p̂)', 'Standard error under H₀', 'Test statistic', 'Critical value', 'p-value',
+            R.pctLevel(1 - o.alpha) + ' confidence interval for p₁ − p₂ (Wald)', 'Relative risk (p̂₁ / p̂₂)', 'Minimum detectable difference (power ' + R.pct(R.TARGET) + ')']
+    } : {
+        label: 'Contraste z para dos proporciones, ' + { two: 'bilateral', right: 'de cola derecha', left: 'de cola izquierda' }[o.tail],
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        yes: '✓ Hay evidencia estadística de que ' + { two: 'las dos proporciones son distintas.', right: 'la proporción del grupo 1 es mayor que la del grupo 2.', left: 'la proporción del grupo 1 es menor que la del grupo 2.' }[o.tail],
+        no: 'ℹ No hay evidencia suficiente de que ' + { two: 'las dos proporciones sean distintas', right: 'la proporción del grupo 1 sea mayor que la del grupo 2', left: 'la proporción del grupo 1 sea menor que la del grupo 2' }[o.tail] + '. Esto no demuestra que sean iguales.',
+        mde: mde == null
+            ? 'Con estos tamaños de grupo, el contraste no llega a un ' + R.pct(R.TARGET) + ' de potencia ni con la mayor diferencia posible.'
+            : 'Con estos tamaños de grupo, el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad diferencias de ' + sign + R.auto(mde) + ' (' + R.points(mde) + ') o mayores respecto a la proporción del grupo 2 (' + pp2 + ').',
+        link: 'Calcular el tamaño muestral necesario para otra diferencia',
+        warn: 'ℹ Algún grupo tiene menos de 5 éxitos o fracasos esperados: la aproximación normal puede ser poco precisa. Usa el test exacto de Fisher.',
+        rows: ['Proporción del grupo 1 (p̂₁)', 'Proporción del grupo 2 (p̂₂)', 'Diferencia observada (p̂₁ − p̂₂)', 'Proporción combinada (p̂)', 'Error estándar bajo H₀', 'Estadístico', 'Valor crítico', 'p-valor',
+            'Intervalo de confianza al ' + R.pctLevel(1 - o.alpha) + ' para p₁ − p₂ (Wald)', 'Riesgo relativo (p̂₁ / p̂₂)', 'Diferencia mínima detectable (potencia ' + R.pct(R.TARGET) + ')']
+    };
+    const notes = [];
+    const small = [o.n1 * o.pPool, o.n1 * (1 - o.pPool), o.n2 * o.pPool, o.n2 * (1 - o.pPool)].some((v) => v < 5);
+    if (small) notes.push(R.esc(T.warn).replace(EN ? 'Fisher\'s exact test' : 'test exacto de Fisher',
+        '<a href="test-exacto-fisher.html?a=' + o.x1 + '&amp;b=' + (o.n1 - o.x1) + '&amp;c=' + o.x2 + '&amp;d=' + (o.n2 - o.x2) + '">' + (EN ? 'Fisher\'s exact test' : 'test exacto de Fisher') + '</a>'));
+    if (mde != null) {
+        const p1Link = Number((o.p2 + dir * mde).toFixed(6));
+        const url = 'tamano-muestral-dos-proporciones.html?p1=' + p1Link + '&p2=' + Number(o.p2.toFixed(6)) + '&alpha=' + o.alpha + '&power=' + R.TARGET +
+            (Math.abs(k - 1) > 1e-9 ? '&ratio=' + R.sig(k, 4) : '') + '&alt=' + (o.tail === 'two' ? 'two-sided' : 'one-sided');
+        notes.push(R.esc(T.mde) + ' ' + R.link(url, T.link));
+    } else notes.push(R.esc(T.mde));
+    notes.push(R.ciLink('intervalo-confianza-diferencia-proporciones.html?x1=' + o.x1 + '&n1=' + o.n1 + '&x2=' + o.x2 + '&n2=' + o.n2 + '&conf=' + R.sig(1 - o.alpha, 6), 1 - o.alpha));
+    const zc = jStat.normal.inv(1 - o.alpha / 2, 0, 1);
+    const seW = Math.sqrt(o.p1 * (1 - o.p1) / o.n1 + o.p2 * (1 - o.p2) / o.n2);
+    const diff = o.p1 - o.p2;
+    R.render(document.getElementById('twoPropResult'), {
+        label: T.label + ' · H₀: p₁ = p₂ · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, sec: ['z = ' + R.num(o.z, 4) + (EN ? ' · p̂₁ = ' : ' · p̂₁ = ') + R.pct(o.p1, 1) + (EN ? ', p̂₂ = ' : '; p̂₂ = ') + R.pct(o.p2, 1)],
+        ok: rejected, verdict: rejected ? T.yes : T.no,
+        notes: notes,
+        rows: [
+            [T.rows[0], R.num(o.p1, 4)],
+            [T.rows[1], R.num(o.p2, 4)],
+            [T.rows[2], R.num(diff, 4) + ' (' + R.points(Math.abs(diff)) + ')'],
+            [T.rows[3], R.num(o.pPool, 4)],
+            [T.rows[4], R.num(o.se, 4)],
+            [T.rows[5], 'z = ' + R.num(o.z, 4)],
+            [T.rows[6], (o.tail === 'two' ? '±' : (o.tail === 'left' ? '−' : '')) + R.num(crit, 4)],
+            [T.rows[7], R.prob(o.p)],
+            [T.rows[8], R.interval(diff - zc * seW, diff + zc * seW, 4)],
+            [T.rows[9], o.p2 > 0 ? R.num(o.p1 / o.p2, 3) : '—'],
+            [T.rows[10], mde == null ? '—' : sign + R.auto(mde)]
+        ]
+    });
+}
+
 function calculateTwoPropTest() {
     const x1 = parseFloat(document.getElementById('x1').value);
     const n1 = parseFloat(document.getElementById('n1').value);
@@ -402,8 +598,7 @@ function calculateTwoPropTest() {
     else if (tail === 'right') p = 1 - jStat.normal.cdf(z, 0, 1);
     else p = jStat.normal.cdf(z, 0, 1);
 
-    const decision = p < alpha ? 'H₀ is rejected.' : 'H₀ is not rejected.';
-    resultEl.innerText = `p̂1=${p1.toFixed(4)} | p̂2=${p2.toFixed(4)} | z=${z.toFixed(4)} | p-value=${p.toFixed(6)} | ${decision}`;
+    renderTwoPropResult({ x1, n1, x2, n2, p1, p2, pPool, se, z, p, alpha, tail });
     renderTwoPropTestChart(alpha, tail, z);
 }
 

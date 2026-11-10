@@ -443,7 +443,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../test-results.js?v=20261110-2"></script>
+<script src="../test-results.js?v=20261110-3"></script>
 <script>
 let twoMeansTestChart;
 
@@ -551,7 +551,7 @@ function renderTwoMeansResult(o) {
         mde: 'With these group sizes, the test detects with ' + R.pct(R.TARGET) + ' probability only differences between the means of ' + mdeTxt + ' or more.',
         link: 'Work out the sample size needed for another difference',
         rows: ['Observed difference (x̄₁ − x̄₂)', 'Standard error', 'Test statistic', 'Degrees of freedom (Welch)', 'Critical value', 'p-value',
-            R.pct(1 - o.alpha, 1) + ' confidence interval for μ₁ − μ₂', "Effect size (Cohen's d)", 'Minimum detectable difference (power ' + R.pct(R.TARGET) + ')']
+            R.pctLevel(1 - o.alpha) + ' confidence interval for μ₁ − μ₂', "Effect size (Cohen's d)", 'Minimum detectable difference (power ' + R.pct(R.TARGET) + ')']
     } : {
         label: 'Contraste t de Welch ' + { two: 'bilateral', right: 'de cola derecha', left: 'de cola izquierda' }[o.tail],
         decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
@@ -561,7 +561,7 @@ function renderTwoMeansResult(o) {
         mde: 'Con estos tamaños de grupo, el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad diferencias entre las medias de ' + mdeTxt + ' o mayores.',
         link: 'Calcular el tamaño muestral necesario para otra diferencia',
         rows: ['Diferencia observada (x̄₁ − x̄₂)', 'Error estándar', 'Estadístico', 'Grados de libertad (Welch)', 'Valor crítico', 'p-valor',
-            'Intervalo de confianza al ' + R.pct(1 - o.alpha, 1) + ' para μ₁ − μ₂', 'Tamaño del efecto (d de Cohen)', 'Diferencia mínima detectable (potencia ' + R.pct(R.TARGET) + ')']
+            'Intervalo de confianza al ' + R.pctLevel(1 - o.alpha) + ' para μ₁ − μ₂', 'Tamaño del efecto (d de Cohen)', 'Diferencia mínima detectable (potencia ' + R.pct(R.TARGET) + ')']
     };
     const rows = [
         [T.rows[0], R.auto(R.sig(diff, 6))],

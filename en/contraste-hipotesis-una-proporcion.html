@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
 
     <script type="application/ld+json">
 {
@@ -75,42 +75,74 @@
   "mainEntity": [
     {
       "@type": "Question",
+      "name": "What does it test?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Whether the proportion of a population that meets a condition equals a reference value p₀, based on the proportion observed in a sample."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does the standard error use p₀ and not p̂?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Because the test evaluates the variability you would expect if the null hypothesis were true, that is, if the proportion were p₀."
+      }
+    },
+    {
+      "@type": "Question",
       "name": "When is the normal approximation valid?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "When the sample size lets you expect enough successes and failures under \\(H_0\\)."
+        "text": "When enough successes and failures are expected under H₀: as a rule of thumb, n·p₀ ≥ 10 and n·(1 − p₀) ≥ 10. If not, use an exact binomial test."
       }
     },
     {
       "@type": "Question",
-      "name": "Can I use a percentage instead of a proportion?",
+      "name": "Can I use percentages?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes, but convert it to a 0–1 scale for the calculation."
+        "text": "Yes, but enter them as proportions between 0 and 1: 65% is 0.65."
       }
     },
     {
       "@type": "Question",
-      "name": "Which tail should I choose?",
+      "name": "Two-tailed or one-tailed?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Two-tailed if you're looking for any difference; one-tailed if you're only interested in an increase or a decrease."
+        "text": "Two-tailed if you care about any difference from p₀; one-tailed only if, before seeing the data, you are interested in just one direction."
       }
     },
     {
       "@type": "Question",
-      "name": "Does significant mean important?",
+      "name": "Is significant the same as important?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Not always; also assess the size of the change in terms of business or real-world impact."
+        "text": "No. With large samples, small differences are significant. Judge the difference in percentage points and its confidence interval."
       }
     },
     {
       "@type": "Question",
-      "name": "Does this distinguish between sample and population deviation?",
+      "name": "What is the minimum detectable difference?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Not in the same way as with means. For proportions, the standard error is built with \\(p_0\\) (or with the pooled proportion for two proportions), not with a \\(\\sigma\\) supplied by the user."
+        "text": "The smallest real difference from p₀ that the test would detect with 80% probability given your sample size."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What sample size do I need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It depends on the difference you want to detect, on p₀ and on the desired power. Work it out with the sample size calculator for the one-proportion test."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if I want to compare two groups?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use the two-proportion test; if the data are paired, McNemar's test."
       }
     }
   ]
@@ -160,11 +192,6 @@
     </header>
 
     <main>
-        <!-- Section order: 1) Key concepts, 2) Description, 3) Calculator, 4) Quick test, 5) Rest -->
-
-
-
-
         <section class="ss-shell" aria-label="Calculator">
             <section class="card ss-controls">
                 <div class="panel-heading">
@@ -223,65 +250,147 @@
             </section>
         </section>
 
+        <aside class="sim-callout" aria-label="Related simulation">
+            <p class="sim-callout-kicker">Interactive simulation</p>
+            <p class="sim-callout-text"><strong>See α, β and power in action</strong> Move the significance level, the effect size and the sample size, and watch how the type I error, the type II error and the power of the test change on the chart.</p>
+            <a class="sim-callout-link" href="simulaciones/simulador-errores-tipo-i-ii.html">Open the type I and type II error simulator →</a>
+        </aside>
+
         <section class="card content-card">
-            <h3>Explanation</h3>
-            <p>The one-proportion test applies when each observation has two possible outcomes (success/failure) and you want to assess whether the population proportion is \(p_0\). It is a common test in campaign validation, production quality, clinical trials and opinion studies.</p>
-            <p>The method relies on the normal approximation of the sample proportion under \(H_0\), so the quality of the approximation improves with adequate sample sizes.</p>
+            <h3>What is a hypothesis test for one proportion?</h3>
+            <p>It is the procedure for deciding, from a sample, whether the proportion of a population that meets a condition equals a reference value \(p_0\). It is used when each observation has only two possible outcomes —yes or no, defective or fine, buys or does not buy— and what matters is the percentage of "yes": is customer satisfaction still 65%? Does the defect rate exceed the 5% the supplier guarantees? Has a campaign reached its 30% response target?</p>
+            <p>The logic is that of any test. You start from the <strong>null hypothesis</strong> that the proportion is \(p_0\) and look at how far the sample proportion \(\hat{p}\) is from it. A sample never reproduces the population proportion exactly: the question is whether the observed difference is larger than sampling variation can reasonably explain. If it is, \(H_0\) is rejected in favour of the <strong>alternative hypothesis</strong>.</p>
 
             <h3>Hypotheses and test statistic</h3>
             <p class="formula-line">\(H_0: p = p_0\)</p>
-            <p class="formula-line">\( z = \frac{\hat{p} - p_0}{\sqrt{p_0(1-p_0)/n}} \)</p>
+            <p class="formula-line">\(H_1: p \neq p_0\), \(p > p_0\) or \(p < p_0\)</p>
+            <p class="formula-line">\( z = \dfrac{\hat{p} - p_0}{\sqrt{p_0(1-p_0)/n}} \)</p>
             <ul>
-                <li><strong>\(\hat{p}\)</strong>: observed sample proportion (successes / n).</li>
-                <li><strong>\(p_0\)</strong>: proportion stated in the null hypothesis.</li>
+                <li><strong>\(\hat{p} = x/n\)</strong>: sample proportion, the number of successes \(x\) divided by the sample size.</li>
+                <li><strong>\(p_0\)</strong>: proportion stated by the null hypothesis.</li>
                 <li><strong>\(n\)</strong>: sample size.</li>
+            </ul>
+            <p>The denominator is the <strong>standard error</strong> of the sample proportion if \(H_0\) were true. Note that it is computed with \(p_0\), not with \(\hat{p}\): the test asks what variability you would expect if the proportion really were \(p_0\). That is why, unlike the one-mean test, you do not need to enter any standard deviation here: for a yes/no variable, the variability is determined by the proportion itself.</p>
+            <p>Thanks to the central limit theorem, with large enough samples the z statistic approximately follows a <a href="normal.html">standard normal</a> under \(H_0\). The statistic measures how many standard errors \(\hat{p}\) lies from \(p_0\).</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>How to carry out the test, step by step</h3>
+            <ol>
+                <li><strong>State the hypotheses</strong> before seeing the data: the value \(p_0\) and whether you care about any difference or only one direction.</li>
+                <li><strong>Set the significance level</strong> \(\alpha\), usually 0.05.</li>
+                <li><strong>Compute the sample proportion</strong> \(\hat{p} = x/n\) and check that the normal approximation is acceptable.</li>
+                <li><strong>Compute the z statistic</strong> and the p-value, or compare it with the critical value from the <a href="tabla-normal.html">normal table</a> (1.96 for a two-tailed test with \(\alpha = 0.05\)).</li>
+                <li><strong>Decide and interpret</strong>, reporting the decision together with the confidence interval for \(p\).</li>
+            </ol>
+
+            <h3>Decision rule</h3>
+            <ul>
+                <li>If the <strong>p-value</strong> is less than \(\alpha\), \(H_0\) is rejected.</li>
+                <li>If the p-value is greater than or equal to \(\alpha\), there is not enough evidence to reject \(H_0\).</li>
+                <li>Not rejecting \(H_0\) does not prove that the proportion equals \(p_0\).</li>
+            </ul>
+
+            <h3>Two-tailed or one-tailed?</h3>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Type</th><th>Alternative hypothesis</th><th>Example question</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Two-tailed</td><td>\(H_1: p \neq p_0\)</td><td>Has satisfaction changed, in either direction?</td></tr>
+                        <tr><td>Right-tailed</td><td>\(H_1: p > p_0\)</td><td>Does the defect rate exceed the guaranteed 5%?</td></tr>
+                        <tr><td>Left-tailed</td><td>\(H_1: p < p_0\)</td><td>Has the churn rate fallen below 20%?</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>The tail must be chosen before seeing the data and for a reason rooted in the problem. Choosing it after seeing which way \(\hat{p}\) points doubles the real risk of a false positive. When in doubt, use the two-tailed test.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>When the normal approximation holds</h3>
+            <p>The z-test is an approximation: the number of successes actually follows a <a href="binomial.html">binomial distribution</a>, which looks like a normal when you expect plenty of successes and plenty of failures. The usual rule of thumb is</p>
+            <p class="formula-line">\( n\,p_0 \geq 10 \quad \text{and} \quad n\,(1-p_0) \geq 10 \)</p>
+            <p>(some texts accept 5). With \(p_0\) close to 0 or 1 you need large samples: for \(p_0 = 0.02\), at least 500 observations. If the rule fails, the p-value of the z-test can be quite inaccurate and an exact binomial test is preferable. The calculator warns you when the rule is not met.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Assumptions of the test</h3>
+            <ul>
+                <li><strong>A dichotomous variable</strong>: each observation is a success or a failure. If your variable is numeric, use the <a href="contraste-hipotesis-una-media.html">one-mean test</a>.</li>
+                <li><strong>Independent observations</strong>: one response does not influence another. This fails, for example, if several people from the same household are surveyed as if they were independent.</li>
+                <li><strong>A random sample</strong> from the population you want to draw conclusions about. With convenience samples (volunteers, whoever answers an online survey) the test may be correct and the conclusion wrong.</li>
+                <li><strong>A large enough sample</strong> for the normal approximation, as explained above.</li>
             </ul>
         </section>
 
-
-
-
-
         <section class="card content-card">
-            <h3>Quick test</h3>
-            <p>Under \(H_0\), the variability of \(\hat{p}\) is given by \(p_0(1-p_0)/n\). That is why the denominator uses \(p_0\): we are evaluating compatibility with the specific null hypothesis.</p>
-            <p>The normal approximation is reasonable when \(n p_0\) and \(n(1-p_0)\) are large enough (rule of thumb: at least 5 or 10).</p>
+            <h3>Worked example 1: two-tailed test</h3>
+            <p>According to previous studies, 65% of a company's customers are satisfied with the service. After an improvement campaign, \(n = 120\) customers are surveyed and 85 say they are satisfied: \(\hat{p} = 85/120 \approx 0.708\). Has the proportion changed? We test \(H_0\colon p = 0.65\) against \(H_1\colon p \neq 0.65\) with \(\alpha = 0.05\).</p>
+            <p>The normal approximation is valid: \(n p_0 = 78\) and \(n(1-p_0) = 42\). The standard error under \(H_0\) is</p>
+            <p class="formula-line">\( SE = \sqrt{\dfrac{0.65 \times 0.35}{120}} \approx 0.0435 \)</p>
+            <p>and the statistic</p>
+            <p class="formula-line">\( z = \dfrac{0.708 - 0.65}{0.0435} \approx 1.34 \)</p>
+            <p>Since \(|z| = 1.34 < 1.96\), the statistic does not fall in the rejection region; the two-tailed p-value is \(p \approx 0.180\). <strong>\(H_0\) is not rejected</strong>.</p>
+            <p>Conclusion: these data do not provide enough evidence that satisfaction has changed. But you cannot claim the campaign was useless either: the 95% Wilson interval for \(p\) runs from 62.2% to 78.2%, compatible with no change and also with an improvement of more than 10 points. With 120 customers, the test detects with 80% probability only changes of about 12 points or more.</p>
+            <p><strong>In the calculator:</strong> p₀ = 0.65, p̂ = 0.7083, n = 120 and "Two-tailed (≠)".</p>
+
+            <h3>Worked example 2: one-tailed test</h3>
+            <p>A supplier guarantees that at most 5% of its parts are defective. A customer inspects a random sample of \(n = 400\) parts and finds 30 defective: \(\hat{p} = 0.075\). It only worries about the rate exceeding the guarantee, so it tests \(H_0\colon p = 0.05\) against \(H_1\colon p > 0.05\) with \(\alpha = 0.05\).</p>
+            <p class="formula-line">\( SE = \sqrt{\dfrac{0.05 \times 0.95}{400}} \approx 0.0109, \qquad z = \dfrac{0.075 - 0.05}{0.0109} \approx 2.29 \)</p>
+            <p>The approximation is valid (\(n p_0 = 20\)). The right-tailed critical value is 1.645 and the p-value is \(P(Z \geq 2.29) \approx 0.011\). <strong>\(H_0\) is rejected</strong>: there is evidence that the defect rate exceeds the guaranteed 5%. The 95% Wilson interval for the real rate runs from 5.3% to 10.5%.</p>
+            <p><strong>In the calculator:</strong> p₀ = 0.05, p̂ = 0.075, n = 400 and "Right-tailed (&gt;)".</p>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example</h3>
-            <p>According to previous studies, 65% of a company's customers are satisfied with the service (\(p_0 = 0.65\)). After an improvement campaign, \(n = 120\) customers are surveyed and 85 report being satisfied, that is, \(\hat{p} = 85/120 \approx 0.708\). Has the proportion changed significantly? Test with \(\alpha = 0.05\), two-tailed.</p>
-            <p>The hypotheses are \(H_0\colon p = 0.65\) versus \(H_1\colon p \neq 0.65\). The standard error under the null hypothesis is:</p>
-            <p class="formula-line">\( SE = \sqrt{\dfrac{p_0(1-p_0)}{n}} = \sqrt{\dfrac{0.65 \cdot 0.35}{120}} = \sqrt{0.001896} \approx 0.04354 \)</p>
-            <p>The z statistic is:</p>
-            <p class="formula-line">\( z = \dfrac{\hat{p} - p_0}{SE} = \dfrac{0.708 - 0.65}{0.04354} \approx 1.33 \)</p>
-            <p>For a two-tailed test with \(\alpha = 0.05\), the critical value is \(z_{0.025} \approx 1.96\). Since \(|z| = 1.33 < 1.96\), the rejection region is not reached. The two-tailed p-value is \(p \approx 0.183 > 0.05\).</p>
-            <p>Conclusion: <strong>\(H_0\) is not rejected</strong>. With these data, the difference between the observed proportion (70.8%) and the reference proportion (65%) is not statistically significant at the 5% level. The improvement could be due to sampling chance.</p>
+            <h3>How to interpret the result</h3>
+            <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) means that, if the proportion really were \(p_0\), it would be very unlikely to obtain a sample proportion as far away as the one observed. But significant is not the same as important: with very large samples, differences of one percentage point become significant. Always look at how far \(\hat{p}\) is from \(p_0\), in percentage points, and at its confidence interval.</p>
+            <p><strong>Not rejecting \(H_0\)</strong> (p-value ≥ α) does not prove that the proportion equals \(p_0\): the data are compatible with that value and often also with quite different ones, as in example 1.</p>
+            <p>In the calculator, the result shows the decision with the p-value, the z statistic and a sentence stating the conclusion. On the chart, the green area is the non-rejection region, the red areas are the critical regions and the amber line marks the observed statistic. Under "Calculation details" you will find the sample proportion, the observed difference in points, the standard error, the critical value and the Wilson interval.</p>
+
+            <h3>Power and minimum detectable difference</h3>
+            <p>Below the conclusion, the calculator shows the <strong>minimum detectable difference</strong>: the smallest real difference from \(p_0\) that, with your sample size, the test would detect with 80% probability. If it is larger than the change that would matter to you, the study has low power and a non-significant result says little. The link opens the <a href="tamano-muestral-contraste-una-proporcion.html">sample size calculator for the one-proportion test</a> with your \(p_0\), your α and the type of test, so you can work out how many observations you would need for the difference you care about.</p>
+
+            <h3>Relationship with the confidence interval</h3>
+            <p>The other link in the result opens the <a href="intervalo-confianza-proporcion.html">confidence interval for a proportion</a> with your data. In the two-tailed test, \(H_0\) is rejected when \(p_0\) lies outside the interval. The correspondence is exact with the Wilson interval, which uses the same standard error as the test; with the Wald interval it can fail in borderline cases. The interval also tells you which values of the proportion are compatible with the data.</p>
         </section>
 
-                <section class="card content-card">
-                    <h3>How to interpret the result</h3>
-                        <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) means that the sample proportion \(\hat{p}\) deviates from \(p_0\) more than expected by chance. It is concluded that there is statistical evidence that the population proportion differs from \(p_0\) (or is greater/smaller, if the test is one-tailed). However, significance does not equal importance: a 1 percentage point difference can be highly significant with a large \(n\) even though it is irrelevant in practice. Always accompany the result with the confidence interval for \(p\) and an assessment of the size of the change in the context of the problem.</p>
-                        <p><strong>Not rejecting \(H_0\)</strong> (p-value ≥ α) does not prove that \(p = p_0\); it only indicates that the data are compatible with that value at the chosen significance level. If the sample is small, the power may be insufficient to detect real deviations. A wide confidence interval that includes values far from \(p_0\) is a sign that the study does not allow definitive conclusions.</p>
-                        <p>The <strong>z statistic</strong> shown by the tool measures how many standard errors \(\hat{p}\) is away from \(p_0\). In the chart, the green zone is the non-rejection region, the red zones are the critical regions and the amber line represents the observed statistic. Values of \(|z|\) greater than the critical value (e.g., 1.96 for a two-tailed α = 0.05) lead to rejecting \(H_0\). Always verify that the validity conditions of the normal approximation are met: \(np_0 \geq 5\) and \(n(1-p_0) \geq 5\).</p>
-                </section>
-                <section id="seo-support-content" class="card content-card">
+        <section class="card content-card">
+            <h3>Common mistakes</h3>
+            <ul>
+                <li><strong>Entering percentages instead of proportions</strong>: 65% is written 0.65.</li>
+                <li><strong>Using the z-test with very few expected successes or failures</strong>, without checking \(n p_0 \geq 10\).</li>
+                <li><strong>Concluding that the proportion has not changed</strong> because the test is not significant.</li>
+                <li><strong>Choosing the tail after seeing the data</strong>.</li>
+                <li><strong>Forgetting how the sample was obtained</strong>: with a voluntary survey, the sample proportion can be biased even if the calculation is correct.</li>
+                <li><strong>Comparing two sample proportions with this test</strong>, treating one of them as if it were \(p_0\). For two groups, use the <a href="contraste-hipotesis-dos-proporciones.html">two-proportion test</a>.</li>
+            </ul>
+        </section>
+
+        <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
               <h3>Related calculators</h3>
               <ul>
-                <li><a href="contraste-hipotesis-dos-proporciones.html">Hypothesis test for two proportions</a></li>
-                <li><a href="tamano-muestral-una-proporcion.html">Sample size for a proportion</a></li>
+                <li><a href="tamano-muestral-contraste-una-proporcion.html">Sample size for the one-proportion test</a></li>
+                <li><a href="intervalo-confianza-proporcion.html">Confidence interval for a proportion</a></li>
+                <li><a href="contraste-hipotesis-dos-proporciones.html">Two-proportion test</a></li>
                 <li><a href="binomial.html">Binomial distribution</a></li>
+                <li><a href="tabla-normal.html">Normal table</a></li>
               </ul>
             </section>
             <h3>Frequently asked questions</h3>
             <ul>
-                <li><strong>When is the normal approximation valid?</strong> When the sample size lets you expect enough successes and failures under \(H_0\).</li>
-                <li><strong>Can I use a percentage instead of a proportion?</strong> Yes, but convert it to a 0–1 scale for the calculation.</li>
-                <li><strong>Which tail should I choose?</strong> Two-tailed if you're looking for any difference; one-tailed if you're only interested in an increase or a decrease.</li>
-                <li><strong>Does significant mean important?</strong> Not always; also assess the size of the change in terms of business or real-world impact.</li>
-                <li><strong>Does this distinguish between sample and population deviation?</strong> Not in the same way as with means. For proportions, the standard error is built with \(p_0\) (or with the pooled proportion for two proportions), not with a \(\sigma\) supplied by the user.</li>
+                <li><strong>What does it test?</strong> Whether the proportion of a population that meets a condition equals a reference value p₀, based on the proportion observed in a sample.</li>
+                <li><strong>Why does the standard error use p₀ and not p̂?</strong> Because the test evaluates the variability you would expect if the null hypothesis were true, that is, if the proportion were p₀.</li>
+                <li><strong>When is the normal approximation valid?</strong> When enough successes and failures are expected under H₀: as a rule of thumb, n·p₀ ≥ 10 and n·(1 − p₀) ≥ 10. If not, use an exact binomial test.</li>
+                <li><strong>Can I use percentages?</strong> Yes, but enter them as proportions between 0 and 1: 65% is 0.65.</li>
+                <li><strong>Two-tailed or one-tailed?</strong> Two-tailed if you care about any difference from p₀; one-tailed only if, before seeing the data, you are interested in just one direction.</li>
+                <li><strong>Is significant the same as important?</strong> No. With large samples, small differences are significant. Judge the difference in percentage points and its confidence interval.</li>
+                <li><strong>What is the minimum detectable difference?</strong> The smallest real difference from p₀ that the test would detect with 80% probability given your sample size.</li>
+                <li><strong>What sample size do I need?</strong> It depends on the difference you want to detect, on p₀ and on the desired power. Work it out with the sample size calculator for the one-proportion test.</li>
+                <li><strong>What if I want to compare two groups?</strong> Use the two-proportion test; if the data are paired, McNemar's test.</li>
             </ul>
+            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Statistical_hypothesis_test" target="_blank" rel="noopener noreferrer">Statistical hypothesis test</a> — Wikipedia</p>
         </section>
 
     </main>
@@ -303,6 +412,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../test-results.js?v=20261110-3"></script>
 <script>
 let propTestChart;
 
@@ -379,6 +489,81 @@ function renderPropTestChart(alpha, tail, zValue) {
     });
 }
 
+// Tamaño muestral con la misma fórmula que la calculadora de tamaño muestral
+// para el contraste de una proporción (diferencia d respecto a p₀).
+function onePropSampleSize(p0, d, alpha, tail, power) {
+    const clamp = (v) => Math.min(0.9999, Math.max(0.0001, v));
+    const zA = jStat.normal.inv(tail === 'two' ? 1 - alpha / 2 : 1 - alpha, 0, 1);
+    const zB = jStat.normal.inv(power, 0, 1);
+    const nFor = (p1) => Math.pow((zA * Math.sqrt(p0 * (1 - p0)) + zB * Math.sqrt(p1 * (1 - p1))) / d, 2);
+    if (tail === 'two') return Math.max(nFor(clamp(p0 + d)), nFor(clamp(p0 - d)));
+    return nFor(clamp(p0 + (tail === 'left' ? -d : d)));
+}
+
+// Resultado: decisión, conclusión, diferencia mínima detectable y detalles.
+function renderPropResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const q = o.tail === 'two' ? 1 - o.alpha / 2 : 1 - o.alpha;
+    const crit = jStat.normal.inv(q, 0, 1);
+    const room = o.tail === 'right' ? 1 - o.p0 : o.tail === 'left' ? o.p0 : Math.max(o.p0, 1 - o.p0);
+    const mdeRaw = R.solveMin((d) => onePropSampleSize(o.p0, d, o.alpha, o.tail, R.TARGET) <= o.n, 1e-6, room - 1e-6);
+    const mde = mdeRaw == null ? null : R.sigUp(mdeRaw, 3);
+    const sign = o.tail === 'two' ? '±' : (o.tail === 'left' ? '−' : '+');
+    const p0 = R.auto(o.p0);
+    const x = Math.round(o.phat * o.n);
+    const T = EN ? {
+        label: 'z-test for one proportion, ' + { two: 'two-tailed', right: 'right-tailed', left: 'left-tailed' }[o.tail],
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        yes: '✓ There is statistical evidence that the proportion is ' + { two: 'different from ', right: 'greater than ', left: 'less than ' }[o.tail] + p0 + '.',
+        no: 'ℹ There is not enough evidence that the proportion is ' + { two: 'different from ', right: 'greater than ', left: 'less than ' }[o.tail] + p0 + '. This does not prove that it equals ' + p0 + '.',
+        mde: mde == null
+            ? 'With n = ' + o.n + ', the test does not reach ' + R.pct(R.TARGET) + ' power even for the largest possible difference from p₀.'
+            : 'With n = ' + o.n + ', the test detects with ' + R.pct(R.TARGET) + ' probability only differences of ' + sign + R.auto(mde) + ' (' + R.points(mde) + ') or more from p₀.',
+        link: 'Work out the sample size needed for another difference',
+        warn: 'ℹ The normal approximation needs n·p₀ ≥ 10 and n·(1 − p₀) ≥ 10; here they are ' + R.num(o.n * o.p0, 1) + ' and ' + R.num(o.n * (1 - o.p0), 1) + '. The p-value may be inaccurate; an exact binomial test is preferable.',
+        rows: ['Sample proportion (p̂)', 'Observed difference (p̂ − p₀)', 'Standard error under H₀', 'Test statistic', 'Critical value', 'p-value', R.pctLevel(1 - o.alpha) + ' Wilson interval for p', 'Minimum detectable difference (power ' + R.pct(R.TARGET) + ')']
+    } : {
+        label: 'Contraste z para una proporción, ' + { two: 'bilateral', right: 'de cola derecha', left: 'de cola izquierda' }[o.tail],
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        yes: '✓ Hay evidencia estadística de que la proporción es ' + { two: 'distinta de ', right: 'mayor que ', left: 'menor que ' }[o.tail] + p0 + '.',
+        no: 'ℹ No hay evidencia suficiente de que la proporción sea ' + { two: 'distinta de ', right: 'mayor que ', left: 'menor que ' }[o.tail] + p0 + '. Esto no demuestra que sea ' + p0 + '.',
+        mde: mde == null
+            ? 'Con n = ' + o.n + ', el contraste no llega a un ' + R.pct(R.TARGET) + ' de potencia ni con la mayor diferencia posible respecto a p₀.'
+            : 'Con n = ' + o.n + ', el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad diferencias de ' + sign + R.auto(mde) + ' (' + R.points(mde) + ') o mayores respecto a p₀.',
+        link: 'Calcular el tamaño muestral necesario para otra diferencia',
+        warn: 'ℹ La aproximación normal necesita n·p₀ ≥ 10 y n·(1 − p₀) ≥ 10; aquí valen ' + R.num(o.n * o.p0, 1) + ' y ' + R.num(o.n * (1 - o.p0), 1) + '. El p-valor puede ser poco preciso; conviene un contraste binomial exacto.',
+        rows: ['Proporción muestral (p̂)', 'Diferencia observada (p̂ − p₀)', 'Error estándar bajo H₀', 'Estadístico', 'Valor crítico', 'p-valor', 'Intervalo de Wilson al ' + R.pctLevel(1 - o.alpha) + ' para p', 'Diferencia mínima detectable (potencia ' + R.pct(R.TARGET) + ')']
+    };
+    // Intervalo de Wilson al 100(1 − α) %.
+    const zc = jStat.normal.inv(1 - o.alpha / 2, 0, 1);
+    const den = 1 + zc * zc / o.n;
+    const ctr = (o.phat + zc * zc / (2 * o.n)) / den;
+    const half = zc * Math.sqrt(o.phat * (1 - o.phat) / o.n + zc * zc / (4 * o.n * o.n)) / den;
+    const notes = [];
+    if (o.n * o.p0 < 10 || o.n * (1 - o.p0) < 10) notes.push(R.esc(T.warn));
+    const sizeUrl = 'tamano-muestral-contraste-una-proporcion.html?h0=' + o.p0 + '&delta=' + mde + '&alpha=' + o.alpha + '&power=' + R.TARGET +
+        '&alt=' + { two: 'two-sided', right: 'greater', left: 'less' }[o.tail];
+    notes.push(R.esc(T.mde) + (mde == null ? '' : ' ' + R.link(sizeUrl, T.link)));
+    notes.push(R.ciLink('intervalo-confianza-proporcion.html?x=' + x + '&n=' + o.n + '&conf=' + R.sig(1 - o.alpha, 6), 1 - o.alpha));
+    R.render(document.getElementById('propResult'), {
+        label: T.label + ' · H₀: p = ' + p0 + ' · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, sec: ['z = ' + R.num(o.z, 4)],
+        ok: rejected, verdict: rejected ? T.yes : T.no,
+        notes: notes,
+        rows: [
+            [T.rows[0], R.num(o.phat, 4)],
+            [T.rows[1], R.num(o.phat - o.p0, 4) + ' (' + R.points(Math.abs(o.phat - o.p0)) + ')'],
+            [T.rows[2], R.num(o.se, 4)],
+            [T.rows[3], 'z = ' + R.num(o.z, 4)],
+            [T.rows[4], (o.tail === 'two' ? '±' : (o.tail === 'left' ? '−' : '')) + R.num(crit, 4)],
+            [T.rows[5], R.prob(o.p)],
+            [T.rows[6], R.interval(Math.max(0, ctr - half), Math.min(1, ctr + half), 4)],
+            [T.rows[7], mde == null ? '—' : sign + R.auto(mde)]
+        ]
+    });
+}
+
 function calculatePropTest() {
     const p0 = parseFloat(document.getElementById('p0').value);
     const phat = parseFloat(document.getElementById('phat').value);
@@ -403,8 +588,7 @@ function calculatePropTest() {
     else if (tail === 'right') p = 1 - jStat.normal.cdf(z, 0, 1);
     else p = jStat.normal.cdf(z, 0, 1);
 
-    const decision = p < alpha ? 'H₀ is rejected.' : 'H₀ is not rejected.';
-    resultEl.innerText = `z = ${z.toFixed(4)} | p-value = ${p.toFixed(6)} | ${decision}`;
+    renderPropResult({ p0, phat, n, alpha, tail, z, p, se });
     renderPropTestChart(alpha, tail, z);
 }
 

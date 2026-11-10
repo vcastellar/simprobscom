@@ -69,7 +69,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="style_new.css?v=20261107-1">
     <style>
         .contingency-table {
             border-collapse: collapse;
@@ -109,34 +109,66 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "¿Cuándo elegir Fisher frente a chi-cuadrado?",
+      "name": "¿Cuándo se usa el test exacto de Fisher?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Cuando alguna frecuencia esperada es inferior a 5, o cuando el tamaño muestral\n                    total es menor de 20."
+        "text": "En tablas 2×2 con muestras pequeñas, sobre todo cuando alguna frecuencia esperada es menor que 5 y el chi-cuadrado no es fiable."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Es conservador el test de Fisher?",
+      "name": "¿Por qué se llama exacto?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "En algunos escenarios puede serlo respecto a alternativas como el test de\n                    Barnard, pero es el estándar más aceptado para tablas 2×2 con pocos datos."
+        "text": "Porque calcula el p-valor con la distribución hipergeométrica, sin aproximaciones normales ni chi-cuadrado."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Puedo usar Fisher con muestras grandes?",
+      "name": "¿Puedo usarlo con muestras grandes?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Sí, aunque con muestras grandes el chi-cuadrado de Pearson ofrece resultados\n                    prácticamente idénticos y es computacionalmente más directo."
+        "text": "Sí. Da resultados muy parecidos al chi-cuadrado; este último se prefiere entonces porque facilita intervalos y cálculos de potencia."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Qué significa que la OR sea 0 o infinita?",
+      "name": "¿Funciona con casillas a cero?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Ocurre cuando alguna celda vale 0. En ese caso la OR no está definida, aunque\n                    el p-valor exacto sí puede calcularse."
+        "text": "Sí. El odds ratio será 0 o infinito, pero el p-valor exacto se calcula sin problemas."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Por qué es conservador?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Porque la distribución es discreta: no siempre existe una región de rechazo con probabilidad exactamente α, y el riesgo real queda algo por debajo."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Bilateral o de una cola?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Bilateral, salvo que antes de ver los datos solo te interese un sentido de la asociación."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué es la diferencia mínima detectable?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "La menor diferencia real entre las proporciones de las dos filas que el test detectaría con un 80 % de probabilidad con tus tamaños."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Sirve para tablas mayores que 2×2?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Existe una extensión (Fisher-Freeman-Halton), pero esta calculadora es para tablas 2×2. Para tablas mayores, usa el chi-cuadrado de independencia."
       }
     }
   ]
@@ -193,7 +225,6 @@
     </header>
 
     <main>
-
         <section class="ss-shell" aria-label="Calculadora">
             <section class="card ss-controls">
                 <div class="panel-heading">
@@ -274,149 +305,141 @@
         </section>
 
         <section class="card content-card">
-            <h3>Explicación</h3>
+            <h3>¿Qué es el test exacto de Fisher?</h3>
+            <p>Es el contraste para decidir si hay <strong>asociación entre dos variables dicotómicas</strong> recogidas en una tabla 2×2 —tratamiento o placebo frente a curación sí o no, expuestos o no frente a enfermos o no— cuando la muestra es <strong>pequeña</strong>. A diferencia del <a href="contraste-independencia-chi-cuadrado.html">chi-cuadrado</a> y del <a href="contraste-hipotesis-dos-proporciones.html">contraste z de dos proporciones</a>, no se apoya en ninguna aproximación normal: calcula la probabilidad exacta de cada tabla posible. Por eso es la opción adecuada en ensayos pequeños, eventos raros, análisis de subgrupos y siempre que alguna frecuencia esperada sea menor que 5.</p>
+            <p>Lo ideó Ronald Fisher con el célebre experimento de la dama que decía distinguir si en su taza se había echado primero la leche o el té: con solo 8 tazas, la pregunta era cuántos aciertos hacían falta para descartar que adivinara al azar.</p>
 
-            <p>
-                El test exacto de Fisher permite contrastar si existe asociación entre dos variables
-                categóricas binarias organizadas en una tabla 2×2. A diferencia del chi-cuadrado de
-                Pearson, no necesita ninguna aproximación asintótica: calcula la probabilidad exacta
-                de cada tabla posible con los mismos márgenes fijos usando la distribución
-                hipergeométrica.
-            </p>
-
-            <p>
-                Es especialmente adecuado cuando las frecuencias esperadas son bajas (por ejemplo,
-                menores que 5 en alguna celda), en ensayos clínicos pequeños, estudios de eventos
-                raros o análisis de subgrupos. Cuando el tamaño muestral es grande, el chi-cuadrado
-                de Pearson tiende a coincidir con Fisher.
-            </p>
-
-            <p>
-                Bajo la hipótesis nula de independencia, el recuento en la celda (1,1) sigue una
-                distribución hipergeométrica condicionada a los márgenes de la tabla:
-            </p>
-
-            <h3>Hipótesis y estadístico</h3>
-            <p class="formula-line">\(H_0\): independencia entre filas y columnas (OR = 1)</p>
-            <p class="formula-line">\(H_1\): asociación (OR ≠ 1)</p>
-            <p class="formula-line">
-                \[P(X = k) = \frac{\dbinom{a+b}{k}\dbinom{c+d}{a+c-k}}{\dbinom{n}{a+c}}\]
-            </p>
-            <p class="formula-line">
-                \[\text{OR} = \frac{a \cdot d}{b \cdot c}\]
-            </p>
-        </section>
-
-
-
-        <section class="card content-card">
-            <h3>Contraste rápido</h3>
-
-            <p>
-                El p-valor exacto se obtiene sumando las probabilidades hipergeométricas de todas
-                las tablas con los mismos márgenes que son al menos tan extremas como la observada.
-                Para el contraste bilateral se suman todas las tablas cuya probabilidad es menor
-                o igual que la de la tabla observada.
-            </p>
-
-            <p class="formula-line">
-                Cola derecha: \(\displaystyle p = \sum_{k \geq a} P(X = k)\)
-            </p>
-            <p class="formula-line">
-                Cola izquierda: \(\displaystyle p = \sum_{k \leq a} P(X = k)\)
-            </p>
-            <p class="formula-line">
-                Bilateral: \(\displaystyle p = \sum_{P(X=k)\,\leq\,P(X=a)} P(X = k)\)
-            </p>
-
-            <p>
-                La odds ratio (OR) cuantifica la fuerza de la asociación: OR = 1 indica independencia,
-                OR &gt; 1 indica mayor frecuencia del evento en la fila 1, OR &lt; 1 indica lo contrario.
-                Para completar el análisis conviene acompañar el p-valor con un intervalo de confianza
-                para el OR.
-            </p>
+            <h3>La tabla y la hipótesis</h3>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th></th><th>Columna A</th><th>Columna B</th><th>Total</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Fila 1</strong></td><td>a</td><td>b</td><td>a + b</td></tr>
+                        <tr><td><strong>Fila 2</strong></td><td>c</td><td>d</td><td>c + d</td></tr>
+                        <tr><td><strong>Total</strong></td><td>a + c</td><td>b + d</td><td>n</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="formula-line">\(H_0\): filas y columnas son independientes (\(OR = 1\))</p>
+            <p class="formula-line">\(H_1\): hay asociación (\(OR \neq 1\), \(OR > 1\) o \(OR < 1\))</p>
+            <p>Lo habitual es que las filas sean los grupos (tratamiento y control) y las columnas, el desenlace (sí y no). Entonces \(H_0\) dice que la proporción de la columna A es la misma en las dos filas: \(a/(a+b)\) frente a \(c/(c+d)\).</p>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto</h3>
-            <p>En un ensayo clínico se asignan aleatoriamente 20 pacientes a dos grupos: 10 reciben el tratamiento y 10 reciben placebo. En el grupo tratamiento, 7 pacientes se recuperan y 3 no se recuperan. En el grupo control, 4 se recuperan y 6 no se recuperan. La tabla de contingencia \(2 \times 2\) es la siguiente: tratamiento/recuperado = 7, tratamiento/no recuperado = 3, control/recuperado = 4, control/no recuperado = 6.</p>
-            <p>Con frecuencias esperadas pequeñas en alguna celda el chi-cuadrado habitual puede ser impreciso, por lo que se aplica el test exacto de Fisher. Los marginales son: fila 1 (tratamiento) = 10, fila 2 (control) = 10, columna 1 (recuperados) = 11, columna 2 (no recuperados) = 9, total = 20.</p>
-            <p>La probabilidad exacta de obtener la tabla observada bajo \(H_0\) (independencia) se calcula con la distribución hipergeométrica:</p>
-            <p class="formula-line">\( P = \frac{\binom{11}{7}\binom{9}{3}}{\binom{20}{10}} = \frac{330 \times 84}{184756} \approx 0{,}150 \)</p>
-            <p>El p-valor unilateral (¿es el tratamiento mejor que el placebo?) se obtiene sumando las probabilidades de todas las tablas igual de extremas o más extremas en la dirección favorable al tratamiento: \(P(X \geq 7) = P(7)+P(8)+P(9)+P(10) \approx 0{,}150 + 0{,}032 + 0{,}003 + 0{,}0001 \approx 0{,}185\). El p-valor bilateral es \(p_{\text{bilateral}} \approx 0{,}37\).</p>
-            <p>Dado que \(p_{\text{bilateral}} = 0{,}37 > 0{,}05 = \alpha\), no se rechaza \(H_0\). La odds ratio observada es \(\widehat{OR} = (7 \times 6)/(3 \times 4) = 42/12 = 3{,}5\), lo que sugiere una tendencia favorable al tratamiento, pero la muestra (n = 20) no es suficientemente grande para alcanzar significación estadística.</p>
-            <p>Conclusión: con un nivel de significación del 5 %, no se puede concluir que exista una asociación estadísticamente significativa entre el tratamiento y la recuperación. Se recomienda replicar el estudio con mayor tamaño muestral para detectar diferencias clínicamente relevantes con potencia adecuada.</p>
+            <h3>Cómo se calcula el p-valor exacto</h3>
+            <p>El test fija los totales de filas y columnas y se pregunta: si no hubiera asociación, ¿qué probabilidad tendría cada forma posible de repartir los casos dentro de la tabla? Con los márgenes fijos, basta con conocer la casilla a para conocer toda la tabla, y bajo \(H_0\) esa casilla sigue una distribución <strong>hipergeométrica</strong>:</p>
+            <p class="formula-line">\( P(X = k) = \dfrac{\dbinom{a+b}{k}\dbinom{c+d}{a+c-k}}{\dbinom{n}{a+c}} \)</p>
+            <p>El p-valor suma las probabilidades de las tablas al menos tan extremas como la observada:</p>
+            <ul>
+                <li><strong>Cola derecha</strong> (\(OR > 1\)): \(p = \sum_{k \geq a} P(X = k)\).</li>
+                <li><strong>Cola izquierda</strong> (\(OR < 1\)): \(p = \sum_{k \leq a} P(X = k)\).</li>
+                <li><strong>Bilateral</strong>: suma de todas las tablas cuya probabilidad es menor o igual que la de la observada.</li>
+            </ul>
+            <p>El gráfico de la calculadora muestra precisamente esa distribución: una barra por cada valor posible de a, con las que entran en el p-valor resaltadas.</p>
+            <p>Como la distribución es discreta, el test es <strong>conservador</strong>: el riesgo real de falso positivo suele quedar algo por debajo de \(\alpha\). Es el precio de no depender de aproximaciones. Con muestras grandes, Fisher y chi-cuadrado dan resultados muy parecidos.</p>
+
+            <h3>Regla de decisión</h3>
+            <ul>
+                <li>Si el <strong>p-valor exacto</strong> es menor que \(\alpha\), se rechaza \(H_0\): hay evidencia de asociación.</li>
+                <li>Si es mayor o igual que \(\alpha\), no hay evidencia suficiente para rechazar la independencia.</li>
+                <li>La dirección la da el odds ratio: OR &gt; 1 indica que la columna A es más frecuente en la fila 1.</li>
+            </ul>
+        </section>
+
+        <section class="card content-card">
+            <h3>¿Fisher, chi-cuadrado o contraste z?</h3>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Situación</th><th>Contraste recomendado</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Tabla 2×2 con alguna frecuencia esperada &lt; 5</td><td>Test exacto de Fisher</td></tr>
+                        <tr><td>Tabla 2×2 con muestras grandes</td><td>Chi-cuadrado o z de dos proporciones (Fisher también vale)</td></tr>
+                        <tr><td>Tabla mayor que 2×2</td><td>Chi-cuadrado de independencia (agrupando categorías si hace falta)</td></tr>
+                        <tr><td>Datos emparejados</td><td><a href="contraste-hipotesis-proporciones-apareadas.html">Test de McNemar</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Con los ordenadores actuales, Fisher puede usarse también con muestras grandes. La razón para preferir el chi-cuadrado o el contraste z en ese caso es práctica: permiten calcular intervalos de confianza y potencia de forma sencilla, y los resultados coinciden.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Supuestos del test</h3>
+            <ul>
+                <li><strong>Observaciones independientes</strong>, cada una clasificada en una sola casilla.</li>
+                <li><strong>Dos variables dicotómicas</strong>.</li>
+                <li><strong>Márgenes fijos</strong>: en sentido estricto, el test supone fijos los totales de filas y columnas. En la práctica se usa también cuando no lo son, y entonces es algo conservador.</li>
+            </ul>
+            <p>No requiere ningún tamaño mínimo: es válido incluso con casillas a cero, que dan un odds ratio de 0 o infinito.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Ejemplo resuelto 1: un ensayo pequeño</h3>
+            <p>En un ensayo, 20 pacientes se asignan al azar a tratamiento o placebo, 10 en cada grupo. Con el tratamiento se recuperan 7 de 10; con el placebo, 4 de 10. La tabla es a = 7, b = 3 (tratamiento) y c = 4, d = 6 (placebo). Los márgenes son 10 y 10 por fila, y 11 recuperados y 9 no recuperados en total.</p>
+            <p>La probabilidad de la tabla observada bajo \(H_0\) es</p>
+            <p class="formula-line">\( P(X = 7) = \dfrac{\dbinom{10}{7}\dbinom{10}{4}}{\dbinom{20}{11}} \approx 0{,}150 \)</p>
+            <p>Para la cola derecha (¿es mejor el tratamiento?) se suman las tablas con 7 o más recuperados en el grupo tratado: \(P(X \geq 7) \approx 0{,}150 + 0{,}032 + 0{,}003 + 0{,}0001 \approx 0{,}185\). El p-valor bilateral suma las tablas igual de improbables o más en los dos extremos, \(p \approx 0{,}370\). <strong>No se rechaza \(H_0\)</strong>.</p>
+            <p>El odds ratio es \((7 \times 6)/(3 \times 4) = 3{,}5\) y la diferencia de recuperación, de 30 puntos porcentuales: un efecto que sería muy relevante. El problema es el tamaño. Con 10 pacientes por grupo y un 40 % de recuperación con placebo, el test no llega a un 80 % de potencia ni con la mayor diferencia posible: ni siquiera un tratamiento que curase a todos se detectaría con esa seguridad. Un resultado no significativo, aquí, dice muy poco.</p>
+            <p><strong>En la calculadora:</strong> a = 7, b = 3, c = 4, d = 6.</p>
+
+            <h3>Ejemplo resuelto 2: un efecto grande con pocos datos</h3>
+            <p>Con la tabla que trae la calculadora, a = 8, b = 2, c = 1, d = 9, la columna A aparece en el 80 % de la fila 1 y en el 10 % de la fila 2. El p-valor exacto bilateral es \(p \approx 0{,}0055\): <strong>se rechaza \(H_0\)</strong>. El odds ratio es \((8 \times 9)/(2 \times 1) = 36\), con un intervalo de confianza muy ancho, como corresponde a una muestra tan pequeña.</p>
+            <p>El chi-cuadrado de Pearson daría aquí \(p \approx 0{,}0017\), bastante más pequeño, pero no es fiable: las frecuencias esperadas de las cuatro casillas son 4,5 y 5,5, en el límite de la regla de Cochran. Fisher es la referencia correcta.</p>
+            <p><strong>En la calculadora:</strong> son los valores con los que se abre la página.</p>
         </section>
 
         <section class="card content-card">
             <h3>Cómo interpretar el resultado</h3>
+            <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que las dos variables están asociadas. Para valorar la magnitud, mira las proporciones de cada fila, su diferencia y el odds ratio con su intervalo de confianza; en muestras pequeñas, ese intervalo suele ser muy ancho.</p>
+            <p><strong>No rechazar \(H_0\)</strong> no demuestra independencia. Con pocos datos, la potencia del test es baja, como en el ejemplo 1.</p>
+            <p>En la calculadora, el resultado muestra la decisión con el p-valor exacto, el odds ratio, las proporciones de la columna A en cada fila y una frase con la conclusión. En «Detalles del cálculo» tienes la diferencia entre filas en puntos porcentuales y la probabilidad de la tabla observada.</p>
 
-                <p>
-                Si el p-valor exacto es menor que \(\alpha\), se rechaza \(H_0\): hay evidencia estadística
-                de asociación entre las filas y las columnas de la tabla 2×2. Si el p-valor es mayor o igual que
-                \(\alpha\), no hay evidencia suficiente para rechazar la independencia con los datos disponibles.
-                A diferencia del chi-cuadrado, este p-valor es <em>exacto</em> (condicionado a los totales marginales
-                observados): no depende de ninguna aproximación asintótica y sigue siendo válido incluso cuando las
-                frecuencias esperadas son muy pequeñas o alguna celda contiene pocos casos. Al ser discreto, el test
-                tiende a ser conservador: su tasa real de error de tipo I suele quedar por debajo de \(\alpha\).
-                </p>
+            <h3>Potencia y diferencia mínima detectable</h3>
+            <p>Debajo de la conclusión, la calculadora indica la <strong>diferencia mínima detectable</strong>: la menor diferencia real respecto a la proporción de la fila 2 que, con tus totales por fila, el test detectaría con un 80 % de probabilidad. Con muestras pequeñas suele ser enorme, o incluso imposible de alcanzar. El enlace abre la <a href="tamano-muestral-fisher.html">calculadora de tamaño muestral para el test de Fisher</a> con tus proporciones, tu α, la proporción entre las filas y el tipo de contraste.</p>
 
-                <p>
-                La <strong>odds ratio (OR)</strong> cuantifica la magnitud y la dirección de la asociación.
-                Una OR = 1 indica independencia perfecta entre las dos variables. Una OR &gt; 1 indica que
-                el evento de la fila 1 es más probable en la columna A que en la columna B; OR &lt; 1 indica
-                lo contrario. Por ejemplo, OR = 3.5 significa que la probabilidad del evento es 3.5 veces
-                mayor en el grupo de la fila 1. La dirección e interpretación exacta siempre dependen de cómo
-                se hayan etiquetado filas y columnas: conviene describir el resultado en términos sustantivos
-                del problema, no solo en términos numéricos.
-                </p>
-
-                <p>
-                Sobre la elección entre <strong>Fisher y chi-cuadrado</strong>: el test exacto de Fisher es
-                preferible cuando alguna frecuencia <em>esperada</em> (no observada) es inferior a 5, o cuando
-                el tamaño muestral total es menor de 20. Con muestras grandes, ambos tests convergen y el
-                chi-cuadrado de Pearson es computacionalmente más directo. Una limitación del test de Fisher
-                es que condiciona en los márgenes fijos de la tabla, supuesto que no siempre es realista en
-                estudios prospectivos; en esos casos se discute el uso de alternativas como el test de Barnard,
-                aunque Fisher sigue siendo el estándar en la mayoría de contextos biomédicos y experimentales.
-                </p>
+            <h3>Intervalo de confianza para el odds ratio</h3>
+            <p>El otro enlace abre la <a href="intervalo-confianza-odds-ratio.html">calculadora del intervalo de confianza para el odds ratio</a> con tu tabla. Si alguna casilla es cero, aplica la corrección de 0,5 automáticamente.</p>
         </section>
+
+        <section class="card content-card">
+            <h3>Errores frecuentes</h3>
+            <ul>
+                <li><strong>Usar el chi-cuadrado con frecuencias esperadas muy pequeñas</strong> en lugar del test exacto.</li>
+                <li><strong>Concluir que no hay efecto</strong> en un estudio pequeño porque el test no es significativo.</li>
+                <li><strong>Elegir la cola después de ver los datos</strong>.</li>
+                <li><strong>Aplicarlo a datos emparejados</strong>: para eso está el test de McNemar.</li>
+                <li><strong>Informar solo del p-valor</strong>, sin las proporciones ni el odds ratio.</li>
+            </ul>
+        </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>
                 <ul>
-                    <li><a href="hypergeometric.html">Distribución hipergeométrica</a></li>
+                    <li><a href="tamano-muestral-fisher.html">Tamaño muestral para el test de Fisher</a></li>
+                    <li><a href="intervalo-confianza-odds-ratio.html">Intervalo de confianza para el odds ratio</a></li>
                     <li><a href="contraste-independencia-chi-cuadrado.html">Chi-cuadrado de independencia</a></li>
-                    <li><a href="contrastes-hipotesis/">Contrastes de hipótesis</a></li>
+                    <li><a href="contraste-hipotesis-dos-proporciones.html">Contraste para dos proporciones</a></li>
+                    <li><a href="contraste-hipotesis-odds-ratio.html">Contraste del odds ratio</a></li>
                 </ul>
             </section>
-
             <h3>Preguntas frecuentes</h3>
-
             <ul>
-                <li>
-                    <strong>¿Cuándo elegir Fisher frente a chi-cuadrado?</strong>
-                    Cuando alguna frecuencia esperada es inferior a 5, o cuando el tamaño muestral
-                    total es menor de 20.
-                </li>
-                <li>
-                    <strong>¿Es conservador el test de Fisher?</strong>
-                    En algunos escenarios puede serlo respecto a alternativas como el test de
-                    Barnard, pero es el estándar más aceptado para tablas 2×2 con pocos datos.
-                </li>
-                <li>
-                    <strong>¿Puedo usar Fisher con muestras grandes?</strong>
-                    Sí, aunque con muestras grandes el chi-cuadrado de Pearson ofrece resultados
-                    prácticamente idénticos y es computacionalmente más directo.
-                </li>
-                <li>
-                    <strong>¿Qué significa que la OR sea 0 o infinita?</strong>
-                    Ocurre cuando alguna celda vale 0. En ese caso la OR no está definida, aunque
-                    el p-valor exacto sí puede calcularse.
-                </li>
+                <li><strong>¿Cuándo se usa el test exacto de Fisher?</strong> En tablas 2×2 con muestras pequeñas, sobre todo cuando alguna frecuencia esperada es menor que 5 y el chi-cuadrado no es fiable.</li>
+                <li><strong>¿Por qué se llama exacto?</strong> Porque calcula el p-valor con la distribución hipergeométrica, sin aproximaciones normales ni chi-cuadrado.</li>
+                <li><strong>¿Puedo usarlo con muestras grandes?</strong> Sí. Da resultados muy parecidos al chi-cuadrado; este último se prefiere entonces porque facilita intervalos y cálculos de potencia.</li>
+                <li><strong>¿Funciona con casillas a cero?</strong> Sí. El odds ratio será 0 o infinito, pero el p-valor exacto se calcula sin problemas.</li>
+                <li><strong>¿Por qué es conservador?</strong> Porque la distribución es discreta: no siempre existe una región de rechazo con probabilidad exactamente α, y el riesgo real queda algo por debajo.</li>
+                <li><strong>¿Bilateral o de una cola?</strong> Bilateral, salvo que antes de ver los datos solo te interese un sentido de la asociación.</li>
+                <li><strong>¿Qué es la diferencia mínima detectable?</strong> La menor diferencia real entre las proporciones de las dos filas que el test detectaría con un 80 % de probabilidad con tus tamaños.</li>
+                <li><strong>¿Sirve para tablas mayores que 2×2?</strong> Existe una extensión (Fisher-Freeman-Halton), pero esta calculadora es para tablas 2×2. Para tablas mayores, usa el chi-cuadrado de independencia.</li>
             </ul>
             <p class="external-ref">Referencia: <a href="https://es.wikipedia.org/wiki/Prueba_exacta_de_Fisher" target="_blank" rel="noopener noreferrer">Prueba exacta de Fisher</a> — Wikipedia</p>
         </section>
+
     </main>
 
     <footer class="legal-footer">
@@ -436,6 +459,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="test-results.js?v=20261110-3"></script>
 
 <script>
 let fisherChart;
@@ -531,6 +555,89 @@ function renderFisherChart(a, probs, pObs, tail) {
     });
 }
 
+// n₁ con la misma fórmula que la calculadora de tamaño muestral para el test
+// de Fisher (Fleiss con corrección de continuidad de Casagrande y Pike).
+function fisherSampleSize(p1, p2, r, alpha, tail, power) {
+    const zA = jStat.normal.inv(tail === 'two' ? 1 - alpha / 2 : 1 - alpha, 0, 1);
+    const zB = jStat.normal.inv(power, 0, 1);
+    const pBar = (p1 + r * p2) / (1 + r);
+    const n = Math.pow(zA * Math.sqrt((1 + 1 / r) * pBar * (1 - pBar)) + zB * Math.sqrt(p1 * (1 - p1) + p2 * (1 - p2) / r), 2) / Math.pow(p1 - p2, 2);
+    return (n / 4) * Math.pow(1 + Math.sqrt(1 + 2 * (1 + 1 / r) / (n * Math.abs(p1 - p2))), 2);
+}
+
+function renderFisherResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const n1 = o.a + o.b, n2 = o.c + o.d;
+    const p1 = n1 ? o.a / n1 : NaN, p2 = n2 ? o.c / n2 : NaN;
+    const r = n2 / n1;
+    const ok = n1 > 0 && n2 > 0;
+    let mde = null, dir = 1;
+    if (ok) {
+        const nFn = (x) => fisherSampleSize(x, p2, r, o.alpha, o.tail, R.TARGET);
+        const search = (s) => {
+            const room = s > 0 ? 1 - p2 : p2;
+            return room <= 2e-6 ? null : R.solveMin((d) => nFn(p2 + s * d) <= n1, 1e-6, room - 1e-6);
+        };
+        const up = o.tail === 'left' ? null : search(1);
+        const down = o.tail === 'right' ? null : search(-1);
+        if (o.tail === 'right') { mde = up; dir = 1; }
+        else if (o.tail === 'left') { mde = down; dir = -1; }
+        else {
+            mde = (up == null && down == null) ? null : Math.max(up == null ? 0 : up, down == null ? 0 : down);
+            dir = (p1 >= p2 && up != null) || down == null ? 1 : -1;
+        }
+        if (mde != null) mde = R.sigUp(mde, 3);
+        if (mde != null && (p2 + dir * mde <= 0 || p2 + dir * mde >= 1)) mde = null;
+    }
+    const sign = o.tail === 'two' ? '±' : (o.tail === 'left' ? '−' : '+');
+    const orTxt = Number.isNaN(o.or) ? '—' : (Number.isFinite(o.or) ? R.num(o.or, 4) : '∞');
+    const T = EN ? {
+        label: 'Fisher\'s exact test, ' + { two: 'two-tailed', right: 'right-tailed', left: 'left-tailed' }[o.tail],
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        yes: '✓ There is statistical evidence of an association between rows and columns: ' + { two: 'the proportion of column A differs between the two rows.', right: 'the proportion of column A is higher in row 1.', left: 'the proportion of column A is lower in row 1.' }[o.tail],
+        no: 'ℹ There is not enough evidence of an association between rows and columns. This does not prove that they are independent.',
+        mde: mde == null
+            ? 'With these row totals, the test does not reach ' + R.pct(R.TARGET) + ' power even for the largest possible difference.'
+            : 'With these row totals, the test detects with ' + R.pct(R.TARGET) + ' probability only differences of ' + sign + R.auto(mde) + ' (' + R.points(mde) + ') or more from the proportion of row 2 (' + R.pct(p2, 1) + ').',
+        link: 'Work out the sample size needed for another difference',
+        rows: ['Proportion of column A in row 1', 'Proportion of column A in row 2', 'Difference', 'Odds ratio (a·d)/(b·c)', 'Probability of the observed table under H₀', 'Exact p-value', 'Minimum detectable difference (power ' + R.pct(R.TARGET) + ')']
+    } : {
+        label: 'Test exacto de Fisher, ' + { two: 'bilateral', right: 'de cola derecha', left: 'de cola izquierda' }[o.tail],
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        yes: '✓ Hay evidencia estadística de asociación entre filas y columnas: ' + { two: 'la proporción de la columna A es distinta en las dos filas.', right: 'la proporción de la columna A es mayor en la fila 1.', left: 'la proporción de la columna A es menor en la fila 1.' }[o.tail],
+        no: 'ℹ No hay evidencia suficiente de asociación entre filas y columnas. Esto no demuestra que sean independientes.',
+        mde: mde == null
+            ? 'Con estos totales por fila, el contraste no llega a un ' + R.pct(R.TARGET) + ' de potencia ni con la mayor diferencia posible.'
+            : 'Con estos totales por fila, el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad diferencias de ' + sign + R.auto(mde) + ' (' + R.points(mde) + ') o mayores respecto a la proporción de la fila 2 (' + R.pct(p2, 1) + ').',
+        link: 'Calcular el tamaño muestral necesario para otra diferencia',
+        rows: ['Proporción de la columna A en la fila 1', 'Proporción de la columna A en la fila 2', 'Diferencia', 'Odds ratio (a·d)/(b·c)', 'Probabilidad de la tabla observada bajo H₀', 'p-valor exacto', 'Diferencia mínima detectable (potencia ' + R.pct(R.TARGET) + ')']
+    };
+    const notes = [];
+    if (mde != null) {
+        const url = 'tamano-muestral-fisher.html?p1=' + Number((p2 + dir * mde).toFixed(6)) + '&p2=' + Number(p2.toFixed(6)) + '&alpha=' + o.alpha +
+            '&power=' + R.TARGET + '&ratio=' + R.sig(r, 4) + '&tail=' + (o.tail === 'two' ? 'two' : dir > 0 ? 'right' : 'left');
+        notes.push(R.esc(T.mde) + ' ' + R.link(url, T.link));
+    } else notes.push(R.esc(T.mde));
+    notes.push(R.ciLink('intervalo-confianza-odds-ratio.html?a=' + o.a + '&b=' + o.b + '&c=' + o.c + '&d=' + o.d + '&conf=' + R.sig(1 - o.alpha, 6), 1 - o.alpha));
+    R.render(document.getElementById('fisherResult'), {
+        label: T.label + ' · H₀: OR = 1 · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, pLabel: EN ? 'exact p-value' : 'p-valor exacto',
+        sec: ['OR = ' + orTxt + ' · ' + (EN ? 'row 1: ' : 'fila 1: ') + (ok ? R.pct(p1, 1) : '—') + (EN ? ', row 2: ' : '; fila 2: ') + (ok ? R.pct(p2, 1) : '—')],
+        ok: rejected, verdict: rejected ? T.yes : T.no,
+        notes: notes,
+        rows: [
+            [T.rows[0], ok ? R.num(p1, 4) : '—'],
+            [T.rows[1], ok ? R.num(p2, 4) : '—'],
+            [T.rows[2], ok ? R.num(p1 - p2, 4) + ' (' + R.points(Math.abs(p1 - p2)) + ')' : '—'],
+            [T.rows[3], orTxt],
+            [T.rows[4], R.prob(o.pObs)],
+            [T.rows[5], R.prob(o.p)],
+            [T.rows[6], mde == null ? '—' : sign + R.auto(mde)]
+        ]
+    });
+}
+
 function calculateFisher() {
     const a = parseInt(document.getElementById('cellA').value, 10);
     const b = parseInt(document.getElementById('cellB').value, 10);
@@ -554,21 +661,21 @@ function calculateFisher() {
     }
 
     const { pValue, or, probs, pObs } = computeFisher(a, b, c, d, tail);
-    const decision = pValue < alpha ? 'Se rechaza H₀.' : 'No se rechaza H₀.';
-
-    let orStr;
-    if (Number.isNaN(or)) orStr = 'No definida';
-    else if (!Number.isFinite(or)) orStr = '∞';
-    else orStr = or.toFixed(4);
-
-    resultEl.innerText =
-        `OR = ${orStr} | p-valor exacto = ${pValue.toFixed(6)} | ${decision}`;
+    renderFisherResult({ a, b, c, d, alpha, tail, p: pValue, or, pObs });
 
     renderFisherChart(a, probs, pObs, tail);
 }
 
 document.getElementById('calcFisherBtn').addEventListener('click', calculateFisher);
 
+(function () {
+    // Tabla recibida por la URL (?a=…&b=…&c=…&d=…), por ejemplo desde otro contraste.
+    let params;
+    try { params = new URLSearchParams(location.search); } catch (e) { return; }
+    const cells = { a: 'cellA', b: 'cellB', c: 'cellC', d: 'cellD' };
+    if (!Object.keys(cells).every((k) => /^\d+$/.test(params.get(k) || ''))) return;
+    Object.keys(cells).forEach((k) => { document.getElementById(cells[k]).value = params.get(k); });
+}());
 calculateFisher();
 </script>
 <script src="field-hints.js?v=20260730-1" defer></script>

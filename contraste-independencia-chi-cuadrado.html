@@ -54,7 +54,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="style_new.css?v=20261107-1">
     <style>
         .ct-wrap {
             overflow-x: auto;
@@ -268,7 +268,7 @@
       "name": "¿Qué es el tamaño mínimo detectable (MDE) en chi-cuadrado de independencia?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Es la asociación más pequeña entre variables (habitualmente expresada con V de Cramér) que el estudio puede detectar con la potencia y α fijados. Con N pequeño solo se detectan asociaciones moderadas o grandes; para detectar asociaciones muy pequeñas se necesita aumentar el tamaño muestral."
+        "text": "Es la asociación más pequeña, medida con la w de Cohen, que el contraste puede detectar con un 80 % de probabilidad con tu tamaño muestral y tus grados de libertad. La calculadora la muestra debajo de la conclusión, con un enlace a la calculadora de tamaño muestral. Con N pequeño solo se detectan asociaciones moderadas o grandes."
       }
     }
   ]
@@ -603,6 +603,19 @@
                 <strong>perfiles fila</strong> muestra lo mismo de forma visual: compara el reparto
                 porcentual de cada fila con la barra «Total».
                 </p>
+
+                <h3>Potencia y asociación mínima detectable</h3>
+                <p>
+                Debajo de la conclusión, la calculadora indica la <strong>asociación mínima
+                detectable</strong>: el menor tamaño del efecto, medido con la \(w\) de Cohen, que el
+                contraste detectaría con un 80 % de probabilidad con tu \(N\) y tus grados de libertad.
+                Si es mayor que la asociación que te parecería relevante, un resultado no significativo
+                dice poco. Como referencia, en una tabla 2×2 con \(N = 100\) solo se detectan con esa
+                seguridad asociaciones de \(w \approx 0{,}28\), casi medianas; para asociaciones pequeñas
+                (\(w = 0{,}1\)) hacen falta unas 785 observaciones. El enlace del resultado abre la
+                <a href="tamano-muestral-chi-cuadrado-independencia.html">calculadora de tamaño muestral
+                para chi-cuadrado de independencia</a> con tus grados de libertad y tu \(\alpha\).
+                </p>
         </section>
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
@@ -683,11 +696,11 @@
                 </li>
                 <li>
                     <strong>¿Qué es el tamaño mínimo detectable (MDE) en chi-cuadrado de independencia?</strong>
-                    Es la asociación más pequeña entre variables (habitualmente expresada con V de
-                    Cramér) que el estudio puede detectar con la potencia y \(\alpha\) fijados. Con
-                    \(N\) pequeño solo se detectan asociaciones moderadas o grandes; para detectar
-                    asociaciones muy pequeñas se necesita aumentar el
-                    <a href="tamano-muestral-chi-cuadrado-independencia.html">tamaño muestral</a>.
+                    Es la asociación más pequeña, medida con la \(w\) de Cohen, que el contraste puede
+                    detectar con un 80 % de probabilidad con tu tamaño muestral y tus grados de libertad.
+                    La calculadora la muestra debajo de la conclusión, con un enlace a la
+                    <a href="tamano-muestral-chi-cuadrado-independencia.html">calculadora de tamaño muestral</a>.
+                    Con \(N\) pequeño solo se detectan asociaciones moderadas o grandes.
                 </li>
             </ul>
             <p class="external-ref">Referencia: <a href="https://es.wikipedia.org/wiki/Prueba_%CF%87%C2%B2" target="_blank" rel="noopener noreferrer">Prueba chi-cuadrado de independencia</a> — Wikipedia</p>
@@ -717,6 +730,8 @@ window.MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="test-results.js?v=20261110-3"></script>
 <script>
 const T = {
   rowLabel: i => `Fila ${i+1}`,
@@ -1121,7 +1136,7 @@ function renderProfileChart(res){
       maintainAspectRatio:false,
       plugins:{
         legend:{position:'top', labels:{color:th.text}},
-        tooltip:{callbacks:{label:c => T.tooltipProfile(c.dataset.label, c.parsed.x.toFixed(1), c.dataset.counts[c.dataIndex])}}
+        tooltip:{callbacks:{label:c => T.tooltipProfile(c.dataset.label, dec(c.parsed.x, 1), c.dataset.counts[c.dataIndex])}}
       },
       scales:{
         x:Object.assign({stacked:true, min:0, max:100}, axisStyle(th, T.xProfile), {ticks:{color:th.text, callback:v => T.pct(v)}}),
@@ -1142,6 +1157,11 @@ function htmlTable(colLabels, rowLabels, cellFn, totals){
 function effectLabel(w){
   const L=T.effectLabels;
   return w<0.1 ? L[0] : w<0.3 ? L[1] : w<0.5 ? L[2] : L[3];
+}
+
+// Números con coma decimal.
+function dec(v, d){
+  return Number(v).toLocaleString('es-ES', { minimumFractionDigits: d, maximumFractionDigits: d });
 }
 
 function formatP(p){
@@ -1210,41 +1230,33 @@ function calculate(){
 
   let validity;
   if(cochranOk){
-    validity=T.cochranOk(minE.toFixed(2), below5, cells);
+    validity=T.cochranOk(minE.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2}), below5, cells);
   } else {
-    validity=`<span class="ct-warn">${T.cochranFail(minE.toFixed(2), below5, cells, Math.round(100*below5/cells), below1)}${(r===2 && c===2) ? T.fisherHint : T.groupHint}</span>`;
+    validity=`<span class="ct-warn">${T.cochranFail(minE.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2}), below5, cells, Math.round(100*below5/cells), below1)}${(r===2 && c===2) ? T.fisherHint : T.groupHint}</span>`;
   }
 
-  const decision=p<alpha ? T.reject : T.noReject;
-  document.getElementById('chiResult').innerHTML =
-    `${T.table(r,c,n)}<br>`+
-    `${T.chiObs(yates)}: <strong>${chi2.toFixed(4)}</strong><br>`+
-    `${T.df}: <strong>${df}</strong><br>`+
-    `${T.crit} (α=${alpha}): <strong>${crit.toFixed(4)}</strong><br>`+
-    `${T.pValue}: <strong>${formatP(p)}</strong><br>`+
-    `${T.cramer}: <strong>${V.toFixed(4)}</strong> (${T.effect(effectLabel(w), w.toFixed(3))})<br>`+
-    `${T.decision} (α=${alpha}): <strong>${decision}</strong><br>`+
-    validity+
-    (yatesAsked && !yates ? `<br>${T.yatesIgnored}` : '');
+  // En tablas 2×2, el enlace a Fisher lleva la tabla.
+  if(r===2 && c===2) validity=validity.replace('href="test-exacto-fisher.html"', `href="test-exacto-fisher.html?a=${O[0][0]}&amp;b=${O[0][1]}&amp;c=${O[1][0]}&amp;d=${O[1][1]}"`);
+  renderChiResult({ r, c, n, chi2, df, p, crit, alpha, V, w, minE, yates, validity, extra: yatesAsked && !yates ? T.yatesIgnored : '' });
 
   const totals={row:rowTotals, col:colTotals, grand:n};
   document.getElementById('expectedTable').innerHTML =
     `<strong>${T.expectedTitle}</strong>`+
-    htmlTable(colLabels, rowLabels, (i,j) => `<td>${E[i][j].toFixed(2)}${E[i][j]<5 ? '*' : ''}</td>`, totals)+
+    htmlTable(colLabels, rowLabels, (i,j) => `<td>${dec(E[i][j], 2)}${E[i][j]<5 ? '*' : ''}</td>`, totals)+
     (below5 ? T.expectedNote : '');
 
   const ranked=[];
   for(let i=0;i<r;i++) for(let j=0;j<c;j++) ranked.push({i,j,v:contrib[i][j]});
   ranked.sort((a,b) => b.v-a.v);
   const top=ranked.slice(0, Math.min(3, ranked.length)).filter(x => x.v>0)
-    .map(x => `${T.q(`${esc(rowLabels[x.i])} / ${esc(colLabels[x.j])}`)} (${T.pct((100*x.v/chi2).toFixed(1))})`).join(', ');
+    .map(x => `${T.q(`${esc(rowLabels[x.i])} / ${esc(colLabels[x.j])}`)} (${T.pct(dec(100*x.v/chi2, 1))})`).join(', ');
   const anySig=adj.some(row => row.some(v => Math.abs(v)>1.96));
   document.getElementById('residualTable').innerHTML =
     `<strong>${T.residualTitle}</strong>`+
     htmlTable(colLabels, rowLabels, (i,j) => {
       const v=adj[i][j];
       const cls=v>1.96 ? ' class="ct-pos"' : v<-1.96 ? ' class="ct-neg"' : '';
-      return `<td${cls}>${v>0 ? '+' : ''}${v.toFixed(2)}</td>`;
+      return `<td${cls}>${v>0 ? '+' : ''}${dec(v, 2).replace('-', '−')}</td>`;
     }, null)+
     (anySig ? T.residualNote : T.noSigResiduals)+
     (top && chi2>0 ? `<br>${T.topCells}: ${top}` : '');
@@ -1253,7 +1265,7 @@ function calculate(){
   const pctTotal=colTotals.map(v => 100*v/n);
   document.getElementById('profileTable').innerHTML =
     `<strong>${T.profileTitle}</strong>`+
-    htmlTable(colLabels, [...rowLabels, T.totalBar], (i,j) => `<td>${T.pct((i<r ? pctRows[i][j] : pctTotal[j]).toFixed(1))}</td>`, null);
+    htmlTable(colLabels, [...rowLabels, T.totalBar], (i,j) => `<td>${T.pct(dec(i<r ? pctRows[i][j] : pctTotal[j], 1))}</td>`, null);
 
   lastResult={df, alpha, chi2, O, rowLabels, colLabels, rowTotals, colTotals, n};
   renderCharts();
@@ -1263,6 +1275,65 @@ function renderCharts(){
   if(!lastResult) return;
   renderChiIndependenceChart(lastResult.df, lastResult.alpha, lastResult.chi2);
   renderProfileChart(lastResult);
+}
+
+// Resultado: decisión, conclusión, efecto mínimo detectable y detalles.
+function renderChiResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const wMin = R.solveMin((w) => R.chi2Power(w, o.n, o.df, o.alpha) >= R.TARGET, 1e-4, 5);
+    const wLink = wMin == null ? null : R.sigUp(wMin, 3);
+    const size = (w) => EN
+        ? (w < 0.1 ? 'a very small association' : w < 0.3 ? 'a small association' : w < 0.5 ? 'a medium association' : 'a large association')
+        : (w < 0.1 ? 'una asociación muy pequeña' : w < 0.3 ? 'una asociación pequeña' : w < 0.5 ? 'una asociación mediana' : 'una asociación grande');
+    const L = EN ? {
+        label: 'Chi-square test of independence' + (o.yates ? ' with Yates correction' : '') + ' · ' + o.r + ' × ' + o.c + ' table, N = ' + o.n,
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        sec: 'χ² = ' + R.num(o.chi2, 4) + ' with ' + o.df + ' degree' + (o.df === 1 ? '' : 's') + ' of freedom · Cramér\'s V = ' + R.num(o.V, 3),
+        yes: '✓ There is statistical evidence of an association between the two variables (' + size(o.w) + ' by Cohen\'s benchmarks).',
+        no: 'ℹ There is not enough evidence of an association between the variables. This does not prove that they are independent.',
+        cells: 'The adjusted residuals below show which cells depart most from independence.',
+        mde: wMin == null
+            ? 'With N = ' + o.n + ', the test does not reach ' + R.pct(R.TARGET) + ' power even for very strong associations.'
+            : 'With N = ' + o.n + ', the test detects with ' + R.pct(R.TARGET) + ' probability only associations of size w = ' + R.num(wMin, 2) + ' or more (' + size(wMin) + ', by Cohen\'s benchmarks).',
+        link: 'Work out the sample size needed for another effect size',
+        rows: ['χ² statistic', 'Degrees of freedom', 'Critical value', 'p-value', 'Cramér\'s V', 'Effect size (Cohen\'s w)', 'Smallest expected frequency', 'Minimum detectable w (power ' + R.pct(R.TARGET) + ')']
+    } : {
+        label: 'Chi-cuadrado de independencia' + (o.yates ? ' con corrección de Yates' : '') + ' · tabla ' + o.r + ' × ' + o.c + ', N = ' + o.n,
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        sec: 'χ² = ' + R.num(o.chi2, 4) + ' con ' + o.df + ' grado' + (o.df === 1 ? '' : 's') + ' de libertad · V de Cramér = ' + R.num(o.V, 3),
+        yes: '✓ Hay evidencia estadística de asociación entre las dos variables (' + size(o.w) + ', según las referencias de Cohen).',
+        no: 'ℹ No hay evidencia suficiente de asociación entre las variables. Esto no demuestra que sean independientes.',
+        cells: 'Los residuos ajustados de más abajo indican qué celdas se apartan más de la independencia.',
+        mde: wMin == null
+            ? 'Con N = ' + o.n + ', el contraste no llega a un ' + R.pct(R.TARGET) + ' de potencia ni con asociaciones muy fuertes.'
+            : 'Con N = ' + o.n + ', el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad asociaciones de tamaño w = ' + R.num(wMin, 2) + ' o mayores (' + size(wMin) + ', según las referencias de Cohen).',
+        link: 'Calcular el tamaño muestral necesario para otro tamaño del efecto',
+        rows: ['Estadístico χ²', 'Grados de libertad', 'Valor crítico', 'p-valor', 'V de Cramér', 'Tamaño del efecto (w de Cohen)', 'Frecuencia esperada mínima', 'w mínimo detectable (potencia ' + R.pct(R.TARGET) + ')']
+    };
+    const notes = [];
+    if (rejected) notes.push(R.esc(L.cells));
+    notes.push(o.validity + (o.extra ? '<br>' + o.extra : ''));
+    if (wLink != null) {
+        const url = 'tamano-muestral-chi-cuadrado-independencia.html?w=' + wLink + '&df=' + o.df + '&alpha=' + o.alpha + '&power=' + R.TARGET;
+        notes.push(R.esc(L.mde) + ' ' + R.link(url, L.link));
+    } else notes.push(R.esc(L.mde));
+    R.render(document.getElementById('chiResult'), {
+        label: L.label + ' · α = ' + R.auto(o.alpha),
+        decision: L.decision, p: o.p, sec: [L.sec],
+        ok: rejected, verdict: rejected ? L.yes : L.no,
+        notes: notes,
+        rows: [
+            [L.rows[0], R.num(o.chi2, 4)],
+            [L.rows[1], String(o.df)],
+            [L.rows[2], R.num(o.crit, 4)],
+            [L.rows[3], R.prob(o.p)],
+            [L.rows[4], R.num(o.V, 4)],
+            [L.rows[5], R.num(o.w, 4)],
+            [L.rows[6], R.num(o.minE, 2)],
+            [L.rows[7], wMin == null ? '—' : R.num(wMin, 3)]
+        ]
+    });
 }
 
 function runCalculation(){

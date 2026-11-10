@@ -67,54 +67,78 @@
     }
     </script>
     <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
     {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "¿Cuándo se usa el test de McNemar?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Se usa cuando se tiene una variable binaria medida dos veces en los mismos sujetos (diseño antes/después o cruzado) y se quiere comparar las proporciones marginales. Solo los pares discordantes (b y c) informan el contraste."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Qué son los pares discordantes?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Son los pares en los que las dos condiciones dan resultados distintos: b (éxito en condición 1, fallo en condición 2) y c (fallo en condición 1, éxito en condición 2). Los pares concordantes (a y d) no aportan información sobre la diferencia entre proporciones."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Por qué se aplica la corrección de continuidad?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "La corrección de continuidad de Edwards ajusta el estadístico chi-cuadrado discreto hacia la distribución continua chi-cuadrado, reduciendo el error de tipo I cuando b+c es pequeño. Es la opción recomendada por defecto."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Cuál es la alternativa exacta al test de McNemar?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "El test binomial exacto sobre los pares discordantes: bajo H₀ se espera que b/(b+c) = 0,5. Cuando b+c es pequeño (< 25), se recomienda el método exacto."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Puede usarse McNemar con más de dos categorías?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Sí, existe la extensión de McNemar para tablas k×k con más de dos categorías ordinales: el test de simetría de Bowker, que generaliza el principio de solo usar las celdas discordantes."
-          }
-        }
-      ]
+      "@type": "Question",
+      "name": "¿Cuándo se usa el test de McNemar?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Para comparar dos proporciones medidas en los mismos individuos, o en parejas emparejadas: antes y después, dos tratamientos en un ensayo cruzado o dos pruebas diagnósticas sobre las mismas muestras."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Por qué solo usa los pares discordantes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Porque la diferencia entre las dos proporciones es (b − c)/N: los individuos que responden igual en las dos condiciones no informan sobre cuál es mejor."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Con o sin corrección de continuidad?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "La corrección es más conservadora y es la opción habitual. Con pocos pares discordantes, lo más fiable es el p-valor exacto binomial, que la calculadora muestra en los detalles."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cuándo usar la versión exacta?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Cuando hay menos de unos 25 pares discordantes. Se basa en que, bajo H₀, b sigue una binomial con b + c ensayos y probabilidad 0,5."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué hipótesis contrasta?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Que la proporción de éxitos es la misma en las dos condiciones, lo que equivale a que los dos tipos de pares discordantes sean igual de frecuentes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿En qué se diferencia del contraste de dos proporciones?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El contraste de dos proporciones supone grupos independientes; McNemar tiene en cuenta que las dos respuestas son del mismo individuo."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué es el odds ratio apareado?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El cociente b/c: cuántas veces es más frecuente el cambio a favor de la condición 1 que el contrario."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué pasa si tengo más de dos condiciones?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Para tres o más condiciones con respuesta de sí o no se usa la prueba Q de Cochran."
+      }
     }
+  ]
+}
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="style_new.css?v=20261107-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -163,7 +187,6 @@
     </header>
 
     <main>
-
         <section class="ss-shell" aria-label="Calculadora">
             <section class="card ss-controls">
                 <div class="panel-heading">
@@ -218,73 +241,114 @@
         </section>
 
         <section class="card content-card">
-            <h3>Explicación</h3>
-            <p>El test de McNemar es el procedimiento estándar para contrastar hipótesis sobre proporciones apareadas cuando la variable respuesta es binaria (éxito/fracaso). Se aplica típicamente en diseños antes/después, estudios de casos y controles apareados, y ensayos cruzados donde se compara la respuesta de los mismos individuos a dos condiciones.</p>
-            <p>La clave del test es que <strong>solo los pares discordantes</strong> aportan información sobre la diferencia entre proporciones. Los pares concordantes (ambos éxito o ambos fracaso) no informan si una condición es mejor que la otra. Esto lleva a una formulación elegante: bajo \(H_0\) se esperaría que los pares discordantes se repartiesen en partes iguales entre b y c.</p>
+            <h3>¿Qué es el test de McNemar?</h3>
+            <p>Es el contraste para comparar dos proporciones cuando los datos están <strong>emparejados</strong>: cada individuo da una respuesta de sí o no en dos condiciones o dos momentos. Por ejemplo, los mismos pacientes con dos fármacos en un ensayo cruzado, la misma persona antes y después de una campaña, dos pruebas diagnósticas aplicadas a las mismas muestras o dos evaluadores que clasifican los mismos casos. La pregunta es si la proporción de «síes» cambia de una condición a otra.</p>
+            <p>No sirve el <a href="contraste-hipotesis-dos-proporciones.html">contraste de dos proporciones independientes</a>, porque las dos respuestas de un mismo individuo están relacionadas: quien mejora con un fármaco tiende a mejorar con el otro. Ignorar ese emparejamiento da p-valores equivocados.</p>
 
-            <h3>Tabla 2×2 para datos apareados</h3>
-            <p>Cada par contribuye a una de las cuatro celdas:</p>
-            <ul>
-                <li><strong>a</strong>: éxito en ambas condiciones (concordante +/+)</li>
-                <li><strong>b</strong>: éxito en condición 1, fracaso en condición 2 (discordante)</li>
-                <li><strong>c</strong>: fracaso en condición 1, éxito en condición 2 (discordante)</li>
-                <li><strong>d</strong>: fracaso en ambas condiciones (concordante −/−)</li>
-            </ul>
+            <h3>La tabla 2×2 de datos apareados</h3>
+            <p>Los datos se resumen contando cuántos individuos hay en cada combinación de respuestas:</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th></th><th>Condición 2: sí</th><th>Condición 2: no</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Condición 1: sí</strong></td><td>a (sí en las dos)</td><td>b (solo en la 1)</td></tr>
+                        <tr><td><strong>Condición 1: no</strong></td><td>c (solo en la 2)</td><td>d (en ninguna)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Con \(N = a + b + c + d\) individuos, la proporción de éxitos es \(p_1 = (a+b)/N\) en la condición 1 y \(p_2 = (a+c)/N\) en la condición 2. Su diferencia es</p>
+            <p class="formula-line">\( p_1 - p_2 = \dfrac{(a + b) - (a + c)}{N} = \dfrac{b - c}{N} \)</p>
+            <p>Las casillas <strong>a</strong> y <strong>d</strong> desaparecen: los individuos que responden igual en las dos condiciones no dicen nada sobre cuál es mejor. Toda la información está en los <strong>pares discordantes</strong>, b y c. Por eso la calculadora solo los pide a ellos.</p>
+        </section>
 
+        <section class="card content-card">
             <h3>Hipótesis y estadístico</h3>
-            <p class="formula-line">\(H_0\colon p_{\text{discordante},12} = p_{\text{discordante},21}\) (i.e., \(\pi_b = \pi_c\))</p>
-            <p class="formula-line">Sin corrección: \( \chi^2 = \dfrac{(b - c)^2}{b + c} \)</p>
-            <p class="formula-line">Con corrección de continuidad: \( \chi^2 = \dfrac{(|b - c| - 1)^2}{b + c} \)</p>
-            <p class="formula-line">\(gl = 1\), p-valor de cola derecha en distribución \(\chi^2\)</p>
-            <p>Equivalente en escala z (test de signo): \( z = \dfrac{b - c}{\sqrt{b + c}} \)</p>
-        </section>
-
-        <section class="card content-card">
-            <h3>Guía rápida de interpretación</h3>
+            <p class="formula-line">\(H_0: p_1 = p_2\) (equivalente a que, entre los discordantes, los dos tipos de cambio sean igual de frecuentes)</p>
+            <p class="formula-line">\( \chi^2 = \dfrac{(b - c)^2}{b + c} \qquad \text{o, con corrección de continuidad,} \qquad \chi^2 = \dfrac{(|b - c| - 1)^2}{b + c} \)</p>
+            <p>Si \(H_0\) es cierta, cada par discordante tiene la misma probabilidad de ser del tipo b que del tipo c, como lanzar una moneda. El estadístico mide cuánto se aleja el reparto observado del 50 %–50 % y, bajo \(H_0\), sigue aproximadamente una <a href="chisquare.html">chi-cuadrado</a> con 1 grado de libertad. Es el cuadrado del estadístico \(z = (b - c)/\sqrt{b + c}\).</p>
             <ul>
-                <li>Si el <strong>p-valor</strong> es menor que \(\alpha\), se rechaza \(H_0\): hay evidencia de que las proporciones marginales difieren.</li>
+                <li><strong>Corrección de continuidad</strong> (de Edwards): resta 1 a \(|b - c|\) para compensar que los recuentos son enteros. Es más conservadora y es la opción por defecto.</li>
+                <li><strong>Versión exacta</strong>: con pocos pares discordantes (menos de unos 25), lo más fiable es calcular el p-valor exacto con la binomial: b sigue una binomial de parámetros \(b + c\) y 0,5. La calculadora lo muestra en los detalles y te avisa cuando conviene usarlo.</li>
+            </ul>
+
+            <h3>Regla de decisión</h3>
+            <ul>
+                <li>Si el <strong>p-valor</strong> es menor que \(\alpha\), se rechaza \(H_0\): la proporción de éxitos es distinta en las dos condiciones.</li>
                 <li>Si el p-valor es mayor o igual que \(\alpha\), no hay evidencia suficiente para rechazar \(H_0\).</li>
-                <li>Usa la corrección de continuidad como opción predeterminada; omítela solo si \(b + c\) es muy grande (&gt; 100).</li>
-                <li>Si \(b + c &lt; 25\), considera el test binomial exacto sobre los pares discordantes.</li>
+                <li>El sentido de la diferencia lo da el signo de \(b - c\): si b &gt; c, la condición 1 tiene más éxitos.</li>
             </ul>
         </section>
 
         <section class="card content-card">
-            <h3>¿Por qué solo importan los pares discordantes?</h3>
-            <p>Imagina que 100 personas toman dos fármacos en orden aleatorio y reportan si mejoran o no. Si alguien mejora con ambos o con ninguno, eso no nos dice cuál fármaco es mejor; solo confirma que esa persona responde o no responde. En cambio, un sujeto que mejora solo con el fármaco A (par discordante b) o solo con el B (par discordante c) aporta evidencia directa sobre la diferencia. Por eso McNemar ignora las celdas concordantes a y d y concentra toda la inferencia en b y c.</p>
+            <h3>Supuestos del test</h3>
+            <ul>
+                <li><strong>Datos emparejados</strong>: cada individuo (o pareja emparejada) aporta una respuesta en cada condición.</li>
+                <li><strong>Respuesta dicotómica</strong> en las dos condiciones.</li>
+                <li><strong>Individuos independientes entre sí</strong>.</li>
+                <li><strong>Suficientes pares discordantes</strong> para la aproximación chi-cuadrado. Con menos de 25, usa el p-valor exacto.</li>
+            </ul>
+            <p>El test de McNemar es el equivalente, para respuestas de sí o no, del <a href="contraste-hipotesis-medias-apareadas.html">contraste de medias apareadas</a>. Si hay más de dos condiciones con respuesta dicotómica, la generalización es la prueba Q de Cochran.</p>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto</h3>
-            <p>En un ensayo cruzado, 100 pacientes evalúan dos fármacos. La tabla de resultados es: a = 45 (mejoran con ambos), b = 18 (solo fármaco 1), c = 8 (solo fármaco 2), d = 29 (ninguno mejora). Se contrasta \(H_0\colon \pi_b = \pi_c\) con \(\alpha = 0{,}05\).</p>
-            <p>Con corrección de continuidad:</p>
-            <p class="formula-line">\( \chi^2 = \dfrac{(|18 - 8| - 1)^2}{18 + 8} = \dfrac{9^2}{26} = \dfrac{81}{26} \approx 3{,}115 \)</p>
-            <p>El p-valor con \(gl = 1\) es \(p \approx 0{,}078\). Como \(p = 0{,}078 > \alpha = 0{,}05\), <strong>no se rechaza \(H_0\)</strong>.</p>
-            <p>Conclusión: con estos datos no hay evidencia suficiente para afirmar que los dos fármacos producen tasas de mejora distintas al nivel del 5 %, aunque el resultado es limítrofe.</p>
+            <h3>Ejemplo resuelto 1: ensayo cruzado con dos fármacos</h3>
+            <p>En un ensayo cruzado, 100 pacientes reciben dos fármacos en periodos distintos. Mejoran con los dos 45 (a), solo con el fármaco 1 18 (b), solo con el fármaco 2 8 (c) y con ninguno 29 (d). La tasa de mejora es del 63 % con el fármaco 1 y del 53 % con el 2. Se contrasta \(H_0\colon p_1 = p_2\) con \(\alpha = 0{,}05\) y corrección de continuidad.</p>
+            <p class="formula-line">\( \chi^2 = \dfrac{(|18 - 8| - 1)^2}{18 + 8} = \dfrac{81}{26} \approx 3{,}115 \)</p>
+            <p>Con 1 grado de libertad, el valor crítico es 3,841 y el p-valor, \(p \approx 0{,}078\). <strong>No se rechaza \(H_0\)</strong>. Como solo hay 26 pares discordantes, conviene mirar también el p-valor exacto, que es 0,076: la conclusión no cambia.</p>
+            <p>Conclusión: no hay evidencia suficiente de que los fármacos difieran, aunque el resultado está cerca del límite y apunta a favor del fármaco 1 (18 frente a 8 cambios). Con solo 26 pares discordantes, el test solo detecta con un 80 % de probabilidad diferencias en las que un tipo de cambio es al menos 3,2 veces más frecuente que el otro; aquí la proporción observada es 18/8 = 2,25.</p>
+            <p><strong>En la calculadora:</strong> b = 18, c = 8 y «Con corrección de continuidad». Son los valores con los que se abre la página.</p>
+
+            <h3>Ejemplo resuelto 2: antes y después de una campaña</h3>
+            <p>Se pregunta a 200 personas si conocen una marca, antes y después de una campaña publicitaria. 12 la conocían antes pero no después (b) y 35 no la conocían antes y sí después (c); el resto respondió igual las dos veces. Se contrasta con \(\alpha = 0{,}05\).</p>
+            <p class="formula-line">\( \chi^2 = \dfrac{(|12 - 35| - 1)^2}{12 + 35} = \dfrac{484}{47} \approx 10{,}30 \)</p>
+            <p>El p-valor es \(p \approx 0{,}0013\): <strong>se rechaza \(H_0\)</strong>. El conocimiento de la marca cambió, y a favor de después de la campaña, porque c &gt; b. El aumento neto es \((35 - 12)/200 = 11{,}5\) puntos porcentuales. Como es un diseño antes y después sin grupo de control, el cambio puede deberse también a otras causas.</p>
+            <p><strong>En la calculadora:</strong> b = 12, c = 35.</p>
         </section>
 
         <section class="card content-card">
             <h3>Cómo interpretar el resultado</h3>
-                <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) significa que hay evidencia estadística de que las proporciones marginales de las dos condiciones son distintas. En términos de la tabla 2×2, los pares discordantes (\(b\) y \(c\)) muestran una asimetría que no puede explicarse por el azar. El test de McNemar es especialmente sensible a este tipo de cambios en los mismos sujetos, lo que lo hace más potente que comparar dos proporciones independientes cuando el diseño es apareado.</p>
-                <p><strong>No rechazar \(H_0\)</strong> (p-valor ≥ α) no implica que las proporciones sean iguales, sino que la asimetría entre \(b\) y \(c\) es compatible con la variación aleatoria esperada. Con un número pequeño de pares discordantes (\(b+c &lt; 25\)), la aproximación chi-cuadrado pierde fiabilidad: en ese caso se recomienda el test binomial exacto sobre los pares discordantes en lugar del estadístico aproximado.</p>
-                <p>El <strong>estadístico chi-cuadrado de McNemar</strong> se calcula solo a partir de \(b\) y \(c\) (los pares donde las dos condiciones discrepan); los pares concordantes (\(a\) y \(d\)) no aportan información sobre la diferencia. Un valor grande del estadístico indica fuerte asimetría entre \(b\) y \(c\). Para valorar la relevancia práctica, complementa con el cociente \(b/c\) (odds ratio marginal) o con la diferencia de proporciones marginales \((b-c)/n\) y su intervalo de confianza.</p>
+            <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que la proporción de éxitos difiere entre las dos condiciones; el sentido lo marca qué tipo de par discordante es más frecuente. Para valorar el tamaño del cambio, calcula la diferencia \((b - c)/N\), que necesita el total de individuos, o el <strong>odds ratio apareado</strong> \(b/c\), que la calculadora muestra con su intervalo de confianza.</p>
+            <p><strong>No rechazar \(H_0\)</strong> no demuestra que las condiciones sean iguales: con pocos pares discordantes el test tiene poca potencia.</p>
+            <p>En la calculadora, el resultado muestra la decisión con el p-valor, el estadístico χ² y una frase con la conclusión y el sentido de la diferencia. En el gráfico, la zona roja es la región de rechazo sobre la chi-cuadrado y la línea marca el estadístico observado. En «Detalles del cálculo» tienes el p-valor exacto, el estadístico z, la proporción de discordantes de cada tipo y el odds ratio apareado.</p>
+
+            <h3>Potencia: lo que importa es el número de discordantes</h3>
+            <p>La potencia del test de McNemar no depende del total de individuos, sino de cuántos pares son discordantes y de lo desequilibrado que esté su reparto. Por eso, debajo de la conclusión, la calculadora indica el <strong>efecto mínimo detectable</strong> con tus pares discordantes: cuántas veces más frecuente tiene que ser un tipo de cambio que el otro para que el test lo detecte con un 80 % de probabilidad. Con 26 discordantes hace falta una proporción de más de 3 a 1; con 100, basta con unos 1,8 a 1.</p>
+            <p>Para planificar un estudio hacen falta las proporciones esperadas de cada tipo de cambio sobre el total, que no se pueden deducir solo de b y c. Puedes calcularlo con la <a href="tamano-muestral-proporciones-apareadas.html">calculadora de tamaño muestral para proporciones apareadas</a>.</p>
         </section>
+
+        <section class="card content-card">
+            <h3>Errores frecuentes</h3>
+            <ul>
+                <li><strong>Analizar datos emparejados con el contraste de dos proporciones independientes</strong>, comparando las dos proporciones marginales como si fueran grupos distintos.</li>
+                <li><strong>Introducir a o d</strong> en los campos de discordantes: el test solo usa b y c.</li>
+                <li><strong>Usar la aproximación chi-cuadrado con muy pocos discordantes</strong> en lugar del p-valor exacto.</li>
+                <li><strong>Olvidar el sentido</strong>: un resultado significativo indica que hay diferencia, y b frente a c indica a favor de qué condición.</li>
+                <li><strong>Atribuir el cambio a la intervención</strong> en un diseño antes y después sin grupo de control.</li>
+            </ul>
+        </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
               <h3>Calculadoras relacionadas</h3>
               <ul>
                 <li><a href="tamano-muestral-proporciones-apareadas.html">Tamaño muestral para proporciones apareadas</a></li>
                 <li><a href="contraste-hipotesis-dos-proporciones.html">Contraste para dos proporciones independientes</a></li>
-                <li><a href="test-exacto-fisher.html">Test exacto de Fisher</a></li>
+                <li><a href="contraste-hipotesis-medias-apareadas.html">Contraste para medias apareadas</a></li>
+                <li><a href="contraste-independencia-chi-cuadrado.html">Chi-cuadrado de independencia</a></li>
               </ul>
             </section>
             <h3>Preguntas frecuentes</h3>
             <ul>
-                <li><strong>¿Cuándo se usa el test de McNemar?</strong> Cuando se tiene una variable binaria medida dos veces en los mismos sujetos y se quiere comparar las proporciones marginales.</li>
-                <li><strong>¿Qué son los pares discordantes?</strong> Los pares donde las dos condiciones dan resultados distintos (b y c). Los pares concordantes (a y d) no aportan información sobre la diferencia.</li>
-                <li><strong>¿Por qué se aplica la corrección de continuidad?</strong> Ajusta el estadístico discreto hacia la distribución continua chi-cuadrado, reduciendo el error de tipo I cuando b+c es pequeño.</li>
-                <li><strong>¿Cuál es la alternativa exacta?</strong> El test binomial exacto sobre los pares discordantes, recomendado cuando b+c &lt; 25.</li>
-                <li><strong>¿Puede usarse McNemar con más de dos categorías?</strong> Sí, con el test de simetría de Bowker para tablas k×k.</li>
+                <li><strong>¿Cuándo se usa el test de McNemar?</strong> Para comparar dos proporciones medidas en los mismos individuos, o en parejas emparejadas: antes y después, dos tratamientos en un ensayo cruzado o dos pruebas diagnósticas sobre las mismas muestras.</li>
+                <li><strong>¿Por qué solo usa los pares discordantes?</strong> Porque la diferencia entre las dos proporciones es (b − c)/N: los individuos que responden igual en las dos condiciones no informan sobre cuál es mejor.</li>
+                <li><strong>¿Con o sin corrección de continuidad?</strong> La corrección es más conservadora y es la opción habitual. Con pocos pares discordantes, lo más fiable es el p-valor exacto binomial, que la calculadora muestra en los detalles.</li>
+                <li><strong>¿Cuándo usar la versión exacta?</strong> Cuando hay menos de unos 25 pares discordantes. Se basa en que, bajo H₀, b sigue una binomial con b + c ensayos y probabilidad 0,5.</li>
+                <li><strong>¿Qué hipótesis contrasta?</strong> Que la proporción de éxitos es la misma en las dos condiciones, lo que equivale a que los dos tipos de pares discordantes sean igual de frecuentes.</li>
+                <li><strong>¿En qué se diferencia del contraste de dos proporciones?</strong> El contraste de dos proporciones supone grupos independientes; McNemar tiene en cuenta que las dos respuestas son del mismo individuo.</li>
+                <li><strong>¿Qué es el odds ratio apareado?</strong> El cociente b/c: cuántas veces es más frecuente el cambio a favor de la condición 1 que el contrario.</li>
+                <li><strong>¿Qué pasa si tengo más de dos condiciones?</strong> Para tres o más condiciones con respuesta de sí o no se usa la prueba Q de Cochran.</li>
             </ul>
             <p class="external-ref">Referencia: <a href="https://es.wikipedia.org/wiki/Prueba_de_McNemar" target="_blank" rel="noopener noreferrer">Prueba de McNemar</a> — Wikipedia</p>
         </section>
@@ -308,6 +372,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="test-results.js?v=20261110-3"></script>
 <script>
 let mcnemarChart;
 
@@ -371,6 +436,68 @@ function renderChart(alpha, chiSqObs) {
     });
 }
 
+// Resultado: decisión, conclusión, efecto mínimo detectable y detalles.
+// La potencia depende de los pares discordantes nd = b + c: si π es la
+// proporción de discordantes del tipo b, H₀ es π = 0,5.
+function renderMcNemarResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const nd = o.b + o.c;
+    const zc = jStat.normal.inv(1 - o.alpha / 2, 0, 1);
+    const crit = jStat.chisquare.inv(1 - o.alpha, 1);
+    // Potencia (aproximación normal) frente a una proporción π de discordantes b.
+    const power = (pi) => jStat.normal.cdf((Math.abs(2 * pi - 1) * Math.sqrt(nd) - zc) / (2 * Math.sqrt(pi * (1 - pi))), 0, 1);
+    const pi = R.solveMin((x) => power(x) >= R.TARGET, 0.5 + 1e-9, 1 - 1e-9);
+    const ratio = pi == null ? null : pi / (1 - pi);
+    const piHat = o.b / nd;
+    const T = EN ? {
+        label: 'McNemar test' + (o.cc ? ' with continuity correction' : ''),
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        yes: '✓ There is statistical evidence that the proportion of successes differs between the two conditions (' + (o.b > o.c ? 'higher in condition 1' : 'higher in condition 2') + ').',
+        no: 'ℹ There is not enough evidence that the proportion of successes differs between the two conditions. This does not prove that they are equal.',
+        mde: ratio == null || ratio > 1000
+            ? 'With ' + nd + ' discordant pairs, the test does not reach ' + R.pct(R.TARGET) + ' power even if all changes went the same way.'
+            : 'With ' + nd + ' discordant pairs, the test detects with ' + R.pct(R.TARGET) + ' probability only differences in which one type of change is at least ' + R.num(ratio, 1) + ' times as frequent as the other.',
+        small: 'ℹ With fewer than 25 discordant pairs, the exact binomial version of the test (b out of b + c, with p = 0.5) is more reliable; here its p-value is ' + R.prob(o.pExact) + '.',
+        rows: ['Discordant pairs (b, c)', 'Total discordant pairs (b + c)', 'χ² statistic', 'Degrees of freedom', 'Critical value', 'p-value', 'Exact p-value (binomial)', 'Statistic z = (b − c)/√(b + c)', 'Proportion of type b among discordant', 'Paired odds ratio (b/c)', R.pctLevel(1 - o.alpha) + ' confidence interval for b/c']
+    } : {
+        label: 'Test de McNemar' + (o.cc ? ' con corrección de continuidad' : ''),
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        yes: '✓ Hay evidencia estadística de que la proporción de éxitos es distinta en las dos condiciones (' + (o.b > o.c ? 'mayor en la condición 1' : 'mayor en la condición 2') + ').',
+        no: 'ℹ No hay evidencia suficiente de que la proporción de éxitos sea distinta en las dos condiciones. Esto no demuestra que sean iguales.',
+        mde: ratio == null || ratio > 1000
+            ? 'Con ' + nd + ' pares discordantes, el contraste no llega a un ' + R.pct(R.TARGET) + ' de potencia ni aunque todos los cambios fueran en el mismo sentido.'
+            : 'Con ' + nd + ' pares discordantes, el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad diferencias en las que un tipo de cambio sea al menos ' + R.num(ratio, 1) + ' veces más frecuente que el otro.',
+        small: 'ℹ Con menos de 25 pares discordantes es más fiable la versión exacta del test (binomial de b sobre b + c con p = 0,5); aquí su p-valor es ' + R.prob(o.pExact) + '.',
+        rows: ['Pares discordantes (b, c)', 'Total de pares discordantes (b + c)', 'Estadístico χ²', 'Grados de libertad', 'Valor crítico', 'p-valor', 'p-valor exacto (binomial)', 'Estadístico z = (b − c)/√(b + c)', 'Proporción de tipo b entre los discordantes', 'Odds ratio apareada (b/c)', 'Intervalo de confianza al ' + R.pctLevel(1 - o.alpha) + ' para b/c']
+    };
+    const notes = [];
+    if (nd < 25) notes.push(R.esc(T.small));
+    notes.push(R.esc(T.mde));
+    const rows = [
+        [T.rows[0], o.b + (EN ? ', ' : '; ') + o.c],
+        [T.rows[1], String(nd)],
+        [T.rows[2], 'χ² = ' + R.num(o.chi2, 4)],
+        [T.rows[3], '1'],
+        [T.rows[4], R.num(crit, 4)],
+        [T.rows[5], R.prob(o.p)],
+        [T.rows[6], R.prob(o.pExact)],
+        [T.rows[7], 'z = ' + R.num(o.z, 4)],
+        [T.rows[8], R.num(piHat, 4)]
+    ];
+    if (o.b > 0 && o.c > 0) {
+        const lr = Math.log(o.b / o.c), se = Math.sqrt(1 / o.b + 1 / o.c);
+        rows.push([T.rows[9], R.num(o.b / o.c, 3)], [T.rows[10], R.interval(Math.exp(lr - zc * se), Math.exp(lr + zc * se), 3)]);
+    } else rows.push([T.rows[9], o.c === 0 ? '∞' : '0']);
+    R.render(document.getElementById('result'), {
+        label: T.label + ' · H₀: p₁ = p₂ · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, sec: ['χ² = ' + R.num(o.chi2, 4) + (EN ? ' with 1 degree of freedom' : ' con 1 grado de libertad')],
+        ok: rejected, verdict: rejected ? T.yes : T.no,
+        notes: notes,
+        rows: rows
+    });
+}
+
 function calculate() {
     const b = parseFloat(document.getElementById('bVal').value);
     const c = parseFloat(document.getElementById('cVal').value);
@@ -394,9 +521,9 @@ function calculate() {
 
     const p = 1 - jStat.chisquare.cdf(chiSq, df);
     const z = (b - c) / Math.sqrt(b + c);
-    const decision = p < alpha ? 'Se rechaza H₀.' : 'No se rechaza H₀.';
-    const corrLabel = correction === 'yes' ? ' (con corrección)' : ' (sin corrección)';
-    resultEl.innerText = `χ² = ${chiSq.toFixed(4)}${corrLabel} | gl = 1 | p-valor = ${p.toFixed(6)} | z = ${z.toFixed(4)} | ${decision}`;
+    // Versión exacta: binomial de b sobre b + c con p = 0,5 (bilateral).
+    const pExact = Math.min(1, 2 * jStat.binomial.cdf(Math.min(b, c), b + c, 0.5));
+    renderMcNemarResult({ b, c, alpha, cc: correction === 'yes', chi2: chiSq, p, z, pExact });
     renderChart(alpha, chiSq);
 }
 
