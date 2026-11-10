@@ -67,54 +67,86 @@
     }
     </script>
     <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
     {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "When is the paired t-test used?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "It is used when each individual is measured twice (before and after) or when subjects are matched by some relevant characteristic, so that the differences between pairs remove the variability between individuals."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What assumptions does the paired t-test require?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The differences d_i must follow an approximately normal distribution (or n must be large, by the central limit theorem). The observations must be independent across pairs."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How does it differ from the independent two-sample t-test?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The paired test works directly with the differences within each pair, removing the variability between individuals. This makes it more powerful when there is positive correlation between the measurements of each pair."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What does μ_d0 mean in the null hypothesis?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "It is the value of the population mean difference under the null hypothesis. It is usually set to 0 to test whether there is an effect, although it can be any value if compared against a reference difference."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How is the p-value calculated in this test?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "It is calculated from Student's t distribution with n-1 degrees of freedom, evaluating the probability of obtaining a statistic as extreme as the one observed under the null hypothesis."
-          }
-        }
-      ]
+      "@type": "Question",
+      "name": "When is the paired t-test used?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "When each value in one condition has its partner in the other: the same subject measured before and after, two treatments in the same subject, or pairs matched on relevant characteristics."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does it differ from the independent two-sample test?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It works with the difference within each pair, which removes the variability between subjects. If the two measurements are correlated, as is usual, it is much more powerful."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What data do I need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The mean and standard deviation of the differences within each pair, and the number of pairs. If you have the original data, first compute the difference for each pair."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What assumptions does it require?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "That the pairs are independent of each other and that the differences follow an approximately normal distribution, or that there are enough pairs. The original data do not need to be normal."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does μ_d0 mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The value of the mean difference under the null hypothesis. It is almost always 0, meaning no change; it can be another value if you want to test a specific change."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the order of the subtraction matter?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Only for the sign: before − after and after − before give differences of opposite sign. Choose the order before you start and pick the tail accordingly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if the differences are not normal?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "With many pairs the test remains valid. With few pairs and very skewed differences, use the Wilcoxon signed-rank test."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the minimum detectable difference?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The smallest real mean difference that the test would detect with 80% probability given your number of pairs and variability."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many pairs do I need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It depends on the change you want to detect, the standard deviation of the differences and the desired power. Work it out with the sample size calculator for paired means."
+      }
     }
+  ]
+}
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -227,83 +259,148 @@
             </section>
         </section>
 
+        <aside class="sim-callout" aria-label="Related simulation">
+            <p class="sim-callout-kicker">Interactive simulation</p>
+            <p class="sim-callout-text"><strong>See α, β and power in action</strong> Move the significance level, the effect size and the sample size, and watch how the type I error, the type II error and the power of the test change on the chart.</p>
+            <a class="sim-callout-link" href="simulaciones/simulador-errores-tipo-i-ii.html">Open the type I and type II error simulator →</a>
+        </aside>
+
         <section class="card content-card">
-            <h3>Explanation</h3>
-            <p>The paired means hypothesis test applies when observations are matched: each individual contributes two measurements (for example, before and after a treatment) or when subjects have been intentionally matched on confounding variables. Instead of comparing two independent groups, the test works directly with the differences \(d_i = x_{i1} - x_{i2}\) within each pair.</p>
-            <p>This design strategy removes the variability between individuals, which usually translates into greater statistical power compared to the t-test for independent samples, especially when there is positive correlation between the measurements of each pair.</p>
+            <h3>What is a hypothesis test for paired means?</h3>
+            <p>It is the test to use when the data come <strong>in pairs</strong>: each unit provides two related measurements, and the question is whether, on average, there is a difference between them. Typical cases are <strong>before and after</strong> measurements of an intervention in the same people, two conditions applied to the same subject (left and right eye, two treatments in random order), or deliberately matched pairs, such as twins or patients matched by age and sex. It is also known as the <strong>dependent-samples t-test</strong> or paired t-test.</p>
+            <p>The idea is very simple: for each pair you compute the difference \(d_i = x_{i1} - x_{i2}\), and the problem becomes a <a href="contraste-hipotesis-una-media.html">one-mean test</a> on those differences. If the intervention has no effect, the differences should hover around 0; if their mean moves away from 0 by more than chance can explain, you conclude that there is a systematic change.</p>
+            <p>The great advantage of the paired design is that <strong>each subject acts as their own control</strong>. Differences between people (some have high blood pressure, others low; some students get better grades than others) disappear when you subtract, and only the variability of the change remains. That is why, with the same number of subjects, it can usually detect much smaller effects than a comparison of two independent groups.</p>
 
             <h3>Hypotheses and test statistic</h3>
             <p class="formula-line">\(H_0: \mu_d = \mu_{d0}\)</p>
             <p class="formula-line">\(H_1: \mu_d \neq \mu_{d0}\), \(\mu_d > \mu_{d0}\) or \(\mu_d &lt; \mu_{d0}\)</p>
             <p class="formula-line">\( t = \dfrac{\bar{d} - \mu_{d0}}{s_d / \sqrt{n}}, \quad df = n - 1 \)</p>
             <ul>
-                <li><strong>\(\bar{d}\)</strong>: sample mean of the differences.</li>
-                <li><strong>\(\mu_{d0}\)</strong>: value of the mean difference under \(H_0\) (usually 0).</li>
-                <li><strong>\(s_d\)</strong>: sample standard deviation of the differences.</li>
-                <li><strong>\(n\)</strong>: number of pairs.</li>
-                <li><strong>\(df = n-1\)</strong>: degrees of freedom of Student's t.</li>
+                <li><strong>\(\bar{d}\)</strong>: mean of the differences within each pair.</li>
+                <li><strong>\(s_d\)</strong>: standard deviation of those differences.</li>
+                <li><strong>\(n\)</strong>: number of pairs (not of measurements).</li>
+                <li><strong>\(\mu_{d0}\)</strong>: mean difference under \(H_0\); almost always 0 ("no change").</li>
             </ul>
+            <p>The denominator \(s_d/\sqrt{n}\) is the standard error of the mean difference. The statistic measures how many standard errors \(\bar{d}\) lies from the value under \(H_0\) and, if \(H_0\) is true, follows a Student's t distribution with \(n-1\) degrees of freedom.</p>
+            <p>Note that the sign depends on the order of the subtraction. If you compute "before − after", a reduction gives positive differences; if you compute "after − before", negative ones. Decide the order before you start and choose the tail of the test accordingly.</p>
         </section>
 
         <section class="card content-card">
-            <h3>Quick decision guide</h3>
+            <h3>How to carry out the test, step by step</h3>
+            <ol>
+                <li><strong>Compute the difference for each pair</strong>, always in the same order.</li>
+                <li><strong>Compute the mean \(\bar{d}\) and the standard deviation \(s_d\)</strong> of the differences. These are the two values the calculator asks for, together with the number of pairs.</li>
+                <li><strong>State the hypotheses and set \(\alpha\)</strong>, usually 0.05.</li>
+                <li><strong>Compute the t statistic</strong> and the p-value with \(n-1\) degrees of freedom (or compare with the <a href="tabla-t-student.html">Student's t table</a>).</li>
+                <li><strong>Decide and interpret</strong>, reporting the decision together with the confidence interval for the mean difference.</li>
+            </ol>
+
+            <h3>Decision rule</h3>
             <ul>
                 <li>If the <strong>p-value</strong> is less than \(\alpha\), \(H_0\) is rejected: there is evidence that the mean difference is not \(\mu_{d0}\).</li>
                 <li>If the p-value is greater than or equal to \(\alpha\), there is not enough evidence to reject \(H_0\).</li>
-                <li>A non-significant result does not prove that \(H_0\) is true; it may be due to lack of power.</li>
-                <li>Always complement with a confidence interval for \(\mu_d\) and the effect size (Cohen's d).</li>
+                <li>A non-significant result does not prove that there is no change; it may be due to low power.</li>
             </ul>
         </section>
 
         <section class="card content-card">
-            <h3>When to use a paired design?</h3>
-            <p>The paired design is especially advantageous when:</p>
-            <ul>
-                <li>The same experimental units are measured under two conditions (repeated-measures design).</li>
-                <li>Subjects are matched by age, sex or other relevant variables before the study.</li>
-                <li>Positive correlation is expected between the two measurements of each pair.</li>
-            </ul>
-            <p>If the differences are not normal and the sample is small, consider the nonparametric alternative: the Wilcoxon signed-rank test for paired data.</p>
+            <h3>Why is the paired design more powerful?</h3>
+            <p>The variance of a difference between two measurements is</p>
+            <p class="formula-line">\( \sigma_d^2 = \sigma_1^2 + \sigma_2^2 - 2\rho\,\sigma_1\sigma_2 \)</p>
+            <p>where \(\rho\) is the correlation between the two measurements in each pair. When the measurements of the same subject are similar (positive \(\rho\), the usual case), the term \(2\rho\sigma_1\sigma_2\) is subtracted, and the differences vary much less than the original data. A smaller standard error means a larger statistic for the same difference, that is, more power.</p>
+            <p>Example 2 below shows it with numbers: with the same 8 students, the paired test gives \(p \approx 0.0005\); if the data were analysed as if they were two independent groups, the p-value would be 0.14 and nothing would be detected. That is why it is a mistake to analyse paired data with the independent two-sample test.</p>
+            <p>The flip side is that, in a before-and-after design without a control group, a significant change does not prove that the intervention caused it: the passage of time, practice with the test or regression to the mean may have played a part. Whenever possible, it is worth comparing with a control group.</p>
+        </section>
 
+        <section class="card content-card">
             <h3>Assumptions of the test</h3>
             <ul>
-                <li>The differences \(d_i\) follow an approximately normal distribution (or \(n\) is sufficiently large).</li>
-                <li>The observations are independent across pairs (not within each pair).</li>
-                <li>The pairs are representative of the population of interest.</li>
+                <li><strong>Paired data</strong>: each measurement in one condition has its partner in the other. If the groups are different people with no matching, use the <a href="contraste-hipotesis-dos-medias.html">independent two-sample test</a>.</li>
+                <li><strong>Pairs independent of each other</strong>: the two measurements of a pair are related, but one pair must not influence another.</li>
+                <li><strong>Approximate normality of the differences</strong> (not of the original data), or a number of pairs large enough, around 30 or more, for the central limit theorem to do its job.</li>
             </ul>
+            <p>With few pairs, check the differences with a histogram or the <a href="shapiro-wilk-normalidad.html">Shapiro-Wilk test</a> and look for outliers: a single pair with an extreme change can drag \(\bar{d}\) and inflate \(s_d\). If the differences are clearly skewed and there are few of them, the non-parametric alternative is the Wilcoxon signed-rank test.</p>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example</h3>
-            <p>Researchers measure systolic blood pressure in 25 patients before and after a treatment. The mean of the differences (before − after) is \(\bar{d} = 2.5\) mmHg with standard deviation \(s_d = 8\) mmHg. They test \(H_0\colon \mu_d = 0\) against \(H_1\colon \mu_d \neq 0\) with \(\alpha = 0.05\).</p>
-            <p>The t statistic is:</p>
+            <h3>Worked example 1: two-tailed test</h3>
+            <p>Systolic blood pressure is measured in 25 patients before and after a treatment. The mean of the differences (before − after) is \(\bar{d} = 2.5\) mmHg with standard deviation \(s_d = 8\) mmHg. We test \(H_0\colon \mu_d = 0\) against \(H_1\colon \mu_d \neq 0\) with \(\alpha = 0.05\).</p>
             <p class="formula-line">\( t = \dfrac{2.5 - 0}{8 / \sqrt{25}} = \dfrac{2.5}{1.6} = 1.5625 \)</p>
-            <p>With \(df = 24\) degrees of freedom and a two-tailed test, the p-value is \(p \approx 0.131\). Since \(p = 0.131 > \alpha = 0.05\), <strong>\(H_0\) is not rejected</strong>.</p>
-            <p>Conclusion: with these data there is not enough statistical evidence to conclude that the treatment produces a significant reduction in blood pressure at the 5% level. It would be advisable to increase the sample size or review the variability of the differences.</p>
+            <p>With \(df = 24\), the two-tailed critical value is \(t_{0.025;\,24} \approx 2.064\). Since \(|t| = 1.5625 < 2.064\), the p-value is \(p \approx 0.131 > 0.05\): <strong>\(H_0\) is not rejected</strong>.</p>
+            <p>Conclusion: there is not enough evidence that the treatment changes mean blood pressure. The 95% confidence interval for the mean difference, \(2.5 \pm 2.064 \times 1.6\), runs from −0.80 to 5.80 mmHg: it is compatible with no effect, but also with reductions of almost 6 mmHg. With 25 patients and this variability, the test detects with 80% probability only mean changes of about 4.7 mmHg or more; detecting 2.5 mmHg would require a considerably larger sample, which you can work out with the link in the result.</p>
+            <p><strong>In the calculator:</strong> d̄ = 2.5, s_d = 8, n = 25, μ_d0 = 0 and "Two-tailed (≠)".</p>
+
+            <h3>Worked example 2: from the data to the test, one-tailed</h3>
+            <p>Eight students take a test before and after an intensive course. Before seeing the data, it is stated that the course, if it has any effect, improves the grade. The grades are:</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Student</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Before</td><td>62</td><td>70</td><td>55</td><td>68</td><td>74</td><td>60</td><td>66</td><td>58</td></tr>
+                        <tr><td>After</td><td>66</td><td>75</td><td>54</td><td>73</td><td>80</td><td>65</td><td>70</td><td>63</td></tr>
+                        <tr><td>\(d_i\) = after − before</td><td>4</td><td>5</td><td>−1</td><td>5</td><td>6</td><td>5</td><td>4</td><td>5</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>The mean of the differences is \(\bar{d} = 33/8 = 4.125\) points and their standard deviation is \(s_d \approx 2.167\). We test \(H_0\colon \mu_d = 0\) against \(H_1\colon \mu_d > 0\):</p>
+            <p class="formula-line">\( t = \dfrac{4.125}{2.167/\sqrt{8}} = \dfrac{4.125}{0.766} \approx 5.384 \)</p>
+            <p>With 7 degrees of freedom, the right-tailed critical value is \(t_{0.05;\,7} \approx 1.895\), and the p-value is \(p \approx 0.0005\). <strong>\(H_0\) is rejected</strong>: there is evidence that the mean grade rises after the course, by about 4 points.</p>
+            <p>Compare this with what would have happened if the before and after grades had been treated as two independent groups: the standard deviations of the grades are 6.5 and 8.1 points, because the students are very different from each other, and Welch's test would give \(t \approx 1.13\) and \(p \approx 0.14\). Pairing removes that variability between students (the correlation between the two grades is 0.98), which is why the effect shows up so clearly.</p>
+            <p><strong>In the calculator:</strong> d̄ = 4.125, s_d = 2.167, n = 8, μ_d0 = 0 and "Right tail (&gt;)".</p>
         </section>
 
         <section class="card content-card">
             <h3>How to interpret the result</h3>
-                <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) implies that the within-pair mean difference \(\bar{d}\) is statistically incompatible with the hypothesized value \(\mu_{d0}\) (usually 0). In practice this means that the treatment, intervention or condition measured twice produces a systematic change in the subjects. Even so, the magnitude of the change is what determines practical relevance: compute the effect size \(d = \bar{d}/s_d\) and assess whether that difference is clinically or substantively important.</p>
-                <p><strong>Not rejecting \(H_0\)</strong> (p-value ≥ α) only indicates that the data are compatible with a mean difference of \(\mu_{d0}\). It does not prove that the effect is null. The most common error is concluding "the treatment doesn't work" when in reality the sample was too small to detect the real effect. Examine the confidence interval for \(\mu_d\): if its upper (or lower, depending on the alternative) end includes clinically relevant differences, the power is insufficient to rule out those differences.</p>
-                <p>The <strong>paired t statistic</strong> is distributed under \(H_0\) as a Student's t with \(n-1\) degrees of freedom. In the chart, the green zone is the non-rejection region, the red zones are the rejection regions and the amber line marks the observed statistic. One advantage of the paired design is that by removing between-subject variability, the standard error is generally smaller than in the independent two-sample test, which increases power when the pairs are positively correlated.</p>
+            <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that the mean difference between the two measurements is incompatible with \(\mu_{d0}\): there is a systematic change. Its practical relevance depends on its size, so look at the mean difference and its confidence interval, and judge whether that change matters in your context.</p>
+            <p><strong>Not rejecting \(H_0\)</strong> (p-value ≥ α) does not prove that there is no change. The most common mistake is to conclude "the treatment does not work" when the sample was too small to detect it, as in example 1.</p>
+            <p>In the calculator, the result shows the decision with the p-value, the statistic with its degrees of freedom and a sentence stating the conclusion. On the chart, the green area is the non-rejection region, the red areas are the critical regions and the amber line marks the observed statistic. Under "Calculation details" you will find the observed difference, the standard error, the critical value, the confidence interval (for the two-tailed test) and the effect size.</p>
+
+            <h3>Power and minimum detectable difference</h3>
+            <p>Below the conclusion, the calculator shows the <strong>minimum detectable difference</strong>: the smallest real mean difference that, with your number of pairs and your \(s_d\), the test would detect with 80% probability. If it is larger than the change that would matter to you, the study has low power and a non-significant result says little. The link opens the <a href="tamano-muestral-medias-apareadas.html">sample size calculator for paired means</a> with your \(s_d\), your α and the type of test, so you can work out how many pairs you would need to detect the difference you care about.</p>
+
+            <h3>Relationship with the confidence interval</h3>
+            <p>In the two-tailed test, \(H_0\) is rejected exactly when \(\mu_{d0}\) lies outside the \(100(1-\alpha)\%\) confidence interval for the mean difference. You can compute that interval with the <a href="intervalo-confianza-medias-apareadas.html">confidence interval for paired means</a>.</p>
+
+            <h3>Effect size</h3>
+            <p>With paired data, the most common effect size is \(d_z = (\bar{d} - \mu_{d0})/s_d\), which expresses the mean difference in standard deviations of the differences. Be careful when comparing it with Cohen's d for two independent groups: \(d_z\) is usually much larger for the same change, because \(s_d\) is smaller than the standard deviation of the original data. In example 2, \(d_z \approx 1.90\).</p>
         </section>
+
+        <section class="card content-card">
+            <h3>Common mistakes</h3>
+            <ul>
+                <li><strong>Analysing paired data as two independent groups</strong>, losing almost all the advantage of the design.</li>
+                <li><strong>Entering the number of measurements instead of the number of pairs</strong>: with 25 patients measured twice, \(n = 25\).</li>
+                <li><strong>Using the standard deviation of the original data</strong> instead of that of the differences.</li>
+                <li><strong>Mixing up the order of the subtraction</strong> or choosing the tail without taking it into account.</li>
+                <li><strong>Attributing the change to the intervention</strong> in a before-and-after design without a control group.</li>
+                <li><strong>Concluding that there is no effect</strong> because the test is not significant.</li>
+            </ul>
+        </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
               <h3>Related calculators</h3>
               <ul>
                 <li><a href="tamano-muestral-medias-apareadas.html">Sample size for paired means</a></li>
                 <li><a href="intervalo-confianza-medias-apareadas.html">Confidence interval for paired means</a></li>
-                <li><a href="contraste-hipotesis-dos-medias.html">Hypothesis test for two independent means</a></li>
+                <li><a href="contraste-hipotesis-dos-medias.html">Independent two-sample test</a></li>
+                <li><a href="contraste-hipotesis-una-media.html">One-mean test</a></li>
+                <li><a href="contraste-hipotesis-proporciones-apareadas.html">Paired proportions (McNemar)</a></li>
               </ul>
             </section>
             <h3>Frequently asked questions</h3>
             <ul>
-                <li><strong>When is the paired t-test used?</strong> When each individual is measured twice or when subjects are matched by some relevant characteristic, so that the differences remove the variability between individuals.</li>
-                <li><strong>What assumptions does the paired t-test require?</strong> The differences \(d_i\) must follow an approximately normal distribution (or \(n\) must be large). The observations must be independent across pairs.</li>
-                <li><strong>How does it differ from the independent two-sample t-test?</strong> The paired test works with the differences within each pair, removing the variability between individuals and being more powerful when there is positive correlation between pairs.</li>
-                <li><strong>What does μ_d0 mean in the null hypothesis?</strong> It is the value of the population mean difference under \(H_0\). It is usually set to 0 to test whether there is an effect.</li>
-                <li><strong>How is the p-value calculated in this test?</strong> From Student's t distribution with \(n-1\) degrees of freedom, evaluating the probability of obtaining a statistic as extreme as the one observed under \(H_0\).</li>
+                <li><strong>When is the paired t-test used?</strong> When each value in one condition has its partner in the other: the same subject measured before and after, two treatments in the same subject, or pairs matched on relevant characteristics.</li>
+                <li><strong>How does it differ from the independent two-sample test?</strong> It works with the difference within each pair, which removes the variability between subjects. If the two measurements are correlated, as is usual, it is much more powerful.</li>
+                <li><strong>What data do I need?</strong> The mean and standard deviation of the differences within each pair, and the number of pairs. If you have the original data, first compute the difference for each pair.</li>
+                <li><strong>What assumptions does it require?</strong> That the pairs are independent of each other and that the differences follow an approximately normal distribution, or that there are enough pairs. The original data do not need to be normal.</li>
+                <li><strong>What does μ_d0 mean?</strong> The value of the mean difference under the null hypothesis. It is almost always 0, meaning no change; it can be another value if you want to test a specific change.</li>
+                <li><strong>Does the order of the subtraction matter?</strong> Only for the sign: before − after and after − before give differences of opposite sign. Choose the order before you start and pick the tail accordingly.</li>
+                <li><strong>What if the differences are not normal?</strong> With many pairs the test remains valid. With few pairs and very skewed differences, use the Wilcoxon signed-rank test.</li>
+                <li><strong>What is the minimum detectable difference?</strong> The smallest real mean difference that the test would detect with 80% probability given your number of pairs and variability.</li>
+                <li><strong>How many pairs do I need?</strong> It depends on the change you want to detect, the standard deviation of the differences and the desired power. Work it out with the sample size calculator for paired means.</li>
             </ul>
             <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Student%27s_t-test#Dependent_t-test_for_paired_samples" target="_blank" rel="noopener noreferrer">Dependent t-test for paired samples</a> — Wikipedia</p>
         </section>
@@ -327,6 +424,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../test-results.js?v=20261110-1"></script>
 <script>
 let pairedMeansChart;
 
@@ -404,6 +502,58 @@ function renderChart(alpha, tail, statValue, df) {
     });
 }
 
+// Resultado: decisión, conclusión, diferencia mínima detectable y detalles.
+function renderPairedResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const diff = o.dbar - o.mud0;
+    const q = o.tail === 'two' ? 1 - o.alpha / 2 : 1 - o.alpha;
+    const crit = jStat.studentt.inv(q, o.df);
+    const mde = R.mdeT(o.se, o.alpha, o.tail, o.df);
+    const mdeTxt = (o.tail === 'two' ? '±' : '') + R.auto(R.sig(mde));
+    const h0 = R.auto(o.mud0);
+    const url = 'tamano-muestral-medias-apareadas.html?sigma=' + o.sd + '&delta=' + R.sig(mde) + '&alpha=' + o.alpha +
+        '&power=' + R.TARGET + '&alt=' + (o.tail === 'two' ? 'two-sided' : 'one-sided');
+    const T = EN ? {
+        label: 'Paired t-test, ' + { two: 'two-tailed', right: 'right-tailed', left: 'left-tailed' }[o.tail],
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        sec: 't = ' + R.num(o.t, 4) + ' with ' + o.df + ' degrees of freedom',
+        yes: '✓ There is statistical evidence that the mean difference is ' + { two: 'different from ', right: 'greater than ', left: 'less than ' }[o.tail] + h0 + '.',
+        no: 'ℹ There is not enough evidence that the mean difference is ' + { two: 'different from ', right: 'greater than ', left: 'less than ' }[o.tail] + h0 + '. This does not prove that it equals ' + h0 + '.',
+        mde: 'With ' + o.n + ' pairs, the test detects with ' + R.pct(R.TARGET) + ' probability only mean differences of ' + mdeTxt + ' or more from μd0.',
+        link: 'Work out the sample size needed for another difference',
+        rows: ['Observed difference (d̄ − μd0)', 'Standard error', 'Test statistic', 'Degrees of freedom', 'Critical value', 'p-value',
+            R.pct(1 - o.alpha, 1) + ' confidence interval for μd', "Effect size (Cohen's dz)", 'Minimum detectable difference (power ' + R.pct(R.TARGET) + ')']
+    } : {
+        label: 'Contraste t para datos apareados, ' + { two: 'bilateral', right: 'de cola derecha', left: 'de cola izquierda' }[o.tail],
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        sec: 't = ' + R.num(o.t, 4) + ' con ' + o.df + ' grados de libertad',
+        yes: '✓ Hay evidencia estadística de que la diferencia media es ' + { two: 'distinta de ', right: 'mayor que ', left: 'menor que ' }[o.tail] + h0 + '.',
+        no: 'ℹ No hay evidencia suficiente de que la diferencia media sea ' + { two: 'distinta de ', right: 'mayor que ', left: 'menor que ' }[o.tail] + h0 + '. Esto no demuestra que sea ' + h0 + '.',
+        mde: 'Con ' + o.n + ' pares, el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad diferencias medias de ' + mdeTxt + ' o mayores respecto a μd0.',
+        link: 'Calcular el tamaño muestral necesario para otra diferencia',
+        rows: ['Diferencia observada (d̄ − μd0)', 'Error estándar', 'Estadístico', 'Grados de libertad', 'Valor crítico', 'p-valor',
+            'Intervalo de confianza al ' + R.pct(1 - o.alpha, 1) + ' para μd', 'Tamaño del efecto (dz de Cohen)', 'Diferencia mínima detectable (potencia ' + R.pct(R.TARGET) + ')']
+    };
+    const rows = [
+        [T.rows[0], R.auto(R.sig(diff, 6))],
+        [T.rows[1], R.num(o.se, 4)],
+        [T.rows[2], 't = ' + R.num(o.t, 4)],
+        [T.rows[3], String(o.df)],
+        [T.rows[4], (o.tail === 'two' ? '±' : (o.tail === 'left' ? '−' : '')) + R.num(crit, 4)],
+        [T.rows[5], R.prob(o.p)]
+    ];
+    if (o.tail === 'two') rows.push([T.rows[6], R.interval(o.dbar - crit * o.se, o.dbar + crit * o.se, 4)]);
+    rows.push([T.rows[7], R.num(diff / o.sd, 3)], [T.rows[8], mdeTxt]);
+    R.render(document.getElementById('result'), {
+        label: T.label + ' · H₀: μd = ' + h0 + ' · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, sec: [T.sec],
+        ok: rejected, verdict: rejected ? T.yes : T.no,
+        notes: [R.esc(T.mde) + ' ' + R.link(url, T.link)],
+        rows: rows
+    });
+}
+
 function calculate() {
     const dbar  = parseFloat(document.getElementById('dbar').value);
     const sd    = parseFloat(document.getElementById('sd').value);
@@ -428,8 +578,7 @@ function calculate() {
     else if (tail === 'right') p = 1 - jStat.studentt.cdf(t, df);
     else                       p = jStat.studentt.cdf(t, df);
 
-    const decision = p < alpha ? 'H₀ is rejected.' : 'H₀ is not rejected.';
-    resultEl.innerText = `t = ${t.toFixed(4)} | df = ${df} | p-value = ${p.toFixed(6)} | ${decision}`;
+    renderPairedResult({ dbar, sd, n: Math.round(n), mud0, alpha, tail, t, df, p, se });
     renderChart(alpha, tail, t, df);
 }
 

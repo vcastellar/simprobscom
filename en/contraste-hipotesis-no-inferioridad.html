@@ -67,54 +67,78 @@
     }
     </script>
     <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
     {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What is a non-inferiority margin δ?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "It is the maximum tolerable difference in favor of the control versus the new treatment. It is defined before the study using clinical or practical judgment. If the observed difference is within the margin (the treatment is not worse than δ relative to the control), non-inferiority is declared."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How does non-inferiority differ from equivalence?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Non-inferiority (one-sided): the new treatment is not unacceptably worse than the control. Equivalence (TOST, two-sided): the new treatment is as good as the control, neither better nor worse in a relevant way. TOST requires two simultaneous one-sided tests."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Why is the 90% CI used in TOST?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "TOST at level α is equivalent to checking that the 100(1-2α)% CI of Δ̂ is contained in [-δ, +δ]. With α=0.05, that corresponds to the 90% CI. If the 90% CI fits within [-δ, +δ], equivalence is declared."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How is the margin δ chosen?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The margin must be defined a priori using clinical or regulatory judgment, not statistical criteria. In clinical trials, it usually represents a fraction (for example, 50%) of the minimum clinically important difference or of the demonstrated effect of the active comparator."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can the superiority hypothesis be rejected and non-inferiority still be declared?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. The non-inferiority test and the superiority test have different null hypotheses. It is perfectly consistent for a trial to fail to demonstrate superiority yet demonstrate non-inferiority, if the observed difference is small and well bounded."
-          }
-        }
-      ]
+      "@type": "Question",
+      "name": "What is the margin δ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The largest difference between treatment and control that is considered irrelevant in practice. It is set before the study on clinical, technical or regulatory grounds, not statistical ones."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does non-inferiority differ from equivalence?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Non-inferiority is one-tailed: it shows that the treatment is not worse than the control by more than δ. Equivalence (TOST) shows that it is neither worse nor better by more than δ, with two one-tailed tests at once."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is the 90% confidence interval used?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Because TOST with α = 0.05 per tail is equivalent to checking that the 100(1 − 2α)% interval, that is, the 90% interval, fits within [−δ, +δ]."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which α should I use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In many fields, 0.05 per tail. In clinical trials for regulatory purposes, 0.025 per tail is usually required, which is equivalent to a 95% interval."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I conclude equivalence if a t-test is not significant?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. A non-significant test may be due to a small sample. To show equivalence you need an equivalence test with a margin set in advance."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can a treatment be both non-inferior and non-superior?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes: that is precisely equivalence. It can also be non-inferior without showing superiority, which is the most common outcome in these studies."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does the power shown by the calculator mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The probability of showing non-inferiority or equivalence with your sample sizes if there were in fact no difference between treatment and control."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many subjects do I need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It depends on the margin, the variability, the expected real difference and the desired power. For means, work it out with the sample size calculator for non-inferiority and equivalence."
+      }
     }
+  ]
+}
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -297,66 +321,125 @@
         </section>
 
         <section class="card content-card">
-            <h3>Explanation</h3>
-            <p>Non-inferiority and equivalence tests invert the usual hypothesis-testing logic. Instead of trying to show that two treatments differ, they try to show that they are similar enough within a predefined clinical or practical margin \(\delta\).</p>
-            <p><strong>Non-inferiority</strong>: the goal is to show that the new treatment (cheaper, less invasive, etc.) is not unacceptably worse than the control. The null hypothesis is that the treatment actually is worse by a relevant amount: \(H_0\colon \Delta \leq -\delta\).</p>
-            <p><strong>Equivalence (TOST)</strong>: the goal is to show that the new treatment is neither better nor worse in a relevant way. It requires two simultaneous one-sided tests (Two One-Sided Tests), one for non-inferiority and one for non-superiority. Equivalence is declared when both are rejected.</p>
-
-            <h3>Hypotheses and test statistics</h3>
-            <p>Let \(\hat{\Delta} = \hat{\theta}_1 - \hat{\theta}_2\) be the estimated difference (of means or proportions) and \(\text{SE}\) its standard error:</p>
-            <p class="formula-line">\( \hat{\Delta} = \bar{x}_1 - \bar{x}_2 \quad \text{or} \quad \hat{\Delta} = \hat{p}_1 - \hat{p}_2 \)</p>
-            <p class="formula-line">\( \text{SE} = \sqrt{\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}} \quad \text{(means)} \)</p>
-            <p class="formula-line">\( \text{SE} = \sqrt{\dfrac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \dfrac{\hat{p}_2(1-\hat{p}_2)}{n_2}} \quad \text{(proportions)} \)</p>
-            <p><strong>Non-inferiority</strong> (\(H_0\colon \Delta \leq -\delta\), \(H_1\colon \Delta > -\delta\)):</p>
-            <p class="formula-line">\( z_{\text{NI}} = \dfrac{\hat{\Delta} + \delta}{\text{SE}}, \quad p_{\text{NI}} = 1 - \Phi(z_{\text{NI}}) \)</p>
-            <p><strong>Non-superiority</strong> (\(H_0\colon \Delta \geq +\delta\), \(H_1\colon \Delta &lt; +\delta\)):</p>
-            <p class="formula-line">\( z_{\text{NS}} = \dfrac{\delta - \hat{\Delta}}{\text{SE}}, \quad p_{\text{NS}} = 1 - \Phi(z_{\text{NS}}) \)</p>
-            <p><strong>TOST equivalence</strong>: \(p_{\text{TOST}} = \max(p_{\text{NI}}, p_{\text{NS}})\). Equivalence is declared if \(p_{\text{TOST}} &lt; \alpha\).</p>
-        </section>
-
-        <section class="card content-card">
-            <h3>Quick interpretation guide</h3>
+            <h3>What are non-inferiority and equivalence tests?</h3>
+            <p>In a classic test you try to show that two treatments <em>are different</em>. But often the question is the opposite: is the generic as effective as the brand-name drug? Does a less invasive surgery, a cheaper treatment or a new version of a process work just as well? A classic test cannot answer that, because not rejecting \(H_0\) does not prove that the treatments are equal: it may simply be due to a small sample.</p>
+            <p>Non-inferiority and equivalence tests <strong>reverse the burden of proof</strong>. The null hypothesis becomes that there is a relevant difference, and what the data have to show is that the difference is small. For that you need to set a <strong>margin \(\delta\)</strong> in advance: the largest difference that would be considered irrelevant in practice.</p>
             <ul>
-                <li><strong>Non-inferiority</strong>: if \(p_{\text{NI}} &lt; \alpha\), \(H_0\) is rejected and non-inferiority is declared. The \(100(1-2\alpha)\%\) CI of \(\hat{\Delta}\) must lie entirely above \(-\delta\).</li>
-                <li><strong>TOST</strong>: if \(p_{\text{TOST}} &lt; \alpha\), equivalence is declared. This is equivalent to checking that the \(100(1-2\alpha)\%\) CI of \(\hat{\Delta}\) is contained in \([-\delta, +\delta\)].</li>
-                <li>With \(\alpha=0.05\), the CI criterion for TOST uses the 90% CI (not the 95% CI).</li>
-                <li>The margin \(\delta\) must be defined <em>a priori</em> using clinical judgment, not statistical criteria.</li>
+                <li><strong>Non-inferiority</strong>: showing that the new treatment is not worse than the control by more than \(\delta\). It is a one-tailed test. It is used, for example, when the new treatment has other advantages (price, convenience, fewer side effects) and it is enough that it does not lose a relevant amount of efficacy.</li>
+                <li><strong>Non-superiority</strong>: the mirror image, showing that it is not better by more than \(\delta\). It is useful, for example, to show that a side effect does not increase by a relevant amount.</li>
+                <li><strong>Equivalence</strong>: showing that it is neither worse nor better by more than \(\delta\). Both one-tailed tests are run at once, the <strong>TOST</strong> procedure (<em>two one-sided tests</em>). This is the approach of bioequivalence studies and of comparisons between measurement methods.</li>
             </ul>
+            <p>In all cases, \(\Delta = \theta_1 - \theta_2\) is the difference between the treatment (group 1) and the control (group 2), in means or proportions, and positive values of \(\Delta\) favour the treatment.</p>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example: non-inferiority of proportions</h3>
-            <p>A new treatment has a success rate \(\hat{p}_1 = 0.72\) in \(n_1 = 200\) patients. The reference treatment has \(\hat{p}_2 = 0.75\) in \(n_2 = 200\) patients. The non-inferiority margin is \(\delta = 0.10\) with \(\alpha = 0.05\).</p>
+            <h3>Hypotheses and test statistics</h3>
+            <p>Let \(\hat{\Delta} = \hat{\theta}_1 - \hat{\theta}_2\) be the observed difference and \(SE\) its standard error:</p>
+            <p class="formula-line">\( \hat{\Delta} = \bar{x}_1 - \bar{x}_2, \qquad SE = \sqrt{\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}} \quad \text{(means)} \)</p>
+            <p class="formula-line">\( \hat{\Delta} = \hat{p}_1 - \hat{p}_2, \qquad SE = \sqrt{\dfrac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \dfrac{\hat{p}_2(1-\hat{p}_2)}{n_2}} \quad \text{(proportions)} \)</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Test</th><th>\(H_0\)</th><th>\(H_1\)</th><th>Statistic</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Non-inferiority</td><td>\(\Delta \leq -\delta\)</td><td>\(\Delta > -\delta\)</td><td>\(z_1 = (\hat{\Delta} + \delta)/SE\)</td></tr>
+                        <tr><td>Non-superiority</td><td>\(\Delta \geq +\delta\)</td><td>\(\Delta &lt; +\delta\)</td><td>\(z_2 = (\delta - \hat{\Delta})/SE\)</td></tr>
+                        <tr><td>Equivalence (TOST)</td><td>\(|\Delta| \geq \delta\)</td><td>\(-\delta &lt; \Delta &lt; +\delta\)</td><td>\(z_1\) and \(z_2\)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Each one-tailed test has p-value \(p = 1 - \Phi(z)\), where \(\Phi\) is the cumulative distribution function of the <a href="normal.html">standard normal</a>. In TOST, \(H_0\) is rejected only if both tests reject, so its p-value is the larger of the two: \(p_{\text{TOST}} = \max(p_1, p_2)\). The calculator uses the normal approximation, which is appropriate with the moderate or large samples usual in this kind of study.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>The confidence interval rule</h3>
+            <p>The clearest way to understand these tests is through the confidence interval for the difference at the \(100(1-2\alpha)\%\) level. With \(\alpha = 0.05\), that is the 90% interval:</p>
+            <ul>
+                <li><strong>Non-inferiority</strong>: declared if the lower limit of the interval lies above \(-\delta\).</li>
+                <li><strong>Non-superiority</strong>: if the upper limit lies below \(+\delta\).</li>
+                <li><strong>Equivalence</strong>: if the whole interval fits within \([-\delta, +\delta]\).</li>
+            </ul>
+            <p>Why 90% and not 95%? Because each one-tailed test uses \(\alpha = 0.05\) in a single tail, and a 90% interval leaves exactly 5% in each tail. Regulatory guidelines for clinical trials (ICH E9, EMA, FDA) usually require \(\alpha = 0.025\) per tail, which amounts to checking the 95% interval; if you work in that setting, enter 0.025 in the calculator.</p>
+            <p>This approach also clarifies the possible outcomes. An interval can lie entirely above \(-\delta\) (non-inferior), cross \(-\delta\) (inconclusive) or even lie entirely above 0 (non-inferior and also superior). What it never allows is concluding equivalence just because the interval contains 0.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>How to choose the margin δ</h3>
+            <p>The margin is the most important design decision and must be set <strong>before seeing the data</strong>, on clinical, technical or business grounds, not statistical ones. Some common guidelines:</p>
+            <ul>
+                <li>In clinical trials against an active control, the margin is usually a fraction (for example, half) of the effect the control has shown against placebo, to ensure that the new treatment retains a good part of that effect.</li>
+                <li>In drug bioequivalence, the standard is that the ratio of geometric means lies between 0.80 and 1.25, which on the log scale is a symmetric margin.</li>
+                <li>When comparing methods or processes, the margin is the difference that would not change any technical decision.</li>
+            </ul>
+            <p>A margin that is too wide lets almost any treatment "show" non-inferiority; one that is too narrow requires huge samples. Changing the margin after seeing the results invalidates the analysis.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Worked example 1: non-inferiority of proportions</h3>
+            <p>A new, cheaper treatment cures 144 of 200 patients (\(\hat{p}_1 = 0.72\)); the reference treatment, 150 of 200 (\(\hat{p}_2 = 0.75\)). A non-inferiority margin of 10 percentage points (\(\delta = 0.10\)) and \(\alpha = 0.05\) were set in advance.</p>
             <p class="formula-line">\( \hat{\Delta} = 0.72 - 0.75 = -0.03 \)</p>
-            <p class="formula-line">\( \text{SE} = \sqrt{\dfrac{0.72\cdot0.28}{200} + \dfrac{0.75\cdot0.25}{200}} = \sqrt{0.001008 + 0.0009375} = \sqrt{0.0019455} \approx 0.04411 \)</p>
-            <p class="formula-line">\( z_{\text{NI}} = \dfrac{-0.03 + 0.10}{0.04411} \approx 1.587, \quad p \approx 0.056 \)</p>
-            <p>Since \(p = 0.057 > \alpha = 0.05\), <strong>non-inferiority is not declared</strong> at the 5% level (a borderline result). The 90% CI of \(\hat{\Delta}\) does not lie entirely above \(-0.10\).</p>
+            <p class="formula-line">\( SE = \sqrt{\dfrac{0.72 \cdot 0.28}{200} + \dfrac{0.75 \cdot 0.25}{200}} = \sqrt{0.001008 + 0.000938} \approx 0.0441 \)</p>
+            <p class="formula-line">\( z_1 = \dfrac{-0.03 + 0.10}{0.0441} \approx 1.587, \qquad p = 1 - \Phi(1.587) \approx 0.056 \)</p>
+            <p>Since \(p \approx 0.056 > 0.05\), <strong>non-inferiority is not declared</strong>. The interval rule shows the same thing: the 90% interval for the difference, \(-0.03 \pm 1.645 \times 0.0441\), runs from −0.103 to 0.043, and its lower limit lies just below −0.10.</p>
+            <p>Conclusion: it cannot be ruled out that the new treatment cures slightly more than 10 points fewer patients than the reference. Note that this does not prove it is inferior; the result is simply inconclusive. If the two treatments were in fact equally effective, a study of this size would show non-inferiority with a probability of only 73%.</p>
+            <p><strong>In the calculator:</strong> "Non-inferiority", "Proportions", p̂₁ = 0.72, p̂₂ = 0.75, n₁ = n₂ = 200, δ = 0.10 and direction "Treatment non-inferior". These are the values the page opens with.</p>
+
+            <h3>Worked example 2: equivalence of means (TOST)</h3>
+            <p>A laboratory compares a new measurement method with the reference one. With 100 samples for each method, it obtains means of \(\bar{x}_1 = 48\) and \(\bar{x}_2 = 50\) units, both with standard deviation 10. The methods are considered interchangeable if the real difference is less than 5 units (\(\delta = 5\)), with \(\alpha = 0.05\).</p>
+            <p class="formula-line">\( \hat{\Delta} = -2, \qquad SE = \sqrt{\dfrac{100}{100} + \dfrac{100}{100}} = \sqrt{2} \approx 1.414 \)</p>
+            <p class="formula-line">\( z_1 = \dfrac{-2 + 5}{1.414} \approx 2.121 \;(p_1 \approx 0.017), \qquad z_2 = \dfrac{5 - (-2)}{1.414} \approx 4.950 \;(p_2 \approx 0.0000004) \)</p>
+            <p>Both tests reject their null hypothesis, and \(p_{\text{TOST}} = \max(0.017,\ 0.0000004) = 0.017 &lt; 0.05\): <strong>equivalence is declared</strong>. The 90% interval, \(-2 \pm 1.645 \times 1.414\), runs from −4.33 to 0.33 and fits entirely within \([-5, 5]\).</p>
+            <p>Conclusion: the difference between the two methods is, with 90% confidence, less than 5 units in either direction. Note that a classic two-means test would not have found a significant difference either (\(p \approx 0.16\)), but that alone would not have allowed you to claim that the methods are interchangeable.</p>
+            <p><strong>In the calculator:</strong> "Equivalence (TOST)", "Means", x̄₁ = 48, x̄₂ = 50, s₁ = s₂ = 10, n₁ = n₂ = 100 and δ = 5.</p>
         </section>
 
         <section class="card content-card">
             <h3>How to interpret the result</h3>
-                <p><strong>Non-inferiority (one-sided test):</strong> rejecting \(H_0\) (p-value &lt; α) means that the lower bound of the \((1-2\alpha)\cdot100\%\) confidence interval for the difference \(\Delta = \mu_T - \mu_C\) exceeds the non-inferiority margin \(-\delta\). In practical terms, this concludes that the experimental treatment is not worse than the control by more than the clinically tolerable amount. Not rejecting \(H_0\) (p-value ≥ α) indicates that the data do not rule out the treatment being worse than the control beyond the defined margin.</p>
-                <p><strong>Equivalence (TOST):</strong> equivalence is declared if both one-sided tests simultaneously reject \(H_0\) (p_TOST &lt; α) and the 90% confidence interval for \(\Delta\) lies entirely within \([-\delta, +\delta]\). An equivalence result does not claim the treatments are identical, only that any difference is small enough to be clinically acceptable. If only one of the two one-sided tests rejects, the conclusion is one-directional: non-inferiority, but not equivalence.</p>
-                <p>Choosing the margin \(\delta\) is the most critical design decision: it must be set a priori using clinical or regulatory judgment, not statistical criteria. In the chart, the green zone corresponds to the equivalence or non-inferiority region, the red zone is the unacceptable-inferiority region, and the amber line shows the estimated difference with its confidence interval. A narrow interval centered near zero is evidence of both non-inferiority and practical equivalence; a wide interval signals uncertainty and possibly an insufficient sample.</p>
+            <p><strong>If non-inferiority is declared</strong> (p-value &lt; α), the data indicate that the treatment is not worse than the control by more than \(\delta\). It does not mean that it is equal or better: only that any loss is smaller than the margin. If, in addition, the whole interval lies above 0, there is also evidence of superiority; moving from non-inferiority to superiority is acceptable, but not the other way round.</p>
+            <p><strong>If equivalence is declared</strong>, the difference is, with the stated confidence, smaller than \(\delta\) in both directions. It does not claim that the treatments are identical, but that any difference is too small to matter.</p>
+            <p><strong>If it is not declared</strong>, the result is inconclusive: the data do not rule out a difference larger than the margin. It does not prove that the treatment is inferior or that the treatments differ. The most common reason is that the sample was small for the chosen margin.</p>
+            <p>In the calculator, the result shows the decision with the p-value (the TOST p-value, for equivalence), the z statistics and a sentence explaining the conclusion with the confidence interval and the margin. On the chart, the red area is the rejection region of \(H_0\) on the standard normal and the lines mark the observed statistics. Under "Calculation details" you will find the observed difference, the standard error, the p-values of each test, the critical value and the interval.</p>
+
+            <h3>Power of the study</h3>
+            <p>Below the conclusion, the calculator shows the <strong>power</strong> of the test under the usual design assumption: that treatment and control are in fact equally effective (\(\Delta = 0\)). It is the probability that a study with your sample sizes and your variability shows non-inferiority or equivalence when it really holds. If it is low, an inconclusive result was to be expected.</p>
+            <p>For means, the link opens the <a href="tamano-muestral-no-inferioridad.html">sample size calculator for non-inferiority and equivalence</a> with your margin, your α and a common standard deviation computed from your data, so you can see how many subjects per group would be needed to reach 80% power. Equivalence needs a larger sample than non-inferiority, because both tests have to be passed at once.</p>
         </section>
+
+        <section class="card content-card">
+            <h3>Common mistakes</h3>
+            <ul>
+                <li><strong>Concluding equivalence because a classic test is not significant.</strong> The absence of significant differences does not prove equality.</li>
+                <li><strong>Choosing or changing the margin after seeing the data.</strong></li>
+                <li><strong>Using the 95% interval with α = 0.05 per tail</strong>, or the 90% interval when the guideline requires 0.025 per tail. The interval level is \(1 - 2\alpha\).</li>
+                <li><strong>Swapping the order of the groups</strong>: the difference is treatment − control, and non-inferiority means that it is not too negative.</li>
+                <li><strong>Forgetting study quality</strong>: poor adherence, dropouts or imprecise measurement bring the two groups closer and favour false conclusions of non-inferiority. That is why analysing both by intention to treat and per protocol is recommended.</li>
+            </ul>
+        </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
               <h3>Related calculators</h3>
               <ul>
-                <li><a href="tamano-muestral-no-inferioridad.html">Sample size for non-inferiority</a></li>
-                <li><a href="contraste-hipotesis-dos-medias.html">Two independent means test</a></li>
-                <li><a href="contraste-hipotesis-dos-proporciones.html">Two independent proportions test</a></li>
+                <li><a href="tamano-muestral-no-inferioridad.html">Sample size for non-inferiority and equivalence</a></li>
+                <li><a href="contraste-hipotesis-dos-medias.html">Independent two-sample test</a></li>
+                <li><a href="contraste-hipotesis-dos-proporciones.html">Test for two independent proportions</a></li>
+                <li><a href="intervalo-confianza-diferencia-medias.html">Confidence interval for the difference in means</a></li>
+                <li><a href="intervalo-confianza-diferencia-proporciones.html">Confidence interval for the difference in proportions</a></li>
               </ul>
             </section>
             <h3>Frequently asked questions</h3>
             <ul>
-                <li><strong>What is the margin δ?</strong> The maximum tolerable difference in favor of the control. It must be defined a priori using clinical or regulatory judgment.</li>
-                <li><strong>How does non-inferiority differ from equivalence?</strong> Non-inferiority is one-sided (the treatment is not worse). Equivalence (TOST) is two-sided (it is neither better nor worse in a relevant way).</li>
-                <li><strong>Why the 90% CI in TOST?</strong> With α=0.05, TOST is equivalent to checking that the 90% CI of Δ̂ is within [−δ, +δ].</li>
-                <li><strong>How is δ chosen?</strong> Using clinical or regulatory judgment, not statistical criteria. It is usually a fraction of the active comparator's effect.</li>
-                <li><strong>Can non-inferiority coexist with non-superiority?</strong> Yes, that is equivalent to declaring equivalence (TOST).</li>
+                <li><strong>What is the margin δ?</strong> The largest difference between treatment and control that is considered irrelevant in practice. It is set before the study on clinical, technical or regulatory grounds, not statistical ones.</li>
+                <li><strong>How does non-inferiority differ from equivalence?</strong> Non-inferiority is one-tailed: it shows that the treatment is not worse than the control by more than δ. Equivalence (TOST) shows that it is neither worse nor better by more than δ, with two one-tailed tests at once.</li>
+                <li><strong>Why is the 90% confidence interval used?</strong> Because TOST with α = 0.05 per tail is equivalent to checking that the 100(1 − 2α)% interval, that is, the 90% interval, fits within [−δ, +δ].</li>
+                <li><strong>Which α should I use?</strong> In many fields, 0.05 per tail. In clinical trials for regulatory purposes, 0.025 per tail is usually required, which is equivalent to a 95% interval.</li>
+                <li><strong>Can I conclude equivalence if a t-test is not significant?</strong> No. A non-significant test may be due to a small sample. To show equivalence you need an equivalence test with a margin set in advance.</li>
+                <li><strong>Can a treatment be both non-inferior and non-superior?</strong> Yes: that is precisely equivalence. It can also be non-inferior without showing superiority, which is the most common outcome in these studies.</li>
+                <li><strong>What does the power shown by the calculator mean?</strong> The probability of showing non-inferiority or equivalence with your sample sizes if there were in fact no difference between treatment and control.</li>
+                <li><strong>How many subjects do I need?</strong> It depends on the margin, the variability, the expected real difference and the desired power. For means, work it out with the sample size calculator for non-inferiority and equivalence.</li>
             </ul>
-            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Non-inferiority_trial" target="_blank" rel="noopener noreferrer">Non-inferiority trial</a> — Wikipedia</p>
+            <p class="external-ref">References: <a href="https://en.wikipedia.org/wiki/Non-inferiority_trial" target="_blank" rel="noopener noreferrer">Non-inferiority trial</a> and <a href="https://en.wikipedia.org/wiki/Equivalence_test" target="_blank" rel="noopener noreferrer">Equivalence test</a> — Wikipedia; ICH E9 and E10, international guidelines on clinical trial design</p>
         </section>
 
     </main>
@@ -378,6 +461,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../test-results.js?v=20261110-1"></script>
 <script>
 let niChart;
 
@@ -433,14 +517,8 @@ function renderNIChart(alpha, zNI, testType, zNS) {
     const minX = -(maxAbsZ + 0.8);
     const maxX =  (maxAbsZ + 0.8);
 
-    let isAcceptanceFn;
-    if (testType === 'ni') {
-        // NI: reject H0 if z > z_alpha → acceptance zone is left of zCrit
-        isAcceptanceFn = (x) => x < zCrit;
-    } else {
-        // TOST: both tests must be significant → acceptance zone between -zCrit and +zCrit
-        isAcceptanceFn = (x) => x > -zCrit && x < zCrit;
-    }
+    // Cada contraste de una cola rechaza H₀ si su estadístico supera z₁₋α.
+    const isAcceptanceFn = (x) => x < zCrit;
 
     const { curve, acceptance, rejection } = buildCurvePoints(
         minX, maxX, 0.02,
@@ -477,6 +555,80 @@ function renderNIChart(alpha, zNI, testType, zNS) {
     });
 }
 
+// Resultado: decisión, conclusión con el intervalo, potencia del diseño y detalles.
+function renderNIResult(o) {
+    const R = TestResult, EN = R.EN;
+    const kind = o.testType === 'tost' ? 'tost' : o.direction; // 'ni' | 'ns' | 'tost'
+    const declared = o.p < o.alpha;
+    const zc = jStat.normal.inv(1 - o.alpha, 0, 1);
+    const lo = o.deltaHat - zc * o.se, hi = o.deltaHat + zc * o.se;
+    const lvl = R.auto(Number(((1 - 2 * o.alpha) * 100).toFixed(1)), 1) + (EN ? '%' : ' %');
+    const ci = R.interval(lo, hi, 4);
+    const d = R.auto(o.delta), md = '−' + d, pd = '+' + d;
+    const edge = (v) => R.num(v, 4);
+    // Potencia si en realidad no hay diferencia (Δ = 0): supuesto habitual del diseño.
+    const g = o.delta / o.se - zc;
+    const power0 = kind === 'tost' ? Math.max(0, 2 * jStat.normal.cdf(g, 0, 1) - 1) : jStat.normal.cdf(g, 0, 1);
+    const sigma = R.sig(o.varType === 'means' ? Math.sqrt((o.s1 * o.s1 + o.s2 * o.s2) / 2) : Math.sqrt((o.p1 * (1 - o.p1) + o.p2 * (1 - o.p2)) / 2), 4);
+    const url = 'tamano-muestral-no-inferioridad.html?type=' + (kind === 'tost' ? 'eq' : 'ni') + '&sigma=' + sigma + '&margin=' + o.delta +
+        '&delta=0&alpha=' + o.alpha + '&power=' + R.TARGET;
+    const T = EN ? {
+        name: { ni: 'Non-inferiority', ns: 'Non-superiority', tost: 'Equivalence (TOST)' }[kind],
+        what: o.varType === 'means' ? 'difference in means' : 'difference in proportions',
+        decision: { ni: 'Non-inferiority', ns: 'Non-superiority', tost: 'Equivalence' }[kind] + (declared ? ' is declared' : ' is not declared'),
+        pLabel: kind === 'tost' ? 'p-value (TOST)' : 'p-value',
+        yes: {
+            ni: '✓ The treatment is not worse than the control by more than δ = ' + d + ': the lower limit of the ' + lvl + ' CI (' + edge(lo) + ') is above ' + md + '.',
+            ns: '✓ The treatment is not better than the control by more than δ = ' + d + ': the upper limit of the ' + lvl + ' CI (' + edge(hi) + ') is below ' + pd + '.',
+            tost: '✓ The difference between treatment and control is smaller than δ = ' + d + ' in both directions: the ' + lvl + ' CI ' + ci + ' lies within [' + md + ', ' + pd + '].'
+        }[kind],
+        no: {
+            ni: 'ℹ It cannot be ruled out that the treatment is worse than the control by more than δ = ' + d + ': the ' + lvl + ' CI reaches ' + edge(lo) + ', below ' + md + '. This does not prove that it is inferior.',
+            ns: 'ℹ It cannot be ruled out that the treatment is better than the control by more than δ = ' + d + ': the ' + lvl + ' CI reaches ' + edge(hi) + ', above ' + pd + '. This does not prove that it is superior.',
+            tost: 'ℹ It cannot be claimed that the difference is smaller than δ = ' + d + ' in both directions: the ' + lvl + ' CI ' + ci + ' does not lie within [' + md + ', ' + pd + ']. This does not prove that the treatments differ.'
+        }[kind],
+        power: 'If treatment and control were truly equal (Δ = 0), with these samples the test would show ' + { ni: 'non-inferiority', ns: 'non-superiority', tost: 'equivalence' }[kind] + ' with ' + R.pct(power0) + ' probability (its power).',
+        link: 'Work out the sample size for ' + R.pct(R.TARGET) + ' power',
+        rows: ['Observed difference (Δ̂)', 'Standard error', 'Margin δ', 'Critical value (one-sided)', lvl + ' confidence interval for Δ', 'Power if Δ = 0']
+    } : {
+        name: { ni: 'No inferioridad', ns: 'No superioridad', tost: 'Equivalencia (TOST)' }[kind],
+        what: o.varType === 'means' ? 'diferencia de medias' : 'diferencia de proporciones',
+        decision: (declared ? 'Se declara la ' : 'No se declara la ') + { ni: 'no inferioridad', ns: 'no superioridad', tost: 'equivalencia' }[kind],
+        pLabel: kind === 'tost' ? 'p-valor (TOST)' : 'p-valor',
+        yes: {
+            ni: '✓ El tratamiento no es peor que el control en más de δ = ' + d + ': el límite inferior del IC al ' + lvl + ' (' + edge(lo) + ') queda por encima de ' + md + '.',
+            ns: '✓ El tratamiento no es mejor que el control en más de δ = ' + d + ': el límite superior del IC al ' + lvl + ' (' + edge(hi) + ') queda por debajo de ' + pd + '.',
+            tost: '✓ La diferencia entre tratamiento y control es menor que δ = ' + d + ' en los dos sentidos: el IC al ' + lvl + ' ' + ci + ' cabe dentro de [' + md + '; ' + pd + '].'
+        }[kind],
+        no: {
+            ni: 'ℹ No se puede descartar que el tratamiento sea peor que el control en más de δ = ' + d + ': el IC al ' + lvl + ' llega hasta ' + edge(lo) + ', por debajo de ' + md + '. Esto no demuestra que sea inferior.',
+            ns: 'ℹ No se puede descartar que el tratamiento sea mejor que el control en más de δ = ' + d + ': el IC al ' + lvl + ' llega hasta ' + edge(hi) + ', por encima de ' + pd + '. Esto no demuestra que sea superior.',
+            tost: 'ℹ No se puede afirmar que la diferencia sea menor que δ = ' + d + ' en los dos sentidos: el IC al ' + lvl + ' ' + ci + ' no cabe dentro de [' + md + '; ' + pd + ']. Esto no demuestra que los tratamientos sean distintos.'
+        }[kind],
+        power: 'Si tratamiento y control fueran en realidad iguales (Δ = 0), con estas muestras el contraste demostraría la ' + { ni: 'no inferioridad', ns: 'no superioridad', tost: 'equivalencia' }[kind] + ' con una probabilidad del ' + R.pct(power0) + ' (su potencia).',
+        link: 'Calcular el tamaño muestral para una potencia del ' + R.pct(R.TARGET),
+        rows: ['Diferencia observada (Δ̂)', 'Error estándar', 'Margen δ', 'Valor crítico (unilateral)', 'Intervalo de confianza al ' + lvl + ' para Δ', 'Potencia si Δ = 0']
+    };
+    const stat = kind === 'tost'
+        ? 'z₁ = ' + R.num(o.z1, 4) + ' (p₁ = ' + R.prob(o.p1v) + ')' + (EN ? ', ' : '; ') + 'z₂ = ' + R.num(o.z2, 4) + ' (p₂ = ' + R.prob(o.p2v) + ')'
+        : 'z = ' + R.num(o.z, 4);
+    const rows = [
+        [T.rows[0], R.num(o.deltaHat, 4)],
+        [T.rows[1], R.num(o.se, 4)],
+        [T.rows[2], d],
+        [kind === 'tost' ? 'z₁' : (EN ? 'Test statistic' : 'Estadístico'), 'z = ' + R.num(kind === 'tost' ? o.z1 : o.z, 4)]
+    ];
+    if (kind === 'tost') rows.push(['z₂', 'z = ' + R.num(o.z2, 4)], ['p₁', R.prob(o.p1v)], ['p₂', R.prob(o.p2v)]);
+    rows.push([T.rows[3], R.num(zc, 4)], [T.pLabel, R.prob(o.p)], [T.rows[4], ci], [T.rows[5], R.pct(power0)]);
+    R.render(document.getElementById('result'), {
+        label: T.name + ' · ' + T.what + ' · δ = ' + d + ' · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, pLabel: T.pLabel, sec: [stat],
+        ok: declared, verdict: declared ? T.yes : T.no,
+        notes: [R.esc(T.power) + (o.varType === 'means' ? ' ' + R.link(url, T.link) : '')],
+        rows: rows
+    });
+}
+
 function calculate() {
     const testType    = document.getElementById('testType').value;
     const varType     = document.getElementById('varType').value;
@@ -484,93 +636,50 @@ function calculate() {
     const alpha       = parseFloat(document.getElementById('alpha').value);
     const niDirection = document.getElementById('niDirection').value;
     const resultEl    = document.getElementById('result');
-
-    if (!Number.isFinite(delta) || delta <= 0 || !Number.isFinite(alpha) || alpha <= 0 || alpha >= 1) {
-        resultEl.innerText = 'Error: δ > 0 and 0 < α < 1.';
+    const E = TestResult.EN
+        ? { base: 'Error: δ > 0 and 0 < α < 0.5.', prop: 'Error: 0 < p̂ < 1 and n ≥ 2 for proportions.', means: 'Error: s > 0 and n ≥ 2 for means.' }
+        : { base: 'Error: δ > 0 y 0 < α < 0,5.', prop: 'Error: 0 < p̂ < 1 y n ≥ 2 para proporciones.', means: 'Error: s > 0 y n ≥ 2 para medias.' };
+    const fail = (msg) => {
+        resultEl.innerText = msg;
         if (niChart) { niChart.destroy(); niChart = null; }
-        return;
-    }
+    };
 
-    let deltaHat, SE;
+    if (!Number.isFinite(delta) || delta <= 0 || !Number.isFinite(alpha) || alpha <= 0 || alpha >= 0.5) return fail(E.base);
 
+    const o = { testType, varType, delta, alpha, direction: niDirection };
     if (varType === 'prop') {
-        const p1  = parseFloat(document.getElementById('p1').value);
-        const p2  = parseFloat(document.getElementById('p2').value);
-        const n1  = parseFloat(document.getElementById('n1p').value);
-        const n2  = parseFloat(document.getElementById('n2p').value);
-        if (![p1, p2, n1, n2].every(Number.isFinite) || p1 <= 0 || p1 >= 1 || p2 <= 0 || p2 >= 1 || n1 < 2 || n2 < 2) {
-            resultEl.innerText = 'Error: 0 < p̂ < 1 and n ≥ 2 for proportions.';
-            if (niChart) { niChart.destroy(); niChart = null; }
-            return;
-        }
-        deltaHat = p1 - p2;
-        SE = Math.sqrt(p1 * (1 - p1) / n1 + p2 * (1 - p2) / n2);
+        const p1 = parseFloat(document.getElementById('p1').value);
+        const p2 = parseFloat(document.getElementById('p2').value);
+        const n1 = parseFloat(document.getElementById('n1p').value);
+        const n2 = parseFloat(document.getElementById('n2p').value);
+        if (![p1, p2, n1, n2].every(Number.isFinite) || p1 <= 0 || p1 >= 1 || p2 <= 0 || p2 >= 1 || n1 < 2 || n2 < 2) return fail(E.prop);
+        Object.assign(o, { p1, p2, deltaHat: p1 - p2, se: Math.sqrt(p1 * (1 - p1) / n1 + p2 * (1 - p2) / n2) });
     } else {
         const xbar1 = parseFloat(document.getElementById('xbar1').value);
         const xbar2 = parseFloat(document.getElementById('xbar2').value);
-        const s1    = parseFloat(document.getElementById('s1').value);
-        const s2    = parseFloat(document.getElementById('s2').value);
-        const n1    = parseFloat(document.getElementById('n1m').value);
-        const n2    = parseFloat(document.getElementById('n2m').value);
-        if (![xbar1, xbar2, s1, s2, n1, n2].every(Number.isFinite) || s1 <= 0 || s2 <= 0 || n1 < 2 || n2 < 2) {
-            resultEl.innerText = 'Error: s > 0 and n ≥ 2 for means.';
-            if (niChart) { niChart.destroy(); niChart = null; }
-            return;
-        }
-        deltaHat = xbar1 - xbar2;
-        SE = Math.sqrt(s1 * s1 / n1 + s2 * s2 / n2);
+        const s1 = parseFloat(document.getElementById('s1').value);
+        const s2 = parseFloat(document.getElementById('s2').value);
+        const n1 = parseFloat(document.getElementById('n1m').value);
+        const n2 = parseFloat(document.getElementById('n2m').value);
+        if (![xbar1, xbar2, s1, s2, n1, n2].every(Number.isFinite) || s1 <= 0 || s2 <= 0 || n1 < 2 || n2 < 2) return fail(E.means);
+        Object.assign(o, { s1, s2, deltaHat: xbar1 - xbar2, se: Math.sqrt(s1 * s1 / n1 + s2 * s2 / n2) });
     }
 
-    // CI at (1 - 2*alpha) level for TOST / NI
-    const zCI = jStat.normal.inv(1 - alpha, 0, 1); // one-sided z
-    const zCI2 = jStat.normal.inv(1 - alpha / 2, 0, 1); // for 95% CI
-    const ciLevel = Math.round((1 - 2 * alpha) * 100);
-    const lowerCI = deltaHat - zCI * SE;
-    const upperCI = deltaHat + zCI * SE;
-    // Full (1-alpha) CI for display
-    const lower95 = deltaHat - zCI2 * SE;
-    const upper95 = deltaHat + zCI2 * SE;
-
-    let resultText = `Δ̂ = ${deltaHat.toFixed(4)} | SE = ${SE.toFixed(4)}\n`;
-
-    if (testType === 'ni') {
-        let zStat, pVal, decisionLabel;
-        if (niDirection === 'ni') {
-            // H0: Δ ≤ -δ, H1: Δ > -δ
-            zStat = (deltaHat + delta) / SE;
-            pVal  = 1 - jStat.normal.cdf(zStat, 0, 1);
-            const declared = pVal < alpha;
-            decisionLabel = declared ? 'Declared non-inferior.' : 'Non-inferiority not declared.';
-            resultText += `z_NI = ${zStat.toFixed(4)} | p = ${pVal.toFixed(6)} | ${decisionLabel}\n`;
-            resultText += `${ciLevel}% CI of Δ̂: [${lowerCI.toFixed(4)}, ∞) | Lower margin: −δ = ${(-delta).toFixed(4)}`;
-            renderNIChart(alpha, zStat, 'ni', null);
-        } else {
-            // H0: Δ ≥ +δ, H1: Δ < +δ
-            zStat = (delta - deltaHat) / SE;
-            pVal  = 1 - jStat.normal.cdf(zStat, 0, 1);
-            const declared = pVal < alpha;
-            decisionLabel = declared ? 'Declared non-superior.' : 'Non-superiority not declared.';
-            resultText += `z_NS = ${zStat.toFixed(4)} | p = ${pVal.toFixed(6)} | ${decisionLabel}\n`;
-            resultText += `${ciLevel}% CI of Δ̂: (−∞, ${upperCI.toFixed(4)}] | Upper margin: +δ = ${delta.toFixed(4)}`;
-            renderNIChart(alpha, zStat, 'ni', null);
-        }
+    // No inferioridad: H0: Δ ≤ −δ. No superioridad: H0: Δ ≥ +δ. TOST: las dos.
+    o.z1 = (o.deltaHat + delta) / o.se;
+    o.z2 = (delta - o.deltaHat) / o.se;
+    o.p1v = 1 - jStat.normal.cdf(o.z1, 0, 1);
+    o.p2v = 1 - jStat.normal.cdf(o.z2, 0, 1);
+    if (testType === 'tost') {
+        o.p = Math.max(o.p1v, o.p2v);
+        renderNIResult(o);
+        renderNIChart(alpha, o.z1, 'tost', o.z2);
     } else {
-        // TOST
-        const z1 = (deltaHat + delta) / SE; // NI part
-        const z2 = (delta - deltaHat) / SE;  // NS part
-        const p1 = 1 - jStat.normal.cdf(z1, 0, 1);
-        const p2 = 1 - jStat.normal.cdf(z2, 0, 1);
-        const pTOST = Math.max(p1, p2);
-        const equivalent = pTOST < alpha;
-        const decisionLabel = equivalent ? 'Equivalence declared.' : 'Equivalence not declared.';
-        resultText +=
-            `z₁ (NI) = ${z1.toFixed(4)} (p₁ = ${p1.toFixed(4)}) | z₂ (NS) = ${z2.toFixed(4)} (p₂ = ${p2.toFixed(4)})\n` +
-            `p_TOST = ${pTOST.toFixed(6)} | ${decisionLabel}\n` +
-            `${ciLevel}% CI of Δ̂: [${lowerCI.toFixed(4)}, ${upperCI.toFixed(4)}] | Margin: [${(-delta).toFixed(4)}, ${delta.toFixed(4)}]`;
-        renderNIChart(alpha, z1, 'tost', z2);
+        o.z = niDirection === 'ni' ? o.z1 : o.z2;
+        o.p = niDirection === 'ni' ? o.p1v : o.p2v;
+        renderNIResult(o);
+        renderNIChart(alpha, o.z, 'ni', null);
     }
-
-    resultEl.innerText = resultText;
 }
 
 document.getElementById('calcBtn').addEventListener('click', calculate);

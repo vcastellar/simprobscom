@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
 
     <script type="application/ld+json">
 {
@@ -75,10 +75,34 @@
   "mainEntity": [
     {
       "@type": "Question",
+      "name": "What does one-way ANOVA test?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Whether the means of three or more independent groups are equal. The alternative hypothesis is that at least one mean differs from the others."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does ANOVA prove that all the means are different?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. A significant result only indicates that at least one mean differs. To find out which, apply post hoc comparisons such as Tukey's test."
+      }
+    },
+    {
+      "@type": "Question",
       "name": "Can I use ANOVA with only two groups?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Mathematically yes, but it is usually more straightforward to use the test for two means."
+        "text": "Yes, and it is equivalent to the t-test with equal variances (F = t²). Even so, for two groups the two-means test is more direct, and it also allows one-tailed tests."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why not run several pairwise t-tests?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Because the risk of some false positive grows with each comparison. With 10 comparisons at α = 0.05, the probability of at least one false difference is around 40%."
       }
     },
     {
@@ -86,23 +110,39 @@
       "name": "What does η² mean?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It is an effect size measure: the proportion of total variability explained by group membership."
+        "text": "The proportion of the total variability explained by group membership. As a rough guide, 0.01 is a small effect, 0.06 medium and 0.14 large."
       }
     },
     {
       "@type": "Question",
-      "name": "What is the minimum detectable effect (MDE) in ANOVA?",
+      "name": "What are the assumptions of ANOVA?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It is the smallest effect size (for example in terms of Cohen's f or η²) that your design can detect with a given power and a fixed α. If the true effect is smaller than the MDE, the ANOVA may fail to find significant differences even if they exist."
+        "text": "Independence, approximate normality in each group and similar variances. If the variances differ a lot, use Welch's ANOVA; if the data are very skewed and there are few of them, the Kruskal-Wallis test."
       }
     },
     {
       "@type": "Question",
-      "name": "Does ANOVA prove that all means are different?",
+      "name": "Can the groups have different sizes?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No. It only tests whether there is evidence that at least one mean differs from the others."
+        "text": "Yes. One-way ANOVA works with unequal groups, although it then becomes more sensitive to unequal variances."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the minimum detectable effect in ANOVA?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The smallest effect size, measured with Cohen's f, that ANOVA would detect with 80% probability given your group sizes. If the real effect is smaller, ANOVA will probably not detect it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many observations per group do I need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It depends on the effect size you want to detect and the desired power. For a medium effect (f = 0.25) with 3 groups, α = 0.05 and 80% power, about 53 per group. Work it out with the sample size calculator for ANOVA."
       }
     }
   ]
@@ -152,105 +192,185 @@
     </header>
 
     <main>
-        <section class="card content-card">
-            <h3>What does ANOVA test?</h3>
-            <p><strong>One-way ANOVA</strong> tests whether several populations share the same mean. It is the natural extension of the two-mean test when there are three or more independent groups.</p>
-            <p>The null hypothesis is \(H_0: \mu_1=\mu_2=\cdots=\mu_k\). The alternative states that at least one mean differs, but ANOVA alone does not indicate which pair of groups is different.</p>
-        </section>
-
-        <section class="card sample-size-panel">
-            <div class="panel-heading">
-                <h2>Calculator</h2>
-                <p>Enter one group per line. Within each line, separate observations with commas, spaces or semicolons. Use a decimal point if you need decimals.</p>
-            </div>
-
-            <div class="form-grid sample-grid">
-                <div class="form-group" style="grid-column: 1 / -1;">
-                    <label for="anovaData">Group data <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                    <textarea id="anovaData" rows="8" class="wide-textarea" aria-describedby="anovaHelp">12, 15, 14, 13, 16
-10, 11, 9, 12, 10
-17, 18, 16, 19, 20</textarea>
-                    <p class="field-hint" hidden>Write one group per line (at least two groups), separating the observations on each line with commas, spaces or semicolons; each group needs at least two observations.</p>
+        <section class="ss-shell" aria-label="Calculator">
+            <section class="card ss-controls">
+                <div class="panel-heading">
+                    <h2>Parameters</h2>
+                    <p>Enter one group per line. Within each line, separate the observations with commas, spaces or semicolons, and use a decimal point for decimals.</p>
                 </div>
-                <div class="form-group">
-                    <label for="alpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
-                    <input type="number" id="alpha" value="0.05" min="0.001" max="0.2" step="0.001">
-                    <p class="field-hint" hidden>Probability of wrongly rejecting \(H_0\) when it is actually true. The usual value is <strong>0.05</strong>.</p>
+
+                <div class="form-grid sample-grid">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label for="anovaData">Group data <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                        <textarea id="anovaData" rows="6" class="wide-textarea">32, 34, 31, 33, 35
+28, 30, 27, 29, 31
+36, 38, 35, 37, 39</textarea>
+                        <p class="field-hint" hidden>Write one group per line (at least two groups), separating the observations on each line with commas, spaces or semicolons; each group needs at least two observations. The sample data are those of the worked example below.</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="alpha">Significance level (α) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+                        <input type="number" id="alpha" value="0.05" min="0.001" max="0.2" step="0.001">
+                        <p class="field-hint" hidden>Probability of wrongly rejecting \(H_0\) when it is actually true. The usual value is <strong>0.05</strong>.</p>
+                    </div>
                 </div>
-            </div>
 
-            <button id="calcAnovaBtn">Calculate ANOVA</button>
-            <div id="anovaResult" class="result-box" aria-live="polite"></div>
+                <button class="calculate-btn" id="calcAnovaBtn">Calculate ANOVA</button>
+            </section>
+
+            <div id="anovaResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+
+            <section class="card ss-chart-panel">
+                <h2 class="ss-chart-title">F distribution, rejection region and observed F</h2>
+                <div class="chart-wrap ss-chart">
+                    <div class="ss-canvas">
+                        <canvas id="anovaChart" aria-label="F distribution of the ANOVA with the rejection region and the observed statistic" role="img"></canvas>
+                    </div>
+                </div>
+            </section>
         </section>
 
         <section class="card content-card">
-            <h3>Visualization of the F test</h3>
-            <p>The red zone represents the right-tail rejection region for the chosen α level. The orange line marks the observed F statistic.</p>
-            <div class="chart-wrap"><canvas id="anovaChart" aria-label="F distribution for the ANOVA" role="img"></canvas></div>
+            <h3>What is one-way ANOVA?</h3>
+            <p><strong>One-way analysis of variance (ANOVA)</strong> tests whether three or more independent populations have the same mean. It is the natural extension of the <a href="contraste-hipotesis-dos-medias.html">two-means test</a> when there are more groups: do three fertilisers give the same yield? Do four suppliers take the same time to deliver an order? Do students using five study methods score the same? The "factor" is the variable that defines the groups (the fertiliser, the supplier, the method), and each value of the factor is a level or treatment.</p>
+            <p>The null hypothesis is that all the means are equal; the alternative, that <strong>at least one</strong> is different:</p>
+            <p class="formula-line">\(H_0: \mu_1 = \mu_2 = \cdots = \mu_k\)</p>
+            <p class="formula-line">\(H_1\): not all \(\mu_j\) are equal</p>
+            <p>ANOVA does not say which mean or means differ, nor in which direction: it is a global question. To find out which pairs of groups differ, it is followed by post hoc comparisons.</p>
+
+            <h3>Why not run several t-tests?</h3>
+            <p>With three groups you would need 3 pairwise comparisons; with five, 10. Each carries a 5% risk of a false positive, and the risks add up: with 10 independent comparisons, the probability of finding at least one "significant" difference by pure chance is around 40%. ANOVA answers the global question with a single test that keeps that risk at \(\alpha\).</p>
         </section>
 
         <section class="card content-card">
-            <h3>One-way ANOVA formulas</h3>
-            <p>ANOVA decomposes the total variability into <strong>between-group</strong> variability and <strong>within-group</strong> variability:</p>
+            <h3>The idea: comparing two sources of variability</h3>
+            <p>Although its aim is to compare means, ANOVA does so by comparing variances, hence its name. The total variability of the data is split into two parts:</p>
+            <ul>
+                <li><strong>Between-group variability</strong>: how far the group means are from the overall mean. It reflects the effect of the factor, plus noise.</li>
+                <li><strong>Within-group variability</strong>: how spread out the data are around the mean of their own group. It is the noise, the variability the factor does not explain.</li>
+            </ul>
+            <p>If \(H_0\) is true, the group means differ only by chance, and both sources estimate the same variance: their ratio should be around 1. If the factor has an effect, the means spread out more than the noise explains, and the between-group variability grows.</p>
             <div class="formula-box">
-                <p class="formula-line">\(SS_T = SS_{between} + SS_{within}\)</p>
-                <p class="formula-line">\(F = \dfrac{MS_{between}}{MS_{within}} = \dfrac{SS_{between}/(k-1)}{SS_{within}/(N-k)}\)</p>
-                <p class="formula-line">\(\eta^2 = SS_{between}/SS_T\)</p>
+                <p class="formula-line">\(SS_{T} = SS_{\text{between}} + SS_{\text{within}}\)</p>
+                <p class="formula-line">\(SS_{\text{between}} = \sum_{j=1}^{k} n_j(\bar{x}_j - \bar{x})^2, \qquad SS_{\text{within}} = \sum_{j=1}^{k}\sum_{i=1}^{n_j}(x_{ij} - \bar{x}_j)^2\)</p>
+                <p class="formula-line">\(F = \dfrac{MS_{\text{between}}}{MS_{\text{within}}} = \dfrac{SS_{\text{between}}/(k-1)}{SS_{\text{within}}/(N-k)}\)</p>
             </div>
-            <p>Under \(H_0\), the F statistic follows approximately a Snedecor's F distribution with \(k-1\) and \(N-k\) degrees of freedom.</p>
+            <p>Here \(k\) is the number of groups, \(n_j\) the size of group \(j\), \(N\) the total number of observations, \(\bar{x}_j\) the mean of group \(j\) and \(\bar{x}\) the overall mean. The <strong>mean squares</strong> (MS) are the sums of squares divided by their degrees of freedom. Under \(H_0\), the statistic follows Snedecor's F distribution with \(k-1\) and \(N-k\) degrees of freedom (you can look up its critical values in the <a href="tabla-f-snedecor.html">F table</a>). The test is always right-tailed: only a large F is evidence against \(H_0\).</p>
+
+            <h3>The ANOVA table</h3>
+            <p>The results are presented in a table with one row per source of variability. The calculator includes it under "Calculation details":</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Source</th><th>SS</th><th>df</th><th>MS</th><th>F</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Between groups</td><td>\(SS_{\text{between}}\)</td><td>\(k-1\)</td><td>\(SS_{\text{between}}/(k-1)\)</td><td>\(MS_{\text{between}}/MS_{\text{within}}\)</td></tr>
+                        <tr><td>Within groups</td><td>\(SS_{\text{within}}\)</td><td>\(N-k\)</td><td>\(SS_{\text{within}}/(N-k)\)</td><td></td></tr>
+                        <tr><td>Total</td><td>\(SS_T\)</td><td>\(N-1\)</td><td></td><td></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>\(MS_{\text{within}}\) is the pooled variance of all the groups: it estimates the common variance \(\sigma^2\) whether or not \(H_0\) is true.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Assumptions of ANOVA</h3>
+            <ul>
+                <li><strong>Independence</strong>: groups independent of each other and observations independent within each group. If the same subjects go through all the conditions, you need a repeated-measures ANOVA.</li>
+                <li><strong>Approximate normality</strong> of the data in each group (or of the residuals). With moderately sized groups of similar size, ANOVA is quite robust to mild departures.</li>
+                <li><strong>Homogeneity of variances</strong>: the group variances should be similar. This is the most delicate assumption when the groups have different sizes.</li>
+            </ul>
+            <p>A rule of thumb: if the largest standard deviation is less than twice the smallest and the groups have similar sizes, classic ANOVA works well. If not, use <strong>Welch's ANOVA</strong>, which does not assume equal variances; if the data are very skewed or there are outliers with small groups, the non-parametric alternative is the Kruskal-Wallis test. The calculator shows the standard deviation of each group under "Calculation details" so you can check this, and you can check normality with the <a href="shapiro-wilk-normalidad.html">Shapiro-Wilk test</a>.</p>
         </section>
 
         <section class="card content-card">
             <h3>Worked example</h3>
-            <p>An agronomist evaluates the effect of three types of fertilizer on the yield (kg) of agricultural plots. 5 plots are randomly assigned to each fertilizer, yielding the following data: Fertilizer A: 32, 34, 31, 33, 35 (mean \(\bar{x}_1 = 33\)); Fertilizer B: 28, 30, 27, 29, 31 (mean \(\bar{x}_2 = 29\)); Fertilizer C: 36, 38, 35, 37, 39 (mean \(\bar{x}_3 = 37\)).</p>
-            <p>The null hypothesis is \(H_0: \mu_1 = \mu_2 = \mu_3\) (the three fertilizers produce the same mean yield) against \(H_1\): at least two means differ. We use \(\alpha = 0.05\).</p>
-            <p>The grand mean is \(\bar{x} = (33 + 29 + 37)/3 = 33\) kg. The between-groups sum of squares (variation due to fertilizer) is:</p>
-            <p class="formula-line">\( SS_{\text{between}} = n \sum_{j=1}^{k}(\bar{x}_j - \bar{x})^2 = 5\left[(33-33)^2 + (29-33)^2 + (37-33)^2\right] = 5(0 + 16 + 16) = 160 \)</p>
-            <p>The within-group variance of each group is \(s^2 = 2.5\). The within-groups sum of squares is:</p>
-            <p class="formula-line">\( SS_{\text{within}} = \sum_{j=1}^{k}(n_j - 1)\,s_j^2 = 3 \times 4 \times 2.5 = 30 \)</p>
-            <p>The degrees of freedom are \(df_{\text{between}} = k - 1 = 2\) and \(df_{\text{within}} = N - k = 15 - 3 = 12\). The mean squares are \(MS_{\text{between}} = 160/2 = 80\) and \(MS_{\text{within}} = 30/12 = 2.5\). The F statistic is:</p>
-            <p class="formula-line">\( F = \frac{MS_{\text{between}}}{MS_{\text{within}}} = \frac{80}{2.5} = 32 \)</p>
-            <p>The critical value for \(\alpha = 0.05\) with \((2,\, 12)\) degrees of freedom is \(F_{0.05;\,2,\,12} \approx 3.89\), and the p-value corresponding to \(F = 32\) is \(p < 0.001\). Since \(F = 32 \gg 3.89\), \(H_0\) is rejected.</p>
-            <p>Conclusion: there are highly significant statistical differences between the mean yields produced by the three fertilizers (\(p < 0.001\)). The effect size is large (\(\eta^2 = 160/190 \approx 0.84\)). To determine which pairs of fertilizers differ significantly, a post hoc test (Tukey HSD or Bonferroni) is recommended.</p>
+            <p>An agronomist evaluates the effect of three fertilisers on the yield (kg) of farm plots. Five plots are randomly assigned to each fertiliser, with these results:</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Fertiliser</th><th>Yields (kg)</th><th>Mean</th><th>Variance</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>A</td><td>32, 34, 31, 33, 35</td><td>33</td><td>2.5</td></tr>
+                        <tr><td>B</td><td>28, 30, 27, 29, 31</td><td>29</td><td>2.5</td></tr>
+                        <tr><td>C</td><td>36, 38, 35, 37, 39</td><td>37</td><td>2.5</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>We test \(H_0: \mu_A = \mu_B = \mu_C\) with \(\alpha = 0.05\). The overall mean is \(\bar{x} = 33\) kg. The between-group sum of squares is</p>
+            <p class="formula-line">\( SS_{\text{between}} = 5\left[(33-33)^2 + (29-33)^2 + (37-33)^2\right] = 5(0 + 16 + 16) = 160 \)</p>
+            <p>and, since each group has variance 2.5 with 4 degrees of freedom, the within-group sum of squares is \(SS_{\text{within}} = 3 \times 4 \times 2.5 = 30\). With \(df_{\text{between}} = 2\) and \(df_{\text{within}} = 15 - 3 = 12\):</p>
+            <p class="formula-line">\( MS_{\text{between}} = \dfrac{160}{2} = 80, \qquad MS_{\text{within}} = \dfrac{30}{12} = 2.5, \qquad F = \dfrac{80}{2.5} = 32 \)</p>
+            <p>The critical value is \(F_{0.05;\,2,\,12} \approx 3.89\) and the p-value is \(p \approx 0.000015\). Since \(F = 32\) far exceeds the critical value, <strong>\(H_0\) is rejected</strong>: there is evidence that not all fertilisers give the same mean yield.</p>
+            <p>The effect size is huge: \(\eta^2 = 160/190 \approx 0.84\), meaning that the fertiliser explains 84% of the variability in yield across these plots. To find out which fertilisers differ from each other, the next step is a post hoc comparison. Note also that, with only 5 plots per group, ANOVA detects with 80% probability only very large effects (f ≈ 0.91): it worked here because the real effect is enormous, but moderate effects would need many more plots.</p>
+            <p><strong>In the calculator:</strong> these are the sample data shown when the page loads.</p>
         </section>
-<section class="card content-card">
-            <h3>Important assumptions</h3>
-            <ul>
-            <li><strong>Independence:</strong> observations must be independent within and between groups.</li>
-            <li><strong>Approximate normality:</strong> the residuals of each group should be reasonably normal, especially with small samples.</li>
-            <li><strong>Homogeneity of variances:</strong> population variances should be similar. If this does not hold, consider alternatives such as Welch's ANOVA.</li>
-            </ul>
-        </section>
-<section class="card content-card">
-            <h3>After a significant ANOVA</h3>
-            <p>A significant ANOVA indicates that some difference exists, but not which one. To identify specific pairs, post hoc comparisons such as Tukey HSD are typically applied, adjusting for multiple comparisons.</p>
-        </section>
-
 
         <section class="card content-card">
             <h3>How to interpret the result</h3>
-                <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that at least one group mean is different from the others, but ANOVA does not reveal which pairs differ nor in which direction. For that, post hoc comparisons are needed (Tukey HSD, Bonferroni, Scheffé, etc.), which control the type I error accumulated by multiple comparisons. Statistical significance does not equate to practical relevance: with large samples, small differences between means can produce a significant F. Report the effect size \(\eta^2 = SS_\text{between}/SS_\text{total}\) to quantify what proportion of the total variability the factor explains.</p>
-                <p><strong>Failing to reject \(H_0\)</strong> (p-value ≥ α) does not prove that all means are equal; it only indicates that the data are compatible with equality at the chosen level. Insufficient power — caused by few subjects per group, high within-group variability, or small true differences — can prevent real effects from being detected. Examine the confidence intervals per group and the sample size to assess whether the study had adequate power.</p>
-                <p>The <strong>F statistic</strong> is the ratio between the variance explained by the factor (between-groups mean square, \(MS_\text{between}\)) and the unexplained residual variance (within-groups mean square, \(MS_\text{within}\)). An \(F\) close to 1 indicates that the variability among means is similar to the random variability within groups. In the chart, the green zone is the non-rejection region, the red zone is the critical right tail, and the amber line marks the observed F. ANOVA assumes independence, approximate normality of residuals, and homogeneity of variances (homoscedasticity); if the latter does not hold, consider Welch's ANOVA.</p>
+            <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that at least one mean differs from the others, but not which one or in which direction. Look at the mean of each group and apply a post hoc comparison. Remember too that significant is not the same as important: with large groups, small differences between means give a significant F.</p>
+            <p><strong>Not rejecting \(H_0\)</strong> (p-value ≥ α) does not prove that the means are equal: the data are compatible with equality, but the study may not have had enough power. Few observations per group or high within-group variability prevent real differences from being detected.</p>
+            <p>The <strong>F statistic</strong> compares the variability between groups with the variability within them. An F close to 1 indicates that the means are as far apart as chance would lead you to expect; the larger it is, the more evidence that the factor has an influence. On the chart, the green area is the non-rejection region, the red area is the critical tail and the amber line marks the observed F.</p>
+
+            <h3>Effect size: η² and Cohen's f</h3>
+            <p>\(\eta^2 = SS_{\text{between}}/SS_T\) is the proportion of the total variability explained by the factor. As a rough guide, 0.01 is a small effect, 0.06 medium and 0.14 large. With small samples, \(\eta^2\) tends to overestimate the real effect; omega squared (\(\omega^2\)) corrects that bias.</p>
+            <p>Power and sample size calculations use <strong>Cohen's f</strong>, obtained from \(\eta^2\) as \(f = \sqrt{\eta^2/(1-\eta^2)}\), which measures how far apart the group means are in units of the within-group standard deviation. Cohen's benchmarks are 0.10 (small), 0.25 (medium) and 0.40 (large).</p>
+
+            <h3>Power and minimum detectable effect</h3>
+            <p>Below the conclusion, the calculator shows the <strong>minimum detectable effect size</strong>: the smallest Cohen's f that, with your group sizes, ANOVA would detect with 80% probability. If it is larger than the effect that would matter to you, a non-significant result says little. For reference, with 3 groups of 20 observations only large effects (f ≈ 0.41) are detected with that probability, and medium effects (f = 0.25) require about 53 observations per group. The link in the result opens the <a href="tamano-muestral-anova.html">sample size calculator for ANOVA</a> with your number of groups and your α, so you can work out the size needed for the effect you care about.</p>
         </section>
+
+        <section class="card content-card">
+            <h3>After a significant ANOVA: post hoc comparisons</h3>
+            <p>If ANOVA rejects \(H_0\), post hoc comparisons show which pairs of groups differ, controlling the accumulated risk of false positives:</p>
+            <ul>
+                <li><strong>Tukey (HSD)</strong>: compares every pair with every other. It is the usual choice when there are no prior hypotheses.</li>
+                <li><strong>Bonferroni</strong>: runs t-tests using \(\alpha\) divided by the number of comparisons. It is simple and suitable if you are only interested in a few comparisons.</li>
+                <li><strong>Dunnett</strong>: compares each treatment only with a control group.</li>
+                <li><strong>Games-Howell</strong>: like Tukey, but without assuming equal variances.</li>
+            </ul>
+            <p>In the fertiliser example, all three differences (C − A = 4, A − B = 4 and C − B = 8 kg) are significant with Tukey's test.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Common mistakes</h3>
+            <ul>
+                <li><strong>Running every pairwise t-test</strong> instead of an ANOVA followed by post hoc comparisons.</li>
+                <li><strong>Reading a significant ANOVA as "all the means are different"</strong>: one differing mean is enough.</li>
+                <li><strong>Concluding that the means are equal</strong> because the ANOVA is not significant.</li>
+                <li><strong>Applying it to repeated measures</strong> of the same subjects, which are not independent groups.</li>
+                <li><strong>Ignoring very different variances</strong> when the groups have different sizes: in that case, use Welch's ANOVA.</li>
+                <li><strong>Reporting only the p-value</strong>, without the group means or the effect size.</li>
+            </ul>
+        </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
               <h3>Related calculators</h3>
               <ul>
-                <li><a href="contraste-hipotesis-dos-medias.html">Hypothesis test for two means</a></li>
-                <li><a href="contraste-hipotesis-varianzas.html">Hypothesis tests for variances</a></li>
+                <li><a href="tamano-muestral-anova.html">Sample size for ANOVA</a></li>
+                <li><a href="contraste-hipotesis-dos-medias.html">Independent two-sample test</a></li>
+                <li><a href="contraste-hipotesis-dos-varianzas.html">Two-variance test</a></li>
                 <li><a href="tabla-f-snedecor.html">Snedecor's F table</a></li>
+                <li><a href="shapiro-wilk-normalidad.html">Shapiro-Wilk normality test</a></li>
               </ul>
             </section>
             <h3>Frequently asked questions</h3>
             <ul>
-                <li><strong>Can I use ANOVA with only two groups?</strong> Mathematically yes, but it is usually more straightforward to use the test for two means.</li>
-                <li><strong>What does η² mean?</strong> It is an effect size measure: the proportion of total variability explained by group membership.</li>
-                <li><strong>What is the minimum detectable effect (MDE) in ANOVA?</strong> It is the smallest effect size (for example in terms of Cohen's \(f\) or \(\eta^2\)) that the design can detect with a fixed power and \(\alpha\). Effects smaller than the MDE usually require a larger sample to become detectable.</li>
-                <li><strong>Does ANOVA prove that all means are different?</strong> No. It only tests whether there is evidence that at least one mean differs from the others.</li>
+                <li><strong>What does one-way ANOVA test?</strong> Whether the means of three or more independent groups are equal. The alternative hypothesis is that at least one mean differs from the others.</li>
+                <li><strong>Does ANOVA prove that all the means are different?</strong> No. A significant result only indicates that at least one mean differs. To find out which, apply post hoc comparisons such as Tukey's test.</li>
+                <li><strong>Can I use ANOVA with only two groups?</strong> Yes, and it is equivalent to the t-test with equal variances (F = t²). Even so, for two groups the two-means test is more direct, and it also allows one-tailed tests.</li>
+                <li><strong>Why not run several pairwise t-tests?</strong> Because the risk of some false positive grows with each comparison. With 10 comparisons at α = 0.05, the probability of at least one false difference is around 40%.</li>
+                <li><strong>What does η² mean?</strong> The proportion of the total variability explained by group membership. As a rough guide, 0.01 is a small effect, 0.06 medium and 0.14 large.</li>
+                <li><strong>What are the assumptions of ANOVA?</strong> Independence, approximate normality in each group and similar variances. If the variances differ a lot, use Welch's ANOVA; if the data are very skewed and there are few of them, the Kruskal-Wallis test.</li>
+                <li><strong>Can the groups have different sizes?</strong> Yes. One-way ANOVA works with unequal groups, although it then becomes more sensitive to unequal variances.</li>
+                <li><strong>What is the minimum detectable effect in ANOVA?</strong> The smallest effect size, measured with Cohen's f, that ANOVA would detect with 80% probability given your group sizes. If the real effect is smaller, ANOVA will probably not detect it.</li>
+                <li><strong>How many observations per group do I need?</strong> It depends on the effect size you want to detect and the desired power. For a medium effect (f = 0.25) with 3 groups, α = 0.05 and 80% power, about 53 per group. Work it out with the sample size calculator for ANOVA.</li>
             </ul>
-            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Analysis_of_variance" target="_blank" rel="noopener noreferrer">Analysis of variance (ANOVA)</a> — Wikipedia</p>
+            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/One-way_analysis_of_variance" target="_blank" rel="noopener noreferrer">One-way analysis of variance</a> — Wikipedia</p>
         </section>
+
     </main>
 
     <footer class="legal-footer">
@@ -270,6 +390,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../test-results.js?v=20261110-1"></script>
 <script>
 let anovaChart;
 
@@ -294,9 +415,6 @@ function sumSquares(values, center) {
     return values.reduce((sum, value) => sum + (value - center) ** 2, 0);
 }
 
-function formatNumber(value, digits = 4) {
-    return Number.isFinite(value) ? value.toFixed(digits) : '—';
-}
 
 function renderAnovaChart(alpha, dfBetween, dfWithin, fObserved) {
     const ctx = document.getElementById('anovaChart');
@@ -348,68 +466,109 @@ function renderAnovaChart(alpha, dfBetween, dfWithin, fObserved) {
     });
 }
 
+// Resultado: decisión, conclusión, efecto mínimo detectable y detalles.
+function renderAnovaResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const fHat = o.eta2 < 1 ? Math.sqrt(o.eta2 / (1 - o.eta2)) : Infinity;
+    const mdeF = R.mdeF(o.N, o.k, o.alpha);
+    const size = (f) => EN
+        ? (f < 0.1 ? 'a very small effect' : f < 0.25 ? 'a small effect' : f < 0.4 ? 'a medium effect' : 'a large effect')
+        : (f < 0.1 ? 'un efecto muy pequeño' : f < 0.25 ? 'un efecto pequeño' : f < 0.4 ? 'un efecto mediano' : 'un efecto grande');
+    const url = 'tamano-muestral-anova.html?k=' + o.k + '&f=' + R.sig(mdeF, 3) + '&alpha=' + o.alpha + '&power=' + R.TARGET;
+    const T = EN ? {
+        label: 'One-way ANOVA · ' + o.k + ' groups, N = ' + o.N + ' · H₀: all means are equal · α = ' + R.auto(o.alpha),
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        yes: '✓ There is statistical evidence that at least one of the group means differs from the others.',
+        no: 'ℹ There is not enough evidence that the group means differ. This does not prove that they are equal.',
+        posthoc: 'ANOVA does not say which groups differ: to find out, use a post hoc comparison such as Tukey\'s test.',
+        mde: 'With these group sizes, the ANOVA detects with ' + R.pct(R.TARGET) + ' probability only effects of size f = ' + R.num(mdeF, 2) + ' or more (' + size(mdeF) + ', by Cohen\'s benchmarks).',
+        link: 'Work out the sample size needed for another effect size',
+        rows: ['F statistic', 'Degrees of freedom (between, within)', 'Critical F', 'p-value', 'Effect size (η²)', "Effect size (Cohen's f)", 'Minimum detectable f (power ' + R.pct(R.TARGET) + ')'],
+        groups: ['Group', 'n', 'Mean', 'Standard deviation'], group: 'Group ',
+        table: ['Source', 'SS', 'df', 'MS', 'F', 'p-value'], src: ['Between groups', 'Within groups', 'Total']
+    } : {
+        label: 'ANOVA de un factor · ' + o.k + ' grupos, N = ' + o.N + ' · H₀: todas las medias son iguales · α = ' + R.auto(o.alpha),
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        yes: '✓ Hay evidencia estadística de que al menos una de las medias es distinta de las demás.',
+        no: 'ℹ No hay evidencia suficiente de que las medias de los grupos difieran. Esto no demuestra que sean iguales.',
+        posthoc: 'El ANOVA no dice qué grupos difieren: para saberlo, aplica una comparación post hoc, como la prueba de Tukey.',
+        mde: 'Con estos tamaños de grupo, el ANOVA solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad efectos de tamaño f = ' + R.num(mdeF, 2) + ' o mayores (' + size(mdeF) + ', según las referencias de Cohen).',
+        link: 'Calcular el tamaño muestral necesario para otro tamaño del efecto',
+        rows: ['Estadístico F', 'Grados de libertad (entre, dentro)', 'F crítico', 'p-valor', 'Tamaño del efecto (η²)', 'Tamaño del efecto (f de Cohen)', 'f mínimo detectable (potencia ' + R.pct(R.TARGET) + ')'],
+        groups: ['Grupo', 'n', 'Media', 'Desv. típica'], group: 'Grupo ',
+        table: ['Fuente', 'SC', 'gl', 'CM', 'F', 'p-valor'], src: ['Entre grupos', 'Dentro de grupos', 'Total']
+    };
+    const td = (v) => '<td>' + R.esc(v) + '</td>';
+    const th = (v) => '<th>' + R.esc(v) + '</th>';
+    let extra = '<div class="result-table-wrap"><table><thead><tr>' + T.groups.map(th).join('') + '</tr></thead><tbody>';
+    o.groups.forEach((g, i) => {
+        extra += '<tr>' + td(T.group + (i + 1)) + td(String(g.n)) + td(R.num(g.mean, 4)) + td(R.num(g.sd, 4)) + '</tr>';
+    });
+    extra += '</tbody></table></div>';
+    extra += '<div class="result-table-wrap"><table><thead><tr>' + T.table.map(th).join('') + '</tr></thead><tbody>' +
+        '<tr>' + td(T.src[0]) + td(R.num(o.ssB, 4)) + td(String(o.dfB)) + td(R.num(o.msB, 4)) + td(R.num(o.F, 4)) + td(R.prob(o.p)) + '</tr>' +
+        '<tr>' + td(T.src[1]) + td(R.num(o.ssW, 4)) + td(String(o.dfW)) + td(R.num(o.msW, 4)) + td('—') + td('—') + '</tr>' +
+        '<tr>' + td(T.src[2]) + td(R.num(o.ssB + o.ssW, 4)) + td(String(o.N - 1)) + td('—') + td('—') + td('—') + '</tr>' +
+        '</tbody></table></div>';
+    const notes = [];
+    if (rejected) notes.push(R.esc(T.posthoc));
+    notes.push(R.esc(T.mde) + ' ' + R.link(url, T.link));
+    R.render(document.getElementById('anovaResult'), {
+        label: T.label,
+        decision: T.decision, p: o.p, sec: ['F(' + o.dfB + ', ' + o.dfW + ') = ' + R.num(o.F, 4)],
+        ok: rejected, verdict: rejected ? T.yes : T.no,
+        notes: notes,
+        rows: [
+            [T.rows[0], 'F = ' + R.num(o.F, 4)],
+            [T.rows[1], o.dfB + ', ' + o.dfW],
+            [T.rows[2], R.num(o.crit, 4)],
+            [T.rows[3], R.prob(o.p)],
+            [T.rows[4], R.num(o.eta2, 3)],
+            [T.rows[5], Number.isFinite(fHat) ? R.num(fHat, 3) : '∞'],
+            [T.rows[6], R.num(mdeF, 3)]
+        ],
+        extraHtml: extra
+    });
+}
+
 function calculateAnova() {
     const groups = parseAnovaGroups(document.getElementById('anovaData').value);
     const alpha = parseFloat(document.getElementById('alpha').value);
     const resultEl = document.getElementById('anovaResult');
+    const E = TestResult.EN
+        ? { alpha: 'Error: α must be between 0 and 1.', groups: 'Error: enter at least two groups with a minimum of two observations per group.', within: 'Error: there is not enough variability within groups to compute the F statistic.' }
+        : { alpha: 'Error: α debe estar entre 0 y 1.', groups: 'Error: introduce al menos dos grupos y un mínimo de dos observaciones por grupo.', within: 'Error: no hay variabilidad suficiente dentro de los grupos para calcular el estadístico F.' };
+    const fail = (msg) => {
+        resultEl.innerText = msg;
+        if (anovaChart) { anovaChart.destroy(); anovaChart = null; }
+    };
 
-    if (!Number.isFinite(alpha) || alpha <= 0 || alpha >= 1) {
-        resultEl.innerText = 'Error: α must be between 0 and 1.';
-        return;
-    }
-
-    if (groups.length < 2 || groups.some((group) => group.length < 2)) {
-        resultEl.innerText = 'Error: enter at least two groups with a minimum of two observations per group.';
-        if (anovaChart) {
-            anovaChart.destroy();
-            anovaChart = null;
-        }
-        return;
-    }
+    if (!Number.isFinite(alpha) || alpha <= 0 || alpha >= 1) return fail(E.alpha);
+    if (groups.length < 2 || groups.some((group) => group.length < 2)) return fail(E.groups);
 
     const allValues = groups.flat();
-    const totalN = allValues.length;
+    const N = allValues.length;
     const k = groups.length;
     const grandMean = mean(allValues);
     const groupMeans = groups.map(mean);
-    const ssBetween = groups.reduce((sum, group, index) => sum + group.length * (groupMeans[index] - grandMean) ** 2, 0);
-    const ssWithin = groups.reduce((sum, group, index) => sum + sumSquares(group, groupMeans[index]), 0);
-    const ssTotal = ssBetween + ssWithin;
-    const dfBetween = k - 1;
-    const dfWithin = totalN - k;
+    const ssB = groups.reduce((sum, group, i) => sum + group.length * (groupMeans[i] - grandMean) ** 2, 0);
+    const ssW = groups.reduce((sum, group, i) => sum + sumSquares(group, groupMeans[i]), 0);
+    const dfB = k - 1;
+    const dfW = N - k;
+    if (dfW <= 0 || ssW <= 0) return fail(E.within);
 
-    if (dfWithin <= 0 || ssWithin <= 0) {
-        resultEl.innerText = 'Error: there is not enough variability within groups to compute the F statistic.';
-        return;
-    }
-
-    const msBetween = ssBetween / dfBetween;
-    const msWithin = ssWithin / dfWithin;
-    const fObserved = msBetween / msWithin;
-    const pValue = 1 - jStat.centralF.cdf(fObserved, dfBetween, dfWithin);
-    const etaSquared = ssTotal > 0 ? ssBetween / ssTotal : NaN;
-    const critical = jStat.centralF.inv(1 - alpha, dfBetween, dfWithin);
-    const decision = pValue < alpha ? 'Reject H₀: there is evidence of differences between means.' : 'Fail to reject H₀: the evidence is not enough to claim differences between means.';
-
-    const summaries = groups.map((group, index) => `Group ${index + 1}: n=${group.length}, mean=${formatNumber(groupMeans[index])}`).join('<br>');
-
-    resultEl.innerHTML = `
-        <p><strong>Result:</strong> F(${dfBetween}, ${dfWithin}) = ${formatNumber(fObserved)} | p-value = ${formatNumber(pValue, 6)} | Critical F = ${formatNumber(critical)} | η² = ${formatNumber(etaSquared)}</p>
-        <p>${decision}</p>
-        <p><strong>Group summary</strong><br>${summaries}</p>
-        <div class="result-table-wrap">
-            <table>
-                <thead><tr><th>Source</th><th>SS</th><th>df</th><th>MS</th><th>F</th><th>p-value</th></tr></thead>
-                <tbody>
-                    <tr><td>Between groups</td><td>${formatNumber(ssBetween)}</td><td>${dfBetween}</td><td>${formatNumber(msBetween)}</td><td>${formatNumber(fObserved)}</td><td>${formatNumber(pValue, 6)}</td></tr>
-                    <tr><td>Within groups</td><td>${formatNumber(ssWithin)}</td><td>${dfWithin}</td><td>${formatNumber(msWithin)}</td><td>—</td><td>—</td></tr>
-                    <tr><td>Total</td><td>${formatNumber(ssTotal)}</td><td>${totalN - 1}</td><td>—</td><td>—</td><td>—</td></tr>
-                </tbody>
-            </table>
-        </div>
-    `;
-
-    renderAnovaChart(alpha, dfBetween, dfWithin, fObserved);
+    const msB = ssB / dfB;
+    const msW = ssW / dfW;
+    const F = msB / msW;
+    const p = 1 - jStat.centralF.cdf(F, dfB, dfW);
+    renderAnovaResult({
+        k, N, alpha, F, p, dfB, dfW, ssB, ssW, msB, msW,
+        eta2: ssB / (ssB + ssW),
+        crit: jStat.centralF.inv(1 - alpha, dfB, dfW),
+        groups: groups.map((g, i) => ({ n: g.length, mean: groupMeans[i], sd: Math.sqrt(sumSquares(g, groupMeans[i]) / (g.length - 1)) }))
+    });
+    renderAnovaChart(alpha, dfB, dfW, F);
 }
 
 document.getElementById('calcAnovaBtn').addEventListener('click', calculateAnova);
