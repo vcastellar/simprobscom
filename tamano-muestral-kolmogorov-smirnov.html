@@ -88,7 +88,7 @@
           "name": "¿Es válida la fórmula para muestras pequeñas?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Hay que usarla con cautela. La fórmula de potencia se basa en una aproximación asintótica por desplazamiento (shift model) que solo tiene en cuenta la desviación máxima d, no la forma de la alternativa, y suele ser optimista: puede subestimar de forma apreciable el tamaño muestral necesario. Por ejemplo, en simulaciones con varias alternativas con d = 0,15, la potencia real con n = 23 quedó entre el 32 % y el 44 %, lejos del 80 % previsto. Si el tamaño muestral es crítico, conviene verificarlo por simulación."
+            "text": "Sí, con una precisión: el tamaño que da la calculadora es conservador. Se basa en la cota inferior de Massey (1951), que garantiza al menos la potencia pedida sea cual sea la forma de la desviación, usando la distribución asintótica de Kolmogorov para el valor crítico. Para muchas alternativas concretas basta con menos datos: frente a un desplazamiento de la media con d = 0,15, la calculadora da n = 141 y en simulación el 80 % se alcanza con unas 75–80 observaciones."
           }
         },
         {
@@ -204,14 +204,16 @@
             <p>El test de Kolmogorov–Smirnov de una muestra contrasta si los datos provienen de una distribución teórica completamente especificada \(F_0\). El estadístico de contraste es la desviación máxima absoluta entre la función de distribución empírica \(\hat{F}_n\) y la teórica:</p>
             <p class="formula-line">\( D_n = \sup_x \left| \hat{F}_n(x) - F_0(x) \right| \)</p>
             <p>El tamaño del efecto es \(d = \max_x |F_{\text{verdadera}}(x) - F_0(x)|\), es decir, la máxima distancia vertical entre la CDF real y la hipotética. Bajo \(H_0\), la distribución asintótica de \(\sqrt{n}\,D_n\) es la distribución de Kolmogorov.</p>
-            <p>La fórmula de potencia usa la <strong>aproximación por desplazamiento</strong> (<em>shift model</em>): bajo \(H_1\), el estadístico \(\sqrt{n}\,D_n\) se desplaza aproximadamente \(d\sqrt{n}\) respecto a su distribución bajo \(H_0\). Es una aproximación heurística: la potencia real depende de la forma completa de la alternativa, no solo de \(d\), y la fórmula suele ser optimista, es decir, tiende a subestimar el \(n\) necesario (véase la nota del ejemplo).</p>
+            <p>La potencia real depende de la forma completa de la alternativa, no solo de \(d\). Por eso la calculadora usa una <strong>cota inferior</strong> (Massey, 1951): calcula el tamaño que garantiza al menos la potencia pedida para cualquier distribución que se aleje \(d\) de la teórica. Es un tamaño <em>suficiente</em>: para muchas alternativas concretas bastará con menos datos (véase la nota del ejemplo).</p>
             <h3>Fórmula de potencia</h3>
             <p>La CDF de la distribución de Kolmogorov es:</p>
             <p class="formula-line">\( P(K \leq x) = 1 - 2\sum_{k=1}^{\infty} (-1)^{k+1} e^{-2k^2 x^2}, \quad x > 0 \)</p>
             <p>El cuantil crítico \(k_\alpha\) se define por \(P(K > k_\alpha) = \alpha\), es decir, \(1 - P(K \leq k_\alpha) = \alpha\). Se halla mediante búsqueda binaria.</p>
-            <p>La potencia del test para tamaño muestral \(n\) se estima como:</p>
-            <p class="formula-line">\( \text{Potencia}(n) = 1 - P\!\left(K \leq k_\alpha - d\sqrt{n}\right) \)</p>
-            <p>La calculadora busca el menor \(n\) entero tal que esta expresión alcanza la potencia objetivo. Cuando \(k_\alpha - d\sqrt{n} \leq 0\), la potencia es 1.</p>
+            <p>Si la función de distribución real se separa \(d\) de la teórica en un punto, la empírica en ese punto se desvía de la teórica \(d\) más un error de muestreo de desviación típica como máximo \(1/(2\sqrt{n})\). Como \(D_n\) es al menos esa desviación, la potencia cumple:</p>
+            <p class="formula-line">\( \text{Potencia}(n) \;\geq\; \Phi\!\left(2\,(d\sqrt{n} - k_\alpha)\right) \)</p>
+            <p>donde \(\Phi\) es la función de distribución normal estándar. Igualando la cota a la potencia objetivo \(1-\beta\) se obtiene el tamaño muestral:</p>
+            <p class="formula-line">\( n = \left\lceil \left( \dfrac{k_\alpha + z_{1-\beta}/2}{d} \right)^{2} \right\rceil \)</p>
+            <p>Con \(\alpha = 0{,}05\) y potencia del 80 %, \(k_\alpha \approx 1{,}358\) y \(z_{0{,}80} \approx 0{,}842\), de modo que \(n \approx (1{,}779/d)^2\).</p>
             <h3>Configuración rápida</h3>
             <ul>
                 <li><strong>d = 0,10:</strong> efecto pequeño. La distribución real se aleja de la teórica como máximo 0,10 en la CDF. Requiere muestras grandes.</li>
@@ -226,20 +228,20 @@
             <p>Con \(d = 0{,}15\), \(\alpha = 0{,}05\) y potencia del 80 %, la calculadora encuentra:</p>
             <ol>
                 <li>El cuantil crítico \(k_{0{,}05} \approx 1{,}358\) mediante búsqueda binaria en la distribución de Kolmogorov.</li>
-                <li>El menor \(n\) tal que \(1 - P(K \leq 1{,}358 - 0{,}15\sqrt{n}) \geq 0{,}80\).</li>
+                <li>El tamaño \(n = \lceil ((1{,}358 + 0{,}842/2)/0{,}15)^2 \rceil = \lceil 11{,}86^2 \rceil = \lceil 140{,}7 \rceil\).</li>
             </ol>
-            <p>El resultado según la aproximación del modelo de desplazamiento es <strong>n = 23 observaciones</strong>. Con esa muestra, si la CDF real se aleja 0,15 de la exponencial teórica, el test lo detectará el 80 % de las veces según esta fórmula asintótica.</p>
-            <p><strong>Nota sobre la aproximación:</strong> el modelo de desplazamiento asintótico tiende a <em>subestimar</em> el tamaño muestral real necesario, especialmente para valores de \(d\) pequeños y \(n\) moderados. La discrepancia puede ser grande: en simulaciones con tres alternativas distintas a la uniforme, todas con \(d = 0{,}15\), la potencia real con \(n = 23\) fue del 32–44 %, y con \(n = 40\) del 53–70 %. Para estudios donde el tamaño muestral sea crítico se recomienda complementar este resultado con simulaciones de Monte Carlo para la alternativa concreta que se espera.</p>
-            <p><strong>Análisis de sensibilidad:</strong> según la misma aproximación, con \(d = 0{,}10\) (efecto pequeño) se necesitarían n ≈ 51 observaciones y con \(d = 0{,}30\) (efecto grande) bastarían n ≈ 6; por lo dicho en la nota anterior, las cifras reales pueden ser bastante mayores. La muestra necesaria crece aproximadamente como \(1/d^2\).</p>
+            <p>El resultado es <strong>n = 141 observaciones</strong>. Con esa muestra, si la CDF real se aleja 0,15 de la exponencial teórica, el test lo detectará al menos el 80 % de las veces, sea cual sea la forma de la desviación.</p>
+            <p><strong>Nota sobre la cota:</strong> el tamaño es conservador. Corresponde al caso más desfavorable, en el que la desviación se concentra en un punto cercano a la mediana. Con alternativas más habituales, la potencia real es mayor: en simulaciones frente a un desplazamiento de la media con \(d = 0{,}15\), la potencia con \(n = 141\) fue del 97 %, y el 80 % se alcanzó con unas 75–80 observaciones. Si el tamaño muestral es crítico o costoso, conviene afinarlo con una simulación de Monte Carlo para la alternativa concreta que se espera.</p>
+            <p><strong>Análisis de sensibilidad:</strong> con \(d = 0{,}10\) (efecto pequeño) se necesitan 317 observaciones; con \(d = 0{,}20\), 80; y con \(d = 0{,}30\) (efecto grande), 36. La muestra necesaria crece como \(1/d^2\): detectar una desviación la mitad de grande exige cuatro veces más datos.</p>
             <h3>Supuestos del modelo</h3>
             <ul>
                 <li>Muestra aleatoria de una variable continua, con observaciones independientes e idénticamente distribuidas.</li>
                 <li>La distribución teórica de referencia está completamente especificada (sus parámetros no se estiman a partir de los datos).</li>
                 <li>El tamaño del efecto es la desviación máxima \(d\) entre la distribución teórica y la alternativa.</li>
-                <li>La potencia se aproxima con la distribución asintótica de Kolmogorov y el modelo de desplazamiento; no se usa la distribución exacta de \(D_n\) para \(n\) finito.</li>
+                <li>El valor crítico usa la distribución asintótica de Kolmogorov y la potencia, la cota inferior de Massey con aproximación normal; no se usa la distribución exacta de \(D_n\) para \(n\) finito.</li>
             </ul>
             <h3>Cómo interpretar el resultado</h3>
-                <p>El valor \(n\) es el número de observaciones con el que, según la aproximación del modelo de desplazamiento, el test de Kolmogorov-Smirnov (KS) alcanzaría la potencia indicada al nivel \(\alpha\) frente a la desviación especificada. Como esa aproximación suele ser optimista, tómalo como un <strong>mínimo orientativo</strong>, no como una garantía. Redondea siempre hacia arriba. Si prevés pérdidas de datos o exclusiones, divide \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener el número de unidades a recoger. Un supuesto crítico es que la distribución teórica bajo \(H_0\) debe estar <strong>completamente especificada</strong> (todos sus parámetros conocidos a priori): si en cambio los parámetros se estiman a partir de los propios datos (como en el test de Lilliefors para normalidad), las tablas críticas del KS estándar no son válidas y el p-valor estará inflado.</p>
+                <p>El valor \(n\) es el número de observaciones con el que, según la cota de Massey, el test de Kolmogorov-Smirnov (KS) alcanza al menos la potencia indicada al nivel \(\alpha\) frente a cualquier desviación del tamaño especificado. Es un tamaño <strong>suficiente y conservador</strong>: frente a muchas alternativas concretas bastará con menos datos. Redondea siempre hacia arriba. Si prevés pérdidas de datos o exclusiones, divide \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener el número de unidades a recoger. Un supuesto crítico es que la distribución teórica bajo \(H_0\) debe estar <strong>completamente especificada</strong> (todos sus parámetros conocidos a priori): si en cambio los parámetros se estiman a partir de los propios datos (como en el test de Lilliefors para normalidad), las tablas críticas del KS estándar no son válidas y el p-valor estará inflado.</p>
                 <p>La potencia del test KS depende de la distancia máxima \(D = \sup_x |F_n(x) - F_0(x)|\) que se desea detectar. El test KS es relativamente potente para detectar diferencias en la zona central de la distribución, pero tiene poca potencia para diferencias en las colas. Si las desviaciones que te interesan son principalmente en los extremos (colas pesadas, asimetría), el test de Anderson-Darling o el test de Cramér-von Mises son más potentes y requieren menor \(n\) para la misma eficacia. Realiza un <em>análisis de sensibilidad</em> variando la distancia \(D\) mínima detectable en ±0,05 para evaluar cuánto cambia \(n\).</p>
                 <p>Si el \(n\) calculado supera varios cientos, ten en cuenta que con muestras muy grandes el test KS detectará desviaciones triviales de la distribución teórica que no tienen relevancia práctica: un \(p < 0{,}05\) no implica que la distribución sea "demasiado distinta" para los propósitos del análisis. En ese contexto, complementa el test con gráficos Q-Q y valora si las desviaciones son sustantivas. Con los datos recogidos, realiza el test con la <a href="kolmogorov-smirnov-bondad-ajuste.html">calculadora de Kolmogorov-Smirnov</a>; si el objetivo es contrastar normalidad específicamente, usa la <a href="tamano-muestral-shapiro-wilk.html">calculadora de Shapiro-Wilk</a> para muestras pequeñas o medianas.</p>
         </section>
@@ -309,10 +311,10 @@ function ksQuantile(alpha) {
     return (lo + hi) / 2;
 }
 
+// Cota inferior de Massey (1951): la potencia es al menos Φ(2(d√n − k_α)),
+// sea cual sea la forma de la alternativa con desviación máxima d.
 function computePower(n, kAlpha, d) {
-    const arg = kAlpha - d * Math.sqrt(n);
-    if (arg <= 0) return 1.0;
-    return 1 - ksCDF(arg);
+    return jStat.normal.cdf(2 * (d * Math.sqrt(n) - kAlpha), 0, 1);
 }
 
 function calculateKSSampleSize() {
@@ -352,7 +354,7 @@ function calculateKSSampleSize() {
 
     resultEl.innerText =
         `n mínimo recomendado: ${n} observaciones\n` +
-        `Potencia alcanzada: ${(actualPower * 100).toFixed(2)} % (objetivo: ${(power * 100).toFixed(0)} %)\n` +
+        `Potencia garantizada (cota inferior): ${(actualPower * 100).toFixed(2)} % (objetivo: ${(power * 100).toFixed(0)} %)\n` +
         `d = ${d}  |  α = ${alpha}  |  k_α = ${kAlpha.toFixed(4)}`;
     window.SampleSizeCharts && SampleSizeCharts.power({
         canvas: 'ksChart', n: n, target: power,

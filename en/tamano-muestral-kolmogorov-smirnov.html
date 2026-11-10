@@ -88,7 +88,7 @@
           "name": "Is the formula valid for small samples?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "It should be used with caution. The power formula relies on an asymptotic shift-model approximation that only accounts for the maximum deviation d, not for the shape of the alternative, and it tends to be optimistic: it can noticeably underestimate the required sample size. For example, in simulations with several alternatives with d = 0.15, the actual power with n = 23 was between 32% and 44%, far from the predicted 80%. If the sample size is critical, verify it by simulation."
+            "text": "Yes, with one caveat: the size the calculator gives is conservative. It is based on Massey's lower bound (1951), which guarantees at least the requested power whatever the shape of the deviation, using the asymptotic Kolmogorov distribution for the critical value. For many specific alternatives less data is enough: against a shift in the mean with d = 0.15, the calculator gives n = 141 and in simulation 80% is reached with about 75–80 observations."
           }
         },
         {
@@ -200,14 +200,16 @@
             <p>The one-sample Kolmogorov–Smirnov test checks whether the data come from a fully specified theoretical distribution \(F_0\). The test statistic is the maximum absolute deviation between the empirical distribution function \(\hat{F}_n\) and the theoretical one:</p>
             <p class="formula-line">\( D_n = \sup_x \left| \hat{F}_n(x) - F_0(x) \right| \)</p>
             <p>The effect size is \(d = \max_x |F_{\text{true}}(x) - F_0(x)|\), that is, the maximum vertical distance between the real CDF and the hypothesized one. Under \(H_0\), the asymptotic distribution of \(\sqrt{n}\,D_n\) is the Kolmogorov distribution.</p>
-            <p>The power formula uses the <strong>shift-model approximation</strong>: under \(H_1\), the statistic \(\sqrt{n}\,D_n\) is shifted by approximately \(d\sqrt{n}\) relative to its distribution under \(H_0\). It is a heuristic approximation: the actual power depends on the full shape of the alternative, not only on \(d\), and the formula tends to be optimistic, that is, it tends to underestimate the required \(n\) (see the note in the example).</p>
+            <p>The actual power depends on the full shape of the alternative, not just on \(d\). That is why the calculator uses a <strong>lower bound</strong> (Massey, 1951): it computes the size that guarantees at least the requested power for any distribution that is \(d\) away from the theoretical one. It is a <em>sufficient</em> size: for many specific alternatives less data will be enough (see the note in the example).</p>
             <h3>Power formula</h3>
             <p>The CDF of the Kolmogorov distribution is:</p>
             <p class="formula-line">\( P(K \leq x) = 1 - 2\sum_{k=1}^{\infty} (-1)^{k+1} e^{-2k^2 x^2}, \quad x > 0 \)</p>
             <p>The critical quantile \(k_\alpha\) is defined by \(P(K > k_\alpha) = \alpha\), that is, \(1 - P(K \leq k_\alpha) = \alpha\). It is found by binary search.</p>
-            <p>The power of the test for sample size \(n\) is estimated as:</p>
-            <p class="formula-line">\( \text{Power}(n) = 1 - P\!\left(K \leq k_\alpha - d\sqrt{n}\right) \)</p>
-            <p>The calculator searches for the smallest integer \(n\) for which this expression reaches the target power. When \(k_\alpha - d\sqrt{n} \leq 0\), the power is 1.</p>
+            <p>If the true distribution function is \(d\) away from the theoretical one at some point, the empirical one at that point departs from the theoretical by \(d\) plus a sampling error with standard deviation at most \(1/(2\sqrt{n})\). Since \(D_n\) is at least that departure, the power satisfies:</p>
+            <p class="formula-line">\( \text{Power}(n) \;\geq\; \Phi\!\left(2\,(d\sqrt{n} - k_\alpha)\right) \)</p>
+            <p>where \(\Phi\) is the standard normal distribution function. Setting the bound equal to the target power \(1-\beta\) gives the sample size:</p>
+            <p class="formula-line">\( n = \left\lceil \left( \dfrac{k_\alpha + z_{1-\beta}/2}{d} \right)^{2} \right\rceil \)</p>
+            <p>With \(\alpha = 0.05\) and 80% power, \(k_\alpha \approx 1.358\) and \(z_{0.80} \approx 0.842\), so \(n \approx (1.779/d)^2\).</p>
             <h3>Quick setup</h3>
             <ul>
                 <li><strong>d = 0.10:</strong> small effect. The real distribution deviates from the theoretical one by at most 0.10 in the CDF. Requires large samples.</li>
@@ -222,20 +224,20 @@
             <p>With \(d = 0.15\), \(\alpha = 0.05\) and 80% power, the calculator finds:</p>
             <ol>
                 <li>The critical quantile \(k_{0.05} \approx 1.358\) via binary search on the Kolmogorov distribution.</li>
-                <li>The smallest \(n\) such that \(1 - P(K \leq 1.358 - 0.15\sqrt{n}) \geq 0.80\).</li>
+                <li>The size \(n = \lceil ((1.358 + 0.842/2)/0.15)^2 \rceil = \lceil 11.86^2 \rceil = \lceil 140.7 \rceil\).</li>
             </ol>
-            <p>The result according to the shift-model approximation is <strong>n = 23 observations</strong>. With that sample, if the real CDF deviates by 0.15 from the theoretical exponential, the test will detect it 80% of the time according to this asymptotic formula.</p>
-            <p><strong>Note on the approximation:</strong> the asymptotic shift model tends to <em>underestimate</em> the actual sample size required, especially for small values of \(d\) and moderate \(n\). The discrepancy can be large: in simulations with three different alternatives to the uniform, all with \(d = 0.15\), the actual power was 32-44% with \(n = 23\) and 53-70% with \(n = 40\). For studies where sample size is critical, it is recommended to complement this result with Monte Carlo simulations for the specific alternative you expect.</p>
-            <p><strong>Sensitivity analysis:</strong> according to the same approximation, with \(d = 0.10\) (small effect) about n ≈ 51 observations would be needed and with \(d = 0.30\) (large effect) n ≈ 6 would suffice; as explained in the previous note, the actual figures can be considerably larger. The required sample grows approximately as \(1/d^2\).</p>
+            <p>The result is <strong>n = 141 observations</strong>. With that sample, if the real CDF deviates by 0.15 from the theoretical exponential, the test will detect it at least 80% of the time, whatever the shape of the deviation.</p>
+            <p><strong>Note on the bound:</strong> the size is conservative. It corresponds to the least favourable case, in which the deviation is concentrated at a point near the median. With more usual alternatives, the actual power is higher: in simulations against a shift in the mean with \(d = 0.15\), power with \(n = 141\) was 97%, and 80% was reached with about 75–80 observations. If the sample size is critical or costly, refine it with a Monte Carlo simulation for the specific alternative you expect.</p>
+            <p><strong>Sensitivity analysis:</strong> with \(d = 0.10\) (small effect) 317 observations are needed; with \(d = 0.20\), 80; and with \(d = 0.30\) (large effect), 36. The required sample grows as \(1/d^2\): detecting a deviation half as large takes four times as much data.</p>
             <h3>Model assumptions</h3>
             <ul>
                 <li>Random sample of a continuous variable, with independent and identically distributed observations.</li>
                 <li>The reference theoretical distribution is fully specified (its parameters are not estimated from the data).</li>
                 <li>The effect size is the maximum deviation \(d\) between the theoretical distribution and the alternative.</li>
-                <li>Power is approximated with the asymptotic Kolmogorov distribution and the shift model; the exact distribution of \(D_n\) for finite \(n\) is not used.</li>
+                <li>The critical value uses the asymptotic Kolmogorov distribution and power uses Massey's lower bound with a normal approximation; the exact distribution of \(D_n\) for finite \(n\) is not used.</li>
             </ul>
             <h3>How to interpret the result</h3>
-                <p>The value \(n\) is the number of observations with which, according to the shift-model approximation, the Kolmogorov-Smirnov (KS) test would reach the indicated power at level \(\alpha\) against the specified deviation. Because that approximation tends to be optimistic, treat it as an <strong>indicative minimum</strong>, not a guarantee. Always round up. If you anticipate data loss or exclusions, divide \(n\) by \((1 - \text{dropout rate})\) to obtain the number of units to collect. A critical assumption is that the theoretical distribution under \(H_0\) must be <strong>fully specified</strong> (all its parameters known a priori): if instead the parameters are estimated from the data themselves (as in the Lilliefors test for normality), the standard KS critical tables are not valid and the p-value will be inflated.</p>
+                <p>The value \(n\) is the number of observations with which, according to Massey's bound, the Kolmogorov-Smirnov (KS) test reaches at least the indicated power at level \(\alpha\) against any deviation of the specified size. It is a <strong>sufficient, conservative</strong> size: against many specific alternatives less data will be enough. Always round up. If you anticipate data loss or exclusions, divide \(n\) by \((1 - \text{dropout rate})\) to obtain the number of units to collect. A critical assumption is that the theoretical distribution under \(H_0\) must be <strong>fully specified</strong> (all its parameters known a priori): if instead the parameters are estimated from the data themselves (as in the Lilliefors test for normality), the standard KS critical tables are not valid and the p-value will be inflated.</p>
                 <p>The power of the KS test depends on the maximum distance \(D = \sup_x |F_n(x) - F_0(x)|\) you want to detect. The KS test is relatively powerful for detecting differences in the central region of the distribution, but has low power for differences in the tails. If the deviations you care about are mainly in the extremes (heavy tails, skewness), the Anderson-Darling test or the Cramér-von Mises test are more powerful and require a smaller \(n\) for the same effectiveness. Perform a <em>sensitivity analysis</em> by varying the minimum detectable distance \(D\) by ±0.05 to see how much \(n\) changes.</p>
                 <p>If the computed \(n\) exceeds a few hundred, keep in mind that with very large samples the KS test will detect trivial deviations from the theoretical distribution that have no practical relevance: a \(p < 0.05\) does not imply the distribution is "too different" for the purposes of the analysis. In that context, complement the test with Q-Q plots and assess whether the deviations are substantive. Once you have collected the data, run the test with the <a href="kolmogorov-smirnov-bondad-ajuste.html">Kolmogorov-Smirnov calculator</a>; if the goal is specifically to test normality, use the <a href="tamano-muestral-shapiro-wilk.html">Shapiro-Wilk calculator</a> for small or moderate samples.</p>
         </section>
@@ -305,10 +307,10 @@ function ksQuantile(alpha) {
     return (lo + hi) / 2;
 }
 
+// Cota inferior de Massey (1951): la potencia es al menos Φ(2(d√n − k_α)),
+// sea cual sea la forma de la alternativa con desviación máxima d.
 function computePower(n, kAlpha, d) {
-    const arg = kAlpha - d * Math.sqrt(n);
-    if (arg <= 0) return 1.0;
-    return 1 - ksCDF(arg);
+    return jStat.normal.cdf(2 * (d * Math.sqrt(n) - kAlpha), 0, 1);
 }
 
 function calculateKSSampleSize() {
@@ -348,7 +350,7 @@ function calculateKSSampleSize() {
 
     resultEl.innerText =
         `Minimum recommended n: ${n} observations\n` +
-        `Achieved power: ${(actualPower * 100).toFixed(2)}% (target: ${(power * 100).toFixed(0)}%)\n` +
+        `Guaranteed power (lower bound): ${(actualPower * 100).toFixed(2)}% (target: ${(power * 100).toFixed(0)}%)\n` +
         `d = ${d}  |  α = ${alpha}  |  k_α = ${kAlpha.toFixed(4)}`;
     window.SampleSizeCharts && SampleSizeCharts.power({
         canvas: 'ksChart', n: n, target: power,

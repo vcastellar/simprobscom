@@ -654,14 +654,19 @@ function renderKsResult(o) {
     const rejected = o.p < o.alpha;
     const kA = ksLimitQuantile(o.alpha);
     const dCrit = kA / Math.sqrt(o.n);
+    // Diferencia que el contraste detecta con al menos la potencia de referencia (cota de Massey),
+    // con la misma fórmula que la calculadora de tamaño muestral.
+    const dRaw = (kA + jStat.normal.inv(R.TARGET, 0, 1) / 2) / Math.sqrt(o.n);
+    const dMin = dRaw < 1 ? R.sigUp(dRaw, 3) : null;
     const T = EN ? {
         label: 'Kolmogorov–Smirnov test · ' + o.dist + ' distribution · n = ' + o.n,
         decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected', pLabel: 'p-value (approx.)',
         yes: '✓ There is statistical evidence that the data do not follow the specified distribution.',
         no: 'ℹ There is not enough evidence against the specified distribution. This does not prove that the data follow it.',
         small: 'ℹ With n < 20 the p-value is an asymptotic approximation: interpret the result with caution.',
-        mde: 'With n = ' + o.n + ', H₀ is rejected only if the observed maximum difference Dₙ exceeds ' + R.num(dCrit, 2) + ': smaller departures go unnoticed.',
-        link: 'Work out the sample size needed to detect a given difference',
+        mde: dMin == null ? 'With n = ' + o.n + ', H₀ is rejected only if the observed maximum difference Dₙ exceeds ' + R.num(dCrit, 2) + ': the sample is too small to guarantee ' + R.pct(R.TARGET) + ' power.'
+            : 'With n = ' + o.n + ', H₀ is rejected only if Dₙ exceeds ' + R.num(dCrit, 2) + '. The test detects with at least ' + R.pct(R.TARGET) + ' probability maximum differences of ' + R.num(dMin, 2) + ' or more between the true and the theoretical distribution function.',
+        link: 'Work out the sample size needed for another difference',
         rows: ['Statistic Dₙ', 'Sample size (n)', 'Critical value of Dₙ', 'p-value (approx.)', 'Point of maximum difference (x)']
     } : {
         label: 'Kolmogorov-Smirnov · distribución ' + o.dist + ' · n = ' + o.n,
@@ -669,13 +674,14 @@ function renderKsResult(o) {
         yes: '✓ Hay evidencia estadística de que los datos no siguen la distribución especificada.',
         no: 'ℹ No hay evidencia suficiente contra la distribución especificada. Esto no demuestra que los datos la sigan.',
         small: 'ℹ Con n < 20 el p-valor es una aproximación asintótica: interpreta el resultado con cautela.',
-        mde: 'Con n = ' + o.n + ', solo se rechaza H₀ si la diferencia máxima observada Dₙ supera ' + R.num(dCrit, 2) + ': las desviaciones menores pasan inadvertidas.',
-        link: 'Calcular el tamaño muestral necesario para detectar una diferencia concreta',
+        mde: dMin == null ? 'Con n = ' + o.n + ', solo se rechaza H₀ si la diferencia máxima observada Dₙ supera ' + R.num(dCrit, 2) + ': la muestra es demasiado pequeña para garantizar un ' + R.pct(R.TARGET) + ' de potencia.'
+            : 'Con n = ' + o.n + ', solo se rechaza H₀ si Dₙ supera ' + R.num(dCrit, 2) + '. El contraste detecta con al menos un ' + R.pct(R.TARGET) + ' de probabilidad diferencias máximas de ' + R.num(dMin, 2) + ' o mayores entre la función de distribución real y la teórica.',
+        link: 'Calcular el tamaño muestral necesario para otra diferencia',
         rows: ['Estadístico Dₙ', 'Tamaño muestral (n)', 'Valor crítico de Dₙ', 'p-valor (aprox.)', 'Punto de máxima diferencia (x)']
     };
     const notes = [];
     if (o.n < 20) notes.push(R.esc(T.small));
-    notes.push(R.esc(T.mde) + ' ' + R.link('tamano-muestral-kolmogorov-smirnov.html?alpha=' + o.alpha + '&power=' + R.TARGET, T.link));
+    notes.push(R.esc(T.mde) + ' ' + R.link('tamano-muestral-kolmogorov-smirnov.html?' + (dMin == null ? '' : 'd=' + dMin + '&') + 'alpha=' + o.alpha + '&power=' + R.TARGET, T.link));
     R.render(document.getElementById('ksResult'), {
         label: T.label + ' · α = ' + R.auto(o.alpha),
         decision: T.decision, p: o.p, pLabel: T.pLabel, sec: ['Dₙ = ' + R.num(o.Dn, 4)],
