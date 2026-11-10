@@ -65,7 +65,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="style_new.css?v=20261107-1">
 
     <script type="application/ld+json">
 {
@@ -74,18 +74,26 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "¿Cuándo se usa el contraste chi-cuadrado de bondad de ajuste?",
+      "name": "¿Para qué sirve el chi-cuadrado de bondad de ajuste?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Cuando se quiere saber si los recuentos observados en categorías mutuamente\n                    excluyentes son compatibles con una distribución teórica previamente especificada."
+        "text": "Para comprobar si las frecuencias observadas de una variable categórica se ajustan a las que predice una distribución teórica."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Cuántos grados de libertad tiene el estadístico?",
+      "name": "¿Cómo se calculan las frecuencias esperadas?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Los grados de libertad son \\(k - 1\\), donde \\(k\\) es el número de categorías.\n                    Si se han estimado parámetros adicionales del modelo con la propia muestra,\n                    se resta uno por cada parámetro estimado."
+        "text": "Multiplicando el total de observaciones por la probabilidad teórica de cada categoría. Si no indicas probabilidades, se supone que todas las categorías son igual de probables."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cuántos grados de libertad tiene?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El número de categorías menos 1. Si las probabilidades teóricas se estiman con los propios datos, se resta además 1 por cada parámetro estimado."
       }
     },
     {
@@ -93,39 +101,39 @@
       "name": "¿Qué condición deben cumplir las frecuencias esperadas?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "La aproximación es adecuada cuando todas las frecuencias esperadas son ≥ 5.\n                    Si alguna es inferior, considera agrupar categorías poco frecuentes."
+        "text": "Deben ser al menos 5 en casi todas las categorías. Si no, conviene agrupar categorías."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Qué diferencia hay con el chi-cuadrado de independencia?",
+      "name": "¿Puedo usar porcentajes?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "El de bondad de ajuste contrasta si una variable sigue una distribución\n                    teórica concreta. El de independencia contrasta si dos variables están\n                    asociadas entre sí, a partir de una tabla de contingencia."
+        "text": "No. El estadístico necesita recuentos: el mismo reparto porcentual da resultados distintos según el tamaño de la muestra."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Las probabilidades teóricas deben sumar exactamente 1?",
+      "name": "¿Qué significa no rechazar H₀?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Sí. La herramienta verifica que las probabilidades introducidas sumen 1\n                    (con tolerancia numérica) y avisa si no se cumple esa condición."
+        "text": "Que los datos son compatibles con el modelo, no que el modelo sea cierto. Con muestras pequeñas, solo se detectarían desviaciones grandes."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Cómo afecta el tamaño muestral al resultado?",
+      "name": "¿En qué se diferencia del chi-cuadrado de independencia?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Con muestras muy grandes, el contraste puede detectar desviaciones muy\n                    pequeñas respecto al modelo teórico que no son relevantes en la práctica.\n                    En esos casos conviene complementar el p-valor con una medida de tamaño\n                    del efecto."
+        "text": "El de bondad de ajuste compara una variable con una distribución teórica; el de independencia estudia la relación entre dos variables en una tabla de contingencia."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Qué es el tamaño mínimo detectable (MDE) en bondad de ajuste?",
+      "name": "¿Qué es la desviación mínima detectable?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Es la desviación mínima respecto al modelo teórico que el test puede detectar con una potencia y α determinados. Cuanto menor sea la muestra, mayor debe ser la discrepancia para que el contraste la detecte; para detectar desviaciones pequeñas se necesita más n."
+        "text": "El menor tamaño del efecto, medido con la w de Cohen, que el contraste detectaría con un 80 % de probabilidad con tu tamaño de muestra."
       }
     }
   ]
@@ -179,7 +187,6 @@
     </header>
 
     <main>
-
         <section class="ss-shell" aria-label="Calculadora">
             <section class="card ss-controls">
                 <div class="panel-heading">
@@ -221,191 +228,123 @@
                         <canvas id="chiGoodnessChart" aria-label="Gráfico de zonas de aceptación y rechazo para el contraste chi-cuadrado de bondad de ajuste" role="img"></canvas>
                     </div>
                 </div>
-                <div id="expectedTable" class="result-box" style="margin-top:12px;">Frecuencias esperadas pendientes…</div>
+                <div id="expectedTable" class="result-box" style="margin-top:12px;overflow-x:auto;">Frecuencias esperadas pendientes…</div>
             </section>
         </section>
 
         <section class="card content-card">
-            <h3>Explicación</h3>
+            <h3>¿Qué es el contraste chi-cuadrado de bondad de ajuste?</h3>
+            <p>Es el contraste que permite decidir si los datos de <strong>una variable categórica</strong> se reparten entre sus categorías como predice un modelo teórico. Se cuentan las observaciones que caen en cada categoría y se comparan con las que cabría esperar: ¿salen las seis caras de un dado con la misma frecuencia? ¿Se reparten los nacimientos por igual entre los días de la semana? ¿Aparecen los cuatro fenotipos de un cruce en la proporción 9:3:3:1 que predice la genética? ¿Se distribuyen las ventas entre regiones como el año pasado?</p>
+            <p>La hipótesis nula afirma que las probabilidades de las categorías son las del modelo; la alternativa, que al menos una es distinta:</p>
+            <p class="formula-line">\(H_0: p_1 = p_{1,0},\ p_2 = p_{2,0},\ \ldots,\ p_k = p_{k,0}\)</p>
+            <p class="formula-line">\(H_1\): alguna \(p_i\) es distinta de la que indica el modelo</p>
 
-            <p>
-                El contraste chi-cuadrado de bondad de ajuste permite evaluar si la distribución
-                empírica de una variable categórica es compatible con una distribución teórica
-                previamente especificada. La pregunta que responde es: ¿los recuentos observados
-                en cada categoría son compatibles con las probabilidades que postula el modelo, o
-                hay evidencia de que la distribución real difiere?
-            </p>
+            <h3>El estadístico</h3>
+            <p class="formula-line">\( \chi^2 = \sum_{i=1}^{k} \dfrac{(O_i - E_i)^2}{E_i}, \qquad E_i = n\,p_{i,0}, \qquad gl = k - 1 \)</p>
+            <ul>
+                <li><strong>\(O_i\)</strong>: frecuencia observada en la categoría \(i\).</li>
+                <li><strong>\(E_i\)</strong>: frecuencia esperada si \(H_0\) fuera cierta: el total \(n\) por la probabilidad teórica.</li>
+                <li><strong>\(k\)</strong>: número de categorías.</li>
+            </ul>
+            <p>Cada término mide cuánto se aleja lo observado de lo esperado, elevado al cuadrado para que las diferencias por exceso y por defecto no se compensen, y dividido por lo esperado para ponerlo en proporción: una diferencia de 10 es enorme si se esperaban 20 y despreciable si se esperaban 2000. Si los datos encajan con el modelo, el estadístico es pequeño; cuanto mayor, peor es el ajuste.</p>
+            <p>Bajo \(H_0\), sigue aproximadamente una distribución <a href="chisquare.html">chi-cuadrado</a> con \(k - 1\) grados de libertad. Se resta 1 porque las frecuencias suman \(n\): conocidas \(k - 1\), la última queda determinada. El contraste es siempre de <strong>cola derecha</strong>: solo los valores grandes son evidencia contra el modelo.</p>
 
-            <p>
-                La idea central es comparar las frecuencias observadas con las frecuencias esperadas
-                que se obtendrían si la hipótesis nula fuera cierta. Si las discrepancias son
-                demasiado grandes para atribuirlas al azar de muestreo, se rechaza el modelo
-                teórico propuesto.
-            </p>
-
-            <p>
-                Por ejemplo, un dado equilibrado debería producir cada cara con probabilidad 1/6.
-                Tras 120 lanzamientos, se compara si los recuentos observados son compatibles con
-                esas probabilidades. Otro uso habitual es verificar si la proporción de defectos
-                por tipo en una línea de producción coincide con el patrón histórico esperado.
-            </p>
-
-            <p>
-                El estadístico de contraste agrega las discrepancias ponderadas de todas las
-                categorías y sigue una distribución chi-cuadrado bajo la hipótesis nula. Los
-                grados de libertad son \(k - 1\), donde \(k\) es el número de categorías, menos
-                el número de parámetros adicionales estimados con la muestra.
-            </p>
-
-            <h3>Hipótesis y estadístico</h3>
-            <p class="formula-line">\(H_0\): la distribución observada coincide con la teórica</p>
-            <p class="formula-line">\(H_1\): la distribución observada no coincide con la teórica</p>
-            <p class="formula-line">
-                \(\chi^2 = \sum_{i=1}^{k}\frac{(O_i - E_i)^2}{E_i}\), &nbsp;
-                con \(E_i = n \cdot p_i\)
-            </p>
-        </section>
-
-
-
-        <section class="card content-card">
-            <h3>Contraste rápido</h3>
-
-            <p>
-                El estadístico chi-cuadrado suma, para cada categoría, el cuadrado de la diferencia
-                entre frecuencia observada y esperada, dividido entre la frecuencia esperada. Bajo
-                la hipótesis nula de que los datos siguen la distribución teórica, este estadístico
-                sigue aproximadamente una distribución \(\chi^2\) con \(k - 1\) grados de libertad:
-            </p>
-
-            <p class="formula-line">
-                \(\chi^2 = \sum_{i=1}^{k} \frac{(O_i - E_i)^2}{E_i} \sim \chi^2_{k-1}\)
-            </p>
-
-            <p>
-                Las frecuencias esperadas se calculan a partir del tamaño muestral \(n\) y las
-                probabilidades teóricas \(p_i\):
-            </p>
-
-            <p class="formula-line">
-                \(E_i = n \cdot p_i\)
-            </p>
-
-            <p>
-                donde \(n = \sum_{i=1}^{k} O_i\) es el total de observaciones. Si las probabilidades
-                teóricas son iguales para todas las categorías (distribución uniforme),
-                \(E_i = n / k\) para todo \(i\).
-            </p>
-
-            <p>
-                Para que la aproximación chi-cuadrado sea fiable, conviene que todas las frecuencias
-                esperadas sean mayores o iguales que 5. Si alguna categoría tiene frecuencias
-                esperadas muy bajas, considera agrupar categorías antes de aplicar el contraste.
-            </p>
+            <h3>Regla de decisión</h3>
+            <ul>
+                <li>Si el <strong>p-valor</strong> es menor que \(\alpha\), se rechaza \(H_0\): los datos no encajan con la distribución teórica.</li>
+                <li>Si el p-valor es mayor o igual que \(\alpha\), los datos son compatibles con el modelo.</li>
+                <li>No rechazar \(H_0\) no demuestra que el modelo sea el verdadero.</li>
+            </ul>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto</h3>
-            <p>Se lanza un dado equilibrado 60 veces y se registran las frecuencias observadas para cada cara: cara 1 → 8 veces; cara 2 → 12; cara 3 → 9; cara 4 → 11; cara 5 → 10; cara 6 → 10. ¿Existe evidencia estadística, a un nivel \(\alpha = 0{,}05\), de que el dado no es equilibrado?</p>
-            <p>Bajo \(H_0\) (dado justo), la probabilidad de cada cara es \(1/6\), por lo que la frecuencia esperada para cada categoría es \(E_i = 60 \times \tfrac{1}{6} = 10\) lanzamientos.</p>
-            <p>El estadístico chi-cuadrado de bondad de ajuste se calcula como:</p>
-            <p class="formula-line">\( \chi^2 = \sum_{i=1}^{k} \frac{(O_i - E_i)^2}{E_i} = \frac{(8-10)^2}{10} + \frac{(12-10)^2}{10} + \frac{(9-10)^2}{10} + \frac{(11-10)^2}{10} + \frac{(10-10)^2}{10} + \frac{(10-10)^2}{10} \)</p>
-            <p class="formula-line">\( \chi^2 = 0{,}4 + 0{,}4 + 0{,}1 + 0{,}1 + 0 + 0 = 1{,}0 \)</p>
-            <p>Los grados de libertad son \(gl = k - 1 = 6 - 1 = 5\). El valor crítico para \(\alpha = 0{,}05\) y \(gl = 5\) es \(\chi^2_{0{,}05;\,5} \approx 11{,}07\), y el p-valor asociado a \(\chi^2 = 1{,}0\) con 5 grados de libertad es \(p \approx 0{,}96\).</p>
-            <p>Dado que \(\chi^2 = 1{,}0 \ll 11{,}07\) (y \(p \gg 0{,}05\)), no se rechaza \(H_0\). Todas las frecuencias esperadas son iguales a 10, bien por encima del mínimo recomendado de 5, por lo que el test es válido en este caso.</p>
-            <p>Conclusión: no hay evidencia estadística de que el dado esté cargado. Las desviaciones observadas respecto a las frecuencias esperadas son perfectamente compatibles con la variabilidad aleatoria de un dado equilibrado en 60 lanzamientos.</p>
+            <h3>Condiciones de aplicación</h3>
+            <ul>
+                <li><strong>Frecuencias, no porcentajes</strong>: el estadístico necesita recuentos. Con los mismos porcentajes, el resultado cambia por completo si detrás hay 50 observaciones o 5000.</li>
+                <li><strong>Observaciones independientes</strong>, cada una clasificada en una sola categoría.</li>
+                <li><strong>Frecuencias esperadas suficientes</strong>: la aproximación chi-cuadrado es fiable cuando todas las frecuencias esperadas son al menos 5 (o, según la regla de Cochran, cuando no más del 20 % son menores que 5 y ninguna menor que 1). Lo que cuenta son las esperadas, no las observadas. Si no se cumple, agrupa categorías poco frecuentes; la calculadora te avisa.</li>
+                <li><strong>Probabilidades fijadas de antemano</strong>: si las probabilidades teóricas se calculan estimando parámetros con los propios datos (por ejemplo, ajustar una Poisson estimando su media), hay que restar un grado de libertad adicional por cada parámetro estimado. La calculadora usa \(k - 1\), que corresponde a probabilidades conocidas.</li>
+            </ul>
+            <p>Para datos continuos sin agrupar, es preferible un contraste específico como el de <a href="kolmogorov-smirnov-bondad-ajuste.html">Kolmogorov-Smirnov</a> o, para la normalidad, el de <a href="shapiro-wilk-normalidad.html">Shapiro-Wilk</a>. Y si lo que quieres es estudiar la relación entre dos variables categóricas, el contraste adecuado es el <a href="contraste-independencia-chi-cuadrado.html">chi-cuadrado de independencia</a>.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Ejemplo resuelto 1: ¿está equilibrado el dado?</h3>
+            <p>Se lanza un dado 60 veces y se obtienen estas frecuencias: 8, 12, 9, 11, 10 y 10. Si el dado es equilibrado, cada cara tiene probabilidad 1/6 y se esperan \(E_i = 60/6 = 10\) apariciones de cada una. Se contrasta con \(\alpha = 0{,}05\).</p>
+            <p class="formula-line">\( \chi^2 = \dfrac{(8-10)^2}{10} + \dfrac{(12-10)^2}{10} + \dfrac{(9-10)^2}{10} + \dfrac{(11-10)^2}{10} + 0 + 0 = 0{,}4 + 0{,}4 + 0{,}1 + 0{,}1 = 1{,}0 \)</p>
+            <p>Con \(gl = 5\), el valor crítico es 11,07 y el p-valor, \(p \approx 0{,}963\). <strong>No se rechaza \(H_0\)</strong>: los resultados son perfectamente compatibles con un dado equilibrado.</p>
+            <p>Pero cuidado con concluir que el dado «es» equilibrado. Con solo 60 lanzamientos, el contraste solo detecta con un 80 % de probabilidad desviaciones medianas o grandes (w ≈ 0,46): un dado ligeramente trucado pasaría la prueba casi siempre. Para detectar desviaciones pequeñas harían falta más de mil lanzamientos.</p>
+            <p><strong>En la calculadora:</strong> frecuencias observadas «8, 12, 9, 11, 10, 10», con las probabilidades teóricas vacías (distribución uniforme).</p>
+
+            <h3>Ejemplo resuelto 2: proporciones teóricas distintas</h3>
+            <p>En su experimento con guisantes, Mendel clasificó 556 semillas en cuatro tipos y obtuvo 315, 108, 101 y 32. Su teoría predice las proporciones 9:3:3:1, es decir, probabilidades 0,5625, 0,1875, 0,1875 y 0,0625. Las frecuencias esperadas son:</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Tipo</th><th>Observadas</th><th>Probabilidad teórica</th><th>Esperadas</th><th>\((O-E)^2/E\)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Lisa y amarilla</td><td>315</td><td>9/16</td><td>312,75</td><td>0,016</td></tr>
+                        <tr><td>Lisa y verde</td><td>108</td><td>3/16</td><td>104,25</td><td>0,135</td></tr>
+                        <tr><td>Rugosa y amarilla</td><td>101</td><td>3/16</td><td>104,25</td><td>0,101</td></tr>
+                        <tr><td>Rugosa y verde</td><td>32</td><td>1/16</td><td>34,75</td><td>0,218</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>El estadístico es \(\chi^2 \approx 0{,}47\) con \(gl = 3\), y el p-valor, \(p \approx 0{,}925\). <strong>No se rechaza \(H_0\)</strong>: los datos encajan muy bien con la teoría. Aquí la muestra es grande: con 556 semillas se detectarían incluso desviaciones pequeñas (w ≈ 0,14), así que el buen ajuste dice bastante más que en el ejemplo del dado.</p>
+            <p><strong>En la calculadora:</strong> frecuencias «315, 108, 101, 32» y probabilidades «0.5625, 0.1875, 0.1875, 0.0625».</p>
         </section>
 
         <section class="card content-card">
             <h3>Cómo interpretar el resultado</h3>
+            <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que la distribución observada difiere de la teórica, pero no dice en qué categorías. Para saberlo, compara las frecuencias observadas y esperadas de la tabla que acompaña al resultado: las categorías con mayor \((O-E)^2/E\) son las que más contribuyen. Recuerda también que, con muestras muy grandes, desviaciones mínimas e irrelevantes resultan significativas.</p>
+            <p><strong>No rechazar \(H_0\)</strong> indica que los datos son compatibles con el modelo, no que el modelo sea cierto: también serían compatibles con otros modelos parecidos.</p>
+            <p>En la calculadora, el resultado muestra la decisión con el p-valor, el estadístico χ² con sus grados de libertad y una frase con la conclusión. En el gráfico, la zona roja es la región de rechazo sobre la chi-cuadrado y la línea marca el estadístico observado. En «Detalles del cálculo» tienes el valor crítico, el tamaño del efecto y la frecuencia esperada mínima.</p>
 
-                <p>
-                <strong>Rechazar \(H_0\)</strong> (p-valor &lt; \(\alpha\)) significa que las
-                frecuencias observadas difieren de las esperadas bajo el modelo teórico más de lo
-                que el azar puede explicar. En la práctica, el modelo distribucional propuesto
-                (uniforme, binomial, Poisson, etc.) no describe adecuadamente los datos. Sin embargo,
-                la significación global no revela <em>dónde</em> está la discrepancia: para localizarla,
-                revisa los <strong>residuos estandarizados</strong> \((O_i - E_i)/\sqrt{E_i}\) de cada
-                categoría. Valores en valor absoluto superiores a 2 señalan las categorías que más
-                alejan el estadístico del valor esperado bajo \(H_0\).
-                </p>
+            <h3>Tamaño del efecto: la w de Cohen</h3>
+            <p>Para medir cuánto se desvían los datos del modelo, con independencia del tamaño de la muestra, se usa la w de Cohen, \(w = \sqrt{\chi^2/n}\). Como orientación, 0,1 es una desviación pequeña, 0,3 mediana y 0,5 grande. En el ejemplo del dado, \(w \approx 0{,}13\); en el de Mendel, \(w \approx 0{,}03\).</p>
 
-                <p>
-                <strong>No rechazar \(H_0\)</strong> (p-valor ≥ \(\alpha\)) no demuestra que los datos
-                «siguen» el modelo teórico; solo indica que son compatibles con él al nivel de
-                significación elegido. Con muestras pequeñas la potencia del test es limitada, y
-                desviaciones moderadas pueden pasar desapercibidas. Con muestras muy grandes, en
-                cambio, pequeñas desviaciones sistemáticas de poca relevancia práctica pueden resultar
-                significativas.
-                </p>
-
-                <p>
-                El <strong>estadístico chi-cuadrado</strong> \(\chi^2 = \sum_i (O_i - E_i)^2 / E_i\)
-                agrega las discrepancias cuadráticas de todas las categorías, ponderadas por la
-                frecuencia esperada. En la visualización, la zona verde es la región de no rechazo
-                y la zona roja es la región crítica unilateral derecha (el test de bondad de ajuste
-                siempre es unilateral derecho, ya que \(\chi^2 \geq 0\)); la línea ámbar señala el
-                estadístico observado. Comprueba antes de interpretar que todas las frecuencias
-                esperadas son ≥ 5; si no, agrupa categorías o usa una prueba exacta.
-                </p>
+            <h3>Potencia y desviación mínima detectable</h3>
+            <p>Debajo de la conclusión, la calculadora indica la <strong>desviación mínima detectable</strong>: la menor w que, con tu tamaño de muestra y tu número de categorías, el contraste detectaría con un 80 % de probabilidad. Es la información que permite valorar un resultado no significativo: si solo se detectarían desviaciones grandes, que los datos «encajen» dice poco. El enlace abre la <a href="tamano-muestral-chi-cuadrado-bondad.html">calculadora de tamaño muestral para chi-cuadrado de bondad de ajuste</a> con tu número de categorías y tu α.</p>
         </section>
+
+        <section class="card content-card">
+            <h3>Errores frecuentes</h3>
+            <ul>
+                <li><strong>Introducir porcentajes o proporciones</strong> en lugar de recuentos.</li>
+                <li><strong>Mirar las frecuencias observadas</strong>, y no las esperadas, para comprobar la regla de «al menos 5».</li>
+                <li><strong>Interpretar un buen ajuste como prueba de que el modelo es cierto</strong>, sobre todo con muestras pequeñas.</li>
+                <li><strong>No ajustar los grados de libertad</strong> cuando las probabilidades teóricas se han estimado con los mismos datos.</li>
+                <li><strong>Agrupar categorías después de ver los datos</strong> hasta conseguir el resultado deseado.</li>
+                <li><strong>Usarlo con observaciones que no son independientes</strong>, como varias respuestas de la misma persona.</li>
+            </ul>
+        </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
-                <h3>Calculadoras relacionadas</h3>
-                <ul>
-                    <li><a href="chisquare.html">Distribución chi-cuadrado</a></li>
-                    <li><a href="contraste-independencia-chi-cuadrado.html">Chi-cuadrado de independencia</a></li>
-                    <li><a href="test-exacto-fisher.html">Test exacto de Fisher</a></li>
-                    <li><a href="contrastes-hipotesis/">Contrastes de hipótesis</a></li>
-                </ul>
+              <h3>Calculadoras relacionadas</h3>
+              <ul>
+                <li><a href="tamano-muestral-chi-cuadrado-bondad.html">Tamaño muestral para chi-cuadrado de bondad de ajuste</a></li>
+                <li><a href="contraste-independencia-chi-cuadrado.html">Chi-cuadrado de independencia</a></li>
+                <li><a href="kolmogorov-smirnov-bondad-ajuste.html">Kolmogorov-Smirnov</a></li>
+                <li><a href="shapiro-wilk-normalidad.html">Shapiro-Wilk de normalidad</a></li>
+                <li><a href="tabla-chi-cuadrado.html">Tabla chi-cuadrado</a></li>
+              </ul>
             </section>
-
             <h3>Preguntas frecuentes</h3>
-
             <ul>
-                <li>
-                    <strong>¿Cuándo se usa el contraste chi-cuadrado de bondad de ajuste?</strong>
-                    Cuando se quiere saber si los recuentos observados en categorías mutuamente
-                    excluyentes son compatibles con una distribución teórica previamente especificada.
-                </li>
-                <li>
-                    <strong>¿Cuántos grados de libertad tiene el estadístico?</strong>
-                    Los grados de libertad son \(k - 1\), donde \(k\) es el número de categorías.
-                    Si se han estimado parámetros adicionales del modelo con la propia muestra,
-                    se resta uno por cada parámetro estimado.
-                </li>
-                <li>
-                    <strong>¿Qué condición deben cumplir las frecuencias esperadas?</strong>
-                    La aproximación es adecuada cuando todas las frecuencias esperadas son ≥ 5.
-                    Si alguna es inferior, considera agrupar categorías poco frecuentes.
-                </li>
-                <li>
-                    <strong>¿Qué diferencia hay con el chi-cuadrado de independencia?</strong>
-                    El de bondad de ajuste contrasta si una variable sigue una distribución
-                    teórica concreta. El de independencia contrasta si dos variables están
-                    asociadas entre sí, a partir de una tabla de contingencia.
-                </li>
-                <li>
-                    <strong>¿Las probabilidades teóricas deben sumar exactamente 1?</strong>
-                    Sí. La herramienta verifica que las probabilidades introducidas sumen 1
-                    (con tolerancia numérica) y avisa si no se cumple esa condición.
-                </li>
-                <li>
-                    <strong>¿Cómo afecta el tamaño muestral al resultado?</strong>
-                    Con muestras muy grandes, el contraste puede detectar desviaciones muy
-                    pequeñas respecto al modelo teórico que no son relevantes en la práctica.
-                    En esos casos conviene complementar el p-valor con una medida de tamaño
-                    del efecto.
-                </li>
-                <li>
-                    <strong>¿Qué es el tamaño mínimo detectable (MDE) en este test?</strong>
-                    Es la desviación mínima respecto al modelo teórico que el contraste puede
-                    detectar con la potencia y \(\alpha\) fijados. Si la discrepancia real es
-                    menor, el test puede no rechazar \(H_0\) aunque exista una diferencia pequeña.
-                </li>
+                <li><strong>¿Para qué sirve el chi-cuadrado de bondad de ajuste?</strong> Para comprobar si las frecuencias observadas de una variable categórica se ajustan a las que predice una distribución teórica.</li>
+                <li><strong>¿Cómo se calculan las frecuencias esperadas?</strong> Multiplicando el total de observaciones por la probabilidad teórica de cada categoría. Si no indicas probabilidades, se supone que todas las categorías son igual de probables.</li>
+                <li><strong>¿Cuántos grados de libertad tiene?</strong> El número de categorías menos 1. Si las probabilidades teóricas se estiman con los propios datos, se resta además 1 por cada parámetro estimado.</li>
+                <li><strong>¿Qué condición deben cumplir las frecuencias esperadas?</strong> Deben ser al menos 5 en casi todas las categorías. Si no, conviene agrupar categorías.</li>
+                <li><strong>¿Puedo usar porcentajes?</strong> No. El estadístico necesita recuentos: el mismo reparto porcentual da resultados distintos según el tamaño de la muestra.</li>
+                <li><strong>¿Qué significa no rechazar H₀?</strong> Que los datos son compatibles con el modelo, no que el modelo sea cierto. Con muestras pequeñas, solo se detectarían desviaciones grandes.</li>
+                <li><strong>¿En qué se diferencia del chi-cuadrado de independencia?</strong> El de bondad de ajuste compara una variable con una distribución teórica; el de independencia estudia la relación entre dos variables en una tabla de contingencia.</li>
+                <li><strong>¿Qué es la desviación mínima detectable?</strong> El menor tamaño del efecto, medido con la w de Cohen, que el contraste detectaría con un 80 % de probabilidad con tu tamaño de muestra.</li>
             </ul>
             <p class="external-ref">Referencia: <a href="https://es.wikipedia.org/wiki/Prueba_%CF%87%C2%B2" target="_blank" rel="noopener noreferrer">Prueba chi-cuadrado de bondad de ajuste</a> — Wikipedia</p>
         </section>
+
     </main>
 
     <footer class="legal-footer">
@@ -431,6 +370,8 @@ window.MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="test-results.js?v=20261111-3"></script>
 <script>
 let chiGoodnessChart;
 
@@ -529,6 +470,51 @@ function formatExpectedGoodness(observed, expected){
   return `<strong>Tabla de frecuencias</strong><br><table><thead>${header}</thead><tbody>${rows}</tbody></table>`;
 }
 
+// Resultado: decisión, conclusión, efecto mínimo detectable y detalles.
+function renderGofResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const wObs = Math.sqrt(o.chi2 / o.n);
+    const wMin = R.solveMin((w) => R.chi2Power(w, o.n, o.df, o.alpha) >= R.TARGET, 1e-4, 5);
+    const size = (w) => EN
+        ? (w < 0.1 ? 'a very small deviation' : w < 0.3 ? 'a small deviation' : w < 0.5 ? 'a medium deviation' : 'a large deviation')
+        : (w < 0.1 ? 'una desviación muy pequeña' : w < 0.3 ? 'una desviación pequeña' : w < 0.5 ? 'una desviación mediana' : 'una desviación grande');
+    const T = EN ? {
+        label: 'Chi-square goodness-of-fit test · ' + o.k + ' categories, N = ' + R.auto(o.n),
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        sec: 'χ² = ' + R.num(o.chi2, 4) + ' with ' + o.df + ' degree' + (o.df === 1 ? '' : 's') + ' of freedom',
+        yes: '✓ There is statistical evidence that the data do not follow the theoretical distribution (' + size(wObs) + ' by Cohen\'s benchmarks).',
+        no: 'ℹ There is not enough evidence against the theoretical distribution. This does not prove that the data follow it.',
+        low: 'ℹ ' + o.low + ' categor' + (o.low === 1 ? 'y has' : 'ies have') + ' an expected frequency below 5: the χ² approximation may be inaccurate. Consider merging categories.',
+        mde: wMin == null ? 'With N = ' + R.auto(o.n) + ', the test does not reach ' + R.pct(R.TARGET) + ' power even for very large deviations.'
+            : 'With N = ' + R.auto(o.n) + ', the test detects with ' + R.pct(R.TARGET) + ' probability only deviations of size w = ' + R.num(wMin, 2) + ' or more (' + size(wMin) + ', by Cohen\'s benchmarks).',
+        link: 'Work out the sample size needed for another effect size',
+        rows: ['χ² statistic', 'Degrees of freedom', 'Critical value', 'p-value', 'Effect size (Cohen\'s w)', 'Smallest expected frequency', 'Minimum detectable w (power ' + R.pct(R.TARGET) + ')']
+    } : {
+        label: 'Chi-cuadrado de bondad de ajuste · ' + o.k + ' categorías, N = ' + R.auto(o.n),
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        sec: 'χ² = ' + R.num(o.chi2, 4) + ' con ' + o.df + ' grado' + (o.df === 1 ? '' : 's') + ' de libertad',
+        yes: '✓ Hay evidencia estadística de que los datos no siguen la distribución teórica (' + size(wObs) + ', según las referencias de Cohen).',
+        no: 'ℹ No hay evidencia suficiente contra la distribución teórica. Esto no demuestra que los datos la sigan.',
+        low: 'ℹ ' + o.low + ' categoría' + (o.low === 1 ? ' tiene' : 's tienen') + ' una frecuencia esperada menor que 5: la aproximación χ² puede ser poco precisa. Considera agrupar categorías.',
+        mde: wMin == null ? 'Con N = ' + R.auto(o.n) + ', el contraste no llega a un ' + R.pct(R.TARGET) + ' de potencia ni con desviaciones muy grandes.'
+            : 'Con N = ' + R.auto(o.n) + ', el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad desviaciones de tamaño w = ' + R.num(wMin, 2) + ' o mayores (' + size(wMin) + ', según las referencias de Cohen).',
+        link: 'Calcular el tamaño muestral necesario para otro tamaño del efecto',
+        rows: ['Estadístico χ²', 'Grados de libertad', 'Valor crítico', 'p-valor', 'Tamaño del efecto (w de Cohen)', 'Frecuencia esperada mínima', 'w mínimo detectable (potencia ' + R.pct(R.TARGET) + ')']
+    };
+    const notes = [];
+    if (o.low > 0) notes.push(R.esc(T.low));
+    if (wMin != null) notes.push(R.esc(T.mde) + ' ' + R.link('tamano-muestral-chi-cuadrado-bondad.html?w=' + R.sigUp(wMin, 3) + '&k=' + o.k + '&alpha=' + o.alpha + '&power=' + R.TARGET, T.link));
+    else notes.push(R.esc(T.mde));
+    R.render(document.getElementById('chiResult'), {
+        label: T.label + ' · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, sec: [T.sec],
+        ok: rejected, verdict: rejected ? T.yes : T.no, notes: notes,
+        rows: [[T.rows[0], R.num(o.chi2, 4)], [T.rows[1], String(o.df)], [T.rows[2], R.num(jStat.chisquare.inv(1 - o.alpha, o.df), 4)], [T.rows[3], R.prob(o.p)],
+            [T.rows[4], R.num(wObs, 4)], [T.rows[5], R.num(o.minE, 2)], [T.rows[6], wMin == null ? '—' : R.num(wMin, 3)]]
+    });
+}
+
 document.getElementById('calcChiBtn').addEventListener('click',()=>{
   try{
     const obsRaw=document.getElementById('observed').value;
@@ -563,17 +549,7 @@ document.getElementById('calcChiBtn').addEventListener('click',()=>{
 
     const df=k-1;
     const p=Math.max(0,Math.min(1,chiSquareSurvival(chi2,df)));
-    const decision=p<alpha?'Se rechaza H₀ (la distribución observada difiere de la teórica).':'No se rechaza H₀ (los datos son compatibles con la distribución teórica).';
-
-    let warning='';
-    if(lowExpected>0) warning=`<br><em>Atención: ${lowExpected} categoría(s) con frecuencia esperada menor que 5. Considera agrupar categorías.</em>`;
-
-    document.getElementById('chiResult').innerHTML =
-      `χ² observado: <strong>${chi2.toFixed(4)}</strong><br>`+
-      `Grados de libertad: <strong>${df}</strong><br>`+
-      `p-valor: <strong>${p.toFixed(6)}</strong><br>`+
-      `Decisión (α=${alpha}): <strong>${decision}</strong>`+
-      warning;
+    renderGofResult({ chi2, df, p, alpha, n, k, low: lowExpected, minE: Math.min(...expected) });
 
     document.getElementById('expectedTable').innerHTML = formatExpectedGoodness(observed, expected);
     renderChiGoodnessChart(df, alpha, chi2);

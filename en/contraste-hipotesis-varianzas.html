@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
 
     <script type="application/ld+json">
 {
@@ -75,42 +75,58 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "When do I use the one-variance test?",
+      "name": "When is a variance tested?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "When you want to check whether the population variance is compatible with a\n                    theoretical or reference value."
+        "text": "When variability is what matters: the consistency of a process, the precision of an instrument or compliance with a tolerance."
       }
     },
     {
       "@type": "Question",
-      "name": "When do I use the two-variance test?",
+      "name": "Which distribution is used?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "When you want to compare whether two populations or conditions have the same spread."
+        "text": "Chi-square with n − 1 degrees of freedom for one variance, and Snedecor's F to compare two."
       }
     },
     {
       "@type": "Question",
-      "name": "What assumption matters most?",
+      "name": "Variance or standard deviation?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The classical variance tests assume the data come from approximately normal\n                    populations."
+        "text": "The calculator asks for variances. If you have the standard deviation, square it. Testing σ² = σ₀² is the same as testing σ = σ₀."
       }
     },
     {
       "@type": "Question",
-      "name": "Can two processes share the same mean but differ in variance?",
+      "name": "What if the data are not normal?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. Two processes can have the same average and still show very different\n                    variability."
+        "text": "These tests stop being reliable, even with large samples. To compare variances, use Levene's test."
       }
     },
     {
       "@type": "Question",
-      "name": "Which tail should I choose?",
+      "name": "Why are there two different critical values in the two-tailed test?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Two-sided if you're looking for any difference; right tail if you want to check\n                    whether the variance is larger; left tail if you want to check whether the variance is smaller."
+        "text": "Because the chi-square and F distributions are not symmetric: the critical value of each tail is computed separately."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the minimum detectable ratio?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "How many times larger or smaller than the reference the true standard deviation must be for the test to detect it with 80% probability."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much data do I need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "More than for a mean: to detect a standard deviation 50% larger than the reference, about 24 observations; for one 20% larger, more than 100."
       }
     }
   ]
@@ -162,8 +178,6 @@
     </header>
 
     <main>
-        <!-- Section order: 1) Calculator, 2) Explanation, 3) Quick test, 4) Worked example, 5) Interpretation, 6) FAQ -->
-
         <section class="ss-shell" aria-label="Calculator">
             <section class="card ss-controls">
                 <div class="panel-heading">
@@ -268,164 +282,120 @@
         </section>
 
         <section class="card content-card">
-            <h3>Explanation</h3>
-
-            <p>
-                The variance test is used to check whether the variability of a population
-                is compatible with a theoretical or reference value. Unlike tests on
-                the mean, this test doesn't analyze whether the data are higher or lower on average,
-                but whether they are more or less spread out than expected.
-            </p>
-
-            <p>
-                In industry, laboratory work and quality control, the average isn't the only thing that matters: variance
-                defines risk, consistency and stability. A process can have a correct mean and
-                still be too irregular.
-            </p>
-
-            <p>
-                For example, a machine may fill bottles with the correct average amount of liquid,
-                but do so with too much variability. Even if the average is right, an excessive
-                variance would mean some bottles are overfilled and others underfilled.
-                The variance test lets you check whether the spread observed in a sample is
-                compatible with the variability considered acceptable.
-            </p>
-
-            <p>
-                For a single variance, a test based on the chi-square distribution is used.
-                To compare two variances, a test based on the F distribution is typically used.
-                In both cases, the classical tests assume the data come from populations that are
-                approximately normal.
-            </p>
-
-            <h3>Hypotheses and statistic</h3>
-            <p class="formula-line">\(H_0: \sigma^2 = \sigma_0^2\)</p>
-            <p class="formula-line">\( \chi^2 = \frac{(n-1)s^2}{\sigma_0^2} \)</p>
-            <p class="formula-line">\(H_0: \sigma_1^2 = \sigma_2^2\)</p>
-            <p class="formula-line">\( F = \frac{s_1^2}{s_2^2} \)</p>
+            <h3>What are tests for variances?</h3>
+            <p>They are the tests that deal with the <strong>variability</strong> of the data, not with its average. In many problems, spread is precisely what matters: a packing machine may fill the correct 500 g on average and still be unacceptable if some bags come out at 480 g and others at 520 g. Variability measures how consistent a process is, how precise a measuring instrument is, or how risky an investment is.</p>
+            <p>This calculator covers the two basic cases:</p>
             <ul>
-                <li><strong>\(s^2\)</strong>: observed sample variance (chi-square test).</li>
-                <li><strong>\(\sigma_0^2\)</strong>: reference variance under \(H_0\) (chi-square test).</li>
-                <li><strong>\(n\)</strong>: sample size; \(df = n-1\) degrees of freedom (chi-square test).</li>
-                <li><strong>\(s_1^2, s_2^2\)</strong>: sample variances of the two groups (F test).</li>
-                <li><strong>\(n_1, n_2\)</strong>: sizes of the two groups; \(df_1 = n_1-1\), \(df_2 = n_2-1\) (F test).</li>
+                <li><strong>One variance</strong>: does the variance of a population equal a reference value \(\sigma_0^2\)? The chi-square distribution is used.</li>
+                <li><strong>Two variances</strong>: do two populations have the same variance? Snedecor's F distribution is used. There is a more detailed explanation in the <a href="contraste-hipotesis-dos-varianzas.html">two-variance test</a>.</li>
+            </ul>
+            <p>Remember that variance is in squared units (g², mm²); the standard deviation, its square root, is in the original units. The calculator asks for variances: if you have the standard deviation \(s\), enter \(s^2\).</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Test for one variance</h3>
+            <p class="formula-line">\(H_0: \sigma^2 = \sigma_0^2\)</p>
+            <p class="formula-line">\(H_1: \sigma^2 \neq \sigma_0^2\), \(\sigma^2 > \sigma_0^2\) or \(\sigma^2 &lt; \sigma_0^2\)</p>
+            <p class="formula-line">\( \chi^2 = \dfrac{(n-1)\,s^2}{\sigma_0^2}, \quad df = n - 1 \)</p>
+            <ul>
+                <li><strong>\(s^2\)</strong>: sample variance.</li>
+                <li><strong>\(\sigma_0^2\)</strong>: variance stated by the null hypothesis.</li>
+                <li><strong>\(n\)</strong>: sample size.</li>
+            </ul>
+            <p>The statistic compares the observed variance with the reference one: if \(H_0\) is true, \(s^2/\sigma_0^2\) is around 1 and the statistic is around its degrees of freedom, \(n-1\). If the data are normal, it follows a <a href="chisquare.html">chi-square</a> distribution with \(n-1\) degrees of freedom.</p>
+            <p>The chi-square distribution is <strong>not symmetric</strong>, so the two-tailed test has two different critical values, one in each tail, which can be looked up in the <a href="tabla-chi-cuadrado.html">chi-square table</a>. In practice, the most common test is the <strong>right-tailed</strong> one: the usual concern is that variability is larger than allowed.</p>
+
+            <h3>Test for two variances</h3>
+            <p class="formula-line">\(H_0: \sigma_1^2 = \sigma_2^2\)</p>
+            <p class="formula-line">\( F = \dfrac{s_1^2}{s_2^2}, \quad df_1 = n_1 - 1, \quad df_2 = n_2 - 1 \)</p>
+            <p>If the two populations have the same variance, the ratio of sample variances is around 1; the further from 1, the more evidence against \(H_0\). With normal data, the ratio follows Snedecor's F distribution, whose critical values are in the <a href="tabla-f-snedecor.html">F table</a>.</p>
+
+            <h3>Decision rule</h3>
+            <ul>
+                <li>If the <strong>p-value</strong> is less than \(\alpha\), \(H_0\) is rejected.</li>
+                <li>If the p-value is greater than or equal to \(\alpha\), there is not enough evidence to reject \(H_0\).</li>
+                <li>Not rejecting \(H_0\) does not prove that the variance equals the reference value, or that two variances are equal.</li>
             </ul>
         </section>
 
-
-
         <section class="card content-card">
-            <h3>Quick test</h3>
-
-            <p>
-                In the one-variance test, the statistic compares the sample variance \(s^2\)
-                with a reference variance \(\sigma_0^2\). Under \(H_0\), the statistic follows
-                a chi-square distribution with \(n-1\) degrees of freedom:
-            </p>
-
-            <p class="formula-line">
-                \( \chi^2 = \frac{(n-1)s^2}{\sigma_0^2} \sim \chi^2_{n-1} \)
-            </p>
-
-            <p>
-                In the comparison of two variances, the statistic compares the ratio between the
-                two sample variances. Under \(H_0\), it follows an F distribution:
-            </p>
-
-            <p class="formula-line">
-                \( F = \frac{s_1^2}{s_2^2} \sim F_{n_1-1,\;n_2-1} \)
-            </p>
-
-            <p>
-                If the result is significant, it's worth reviewing possible sources of variation:
-                batches, shifts, instrumentation, supplier changes, measurement conditions or
-                differences between groups.
-            </p>
+            <h3>The normality assumption matters a lot</h3>
+            <p>Tests for means tolerate non-normal data well, thanks to the central limit theorem. Tests for variances do <strong>not</strong>: both the chi-square and the F test depend on the data following a normal distribution, and that dependence does not go away as the sample grows. With heavy-tailed distributions (more extreme values than a normal), they reject \(H_0\) much more often than \(\alpha\) indicates, even if the variance is correct.</p>
+            <ul>
+                <li><strong>Check normality</strong> before using them, with a histogram or the <a href="shapiro-wilk-normalidad.html">Shapiro-Wilk test</a>.</li>
+                <li><strong>Check for outliers</strong>: because values are squared, a single extreme observation inflates the variance.</li>
+                <li>To compare two or more variances with non-normal data, <strong>Levene's test</strong> (or its Brown-Forsythe variant, based on the median) is preferable, as it is much more robust.</li>
+            </ul>
+            <p>The other assumptions are the usual ones: a random sample, independent observations and, for two variances, groups independent of each other.</p>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example</h3>
-            <p>Suppose you want to compare the variability of two screw-manufacturing processes. Process A: sample variance \(s_1^2 = 25\) mm², \(n_1 = 21\) units. Process B: sample variance \(s_2^2 = 16\) mm², \(n_2 = 16\) units. We test \(H_0\colon \sigma_1^2 = \sigma_2^2\) against \(H_1\colon \sigma_1^2 \neq \sigma_2^2\) with \(\alpha = 0.05\), two-sided, using Snedecor's F test.</p>
-            <p>The F statistic is computed as the ratio of variances (larger over smaller):</p>
-            <p class="formula-line">\( F = \dfrac{s_1^2}{s_2^2} = \dfrac{25}{16} = 1.5625 \)</p>
-            <p>The degrees of freedom are \(df_1 = n_1 - 1 = 20\) and \(df_2 = n_2 - 1 = 15\). For a two-sided test with \(\alpha = 0.05\), the upper critical value is \(F_{0.025;\,20,\,15} \approx 2.76\). The lower critical value is \(F_{0.975;\,20,\,15} \approx 1/F_{0.025;\,15,\,20} \approx 0.39\).</p>
-            <p>Since \(0.39 < F = 1.5625 < 2.76\), the statistic doesn't fall in either rejection tail. The two-sided p-value is \(p \approx 0.38 > 0.05\).</p>
-            <p>Conclusion: <strong>fail to reject \(H_0\)</strong>. The data don't provide significant evidence that the two processes have different variances. Both processes show comparable spread at the 5% significance level.</p>
+            <h3>Worked example 1: one variance, two-tailed test</h3>
+            <p>A process is set to produce parts with a variance of \(\sigma_0^2 = 10\) mm². A sample of \(n = 25\) parts gives \(s^2 = 14\) mm². Has the variability changed? We test \(H_0\colon \sigma^2 = 10\) against \(H_1\colon \sigma^2 \neq 10\) with \(\alpha = 0.05\).</p>
+            <p class="formula-line">\( \chi^2 = \dfrac{24 \times 14}{10} = 33.6 \)</p>
+            <p>With 24 degrees of freedom, the critical values are 12.40 and 39.36. Since \(12.40 < 33.6 < 39.36\), the statistic does not fall in the rejection region; the p-value is \(p \approx 0.184\). <strong>\(H_0\) is not rejected</strong>.</p>
+            <p>Conclusion: there is not enough evidence that the variance has changed. But the 95% confidence interval for \(\sigma^2\) runs from 8.5 to 27.1 mm²: it is compatible with 10 and also with a variance almost three times larger. Variances are estimated much less precisely than means: with 25 parts, the test detects with 80% probability only a standard deviation at least 1.48 times the reference one (or 0.65 times or less).</p>
+            <p><strong>In the calculator:</strong> "One variance vs. a reference value", n = 25, s² = 14, σ₀² = 10 and "Two-sided (≠)". These are the values the page opens with.</p>
+
+            <h3>Worked example 2: one variance, right tail</h3>
+            <p>A packing machine must fill bags with a standard deviation of at most 2 g (\(\sigma_0^2 = 4\) g²). A sample of \(n = 30\) bags gives \(s^2 = 6.5\) g² (\(s \approx 2.55\) g). The only concern is variability above the limit: \(H_0\colon \sigma^2 = 4\) against \(H_1\colon \sigma^2 > 4\), with \(\alpha = 0.05\).</p>
+            <p class="formula-line">\( \chi^2 = \dfrac{29 \times 6.5}{4} = 47.125 \)</p>
+            <p>The right-tailed critical value with 29 degrees of freedom is 42.56 and the p-value is \(p \approx 0.018\). <strong>\(H_0\) is rejected</strong>: there is evidence that variability exceeds the limit. The 95% interval for the standard deviation runs from 2.03 to 3.43 g.</p>
+            <p><strong>In the calculator:</strong> n = 30, s² = 6.5, σ₀² = 4 and "Right tail (&gt;)".</p>
+
+            <h3>Worked example 3: two variances</h3>
+            <p>The variability of two production lines is compared. Line 1: \(s_1^2 = 16\) with \(n_1 = 20\). Line 2: \(s_2^2 = 9\) with \(n_2 = 18\). The statistic is \(F = 16/9 \approx 1.78\) with 19 and 17 degrees of freedom; the two-tailed critical values are 0.39 and 2.63, and the p-value is \(p \approx 0.238\). <strong>\(H_0\) is not rejected</strong>: there is no evidence that the variances differ, although with these sizes the test reliably detects only standard deviations that differ by a factor of almost 2.</p>
+            <p><strong>In the calculator:</strong> "Comparison of two variances", n₁ = 20, n₂ = 18, s₁² = 16 and s₂² = 9.</p>
         </section>
 
         <section class="card content-card">
             <h3>How to interpret the result</h3>
+            <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that variability differs from the reference value, or between the two groups. To judge by how much, look at the ratio of variances and, better still, that of standard deviations, which is in the units of the data: twice the variance means a standard deviation only 41% larger.</p>
+            <p><strong>Not rejecting \(H_0\)</strong> does not prove that variability is as expected. Confidence intervals for a variance are very wide with small samples, as in example 1.</p>
+            <p>In the calculator, the result shows the decision with the p-value, the statistic with its degrees of freedom and a sentence stating the conclusion. On the chart, the green area is the non-rejection region, the red areas are the critical regions and the amber line marks the statistic. Under "Calculation details" you will find the critical values and the confidence intervals for the variance and the standard deviation.</p>
 
-                <p>
-                <strong>Rejecting \(H_0\)</strong> (p-value &lt; \(\alpha\)) means the sample variance
-                \(s^2\) is statistically incompatible with the hypothesized value \(\sigma^2_0\).
-                In practical terms, there's evidence that the variability of the process or population
-                differs from the reference. However, the chi-square test for one variance
-                is notably sensitive to departures from normality: a rejection can reflect
-                a skewed or heavy-tailed distribution rather than a genuinely
-                different variance. Always complement it with a plot of the data (histogram, Q-Q plot) and
-                consider the context of the problem.
-                </p>
+            <h3>Power and minimum detectable ratio</h3>
+            <p>Below the conclusion, the calculator shows the <strong>minimum detectable ratio</strong>: how many times larger (or smaller) than the reference the true standard deviation must be for the test to detect it with 80% probability. The link opens the sample size calculator for <a href="tamano-muestral-una-varianza.html">one variance</a> or for <a href="tamano-muestral-dos-varianzas.html">two variances</a> with your α and the type of test. For reference, detecting a standard deviation 50% larger than the reference takes about 24 observations; one 20% larger, more than 100.</p>
 
-                <p>
-                <strong>Failing to reject \(H_0\)</strong> (p-value ≥ \(\alpha\)) doesn't prove that
-                \(\sigma^2 = \sigma^2_0\); it only indicates that the data are compatible with that value
-                at the chosen level. With small samples, the power to detect changes in variance
-                is generally low. The confidence interval for \(\sigma^2\) — based on
-                percentiles of the chi-square distribution with \(n-1\) degrees of freedom — offers
-                a more complete picture of the range of plausible values.
-                </p>
-
-                <p>
-                The <strong>chi-square statistic</strong> \(\chi^2 = (n-1)s^2/\sigma^2_0\) measures
-                how far the sample variance is from the hypothesized one. In the chart, the
-                green region represents the non-rejection zone and the red zones the critical
-                regions (one-sided or two-sided depending on the chosen alternative); the amber
-                line marks the observed statistic. Unlike mean tests, the
-                chi-square distribution isn't symmetric, so the critical values differ between the two
-                tails even for the same \(\alpha\).
-                </p>
+            <h3>Confidence interval</h3>
+            <p>In the one-variance test, the other link opens the <a href="intervalo-confianza-varianza.html">confidence interval for the variance</a> with your data. In the two-tailed test, \(H_0\) is rejected exactly when \(\sigma_0^2\) lies outside the interval.</p>
         </section>
+
+        <section class="card content-card">
+            <h3>Common mistakes</h3>
+            <ul>
+                <li><strong>Entering standard deviations instead of variances</strong>: the calculator asks for \(s^2\) and \(\sigma_0^2\).</li>
+                <li><strong>Applying these tests to non-normal data</strong> without checking.</li>
+                <li><strong>Using the F test to choose between Student's t and Welch's t</strong>: it is not good practice; use <a href="contraste-hipotesis-dos-medias.html">Welch</a> directly.</li>
+                <li><strong>Concluding that variability is correct</strong> because the test is not significant.</li>
+                <li><strong>Forgetting that the chi-square and F distributions are not symmetric</strong> when looking up two-tailed critical values.</li>
+            </ul>
+        </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
-                <h3>Related calculators</h3>
-                <ul>
-                    <li><a href="chisquare.html">Chi-square distribution</a></li>
-                    <li><a href="centralf.html">F distribution</a></li>
-                    <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
-                </ul>
+              <h3>Related calculators</h3>
+              <ul>
+                <li><a href="contraste-hipotesis-dos-varianzas.html">Two-variance test (Snedecor's F)</a></li>
+                <li><a href="intervalo-confianza-varianza.html">Confidence interval for the variance</a></li>
+                <li><a href="tamano-muestral-una-varianza.html">Sample size for one variance</a></li>
+                <li><a href="tamano-muestral-dos-varianzas.html">Sample size for two variances</a></li>
+                <li><a href="tabla-chi-cuadrado.html">Chi-square table</a> and <a href="tabla-f-snedecor.html">F table</a></li>
+              </ul>
             </section>
-
             <h3>Frequently asked questions</h3>
-
             <ul>
-                <li>
-                    <strong>When do I use the one-variance test?</strong>
-                    When you want to check whether the population variance is compatible with a
-                    theoretical or reference value.
-                </li>
-                <li>
-                    <strong>When do I use the two-variance test?</strong>
-                    When you want to compare whether two populations or conditions have the same spread.
-                </li>
-                <li>
-                    <strong>What assumption matters most?</strong>
-                    The classical variance tests assume the data come from approximately normal
-                    populations.
-                </li>
-                <li>
-                    <strong>Can two processes share the same mean but differ in variance?</strong>
-                    Yes. Two processes can have the same average and still show very different
-                    variability.
-                </li>
-                <li>
-                    <strong>Which tail should I choose?</strong>
-                    Two-sided if you're looking for any difference; right tail if you want to check
-                    whether the variance is larger; left tail if you want to check whether the variance is smaller.
-                </li>
+                <li><strong>When is a variance tested?</strong> When variability is what matters: the consistency of a process, the precision of an instrument or compliance with a tolerance.</li>
+                <li><strong>Which distribution is used?</strong> Chi-square with n − 1 degrees of freedom for one variance, and Snedecor's F to compare two.</li>
+                <li><strong>Variance or standard deviation?</strong> The calculator asks for variances. If you have the standard deviation, square it. Testing σ² = σ₀² is the same as testing σ = σ₀.</li>
+                <li><strong>What if the data are not normal?</strong> These tests stop being reliable, even with large samples. To compare variances, use Levene's test.</li>
+                <li><strong>Why are there two different critical values in the two-tailed test?</strong> Because the chi-square and F distributions are not symmetric: the critical value of each tail is computed separately.</li>
+                <li><strong>What is the minimum detectable ratio?</strong> How many times larger or smaller than the reference the true standard deviation must be for the test to detect it with 80% probability.</li>
+                <li><strong>How much data do I need?</strong> More than for a mean: to detect a standard deviation 50% larger than the reference, about 24 observations; for one 20% larger, more than 100.</li>
             </ul>
-            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/F-test_of_equality_of_variances" target="_blank" rel="noopener noreferrer">F-test of equality of variances</a> — Wikipedia</p>
+            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Chi-squared_test" target="_blank" rel="noopener noreferrer">Chi-squared test</a> — Wikipedia</p>
         </section>
+
     </main>
 
     <footer class="legal-footer">
@@ -445,6 +415,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../test-results.js?v=20261111-3"></script>
 
 <script>
 let varianceTestChart;
@@ -683,6 +654,152 @@ function updateVarianceInputVisibility() {
     }
 }
 
+// Potencia exacta del contraste de una varianza si la desviación típica real
+// es R veces σ₀ (misma fórmula que la calculadora de tamaño muestral).
+function oneVariancePower(n, R, alpha, tail) {
+    const df = n - 1, R2 = R * R;
+    if (tail === 'two') return jStat.chisquare.cdf(jStat.chisquare.inv(alpha / 2, df) / R2, df) + (1 - jStat.chisquare.cdf(jStat.chisquare.inv(1 - alpha / 2, df) / R2, df));
+    if (tail === 'right') return 1 - jStat.chisquare.cdf(jStat.chisquare.inv(1 - alpha, df) / R2, df);
+    return jStat.chisquare.cdf(jStat.chisquare.inv(alpha, df) / R2, df);
+}
+
+// Razones mínimas detectables (hacia arriba y hacia abajo) con la potencia de referencia.
+function ratioMde(powerFn, tail) {
+    const R = TestResult;
+    const upLn = tail === 'left' ? null : R.solveMin((t) => powerFn(Math.exp(t)) >= R.TARGET, 1e-6, Math.log(100));
+    const downLn = tail === 'right' ? null : R.solveMin((t) => powerFn(Math.exp(-t)) >= R.TARGET, 1e-6, Math.log(100));
+    return {
+        up: upLn == null ? null : R.sigUp(Math.exp(upLn), 3),
+        down: downLn == null ? null : Math.floor(Math.exp(-downLn) * 1000) / 1000
+    };
+}
+
+function renderOneVarianceResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const m = ratioMde((r) => oneVariancePower(o.n, r, o.alpha, o.tail), o.tail);
+    const f2 = (v) => R.num(v, 2);
+    const v0 = R.auto(o.sigma0sq);
+    const none = m.up == null && m.down == null;
+    const mdeTxt = none ? null : EN
+        ? (o.tail === 'right' ? 'at least ' + f2(m.up) + ' times σ₀' : o.tail === 'left' ? f2(m.down) + ' times σ₀ or less' : 'at least ' + f2(m.up) + ' times σ₀ (or ' + f2(m.down) + ' times σ₀ or less)')
+        : (o.tail === 'right' ? 'de al menos ' + f2(m.up) + ' veces σ₀' : o.tail === 'left' ? 'de ' + f2(m.down) + ' veces σ₀ o menos' : 'de al menos ' + f2(m.up) + ' veces σ₀ (o de ' + f2(m.down) + ' veces σ₀ o menos)');
+    const T = EN ? {
+        label: 'χ² test for one variance, ' + { two: 'two-tailed', right: 'right-tailed', left: 'left-tailed' }[o.tail],
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        sec: 'χ² = ' + R.num(o.stat, 4) + ' with ' + o.df + ' degrees of freedom',
+        yes: '✓ There is statistical evidence that the variance is ' + { two: 'different from ', right: 'greater than ', left: 'less than ' }[o.tail] + v0 + '.',
+        no: 'ℹ There is not enough evidence that the variance is ' + { two: 'different from ', right: 'greater than ', left: 'less than ' }[o.tail] + v0 + '. This does not prove that it equals ' + v0 + '.',
+        mde: none ? 'With n = ' + o.n + ', the test does not reach ' + R.pct(R.TARGET) + ' power even for very large changes in variability.'
+            : 'With n = ' + o.n + ', the test detects with ' + R.pct(R.TARGET) + ' probability only true standard deviations of ' + mdeTxt + '.',
+        link: 'Work out the sample size needed for another ratio',
+        rows: ['Sample variance (s²)', 'Sample standard deviation (s)', 'Ratio s²/σ₀²', 'Test statistic', 'Degrees of freedom', 'Critical value', 'p-value', R.pctLevel(1 - o.alpha) + ' confidence interval for σ²', R.pctLevel(1 - o.alpha) + ' confidence interval for σ', 'Minimum detectable ratio σ/σ₀ (power ' + R.pct(R.TARGET) + ')']
+    } : {
+        label: 'Contraste χ² para una varianza, ' + { two: 'bilateral', right: 'de cola derecha', left: 'de cola izquierda' }[o.tail],
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        sec: 'χ² = ' + R.num(o.stat, 4) + ' con ' + o.df + ' grados de libertad',
+        yes: '✓ Hay evidencia estadística de que la varianza es ' + { two: 'distinta de ', right: 'mayor que ', left: 'menor que ' }[o.tail] + v0 + '.',
+        no: 'ℹ No hay evidencia suficiente de que la varianza sea ' + { two: 'distinta de ', right: 'mayor que ', left: 'menor que ' }[o.tail] + v0 + '. Esto no demuestra que sea ' + v0 + '.',
+        mde: none ? 'Con n = ' + o.n + ', el contraste no llega a un ' + R.pct(R.TARGET) + ' de potencia ni con cambios muy grandes de variabilidad.'
+            : 'Con n = ' + o.n + ', el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad desviaciones típicas reales ' + mdeTxt + '.',
+        link: 'Calcular el tamaño muestral necesario para otra razón',
+        rows: ['Varianza muestral (s²)', 'Desviación típica muestral (s)', 'Cociente s²/σ₀²', 'Estadístico', 'Grados de libertad', 'Valor crítico', 'p-valor', 'Intervalo de confianza al ' + R.pctLevel(1 - o.alpha) + ' para σ²', 'Intervalo de confianza al ' + R.pctLevel(1 - o.alpha) + ' para σ', 'Razón σ/σ₀ mínima detectable (potencia ' + R.pct(R.TARGET) + ')']
+    };
+    const cLo = jStat.chisquare.inv(o.tail === 'two' ? o.alpha / 2 : o.alpha, o.df);
+    const cHi = jStat.chisquare.inv(o.tail === 'two' ? 1 - o.alpha / 2 : 1 - o.alpha, o.df);
+    const crit = o.tail === 'two' ? R.num(cLo, 4) + (EN ? ' and ' : ' y ') + R.num(cHi, 4) : R.num(o.tail === 'right' ? cHi : cLo, 4);
+    const lo = o.df * o.s2 / jStat.chisquare.inv(1 - o.alpha / 2, o.df), hi = o.df * o.s2 / jStat.chisquare.inv(o.alpha / 2, o.df);
+    const notes = [];
+    if (!none) {
+        const rLink = o.tail === 'left' || (o.tail === 'two' && o.s2 < o.sigma0sq) ? m.down : m.up;
+        const url = 'tamano-muestral-una-varianza.html?r=' + rLink + '&alpha=' + o.alpha + '&power=' + R.TARGET + '&alt=' + { two: 'two-sided', right: 'greater', left: 'less' }[o.tail];
+        notes.push(R.esc(T.mde) + ' ' + R.link(url, T.link));
+    } else notes.push(R.esc(T.mde));
+    notes.push(R.ciLink('intervalo-confianza-varianza.html?s=' + R.sig(Math.sqrt(o.s2), 6) + '&n=' + o.n + '&conf=' + R.sig(1 - o.alpha, 6), 1 - o.alpha));
+    R.render(document.getElementById('varianceResult'), {
+        label: T.label + ' · H₀: σ² = ' + v0 + ' · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, sec: [T.sec],
+        ok: rejected, verdict: rejected ? T.yes : T.no, notes: notes,
+        rows: [
+            [T.rows[0], R.auto(o.s2)], [T.rows[1], R.num(Math.sqrt(o.s2), 4)], [T.rows[2], R.num(o.s2 / o.sigma0sq, 4)],
+            [T.rows[3], 'χ² = ' + R.num(o.stat, 4)], [T.rows[4], String(o.df)], [T.rows[5], crit], [T.rows[6], R.prob(o.p)],
+            [T.rows[7], R.interval(lo, hi, 4)], [T.rows[8], R.interval(Math.sqrt(lo), Math.sqrt(hi), 4)],
+            [T.rows[9], none ? '—' : (o.tail === 'right' ? '≥ ' + f2(m.up) : o.tail === 'left' ? '≤ ' + f2(m.down) : '≥ ' + f2(m.up) + (EN ? ' or ≤ ' : ' o ≤ ') + f2(m.down))]
+        ]
+    });
+}
+
+// Potencia exacta del contraste F si la razón real de desviaciones típicas es R = σ₁/σ₂.
+function twoVariancesPower(df1, df2, R, alpha, tail) {
+    const R2 = R * R, F = jStat.centralF;
+    if (tail === 'two') return F.cdf(F.inv(alpha / 2, df1, df2) / R2, df1, df2) + (1 - F.cdf(F.inv(1 - alpha / 2, df1, df2) / R2, df1, df2));
+    if (tail === 'right') return 1 - F.cdf(F.inv(1 - alpha, df1, df2) / R2, df1, df2);
+    return F.cdf(F.inv(alpha, df1, df2) / R2, df1, df2);
+}
+
+function twoVarRatioMde(powerFn, tail) {
+    const R = TestResult;
+    const upLn = tail === 'left' ? null : R.solveMin((t) => powerFn(Math.exp(t)) >= R.TARGET, 1e-6, Math.log(100));
+    const downLn = tail === 'right' ? null : R.solveMin((t) => powerFn(Math.exp(-t)) >= R.TARGET, 1e-6, Math.log(100));
+    return {
+        up: upLn == null ? null : R.sigUp(Math.exp(upLn), 3),
+        down: downLn == null ? null : Math.floor(Math.exp(-downLn) * 1000) / 1000
+    };
+}
+
+function renderTwoVariancesResult(elId, o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const m = twoVarRatioMde((r) => twoVariancesPower(o.df1, o.df2, r, o.alpha, o.tail), o.tail);
+    const f2 = (v) => R.num(v, 2);
+    const none = m.up == null && m.down == null;
+    const mdeTxt = none ? null : EN
+        ? (o.tail === 'right' ? f2(m.up) + ' or more' : o.tail === 'left' ? f2(m.down) + ' or less' : f2(m.up) + ' or more (or ' + f2(m.down) + ' or less)')
+        : (o.tail === 'right' ? 'de ' + f2(m.up) + ' o mayores' : o.tail === 'left' ? 'de ' + f2(m.down) + ' o menores' : 'de ' + f2(m.up) + ' o mayores (o de ' + f2(m.down) + ' o menores)');
+    const T = EN ? {
+        label: 'F test for two variances, ' + { two: 'two-tailed', right: 'right-tailed', left: 'left-tailed' }[o.tail],
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        sec: 'F = ' + R.num(o.stat, 4) + ' with ' + o.df1 + ' and ' + o.df2 + ' degrees of freedom',
+        yes: '✓ There is statistical evidence that ' + { two: 'the variances of the two groups differ.', right: 'the variance of group 1 is greater than that of group 2.', left: 'the variance of group 1 is less than that of group 2.' }[o.tail],
+        no: 'ℹ There is not enough evidence that ' + { two: 'the variances of the two groups differ', right: 'the variance of group 1 is greater than that of group 2', left: 'the variance of group 1 is less than that of group 2' }[o.tail] + '. This does not prove that they are equal.',
+        mde: none ? 'With these sample sizes, the test does not reach ' + R.pct(R.TARGET) + ' power even for very different variabilities.'
+            : 'With these sample sizes, the test detects with ' + R.pct(R.TARGET) + ' probability only ratios of standard deviations σ₁/σ₂ of ' + mdeTxt + '.',
+        link: 'Work out the sample size needed for another ratio',
+        rows: ['Ratio of variances (s₁²/s₂²)', 'Ratio of standard deviations (s₁/s₂)', 'Test statistic', 'Degrees of freedom', 'Critical value', 'p-value', R.pctLevel(1 - o.alpha) + ' confidence interval for σ₁²/σ₂²', R.pctLevel(1 - o.alpha) + ' confidence interval for σ₁/σ₂', 'Minimum detectable ratio σ₁/σ₂ (power ' + R.pct(R.TARGET) + ')']
+    } : {
+        label: 'Contraste F para dos varianzas, ' + { two: 'bilateral', right: 'de cola derecha', left: 'de cola izquierda' }[o.tail],
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        sec: 'F = ' + R.num(o.stat, 4) + ' con ' + o.df1 + ' y ' + o.df2 + ' grados de libertad',
+        yes: '✓ Hay evidencia estadística de que ' + { two: 'las varianzas de los dos grupos son distintas.', right: 'la varianza del grupo 1 es mayor que la del grupo 2.', left: 'la varianza del grupo 1 es menor que la del grupo 2.' }[o.tail],
+        no: 'ℹ No hay evidencia suficiente de que ' + { two: 'las varianzas de los dos grupos sean distintas', right: 'la varianza del grupo 1 sea mayor que la del grupo 2', left: 'la varianza del grupo 1 sea menor que la del grupo 2' }[o.tail] + '. Esto no demuestra que sean iguales.',
+        mde: none ? 'Con estos tamaños de muestra, el contraste no llega a un ' + R.pct(R.TARGET) + ' de potencia ni con variabilidades muy distintas.'
+            : 'Con estos tamaños de muestra, el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad cocientes de desviaciones típicas σ₁/σ₂ ' + mdeTxt + '.',
+        link: 'Calcular el tamaño muestral necesario para otra razón',
+        rows: ['Cociente de varianzas (s₁²/s₂²)', 'Cociente de desviaciones típicas (s₁/s₂)', 'Estadístico', 'Grados de libertad', 'Valor crítico', 'p-valor', 'Intervalo de confianza al ' + R.pctLevel(1 - o.alpha) + ' para σ₁²/σ₂²', 'Intervalo de confianza al ' + R.pctLevel(1 - o.alpha) + ' para σ₁/σ₂', 'Razón σ₁/σ₂ mínima detectable (potencia ' + R.pct(R.TARGET) + ')']
+    };
+    const F = jStat.centralF;
+    const cLo = F.inv(o.tail === 'two' ? o.alpha / 2 : o.alpha, o.df1, o.df2), cHi = F.inv(o.tail === 'two' ? 1 - o.alpha / 2 : 1 - o.alpha, o.df1, o.df2);
+    const crit = o.tail === 'two' ? R.num(cLo, 4) + (EN ? ' and ' : ' y ') + R.num(cHi, 4) : R.num(o.tail === 'right' ? cHi : cLo, 4);
+    const lo = o.stat / F.inv(1 - o.alpha / 2, o.df1, o.df2), hi = o.stat / F.inv(o.alpha / 2, o.df1, o.df2);
+    const notes = [];
+    if (!none) {
+        const rLink = o.tail === 'left' || (o.tail === 'two' && o.stat < 1) ? m.down : m.up;
+        const url = 'tamano-muestral-dos-varianzas.html?r=' + rLink + '&alpha=' + o.alpha + '&power=' + R.TARGET + '&alt=' + (o.tail === 'two' ? 'two-sided' : 'one-sided');
+        notes.push(R.esc(T.mde) + ' ' + R.link(url, T.link));
+    } else notes.push(R.esc(T.mde));
+    R.render(document.getElementById(elId), {
+        label: T.label + ' · H₀: σ₁² = σ₂² · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, sec: [T.sec],
+        ok: rejected, verdict: rejected ? T.yes : T.no, notes: notes,
+        rows: [
+            [T.rows[0], R.num(o.stat, 4)], [T.rows[1], R.num(Math.sqrt(o.stat), 4)], [T.rows[2], 'F = ' + R.num(o.stat, 4)],
+            [T.rows[3], o.df1 + (EN ? ' and ' : ' y ') + o.df2], [T.rows[4], crit], [T.rows[5], R.prob(o.p)],
+            [T.rows[6], R.interval(lo, hi, 4)], [T.rows[7], R.interval(Math.sqrt(lo), Math.sqrt(hi), 4)],
+            [T.rows[8], none ? '—' : (o.tail === 'right' ? '≥ ' + f2(m.up) : o.tail === 'left' ? '≤ ' + f2(m.down) : '≥ ' + f2(m.up) + (EN ? ' or ≤ ' : ' o ≤ ') + f2(m.down))]
+        ]
+    });
+}
+
 function calculateVarianceTest() {
     const testType = document.getElementById('testType').value;
     const alpha = parseFloat(document.getElementById('alpha').value);
@@ -717,10 +834,7 @@ function calculateVarianceTest() {
         let pValue = calculatePValueChiSquare(statistic, df, tail);
         pValue = Math.min(Math.max(pValue, 0), 1);
 
-        const decision = pValue < alpha ? 'Reject H₀.' : 'Fail to reject H₀.';
-
-        resultEl.innerText =
-            `χ² = ${statistic.toFixed(4)} | df = ${df} | p-value = ${pValue.toFixed(6)} | ${decision}`;
+        renderOneVarianceResult({ n: Math.round(n), s2: sampleVariance, sigma0sq: sigma0Squared, alpha, tail, stat: statistic, p: pValue, df });
 
         renderVarianceTestChart({
             distribution: 'chisquare',
@@ -751,10 +865,7 @@ function calculateVarianceTest() {
         let pValue = calculatePValueF(statistic, df1, df2, tail);
         pValue = Math.min(Math.max(pValue, 0), 1);
 
-        const decision = pValue < alpha ? 'Reject H₀.' : 'Fail to reject H₀.';
-
-        resultEl.innerText =
-            `F = ${statistic.toFixed(4)} | df₁ = ${df1}, df₂ = ${df2} | p-value = ${pValue.toFixed(6)} | ${decision}`;
+        renderTwoVariancesResult('varianceResult', { alpha, tail, stat: statistic, p: pValue, df1, df2 });
 
         renderVarianceTestChart({
             distribution: 'f',

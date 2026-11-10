@@ -65,7 +65,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="style_new.css?v=20261107-1">
 
     <script type="application/ld+json">
 {
@@ -251,7 +251,7 @@
                         <canvas id="ksChart" aria-label="Gráfico de funciones de distribución empírica y teórica para el test de Kolmogorov-Smirnov" role="img"></canvas>
                     </div>
                 </div>
-                <div id="ksTable" class="result-box" style="margin-top:12px;"></div>
+                <div id="ksTable" class="result-box" style="margin-top:12px;overflow-x:auto;"></div>
             </section>
         </section>
 
@@ -381,6 +381,12 @@
                 valores críticos deben corregirse (test de Lilliefors para normalidad, por ejemplo).
                 </p>
         </section>
+        <section class="card content-card">
+            <h3>Qué puede detectar el contraste con tu muestra</h3>
+            <p>Debajo de la conclusión, la calculadora indica a partir de qué valor del estadístico se rechaza \(H_0\) con tu tamaño de muestra. El valor crítico es aproximadamente \(1{,}36/\sqrt{n}\) para \(\alpha = 0{,}05\): con 20 datos, solo se rechaza si la función de distribución empírica se separa de la teórica más de 0,30 en algún punto; con 100 datos, más de 0,14. Las desviaciones menores pasan inadvertidas, así que, con muestras pequeñas, no rechazar \(H_0\) dice poco sobre si los datos siguen de verdad esa distribución.</p>
+            <p>El enlace del resultado abre la <a href="tamano-muestral-kolmogorov-smirnov.html">calculadora de tamaño muestral para Kolmogorov-Smirnov</a> con tu \(\alpha\), para que calcules cuántos datos harían falta para detectar la diferencia que te interese.</p>
+        </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Calculadoras relacionadas</h3>
@@ -466,6 +472,8 @@ window.MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="test-results.js?v=20261111-3"></script>
 <script>
 let ksChart;
 
@@ -624,6 +632,63 @@ function buildKSTable(sortedData, getCDF){
     return `<strong>Tabla de distribuciones acumuladas</strong><br><table><thead>${header}</thead><tbody>${rows}</tbody></table>`;
 }
 
+// Distribución límite de Kolmogorov y su cuantil (como en la calculadora de tamaño muestral).
+function ksLimitCDF(x) {
+    if (x <= 0) return 0;
+    if (x > 3.5) return 1;
+    let sum = 0;
+    for (let k = 1; k <= 100; k++) {
+        const term = (k % 2 === 1 ? 1 : -1) * Math.exp(-2 * k * k * x * x);
+        sum += term;
+        if (Math.abs(term) < 1e-12) break;
+    }
+    return Math.min(1, Math.max(0, 1 - 2 * sum));
+}
+function ksLimitQuantile(alpha) {
+    let lo = 0.1, hi = 4.0;
+    for (let i = 0; i < 100; i++) {
+        const mid = (lo + hi) / 2;
+        if (1 - ksLimitCDF(mid) > alpha) lo = mid; else hi = mid;
+    }
+    return (lo + hi) / 2;
+}
+
+function renderKsResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const kA = ksLimitQuantile(o.alpha);
+    const dCrit = kA / Math.sqrt(o.n);
+    const T = EN ? {
+        label: 'Kolmogorov–Smirnov test · ' + o.dist + ' distribution · n = ' + o.n,
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected', pLabel: 'p-value (approx.)',
+        yes: '✓ There is statistical evidence that the data do not follow the specified distribution.',
+        no: 'ℹ There is not enough evidence against the specified distribution. This does not prove that the data follow it.',
+        small: 'ℹ With n < 20 the p-value is an asymptotic approximation: interpret the result with caution.',
+        mde: 'With n = ' + o.n + ', H₀ is rejected only if the observed maximum difference Dₙ exceeds ' + R.num(dCrit, 2) + ': smaller departures go unnoticed.',
+        link: 'Work out the sample size needed to detect a given difference',
+        rows: ['Statistic Dₙ', 'Sample size (n)', 'Critical value of Dₙ', 'p-value (approx.)', 'Point of maximum difference (x)']
+    } : {
+        label: 'Kolmogorov-Smirnov · distribución ' + o.dist + ' · n = ' + o.n,
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀', pLabel: 'p-valor (aprox.)',
+        yes: '✓ Hay evidencia estadística de que los datos no siguen la distribución especificada.',
+        no: 'ℹ No hay evidencia suficiente contra la distribución especificada. Esto no demuestra que los datos la sigan.',
+        small: 'ℹ Con n < 20 el p-valor es una aproximación asintótica: interpreta el resultado con cautela.',
+        mde: 'Con n = ' + o.n + ', solo se rechaza H₀ si la diferencia máxima observada Dₙ supera ' + R.num(dCrit, 2) + ': las desviaciones menores pasan inadvertidas.',
+        link: 'Calcular el tamaño muestral necesario para detectar una diferencia concreta',
+        rows: ['Estadístico Dₙ', 'Tamaño muestral (n)', 'Valor crítico de Dₙ', 'p-valor (aprox.)', 'Punto de máxima diferencia (x)']
+    };
+    const notes = [];
+    if (o.n < 20) notes.push(R.esc(T.small));
+    notes.push(R.esc(T.mde) + ' ' + R.link('tamano-muestral-kolmogorov-smirnov.html?alpha=' + o.alpha + '&power=' + R.TARGET, T.link));
+    R.render(document.getElementById('ksResult'), {
+        label: T.label + ' · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, pLabel: T.pLabel, sec: ['Dₙ = ' + R.num(o.Dn, 4)],
+        ok: rejected, verdict: rejected ? T.yes : T.no, notes: notes,
+        rows: [[T.rows[0], R.num(o.Dn, 6)], [T.rows[1], String(o.n)], [T.rows[2], R.num(dCrit, 4)], [T.rows[3], R.prob(o.p)],
+            [T.rows[4], R.auto(o.xMax)]]
+    });
+}
+
 document.getElementById('calcKsBtn').addEventListener('click', () => {
     try{
         const rawData = document.getElementById('sampleData').value;
@@ -662,19 +727,7 @@ document.getElementById('calcKsBtn').addEventListener('click', () => {
         }
 
         const pValue = kolmogorovPValue(n, Dn);
-        const decision = pValue < alpha
-            ? 'Se rechaza H₀ (los datos no siguen la distribución teórica especificada).'
-            : 'No se rechaza H₀ (los datos son compatibles con la distribución teórica).';
-
-        let warning = '';
-        if(n < 20) warning = '<br><em>Atención: con n &lt; 20 el p-valor es una aproximación asintótica. Interpreta el resultado con cautela.</em>';
-
-        document.getElementById('ksResult').innerHTML =
-            `Estadístico Dₙ: <strong>${Dn.toFixed(6)}</strong><br>` +
-            `Tamaño muestral (n): <strong>${n}</strong><br>` +
-            `p-valor (aprox.): <strong>${pValue.toFixed(6)}</strong><br>` +
-            `Decisión (α=${alpha}): <strong>${decision}</strong>` +
-            warning;
+        renderKsResult({ Dn, n, p: pValue, alpha, xMax: maxDiffX, dist: document.getElementById('distType').selectedOptions[0].textContent.trim().toLowerCase() });
 
         document.getElementById('ksTable').innerHTML = buildKSTable(sorted, getCDF);
         renderKSChart(sorted, getCDF, maxDiffX, fnAtMax, f0AtMax, Dn);

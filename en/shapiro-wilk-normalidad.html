@@ -65,7 +65,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../style_new.css?v=20261102-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
 
     <script type="application/ld+json">
 {
@@ -432,6 +432,12 @@
                 the data depart from normality, complement the result with a Q-Q plot.
                 </p>
         </section>
+        <section class="card content-card">
+            <h3>Power: which departures it can detect</h3>
+            <p>The power of the Shapiro-Wilk test depends on the sample size and on the type of departure from normality. With small samples it detects only very marked departures (strong skewness, clear outliers), so not rejecting normality with 10 or 15 observations says little. With very large samples the opposite happens: it detects tiny departures that have no practical importance for methods that assume normality. That is why the test should always be accompanied by a histogram or a Q-Q plot.</p>
+            <p>The link in the result opens the <a href="tamano-muestral-shapiro-wilk.html">sample size calculator for Shapiro-Wilk</a> with your \(\alpha\), where you can enter the skewness and kurtosis you want to be able to detect.</p>
+        </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
                 <h3>Related calculators</h3>
@@ -484,6 +490,8 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="../test-results.js?v=20261111-3"></script>
 <script>
 let shapiroChart;
 
@@ -641,6 +649,43 @@ function drawShapiroChart(wSim, wObs, wCrit) {
   });
 }
 
+// Resultado: decisión, conclusión y detalles de la simulación Monte Carlo.
+function renderShapiroResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const B = o.B.toLocaleString(R.LOCALE);
+    const T = EN ? {
+        label: 'Shapiro–Wilk normality test · n = ' + o.n + ' · ' + B + ' Monte Carlo replicates',
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected', pLabel: 'p-value (Monte Carlo)',
+        yes: '✓ There is statistical evidence that the data do not come from a normal distribution.',
+        no: 'ℹ There is not enough evidence against normality. This does not prove that the data are normal' + (o.n < 30 ? ': with small samples the test detects only large departures.' : '.'),
+        near: 'ℹ α lies within the Monte Carlo confidence interval of the p-value, so the decision may change with another seed. Increase B to estimate it more precisely.',
+        power: 'The power of the test depends on the type of departure from normality (skewness, heavy tails) and on the sample size.',
+        link: 'Work out the sample size needed to detect a given departure',
+        rows: ['Sample size (n)', 'Statistic W', 'Replicates with W ≤ observed W', 'Monte Carlo p-value (b+1)/(B+1)', 'Monte Carlo standard error of the p-value', '95% confidence interval for the p-value (Wilson)', 'Critical W (left tail)']
+    } : {
+        label: 'Shapiro-Wilk de normalidad · n = ' + o.n + ' · ' + B + ' réplicas Monte Carlo',
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀', pLabel: 'p-valor (Monte Carlo)',
+        yes: '✓ Hay evidencia estadística de que los datos no proceden de una distribución normal.',
+        no: 'ℹ No hay evidencia suficiente contra la normalidad. Esto no demuestra que los datos sean normales' + (o.n < 30 ? ': con muestras pequeñas el test solo detecta desviaciones grandes.' : '.'),
+        near: 'ℹ α está dentro del intervalo de confianza Monte Carlo del p-valor, así que la decisión puede cambiar con otra semilla. Aumenta B para estimarlo con más precisión.',
+        power: 'La potencia del test depende del tipo de desviación de la normalidad (asimetría, colas pesadas) y del tamaño de la muestra.',
+        link: 'Calcular el tamaño muestral necesario para detectar una desviación concreta',
+        rows: ['Tamaño muestral (n)', 'Estadístico W', 'Réplicas con W ≤ W observado', 'p-valor Monte Carlo (b+1)/(B+1)', 'Error estándar Monte Carlo del p-valor', 'Intervalo de confianza al 95 % del p-valor (Wilson)', 'W crítico (cola izquierda)']
+    };
+    const notes = [];
+    if (o.nearAlpha) notes.push(R.esc(T.near));
+    notes.push(R.esc(T.power) + ' ' + R.link('tamano-muestral-shapiro-wilk.html?alpha=' + o.alpha + '&power=' + R.TARGET, T.link));
+    R.render(document.getElementById('shapiroResult'), {
+        label: T.label + ' · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, pLabel: T.pLabel, sec: ['W = ' + R.num(o.W, 4)],
+        ok: rejected, verdict: rejected ? T.yes : T.no, notes: notes,
+        rows: [[T.rows[0], String(o.n)], [T.rows[1], R.num(o.W, 4)], [T.rows[2], 'b = ' + o.b.toLocaleString(R.LOCALE) + (EN ? ' of ' : ' de ') + B],
+            [T.rows[3], R.num(o.p, o.digits)], [T.rows[4], R.num(o.se, 4)], [T.rows[5], R.interval(o.ciLo, o.ciHi, o.digits)],
+            [T.rows[6], o.wCrit == null ? '—' : R.num(o.wCrit, 4)]]
+    });
+}
+
 document.getElementById('calcShapiroBtn').addEventListener('click', () => {
   const sampleText = document.getElementById('sampleData').value;
   const sample = sampleText.split(/[\s,;]+/).map(v => parseFloat(v)).filter(v => !Number.isNaN(v));
@@ -670,24 +715,13 @@ document.getElementById('calcShapiroBtn').addEventListener('click', () => {
   // Critical value consistent with the decision: reject iff b ≤ kMax, i.e. iff W_obs < sorted[kMax]
   const kMax = maxRejectCount(B, alpha);
   const wCrit = kMax >= 0 ? [...wSim].sort((a, b) => a - b)[kMax] : null;
-  const decision = pValue < alpha ? 'Reject H₀ (not normal).' : 'Fail to reject H₀ (compatible with normality).';
-
-  document.getElementById('shapiroResult').innerHTML =
-    `n: <strong>${n}</strong><br>` +
-    `Observed W: <strong>${wObs.toFixed(4)}</strong><br>` +
-    `Replicates with W ≤ observed W: <strong>b = ${nBelow.toLocaleString('en-US')}</strong> of ${B.toLocaleString('en-US')}<br>` +
-    `Monte Carlo p-value (b+1)/(B+1): <strong>${pValue.toFixed(digits)}</strong>` +
-    (nBelow === 0 ? ` (smallest possible with this B)` : ` (MC standard error ≈ ${pSe.toFixed(4)})`) + `<br>` +
-    `95% Monte Carlo CI for the p-value (Wilson): <strong>[${ciLo.toFixed(digits)}, ${ciHi.toFixed(digits)}]</strong><br>` +
-    (wCrit !== null ? `Critical W (left tail, α=${alpha}): <strong>${wCrit.toFixed(4)}</strong><br>` : '') +
-    `Decision: <strong>${decision}</strong>`;
+  renderShapiroResult({ n, W: wObs, b: nBelow, B, p: pValue, se: pSe, ciLo, ciHi, digits, wCrit, alpha, nearAlpha });
 
   document.getElementById('shapiroNotes').innerHTML =
     (wCrit !== null
       ? `Rejection region: W &lt; ${wCrit.toFixed(4)} (left tail).<br>`
       : `With B = ${B.toLocaleString('en-US')} the smallest possible p-value, 1/(B+1), is not below α: increase B to be able to reject at this level.<br>`) +
-    `The simulation used ${B.toLocaleString('en-US')} normal samples under H₀ with seed ${seed}.` +
-    (nearAlpha ? `<br>Note: α lies inside the Monte Carlo confidence interval of the p-value, so the decision may change with a different seed. Increase B to estimate it more precisely.` : '');
+    `The simulation used ${B.toLocaleString('en-US')} normal samples under H₀ with seed ${seed}.`;
 
   drawShapiroChart(wSim, wObs, wCrit);
 });

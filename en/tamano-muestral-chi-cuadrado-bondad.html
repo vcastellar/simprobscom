@@ -477,6 +477,16 @@ function calculateWFromCategories() {
 
 document.getElementById('bondadCalculateBtn').addEventListener('click', calculateBondadSampleSize);
 document.getElementById('bondadWBtn').addEventListener('click', function () { calculateWFromCategories(); calculateBondadSampleSize(); });
+(function () {
+    // Valores recibidos por la URL, por ejemplo desde la calculadora del contraste.
+    let params;
+    try { params = new URLSearchParams(location.search); } catch (e) { return; }
+    const fields = { w: "bondadW", k: "bondadK", alpha: "bondadAlpha", power: "bondadPower" };
+    Object.keys(fields).forEach(function (key) {
+        const value = parseFloat(params.get(key));
+        if (Number.isFinite(value)) document.getElementById(fields[key]).value = value;
+    });
+}());
 calculateBondadSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>

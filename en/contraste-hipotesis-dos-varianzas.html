@@ -67,46 +67,78 @@
     }
     </script>
     <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
     {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What fundamental assumption does the F-test require?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The F-test for equality of variances assumes that the data in both groups come from normally distributed populations. It is sensitive to deviations from normality, so when this assumption is in doubt it is advisable to consider robust alternatives such as Levene's test or Bartlett's test."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Does it matter which variance goes in the numerator?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "In a two-tailed test it does not matter, since the p-value is calculated taking both tails into account. In one-tailed tests it does matter: if you want to test that σ₁² > σ₂², you must place group 1's variance in the numerator (F = s₁²/s₂²) and use the right tail."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "When should the F-test be used instead of Levene's test?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The F-test is appropriate when the data can be assumed normal. Levene's test is more robust against deviations from normality and is recommended when this condition cannot be verified. In practice, for small samples with confirmed normality, the F-test is the classic choice."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can the F-test be applied to more than two groups?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Not directly. The F-test for equality of variances compares exactly two groups. To compare the homogeneity of variances across more than two groups, tests such as Bartlett's test or the generalized Levene's test are used, which are designed for the case of k groups."
-          }
-        }
-      ]
+      "@type": "Question",
+      "name": "What does the F test for two variances test?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Whether two independent populations have the same variance, based on the ratio of the sample variances."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which variance goes in the numerator?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "That of group 1. You can use either; many textbooks put the larger one so that F is greater than 1 and only the upper critical value is needed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why are there two different critical values?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Because the F distribution is not symmetric. The lower one is the reciprocal of the upper one with the degrees of freedom swapped."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if the data are not normal?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The F test stops being reliable, even with large samples. Use Levene's test or the Brown-Forsythe test."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I run it before a two-means t-test?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It is not recommended. It is better to use Welch's test directly, which does not assume equal variances."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I interpret the value of F?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It is the ratio of variances. Its square root is the ratio of standard deviations: F = 4 means one standard deviation is twice the other."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the minimum detectable ratio?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The ratio of standard deviations closest to 1 that the test would detect with 80% probability given your sample sizes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much data do I need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Quite a lot: about 50 per group to detect that one standard deviation is 1.5 times the other, and about 160 per group for a ratio of 1.25."
+      }
     }
+  ]
+}
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -153,7 +185,6 @@
     </header>
 
     <main>
-
         <section class="ss-shell" aria-label="Calculator">
             <section class="card ss-controls">
                 <div class="panel-heading">
@@ -226,222 +257,126 @@
         </section>
 
         <section class="card content-card">
-            <h3>Explanation</h3>
+            <h3>What is a hypothesis test for two variances?</h3>
+            <p>It is the procedure for deciding whether two independent populations have the same <strong>variability</strong>. It is known as <strong>Snedecor's F test</strong> (or the Fisher-Snedecor test) of equality of variances. It answers questions such as: is one machine more consistent than another? Does one instrument measure more precisely than another? Are the grades of one group more homogeneous than those of another? Is one investment more volatile than another?</p>
+            <p>The idea is very direct: one sample variance is divided by the other. If the two populations have the same variance, the ratio should be around 1; the further it is from 1, the more evidence that the variabilities differ.</p>
 
-            <p>
-                Snedecor's F-test is the classic procedure for testing whether two independent
-                populations show the same variability. Instead of comparing averages, this
-                test evaluates whether the dispersion of one group is significantly greater or smaller
-                than that of the other.
-            </p>
-
-            <p>
-                The method is common in quality control, comparative studies, and as a preliminary step
-                to other tests: for example, the choice between Student's t-test with equal variances
-                or with unequal variances depends on whether homoscedasticity can be assumed, which is
-                precisely what this test evaluates.
-            </p>
-
-            <p>
-                The F statistic is built as the ratio between the two sample variances.
-                Under the null hypothesis of equal variances, this ratio follows an
-                F distribution with \(n_1 - 1\) and \(n_2 - 1\) degrees of freedom. If the variances
-                are very different, the ratio will move away from 1 and the test will be significant.
-            </p>
-
-            <p>
-                The fundamental assumption is normality of the data in both groups. The F-test is
-                sensitive to this condition; when normality is in doubt it is advisable to consider
-                more robust alternatives such as Levene's test.
-            </p>
-        </section>
-
-        <section class="card content-card">
-            <h3>Hypotheses and statistic</h3>
-
-            <p>The test states as the null hypothesis the equality of population variances:</p>
-
-            <p class="formula-line">\(H_0\colon \sigma_1^2 = \sigma_2^2\)</p>
-
-            <p>The alternative hypothesis depends on the type of test chosen:</p>
-
+            <h3>Hypotheses and test statistic</h3>
+            <p class="formula-line">\(H_0: \sigma_1^2 = \sigma_2^2\)</p>
+            <p class="formula-line">\(H_1: \sigma_1^2 \neq \sigma_2^2\), \(\sigma_1^2 > \sigma_2^2\) or \(\sigma_1^2 &lt; \sigma_2^2\)</p>
+            <p class="formula-line">\( F = \dfrac{s_1^2}{s_2^2}, \quad df_1 = n_1 - 1, \quad df_2 = n_2 - 1 \)</p>
             <ul>
-                <li>Two-tailed: \(H_1\colon \sigma_1^2 \neq \sigma_2^2\)</li>
-                <li>Right tail: \(H_1\colon \sigma_1^2 > \sigma_2^2\)</li>
-                <li>Left tail: \(H_1\colon \sigma_1^2 < \sigma_2^2\)</li>
+                <li><strong>\(s_1^2, s_2^2\)</strong>: sample variances of the two groups.</li>
+                <li><strong>\(n_1, n_2\)</strong>: group sizes.</li>
+                <li><strong>\(df_1, df_2\)</strong>: numerator and denominator degrees of freedom.</li>
+            </ul>
+            <p>If the data in both groups are normal and \(H_0\) is true, the statistic follows <strong>Snedecor's F distribution</strong> with \(df_1\) and \(df_2\) degrees of freedom. Order matters: the first degrees of freedom always belong to the variance in the numerator.</p>
+
+            <h3>Critical values and tails</h3>
+            <p>The F distribution is not symmetric: it only takes positive values and has a long right tail. That is why the two-tailed test has two different critical values, and the lower one is obtained from the <a href="tabla-f-snedecor.html">F table</a> with the relationship</p>
+            <p class="formula-line">\( F_{\alpha/2;\ df_1,\ df_2} = \dfrac{1}{F_{1-\alpha/2;\ df_2,\ df_1}} \)</p>
+            <p>Many textbooks avoid that step by always putting the larger variance in the numerator, so that \(F \geq 1\) and only the upper critical value is needed. The calculator does not need this: it computes both tails and accepts any order.</p>
+            <ul>
+                <li><strong>Two-tailed</strong>: do the variances differ?</li>
+                <li><strong>Right tail</strong>: is the variance of group 1 greater?</li>
+                <li><strong>Left tail</strong>: is the variance of group 1 smaller?</li>
             </ul>
 
-            <p>The test statistic is the ratio of the sample variances:</p>
-
-            <p class="formula-line">
-                \( F = \dfrac{s_1^2}{s_2^2} \)
-            </p>
-
-            <p>
-                Under \(H_0\), this statistic follows an F distribution with degrees of
-                freedom \(df_1 = n_1 - 1\) and \(df_2 = n_2 - 1\):
-            </p>
-
-            <p class="formula-line">
-                \( F = \dfrac{s_1^2}{s_2^2} \sim F_{n_1-1,\; n_2-1} \)
-            </p>
-
-            <p>
-                \(H_0\) is rejected when the F statistic falls in the critical region determined
-                by the significance level \(\alpha\) and the selected test type.
-            </p>
-        </section>
-
-        <section class="card content-card">
-            <h3>Quick check</h3>
-
-            <p>
-                A first read of the F statistic gives a hint of the result before looking at the p-value:
-            </p>
-
+            <h3>Decision rule</h3>
             <ul>
-                <li>
-                    <strong>F close to 1:</strong> the sample variances are similar. Unless
-                    the samples are very large, it is likely that there is no evidence to reject \(H_0\).
-                </li>
-                <li>
-                    <strong>F clearly greater than 1:</strong> group 1 shows greater variability
-                    than group 2. The further it moves away from 1, the more evidence in favor of \(\sigma_1^2 > \sigma_2^2\).
-                </li>
-                <li>
-                    <strong>F clearly less than 1:</strong> group 2 shows greater variability
-                    than group 1. A value very close to 0 indicates strong evidence of \(\sigma_1^2 < \sigma_2^2\).
-                </li>
+                <li>If the <strong>p-value</strong> is less than \(\alpha\), \(H_0\) is rejected: there is evidence that the variances differ.</li>
+                <li>If the p-value is greater than or equal to \(\alpha\), there is not enough evidence to reject \(H_0\).</li>
+                <li>Not rejecting \(H_0\) does not prove that the variances are equal.</li>
             </ul>
-
-            <p>
-                In any case, the formal decision should be based on the p-value and the
-                significance level \(\alpha\), not just on the magnitude of F.
-            </p>
-
-            <p>
-                If the result is significant, it is worth investigating the source of the difference in
-                variability: different processes, instruments, measurement conditions, batches or
-                human groups may explain the observed disparity.
-            </p>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example</h3>
+            <h3>Assumptions: beware of normality</h3>
+            <ul>
+                <li><strong>Two independent samples</strong>, with independent observations within each one.</li>
+                <li><strong>Normal data in both groups.</strong> This is the critical assumption.</li>
+            </ul>
+            <p>The F test is <strong>very sensitive to non-normality</strong>, and it does not improve as the sample grows. With heavy-tailed distributions, it can reject equality of variances two or three times as often as \(\alpha\) indicates, even when the variances are equal; in practice, it sometimes detects that the data are not normal rather than that the variances differ.</p>
+            <p>That is why it is worth checking the normality of each group (for example, with the <a href="shapiro-wilk-normalidad.html">Shapiro-Wilk test</a>) and looking for outliers. If in doubt, the recommended alternative is <strong>Levene's test</strong>, or its Brown-Forsythe variant based on the median, which hardly depends on the shape of the distribution and also works for more than two groups.</p>
 
-            <p>
-                We want to compare the variability of two production lines of metal parts.
-                Line 1: sample variance \(s_1^2 = 16\) mm², sample size \(n_1 = 20\) parts.
-                Line 2: sample variance \(s_2^2 = 9\) mm², sample size \(n_2 = 18\) parts.
-                We test \(H_0\colon \sigma_1^2 = \sigma_2^2\) against
-                \(H_1\colon \sigma_1^2 \neq \sigma_2^2\) with \(\alpha = 0.05\), two-tailed.
-            </p>
+            <h3>Is it useful for choosing the test for means?</h3>
+            <p>For years the F test was taught as a preliminary step to the two-means test: if equality of variances was not rejected, Student's t with a pooled variance was used; if it was rejected, Welch's. This is now discouraged: that two-stage procedure does not control the type I error well, and the F test has little power with small samples, precisely when it would be needed. The recommendation is to use <a href="contraste-hipotesis-dos-medias.html">Welch's test</a> directly, which works well whether or not the variances are equal. The F test should be reserved for when variability is itself the question.</p>
+        </section>
 
-            <p><strong>Step 1 — F statistic</strong></p>
-            <p class="formula-line">
-                \( F = \dfrac{s_1^2}{s_2^2} = \dfrac{16}{9} \approx 1.7778 \)
-            </p>
+        <section class="card content-card">
+            <h3>Worked example 1: two-tailed test</h3>
+            <p>The variability of two production lines of metal parts is compared. Line 1: \(s_1^2 = 16\) mm² with \(n_1 = 20\) parts. Line 2: \(s_2^2 = 9\) mm² with \(n_2 = 18\) parts. We test \(H_0\colon \sigma_1^2 = \sigma_2^2\) against \(H_1\colon \sigma_1^2 \neq \sigma_2^2\) with \(\alpha = 0.05\).</p>
+            <p class="formula-line">\( F = \dfrac{16}{9} \approx 1.778, \quad df_1 = 19, \quad df_2 = 17 \)</p>
+            <p>The critical values are \(F_{0.025;\,19,\,17} \approx 0.39\) and \(F_{0.975;\,19,\,17} \approx 2.63\). Since \(0.39 < 1.778 < 2.63\), the statistic does not fall in the rejection region; the p-value is \(p \approx 0.238\). <strong>\(H_0\) is not rejected</strong>.</p>
+            <p>Conclusion: there is not enough evidence that the two lines differ in variability. But the 95% confidence interval for \(\sigma_1^2/\sigma_2^2\) runs from 0.68 to 4.56: it is compatible with equal variances and also with line 1 having a variance more than four times larger. With 20 and 18 parts, the test detects with 80% probability only standard deviations that differ by a factor of almost 2.</p>
+            <p><strong>In the calculator:</strong> n₁ = 20, n₂ = 18, s₁² = 16, s₂² = 9 and "Two-tailed". These are the values the page opens with.</p>
 
-            <p><strong>Step 2 — Degrees of freedom</strong></p>
-            <p class="formula-line">
-                \( df_1 = n_1 - 1 = 19, \quad df_2 = n_2 - 1 = 17 \)
-            </p>
-
-            <p><strong>Step 3 — Critical values (α = 0.05, two-tailed)</strong></p>
-            <p>
-                The upper critical value is \(F_{0.025;\,19,\,17} \approx 2.63\).
-                The lower critical value is \(F_{0.975;\,19,\,17} = 1 / F_{0.025;\,17,\,19} \approx 0.38\).
-            </p>
-
-            <p><strong>Step 4 — Decision</strong></p>
-            <p>
-                Since \(0.38 < F = 1.7778 < 2.63\), the statistic does not fall in either
-                rejection region. The two-tailed p-value is \(p \approx 0.24 > 0.05\).
-            </p>
-
-            <p>
-                Conclusion: <strong>\(H_0\) is not rejected</strong>. The data do not provide
-                significant evidence that the two lines have different variances at the 5%
-                significance level. The observed variabilities are compatible with the hypothesis of equality.
-            </p>
+            <h3>Worked example 2: one-tailed test</h3>
+            <p>A laboratory suspects that an old instrument (group 1) measures less precisely than a new one (group 2). With 25 measurements of the same sample on each instrument, it obtains \(s_1^2 = 36\) and \(s_2^2 = 12\). We test \(H_0\colon \sigma_1^2 = \sigma_2^2\) against \(H_1\colon \sigma_1^2 > \sigma_2^2\) with \(\alpha = 0.05\).</p>
+            <p class="formula-line">\( F = \dfrac{36}{12} = 3.00, \quad df_1 = df_2 = 24 \)</p>
+            <p>The right-tailed critical value is \(F_{0.95;\,24,\,24} \approx 1.98\) and the p-value is \(p \approx 0.005\). <strong>\(H_0\) is rejected</strong>: there is evidence that the old instrument is less precise. Its standard deviation is about 1.7 times that of the new one (\(\sqrt{3} \approx 1.73\)), with a 95% interval for that ratio from 1.15 to 2.61.</p>
+            <p><strong>In the calculator:</strong> n₁ = 25, n₂ = 25, s₁² = 36, s₂² = 12 and "Right tail".</p>
         </section>
 
         <section class="card content-card">
             <h3>How to interpret the result</h3>
+            <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that the two populations differ in variability, provided the data are normal. To judge by how much, the ratio of standard deviations is more intuitive than that of variances: an F of 4 means one standard deviation is twice the other.</p>
+            <p><strong>Not rejecting \(H_0\)</strong> does not prove that the variances are equal. With small samples, the confidence interval for the ratio is very wide, as in example 1.</p>
+            <p>In the calculator, the result shows the decision with the p-value, the F statistic with its degrees of freedom and a sentence stating the conclusion. On the chart, the green area is the non-rejection region on the F distribution, the red areas are the critical regions and the amber line marks the statistic. Under "Calculation details" you will find the critical values and the confidence intervals for the ratio of variances and of standard deviations.</p>
 
-                <p>
-                <strong>Rejecting \(H_0\)</strong> (p-value &lt; \(\alpha\)) indicates that the ratio
-                of sample variances \(F = s^2_1 / s^2_2\) is statistically incompatible with
-                the population equality \(\sigma^2_1 = \sigma^2_2\). In practice this is relevant,
-                for example, when deciding which variant of the t-test to use (equal or unequal
-                variances) or when the homogeneity of variances is an assumption of <a href="anova.html">ANOVA</a>.
-                However, Snedecor's F-test is very sensitive to deviations from normality:
-                a significant result may be due to skewed tails rather than genuinely
-                different variances. Before acting, inspect the data visually.
-                </p>
-
-                <p>
-                <strong>Not rejecting \(H_0\)</strong> (p-value ≥ \(\alpha\)) does not prove homoscedasticity;
-                it only indicates that the data are compatible with \(\sigma^2_1 = \sigma^2_2\) at the
-                chosen level. The F-test has low power with small samples, so it may not
-                detect real differences in variance. The observed \(F\) ratio and its confidence
-                interval provide information about the relative magnitude of the variabilities.
-                </p>
-
-                <p>
-                The <strong>F statistic</strong> follows, under \(H_0\), an F distribution
-                with \((n_1-1, n_2-1)\) degrees of freedom. In the chart, the green zone is the
-                non-rejection region and the red zones are the critical tails; the amber line marks
-                the observed statistic. Since \(F \geq 0\), the distribution is right-skewed: an
-                \(F \gg 1\) suggests greater variance in group 1, while \(F \ll 1\)
-                suggests greater variance in group 2. With very large samples, moderate differences
-                in variances can turn out significant even though they have little practical impact.
-                </p>
+            <h3>Power and minimum detectable ratio</h3>
+            <p>Comparing variabilities requires much more data than comparing means. Below the conclusion, the calculator shows the <strong>minimum detectable ratio</strong>: the ratio of standard deviations \(\sigma_1/\sigma_2\) closest to 1 that the test would detect with 80% probability given your sample sizes. The link opens the <a href="tamano-muestral-dos-varianzas.html">sample size calculator for two variances</a> with your α and the type of test. For reference, in a two-tailed test with \(\alpha = 0.05\):</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Ratio of standard deviations to detect</th><th>Size needed per group (80% power)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>2 (one twice the other)</td><td>19</td></tr>
+                        <tr><td>1.5</td><td>50</td></tr>
+                        <tr><td>1.25</td><td>160</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
+
+        <section class="card content-card">
+            <h3>Common mistakes</h3>
+            <ul>
+                <li><strong>Applying the F test to non-normal data</strong>: this is its weak point. Use Levene if in doubt.</li>
+                <li><strong>Entering standard deviations instead of variances.</strong></li>
+                <li><strong>Using it as a preliminary step to the test for means</strong> instead of applying Welch directly.</li>
+                <li><strong>Swapping the degrees of freedom</strong> when reading the table: the numerator's come first.</li>
+                <li><strong>Concluding that the variances are equal</strong> because the test is not significant with small samples.</li>
+                <li><strong>Using it with paired data</strong>: the two samples must be independent.</li>
+            </ul>
+        </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
-                <h3>Related calculators</h3>
-                <ul>
-                    <li><a href="contraste-hipotesis-varianzas.html">Tests on variances — one or two variances</a></li>
-                    <li><a href="tamano-muestral-dos-varianzas.html">Sample size to compare two variances</a></li>
-                    <li><a href="centralf.html">Snedecor's F distribution</a></li>
-                    <li><a href="contrastes-hipotesis/">All hypothesis tests</a></li>
-                </ul>
+              <h3>Related calculators</h3>
+              <ul>
+                <li><a href="tamano-muestral-dos-varianzas.html">Sample size for two variances</a></li>
+                <li><a href="contraste-hipotesis-varianzas.html">One-variance test</a></li>
+                <li><a href="contraste-hipotesis-dos-medias.html">Two-means test (Welch)</a></li>
+                <li><a href="anova.html">One-way ANOVA</a></li>
+                <li><a href="tabla-f-snedecor.html">Snedecor's F table</a></li>
+              </ul>
             </section>
-
             <h3>Frequently asked questions</h3>
-
             <ul>
-                <li>
-                    <strong>What fundamental assumption does the F-test require?</strong>
-                    The F-test assumes that the data in both groups come from normally distributed
-                    populations. It is sensitive to deviations from normality, so when this
-                    assumption is in doubt it is advisable to consider robust alternatives such as Levene's test or Bartlett's test.
-                </li>
-                <li>
-                    <strong>Does it matter which variance goes in the numerator?</strong>
-                    In a two-tailed test it does not matter, since the p-value is calculated taking
-                    both tails into account. In one-tailed tests it does matter: if you want to test that
-                    \(\sigma_1^2 > \sigma_2^2\), you must place group 1's variance in the numerator
-                    and use the right tail.
-                </li>
-                <li>
-                    <strong>When should the F-test be used instead of Levene's test?</strong>
-                    The F-test is appropriate when the data can be assumed normal. Levene's test
-                    is more robust against deviations from normality and is recommended when this condition
-                    cannot be verified. For small samples with confirmed normality, the F-test is
-                    the classic choice.
-                </li>
-                <li>
-                    <strong>Can the F-test be applied to more than two groups?</strong>
-                    Not directly. The F-test for equality of variances compares exactly two groups.
-                    To compare the homogeneity of variances across more than two groups, tests
-                    such as Bartlett's test or the generalized Levene's test are used, designed for the case
-                    of k groups.
-                </li>
+                <li><strong>What does the F test for two variances test?</strong> Whether two independent populations have the same variance, based on the ratio of the sample variances.</li>
+                <li><strong>Which variance goes in the numerator?</strong> That of group 1. You can use either; many textbooks put the larger one so that F is greater than 1 and only the upper critical value is needed.</li>
+                <li><strong>Why are there two different critical values?</strong> Because the F distribution is not symmetric. The lower one is the reciprocal of the upper one with the degrees of freedom swapped.</li>
+                <li><strong>What if the data are not normal?</strong> The F test stops being reliable, even with large samples. Use Levene's test or the Brown-Forsythe test.</li>
+                <li><strong>Should I run it before a two-means t-test?</strong> It is not recommended. It is better to use Welch's test directly, which does not assume equal variances.</li>
+                <li><strong>How do I interpret the value of F?</strong> It is the ratio of variances. Its square root is the ratio of standard deviations: F = 4 means one standard deviation is twice the other.</li>
+                <li><strong>What is the minimum detectable ratio?</strong> The ratio of standard deviations closest to 1 that the test would detect with 80% probability given your sample sizes.</li>
+                <li><strong>How much data do I need?</strong> Quite a lot: about 50 per group to detect that one standard deviation is 1.5 times the other, and about 160 per group for a ratio of 1.25.</li>
             </ul>
             <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/F-test_of_equality_of_variances" target="_blank" rel="noopener noreferrer">F-test of equality of variances</a> — Wikipedia</p>
         </section>
+
     </main>
 
     <footer class="legal-footer">
@@ -461,6 +396,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../test-results.js?v=20261111-3"></script>
 
 <script>
 let dosVarianzasChart;
@@ -616,6 +552,77 @@ function renderDosVarianzasChart(statistic, alpha, tail, df1, df2) {
     });
 }
 
+// Potencia exacta del contraste F si la razón real de desviaciones típicas es R = σ₁/σ₂.
+function twoVariancesPower(df1, df2, R, alpha, tail) {
+    const R2 = R * R, F = jStat.centralF;
+    if (tail === 'two') return F.cdf(F.inv(alpha / 2, df1, df2) / R2, df1, df2) + (1 - F.cdf(F.inv(1 - alpha / 2, df1, df2) / R2, df1, df2));
+    if (tail === 'right') return 1 - F.cdf(F.inv(1 - alpha, df1, df2) / R2, df1, df2);
+    return F.cdf(F.inv(alpha, df1, df2) / R2, df1, df2);
+}
+
+function twoVarRatioMde(powerFn, tail) {
+    const R = TestResult;
+    const upLn = tail === 'left' ? null : R.solveMin((t) => powerFn(Math.exp(t)) >= R.TARGET, 1e-6, Math.log(100));
+    const downLn = tail === 'right' ? null : R.solveMin((t) => powerFn(Math.exp(-t)) >= R.TARGET, 1e-6, Math.log(100));
+    return {
+        up: upLn == null ? null : R.sigUp(Math.exp(upLn), 3),
+        down: downLn == null ? null : Math.floor(Math.exp(-downLn) * 1000) / 1000
+    };
+}
+
+function renderTwoVariancesResult(elId, o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const m = twoVarRatioMde((r) => twoVariancesPower(o.df1, o.df2, r, o.alpha, o.tail), o.tail);
+    const f2 = (v) => R.num(v, 2);
+    const none = m.up == null && m.down == null;
+    const mdeTxt = none ? null : EN
+        ? (o.tail === 'right' ? f2(m.up) + ' or more' : o.tail === 'left' ? f2(m.down) + ' or less' : f2(m.up) + ' or more (or ' + f2(m.down) + ' or less)')
+        : (o.tail === 'right' ? 'de ' + f2(m.up) + ' o mayores' : o.tail === 'left' ? 'de ' + f2(m.down) + ' o menores' : 'de ' + f2(m.up) + ' o mayores (o de ' + f2(m.down) + ' o menores)');
+    const T = EN ? {
+        label: 'F test for two variances, ' + { two: 'two-tailed', right: 'right-tailed', left: 'left-tailed' }[o.tail],
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        sec: 'F = ' + R.num(o.stat, 4) + ' with ' + o.df1 + ' and ' + o.df2 + ' degrees of freedom',
+        yes: '✓ There is statistical evidence that ' + { two: 'the variances of the two groups differ.', right: 'the variance of group 1 is greater than that of group 2.', left: 'the variance of group 1 is less than that of group 2.' }[o.tail],
+        no: 'ℹ There is not enough evidence that ' + { two: 'the variances of the two groups differ', right: 'the variance of group 1 is greater than that of group 2', left: 'the variance of group 1 is less than that of group 2' }[o.tail] + '. This does not prove that they are equal.',
+        mde: none ? 'With these sample sizes, the test does not reach ' + R.pct(R.TARGET) + ' power even for very different variabilities.'
+            : 'With these sample sizes, the test detects with ' + R.pct(R.TARGET) + ' probability only ratios of standard deviations σ₁/σ₂ of ' + mdeTxt + '.',
+        link: 'Work out the sample size needed for another ratio',
+        rows: ['Ratio of variances (s₁²/s₂²)', 'Ratio of standard deviations (s₁/s₂)', 'Test statistic', 'Degrees of freedom', 'Critical value', 'p-value', R.pctLevel(1 - o.alpha) + ' confidence interval for σ₁²/σ₂²', R.pctLevel(1 - o.alpha) + ' confidence interval for σ₁/σ₂', 'Minimum detectable ratio σ₁/σ₂ (power ' + R.pct(R.TARGET) + ')']
+    } : {
+        label: 'Contraste F para dos varianzas, ' + { two: 'bilateral', right: 'de cola derecha', left: 'de cola izquierda' }[o.tail],
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        sec: 'F = ' + R.num(o.stat, 4) + ' con ' + o.df1 + ' y ' + o.df2 + ' grados de libertad',
+        yes: '✓ Hay evidencia estadística de que ' + { two: 'las varianzas de los dos grupos son distintas.', right: 'la varianza del grupo 1 es mayor que la del grupo 2.', left: 'la varianza del grupo 1 es menor que la del grupo 2.' }[o.tail],
+        no: 'ℹ No hay evidencia suficiente de que ' + { two: 'las varianzas de los dos grupos sean distintas', right: 'la varianza del grupo 1 sea mayor que la del grupo 2', left: 'la varianza del grupo 1 sea menor que la del grupo 2' }[o.tail] + '. Esto no demuestra que sean iguales.',
+        mde: none ? 'Con estos tamaños de muestra, el contraste no llega a un ' + R.pct(R.TARGET) + ' de potencia ni con variabilidades muy distintas.'
+            : 'Con estos tamaños de muestra, el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad cocientes de desviaciones típicas σ₁/σ₂ ' + mdeTxt + '.',
+        link: 'Calcular el tamaño muestral necesario para otra razón',
+        rows: ['Cociente de varianzas (s₁²/s₂²)', 'Cociente de desviaciones típicas (s₁/s₂)', 'Estadístico', 'Grados de libertad', 'Valor crítico', 'p-valor', 'Intervalo de confianza al ' + R.pctLevel(1 - o.alpha) + ' para σ₁²/σ₂²', 'Intervalo de confianza al ' + R.pctLevel(1 - o.alpha) + ' para σ₁/σ₂', 'Razón σ₁/σ₂ mínima detectable (potencia ' + R.pct(R.TARGET) + ')']
+    };
+    const F = jStat.centralF;
+    const cLo = F.inv(o.tail === 'two' ? o.alpha / 2 : o.alpha, o.df1, o.df2), cHi = F.inv(o.tail === 'two' ? 1 - o.alpha / 2 : 1 - o.alpha, o.df1, o.df2);
+    const crit = o.tail === 'two' ? R.num(cLo, 4) + (EN ? ' and ' : ' y ') + R.num(cHi, 4) : R.num(o.tail === 'right' ? cHi : cLo, 4);
+    const lo = o.stat / F.inv(1 - o.alpha / 2, o.df1, o.df2), hi = o.stat / F.inv(o.alpha / 2, o.df1, o.df2);
+    const notes = [];
+    if (!none) {
+        const rLink = o.tail === 'left' || (o.tail === 'two' && o.stat < 1) ? m.down : m.up;
+        const url = 'tamano-muestral-dos-varianzas.html?r=' + rLink + '&alpha=' + o.alpha + '&power=' + R.TARGET + '&alt=' + (o.tail === 'two' ? 'two-sided' : 'one-sided');
+        notes.push(R.esc(T.mde) + ' ' + R.link(url, T.link));
+    } else notes.push(R.esc(T.mde));
+    R.render(document.getElementById(elId), {
+        label: T.label + ' · H₀: σ₁² = σ₂² · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, sec: [T.sec],
+        ok: rejected, verdict: rejected ? T.yes : T.no, notes: notes,
+        rows: [
+            [T.rows[0], R.num(o.stat, 4)], [T.rows[1], R.num(Math.sqrt(o.stat), 4)], [T.rows[2], 'F = ' + R.num(o.stat, 4)],
+            [T.rows[3], o.df1 + (EN ? ' and ' : ' y ') + o.df2], [T.rows[4], crit], [T.rows[5], R.prob(o.p)],
+            [T.rows[6], R.interval(lo, hi, 4)], [T.rows[7], R.interval(Math.sqrt(lo), Math.sqrt(hi), 4)],
+            [T.rows[8], none ? '—' : (o.tail === 'right' ? '≥ ' + f2(m.up) : o.tail === 'left' ? '≤ ' + f2(m.down) : '≥ ' + f2(m.up) + (EN ? ' or ≤ ' : ' o ≤ ') + f2(m.down))]
+        ]
+    });
+}
+
 function calculateDosVarianzas() {
     const n1 = parseFloat(document.getElementById('n1').value);
     const n2 = parseFloat(document.getElementById('n2').value);
@@ -643,20 +650,7 @@ function calculateDosVarianzas() {
     let pValue = calculatePValueF(statistic, df1, df2, tail);
     pValue = Math.min(Math.max(pValue, 0), 1);
 
-    const critical = getFCriticalValues(alpha, tail, df1, df2);
-    const decision = pValue < alpha ? 'H₀ is rejected.' : 'H₀ is not rejected.';
-
-    let criticalStr;
-    if (tail === 'two') {
-        criticalStr = `F_left = ${critical.left.toFixed(4)}, F_right = ${critical.right.toFixed(4)}`;
-    } else if (tail === 'right') {
-        criticalStr = `F_crit = ${critical.right.toFixed(4)}`;
-    } else {
-        criticalStr = `F_crit = ${critical.left.toFixed(4)}`;
-    }
-
-    resultEl.innerText =
-        `F = ${statistic.toFixed(4)} | df₁ = ${df1}, df₂ = ${df2} | ${criticalStr} | p-value = ${pValue.toFixed(6)} | ${decision}`;
+    renderTwoVariancesResult('dosVarianzasResult', { alpha, tail, stat: statistic, p: pValue, df1, df2 });
 
     renderDosVarianzasChart(statistic, alpha, tail, df1, df2);
 }

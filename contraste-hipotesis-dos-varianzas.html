@@ -67,46 +67,78 @@
     }
     </script>
     <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
     {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "¿Qué supuesto fundamental requiere el test F?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "El test F de igualdad de varianzas asume que los datos de ambos grupos proceden de poblaciones con distribución normal. Es sensible a desviaciones de la normalidad, por lo que ante dudas sobre este supuesto conviene considerar alternativas robustas como el test de Levene o el de Bartlett."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Importa cuál varianza va en el numerador?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "En un contraste bilateral no importa, ya que el p-valor se calcula teniendo en cuenta ambas colas. En contrastes unilaterales sí importa: si quieres contrastar que σ₁² > σ₂², debes colocar la varianza del grupo 1 en el numerador (F = s₁²/s₂²) y usar la cola derecha."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Cuándo usar el test F en lugar de la prueba de Levene?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "El test F es adecuado cuando los datos pueden asumirse normales. La prueba de Levene es más robusta ante desviaciones de la normalidad y se recomienda cuando esta condición no puede verificarse. En la práctica, para muestras pequeñas con normalidad confirmada, el test F es la elección clásica."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Puede el test F aplicarse a más de dos grupos?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No directamente. El test F de igualdad de varianzas compara exactamente dos grupos. Para comparar la homogeneidad de varianzas en más de dos grupos se utilizan pruebas como el test de Bartlett o el test de Levene generalizado, que están diseñados para el caso de k grupos."
-          }
-        }
-      ]
+      "@type": "Question",
+      "name": "¿Qué contrasta el test F de dos varianzas?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Si dos poblaciones independientes tienen la misma varianza, a partir del cociente de las varianzas muestrales."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué varianza va en el numerador?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "La del grupo 1. Puedes poner cualquiera; muchos libros ponen la mayor para que F sea mayor que 1 y baste con el valor crítico superior."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Por qué hay dos valores críticos distintos?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Porque la distribución F no es simétrica. El inferior es el inverso del superior con los grados de libertad intercambiados."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué pasa si los datos no son normales?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El test F deja de ser fiable, incluso con muestras grandes. Usa el test de Levene o el de Brown-Forsythe."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Debo hacerlo antes de un contraste t de dos medias?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No es recomendable. Es mejor usar directamente el contraste de Welch, que no supone varianzas iguales."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo interpreto el valor de F?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Es el cociente de varianzas. Su raíz cuadrada es el cociente de desviaciones típicas: F = 4 significa que una desviación típica es el doble de la otra."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué es la razón mínima detectable?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El cociente de desviaciones típicas más cercano a 1 que el contraste detectaría con un 80 % de probabilidad con tus tamaños de muestra."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cuántos datos necesito?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Bastantes: unos 50 por grupo para detectar que una desviación típica es 1,5 veces la otra, y unos 160 por grupo para un cociente de 1,25."
+      }
     }
+  ]
+}
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="style_new.css?v=20261107-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -157,7 +189,6 @@
     </header>
 
     <main>
-
         <section class="ss-shell" aria-label="Calculadora">
             <section class="card ss-controls">
                 <div class="panel-heading">
@@ -230,222 +261,126 @@
         </section>
 
         <section class="card content-card">
-            <h3>Explicación</h3>
+            <h3>¿Qué es el contraste de hipótesis para dos varianzas?</h3>
+            <p>Es el procedimiento que permite decidir si dos poblaciones independientes tienen la misma <strong>variabilidad</strong>. Se conoce como <strong>test F de Snedecor</strong> (o de Fisher-Snedecor) de igualdad de varianzas. Sirve para preguntas como: ¿es una máquina más regular que otra? ¿Mide un instrumento con más precisión que otro? ¿Son las notas de un grupo más homogéneas que las de otro? ¿Es más volátil una inversión que otra?</p>
+            <p>La idea es muy directa: se divide una varianza muestral entre la otra. Si las dos poblaciones tienen la misma varianza, el cociente debería rondar 1; cuanto más se aleja de 1, más evidencia de que las variabilidades son distintas.</p>
 
-            <p>
-                El test F de Snedecor es el procedimiento clásico para contrastar si dos poblaciones
-                independientes presentan la misma variabilidad. En lugar de comparar promedios, este
-                contraste evalúa si la dispersión de un grupo es significativamente mayor o menor que
-                la del otro.
-            </p>
-
-            <p>
-                El método es habitual en control de calidad, estudios comparativos y como paso previo
-                a otras pruebas: por ejemplo, la elección entre la t de Student con varianzas iguales
-                o con varianzas distintas depende de si se puede asumir homocedasticidad, algo que
-                precisamente evalúa este test.
-            </p>
-
-            <p>
-                El estadístico F se construye como el cociente entre las dos varianzas muestrales.
-                Bajo la hipótesis nula de igualdad de varianzas, este cociente sigue una distribución
-                F de Snedecor con \(n_1 - 1\) y \(n_2 - 1\) grados de libertad. Si las varianzas
-                son muy distintas, el cociente se alejará de 1 y el test resultará significativo.
-            </p>
-
-            <p>
-                El supuesto fundamental es la normalidad de los datos en ambos grupos. El test F es
-                sensible a esta condición; ante dudas sobre la normalidad conviene considerar
-                alternativas como el test de Levene, más robusto.
-            </p>
-        </section>
-
-        <section class="card content-card">
             <h3>Hipótesis y estadístico</h3>
-
-            <p>El contraste plantea como hipótesis nula la igualdad de varianzas poblacionales:</p>
-
-            <p class="formula-line">\(H_0\colon \sigma_1^2 = \sigma_2^2\)</p>
-
-            <p>La hipótesis alternativa depende del tipo de contraste elegido:</p>
-
+            <p class="formula-line">\(H_0: \sigma_1^2 = \sigma_2^2\)</p>
+            <p class="formula-line">\(H_1: \sigma_1^2 \neq \sigma_2^2\), \(\sigma_1^2 > \sigma_2^2\) o \(\sigma_1^2 &lt; \sigma_2^2\)</p>
+            <p class="formula-line">\( F = \dfrac{s_1^2}{s_2^2}, \quad gl_1 = n_1 - 1, \quad gl_2 = n_2 - 1 \)</p>
             <ul>
-                <li>Bilateral: \(H_1\colon \sigma_1^2 \neq \sigma_2^2\)</li>
-                <li>Cola derecha: \(H_1\colon \sigma_1^2 > \sigma_2^2\)</li>
-                <li>Cola izquierda: \(H_1\colon \sigma_1^2 < \sigma_2^2\)</li>
+                <li><strong>\(s_1^2, s_2^2\)</strong>: varianzas muestrales de los dos grupos.</li>
+                <li><strong>\(n_1, n_2\)</strong>: tamaños de los grupos.</li>
+                <li><strong>\(gl_1, gl_2\)</strong>: grados de libertad del numerador y del denominador.</li>
+            </ul>
+            <p>Si los datos de los dos grupos son normales y \(H_0\) es cierta, el estadístico sigue una <strong>distribución F de Snedecor</strong> con \(gl_1\) y \(gl_2\) grados de libertad. El orden importa: los primeros grados de libertad son siempre los de la varianza del numerador.</p>
+
+            <h3>Valores críticos y colas</h3>
+            <p>La distribución F no es simétrica: solo toma valores positivos y tiene una cola larga a la derecha. Por eso, en el contraste bilateral hay dos valores críticos distintos, y el inferior se obtiene a partir de la <a href="tabla-f-snedecor.html">tabla F</a> con la relación</p>
+            <p class="formula-line">\( F_{\alpha/2;\ gl_1,\ gl_2} = \dfrac{1}{F_{1-\alpha/2;\ gl_2,\ gl_1}} \)</p>
+            <p>Muchos libros evitan ese paso colocando siempre la varianza mayor en el numerador, de modo que \(F \geq 1\) y basta con el valor crítico superior. La calculadora no lo necesita: calcula las dos colas y admite cualquier orden.</p>
+            <ul>
+                <li><strong>Bilateral</strong>: ¿son distintas las varianzas?</li>
+                <li><strong>Cola derecha</strong>: ¿es mayor la varianza del grupo 1?</li>
+                <li><strong>Cola izquierda</strong>: ¿es menor la varianza del grupo 1?</li>
             </ul>
 
-            <p>El estadístico de contraste es el cociente de las varianzas muestrales:</p>
-
-            <p class="formula-line">
-                \( F = \dfrac{s_1^2}{s_2^2} \)
-            </p>
-
-            <p>
-                Bajo \(H_0\), este estadístico sigue una distribución F de Snedecor con grados de
-                libertad \(gl_1 = n_1 - 1\) y \(gl_2 = n_2 - 1\):
-            </p>
-
-            <p class="formula-line">
-                \( F = \dfrac{s_1^2}{s_2^2} \sim F_{n_1-1,\; n_2-1} \)
-            </p>
-
-            <p>
-                Se rechaza \(H_0\) cuando el estadístico F cae en la región crítica determinada
-                por el nivel de significación \(\alpha\) y el tipo de contraste seleccionado.
-            </p>
+            <h3>Regla de decisión</h3>
+            <ul>
+                <li>Si el <strong>p-valor</strong> es menor que \(\alpha\), se rechaza \(H_0\): hay evidencia de que las varianzas difieren.</li>
+                <li>Si el p-valor es mayor o igual que \(\alpha\), no hay evidencia suficiente para rechazar \(H_0\).</li>
+                <li>No rechazar \(H_0\) no demuestra que las varianzas sean iguales.</li>
+            </ul>
         </section>
 
         <section class="card content-card">
-            <h3>Contraste rápido</h3>
-
-            <p>
-                Una primera lectura del estadístico F orienta sobre el resultado antes de mirar el p-valor:
-            </p>
-
+            <h3>Supuestos: cuidado con la normalidad</h3>
             <ul>
-                <li>
-                    <strong>F próximo a 1:</strong> las varianzas muestrales son similares. Salvo que
-                    las muestras sean muy grandes, es probable que no haya evidencia para rechazar \(H_0\).
-                </li>
-                <li>
-                    <strong>F claramente mayor que 1:</strong> el grupo 1 presenta mayor variabilidad
-                    que el grupo 2. Cuanto más se aleje de 1, más evidencia a favor de \(\sigma_1^2 > \sigma_2^2\).
-                </li>
-                <li>
-                    <strong>F claramente menor que 1:</strong> el grupo 2 presenta mayor variabilidad
-                    que el grupo 1. Un valor muy cercano a 0 indica fuerte evidencia de \(\sigma_1^2 < \sigma_2^2\).
-                </li>
+                <li><strong>Dos muestras independientes</strong>, con observaciones independientes dentro de cada una.</li>
+                <li><strong>Datos normales en los dos grupos.</strong> Es el supuesto crítico.</li>
             </ul>
+            <p>El test F es <strong>muy sensible a la falta de normalidad</strong>, y no mejora al aumentar la muestra. Con distribuciones de colas pesadas, puede rechazar la igualdad de varianzas el doble o el triple de veces de lo que indica \(\alpha\), aunque las varianzas sean iguales; en la práctica, a veces detecta que los datos no son normales y no que las varianzas difieran.</p>
+            <p>Por eso conviene comprobar la normalidad de cada grupo (por ejemplo, con el <a href="shapiro-wilk-normalidad.html">test de Shapiro-Wilk</a>) y revisar los valores atípicos. Si hay dudas, la alternativa recomendada es el <strong>test de Levene</strong>, o su variante de Brown-Forsythe basada en la mediana, que apenas depende de la forma de la distribución y sirve también para más de dos grupos.</p>
 
-            <p>
-                En cualquier caso, la decisión formal debe basarse en el p-valor y en el nivel de
-                significación \(\alpha\), no solo en la magnitud de F.
-            </p>
-
-            <p>
-                Si el resultado es significativo, conviene investigar el origen de la diferencia de
-                variabilidades: distintos procesos, instrumentos, condiciones de medición, lotes o
-                grupos humanos pueden explicar la disparidad observada.
-            </p>
+            <h3>¿Sirve para elegir el contraste de medias?</h3>
+            <p>Durante años se enseñó a usar el test F como paso previo al contraste de dos medias: si no se rechazaba la igualdad de varianzas, se usaba la t de Student con varianza común; si se rechazaba, la de Welch. Hoy se desaconseja: ese procedimiento en dos etapas no controla bien el error de tipo I, y el test F, con muestras pequeñas, tiene poca potencia justo cuando haría falta. Lo recomendable es usar directamente el <a href="contraste-hipotesis-dos-medias.html">contraste de Welch</a>, que funciona bien tanto si las varianzas son iguales como si no. El test F debe reservarse para cuando la variabilidad es, en sí misma, la pregunta.</p>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto</h3>
+            <h3>Ejemplo resuelto 1: contraste bilateral</h3>
+            <p>Se compara la variabilidad de dos líneas de producción de piezas metálicas. Línea 1: \(s_1^2 = 16\) mm² con \(n_1 = 20\) piezas. Línea 2: \(s_2^2 = 9\) mm² con \(n_2 = 18\) piezas. Se contrasta \(H_0\colon \sigma_1^2 = \sigma_2^2\) frente a \(H_1\colon \sigma_1^2 \neq \sigma_2^2\) con \(\alpha = 0{,}05\).</p>
+            <p class="formula-line">\( F = \dfrac{16}{9} \approx 1{,}778, \quad gl_1 = 19, \quad gl_2 = 17 \)</p>
+            <p>Los valores críticos son \(F_{0{,}025;\,19,\,17} \approx 0{,}39\) y \(F_{0{,}975;\,19,\,17} \approx 2{,}63\). Como \(0{,}39 < 1{,}778 < 2{,}63\), el estadístico no cae en la región de rechazo; el p-valor es \(p \approx 0{,}238\). <strong>No se rechaza \(H_0\)</strong>.</p>
+            <p>Conclusión: no hay evidencia suficiente de que las dos líneas tengan distinta variabilidad. Pero el intervalo de confianza del 95 % para \(\sigma_1^2/\sigma_2^2\) va de 0,68 a 4,56: es compatible con varianzas iguales y también con que la línea 1 tenga una varianza más de cuatro veces mayor. Con 20 y 18 piezas, el contraste solo detecta con un 80 % de probabilidad desviaciones típicas que difieran en un factor de casi 2.</p>
+            <p><strong>En la calculadora:</strong> n₁ = 20, n₂ = 18, s₁² = 16, s₂² = 9 y «Bilateral». Son los valores con los que se abre la página.</p>
 
-            <p>
-                Se desea comparar la variabilidad de dos líneas de producción de piezas metálicas.
-                Línea 1: varianza muestral \(s_1^2 = 16\) mm², tamaño muestral \(n_1 = 20\) piezas.
-                Línea 2: varianza muestral \(s_2^2 = 9\) mm², tamaño muestral \(n_2 = 18\) piezas.
-                Se contrasta \(H_0\colon \sigma_1^2 = \sigma_2^2\) frente a
-                \(H_1\colon \sigma_1^2 \neq \sigma_2^2\) con \(\alpha = 0{,}05\) bilateral.
-            </p>
-
-            <p><strong>Paso 1 — Estadístico F</strong></p>
-            <p class="formula-line">
-                \( F = \dfrac{s_1^2}{s_2^2} = \dfrac{16}{9} \approx 1{,}7778 \)
-            </p>
-
-            <p><strong>Paso 2 — Grados de libertad</strong></p>
-            <p class="formula-line">
-                \( gl_1 = n_1 - 1 = 19, \quad gl_2 = n_2 - 1 = 17 \)
-            </p>
-
-            <p><strong>Paso 3 — Valores críticos (α = 0,05 bilateral)</strong></p>
-            <p>
-                El valor crítico superior es \(F_{0{,}025;\,19,\,17} \approx 2{,}63\).
-                El valor crítico inferior es \(F_{0{,}975;\,19,\,17} = 1 / F_{0{,}025;\,17,\,19} \approx 0{,}38\).
-            </p>
-
-            <p><strong>Paso 4 — Decisión</strong></p>
-            <p>
-                Como \(0{,}38 < F = 1{,}7778 < 2{,}63\), el estadístico no cae en ninguna región de
-                rechazo. El p-valor bilateral es \(p \approx 0{,}24 > 0{,}05\).
-            </p>
-
-            <p>
-                Conclusión: <strong>no se rechaza \(H_0\)</strong>. Los datos no aportan evidencia
-                significativa de que las dos líneas tengan varianzas distintas al nivel de significación
-                del 5 %. Las variabilidades observadas son compatibles con la hipótesis de igualdad.
-            </p>
+            <h3>Ejemplo resuelto 2: contraste de una cola</h3>
+            <p>Un laboratorio sospecha que un instrumento antiguo (grupo 1) mide con menos precisión que uno nuevo (grupo 2). Con 25 mediciones de la misma muestra en cada instrumento, obtiene \(s_1^2 = 36\) y \(s_2^2 = 12\). Se contrasta \(H_0\colon \sigma_1^2 = \sigma_2^2\) frente a \(H_1\colon \sigma_1^2 > \sigma_2^2\) con \(\alpha = 0{,}05\).</p>
+            <p class="formula-line">\( F = \dfrac{36}{12} = 3{,}00, \quad gl_1 = gl_2 = 24 \)</p>
+            <p>El valor crítico de cola derecha es \(F_{0{,}95;\,24,\,24} \approx 1{,}98\) y el p-valor, \(p \approx 0{,}005\). <strong>Se rechaza \(H_0\)</strong>: hay evidencia de que el instrumento antiguo es menos preciso. Su desviación típica es unas 1,7 veces la del nuevo (\(\sqrt{3} \approx 1{,}73\)), con un intervalo del 95 % para ese cociente de 1,15 a 2,61.</p>
+            <p><strong>En la calculadora:</strong> n₁ = 25, n₂ = 25, s₁² = 36, s₂² = 12 y «Cola derecha».</p>
         </section>
 
         <section class="card content-card">
             <h3>Cómo interpretar el resultado</h3>
+            <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que las dos poblaciones tienen distinta variabilidad, siempre que los datos sean normales. Para valorar cuánto, es más intuitivo el cociente de desviaciones típicas que el de varianzas: un F de 4 significa que una desviación típica es el doble de la otra.</p>
+            <p><strong>No rechazar \(H_0\)</strong> no demuestra que las varianzas sean iguales. Con muestras pequeñas, el intervalo de confianza del cociente es muy ancho, como en el ejemplo 1.</p>
+            <p>En la calculadora, el resultado muestra la decisión con el p-valor, el estadístico F con sus grados de libertad y una frase con la conclusión. En el gráfico, la zona verde es la región de no rechazo sobre la distribución F, las rojas son las regiones críticas y la línea ámbar marca el estadístico. En «Detalles del cálculo» tienes los valores críticos y los intervalos de confianza para el cociente de varianzas y de desviaciones típicas.</p>
 
-                <p>
-                <strong>Rechazar \(H_0\)</strong> (p-valor &lt; \(\alpha\)) indica que el cociente
-                de varianzas muestrales \(F = s^2_1 / s^2_2\) es estadísticamente incompatible con
-                la igualdad poblacional \(\sigma^2_1 = \sigma^2_2\). En la práctica esto es relevante,
-                por ejemplo, cuando se quiere decidir qué variante del test t usar (varianzas iguales
-                o desiguales) o cuando la homogeneidad de varianzas es un supuesto del <a href="anova.html">ANOVA</a>.
-                No obstante, el test F de Snedecor es muy sensible a desviaciones de la normalidad:
-                un resultado significativo puede deberse a colas asimétricas más que a varianzas
-                genuinamente distintas. Antes de actuar, inspecciona los datos visualmente.
-                </p>
-
-                <p>
-                <strong>No rechazar \(H_0\)</strong> (p-valor ≥ \(\alpha\)) no demuestra homocedasticidad;
-                solo indica que los datos son compatibles con \(\sigma^2_1 = \sigma^2_2\) al nivel
-                elegido. El test F tiene baja potencia con muestras pequeñas, por lo que puede no
-                detectar diferencias reales de varianza. El cociente \(F\) observado y su intervalo
-                de confianza aportan información sobre la magnitud relativa de las variabilidades.
-                </p>
-
-                <p>
-                El <strong>estadístico F</strong> sigue bajo \(H_0\) una distribución F de Snedecor
-                con \((n_1-1, n_2-1)\) grados de libertad. En la visualización, la zona verde es la
-                región de no rechazo y las zonas rojas son las colas críticas; la línea ámbar señala
-                el estadístico observado. Dado que \(F \geq 0\), la distribución es asimétrica a la
-                derecha: un \(F \gg 1\) sugiere mayor varianza en el grupo 1, mientras que \(F \ll 1\)
-                sugiere mayor varianza en el grupo 2. Con muestras muy grandes, diferencias moderadas
-                en varianzas pueden resultar significativas aunque tengan escaso impacto práctico.
-                </p>
+            <h3>Potencia y razón mínima detectable</h3>
+            <p>Comparar variabilidades exige muchos más datos que comparar medias. Debajo de la conclusión, la calculadora indica la <strong>razón mínima detectable</strong>: el cociente de desviaciones típicas \(\sigma_1/\sigma_2\) más cercano a 1 que el contraste detectaría con un 80 % de probabilidad con tus tamaños de muestra. El enlace abre la <a href="tamano-muestral-dos-varianzas.html">calculadora de tamaño muestral para dos varianzas</a> con tu α y el tipo de contraste. Como referencia, en un contraste bilateral con \(\alpha = 0{,}05\):</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Cociente de desviaciones típicas a detectar</th><th>Tamaño necesario por grupo (potencia 80 %)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>2 (una el doble que la otra)</td><td>19</td></tr>
+                        <tr><td>1,5</td><td>50</td></tr>
+                        <tr><td>1,25</td><td>160</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
+
+        <section class="card content-card">
+            <h3>Errores frecuentes</h3>
+            <ul>
+                <li><strong>Aplicar el test F a datos no normales</strong>: es su punto débil. Usa Levene si hay dudas.</li>
+                <li><strong>Introducir desviaciones típicas en lugar de varianzas.</strong></li>
+                <li><strong>Usarlo como paso previo al contraste de medias</strong> en lugar de aplicar Welch directamente.</li>
+                <li><strong>Intercambiar los grados de libertad</strong> al consultar la tabla: los del numerador van primero.</li>
+                <li><strong>Concluir que las varianzas son iguales</strong> porque el contraste no es significativo con muestras pequeñas.</li>
+                <li><strong>Usarlo con datos emparejados</strong>: las dos muestras deben ser independientes.</li>
+            </ul>
+        </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
-                <h3>Calculadoras relacionadas</h3>
-                <ul>
-                    <li><a href="contraste-hipotesis-varianzas.html">Contrastes sobre varianzas — una o dos varianzas</a></li>
-                    <li><a href="tamano-muestral-dos-varianzas.html">Tamaño muestral para comparar dos varianzas</a></li>
-                    <li><a href="centralf.html">Distribución F de Snedecor</a></li>
-                    <li><a href="contrastes-hipotesis/">Todos los contrastes de hipótesis</a></li>
-                </ul>
+              <h3>Calculadoras relacionadas</h3>
+              <ul>
+                <li><a href="tamano-muestral-dos-varianzas.html">Tamaño muestral para dos varianzas</a></li>
+                <li><a href="contraste-hipotesis-varianzas.html">Contraste para una varianza</a></li>
+                <li><a href="contraste-hipotesis-dos-medias.html">Contraste para dos medias (Welch)</a></li>
+                <li><a href="anova.html">ANOVA de un factor</a></li>
+                <li><a href="tabla-f-snedecor.html">Tabla F de Snedecor</a></li>
+              </ul>
             </section>
-
             <h3>Preguntas frecuentes</h3>
-
             <ul>
-                <li>
-                    <strong>¿Qué supuesto fundamental requiere el test F?</strong>
-                    El test F asume que los datos de ambos grupos proceden de poblaciones con distribución
-                    normal. Es sensible a desviaciones de la normalidad, por lo que ante dudas sobre este
-                    supuesto conviene considerar alternativas robustas como el test de Levene o el de Bartlett.
-                </li>
-                <li>
-                    <strong>¿Importa cuál varianza va en el numerador?</strong>
-                    En un contraste bilateral no importa, ya que el p-valor se calcula teniendo en cuenta
-                    ambas colas. En contrastes unilaterales sí importa: si quieres contrastar que
-                    \(\sigma_1^2 > \sigma_2^2\), debes colocar la varianza del grupo 1 en el numerador
-                    y usar la cola derecha.
-                </li>
-                <li>
-                    <strong>¿Cuándo usar el test F en lugar de la prueba de Levene?</strong>
-                    El test F es adecuado cuando los datos pueden asumirse normales. La prueba de Levene
-                    es más robusta ante desviaciones de la normalidad y se recomienda cuando esta condición
-                    no puede verificarse. Para muestras pequeñas con normalidad confirmada, el test F es
-                    la elección clásica.
-                </li>
-                <li>
-                    <strong>¿Puede el test F aplicarse a más de dos grupos?</strong>
-                    No directamente. El test F de igualdad de varianzas compara exactamente dos grupos.
-                    Para comparar la homogeneidad de varianzas en más de dos grupos se utilizan pruebas
-                    como el test de Bartlett o el test de Levene generalizado, diseñados para el caso
-                    de k grupos.
-                </li>
+                <li><strong>¿Qué contrasta el test F de dos varianzas?</strong> Si dos poblaciones independientes tienen la misma varianza, a partir del cociente de las varianzas muestrales.</li>
+                <li><strong>¿Qué varianza va en el numerador?</strong> La del grupo 1. Puedes poner cualquiera; muchos libros ponen la mayor para que F sea mayor que 1 y baste con el valor crítico superior.</li>
+                <li><strong>¿Por qué hay dos valores críticos distintos?</strong> Porque la distribución F no es simétrica. El inferior es el inverso del superior con los grados de libertad intercambiados.</li>
+                <li><strong>¿Qué pasa si los datos no son normales?</strong> El test F deja de ser fiable, incluso con muestras grandes. Usa el test de Levene o el de Brown-Forsythe.</li>
+                <li><strong>¿Debo hacerlo antes de un contraste t de dos medias?</strong> No es recomendable. Es mejor usar directamente el contraste de Welch, que no supone varianzas iguales.</li>
+                <li><strong>¿Cómo interpreto el valor de F?</strong> Es el cociente de varianzas. Su raíz cuadrada es el cociente de desviaciones típicas: F = 4 significa que una desviación típica es el doble de la otra.</li>
+                <li><strong>¿Qué es la razón mínima detectable?</strong> El cociente de desviaciones típicas más cercano a 1 que el contraste detectaría con un 80 % de probabilidad con tus tamaños de muestra.</li>
+                <li><strong>¿Cuántos datos necesito?</strong> Bastantes: unos 50 por grupo para detectar que una desviación típica es 1,5 veces la otra, y unos 160 por grupo para un cociente de 1,25.</li>
             </ul>
-            <p class="external-ref">Referencia: <a href="https://es.wikipedia.org/wiki/Prueba_F_de_igualdad_de_varianzas" target="_blank" rel="noopener noreferrer">Prueba F de igualdad de varianzas</a> — Wikipedia</p>
+            <p class="external-ref">Referencia: <a href="https://es.wikipedia.org/wiki/Distribuci%C3%B3n_F" target="_blank" rel="noopener noreferrer">Distribución F de Snedecor</a> — Wikipedia</p>
         </section>
+
     </main>
 
     <footer class="legal-footer">
@@ -465,6 +400,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="test-results.js?v=20261111-3"></script>
 
 <script>
 let dosVarianzasChart;
@@ -620,6 +556,77 @@ function renderDosVarianzasChart(statistic, alpha, tail, df1, df2) {
     });
 }
 
+// Potencia exacta del contraste F si la razón real de desviaciones típicas es R = σ₁/σ₂.
+function twoVariancesPower(df1, df2, R, alpha, tail) {
+    const R2 = R * R, F = jStat.centralF;
+    if (tail === 'two') return F.cdf(F.inv(alpha / 2, df1, df2) / R2, df1, df2) + (1 - F.cdf(F.inv(1 - alpha / 2, df1, df2) / R2, df1, df2));
+    if (tail === 'right') return 1 - F.cdf(F.inv(1 - alpha, df1, df2) / R2, df1, df2);
+    return F.cdf(F.inv(alpha, df1, df2) / R2, df1, df2);
+}
+
+function twoVarRatioMde(powerFn, tail) {
+    const R = TestResult;
+    const upLn = tail === 'left' ? null : R.solveMin((t) => powerFn(Math.exp(t)) >= R.TARGET, 1e-6, Math.log(100));
+    const downLn = tail === 'right' ? null : R.solveMin((t) => powerFn(Math.exp(-t)) >= R.TARGET, 1e-6, Math.log(100));
+    return {
+        up: upLn == null ? null : R.sigUp(Math.exp(upLn), 3),
+        down: downLn == null ? null : Math.floor(Math.exp(-downLn) * 1000) / 1000
+    };
+}
+
+function renderTwoVariancesResult(elId, o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const m = twoVarRatioMde((r) => twoVariancesPower(o.df1, o.df2, r, o.alpha, o.tail), o.tail);
+    const f2 = (v) => R.num(v, 2);
+    const none = m.up == null && m.down == null;
+    const mdeTxt = none ? null : EN
+        ? (o.tail === 'right' ? f2(m.up) + ' or more' : o.tail === 'left' ? f2(m.down) + ' or less' : f2(m.up) + ' or more (or ' + f2(m.down) + ' or less)')
+        : (o.tail === 'right' ? 'de ' + f2(m.up) + ' o mayores' : o.tail === 'left' ? 'de ' + f2(m.down) + ' o menores' : 'de ' + f2(m.up) + ' o mayores (o de ' + f2(m.down) + ' o menores)');
+    const T = EN ? {
+        label: 'F test for two variances, ' + { two: 'two-tailed', right: 'right-tailed', left: 'left-tailed' }[o.tail],
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        sec: 'F = ' + R.num(o.stat, 4) + ' with ' + o.df1 + ' and ' + o.df2 + ' degrees of freedom',
+        yes: '✓ There is statistical evidence that ' + { two: 'the variances of the two groups differ.', right: 'the variance of group 1 is greater than that of group 2.', left: 'the variance of group 1 is less than that of group 2.' }[o.tail],
+        no: 'ℹ There is not enough evidence that ' + { two: 'the variances of the two groups differ', right: 'the variance of group 1 is greater than that of group 2', left: 'the variance of group 1 is less than that of group 2' }[o.tail] + '. This does not prove that they are equal.',
+        mde: none ? 'With these sample sizes, the test does not reach ' + R.pct(R.TARGET) + ' power even for very different variabilities.'
+            : 'With these sample sizes, the test detects with ' + R.pct(R.TARGET) + ' probability only ratios of standard deviations σ₁/σ₂ of ' + mdeTxt + '.',
+        link: 'Work out the sample size needed for another ratio',
+        rows: ['Ratio of variances (s₁²/s₂²)', 'Ratio of standard deviations (s₁/s₂)', 'Test statistic', 'Degrees of freedom', 'Critical value', 'p-value', R.pctLevel(1 - o.alpha) + ' confidence interval for σ₁²/σ₂²', R.pctLevel(1 - o.alpha) + ' confidence interval for σ₁/σ₂', 'Minimum detectable ratio σ₁/σ₂ (power ' + R.pct(R.TARGET) + ')']
+    } : {
+        label: 'Contraste F para dos varianzas, ' + { two: 'bilateral', right: 'de cola derecha', left: 'de cola izquierda' }[o.tail],
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        sec: 'F = ' + R.num(o.stat, 4) + ' con ' + o.df1 + ' y ' + o.df2 + ' grados de libertad',
+        yes: '✓ Hay evidencia estadística de que ' + { two: 'las varianzas de los dos grupos son distintas.', right: 'la varianza del grupo 1 es mayor que la del grupo 2.', left: 'la varianza del grupo 1 es menor que la del grupo 2.' }[o.tail],
+        no: 'ℹ No hay evidencia suficiente de que ' + { two: 'las varianzas de los dos grupos sean distintas', right: 'la varianza del grupo 1 sea mayor que la del grupo 2', left: 'la varianza del grupo 1 sea menor que la del grupo 2' }[o.tail] + '. Esto no demuestra que sean iguales.',
+        mde: none ? 'Con estos tamaños de muestra, el contraste no llega a un ' + R.pct(R.TARGET) + ' de potencia ni con variabilidades muy distintas.'
+            : 'Con estos tamaños de muestra, el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad cocientes de desviaciones típicas σ₁/σ₂ ' + mdeTxt + '.',
+        link: 'Calcular el tamaño muestral necesario para otra razón',
+        rows: ['Cociente de varianzas (s₁²/s₂²)', 'Cociente de desviaciones típicas (s₁/s₂)', 'Estadístico', 'Grados de libertad', 'Valor crítico', 'p-valor', 'Intervalo de confianza al ' + R.pctLevel(1 - o.alpha) + ' para σ₁²/σ₂²', 'Intervalo de confianza al ' + R.pctLevel(1 - o.alpha) + ' para σ₁/σ₂', 'Razón σ₁/σ₂ mínima detectable (potencia ' + R.pct(R.TARGET) + ')']
+    };
+    const F = jStat.centralF;
+    const cLo = F.inv(o.tail === 'two' ? o.alpha / 2 : o.alpha, o.df1, o.df2), cHi = F.inv(o.tail === 'two' ? 1 - o.alpha / 2 : 1 - o.alpha, o.df1, o.df2);
+    const crit = o.tail === 'two' ? R.num(cLo, 4) + (EN ? ' and ' : ' y ') + R.num(cHi, 4) : R.num(o.tail === 'right' ? cHi : cLo, 4);
+    const lo = o.stat / F.inv(1 - o.alpha / 2, o.df1, o.df2), hi = o.stat / F.inv(o.alpha / 2, o.df1, o.df2);
+    const notes = [];
+    if (!none) {
+        const rLink = o.tail === 'left' || (o.tail === 'two' && o.stat < 1) ? m.down : m.up;
+        const url = 'tamano-muestral-dos-varianzas.html?r=' + rLink + '&alpha=' + o.alpha + '&power=' + R.TARGET + '&alt=' + (o.tail === 'two' ? 'two-sided' : 'one-sided');
+        notes.push(R.esc(T.mde) + ' ' + R.link(url, T.link));
+    } else notes.push(R.esc(T.mde));
+    R.render(document.getElementById(elId), {
+        label: T.label + ' · H₀: σ₁² = σ₂² · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, sec: [T.sec],
+        ok: rejected, verdict: rejected ? T.yes : T.no, notes: notes,
+        rows: [
+            [T.rows[0], R.num(o.stat, 4)], [T.rows[1], R.num(Math.sqrt(o.stat), 4)], [T.rows[2], 'F = ' + R.num(o.stat, 4)],
+            [T.rows[3], o.df1 + (EN ? ' and ' : ' y ') + o.df2], [T.rows[4], crit], [T.rows[5], R.prob(o.p)],
+            [T.rows[6], R.interval(lo, hi, 4)], [T.rows[7], R.interval(Math.sqrt(lo), Math.sqrt(hi), 4)],
+            [T.rows[8], none ? '—' : (o.tail === 'right' ? '≥ ' + f2(m.up) : o.tail === 'left' ? '≤ ' + f2(m.down) : '≥ ' + f2(m.up) + (EN ? ' or ≤ ' : ' o ≤ ') + f2(m.down))]
+        ]
+    });
+}
+
 function calculateDosVarianzas() {
     const n1 = parseFloat(document.getElementById('n1').value);
     const n2 = parseFloat(document.getElementById('n2').value);
@@ -647,20 +654,7 @@ function calculateDosVarianzas() {
     let pValue = calculatePValueF(statistic, df1, df2, tail);
     pValue = Math.min(Math.max(pValue, 0), 1);
 
-    const critical = getFCriticalValues(alpha, tail, df1, df2);
-    const decision = pValue < alpha ? 'Se rechaza H₀.' : 'No se rechaza H₀.';
-
-    let criticalStr;
-    if (tail === 'two') {
-        criticalStr = `F_izq = ${critical.left.toFixed(4)}, F_der = ${critical.right.toFixed(4)}`;
-    } else if (tail === 'right') {
-        criticalStr = `F_crit = ${critical.right.toFixed(4)}`;
-    } else {
-        criticalStr = `F_crit = ${critical.left.toFixed(4)}`;
-    }
-
-    resultEl.innerText =
-        `F = ${statistic.toFixed(4)} | gl₁ = ${df1}, gl₂ = ${df2} | ${criticalStr} | p-valor = ${pValue.toFixed(6)} | ${decision}`;
+    renderTwoVariancesResult('dosVarianzasResult', { alpha, tail, stat: statistic, p: pValue, df1, df2 });
 
     renderDosVarianzasChart(statistic, alpha, tail, df1, df2);
 }

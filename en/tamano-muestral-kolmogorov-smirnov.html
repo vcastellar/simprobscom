@@ -358,6 +358,16 @@ function calculateKSSampleSize() {
 }
 
 document.getElementById('ksCalculateBtn').addEventListener('click', calculateKSSampleSize);
+(function () {
+    // Valores recibidos por la URL, por ejemplo desde la calculadora del contraste.
+    let params;
+    try { params = new URLSearchParams(location.search); } catch (e) { return; }
+    const fields = { d: "ksD", alpha: "ksAlpha", power: "ksPower" };
+    Object.keys(fields).forEach(function (key) {
+        const value = parseFloat(params.get(key));
+        if (Number.isFinite(value)) document.getElementById(fields[key]).value = value;
+    });
+}());
 calculateKSSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>

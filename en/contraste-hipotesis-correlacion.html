@@ -67,54 +67,86 @@
     }
     </script>
     <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
     {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "When should I use the t-test and when Fisher's z transformation for correlations?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The t-test (with df=n-2) is used when ρ₀=0. When ρ₀≠0, the sampling distribution of r is not symmetric, so Fisher's z transformation (arctanh) is applied to stabilize the variance and obtain an approximately normal statistic."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What assumptions does the Pearson correlation test require?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The pair (X, Y) must follow a bivariate normal distribution, the observations must be independent, and the relationship must be linear. With large sample sizes the test is robust to non-normality of the marginals."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How is the confidence interval for ρ interpreted?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The CI for ρ is built by transforming r with arctanh, computing the CI on the z scale, and converting back to the original scale with tanh. If the CI does not include 0, there is evidence of correlation at that confidence level."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can r be significant even if the correlation is small?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. With large samples even small correlations (|r| < 0.1) can be statistically significant. That is why it is important to report r and its CI in addition to the p-value, in order to assess practical relevance."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What alternative exists if bivariate normality cannot be assumed?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "You can use Spearman's rank correlation or Kendall's tau, which are non-parametric and do not require normality."
-          }
-        }
-      ]
+      "@type": "Question",
+      "name": "What does it test?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Whether the linear correlation between two variables in the population equals a value ρ₀, usually 0, based on the correlation r observed in a sample."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When is t used and when Fisher's z?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The t statistic, when the null hypothesis is ρ = 0. Fisher's z transformation, when testing another value of ρ and for the confidence interval."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is a significant correlation a strong correlation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Significant means distinguishable from zero. With 1000 observations, a correlation of 0.10 is highly significant and explains only 1% of the variability."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is r²?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The coefficient of determination: the proportion of the variability of one variable that is linearly explained by the other."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does correlation imply causation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Two variables can be correlated because both depend on a third one, or by chance."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What assumptions does it require?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Paired, independent data, a linear relationship, approximate normality and no influential outliers. If they fail, use Spearman's correlation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is the confidence interval not symmetric?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Because it is computed on Fisher's z scale and then transformed back; near ±1 the interval is compressed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the minimum detectable correlation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The weakest true correlation that the test would detect with 80% probability given your sample size."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much data do I need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It depends on the correlation you want to detect: about 85 pairs for ρ = 0.3 and about 780 for ρ = 0.1, with α = 0.05 and 80% power."
+      }
     }
+  ]
+}
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -159,7 +191,6 @@
     </header>
 
     <main>
-
         <section class="ss-shell" aria-label="Calculator">
             <section class="card ss-controls">
                 <div class="panel-heading">
@@ -223,66 +254,119 @@
         </section>
 
         <section class="card content-card">
-            <h3>Explanation</h3>
-            <p>The hypothesis test for the Pearson correlation lets you assess whether the population correlation \(\rho\) is compatible with a hypothesized value \(\rho_0\). The most common case is testing \(H_0\colon \rho = 0\) (no linear correlation), but it is also possible to test against any other value.</p>
-            <p>The choice of procedure depends on the null value: if \(\rho_0 = 0\) an exact t-test is used; if \(\rho_0 \neq 0\) Fisher's z transformation (arctanh) is used instead, which stabilizes the variance and produces an approximately normal statistic.</p>
+            <h3>What is a hypothesis test for Pearson's correlation?</h3>
+            <p>It is the procedure for deciding whether the <strong>linear relationship</strong> between two quantitative variables, observed in a sample, really exists in the population or could be due to chance. Pearson's correlation coefficient \(r\) measures that relationship on a scale from −1 to 1: 0 means no linear relationship, positive values mean the two variables increase together, and negative values mean one falls as the other rises. Is height related to weight? Study hours to grades? Advertising spend to sales?</p>
+            <p>With little data, it is easy to get correlations of 0.3 or 0.4 between variables that have nothing to do with each other. The test answers the question: if the true correlation \(\rho\) were 0, would it be unusual to observe an \(r\) like mine with this sample size?</p>
 
-            <h3>Hypotheses and statistics</h3>
-            <p class="formula-line">\(H_0\colon \rho = \rho_0\)</p>
-            <p><strong>When \(\rho_0 = 0\):</strong></p>
-            <p class="formula-line">\( t = \dfrac{r\,\sqrt{n-2}}{\sqrt{1-r^2}}, \quad df = n-2 \)</p>
-            <p><strong>When \(\rho_0 \neq 0\) (Fisher's z transformation):</strong></p>
-            <p class="formula-line">\( z = \left(\operatorname{arctanh}(r) - \operatorname{arctanh}(\rho_0)\right)\cdot\sqrt{n-3} \)</p>
-            <p>The \(100(1-\alpha)\%\) confidence interval for \(\rho\) is always built using Fisher's transformation:</p>
-            <p class="formula-line">\( \hat{\rho}_{\text{lower}} = \tanh\!\left(\operatorname{arctanh}(r) - \dfrac{z_{\alpha/2}}{\sqrt{n-3}}\right) \)</p>
-            <p class="formula-line">\( \hat{\rho}_{\text{upper}} = \tanh\!\left(\operatorname{arctanh}(r) + \dfrac{z_{\alpha/2}}{\sqrt{n-3}}\right) \)</p>
-        </section>
+            <h3>Hypotheses and test statistics</h3>
+            <p class="formula-line">\(H_0: \rho = \rho_0\)</p>
+            <p class="formula-line">\(H_1: \rho \neq \rho_0\), \(\rho > \rho_0\) or \(\rho &lt; \rho_0\)</p>
+            <p>The most common case is testing \(\rho_0 = 0\) ("no correlation"). A t statistic is used:</p>
+            <p class="formula-line">\( t = \dfrac{r\,\sqrt{n-2}}{\sqrt{1-r^2}}, \quad df = n - 2 \)</p>
+            <p>If the null hypothesis states another value (\(\rho_0 \neq 0\); for example, "the correlation is at least 0.5"), the distribution of \(r\) is no longer symmetric and <strong>Fisher's z transformation</strong> is used:</p>
+            <p class="formula-line">\( z_r = \tfrac{1}{2}\ln\dfrac{1+r}{1-r} = \operatorname{arctanh}(r), \qquad z = (z_r - z_{\rho_0})\,\sqrt{n-3} \)</p>
+            <p>The transformation turns \(r\), whose distribution is squeezed near ±1, into an approximately normal quantity with standard error \(1/\sqrt{n-3}\), whatever the true correlation. It is also used to compute the confidence interval for \(\rho\), which the calculator shows in the details and which is therefore not symmetric around \(r\).</p>
 
-        <section class="card content-card">
-            <h3>Quick interpretation guide</h3>
+            <h3>Decision rule</h3>
             <ul>
-                <li>If the <strong>p-value</strong> is smaller than \(\alpha\), \(H_0\) is rejected: there is evidence that \(\rho \neq \rho_0\).</li>
-                <li>If the p-value is greater than or equal to \(\alpha\), the evidence is insufficient to reject \(H_0\).</li>
-                <li>With large samples, small correlations can be significant: always report the CI and \(r^2\) (coefficient of determination).</li>
-                <li>If the CI for \(\rho\) does not include \(\rho_0\), it agrees with rejecting \(H_0\) at level \(\alpha\).</li>
+                <li>If the <strong>p-value</strong> is less than \(\alpha\), \(H_0\) is rejected: there is evidence that the correlation differs from \(\rho_0\).</li>
+                <li>If the p-value is greater than or equal to \(\alpha\), there is not enough evidence to reject \(H_0\).</li>
+                <li>Not rejecting \(\rho = 0\) does not prove that the variables are independent.</li>
             </ul>
         </section>
 
         <section class="card content-card">
-            <h3>Why Fisher's transformation?</h3>
-            <p>The sampling distribution of \(r\) is skewed when \(\rho \neq 0\): the values of \(r\) are bounded within \([-1,1]\) and the distribution compresses near the extremes. Fisher showed in 1915 that \(\operatorname{arctanh}(r)\) has an approximately normal distribution with variance \(1/(n-3)\), regardless of the value of \(\rho\). This property makes the transformation essential for building confidence intervals and for testing \(H_0\colon \rho = \rho_0\) with \(\rho_0 \neq 0\).</p>
+            <h3>Significant does not mean strong</h3>
+            <p>The test only says whether the correlation can be distinguished from \(\rho_0\); it does not say whether it is large. With large samples, tiny correlations are significant, and with small samples, sizeable correlations are not:</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Sample size</th><th>Smallest significant |r| (two-tailed, \(\alpha = 0.05\))</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>\(n = 10\)</td><td>0.63</td></tr>
+                        <tr><td>\(n = 30\)</td><td>0.36</td></tr>
+                        <tr><td>\(n = 100\)</td><td>0.20</td></tr>
+                        <tr><td>\(n = 1000\)</td><td>0.06</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>To judge magnitude, use \(r\) itself and the <strong>coefficient of determination</strong> \(r^2\), the proportion of the variability of one variable that is linearly explained by the other. A correlation of 0.3 explains only 9%. As a rough guide (Cohen), |r| around 0.1 is a weak correlation, 0.3 moderate and 0.5 strong, although what counts as "strong" depends heavily on the field.</p>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example</h3>
-            <p>We have \(n = 30\) observations and obtain a sample correlation \(r = 0.45\). We test \(H_0\colon \rho = 0\) against \(H_1\colon \rho \neq 0\) with \(\alpha = 0.05\).</p>
-            <p>Since \(\rho_0 = 0\), the t-test is used with \(df = 28\):</p>
-            <p class="formula-line">\( t = \dfrac{0.45\,\sqrt{28}}{\sqrt{1 - 0.2025}} = \dfrac{0.45 \times 5.292}{\sqrt{0.7975}} \approx \dfrac{2.381}{0.893} \approx 2.667 \)</p>
-            <p>The two-tailed p-value is \(p \approx 0.012\). Since \(p = 0.012 < \alpha = 0.05\), <strong>\(H_0\) is rejected</strong>.</p>
-            <p>The 95% CI for \(\rho\) via Fisher's transformation is approximately \([0.11,\, 0.70]\), which does not include 0, confirming the test's decision.</p>
+            <h3>Assumptions of the test</h3>
+            <ul>
+                <li><strong>Two quantitative variables</strong> measured on the same individuals (paired data).</li>
+                <li><strong>Independent observations</strong>: each pair of values comes from a different individual.</li>
+                <li><strong>A linear relationship</strong>: \(r\) only measures the linear part of the relationship. A very strong curved relationship can give \(r\) close to 0.</li>
+                <li><strong>Approximate normality</strong> of both variables (bivariate normality), especially with small samples.</li>
+                <li><strong>No influential outliers</strong>: a single extreme point can create or destroy a correlation.</li>
+            </ul>
+            <p>Before computing anything, draw the scatter plot: it is the only way to see whether the relationship is linear and whether there are anomalous points. If the relationship is monotonic but not linear, or there are outliers, the alternative is Spearman's rank correlation.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Worked example 1: is there a correlation?</h3>
+            <p>In a sample of \(n = 30\) students, the correlation between study hours and grade is \(r = 0.45\). We test \(H_0\colon \rho = 0\) against \(H_1\colon \rho \neq 0\) with \(\alpha = 0.05\).</p>
+            <p class="formula-line">\( t = \dfrac{0.45\,\sqrt{28}}{\sqrt{1 - 0.45^2}} = \dfrac{2.381}{0.893} \approx 2.666 \)</p>
+            <p>With 28 degrees of freedom, the two-tailed critical value is 2.048 and the p-value is \(p \approx 0.013\). <strong>\(H_0\) is rejected</strong>: there is evidence of a positive linear correlation.</p>
+            <p>How strong? The 95% confidence interval for \(\rho\) runs from 0.11 to 0.70: the true correlation could be weak or strong. And \(r^2 = 0.20\): study hours explain around 20% of the variability in grades in this sample. With 30 students, the test detects with 80% probability only correlations of ±0.49 or stronger.</p>
+            <p><strong>In the calculator:</strong> r = 0.45, n = 30, ρ₀ = 0 and "Two-tailed (≠)". These are the values the page opens with.</p>
+
+            <h3>Worked example 2: testing a value other than zero</h3>
+            <p>A psychological test is considered acceptable if its correlation with the reference test exceeds 0.5. In a sample of \(n = 50\) people, \(r = 0.72\) is obtained. We test \(H_0\colon \rho = 0.5\) against \(H_1\colon \rho > 0.5\) with \(\alpha = 0.05\). Since \(\rho_0 \neq 0\), Fisher's z is used:</p>
+            <p class="formula-line">\( z_r = \operatorname{arctanh}(0.72) \approx 0.908, \quad z_{\rho_0} = \operatorname{arctanh}(0.5) \approx 0.549, \quad z = (0.908 - 0.549)\sqrt{47} \approx 2.46 \)</p>
+            <p>The right-tailed p-value is \(p \approx 0.007\): <strong>\(H_0\) is rejected</strong>. There is evidence that the correlation exceeds 0.5; the 95% interval for \(\rho\) runs from 0.55 to 0.83.</p>
+            <p><strong>In the calculator:</strong> r = 0.72, n = 50, ρ₀ = 0.5 and "Right tail (&gt;)".</p>
+
+            <h3>Example 3: significant but irrelevant</h3>
+            <p>With \(n = 1000\) and \(r = 0.10\), the test of \(\rho = 0\) gives \(t \approx 3.18\) and \(p \approx 0.0015\): highly significant. But \(r^2 = 0.01\): one variable explains 1% of the other. The correlation exists, and it is practically useless for prediction.</p>
         </section>
 
         <section class="card content-card">
             <h3>How to interpret the result</h3>
-                <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that the sample correlation coefficient \(r\) is statistically incompatible with the hypothesized value \(\rho_0\). The most common case is \(\rho_0 = 0\): rejecting \(H_0\) means there is evidence of a linear association between the two variables. However, with large samples even very weak correlations (for example, \(r = 0.10\)) can be highly significant. The coefficient of determination \(r^2\) — which indicates what fraction of the variability of one variable is explained by the other — is the key metric for assessing practical relevance: an \(r^2 = 0.01\) means only 1% of the variance is shared, which may lack substantive importance.</p>
-                <p><strong>Failing to reject \(H_0\)</strong> (p-value ≥ α) does not imply that \(\rho = \rho_0\); it only means the data are compatible with that value. With small samples the power is limited: moderate correlations (\(r \approx 0.3\)) may not turn out significant with fewer than 30–40 observations. Examine the confidence interval for \(\rho\): if it is wide, the uncertainty about the true correlation is large.</p>
-                <p>The <strong>t statistic</strong> (for \(\rho_0=0\)) or the <strong>Fisher z statistic</strong> (for \(\rho_0 \neq 0\)) is shown in the tool. In the chart, the green zone is the non-rejection region, the red zones are the critical regions, and the amber line marks the observed statistic. Remember that the test assumes a bivariate normal distribution and independence of pairs; against departures from normality with large \(n\) the test remains robust, but for small samples consider resampling methods.</p>
+            <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) with \(\rho_0 = 0\) indicates that there is a linear relationship between the variables, and the sign of \(r\) gives its direction. It does not indicate that one causes the other: both may depend on a third variable. Always judge the magnitude with \(r\), \(r^2\) and the confidence interval.</p>
+            <p><strong>Not rejecting \(H_0\)</strong> does not prove that there is no relationship: it may be weak, it may be non-linear, or the sample may be small.</p>
+            <p>In the calculator, the result shows the decision with the p-value, the correlation with its rough label (weak, moderate or strong), the statistic and a sentence stating the conclusion. On the chart, the green area is the non-rejection region, the red areas are the critical regions and the amber line marks the statistic. Under "Calculation details" you will find \(r^2\), the critical value and Fisher's confidence interval for \(\rho\).</p>
+
+            <h3>Power and minimum detectable correlation</h3>
+            <p>Below the conclusion, the calculator shows the <strong>minimum detectable correlation</strong>: the weakest true correlation that, with your sample size, the test would detect with 80% probability. If it is stronger than the correlation that would matter to you, a non-significant result says little. When you test \(\rho_0 = 0\), the link opens the <a href="tamano-muestral-correlacion.html">sample size calculator for correlation</a> with your α and the type of test. For reference, detecting a correlation of 0.3 takes about 85 pairs of observations; one of 0.1, about 780.</p>
         </section>
+
+        <section class="card content-card">
+            <h3>Common mistakes</h3>
+            <ul>
+                <li><strong>Confusing correlation with causation.</strong></li>
+                <li><strong>Confusing significant with strong</strong>: with large samples, almost any correlation is significant.</li>
+                <li><strong>Not looking at the scatter plot</strong>: a high \(r\) may be due to a single point, and a null \(r\) may hide a curved relationship.</li>
+                <li><strong>Concluding that there is no relationship</strong> because \(r\) is not significant.</li>
+                <li><strong>Extrapolating</strong> the relationship beyond the observed range of values.</li>
+                <li><strong>Computing many correlations</strong> between many variables and keeping the significant ones: 1 in 20 will be so by chance.</li>
+            </ul>
+        </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
               <h3>Related calculators</h3>
               <ul>
                 <li><a href="tamano-muestral-correlacion.html">Sample size for correlation</a></li>
-                <li><a href="contraste-hipotesis-una-media.html">Hypothesis test for one mean</a></li>
+                <li><a href="contraste-hipotesis-dos-medias.html">Independent two-sample test</a></li>
+                <li><a href="contraste-independencia-chi-cuadrado.html">Chi-square test of independence</a> (categorical variables)</li>
+                <li><a href="studentt.html">Student's t distribution</a> and <a href="tabla-t-student.html">t table</a></li>
               </ul>
             </section>
             <h3>Frequently asked questions</h3>
             <ul>
-                <li><strong>When should I use the t-test and when Fisher's z transformation?</strong> The t-test when \(\rho_0=0\); Fisher's z transformation when \(\rho_0 \neq 0\) because the distribution of r is not symmetric.</li>
-                <li><strong>What assumptions does it require?</strong> Bivariate normal distribution, independence of observations and a linear relationship. Robust with large n.</li>
-                <li><strong>How is the CI for ρ interpreted?</strong> It is built with the arctanh transformation and converted back to the original scale with tanh. If it does not include ρ₀, there is evidence of a difference.</li>
-                <li><strong>Can a small r be significant?</strong> Yes, with large n. Always report r, its CI and r² to assess practical relevance.</li>
-                <li><strong>Non-parametric alternative?</strong> Spearman's rank correlation or Kendall's tau when bivariate normality cannot be assumed.</li>
+                <li><strong>What does it test?</strong> Whether the linear correlation between two variables in the population equals a value ρ₀, usually 0, based on the correlation r observed in a sample.</li>
+                <li><strong>When is t used and when Fisher's z?</strong> The t statistic, when the null hypothesis is ρ = 0. Fisher's z transformation, when testing another value of ρ and for the confidence interval.</li>
+                <li><strong>Is a significant correlation a strong correlation?</strong> No. Significant means distinguishable from zero. With 1000 observations, a correlation of 0.10 is highly significant and explains only 1% of the variability.</li>
+                <li><strong>What is r²?</strong> The coefficient of determination: the proportion of the variability of one variable that is linearly explained by the other.</li>
+                <li><strong>Does correlation imply causation?</strong> No. Two variables can be correlated because both depend on a third one, or by chance.</li>
+                <li><strong>What assumptions does it require?</strong> Paired, independent data, a linear relationship, approximate normality and no influential outliers. If they fail, use Spearman's correlation.</li>
+                <li><strong>Why is the confidence interval not symmetric?</strong> Because it is computed on Fisher's z scale and then transformed back; near ±1 the interval is compressed.</li>
+                <li><strong>What is the minimum detectable correlation?</strong> The weakest true correlation that the test would detect with 80% probability given your sample size.</li>
+                <li><strong>How much data do I need?</strong> It depends on the correlation you want to detect: about 85 pairs for ρ = 0.3 and about 780 for ρ = 0.1, with α = 0.05 and 80% power.</li>
             </ul>
             <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Pearson_correlation_coefficient" target="_blank" rel="noopener noreferrer">Pearson correlation coefficient</a> — Wikipedia</p>
         </section>
@@ -306,6 +390,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../test-results.js?v=20261111-3"></script>
 <script>
 let corrChart;
 
@@ -395,6 +480,62 @@ function renderChart(alpha, tail, statValue, useT, df) {
     });
 }
 
+// Resultado: decisión, conclusión, correlación mínima detectable y detalles.
+// La potencia usa la transformación z de Fisher, como la calculadora de tamaño muestral.
+function renderCorrResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const zero = Math.abs(o.rho0) < 1e-10;
+    const q = o.tail === 'two' ? 1 - o.alpha / 2 : 1 - o.alpha;
+    const delta = (jStat.normal.inv(q, 0, 1) + jStat.normal.inv(R.TARGET, 0, 1)) / Math.sqrt(o.n - 3);
+    const up = Math.tanh(Math.atanh(o.rho0) + delta), down = Math.tanh(Math.atanh(o.rho0) - delta);
+    const rMin = R.sigUp(Math.tanh(delta), 3);
+    const f2 = (v) => R.num(v, 2);
+    const strength = (r) => { const a = Math.abs(r); return EN ? (a < 0.1 ? 'negligible' : a < 0.3 ? 'weak' : a < 0.5 ? 'moderate' : 'strong') : (a < 0.1 ? 'despreciable' : a < 0.3 ? 'débil' : a < 0.5 ? 'moderada' : 'fuerte'); };
+    const rho0 = R.auto(o.rho0);
+    const mdeTxt = zero
+        ? (o.tail === 'two' ? '±' + f2(rMin) : o.tail === 'right' ? f2(rMin) : '−' + f2(rMin)) + (EN ? (o.tail === 'left' ? ' or lower' : ' or stronger') : (o.tail === 'left' ? ' o menores' : ' o más fuertes'))
+        : (EN ? (o.tail === 'right' ? f2(up) + ' or higher' : o.tail === 'left' ? f2(down) + ' or lower' : f2(up) + ' or higher (or ' + f2(down) + ' or lower)')
+              : (o.tail === 'right' ? f2(up) + ' o mayores' : o.tail === 'left' ? f2(down) + ' o menores' : f2(up) + ' o mayores (o de ' + f2(down) + ' o menores)'));
+    const T = EN ? {
+        label: (o.useT ? 't-test' : 'Fisher z-test') + ' for Pearson\'s correlation, ' + { two: 'two-tailed', right: 'right-tailed', left: 'left-tailed' }[o.tail],
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        sec: 'r = ' + R.num(o.r, 4) + ' (' + strength(o.r) + ' correlation) · ' + (o.useT ? 't = ' + R.num(o.stat, 4) + ' with ' + o.df + ' degrees of freedom' : 'z = ' + R.num(o.stat, 4)),
+        yes: zero ? '✓ There is statistical evidence of a ' + (o.r > 0 ? 'positive' : 'negative') + ' linear correlation between the two variables.'
+            : '✓ There is statistical evidence that the correlation is ' + { two: 'different from ', right: 'greater than ', left: 'less than ' }[o.tail] + rho0 + '.',
+        no: zero ? 'ℹ There is not enough evidence of a linear correlation. This does not prove that there is no relationship: it may be weak or non-linear.'
+            : 'ℹ There is not enough evidence that the correlation is ' + { two: 'different from ', right: 'greater than ', left: 'less than ' }[o.tail] + rho0 + '. This does not prove that it equals ' + rho0 + '.',
+        mde: 'With n = ' + o.n + ', the test detects with ' + R.pct(R.TARGET) + ' probability only true correlations of ' + mdeTxt + '.',
+        link: 'Work out the sample size needed for another correlation',
+        rows: ['Sample correlation (r)', 'Coefficient of determination (r²)', 'Test statistic', 'Degrees of freedom', 'Critical value', 'p-value', R.pctLevel(1 - o.alpha) + ' confidence interval for ρ (Fisher)', 'Minimum detectable correlation (power ' + R.pct(R.TARGET) + ')']
+    } : {
+        label: 'Contraste ' + (o.useT ? 't' : 'z de Fisher') + ' para la correlación de Pearson, ' + { two: 'bilateral', right: 'de cola derecha', left: 'de cola izquierda' }[o.tail],
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        sec: 'r = ' + R.num(o.r, 4) + ' (correlación ' + strength(o.r) + ') · ' + (o.useT ? 't = ' + R.num(o.stat, 4) + ' con ' + o.df + ' grados de libertad' : 'z = ' + R.num(o.stat, 4)),
+        yes: zero ? '✓ Hay evidencia estadística de correlación lineal ' + (o.r > 0 ? 'positiva' : 'negativa') + ' entre las dos variables.'
+            : '✓ Hay evidencia estadística de que la correlación es ' + { two: 'distinta de ', right: 'mayor que ', left: 'menor que ' }[o.tail] + rho0 + '.',
+        no: zero ? 'ℹ No hay evidencia suficiente de correlación lineal. Esto no demuestra que no haya relación: puede ser débil o no lineal.'
+            : 'ℹ No hay evidencia suficiente de que la correlación sea ' + { two: 'distinta de ', right: 'mayor que ', left: 'menor que ' }[o.tail] + rho0 + '. Esto no demuestra que sea ' + rho0 + '.',
+        mde: 'Con n = ' + o.n + ', el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad correlaciones reales de ' + mdeTxt + '.',
+        link: 'Calcular el tamaño muestral necesario para otra correlación',
+        rows: ['Correlación muestral (r)', 'Coeficiente de determinación (r²)', 'Estadístico', 'Grados de libertad', 'Valor crítico', 'p-valor', 'Intervalo de confianza al ' + R.pctLevel(1 - o.alpha) + ' para ρ (Fisher)', 'Correlación mínima detectable (potencia ' + R.pct(R.TARGET) + ')']
+    };
+    const crit = o.useT ? jStat.studentt.inv(q, o.df) : jStat.normal.inv(q, 0, 1);
+    const zc = jStat.normal.inv(1 - o.alpha / 2, 0, 1), se = 1 / Math.sqrt(o.n - 3);
+    const url = 'tamano-muestral-correlacion.html?rho=' + rMin + '&alpha=' + o.alpha + '&power=' + R.TARGET + '&tail=' + (o.tail === 'two' ? 'two' : 'one');
+    const rows = [[T.rows[0], R.num(o.r, 4)], [T.rows[1], R.num(o.r * o.r, 4)], [T.rows[2], (o.useT ? 't = ' : 'z = ') + R.num(o.stat, 4)]];
+    if (o.useT) rows.push([T.rows[3], String(o.df)]);
+    rows.push([T.rows[4], (o.tail === 'two' ? '±' : (o.tail === 'left' ? '−' : '')) + R.num(crit, 4)], [T.rows[5], R.prob(o.p)],
+        [T.rows[6], R.interval(Math.tanh(Math.atanh(o.r) - zc * se), Math.tanh(Math.atanh(o.r) + zc * se), 4)], [T.rows[7], mdeTxt]);
+    R.render(document.getElementById('result'), {
+        label: T.label + ' · H₀: ρ = ' + rho0 + ' · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, sec: [T.sec],
+        ok: rejected, verdict: rejected ? T.yes : T.no,
+        notes: [R.esc(T.mde) + (zero ? ' ' + R.link(url, T.link) : '')],
+        rows: rows
+    });
+}
+
 function calculate() {
     const r     = parseFloat(document.getElementById('r').value);
     const n     = parseFloat(document.getElementById('n').value);
@@ -433,20 +574,7 @@ function calculate() {
         renderChart(alpha, tail, stat, false, 0);
     }
 
-    // 95% CI for rho using Fisher (always bilateral regardless of tail)
-    const zr = Math.atanh(r);
-    const zCrit = jStat.normal.inv(1 - alpha / 2, 0, 1);
-    const se_zr = 1 / Math.sqrt(n - 3);
-    const lowerZ = zr - zCrit * se_zr;
-    const upperZ = zr + zCrit * se_zr;
-    const lowerRho = Math.tanh(lowerZ);
-    const upperRho = Math.tanh(upperZ);
-
-    const decision = p < alpha ? 'Reject H₀.' : 'Fail to reject H₀.';
-    const confLevel = Math.round((1 - alpha) * 100);
-    resultEl.innerText =
-        `${statName} = ${stat.toFixed(4)}${dfInfo} | p-value = ${p.toFixed(6)} | ${decision}\n` +
-        `${confLevel}% CI for ρ: [${lowerRho.toFixed(4)}, ${upperRho.toFixed(4)}]`;
+    renderCorrResult({ r, n: Math.round(n), rho0, alpha, tail, stat, p, useT, df: Math.round(n) - 2 });
 }
 
 document.getElementById('calcBtn').addEventListener('click', calculate);

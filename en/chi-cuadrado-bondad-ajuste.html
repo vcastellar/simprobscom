@@ -65,7 +65,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
 
     <script type="application/ld+json">
 {
@@ -74,18 +74,26 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "When is the chi-square goodness-of-fit test used?",
+      "name": "What is the chi-square goodness-of-fit test for?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "When you want to know whether the counts observed in mutually exclusive\n                    categories are compatible with a previously specified theoretical distribution."
+        "text": "To check whether the observed frequencies of a categorical variable match those predicted by a theoretical distribution."
       }
     },
     {
       "@type": "Question",
-      "name": "How many degrees of freedom does the statistic have?",
+      "name": "How are the expected frequencies computed?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The degrees of freedom are \\(k - 1\\), where \\(k\\) is the number of categories.\n                    If additional model parameters have been estimated from the sample itself,\n                    one degree of freedom is subtracted for each estimated parameter."
+        "text": "By multiplying the total number of observations by the theoretical probability of each category. If you give no probabilities, all categories are assumed equally likely."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many degrees of freedom does it have?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The number of categories minus 1. If the theoretical probabilities are estimated from the data, 1 more is subtracted for each estimated parameter."
       }
     },
     {
@@ -93,39 +101,39 @@
       "name": "What condition must the expected frequencies meet?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The approximation is adequate when all expected frequencies are ≥ 5.\n                    If any is lower, consider grouping infrequent categories."
+        "text": "They should be at least 5 in almost all categories. If not, merge categories."
       }
     },
     {
       "@type": "Question",
-      "name": "What's the difference from the chi-square test of independence?",
+      "name": "Can I use percentages?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The goodness-of-fit test checks whether a variable follows a specific\n                    theoretical distribution. The independence test checks whether two variables\n                    are associated with each other, based on a contingency table."
+        "text": "No. The statistic needs counts: the same percentage split gives different results depending on the sample size."
       }
     },
     {
       "@type": "Question",
-      "name": "Do the theoretical probabilities need to add up to exactly 1?",
+      "name": "What does not rejecting H₀ mean?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. The tool checks that the entered probabilities add up to 1\n                    (within numerical tolerance) and warns if that condition is not met."
+        "text": "That the data are compatible with the model, not that the model is true. With small samples, only large deviations would be detected."
       }
     },
     {
       "@type": "Question",
-      "name": "How does sample size affect the result?",
+      "name": "How does it differ from the chi-square test of independence?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "With very large samples, the test can detect very small deviations\n                    from the theoretical model that are not practically relevant.\n                    In those cases it is a good idea to complement the p-value with a measure\n                    of effect size."
+        "text": "The goodness-of-fit test compares one variable with a theoretical distribution; the test of independence studies the relationship between two variables in a contingency table."
       }
     },
     {
       "@type": "Question",
-      "name": "What is the minimum detectable effect (MDE) in goodness-of-fit testing?",
+      "name": "What is the minimum detectable deviation?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It is the smallest deviation from the theoretical model that the test can detect with a given power and α. The smaller the sample, the larger the discrepancy needs to be for the test to detect it; detecting small deviations requires a larger n."
+        "text": "The smallest effect size, measured with Cohen's w, that the test would detect with 80% probability given your sample size."
       }
     }
   ]
@@ -175,7 +183,6 @@
     </header>
 
     <main>
-
         <section class="ss-shell" aria-label="Calculator">
             <section class="card ss-controls">
                 <div class="panel-heading">
@@ -217,193 +224,123 @@
                         <canvas id="chiGoodnessChart" aria-label="Chart of acceptance and rejection zones for the chi-square goodness-of-fit test" role="img"></canvas>
                     </div>
                 </div>
-                <div id="expectedTable" class="result-box" style="margin-top:12px;">Expected frequencies pending…</div>
+                <div id="expectedTable" class="result-box" style="margin-top:12px;overflow-x:auto;">Expected frequencies pending…</div>
             </section>
         </section>
 
         <section class="card content-card">
-            <h3>Explanation</h3>
+            <h3>What is the chi-square goodness-of-fit test?</h3>
+            <p>It is the test for deciding whether the data of <strong>one categorical variable</strong> are distributed across its categories as a theoretical model predicts. You count the observations falling into each category and compare them with what would be expected: do the six faces of a die come up equally often? Are births spread evenly across the days of the week? Do the four phenotypes of a cross appear in the 9:3:3:1 ratio that genetics predicts? Are sales distributed across regions as they were last year?</p>
+            <p>The null hypothesis states that the category probabilities are those of the model; the alternative, that at least one is different:</p>
+            <p class="formula-line">\(H_0: p_1 = p_{1,0},\ p_2 = p_{2,0},\ \ldots,\ p_k = p_{k,0}\)</p>
+            <p class="formula-line">\(H_1\): some \(p_i\) differs from the one given by the model</p>
 
-            <p>
-                The chi-square goodness-of-fit test lets you assess whether the empirical
-                distribution of a categorical variable is compatible with a previously
-                specified theoretical distribution. The question it answers is: are the
-                counts observed in each category compatible with the probabilities postulated
-                by the model, or is there evidence that the actual distribution differs?
-            </p>
+            <h3>The statistic</h3>
+            <p class="formula-line">\( \chi^2 = \sum_{i=1}^{k} \dfrac{(O_i - E_i)^2}{E_i}, \qquad E_i = n\,p_{i,0}, \qquad df = k - 1 \)</p>
+            <ul>
+                <li><strong>\(O_i\)</strong>: observed frequency in category \(i\).</li>
+                <li><strong>\(E_i\)</strong>: expected frequency if \(H_0\) were true: the total \(n\) times the theoretical probability.</li>
+                <li><strong>\(k\)</strong>: number of categories.</li>
+            </ul>
+            <p>Each term measures how far the observed count is from the expected one, squared so that excesses and shortfalls do not cancel out, and divided by the expected count to put it in proportion: a difference of 10 is huge if 20 were expected and negligible if 2000 were. If the data fit the model, the statistic is small; the larger it is, the worse the fit.</p>
+            <p>Under \(H_0\), it approximately follows a <a href="chisquare.html">chi-square</a> distribution with \(k - 1\) degrees of freedom. One is subtracted because the frequencies add up to \(n\): once \(k - 1\) are known, the last one is determined. The test is always <strong>right-tailed</strong>: only large values are evidence against the model.</p>
 
-            <p>
-                The core idea is to compare the observed frequencies with the expected
-                frequencies that would occur if the null hypothesis were true. If the
-                discrepancies are too large to attribute to sampling chance, the proposed
-                theoretical model is rejected.
-            </p>
-
-            <p>
-                For example, a fair die should produce each face with probability 1/6. After
-                120 rolls, you compare whether the observed counts are compatible with those
-                probabilities. Another common use is checking whether the proportion of
-                defects by type on a production line matches the expected historical pattern.
-            </p>
-
-            <p>
-                The test statistic aggregates the weighted discrepancies across all categories
-                and follows a chi-square distribution under the null hypothesis. The degrees
-                of freedom are \(k - 1\), where \(k\) is the number of categories, minus the
-                number of additional parameters estimated from the sample.
-            </p>
-
-            <h3>Hypotheses and test statistic</h3>
-            <p class="formula-line">\(H_0\): the observed distribution matches the theoretical one</p>
-            <p class="formula-line">\(H_1\): the observed distribution does not match the theoretical one</p>
-            <p class="formula-line">
-                \(\chi^2 = \sum_{i=1}^{k}\frac{(O_i - E_i)^2}{E_i}\), &nbsp;
-                with \(E_i = n \cdot p_i\)
-            </p>
-        </section>
-
-
-
-        <section class="card content-card">
-            <h3>Quick check</h3>
-
-            <p>
-                The chi-square statistic sums, for each category, the squared difference
-                between observed and expected frequency, divided by the expected frequency.
-                Under the null hypothesis that the data follow the theoretical distribution,
-                this statistic approximately follows a \(\chi^2\) distribution with \(k - 1\)
-                degrees of freedom:
-            </p>
-
-            <p class="formula-line">
-                \(\chi^2 = \sum_{i=1}^{k} \frac{(O_i - E_i)^2}{E_i} \sim \chi^2_{k-1}\)
-            </p>
-
-            <p>
-                Expected frequencies are computed from the sample size \(n\) and the
-                theoretical probabilities \(p_i\):
-            </p>
-
-            <p class="formula-line">
-                \(E_i = n \cdot p_i\)
-            </p>
-
-            <p>
-                where \(n = \sum_{i=1}^{k} O_i\) is the total number of observations. If the
-                theoretical probabilities are equal across all categories (uniform
-                distribution), \(E_i = n / k\) for every \(i\).
-            </p>
-
-            <p>
-                For the chi-square approximation to be reliable, all expected frequencies
-                should be greater than or equal to 5. If any category has very low expected
-                frequencies, consider grouping categories before applying the test.
-            </p>
+            <h3>Decision rule</h3>
+            <ul>
+                <li>If the <strong>p-value</strong> is less than \(\alpha\), \(H_0\) is rejected: the data do not fit the theoretical distribution.</li>
+                <li>If the p-value is greater than or equal to \(\alpha\), the data are compatible with the model.</li>
+                <li>Not rejecting \(H_0\) does not prove that the model is the true one.</li>
+            </ul>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example</h3>
-            <p>A fair die is rolled 60 times and the observed frequencies are recorded for each face: face 1 → 8 times; face 2 → 12; face 3 → 9; face 4 → 11; face 5 → 10; face 6 → 10. Is there statistical evidence, at \(\alpha = 0.05\), that the die is not fair?</p>
-            <p>Under \(H_0\) (fair die), the probability of each face is \(1/6\), so the expected frequency for each category is \(E_i = 60 \times \tfrac{1}{6} = 10\) rolls.</p>
-            <p>The chi-square goodness-of-fit statistic is computed as:</p>
-            <p class="formula-line">\( \chi^2 = \sum_{i=1}^{k} \frac{(O_i - E_i)^2}{E_i} = \frac{(8-10)^2}{10} + \frac{(12-10)^2}{10} + \frac{(9-10)^2}{10} + \frac{(11-10)^2}{10} + \frac{(10-10)^2}{10} + \frac{(10-10)^2}{10} \)</p>
-            <p class="formula-line">\( \chi^2 = 0.4 + 0.4 + 0.1 + 0.1 + 0 + 0 = 1.0 \)</p>
-            <p>The degrees of freedom are \(df = k - 1 = 6 - 1 = 5\). The critical value for \(\alpha = 0.05\) and \(df = 5\) is \(\chi^2_{0.05;\,5} \approx 11.07\), and the p-value associated with \(\chi^2 = 1.0\) at 5 degrees of freedom is \(p \approx 0.96\).</p>
-            <p>Since \(\chi^2 = 1.0 \ll 11.07\) (and \(p \gg 0.05\)), \(H_0\) is not rejected. All expected frequencies equal 10, well above the recommended minimum of 5, so the test is valid in this case.</p>
-            <p>Conclusion: there is no statistical evidence that the die is loaded. The observed deviations from the expected frequencies are perfectly compatible with the random variability of a fair die over 60 rolls.</p>
+            <h3>Conditions for use</h3>
+            <ul>
+                <li><strong>Frequencies, not percentages</strong>: the statistic needs counts. With the same percentages, the result changes completely depending on whether there are 50 or 5000 observations behind them.</li>
+                <li><strong>Independent observations</strong>, each classified into a single category.</li>
+                <li><strong>Large enough expected frequencies</strong>: the chi-square approximation is reliable when all expected frequencies are at least 5 (or, by Cochran's rule, when no more than 20% are below 5 and none is below 1). What counts are the expected frequencies, not the observed ones. If the condition fails, merge infrequent categories; the calculator warns you.</li>
+                <li><strong>Probabilities set in advance</strong>: if the theoretical probabilities are computed by estimating parameters from the data themselves (for example, fitting a Poisson by estimating its mean), one further degree of freedom must be subtracted for each estimated parameter. The calculator uses \(k - 1\), which corresponds to known probabilities.</li>
+            </ul>
+            <p>For ungrouped continuous data, a specific test such as <a href="kolmogorov-smirnov-bondad-ajuste.html">Kolmogorov-Smirnov</a> or, for normality, <a href="shapiro-wilk-normalidad.html">Shapiro-Wilk</a> is preferable. And if you want to study the relationship between two categorical variables, the appropriate test is the <a href="contraste-independencia-chi-cuadrado.html">chi-square test of independence</a>.</p>
+        </section>
+
+        <section class="card content-card">
+            <h3>Worked example 1: is the die fair?</h3>
+            <p>A die is rolled 60 times with these frequencies: 8, 12, 9, 11, 10 and 10. If the die is fair, each face has probability 1/6 and \(E_i = 60/6 = 10\) appearances of each are expected. We test with \(\alpha = 0.05\).</p>
+            <p class="formula-line">\( \chi^2 = \dfrac{(8-10)^2}{10} + \dfrac{(12-10)^2}{10} + \dfrac{(9-10)^2}{10} + \dfrac{(11-10)^2}{10} + 0 + 0 = 0.4 + 0.4 + 0.1 + 0.1 = 1.0 \)</p>
+            <p>With \(df = 5\), the critical value is 11.07 and the p-value is \(p \approx 0.963\). <strong>\(H_0\) is not rejected</strong>: the results are perfectly compatible with a fair die.</p>
+            <p>But be careful about concluding that the die "is" fair. With only 60 rolls, the test detects with 80% probability only medium or large deviations (w ≈ 0.46): a slightly loaded die would pass the test almost every time. Detecting small deviations would take more than a thousand rolls.</p>
+            <p><strong>In the calculator:</strong> observed frequencies "8, 12, 9, 11, 10, 10", with the theoretical probabilities left empty (uniform distribution).</p>
+
+            <h3>Worked example 2: unequal theoretical proportions</h3>
+            <p>In his pea experiment, Mendel classified 556 seeds into four types and obtained 315, 108, 101 and 32. His theory predicts the ratio 9:3:3:1, that is, probabilities 0.5625, 0.1875, 0.1875 and 0.0625. The expected frequencies are:</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Type</th><th>Observed</th><th>Theoretical probability</th><th>Expected</th><th>\((O-E)^2/E\)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Round and yellow</td><td>315</td><td>9/16</td><td>312.75</td><td>0.016</td></tr>
+                        <tr><td>Round and green</td><td>108</td><td>3/16</td><td>104.25</td><td>0.135</td></tr>
+                        <tr><td>Wrinkled and yellow</td><td>101</td><td>3/16</td><td>104.25</td><td>0.101</td></tr>
+                        <tr><td>Wrinkled and green</td><td>32</td><td>1/16</td><td>34.75</td><td>0.218</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>The statistic is \(\chi^2 \approx 0.47\) with \(df = 3\), and the p-value is \(p \approx 0.925\). <strong>\(H_0\) is not rejected</strong>: the data fit the theory very well. Here the sample is large: with 556 seeds even small deviations (w ≈ 0.14) would be detected, so the good fit says considerably more than in the die example.</p>
+            <p><strong>In the calculator:</strong> frequencies "315, 108, 101, 32" and probabilities "0.5625, 0.1875, 0.1875, 0.0625".</p>
         </section>
 
         <section class="card content-card">
             <h3>How to interpret the result</h3>
+            <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that the observed distribution differs from the theoretical one, but not in which categories. To find out, compare the observed and expected frequencies in the table that accompanies the result: the categories with the largest \((O-E)^2/E\) contribute the most. Remember too that, with very large samples, tiny and irrelevant deviations become significant.</p>
+            <p><strong>Not rejecting \(H_0\)</strong> indicates that the data are compatible with the model, not that the model is true: they would also be compatible with other similar models.</p>
+            <p>In the calculator, the result shows the decision with the p-value, the χ² statistic with its degrees of freedom and a sentence stating the conclusion. On the chart, the red area is the rejection region on the chi-square distribution and the line marks the observed statistic. Under "Calculation details" you will find the critical value, the effect size and the smallest expected frequency.</p>
 
-                <p>
-                <strong>Rejecting \(H_0\)</strong> (p-value &lt; \(\alpha\)) means that the
-                observed frequencies differ from those expected under the theoretical model
-                by more than chance can explain. In practice, the proposed distributional
-                model (uniform, binomial, Poisson, etc.) does not adequately describe the
-                data. However, overall significance does not reveal <em>where</em> the
-                discrepancy lies: to locate it, check the <strong>standardized residuals</strong>
-                \((O_i - E_i)/\sqrt{E_i}\) for each category. Absolute values greater than 2
-                flag the categories that most drive the statistic away from what is expected
-                under \(H_0\).
-                </p>
+            <h3>Effect size: Cohen's w</h3>
+            <p>To measure how far the data depart from the model, regardless of sample size, Cohen's w is used: \(w = \sqrt{\chi^2/n}\). As a rough guide, 0.1 is a small deviation, 0.3 medium and 0.5 large. In the die example, \(w \approx 0.13\); in Mendel's, \(w \approx 0.03\).</p>
 
-                <p>
-                <strong>Failing to reject \(H_0\)</strong> (p-value ≥ \(\alpha\)) does not prove
-                that the data "follow" the theoretical model; it only indicates that they are
-                compatible with it at the chosen significance level. With small samples the
-                power of the test is limited, and moderate deviations can go unnoticed. With
-                very large samples, on the other hand, small systematic deviations of little
-                practical relevance can turn out to be significant.
-                </p>
-
-                <p>
-                The <strong>chi-square statistic</strong> \(\chi^2 = \sum_i (O_i - E_i)^2 / E_i\)
-                aggregates the squared discrepancies across all categories, weighted by the
-                expected frequency. In the chart, the green zone is the non-rejection region
-                and the red zone is the right-tailed critical region (the goodness-of-fit test
-                is always right-tailed, since \(\chi^2 \geq 0\)); the amber line marks the
-                observed statistic. Before interpreting the result, check that all expected
-                frequencies are ≥ 5; if not, group categories or use an exact test.
-                </p>
+            <h3>Power and minimum detectable deviation</h3>
+            <p>Below the conclusion, the calculator shows the <strong>minimum detectable deviation</strong>: the smallest w that, with your sample size and number of categories, the test would detect with 80% probability. This is what lets you judge a non-significant result: if only large deviations would be detected, the fact that the data "fit" says little. The link opens the <a href="tamano-muestral-chi-cuadrado-bondad.html">sample size calculator for the chi-square goodness-of-fit test</a> with your number of categories and your α.</p>
         </section>
+
+        <section class="card content-card">
+            <h3>Common mistakes</h3>
+            <ul>
+                <li><strong>Entering percentages or proportions</strong> instead of counts.</li>
+                <li><strong>Looking at the observed frequencies</strong>, rather than the expected ones, to check the "at least 5" rule.</li>
+                <li><strong>Reading a good fit as proof that the model is true</strong>, especially with small samples.</li>
+                <li><strong>Not adjusting the degrees of freedom</strong> when the theoretical probabilities were estimated from the same data.</li>
+                <li><strong>Merging categories after seeing the data</strong> until the desired result is obtained.</li>
+                <li><strong>Using it with observations that are not independent</strong>, such as several answers from the same person.</li>
+            </ul>
+        </section>
+
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
-                <h3>Related calculators</h3>
-                <ul>
-                    <li><a href="chisquare.html">Chi-square distribution</a></li>
-                    <li><a href="contraste-independencia-chi-cuadrado.html">Chi-square test of independence</a></li>
-                    <li><a href="test-exacto-fisher.html">Fisher's exact test</a></li>
-                    <li><a href="contrastes-hipotesis/">Hypothesis tests</a></li>
-                </ul>
+              <h3>Related calculators</h3>
+              <ul>
+                <li><a href="tamano-muestral-chi-cuadrado-bondad.html">Sample size for the chi-square goodness-of-fit test</a></li>
+                <li><a href="contraste-independencia-chi-cuadrado.html">Chi-square test of independence</a></li>
+                <li><a href="kolmogorov-smirnov-bondad-ajuste.html">Kolmogorov-Smirnov</a></li>
+                <li><a href="shapiro-wilk-normalidad.html">Shapiro-Wilk normality test</a></li>
+                <li><a href="tabla-chi-cuadrado.html">Chi-square table</a></li>
+              </ul>
             </section>
-
             <h3>Frequently asked questions</h3>
-
             <ul>
-                <li>
-                    <strong>When is the chi-square goodness-of-fit test used?</strong>
-                    When you want to know whether the counts observed in mutually exclusive
-                    categories are compatible with a previously specified theoretical distribution.
-                </li>
-                <li>
-                    <strong>How many degrees of freedom does the statistic have?</strong>
-                    The degrees of freedom are \(k - 1\), where \(k\) is the number of categories.
-                    If additional model parameters have been estimated from the sample itself,
-                    one degree of freedom is subtracted for each estimated parameter.
-                </li>
-                <li>
-                    <strong>What condition must the expected frequencies meet?</strong>
-                    The approximation is adequate when all expected frequencies are ≥ 5.
-                    If any is lower, consider grouping infrequent categories.
-                </li>
-                <li>
-                    <strong>What's the difference from the chi-square test of independence?</strong>
-                    The goodness-of-fit test checks whether a variable follows a specific
-                    theoretical distribution. The independence test checks whether two variables
-                    are associated with each other, based on a contingency table.
-                </li>
-                <li>
-                    <strong>Do the theoretical probabilities need to add up to exactly 1?</strong>
-                    Yes. The tool checks that the entered probabilities add up to 1
-                    (within numerical tolerance) and warns if that condition is not met.
-                </li>
-                <li>
-                    <strong>How does sample size affect the result?</strong>
-                    With very large samples, the test can detect very small deviations from
-                    the theoretical model that are not practically relevant. In those cases
-                    it is a good idea to complement the p-value with a measure of effect size.
-                </li>
-                <li>
-                    <strong>What is the minimum detectable effect (MDE) in this test?</strong>
-                    It is the smallest deviation from the theoretical model that the test can
-                    detect with the power and \(\alpha\) set. If the actual discrepancy is
-                    smaller, the test may fail to reject \(H_0\) even though a small difference
-                    exists.
-                </li>
+                <li><strong>What is the chi-square goodness-of-fit test for?</strong> To check whether the observed frequencies of a categorical variable match those predicted by a theoretical distribution.</li>
+                <li><strong>How are the expected frequencies computed?</strong> By multiplying the total number of observations by the theoretical probability of each category. If you give no probabilities, all categories are assumed equally likely.</li>
+                <li><strong>How many degrees of freedom does it have?</strong> The number of categories minus 1. If the theoretical probabilities are estimated from the data, 1 more is subtracted for each estimated parameter.</li>
+                <li><strong>What condition must the expected frequencies meet?</strong> They should be at least 5 in almost all categories. If not, merge categories.</li>
+                <li><strong>Can I use percentages?</strong> No. The statistic needs counts: the same percentage split gives different results depending on the sample size.</li>
+                <li><strong>What does not rejecting H₀ mean?</strong> That the data are compatible with the model, not that the model is true. With small samples, only large deviations would be detected.</li>
+                <li><strong>How does it differ from the chi-square test of independence?</strong> The goodness-of-fit test compares one variable with a theoretical distribution; the test of independence studies the relationship between two variables in a contingency table.</li>
+                <li><strong>What is the minimum detectable deviation?</strong> The smallest effect size, measured with Cohen's w, that the test would detect with 80% probability given your sample size.</li>
             </ul>
-            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Pearson%27s_chi-squared_test" target="_blank" rel="noopener noreferrer">Chi-square goodness-of-fit test</a> — Wikipedia</p>
+            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Pearson%27s_chi-squared_test" target="_blank" rel="noopener noreferrer">Pearson's chi-squared test</a> — Wikipedia</p>
         </section>
+
     </main>
 
     <footer class="legal-footer">
@@ -429,6 +366,8 @@ window.MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+<script src="../test-results.js?v=20261111-3"></script>
 <script>
 let chiGoodnessChart;
 
@@ -527,6 +466,51 @@ function formatExpectedGoodness(observed, expected){
   return `<strong>Frequency table</strong><br><table><thead>${header}</thead><tbody>${rows}</tbody></table>`;
 }
 
+// Resultado: decisión, conclusión, efecto mínimo detectable y detalles.
+function renderGofResult(o) {
+    const R = TestResult, EN = R.EN;
+    const rejected = o.p < o.alpha;
+    const wObs = Math.sqrt(o.chi2 / o.n);
+    const wMin = R.solveMin((w) => R.chi2Power(w, o.n, o.df, o.alpha) >= R.TARGET, 1e-4, 5);
+    const size = (w) => EN
+        ? (w < 0.1 ? 'a very small deviation' : w < 0.3 ? 'a small deviation' : w < 0.5 ? 'a medium deviation' : 'a large deviation')
+        : (w < 0.1 ? 'una desviación muy pequeña' : w < 0.3 ? 'una desviación pequeña' : w < 0.5 ? 'una desviación mediana' : 'una desviación grande');
+    const T = EN ? {
+        label: 'Chi-square goodness-of-fit test · ' + o.k + ' categories, N = ' + R.auto(o.n),
+        decision: rejected ? 'H₀ is rejected' : 'H₀ is not rejected',
+        sec: 'χ² = ' + R.num(o.chi2, 4) + ' with ' + o.df + ' degree' + (o.df === 1 ? '' : 's') + ' of freedom',
+        yes: '✓ There is statistical evidence that the data do not follow the theoretical distribution (' + size(wObs) + ' by Cohen\'s benchmarks).',
+        no: 'ℹ There is not enough evidence against the theoretical distribution. This does not prove that the data follow it.',
+        low: 'ℹ ' + o.low + ' categor' + (o.low === 1 ? 'y has' : 'ies have') + ' an expected frequency below 5: the χ² approximation may be inaccurate. Consider merging categories.',
+        mde: wMin == null ? 'With N = ' + R.auto(o.n) + ', the test does not reach ' + R.pct(R.TARGET) + ' power even for very large deviations.'
+            : 'With N = ' + R.auto(o.n) + ', the test detects with ' + R.pct(R.TARGET) + ' probability only deviations of size w = ' + R.num(wMin, 2) + ' or more (' + size(wMin) + ', by Cohen\'s benchmarks).',
+        link: 'Work out the sample size needed for another effect size',
+        rows: ['χ² statistic', 'Degrees of freedom', 'Critical value', 'p-value', 'Effect size (Cohen\'s w)', 'Smallest expected frequency', 'Minimum detectable w (power ' + R.pct(R.TARGET) + ')']
+    } : {
+        label: 'Chi-cuadrado de bondad de ajuste · ' + o.k + ' categorías, N = ' + R.auto(o.n),
+        decision: rejected ? 'Se rechaza H₀' : 'No se rechaza H₀',
+        sec: 'χ² = ' + R.num(o.chi2, 4) + ' con ' + o.df + ' grado' + (o.df === 1 ? '' : 's') + ' de libertad',
+        yes: '✓ Hay evidencia estadística de que los datos no siguen la distribución teórica (' + size(wObs) + ', según las referencias de Cohen).',
+        no: 'ℹ No hay evidencia suficiente contra la distribución teórica. Esto no demuestra que los datos la sigan.',
+        low: 'ℹ ' + o.low + ' categoría' + (o.low === 1 ? ' tiene' : 's tienen') + ' una frecuencia esperada menor que 5: la aproximación χ² puede ser poco precisa. Considera agrupar categorías.',
+        mde: wMin == null ? 'Con N = ' + R.auto(o.n) + ', el contraste no llega a un ' + R.pct(R.TARGET) + ' de potencia ni con desviaciones muy grandes.'
+            : 'Con N = ' + R.auto(o.n) + ', el contraste solo detecta con un ' + R.pct(R.TARGET) + ' de probabilidad desviaciones de tamaño w = ' + R.num(wMin, 2) + ' o mayores (' + size(wMin) + ', según las referencias de Cohen).',
+        link: 'Calcular el tamaño muestral necesario para otro tamaño del efecto',
+        rows: ['Estadístico χ²', 'Grados de libertad', 'Valor crítico', 'p-valor', 'Tamaño del efecto (w de Cohen)', 'Frecuencia esperada mínima', 'w mínimo detectable (potencia ' + R.pct(R.TARGET) + ')']
+    };
+    const notes = [];
+    if (o.low > 0) notes.push(R.esc(T.low));
+    if (wMin != null) notes.push(R.esc(T.mde) + ' ' + R.link('tamano-muestral-chi-cuadrado-bondad.html?w=' + R.sigUp(wMin, 3) + '&k=' + o.k + '&alpha=' + o.alpha + '&power=' + R.TARGET, T.link));
+    else notes.push(R.esc(T.mde));
+    R.render(document.getElementById('chiResult'), {
+        label: T.label + ' · α = ' + R.auto(o.alpha),
+        decision: T.decision, p: o.p, sec: [T.sec],
+        ok: rejected, verdict: rejected ? T.yes : T.no, notes: notes,
+        rows: [[T.rows[0], R.num(o.chi2, 4)], [T.rows[1], String(o.df)], [T.rows[2], R.num(jStat.chisquare.inv(1 - o.alpha, o.df), 4)], [T.rows[3], R.prob(o.p)],
+            [T.rows[4], R.num(wObs, 4)], [T.rows[5], R.num(o.minE, 2)], [T.rows[6], wMin == null ? '—' : R.num(wMin, 3)]]
+    });
+}
+
 document.getElementById('calcChiBtn').addEventListener('click',()=>{
   try{
     const obsRaw=document.getElementById('observed').value;
@@ -561,17 +545,7 @@ document.getElementById('calcChiBtn').addEventListener('click',()=>{
 
     const df=k-1;
     const p=Math.max(0,Math.min(1,chiSquareSurvival(chi2,df)));
-    const decision=p<alpha?'Reject H₀ (the observed distribution differs from the theoretical one).':'Fail to reject H₀ (the data are compatible with the theoretical distribution).';
-
-    let warning='';
-    if(lowExpected>0) warning=`<br><em>Warning: ${lowExpected} category(ies) with expected frequency below 5. Consider grouping categories.</em>`;
-
-    document.getElementById('chiResult').innerHTML =
-      `Observed χ²: <strong>${chi2.toFixed(4)}</strong><br>`+
-      `Degrees of freedom: <strong>${df}</strong><br>`+
-      `p-value: <strong>${p.toFixed(6)}</strong><br>`+
-      `Decision (α=${alpha}): <strong>${decision}</strong>`+
-      warning;
+    renderGofResult({ chi2, df, p, alpha, n, k, low: lowExpected, minE: Math.min(...expected) });
 
     document.getElementById('expectedTable').innerHTML = formatExpectedGoodness(observed, expected);
     renderChiGoodnessChart(df, alpha, chi2);
