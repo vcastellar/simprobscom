@@ -92,9 +92,9 @@
     // Enlace al simulador de errores tipo I y II con el contraste actual:
     // d = diferencia mínima detectable en desviaciones típicas. El simulador
     // solo tiene cola derecha y bilateral; la cola izquierda se muestra reflejada.
-    function simLink(d, n, alpha, tail, approx) {
+    function simLink(d, n, alpha, tail, approx, sigma) {
         const url = 'simulaciones/simulador-errores-tipo-i-ii.html?d=' + sig(d, 4) + '&n=' + n + '&alpha=' + alpha +
-            '&tail=' + (tail === 'two' ? 'two' : 'right') + (tail === 'left' ? '&mirror=1' : '') + (approx ? '&approx=' + approx : '');
+            '&tail=' + (tail === 'two' ? 'two' : 'right') + (tail === 'left' ? '&mirror=1' : '') + (approx ? '&approx=' + approx : '') + (sigma > 0 ? '&sigma=' + sig(sigma, 4) : '');
         return link(url, EN ? 'See α, β and the power of this test in the type I and II error simulator' : 'Ver α, β y la potencia de este contraste en el simulador de errores tipo I y II');
     }
 

@@ -674,7 +674,7 @@ function renderMeanTestResult(o) {
     h += '<div class="ci-res-note ci-res-info"><a href="' + mtEsc(ciUrl) + '">' + (MT_EN ? 'Open the ' + lvl + ' confidence interval with these data' : 'Abrir el intervalo de confianza al ' + lvl + ' con estos datos') + '</a>.</div>';
     // Enlace al simulador de errores tipo I y II: d = diferencia mínima detectable / desviación típica.
     const simUrl = 'simulaciones/simulador-errores-tipo-i-ii.html?d=' + Number((mde / o.s).toPrecision(4)) + '&n=' + o.n + '&alpha=' + o.alpha +
-        '&tail=' + (o.tail === 'two' ? 'two' : 'right') + (o.tail === 'left' ? '&mirror=1' : '') + (o.isT ? '&approx=t' : '');
+        '&tail=' + (o.tail === 'two' ? 'two' : 'right') + (o.tail === 'left' ? '&mirror=1' : '') + (o.isT ? '&approx=t' : '') + '&sigma=' + o.s;
     h += '<div class="ci-res-note ci-res-info"><a href="' + mtEsc(simUrl) + '">' + (MT_EN ? 'See α, β and the power of this test in the type I and II error simulator' : 'Ver α, β y la potencia de este contraste en el simulador de errores tipo I y II') + '</a>.</div>';
 
     const rows = [

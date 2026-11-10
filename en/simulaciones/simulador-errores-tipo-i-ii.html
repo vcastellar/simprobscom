@@ -376,12 +376,18 @@
         </div>
 
         <div class="form-group">
-          <label for="effectSize">Effect size <em>d</em> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+          <label for="effectSize">True difference from μ₀ <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
           <div class="slider-row">
             <input type="range" id="effectSize" min="0" max="3" step="0.05" value="0.5">
             <span class="slider-val" id="effectSizeVal">d = 0.50</span>
           </div>
-            <p class="field-hint" hidden>True difference between means in standard deviation units (Cohen's d). <strong>d = 0.2</strong> is considered a small effect, <strong>d = 0.5</strong> medium and <strong>d = 0.8</strong> large.</p>
+            <p class="field-hint" hidden>How far the true mean is from μ₀. If you enter the standard deviation of your data, it is shown in their units (Δ); otherwise, in standard deviations (Cohen's d). <strong>d = 0.2</strong> is considered a small effect, <strong>d = 0.5</strong> medium and <strong>d = 0.8</strong> large.</p>
+        </div>
+
+        <div class="form-group">
+          <label for="sigmaUnits">Standard deviation σ (optional) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
+          <input type="number" id="sigmaUnits" min="0" step="any" placeholder="—">
+          <p class="field-hint" hidden>The standard deviation of your data. With it, the difference is shown in the original units: Δ = d × σ. For example, with σ = 8 g, d = 0.5 is a true difference of 4 g. If you leave it empty, only d is used.</p>
         </div>
 
         <div class="form-group">
@@ -718,6 +724,24 @@ function initChart() {
 /* ════════════════════════════════════════════
    COMPUTE & RENDER
 ════════════════════════════════════════════ */
+// La diferencia se muestra en las unidades de los datos si se conoce σ.
+function sigmaUnits() {
+  const v = parseFloat(document.getElementById('sigmaUnits').value);
+  return v > 0 ? v : null;
+}
+function fmtDiff(v) {
+  return String(Number(v.toPrecision(3)));
+}
+function effectLabel(d) {
+  const s = sigmaUnits();
+  return s ? 'Δ = ' + fmtDiff(d * s) + ' · d = ' + d.toFixed(2) : 'd = ' + d.toFixed(2);
+}
+function effectText(d) {
+  const s = sigmaUnits();
+  if (s) return 'a true difference of Δ = ' + fmtDiff(d * s) + ' (d = Δ/σ = ' + d.toFixed(2) + ')';
+  return 'effect size d = ' + d.toFixed(2);
+}
+
 function getParams() {
   const testType  = document.getElementById('testType').value;
   const d         = parseFloat(document.getElementById('effectSize').value);
@@ -864,7 +888,7 @@ function updateInterpretation(params, stats) {
 
   const html = `
     With a <strong>${typeStr}</strong> test at level α = <strong>${alpha.toFixed(3)}</strong>,
-    ${critStr}. Under H₁ with effect size d = ${d.toFixed(2)} and n = ${n} observations,
+    ${critStr}. Under H₁ with ${effectText(d)} and n = ${n} observations,
     the non-centrality parameter is δ = d × √n = <strong>${delta.toFixed(3)}</strong>.
     <br><br>
     The probability of a type II error is β = <strong>${beta.toFixed(3)}</strong>,
@@ -888,11 +912,15 @@ function update() {
    SLIDER LABELS
 ════════════════════════════════════════════ */
 document.getElementById('effectSize').addEventListener('input', function () {
-  document.getElementById('effectSizeVal').textContent = 'd = ' + parseFloat(this.value).toFixed(2);
+  document.getElementById('effectSizeVal').textContent = effectLabel(parseFloat(this.value));
   update();
 });
 document.getElementById('alpha').addEventListener('input', function () {
   document.getElementById('alphaVal').textContent = 'α = ' + parseFloat(this.value).toFixed(3);
+  update();
+});
+document.getElementById('sigmaUnits').addEventListener('input', function () {
+  document.getElementById('effectSizeVal').textContent = effectLabel(parseFloat(document.getElementById('effectSize').value));
   update();
 });
 document.getElementById('testType').addEventListener('change', update);
@@ -909,7 +937,9 @@ document.getElementById('sampleSize').addEventListener('change', update);
   if (!(d >= 0) || !(n >= 2)) return;
   const dEl = document.getElementById('effectSize'), aEl = document.getElementById('alpha'), nEl = document.getElementById('sampleSize');
   dEl.step = 'any'; dEl.max = String(Math.max(3, Math.ceil(d))); dEl.value = d;
-  document.getElementById('effectSizeVal').textContent = 'd = ' + d.toFixed(2);
+  const sigma = parseFloat(q.get('sigma'));
+  if (sigma > 0) document.getElementById('sigmaUnits').value = sigma;
+  document.getElementById('effectSizeVal').textContent = effectLabel(d);
   if (alpha > 0 && alpha < 1) {
     aEl.step = 'any'; aEl.min = String(Math.min(0.005, alpha)); aEl.max = String(Math.max(0.25, alpha)); aEl.value = alpha;
     document.getElementById('alphaVal').textContent = 'α = ' + alpha.toFixed(3);
@@ -919,7 +949,7 @@ document.getElementById('sampleSize').addEventListener('change', update);
   nEl.value = opt.value;
   if (['right', 'two'].includes(q.get('tail'))) document.getElementById('testType').value = q.get('tail');
   const note = document.getElementById('fromTestNote');
-  note.textContent = 'Values received from your test: d is the minimum detectable difference divided by the standard deviation, so power is around 80%.' + (q.get('approx') === 't' ? ' The simulator uses the normal approximation: with small samples, the exact power of the t-test is slightly lower than what you see here.' : q.get('approx') === 'prop' ? ' The simulator uses the same standard deviation under H₀ and H₁, so power may differ slightly from that of the calculator.' : '') + (q.get('mirror') === '1' ? ' Your test is left-tailed; by symmetry, it is shown here as right-tailed.' : '');
+  note.textContent = 'Values received from your test: the difference Δ is the smallest one it detects with 80% probability, so power is around 80%.' + (q.get('approx') === 't' ? ' The simulator uses the normal approximation: with small samples, the exact power of the t-test is slightly lower than what you see here.' : q.get('approx') === 'prop' ? ' The simulator uses the same standard deviation under H₀ and H₁, so power may differ slightly from that of the calculator.' : '') + (q.get('mirror') === '1' ? ' Your test is left-tailed; by symmetry, it is shown here as right-tailed.' : '');
   note.hidden = false;
 }());
 initChart();

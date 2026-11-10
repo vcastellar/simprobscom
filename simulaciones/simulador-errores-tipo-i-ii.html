@@ -380,12 +380,18 @@
         </div>
 
         <div class="form-group">
-          <label for="effectSize">Tamaño del efecto <em>d</em> <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+          <label for="effectSize">Diferencia real respecto a μ₀ <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
           <div class="slider-row">
             <input type="range" id="effectSize" min="0" max="3" step="0.05" value="0.5">
             <span class="slider-val" id="effectSizeVal">d = 0.50</span>
           </div>
-          <p class="field-hint" hidden>Diferencia real entre medias en unidades de desviación típica (d de Cohen). <strong>d = 0,2</strong> se considera un efecto pequeño, <strong>d = 0,5</strong> mediano y <strong>d = 0,8</strong> grande.</p>
+          <p class="field-hint" hidden>Cuánto se aleja la media real de μ₀. Si indicas la desviación típica de tus datos, se muestra en sus unidades (Δ); si no, en desviaciones típicas (d de Cohen). <strong>d = 0,2</strong> se considera un efecto pequeño, <strong>d = 0,5</strong> mediano y <strong>d = 0,8</strong> grande.</p>
+        </div>
+
+        <div class="form-group">
+          <label for="sigmaUnits">Desviación típica σ (opcional) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
+          <input type="number" id="sigmaUnits" min="0" step="any" placeholder="—">
+          <p class="field-hint" hidden>La desviación típica de tus datos. Con ella, la diferencia se muestra en las unidades originales: Δ = d × σ. Por ejemplo, con σ = 8 g, d = 0,5 equivale a una diferencia real de 4 g. Si la dejas vacía, se trabaja solo con d.</p>
         </div>
 
         <div class="form-group">
@@ -722,6 +728,24 @@ function initChart() {
 /* ════════════════════════════════════════════
    COMPUTE & RENDER
 ════════════════════════════════════════════ */
+// La diferencia se muestra en las unidades de los datos si se conoce σ.
+function sigmaUnits() {
+  const v = parseFloat(document.getElementById('sigmaUnits').value);
+  return v > 0 ? v : null;
+}
+function fmtDiff(v) {
+  return String(Number(v.toPrecision(3)));
+}
+function effectLabel(d) {
+  const s = sigmaUnits();
+  return s ? 'Δ = ' + fmtDiff(d * s) + ' · d = ' + d.toFixed(2) : 'd = ' + d.toFixed(2);
+}
+function effectText(d) {
+  const s = sigmaUnits();
+  if (s) return 'una diferencia real de Δ = ' + fmtDiff(d * s) + ' (d = Δ/σ = ' + d.toFixed(2) + ')';
+  return 'tamaño del efecto d = ' + d.toFixed(2);
+}
+
 function getParams() {
   const testType  = document.getElementById('testType').value;
   const d         = parseFloat(document.getElementById('effectSize').value);
@@ -868,7 +892,7 @@ function updateInterpretation(params, stats) {
 
   const html = `
     Con un contraste <strong>${typeStr}</strong> al nivel α = <strong>${alpha.toFixed(3)}</strong>,
-    ${critStr}. Bajo H₁ con tamaño del efecto d = ${d.toFixed(2)} y n = ${n} observaciones,
+    ${critStr}. Bajo H₁ con ${effectText(d)} y n = ${n} observaciones,
     el parámetro de no-centralidad es δ = d × √n = <strong>${delta.toFixed(3)}</strong>.
     <br><br>
     La probabilidad de error tipo II es β = <strong>${beta.toFixed(3)}</strong>,
@@ -892,11 +916,15 @@ function update() {
    SLIDER LABELS
 ════════════════════════════════════════════ */
 document.getElementById('effectSize').addEventListener('input', function () {
-  document.getElementById('effectSizeVal').textContent = 'd = ' + parseFloat(this.value).toFixed(2);
+  document.getElementById('effectSizeVal').textContent = effectLabel(parseFloat(this.value));
   update();
 });
 document.getElementById('alpha').addEventListener('input', function () {
   document.getElementById('alphaVal').textContent = 'α = ' + parseFloat(this.value).toFixed(3);
+  update();
+});
+document.getElementById('sigmaUnits').addEventListener('input', function () {
+  document.getElementById('effectSizeVal').textContent = effectLabel(parseFloat(document.getElementById('effectSize').value));
   update();
 });
 document.getElementById('testType').addEventListener('change', update);
@@ -913,7 +941,9 @@ document.getElementById('sampleSize').addEventListener('change', update);
   if (!(d >= 0) || !(n >= 2)) return;
   const dEl = document.getElementById('effectSize'), aEl = document.getElementById('alpha'), nEl = document.getElementById('sampleSize');
   dEl.step = 'any'; dEl.max = String(Math.max(3, Math.ceil(d))); dEl.value = d;
-  document.getElementById('effectSizeVal').textContent = 'd = ' + d.toFixed(2);
+  const sigma = parseFloat(q.get('sigma'));
+  if (sigma > 0) document.getElementById('sigmaUnits').value = sigma;
+  document.getElementById('effectSizeVal').textContent = effectLabel(d);
   if (alpha > 0 && alpha < 1) {
     aEl.step = 'any'; aEl.min = String(Math.min(0.005, alpha)); aEl.max = String(Math.max(0.25, alpha)); aEl.value = alpha;
     document.getElementById('alphaVal').textContent = 'α = ' + alpha.toFixed(3);
@@ -923,7 +953,7 @@ document.getElementById('sampleSize').addEventListener('change', update);
   nEl.value = opt.value;
   if (['right', 'two'].includes(q.get('tail'))) document.getElementById('testType').value = q.get('tail');
   const note = document.getElementById('fromTestNote');
-  note.textContent = 'Valores recibidos de tu contraste: d es la diferencia mínima detectable dividida entre la desviación típica, así que la potencia ronda el 80 %.' + (q.get('approx') === 't' ? ' El simulador usa la aproximación normal: con muestras pequeñas, la potencia exacta del contraste t es algo menor que la que ves aquí.' : q.get('approx') === 'prop' ? ' El simulador usa la misma desviación bajo H₀ y H₁, así que la potencia puede diferir ligeramente de la de la calculadora.' : '') + (q.get('mirror') === '1' ? ' Tu contraste es de cola izquierda; por simetría, aquí se muestra como cola derecha.' : '');
+  note.textContent = 'Valores recibidos de tu contraste: la diferencia Δ es la mínima que detecta con un 80 % de probabilidad, así que la potencia ronda el 80 %.' + (q.get('approx') === 't' ? ' El simulador usa la aproximación normal: con muestras pequeñas, la potencia exacta del contraste t es algo menor que la que ves aquí.' : q.get('approx') === 'prop' ? ' El simulador usa la misma desviación bajo H₀ y H₁, así que la potencia puede diferir ligeramente de la de la calculadora.' : '') + (q.get('mirror') === '1' ? ' Tu contraste es de cola izquierda; por simetría, aquí se muestra como cola derecha.' : '');
   note.hidden = false;
 }());
 initChart();
