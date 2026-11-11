@@ -254,12 +254,22 @@
     .faq-list li { margin-bottom: 18px; }
     .faq-list li strong { display: block; margin-bottom: 4px; color: #1e293b; }
 
-    /* ---- Formula line ---- */
-    .formula-line {
+    /* ---- Fórmulas: sin recuadro ni barras de desplazamiento ---- */
+    .math-block {
       text-align: center;
       font-size: 1.05rem;
-      margin: 12px 0;
-      overflow-x: auto;
+      margin: 14px 0;
+    }
+    .math-block mjx-container[display="true"] { margin: 0; }
+    @media (max-width: 480px) {
+      .math-block { font-size: 0.82rem; }
+      .content-table { font-size: 0.8rem; }
+      .content-table th, .content-table td { padding: 6px 5px; }
+    }
+    @media (max-width: 360px) {
+      .math-block { font-size: 0.68rem; }
+      .content-table { font-size: 0.72rem; }
+      .content-table th, .content-table td { padding: 5px 3px; }
     }
 
     /* ---- Canvas axis labels ---- */
@@ -510,6 +520,135 @@
          EDUCATIONAL SECTION 2: Nominal vs actual coverage
     ============================================================ -->
     <section class="card content-card">
+      <h2>Cómo funciona el simulador, paso a paso</h2>
+      <p>El simulador hace lo que en la práctica nunca se puede hacer: repetir el mismo estudio muchas veces conociendo el valor verdadero. Cada vez que pulsas <strong>Simular</strong>:</p>
+      <ol>
+        <li><strong>Fija la verdad.</strong> Toma como valor real el que has escrito: la media μ (y la desviación típica σ) o la proporción p.</li>
+        <li><strong>Extrae una muestra</strong> de tamaño n de esa población: n valores de una normal N(μ, σ) en el modo Media, o n ensayos de éxito o fracaso con probabilidad p en el modo Proporción.</li>
+        <li><strong>Construye el intervalo</strong> con esa muestra, usando el método elegido, igual que harías con datos reales: sin mirar el valor verdadero.</li>
+        <li><strong>Comprueba si acierta</strong>: el intervalo «cubre» si el valor verdadero queda dentro. Se dibuja en azul si cubre y en rojo si no.</li>
+        <li><strong>Repite</strong> los pasos 2 a 4 tantas veces como intervalos hayas pedido, y cuenta qué porcentaje ha cubierto: es la <strong>cobertura empírica</strong>.</li>
+      </ol>
+      <p>En el gráfico, cada fila es un estudio distinto. El punto central de cada segmento es la estimación de esa muestra (su media o su proporción), y la línea vertical discontinua es el valor verdadero. Fíjate en que el valor verdadero no se mueve: lo que cambia de una muestra a otra es el intervalo. Con un nivel del 95 %, a la larga 5 de cada 100 intervalos quedan en rojo, y nada en los datos de esas muestras avisa de que les ha tocado.</p>
+      <p>Las tarjetas de arriba resumen la simulación: el nivel nominal elegido, la cobertura empírica, cuántos intervalos han cubierto y la anchura media. Con 100 intervalos, es normal que la cobertura empírica oscile unos puntos alrededor de la nominal (91 % o 98 % no indican ningún fallo); con más intervalos, se acerca.</p>
+    </section>
+
+    <section class="card content-card">
+      <h2>Modo Media: σ conocida frente a σ desconocida</h2>
+      <p>En los dos métodos las muestras se generan igual, a partir de la μ y la σ verdaderas que has escrito. La diferencia está en <strong>qué información se permite usar al construir cada intervalo</strong>:</p>
+      <div class="content-table-wrap">
+        <table class="content-table">
+          <thead>
+            <tr><th></th><th>σ conocida (z)</th><th>σ desconocida (s y t de Student)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Desviación típica que usa el intervalo</td><td>La σ verdadera, la misma en todas las muestras</td><td>La desviación típica s de cada muestra, distinta en cada una</td></tr>
+            <tr><td>Valor crítico</td><td>z de la normal (1,96 al 95 %)</td><td>t de Student con n − 1 grados de libertad (2,776 con n = 5; 2,045 con n = 30)</td></tr>
+            <tr><td>Fórmula</td><td>\(\bar{x} \pm z_{\alpha/2}\,\dfrac{\sigma}{\sqrt{n}}\)</td><td>\(\bar{x} \pm t_{\alpha/2;\,n-1}\,\dfrac{s}{\sqrt{n}}\)</td></tr>
+            <tr><td>Anchura de los intervalos</td><td>Todos iguales</td><td>Cambia de una muestra a otra</td></tr>
+            <tr><td>Cobertura real</td><td>Exactamente la nominal</td><td>Exactamente la nominal</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Con <strong>σ conocida</strong>, lo único que varía entre muestras es el centro del intervalo, \(\bar{x}\): en el gráfico verás segmentos de la misma longitud desplazados a izquierda y derecha. Es el caso de los libros de texto, pero en la práctica casi nunca se conoce σ.</p>
+      <p>Con <strong>σ desconocida</strong>, cada muestra estima también la dispersión, y unas veces la infraestima y otras la sobrestima. Por eso verás intervalos cortos y largos mezclados. Una muestra que por azar sale muy concentrada da un intervalo estrecho, y es más fácil que no cubra. Para compensar esa incertidumbre añadida se usa la t de Student, cuyo valor crítico es mayor que el de la normal, sobre todo con muestras pequeñas: los intervalos son, de media, más anchos, y gracias a eso la cobertura vuelve a ser la nominal.</p>
+      <p><strong>Qué pasaría sin la t.</strong> Si se usara la desviación muestral s con el valor crítico 1,96 de la normal, que es un error frecuente, los intervalos serían demasiado estrechos: con n = 5, solo cubrirían el 88 % de las veces en lugar del 95 %; con n = 10, el 92 %; con n = 30, el 94 %. Esa es la razón de ser de la t de Student.</p>
+      <p><strong>Pruébalo:</strong> elige n = 5 y simula con cada método. Con σ conocida, todos los intervalos miden lo mismo; con σ desconocida, sus longitudes son muy distintas y la anchura media es mayor, pero la cobertura sigue rondando el 95 %. Sube a n = 100 y verás que los dos métodos se vuelven casi indistinguibles.</p>
+      <p>En los dos métodos, el simulador genera datos normales. Con datos reales no normales, la cobertura es solo aproximada y mejora al crecer n, por el <a href="../simulaciones/teorema-central-limite.html">teorema central del límite</a>.</p>
+    </section>
+
+    <section class="card content-card">
+      <h2>Modo Proporción: cómo se construyen los intervalos de Wald y de Wilson</h2>
+      <p>Los dos intervalos salen del mismo razonamiento y solo se separan en el último paso. Conviene verlo despacio, porque ahí está la razón de que uno funcione mucho mejor que el otro.</p>
+
+      <h3>Punto de partida: la proporción muestral es casi normal</h3>
+      <p>Si en n ensayos independientes hay X éxitos y la probabilidad de éxito es p, X sigue una distribución binomial y la proporción muestral \(\hat{p} = X/n\) tiene</p>
+      <div class="math-block">\[ E(\hat{p}) = p, \qquad \operatorname{Var}(\hat{p}) = \frac{p(1-p)}{n}. \]</div>
+      <p>Por el teorema central del límite, con n suficientemente grande, la proporción tipificada se comporta como una normal estándar:</p>
+      <div class="math-block">\[ Z = \frac{\hat{p} - p}{\sqrt{p(1-p)/n}} \;\approx\; N(0,\,1). \]</div>
+      <p>Llamando \(z = z_{\alpha/2}\) al valor crítico de la normal (1,96 al 95 %), la probabilidad de que Z quede entre −z y z es aproximadamente \(1-\alpha\):</p>
+      <div class="math-block">\[ P\!\left( |\hat{p} - p| \le z\,\sqrt{\frac{p(1-p)}{n}} \right) \approx 1 - \alpha. \]</div>
+      <p>El intervalo de confianza está formado por los valores de p que cumplen la desigualdad de dentro. La dificultad es que p aparece a los dos lados: en \(|\hat{p} - p|\) y dentro de la raíz. Los dos métodos resuelven ese problema de forma distinta.</p>
+
+      <h3>Wald: sustituir p por p̂ dentro de la raíz</h3>
+      <p><strong>Paso 1.</strong> La raíz es la desviación típica de \(\hat{p}\), pero depende de la p que no conocemos. Wald la sustituye por su estimación, el <strong>error estándar</strong>:</p>
+      <div class="math-block">\[ \sqrt{\frac{p(1-p)}{n}} \;\longrightarrow\; SE = \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}. \]</div>
+      <p>Con muestras grandes el cambio apenas importa, porque \(\hat{p}\) se acerca a p.</p>
+      <p><strong>Paso 2.</strong> Ahora la raíz es un número fijo, calculado con los datos, y p solo aparece en el valor absoluto:</p>
+      <div class="math-block">\[ |\hat{p} - p| \le z \cdot SE, \]</div>
+      <p>lo que equivale a</p>
+      <div class="math-block">\[ -z \cdot SE \le \hat{p} - p \le z \cdot SE. \]</div>
+      <p><strong>Paso 3.</strong> Despejando p:</p>
+      <div class="math-block">\[ \hat{p} - z \cdot SE \;\le\; p \;\le\; \hat{p} + z \cdot SE, \]</div>
+      <p>que es el intervalo de Wald:</p>
+      <div class="math-block">\[ \hat{p} \pm z\,\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}. \]</div>
+      <p>El intervalo queda centrado en \(\hat{p}\) y es simétrico. Su punto débil está en el paso 1: con muestras pequeñas o con p cerca de 0 o de 1, \(\hat{p}\) estima mal la dispersión. El caso extremo es una muestra sin ningún éxito: \(\hat{p} = 0\), el error estándar vale 0 y el intervalo se reduce al punto 0, como si hubiera certeza absoluta. Y si \(\hat{p}\) es pequeña pero no nula, el extremo inferior puede salir negativo y hay que recortarlo a 0.</p>
+
+      <h3>Wilson: despejar p sin sustituir nada</h3>
+      <p>Wilson deja la p desconocida dentro de la raíz y busca todos los valores de p que cumplen la desigualdad.</p>
+      <p><strong>Paso 1. Elevar al cuadrado.</strong> Los dos lados son positivos, así que la desigualdad es equivalente a</p>
+      <div class="math-block">\[ (\hat{p} - p)^2 \le \frac{z^2}{n}\,p(1-p). \]</div>
+      <p><strong>Paso 2. Desarrollar.</strong></p>
+      <div class="math-block">\[ \hat{p}^2 - 2\hat{p}\,p + p^2 \le \frac{z^2}{n}\,p - \frac{z^2}{n}\,p^2. \]</div>
+      <p><strong>Paso 3. Agrupar en potencias de p.</strong> Pasando todo a la izquierda queda una inecuación de segundo grado en p:</p>
+      <div class="math-block">\[ \begin{aligned} a\,p^2 - b\,p + c \le 0, \quad &a = 1 + \frac{z^2}{n}, \\ &b = 2\hat{p} + \frac{z^2}{n}, \\ &c = \hat{p}^2. \end{aligned} \]</div>
+      <p>Como a es positivo, la parábola \(a p^2 - b p + c\) abre hacia arriba y es negativa justo entre sus dos raíces. Esas dos raíces son los extremos del intervalo.</p>
+      <p><strong>Paso 4. Resolver la ecuación de segundo grado.</strong></p>
+      <div class="math-block">\[ p = \frac{b \pm \sqrt{b^2 - 4ac}}{2a}. \]</div>
+      <p>El discriminante se simplifica mucho, porque los términos en \(\hat{p}^2\) se cancelan:</p>
+      <div class="math-block">\[ \begin{aligned} b^2 - 4ac &= 4\hat{p}^2 + \frac{4\hat{p}z^2}{n} + \frac{z^4}{n^2} - 4\hat{p}^2 - \frac{4\hat{p}^2 z^2}{n} \\ &= \frac{4z^2\,\hat{p}(1-\hat{p})}{n} + \frac{z^4}{n^2} \\ &= 4z^2 \left( \frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2} \right). \end{aligned} \]</div>
+      <p><strong>Paso 5. Sustituir y dividir entre 2.</strong> Se obtiene el intervalo de Wilson:</p>
+      <div class="math-block">\[ \frac{\hat{p} + \dfrac{z^2}{2n}}{1 + \dfrac{z^2}{n}} \;\pm\; \frac{z}{1 + \dfrac{z^2}{n}} \sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}. \]</div>
+
+      <h3>Qué dice la fórmula de Wilson</h3>
+      <p><strong>El centro no es \(\hat{p}\).</strong> Multiplicando arriba y abajo por n, el centro se puede escribir de dos formas reveladoras:</p>
+      <div class="math-block">\[ \frac{X + z^2/2}{n + z^2} \;=\; \frac{n}{n + z^2}\,\hat{p} \;+\; \frac{z^2}{n + z^2}\cdot\frac{1}{2}. \]</div>
+      <p>La primera equivale a añadir a la muestra \(z^2/2 \approx 2\) éxitos y 2 fracasos ficticios. La segunda muestra que el centro es una media ponderada entre \(\hat{p}\) y 0,5: con muestras pequeñas pesa más el 0,5, y al crecer n el centro se acerca a \(\hat{p}\).</p>
+      <p><strong>La anchura nunca es cero.</strong> El término \(z^2/4n^2\) de la raíz no depende de \(\hat{p}\), así que incluso con 0 éxitos el intervalo tiene una anchura razonable.</p>
+      <p><strong>Nunca se sale de [0, 1]</strong>, porque sus extremos son valores de p que cumplen una desigualdad con \(p(1-p) \ge 0\).</p>
+      <p><strong>Cuando n es grande, coincide con Wald.</strong> Los términos \(z^2/n\), \(z^2/2n\) y \(z^2/4n^2\) se hacen despreciables y la fórmula se reduce a \(\hat{p} \pm z\sqrt{\hat{p}(1-\hat{p})/n}\).</p>
+      <p><strong>Es el contraste al revés.</strong> La desigualdad de partida es la regla de no rechazo del <a href="../contraste-hipotesis-una-proporcion.html">contraste de una proporción</a>, que usa el error estándar calculado con \(p_0\). Por eso el intervalo de Wilson contiene exactamente los valores \(p_0\) que ese contraste no rechazaría con tus datos; se dice que «invierte» el contraste. El de Wald, en cambio, no corresponde exactamente a ese contraste.</p>
+
+      <h3>Un ejemplo con números</h3>
+      <p>Con 2 éxitos en 20 ensayos (\(\hat{p} = 0{,}10\)) y un nivel del 95 %:</p>
+      <div class="content-table-wrap">
+        <table class="content-table">
+          <thead>
+            <tr><th>Método</th><th>Centro</th><th>Intervalo</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Wald</td><td>0,100</td><td>de −0,031 a 0,231, que se recorta a [0; 0,231]</td></tr>
+            <tr><td>Wilson</td><td>0,164</td><td>[0,028; 0,301]</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Las cuentas, paso a paso, con \(z = 1{,}96\) y \(z^2 = 3{,}8416\):</p>
+      <ul>
+        <li><strong>Wilson, denominador:</strong> \(1 + 3{,}8416/20\) \(= 1{,}1921\).</li>
+        <li><strong>Wilson, centro:</strong> \((0{,}10 + 0{,}0960)/1{,}1921\) \(= 0{,}164\).</li>
+        <li><strong>Wilson, semiamplitud:</strong> \(1{,}96\sqrt{0{,}0045 + 0{,}0024}\) \(/\,1{,}1921\) \(= 0{,}137\). Intervalo: \(0{,}164 \pm 0{,}137\).</li>
+        <li><strong>Wald:</strong> \(SE = \sqrt{0{,}10 \cdot 0{,}90/20}\) \(= 0{,}067\), e intervalo \(0{,}10 \pm 1{,}96 \cdot 0{,}067\) \(= 0{,}10 \pm 0{,}131\).</li>
+      </ul>
+      <p>Con 0 éxitos en 20, Wald da el intervalo [0; 0], mientras que Wilson da [0; 0,161].</p>
+      <h3>Qué verás en el simulador</h3>
+      <p>La diferencia de cobertura puede calcularse exactamente, y es la que el simulador reproduce:</p>
+      <div class="content-table-wrap">
+        <table class="content-table">
+          <thead>
+            <tr><th>Caso</th><th>Cobertura real de Wald</th><th>Cobertura real de Wilson</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>p = 0,05, n = 20</td><td>63,9 %</td><td>92,5 %</td></tr>
+            <tr><td>p = 0,05, n = 100</td><td>87,7 %</td><td>96,6 %</td></tr>
+            <tr><td>p = 0,10, n = 50</td><td>87,9 %</td><td>97,0 %</td></tr>
+            <tr><td>p = 0,50, n = 30</td><td>95,7 %</td><td>95,7 %</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Con p = 0,05 y n = 20, más de un tercio de los intervalos de Wald «al 95 %» no contienen el valor verdadero, sobre todo porque muchas muestras salen con 0 éxitos. Con p = 0,5 los dos métodos coinciden. Ninguno clava el 95 % en todos los casos, porque el número de éxitos solo puede tomar valores enteros, pero el de Wilson se mantiene siempre cerca. La <a href="../intervalo-confianza-proporcion.html">calculadora de intervalo de confianza para una proporción</a> calcula los dos con tus datos, para que puedas compararlos.</p>
+    </section>
+
+    <section class="card content-card">
       <h2>Cobertura nominal vs cobertura real</h2>
       <p>El <strong>nivel nominal</strong> es el valor de confianza que especificamos al construir el IC (90%, 95%, 99%). La <strong>cobertura real</strong> (o empírica) es la fracción de intervalos que efectivamente cubren el parámetro verdadero en una larga serie de repeticiones.</p>
       <p>Para el IC de la media con una población normal, como en este simulador (tanto con σ conocida como con la t de Student), la cobertura real coincide exactamente con la nominal para cualquier tamaño muestral, porque la media muestral es exactamente normal. Si la población no es normal, la coincidencia solo es aproximada y mejora con n por el TCL.</p>
@@ -527,7 +666,7 @@
     <section class="card content-card">
       <h2>¿Cómo afecta el tamaño muestral?</h2>
       <p>El tamaño muestral n tiene un efecto directo y claro sobre la anchura del intervalo de confianza. Para el IC de la media con σ conocida:</p>
-      <p class="formula-line">\[ \text{Anchura} = 2 \times z_{\alpha/2} \times \dfrac{\sigma}{\sqrt{n}} \]</p>
+      <div class="math-block">\[ \text{Anchura} = 2 \times z_{\alpha/2} \times \dfrac{\sigma}{\sqrt{n}} \]</div>
       <p>La anchura es proporcional a \(1/\sqrt{n}\): si <strong>cuadruplicamos n</strong>, la anchura se reduce a la mitad. Para reducir la anchura a un tercio, necesitamos multiplicar n por 9.</p>
       <p>Sin embargo, aumentar n <strong>no cambia la cobertura</strong>: un intervalo del 95% sigue siendo del 95% independientemente de si n = 10 o n = 1000. Lo que cambia es cuán estrecho es ese intervalo, es decir, la <em>precisión</em> de la estimación. Intervalos más estrechos son más útiles en la práctica, aunque ambos tienen la misma garantía de cobertura nominal.</p>
       <p>Puedes verificar esto en el simulador: mantén fijo el nivel de confianza al 95% y el número de intervalos en 100, y varía n entre 5 y 100. Observarás que:</p>
@@ -568,6 +707,19 @@
     </section>
 
     <!-- Related tools -->
+    <section class="card content-card">
+      <h2>Referencias y lecturas recomendadas</h2>
+      <ul>
+        <li><a href="https://es.wikipedia.org/wiki/Intervalo_de_confianza" target="_blank" rel="noopener noreferrer">Intervalo de confianza</a> — Wikipedia. Definición, interpretación y construcción general.</li>
+        <li><a href="https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval" target="_blank" rel="noopener noreferrer">Binomial proportion confidence interval</a> — Wikipedia (en inglés). Comparación de los intervalos de Wald, Wilson, Agresti-Coull y Clopper-Pearson, con sus fórmulas.</li>
+        <li>Neyman, J. (1937). <a href="https://doi.org/10.1098/rsta.1937.0005" target="_blank" rel="noopener noreferrer">Outline of a theory of statistical estimation based on the classical theory of probability</a>. <em>Philosophical Transactions of the Royal Society A</em>, 236, 333–380. El artículo que define los intervalos de confianza y su interpretación como cobertura a largo plazo.</li>
+        <li>Student (W. S. Gosset) (1908). <a href="https://doi.org/10.1093/biomet/6.1.1" target="_blank" rel="noopener noreferrer">The probable error of a mean</a>. <em>Biometrika</em>, 6(1), 1–25. El origen de la distribución t, para el caso de σ desconocida.</li>
+        <li>Wilson, E. B. (1927). <a href="https://doi.org/10.1080/01621459.1927.10502953" target="_blank" rel="noopener noreferrer">Probable inference, the law of succession, and statistical inference</a>. <em>Journal of the American Statistical Association</em>, 22(158), 209–212. El artículo original del intervalo de Wilson.</li>
+        <li>Agresti, A. y Coull, B. A. (1998). <a href="https://doi.org/10.1080/00031305.1998.10480550" target="_blank" rel="noopener noreferrer">Approximate is better than "exact" for interval estimation of binomial proportions</a>. <em>The American Statistician</em>, 52(2), 119–126.</li>
+        <li>Brown, L. D., Cai, T. T. y DasGupta, A. (2001). <a href="https://doi.org/10.1214/ss/1009213286" target="_blank" rel="noopener noreferrer">Interval estimation for a binomial proportion</a>. <em>Statistical Science</em>, 16(2), 101–133. El estudio de referencia sobre la mala cobertura del intervalo de Wald; recomienda el de Wilson.</li>
+      </ul>
+    </section>
+
     <section class="card content-card">
       <h2>Herramientas relacionadas</h2>
       <ul>
