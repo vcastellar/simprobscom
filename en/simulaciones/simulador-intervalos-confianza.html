@@ -504,6 +504,94 @@
          EDUCATIONAL SECTION 2: Nominal vs actual coverage
     ============================================================ -->
     <section class="card content-card">
+      <h2>How the simulator works, step by step</h2>
+      <p>The simulator does what can never be done in practice: repeat the same study many times while knowing the true value. Each time you click <strong>Simulate</strong>:</p>
+      <ol>
+        <li><strong>It fixes the truth.</strong> It takes the value you entered as the real one: the mean μ (and the standard deviation σ) or the proportion p.</li>
+        <li><strong>It draws a sample</strong> of size n from that population: n values from a normal N(μ, σ) in Mean mode, or n success/failure trials with probability p in Proportion mode.</li>
+        <li><strong>It builds the interval</strong> from that sample, using the chosen method, just as you would with real data: without looking at the true value.</li>
+        <li><strong>It checks whether it is right</strong>: the interval "covers" if the true value lies inside. It is drawn in blue if it covers and in red if it does not.</li>
+        <li><strong>It repeats</strong> steps 2 to 4 as many times as the number of intervals you asked for, and counts what percentage covered: that is the <strong>empirical coverage</strong>.</li>
+      </ol>
+      <p>On the chart, each row is a different study. The central dot of each segment is that sample's estimate (its mean or proportion), and the dashed vertical line is the true value. Note that the true value does not move: what changes from sample to sample is the interval. At the 95% level, in the long run 5 out of every 100 intervals end up red, and nothing in the data of those samples warns that it was their turn.</p>
+      <p>The cards at the top summarise the simulation: the chosen nominal level, the empirical coverage, how many intervals covered and the mean width. With 100 intervals, it is normal for the empirical coverage to wobble a few points around the nominal level (91% or 98% do not indicate a problem); with more intervals, it gets closer.</p>
+    </section>
+
+    <section class="card content-card">
+      <h2>Mean mode: known σ versus unknown σ</h2>
+      <p>With both methods the samples are generated in the same way, from the true μ and σ you entered. The difference lies in <strong>which information each interval is allowed to use</strong>:</p>
+      <div class="content-table-wrap">
+        <table class="content-table">
+          <thead>
+            <tr><th></th><th>Known σ (z)</th><th>Unknown σ (s and Student's t)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Standard deviation used by the interval</td><td>The true σ, the same for every sample</td><td>The standard deviation s of each sample, different every time</td></tr>
+            <tr><td>Critical value</td><td>Normal z (1.96 at 95%)</td><td>Student's t with n − 1 degrees of freedom (2.776 with n = 5; 2.045 with n = 30)</td></tr>
+            <tr><td>Formula</td><td>\(\bar{x} \pm z_{\alpha/2}\,\dfrac{\sigma}{\sqrt{n}}\)</td><td>\(\bar{x} \pm t_{\alpha/2;\,n-1}\,\dfrac{s}{\sqrt{n}}\)</td></tr>
+            <tr><td>Width of the intervals</td><td>All the same</td><td>Changes from sample to sample</td></tr>
+            <tr><td>Actual coverage</td><td>Exactly nominal</td><td>Exactly nominal</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>With <strong>known σ</strong>, the only thing that varies between samples is the centre of the interval, \(\bar{x}\): on the chart you will see segments of the same length shifted left and right. This is the textbook case, but in practice σ is almost never known.</p>
+      <p>With <strong>unknown σ</strong>, each sample also estimates the spread, sometimes underestimating it and sometimes overestimating it. That is why you will see short and long intervals mixed together. A sample that happens to be tightly clustered gives a narrow interval, which is more likely to miss. To compensate for that extra uncertainty, Student's t is used; its critical value is larger than the normal one, especially with small samples: the intervals are wider on average, and thanks to that the coverage is nominal again.</p>
+      <p><strong>What would happen without t.</strong> If the sample standard deviation s were used with the normal critical value 1.96, a common mistake, the intervals would be too narrow: with n = 5 they would cover only 88% of the time instead of 95%; with n = 10, 92%; with n = 30, 94%. That is the whole point of Student's t.</p>
+      <p><strong>Try it:</strong> choose n = 5 and simulate with each method. With known σ, all intervals have the same length; with unknown σ, their lengths differ a lot and the mean width is larger, but coverage still hovers around 95%. Go up to n = 100 and the two methods become almost indistinguishable.</p>
+      <p>With both methods, the simulator generates normal data. With real non-normal data, coverage is only approximate and improves as n grows, by the <a href="../simulaciones/teorema-central-limite.html">central limit theorem</a>.</p>
+    </section>
+
+    <section class="card content-card">
+      <h2>Proportion mode: how the Wald and Wilson intervals are built</h2>
+      <p>Both methods start from the same fact: if the true proportion is p, the sample proportion \(\hat{p}\) is approximately normal with mean p and standard deviation \(\sqrt{p(1-p)/n}\). Therefore, with approximate probability \(1-\alpha\):</p>
+      <p class="formula-line">\( |\hat{p} - p| \;\leq\; z_{\alpha/2}\,\sqrt{\dfrac{p(1-p)}{n}} \)</p>
+      <p>The problem is that p, the quantity being sought, also appears inside the square root. The two methods differ in how they deal with that.</p>
+      <h3>Wald: replace p with p̂ inside the root</h3>
+      <p>This is the quick fix: the unknown p in the root is replaced by its estimate \(\hat{p}\).</p>
+      <p class="formula-line">\( \hat{p} \;\pm\; z_{\alpha/2}\,\sqrt{\dfrac{\hat{p}(1-\hat{p})}{n}} \)</p>
+      <p>The interval is centred on \(\hat{p}\). It fails when \(\hat{p}\) is a poor estimate of the spread, that is, with small samples or proportions close to 0 or 1. The extreme case: if the sample contains no successes, \(\hat{p} = 0\), the root is 0 and the interval collapses to the single point 0, as if there were absolute certainty.</p>
+      <h3>Wilson: actually solve for p</h3>
+      <p>Wilson replaces nothing: it looks for all the values of p that satisfy the inequality. Squaring gives a quadratic inequality in p, and its two solutions are the ends of the interval:</p>
+      <p class="formula-line">\( \dfrac{\hat{p} + \dfrac{z^2}{2n}}{1 + \dfrac{z^2}{n}} \;\pm\; \dfrac{z}{1 + \dfrac{z^2}{n}}\,\sqrt{\dfrac{\hat{p}(1-\hat{p})}{n} + \dfrac{z^2}{4n^2}} \)</p>
+      <p>where \(z = z_{\alpha/2}\). Put another way, the Wilson interval contains exactly the values \(p_0\) that the <a href="../contraste-hipotesis-una-proporcion.html">one-proportion test</a> would not reject with those data; that is why it is said to "invert" the test. It has three visible consequences:</p>
+      <ul>
+        <li><strong>The centre is not \(\hat{p}\)</strong>, but a value pulled towards 0.5. It is equivalent to adding \(z^2/2 \approx 2\) fictitious successes and 2 fictitious failures to the sample.</li>
+        <li><strong>The width is never zero</strong>, because of the \(z^2/4n^2\) term in the root: even with 0 successes it gives a sensible interval.</li>
+        <li><strong>It never leaves [0, 1]</strong>, which the Wald interval does, forcing it to be truncated.</li>
+      </ul>
+      <h3>A worked example</h3>
+      <p>With 2 successes in 20 trials (\(\hat{p} = 0.10\)) at the 95% level:</p>
+      <div class="content-table-wrap">
+        <table class="content-table">
+          <thead>
+            <tr><th>Method</th><th>Centre</th><th>Interval</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Wald</td><td>0.100</td><td>from −0.031 to 0.231, truncated to [0, 0.231]</td></tr>
+            <tr><td>Wilson</td><td>0.164</td><td>[0.028, 0.301]</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>With 0 successes in 20, Wald gives the interval [0, 0], whereas Wilson gives [0, 0.161].</p>
+      <h3>What you will see in the simulator</h3>
+      <p>The difference in coverage can be computed exactly, and it is what the simulator reproduces:</p>
+      <div class="content-table-wrap">
+        <table class="content-table">
+          <thead>
+            <tr><th>Case</th><th>Actual coverage of Wald</th><th>Actual coverage of Wilson</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>p = 0.05, n = 20</td><td>63.9%</td><td>92.5%</td></tr>
+            <tr><td>p = 0.05, n = 100</td><td>87.7%</td><td>96.6%</td></tr>
+            <tr><td>p = 0.10, n = 50</td><td>87.9%</td><td>97.0%</td></tr>
+            <tr><td>p = 0.50, n = 30</td><td>95.7%</td><td>95.7%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>With p = 0.05 and n = 20, more than a third of the "95%" Wald intervals do not contain the true value, mainly because many samples come out with 0 successes. With p = 0.5 the two methods agree. Neither hits 95% exactly in every case, because the number of successes can only take whole values, but Wilson always stays close. The <a href="../intervalo-confianza-proporcion.html">confidence interval calculator for a proportion</a> computes both from your data, so you can compare them.</p>
+    </section>
+
+    <section class="card content-card">
       <h2>Nominal coverage vs actual coverage</h2>
       <p>The <strong>nominal level</strong> is the confidence value we specify when constructing the CI (90%, 95%, 99%). The <strong>actual (or empirical) coverage</strong> is the fraction of intervals that actually cover the true parameter across a long series of repetitions.</p>
       <p>For the CI of the mean with a normal population, as in this simulator (both with known σ and with Student's t), the actual coverage matches the nominal level exactly for any sample size, because the sample mean is exactly normal. If the population is not normal, the match is only approximate and improves with n by the CLT.</p>
@@ -562,6 +650,19 @@
     </section>
 
     <!-- Related tools -->
+    <section class="card content-card">
+      <h2>References and further reading</h2>
+      <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Confidence_interval" target="_blank" rel="noopener noreferrer">Confidence interval</a> — Wikipedia. Definition, interpretation and general construction.</li>
+        <li><a href="https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval" target="_blank" rel="noopener noreferrer">Binomial proportion confidence interval</a> — Wikipedia. Comparison of the Wald, Wilson, Agresti-Coull and Clopper-Pearson intervals, with their formulas.</li>
+        <li>Neyman, J. (1937). <a href="https://doi.org/10.1098/rsta.1937.0005" target="_blank" rel="noopener noreferrer">Outline of a theory of statistical estimation based on the classical theory of probability</a>. <em>Philosophical Transactions of the Royal Society A</em>, 236, 333–380. The paper that defines confidence intervals and their interpretation as long-run coverage.</li>
+        <li>Student (W. S. Gosset) (1908). <a href="https://doi.org/10.1093/biomet/6.1.1" target="_blank" rel="noopener noreferrer">The probable error of a mean</a>. <em>Biometrika</em>, 6(1), 1–25. The origin of the t distribution, for the unknown-σ case.</li>
+        <li>Wilson, E. B. (1927). <a href="https://doi.org/10.1080/01621459.1927.10502953" target="_blank" rel="noopener noreferrer">Probable inference, the law of succession, and statistical inference</a>. <em>Journal of the American Statistical Association</em>, 22(158), 209–212. The original paper on the Wilson interval.</li>
+        <li>Agresti, A. and Coull, B. A. (1998). <a href="https://doi.org/10.1080/00031305.1998.10480550" target="_blank" rel="noopener noreferrer">Approximate is better than "exact" for interval estimation of binomial proportions</a>. <em>The American Statistician</em>, 52(2), 119–126.</li>
+        <li>Brown, L. D., Cai, T. T. and DasGupta, A. (2001). <a href="https://doi.org/10.1214/ss/1009213286" target="_blank" rel="noopener noreferrer">Interval estimation for a binomial proportion</a>. <em>Statistical Science</em>, 16(2), 101–133. The reference study on the poor coverage of the Wald interval; it recommends Wilson.</li>
+      </ul>
+    </section>
+
     <section class="card content-card">
       <h2>Related tools</h2>
       <ul>
