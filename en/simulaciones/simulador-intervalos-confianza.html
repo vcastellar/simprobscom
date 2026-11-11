@@ -254,12 +254,22 @@
     .faq-list li { margin-bottom: 18px; }
     .faq-list li strong { display: block; margin-bottom: 4px; color: #1e293b; }
 
-    /* ---- Formula line ---- */
-    .formula-line {
+    /* ---- Fórmulas: sin recuadro ni barras de desplazamiento ---- */
+    .math-block {
       text-align: center;
       font-size: 1.05rem;
-      margin: 12px 0;
-      overflow-x: auto;
+      margin: 14px 0;
+    }
+    .math-block mjx-container[display="true"] { margin: 0; }
+    @media (max-width: 480px) {
+      .math-block { font-size: 0.82rem; }
+      .content-table { font-size: 0.8rem; }
+      .content-table th, .content-table td { padding: 6px 5px; }
+    }
+    @media (max-width: 360px) {
+      .math-block { font-size: 0.68rem; }
+      .content-table { font-size: 0.72rem; }
+      .content-table th, .content-table td { padding: 5px 3px; }
     }
 
     /* ---- Canvas axis labels ---- */
@@ -543,22 +553,56 @@
 
     <section class="card content-card">
       <h2>Proportion mode: how the Wald and Wilson intervals are built</h2>
-      <p>Both methods start from the same fact: if the true proportion is p, the sample proportion \(\hat{p}\) is approximately normal with mean p and standard deviation \(\sqrt{p(1-p)/n}\). Therefore, with approximate probability \(1-\alpha\):</p>
-      <p class="formula-line">\( |\hat{p} - p| \;\leq\; z_{\alpha/2}\,\sqrt{\dfrac{p(1-p)}{n}} \)</p>
-      <p>The problem is that p, the quantity being sought, also appears inside the square root. The two methods differ in how they deal with that.</p>
+      <p>Both intervals come from the same reasoning and only part ways at the last step. It is worth going through it slowly, because that is where the reason one works much better than the other lies.</p>
+
+      <h3>Starting point: the sample proportion is nearly normal</h3>
+      <p>If there are X successes in n independent trials and the probability of success is p, X follows a binomial distribution and the sample proportion \(\hat{p} = X/n\) has</p>
+      <div class="math-block">\[ E(\hat{p}) = p, \qquad \operatorname{Var}(\hat{p}) = \frac{p(1-p)}{n}. \]</div>
+      <p>By the central limit theorem, when n is large enough, the standardised proportion behaves like a standard normal:</p>
+      <div class="math-block">\[ Z = \frac{\hat{p} - p}{\sqrt{p(1-p)/n}} \;\approx\; N(0,\,1). \]</div>
+      <p>Writing \(z = z_{\alpha/2}\) for the normal critical value (1.96 at 95%), the probability that Z lies between −z and z is approximately \(1-\alpha\):</p>
+      <div class="math-block">\[ P\!\left( |\hat{p} - p| \le z\,\sqrt{\frac{p(1-p)}{n}} \right) \approx 1 - \alpha. \]</div>
+      <p>The confidence interval is made up of the values of p that satisfy the inequality inside. The difficulty is that p appears on both sides: in \(|\hat{p} - p|\) and inside the square root. The two methods deal with that in different ways.</p>
+
       <h3>Wald: replace p with p̂ inside the root</h3>
-      <p>This is the quick fix: the unknown p in the root is replaced by its estimate \(\hat{p}\).</p>
-      <p class="formula-line">\( \hat{p} \;\pm\; z_{\alpha/2}\,\sqrt{\dfrac{\hat{p}(1-\hat{p})}{n}} \)</p>
-      <p>The interval is centred on \(\hat{p}\). It fails when \(\hat{p}\) is a poor estimate of the spread, that is, with small samples or proportions close to 0 or 1. The extreme case: if the sample contains no successes, \(\hat{p} = 0\), the root is 0 and the interval collapses to the single point 0, as if there were absolute certainty.</p>
-      <h3>Wilson: actually solve for p</h3>
-      <p>Wilson replaces nothing: it looks for all the values of p that satisfy the inequality. Squaring gives a quadratic inequality in p, and its two solutions are the ends of the interval:</p>
-      <p class="formula-line">\( \dfrac{\hat{p} + \dfrac{z^2}{2n}}{1 + \dfrac{z^2}{n}} \;\pm\; \dfrac{z}{1 + \dfrac{z^2}{n}}\,\sqrt{\dfrac{\hat{p}(1-\hat{p})}{n} + \dfrac{z^2}{4n^2}} \)</p>
-      <p>where \(z = z_{\alpha/2}\). Put another way, the Wilson interval contains exactly the values \(p_0\) that the <a href="../contraste-hipotesis-una-proporcion.html">one-proportion test</a> would not reject with those data; that is why it is said to "invert" the test. It has three visible consequences:</p>
-      <ul>
-        <li><strong>The centre is not \(\hat{p}\)</strong>, but a value pulled towards 0.5. It is equivalent to adding \(z^2/2 \approx 2\) fictitious successes and 2 fictitious failures to the sample.</li>
-        <li><strong>The width is never zero</strong>, because of the \(z^2/4n^2\) term in the root: even with 0 successes it gives a sensible interval.</li>
-        <li><strong>It never leaves [0, 1]</strong>, which the Wald interval does, forcing it to be truncated.</li>
-      </ul>
+      <p><strong>Step 1.</strong> The root is the standard deviation of \(\hat{p}\), but it depends on the unknown p. Wald replaces it with its estimate, the <strong>standard error</strong>:</p>
+      <div class="math-block">\[ \sqrt{\frac{p(1-p)}{n}} \;\longrightarrow\; SE = \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}. \]</div>
+      <p>With large samples the change hardly matters, because \(\hat{p}\) gets close to p.</p>
+      <p><strong>Step 2.</strong> The root is now a fixed number, computed from the data, and p only appears in the absolute value:</p>
+      <div class="math-block">\[ |\hat{p} - p| \le z \cdot SE, \]</div>
+      <p>which is equivalent to</p>
+      <div class="math-block">\[ -z \cdot SE \le \hat{p} - p \le z \cdot SE. \]</div>
+      <p><strong>Step 3.</strong> Solving for p:</p>
+      <div class="math-block">\[ \hat{p} - z \cdot SE \;\le\; p \;\le\; \hat{p} + z \cdot SE, \]</div>
+      <p>which is the Wald interval:</p>
+      <div class="math-block">\[ \hat{p} \pm z\,\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}. \]</div>
+      <p>The interval is centred on \(\hat{p}\) and symmetric. Its weak point is step 1: with small samples or p close to 0 or 1, \(\hat{p}\) is a poor estimate of the spread. The extreme case is a sample with no successes: \(\hat{p} = 0\), the standard error is 0 and the interval collapses to the single point 0, as if there were absolute certainty. And if \(\hat{p}\) is small but not zero, the lower end can come out negative and has to be truncated to 0.</p>
+
+      <h3>Wilson: solve for p without replacing anything</h3>
+      <p>Wilson keeps the unknown p inside the root and looks for all the values of p that satisfy the inequality.</p>
+      <p><strong>Step 1. Square both sides.</strong> Both sides are positive, so the inequality is equivalent to</p>
+      <div class="math-block">\[ (\hat{p} - p)^2 \le \frac{z^2}{n}\,p(1-p). \]</div>
+      <p><strong>Step 2. Expand.</strong></p>
+      <div class="math-block">\[ \hat{p}^2 - 2\hat{p}\,p + p^2 \le \frac{z^2}{n}\,p - \frac{z^2}{n}\,p^2. \]</div>
+      <p><strong>Step 3. Collect powers of p.</strong> Moving everything to the left gives a quadratic inequality in p:</p>
+      <div class="math-block">\[ \begin{aligned} a\,p^2 - b\,p + c \le 0, \quad &a = 1 + \frac{z^2}{n}, \\ &b = 2\hat{p} + \frac{z^2}{n}, \\ &c = \hat{p}^2. \end{aligned} \]</div>
+      <p>Since a is positive, the parabola \(a p^2 - b p + c\) opens upwards and is negative exactly between its two roots. Those two roots are the ends of the interval.</p>
+      <p><strong>Step 4. Solve the quadratic equation.</strong></p>
+      <div class="math-block">\[ p = \frac{b \pm \sqrt{b^2 - 4ac}}{2a}. \]</div>
+      <p>The discriminant simplifies a lot, because the \(\hat{p}^2\) terms cancel:</p>
+      <div class="math-block">\[ \begin{aligned} b^2 - 4ac &= 4\hat{p}^2 + \frac{4\hat{p}z^2}{n} + \frac{z^4}{n^2} - 4\hat{p}^2 - \frac{4\hat{p}^2 z^2}{n} \\ &= \frac{4z^2\,\hat{p}(1-\hat{p})}{n} + \frac{z^4}{n^2} \\ &= 4z^2 \left( \frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2} \right). \end{aligned} \]</div>
+      <p><strong>Step 5. Substitute and divide by 2.</strong> This gives the Wilson interval:</p>
+      <div class="math-block">\[ \frac{\hat{p} + \dfrac{z^2}{2n}}{1 + \dfrac{z^2}{n}} \;\pm\; \frac{z}{1 + \dfrac{z^2}{n}} \sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}. \]</div>
+
+      <h3>What the Wilson formula tells you</h3>
+      <p><strong>The centre is not \(\hat{p}\).</strong> Multiplying top and bottom by n, the centre can be written in two revealing ways:</p>
+      <div class="math-block">\[ \frac{X + z^2/2}{n + z^2} \;=\; \frac{n}{n + z^2}\,\hat{p} \;+\; \frac{z^2}{n + z^2}\cdot\frac{1}{2}. \]</div>
+      <p>The first is equivalent to adding \(z^2/2 \approx 2\) fictitious successes and 2 fictitious failures to the sample. The second shows that the centre is a weighted average of \(\hat{p}\) and 0.5: with small samples 0.5 carries more weight, and as n grows the centre moves towards \(\hat{p}\).</p>
+      <p><strong>The width is never zero.</strong> The \(z^2/4n^2\) term in the root does not depend on \(\hat{p}\), so even with 0 successes the interval has a sensible width.</p>
+      <p><strong>It never leaves [0, 1]</strong>, because its ends are values of p that satisfy an inequality with \(p(1-p) \ge 0\).</p>
+      <p><strong>When n is large, it matches Wald.</strong> The terms \(z^2/n\), \(z^2/2n\) and \(z^2/4n^2\) become negligible and the formula reduces to \(\hat{p} \pm z\sqrt{\hat{p}(1-\hat{p})/n}\).</p>
+      <p><strong>It is the test turned around.</strong> The starting inequality is the non-rejection rule of the <a href="../contraste-hipotesis-una-proporcion.html">one-proportion test</a>, which uses the standard error computed with \(p_0\). That is why the Wilson interval contains exactly the values \(p_0\) that the test would not reject with your data; it is said to "invert" the test. The Wald interval, by contrast, does not correspond exactly to that test.</p>
+
       <h3>A worked example</h3>
       <p>With 2 successes in 20 trials (\(\hat{p} = 0.10\)) at the 95% level:</p>
       <div class="content-table-wrap">
@@ -572,6 +616,13 @@
           </tbody>
         </table>
       </div>
+      <p>The arithmetic, step by step, with \(z = 1.96\) and \(z^2 = 3.8416\):</p>
+      <ul>
+        <li><strong>Wilson, denominator:</strong> \(1 + 3.8416/20\) \(= 1.1921\).</li>
+        <li><strong>Wilson, centre:</strong> \((0.10 + 0.0960)/1.1921\) \(= 0.164\).</li>
+        <li><strong>Wilson, half-width:</strong> \(1.96\sqrt{0.0045 + 0.0024}\) \(/\,1.1921\) \(= 0.137\). Interval: \(0.164 \pm 0.137\).</li>
+        <li><strong>Wald:</strong> \(SE = \sqrt{0.10 \cdot 0.90/20}\) \(= 0.067\), and the interval is \(0.10 \pm 1.96 \cdot 0.067\) \(= 0.10 \pm 0.131\).</li>
+      </ul>
       <p>With 0 successes in 20, Wald gives the interval [0, 0], whereas Wilson gives [0, 0.161].</p>
       <h3>What you will see in the simulator</h3>
       <p>The difference in coverage can be computed exactly, and it is what the simulator reproduces:</p>
@@ -609,7 +660,7 @@
     <section class="card content-card">
       <h2>How does sample size affect it?</h2>
       <p>The sample size n has a direct and clear effect on the width of the confidence interval. For the CI of the mean with known σ:</p>
-      <p class="formula-line">\[ \text{Width} = 2 \times z_{\alpha/2} \times \dfrac{\sigma}{\sqrt{n}} \]</p>
+      <div class="math-block">\[ \text{Width} = 2 \times z_{\alpha/2} \times \dfrac{\sigma}{\sqrt{n}} \]</div>
       <p>The width is proportional to \(1/\sqrt{n}\): if we <strong>quadruple n</strong>, the width is cut in half. To reduce the width to a third, we need to multiply n by 9.</p>
       <p>However, increasing n <strong>does not change the coverage</strong>: a 95% interval is still 95% regardless of whether n = 10 or n = 1000. What changes is how narrow that interval is, i.e. the <em>precision</em> of the estimate. Narrower intervals are more useful in practice, even though both have the same nominal coverage guarantee.</p>
       <p>You can verify this in the simulator: keep the confidence level fixed at 95% and the number of intervals at 100, and vary n between 5 and 100. You'll observe that:</p>
