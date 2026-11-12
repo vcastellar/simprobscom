@@ -296,6 +296,19 @@
       border-color: rgba(148,163,184,0.3);
     }
     html.dark-mode #canvas2d { background: #1e293b; }
+    /* ---- Fórmulas: sin recuadro ni barras de desplazamiento ---- */
+    .math-block { text-align: center; font-size: 1.05rem; margin: 14px 0; }
+    .math-block mjx-container[display="true"] { margin: 0; }
+    @media (max-width: 480px) {
+      .math-block { font-size: 0.82rem; }
+      .content-table { font-size: 0.8rem; }
+      .content-table th, .content-table td { padding: 6px 5px; }
+    }
+    @media (max-width: 360px) {
+      .math-block { font-size: 0.68rem; }
+      .content-table { font-size: 0.72rem; }
+      .content-table th, .content-table td { padding: 5px 3px; }
+    }
   </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
@@ -553,6 +566,28 @@
     </section>
 
     <section class="card content-card">
+      <h2>How the simulator works, step by step</h2>
+      <h3>1D tab</h3>
+      <ol>
+        <li><strong>Each path starts at 0.</strong></li>
+        <li><strong>At each step a "coin is tossed":</strong> a random number between 0 and 1 is drawn; if it is below p, the position goes up by 1, otherwise it goes down by 1. With p = 0.5 the coin is fair.</li>
+        <li><strong>This is repeated n times</strong> and the position after each step is plotted.</li>
+        <li><strong>All of the above is repeated</strong> for each path, independently: none of them influences the others.</li>
+      </ol>
+      <p>The cards summarise the <strong>final positions</strong> of the paths drawn: their mean, their standard deviation, the smallest and the largest. Below the first two is the value predicted by theory, n(2p − 1) for the mean and 2√(p(1 − p)n) for the standard deviation. With few paths, the empirical values can be quite far from the theoretical ones (with a single path, the standard deviation is 0): use 50 to compare them.</p>
+      <p>The <strong>expected mean line</strong> is the theoretical mean position at each time, t(2p − 1): horizontal if p = 0.5 and sloped if there is drift. The <strong>±2σ bands</strong> lie two standard deviations from that line, 2 · 2√(p(1 − p)t), which is why they look like a parabola on its side. At each time they contain about 95% of the paths; over the whole run, it is normal for a path to stray outside them at some point.</p>
+
+      <h3>2D tab</h3>
+      <ol>
+        <li><strong>Each path starts at the origin</strong> (0, 0).</li>
+        <li><strong>At each step one of the four directions is chosen at random</strong> (up, down, left or right), each with probability 1/4, and the walker moves one unit.</li>
+        <li><strong>This is repeated n times</strong> and the whole path is drawn on the plane.</li>
+      </ol>
+      <p>The cards show the <strong>mean final distance</strong> from the origin (theory predicts about 0.886√n), the <strong>mean squared distance</strong> (theory predicts exactly n), the <strong>maximum displacement</strong> (the farthest any path has been at any time) and the <strong>returns to the origin</strong> (how many times it has passed through (0, 0) again; only counted when there is a single path). The <strong>dashed circle</strong> has radius √n.</p>
+      <p>On both tabs, each click on "Simulate" generates new paths. The formulas for all these theoretical values are derived below.</p>
+    </section>
+
+    <section class="card content-card">
       <h2>Mathematical properties</h2>
 
       <h3>Mean and variance</h3>
@@ -569,10 +604,10 @@
       <p style="text-align:center; font-size:1.05rem; margin: 1rem 0;">
         \( X_n \approx \mathcal{N}\!\left(n(2p-1),\; 4p(1-p)\,n\right) \)
       </p>
-      <p>This justifies the theoretical ±2σ bands you can see in the simulator: approximately 95% of trajectories should fall within the band E[X<sub>n</sub>] ± 2 · 2√(p(1−p)n). Notice how the bands widen following the √n curve rather than a straight line.</p>
+      <p>This justifies the theoretical ±2σ bands you can see in the simulator: at each time, approximately 95% of trajectories should lie within the band E[X<sub>n</sub>] ± 2 · 2√(p(1−p)n). Notice how the bands widen following the √n curve rather than a straight line.</p>
 
       <h3>The random walk in 2D</h3>
-      <p>In two dimensions, the particle moves with equal probability 1/4 along each of the four axes (north, south, east, west). Now X<sub>n</sub> and Y<sub>n</sub> are two independent 1D random walks that evolve on alternating steps: on average, each component receives n/2 effective steps.</p>
+      <p>In two dimensions, the particle moves with equal probability 1/4 along each of the four axes (north, south, east, west). At each step only one of the two coordinates changes, so X<sub>n</sub> and Y<sub>n</sub> are not independent, but each behaves like a 1D walk that receives, on average, n/2 steps.</p>
       <p>The Euclidean distance to the origin is still of order √n:</p>
       <p style="text-align:center; font-size:1.05rem; margin: 1rem 0;">
         \( \mathrm{E}\!\left[\,r_n^2\,\right] = \mathrm{E}[X_n^2 + Y_n^2] = n \)
@@ -580,6 +615,62 @@
         <span style="margin-left:2rem;">\( r_{\mathrm{RMS}} = \sqrt{n} \)</span>
       </p>
       <p>The dashed circle in the 2D simulator has radius √n and corresponds to this root-mean-square distance. Notice how the endpoints of the trajectories cluster roughly within that circle.</p>
+    </section>
+
+    <section class="card content-card">
+      <h2>Where the formulas come from</h2>
+      <h3>Mean and variance: from one step to n steps</h3>
+      <p>A step \(\xi\) equals +1 with probability p and −1 with probability 1 − p. Its mean and variance are</p>
+      <div class="math-block">\[ E(\xi) = (+1)\,p + (-1)(1-p) = 2p - 1, \]</div>
+      <div class="math-block">\[ \begin{aligned} \operatorname{Var}(\xi) &= E(\xi^2) - E(\xi)^2 \\ &= 1 - (2p-1)^2 = 4p(1-p), \end{aligned} \]</div>
+      <p>because \(\xi^2\) is always 1. The position is the sum of n independent steps; means always add, and variances add because the steps are independent:</p>
+      <div class="math-block">\[ \begin{gathered} E(X_n) = n(2p-1), \\ \operatorname{Var}(X_n) = 4p(1-p)\,n. \end{gathered} \]</div>
+      <p>The drift grows like n and the standard deviation like √n. That is the whole explanation of why a small edge wins in the long run: the ratio of drift to noise grows like √n.</p>
+
+      <h3>The exact distribution of the position</h3>
+      <p>If K of the n steps went up, the position is \(X_n = K - (n - K) = 2K - n\), and K follows a binomial with parameters n and p. Therefore:</p>
+      <div class="math-block">\[ P(X_n = x) = \binom{n}{\frac{n+x}{2}}\,p^{\frac{n+x}{2}}\,(1-p)^{\frac{n-x}{2}}, \]</div>
+      <p>for the values of x with the same parity as n (after an even number of steps, the position is even). For example, the probability of being back at 0 after 10 steps of a symmetric walk is \(\binom{10}{5}/2^{10} = 0.246\). For large n, Stirling's formula gives a very useful approximation:</p>
+      <div class="math-block">\[ P(X_{2m} = 0) = \binom{2m}{m}\frac{1}{4^m} \approx \frac{1}{\sqrt{\pi m}}. \]</div>
+
+      <h3>In 2D, the mean squared distance is exactly n</h3>
+      <p>The position is the sum of n steps, each a unit vector \(S_i\). Expanding the square of the sum:</p>
+      <div class="math-block">\[ r_n^2 = \Big|\sum_{i=1}^{n} S_i\Big|^2 = \sum_{i=1}^{n} |S_i|^2 + \sum_{i \ne j} S_i \cdot S_j. \]</div>
+      <p>Each \(|S_i|^2\) equals 1. And each cross product has mean 0, because the steps are independent and each has mean 0. That leaves</p>
+      <div class="math-block">\[ E(r_n^2) = n \quad\Longrightarrow\quad r_{\text{RMS}} = \sqrt{n}, \]</div>
+      <p>which is the radius of the dashed circle. The result is exact for any n and holds in any dimension.</p>
+
+      <h3>The mean distance is somewhat smaller: 0.886√n</h3>
+      <p>For large n, each coordinate is approximately normal with mean 0 and variance n/2 (each receives half of the steps). The distance from the origin of a point with two such coordinates follows a Rayleigh distribution, whose mean is</p>
+      <div class="math-block">\[ E(r_n) \approx \sqrt{\frac{\pi}{2}} \cdot \sqrt{\frac{n}{2}} = \frac{\sqrt{\pi n}}{2} \approx 0.886\,\sqrt{n}. \]</div>
+      <p>It is smaller than \(\sqrt{n}\) because the mean of a quantity is always less than or equal to the root of the mean of its square. That is why, on average, the end points fall somewhat inside the circle.</p>
+
+      <h3>Why it returns to the origin in 1D and 2D, but not in 3D</h3>
+      <p>The expected number of visits to the origin is the sum, over all times, of the probability of being there. If that sum is infinite, the walk is certain to return again and again; if it is finite, there comes a time when it never returns.</p>
+      <ul>
+        <li><strong>1D:</strong> the probability of being at 0 after 2m steps is approximately \(1/\sqrt{\pi m}\), and the sum of \(1/\sqrt{m}\) is infinite.</li>
+        <li><strong>2D:</strong> the combinations \(X_n + Y_n\) and \(X_n - Y_n\) are two independent 1D walks, and the walk is at the origin when both are 0. The probability is the square of the previous one, approximately \(1/(\pi m)\). The sum of \(1/m\) is also infinite, but it grows very slowly, like a logarithm.</li>
+        <li><strong>3D:</strong> the probability decays like \(1/m^{3/2}\), whose sum is finite. The walk eventually stops returning.</li>
+      </ul>
+      <p>The slowness of the 2D case shows in the simulator. Expected number of returns to the origin:</p>
+      <div class="content-table-wrap">
+        <table class="content-table">
+          <thead>
+            <tr><th>Steps</th><th>Symmetric 1D walk</th><th>2D walk</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>100</td><td>7.0</td><td>1.3</td></tr>
+            <tr><td>1,000</td><td>24.3</td><td>2.0</td></tr>
+            <tr><td>10,000</td><td>78.8</td><td>2.8</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>With 10,000 steps in 2D, you will usually see between 0 and a few returns: recurrence is certain, but only in the very long run.</p>
+
+      <h3>The gambler's ruin in the fair game</h3>
+      <p>Let \(P_k\) be the probability of ruin when you hold k euros and the two players hold N = a + b between them. After one bet you hold k + 1 or k − 1, each with probability ½:</p>
+      <div class="math-block">\[ P_k = \tfrac{1}{2}P_{k+1} + \tfrac{1}{2}P_{k-1}, \qquad P_0 = 1, \quad P_N = 0. \]</div>
+      <p>Each value is the average of its two neighbours, so the \(P_k\) lie on a straight line. The one through the two end points is \(P_k = 1 - k/N\), and with k = a you get \(P_a = b/(a+b)\). The same method gives the mean length of the game, \(a \cdot b\) bets: with €100 against €900, 90,000 bets.</p>
     </section>
 
     <section class="card content-card">
@@ -597,14 +688,14 @@
       <h2>The gambler's ruin</h2>
       <p>Imagine a gambler who starts with $<em>a</em> and plays a series of $1 bets against an opponent with $<em>b</em>. On each round, the gambler wins $1 with probability p or loses $1 with probability q = 1 − p. The game ends when someone goes broke.</p>
       <p>This classic problem is equivalent to a random walk with absorbing barriers at 0 and a + b. The probability that the gambler goes broke is:</p>
-      <p style="text-align:center; font-size:1.02rem; margin: 1rem 0;">
+      <div class="math-block">
         \[
           P(\text{ruin}) = \begin{cases}
             \dfrac{(q/p)^a - (q/p)^{a+b}}{1 - (q/p)^{a+b}} & \text{if } p \neq \tfrac{1}{2} \\[1.4em]
             \dfrac{b}{a+b} & \text{if } p = \tfrac{1}{2}
           \end{cases}
         \]
-      </p>
+      </div>
       <p>For a fair game (p = 0.5), the probability of ruin depends only on the ratio of capital: if the gambler has $100 and the house has $900, the probability that the gambler goes broke is 900/1000 = 90%. Even with a perfectly fair game, the asymmetry in capital makes ruin nearly certain for the poorer player.</p>
       <p>With p &lt; 0.5 (the real situation in a casino, where the house has the edge), ruin is practically inevitable in the long run. Only with p &gt; 0.5 can the gambler have a positive probability of ruining the opponent before going broke.</p>
       <p>In the 1D simulator, change p to 0.40 or 0.30 with negative drift and watch how the trajectories decline systematically — that's the house edge at work.</p>
@@ -672,6 +763,19 @@
         <h3>What are Lévy flights?</h3>
         <p>Lévy flights are a generalization of the random walk in which the steps do not have finite variance: most are small, but occasionally very large jumps occur, following a heavy-tailed distribution (stable Lévy distribution). Many animals, from albatrosses to sharks, use search strategies that resemble Lévy flights because they are optimal for exploring environments where prey is scarce and randomly distributed.</p>
       </div>
+    </section>
+
+    <section class="card content-card">
+      <h2>References and further reading</h2>
+      <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Random_walk" target="_blank" rel="noopener noreferrer">Random walk</a> — Wikipedia. Definition, properties and applications.</li>
+        <li>Pearson, K. (1905). <a href="https://doi.org/10.1038/072294b0" target="_blank" rel="noopener noreferrer">The problem of the random walk</a>. <em>Nature</em>, 72, 294. The letter that gave the problem its name.</li>
+        <li>Pólya, G. (1921). <a href="https://doi.org/10.1007/BF01458701" target="_blank" rel="noopener noreferrer">Über eine Aufgabe der Wahrscheinlichkeitsrechnung betreffend die Irrfahrt im Straßennetz</a>. <em>Mathematische Annalen</em>, 84, 149–160. The recurrence theorem in 1 and 2 dimensions (in German).</li>
+        <li>Einstein, A. (1905). <a href="https://doi.org/10.1002/andp.19053220806" target="_blank" rel="noopener noreferrer">Über die von der molekularkinetischen Theorie der Wärme geforderte Bewegung von in ruhenden Flüssigkeiten suspendierten Teilchen</a>. <em>Annalen der Physik</em>, 322(8), 549–560. The explanation of Brownian motion (in German).</li>
+        <li>Feller, W. (1968). <em>An Introduction to Probability Theory and Its Applications</em>, vol. 1 (3rd ed.). Wiley. Chapters III and XIV cover the random walk and the gambler's ruin.</li>
+        <li>Lawler, G. F. and Limic, V. (2010). <a href="https://doi.org/10.1017/CBO9780511750854" target="_blank" rel="noopener noreferrer">Random Walk: A Modern Introduction</a>. Cambridge University Press.</li>
+        <li>Fama, E. F. (1970). <a href="https://doi.org/10.2307/2325486" target="_blank" rel="noopener noreferrer">Efficient capital markets: a review of theory and empirical work</a>. <em>The Journal of Finance</em>, 25(2), 383–417.</li>
+      </ul>
     </section>
 
     <section class="card content-card">
@@ -1099,7 +1203,7 @@ function simulate2D() {
     }
 
     document.getElementById('s2d-dist').textContent  = fmtN(arrMean(dists));
-    document.getElementById('s2d-edist').textContent  = `Expected ≈ ${fmtN(sqrtN * Math.sqrt(Math.PI/2), 2)}`;
+    document.getElementById('s2d-edist').textContent  = `Expected ≈ ${fmtN(Math.sqrt(Math.PI * n) / 2, 2)}`;
     document.getElementById('s2d-dist2').textContent  = fmtN(arrMean(dists2), 1);
     document.getElementById('s2d-edist2').textContent = `Expected: n = ${n}`;
     document.getElementById('s2d-maxdist').textContent = fmtN(maxDist, 1);
@@ -1108,10 +1212,10 @@ function simulate2D() {
 
     // interpretation
     const dMean  = arrMean(dists);
-    const thDist = sqrtN * Math.sqrt(Math.PI / 2);
+    const thDist = Math.sqrt(Math.PI * n) / 2;
     const ratio  = dMean / thDist;
     let txt2 = `With n = ${n} steps, the distance from the origin is still of order √n ≈ ${fmtN(sqrtN, 1)}. `;
-    txt2 += `The empirical mean distance is ${fmtN(dMean, 2)} (theoretical: √(πn/2) ≈ ${fmtN(thDist, 2)}). `;
+    txt2 += `The empirical mean distance is ${fmtN(dMean, 2)} (theoretical: √(πn)/2 ≈ ${fmtN(thDist, 2)}). `;
     if (nPaths === 1) {
       txt2 += `The trajectory has returned to the origin <strong>${returns}</strong> times, illustrating the recurrence of the 2D walk.`;
     } else {

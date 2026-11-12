@@ -253,6 +253,19 @@
         grid-template-columns: 1fr;
       }
     }
+    /* ---- Fórmulas: sin recuadro ni barras de desplazamiento ---- */
+    .math-block { text-align: center; font-size: 1.05rem; margin: 14px 0; }
+    .math-block mjx-container[display="true"] { margin: 0; }
+    @media (max-width: 480px) {
+      .math-block { font-size: 0.82rem; }
+      .content-table { font-size: 0.8rem; }
+      .content-table th, .content-table td { padding: 6px 5px; }
+    }
+    @media (max-width: 360px) {
+      .math-block { font-size: 0.68rem; }
+      .content-table { font-size: 0.72rem; }
+      .content-table th, .content-table td { padding: 5px 3px; }
+    }
   </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
@@ -551,7 +564,7 @@
         Formalmente, sean \(X_1, X_2, \ldots, X_n\) variables aleatorias i.i.d. con media \(\mu\) y varianza finita \(\sigma^2 &lt; \infty\).
         Entonces la media muestral \(\bar{X}_n = \frac{1}{n}\sum_{i=1}^{n} X_i\) satisface:
       </p>
-      <div class="formula-box" style="text-align:center; padding: 16px;">
+      <div class="math-block">
         \[\frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} \xrightarrow{d} \mathcal{N}(0,1) \quad \text{cuando } n \to \infty\]
       </div>
       <p>
@@ -560,13 +573,60 @@
         cuanto más simétrica y «bien portada» sea la distribución, más rápido converge la media muestral a la normal.
         El <strong>teorema de Berry-Esseen</strong> cuantifica esta velocidad con una cota uniforme del error de aproximación:
       </p>
-      <div class="formula-box" style="text-align:center; padding: 16px;">
+      <div class="math-block">
         \[\sup_x \left| F_n(x) - \Phi(x) \right| \leq \frac{C\, \rho}{\sigma^3 \sqrt{n}}\]
       </div>
       <p>
         donde \(\rho = \mathbb{E}[|X-\mu|^3]\) es el tercer momento absoluto centrado y \(C \approx 0.4748\).
         Esto implica que distribuciones con mayor asimetría requieren muestras más grandes para que la aproximación normal sea precisa.
       </p>
+    </section>
+
+    <section class="card content-card">
+      <h2>De dónde salen la media, el error estándar y la campana</h2>
+      <p>La columna «Teórico» de la tabla y la curva roja del gráfico inferior salen de tres resultados. Los dos primeros son exactos para cualquier \(n\); el tercero es el teorema central del límite propiamente dicho.</p>
+
+      <h3>La media de las medias es μ</h3>
+      <p>La esperanza de una suma es la suma de las esperanzas, y las constantes salen fuera:</p>
+      <div class="math-block">\[ E(\bar{X}_n) = \frac{1}{n}\sum_{i=1}^{n} E(X_i) = \frac{1}{n}\cdot n\mu = \mu. \]</div>
+      <p>Por eso el histograma de las medias está centrado en el mismo valor que la distribución original, sea cual sea \(n\).</p>
+
+      <h3>La varianza de la media es σ²/n</h3>
+      <p>Al sacar una constante de una varianza, sale al cuadrado; y la varianza de una suma de variables <strong>independientes</strong> es la suma de las varianzas:</p>
+      <div class="math-block">\[ \operatorname{Var}(\bar{X}_n) = \frac{1}{n^2}\sum_{i=1}^{n} \operatorname{Var}(X_i) = \frac{n\sigma^2}{n^2} = \frac{\sigma^2}{n}. \]</div>
+      <p>Su raíz cuadrada es el <strong>error estándar</strong>, \(\sigma/\sqrt{n}\). Promediar reduce la dispersión porque los errores por exceso de unas observaciones se compensan en parte con los errores por defecto de otras; pero la reducción va con \(\sqrt{n}\), no con \(n\): para reducir el error estándar a la mitad hacen falta cuatro veces más datos.</p>
+      <p>Estos dos resultados no dependen de que \(n\) sea grande. Por eso, en el simulador, las filas de media y desviación típica coinciden con las teóricas incluso con \(n = 2\). Lo que cambia con \(n\) es la <em>forma</em>.</p>
+
+      <h3>La asimetría se reduce como 1/√n</h3>
+      <p>El tercer momento central (el promedio de las desviaciones al cubo, que mide la asimetría) también se suma cuando las variables son independientes: el de la suma es \(n\mu_3\). Dividiendo entre el cubo de la desviación típica de la suma, \((\sqrt{n}\,\sigma)^3\), queda el coeficiente de asimetría de la media:</p>
+      <div class="math-block">\[ \gamma_1(\bar{X}_n) = \frac{n\,\mu_3}{n^{3/2}\,\sigma^3} = \frac{\gamma_1}{\sqrt{n}}. \]</div>
+      <p>Es la fila «Asimetría» de la tabla del simulador, y explica el ritmo de la convergencia. Para las seis distribuciones del simulador, la tabla da la asimetría γ₁ de la distribución base y, en las tres últimas columnas, la de la media muestral con ese tamaño n:</p>
+      <div class="content-table-wrap">
+        <table class="content-table">
+          <thead>
+            <tr><th>Distribución</th><th>γ₁</th><th>n = 5</th><th>n = 30</th><th>n = 100</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Normal</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>Uniforme</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>Exponencial</td><td>2</td><td>0,894</td><td>0,365</td><td>0,200</td></tr>
+            <tr><td>Bernoulli</td><td>0,873</td><td>0,390</td><td>0,159</td><td>0,087</td></tr>
+            <tr><td>Poisson</td><td>0,577</td><td>0,258</td><td>0,105</td><td>0,058</td></tr>
+            <tr><td>Chi-cuadrado</td><td>1,633</td><td>0,730</td><td>0,298</td><td>0,163</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Con la exponencial hacen falta 100 observaciones para que la asimetría de la media baje a 0,2; con la normal y la uniforme es 0 desde el principio. En las distribuciones simétricas, lo que queda por corregir es el apuntamiento (curtosis), que se reduce más deprisa, como \(1/n\); por eso la uniforme parece una campana ya con \(n = 5\).</p>
+
+      <h3>Por qué aparece precisamente la normal</h3>
+      <p>Una idea de la demostración, sin todo el rigor. Se tipifican las observaciones, \(Y_i = (X_i - \mu)/\sigma\), que pasan a tener media 0 y varianza 1. La media muestral tipificada es entonces una suma:</p>
+      <div class="math-block">\[ Z_n = \frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} = \frac{1}{\sqrt{n}}\sum_{i=1}^{n} Y_i. \]</div>
+      <p>Se usa la <strong>función generadora de momentos</strong>, \(M(t) = E(e^{tY})\), que caracteriza a una distribución. Desarrollándola en serie, y como \(E(Y) = 0\) y \(E(Y^2) = 1\):</p>
+      <div class="math-block">\[ \begin{aligned} M(t) &= 1 + t\,E(Y) + \frac{t^2}{2}E(Y^2) + \cdots \\ &= 1 + \frac{t^2}{2} + o(t^2). \end{aligned} \]</div>
+      <p>La función generadora de una suma de variables independientes es el producto de las de los sumandos. Como en \(Z_n\) cada sumando va dividido entre \(\sqrt{n}\):</p>
+      <div class="math-block">\[ \begin{aligned} M_{Z_n}(t) &= \left[ M\!\left(\frac{t}{\sqrt{n}}\right) \right]^{n} \\ &= \left[ 1 + \frac{t^2}{2n} + o\!\left(\frac{1}{n}\right) \right]^{n} \;\longrightarrow\; e^{t^2/2}, \end{aligned} \]</div>
+      <p>por el límite \((1 + a/n)^n \to e^a\). Y \(e^{t^2/2}\) es justamente la función generadora de la normal estándar. La demostración rigurosa sigue el mismo camino con la función característica, que existe siempre.</p>
+      <p>Lo importante es qué sobrevive al límite: solo la media y la varianza. Todos los demás rasgos de la distribución original (asimetría, colas, que sea discreta o continua) están en los términos \(o(1/n)\), que desaparecen. Por eso el resultado es el mismo se parta de donde se parta, y por eso hace falta que la varianza sea finita: sin ella no existe el término \(t^2/2\).</p>
     </section>
 
     <section class="card content-card" aria-labelledby="n-needed-heading">
@@ -676,7 +736,7 @@
         <summary>¿Necesito que las variables sean idénticamente distribuidas?</summary>
         <p>
           La versión clásica del TCL requiere variables i.i.d. (independientes e idénticamente distribuidas). Sin embargo,
-          existen extensiones más generales: el <strong>teorema de Lindeberg-Lévy</strong> relaja la condición de distribución
+          existen extensiones más generales: el <strong>teorema de Lindeberg-Feller</strong> relaja la condición de distribución
           idéntica y solo requiere que ninguna variable individual domine la suma (condición de Lindeberg). Esta extensión es
           clave en econometría y en el análisis de series temporales.
         </p>
@@ -692,6 +752,18 @@
           en los histogramas del simulador: a mayor \(n\), la campana de la media muestral se hace más estrecha.
         </p>
       </details>
+    </section>
+
+    <section class="card content-card">
+      <h2>Referencias y lecturas recomendadas</h2>
+      <ul>
+        <li><a href="https://es.wikipedia.org/wiki/Teorema_del_l%C3%ADmite_central" target="_blank" rel="noopener noreferrer">Teorema del límite central</a> — Wikipedia. Enunciado, variantes y demostración.</li>
+        <li><a href="https://en.wikipedia.org/wiki/Berry%E2%80%93Esseen_theorem" target="_blank" rel="noopener noreferrer">Berry–Esseen theorem</a> — Wikipedia (en inglés). La cota de la velocidad de convergencia y los valores conocidos de la constante.</li>
+        <li>Fischer, H. (2011). <a href="https://doi.org/10.1007/978-0-387-87857-7" target="_blank" rel="noopener noreferrer">A History of the Central Limit Theorem: From Classical to Modern Probability Theory</a>. Springer. La historia del teorema, de De Moivre y Laplace a Lindeberg y Lévy.</li>
+        <li>Le Cam, L. (1986). <a href="https://doi.org/10.1214/ss/1177013818" target="_blank" rel="noopener noreferrer">The central limit theorem around 1935</a>. <em>Statistical Science</em>, 1(1), 78–91.</li>
+        <li>Lindeberg, J. W. (1922). <a href="https://doi.org/10.1007/BF01494395" target="_blank" rel="noopener noreferrer">Eine neue Herleitung des Exponentialgesetzes in der Wahrscheinlichkeitsrechnung</a>. <em>Mathematische Zeitschrift</em>, 15, 211–225. La demostración con la condición de Lindeberg (en alemán).</li>
+        <li>Berry, A. C. (1941). <a href="https://doi.org/10.1090/S0002-9947-1941-0003498-3" target="_blank" rel="noopener noreferrer">The accuracy of the Gaussian approximation to the sum of independent variates</a>. <em>Transactions of the American Mathematical Society</em>, 49(1), 122–136.</li>
+      </ul>
     </section>
 
   </main>

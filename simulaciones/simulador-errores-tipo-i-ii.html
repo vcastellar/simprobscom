@@ -312,6 +312,20 @@
       line-height: 1.7;
       border-top: none;
     }
+    /* ---- Fórmulas: sin recuadro ni barras de desplazamiento ---- */
+    .math-block { text-align: center; font-size: 1.05rem; margin: 14px 0; }
+    .math-block mjx-container[display="true"] { margin: 0; }
+    @media (max-width: 480px) {
+      .math-block { font-size: 0.82rem; }
+      .content-table { font-size: 0.8rem; }
+      .content-table th, .content-table td { padding: 6px 5px; }
+    }
+    @media (max-width: 360px) {
+      .math-block { font-size: 0.68rem; }
+      .content-table { font-size: 0.72rem; }
+      .content-table th, .content-table td { padding: 5px 3px; }
+      .content-card table th, .content-card table td { padding: 6px 5px !important; font-size: 0.8rem; }
+    }
   </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
@@ -461,6 +475,64 @@
     <!-- ═══════════════════════════════ EDUCATIONAL ═══════════════════════ -->
 
     <section class="card content-card">
+      <h2>Cómo funciona esta herramienta, paso a paso</h2>
+      <p>A diferencia de otros simuladores de ProbLab, este no genera muestras al azar: calcula α, β y la potencia con fórmulas exactas y las dibuja, así que el resultado es siempre el mismo para los mismos valores. El modelo es el <strong>contraste z de una media</strong>: se decide entre H₀: μ = μ₀ y la alternativa a partir de la media de n observaciones con desviación típica σ.</p>
+      <ol>
+        <li><strong>La muestra se resume en un número.</strong> El estadístico \(Z = (\bar{x} - \mu_0)/(\sigma/\sqrt{n})\) mide a cuántos errores estándar queda la media muestral de μ₀. Es el eje horizontal del gráfico.</li>
+        <li><strong>Curva azul: lo que pasaría si H₀ fuera cierta.</strong> En ese caso Z sigue una normal estándar, centrada en 0.</li>
+        <li><strong>Curva roja: lo que pasaría si la diferencia fuera real.</strong> Si la media verdadera se aleja de μ₀ lo que marca el deslizador, Z sigue una normal con la misma forma pero desplazada hasta δ = d × √n. Esa distancia es la tarjeta «Separación entre curvas».</li>
+        <li><strong>El nivel α fija la frontera.</strong> La línea vertical discontinua es el valor crítico: z<sub>α</sub> en el contraste unilateral y ±z<sub>α/2</sub> en el bilateral. Se rechaza H₀ cuando Z cae más allá.</li>
+        <li><strong>Las áreas son las probabilidades.</strong> El área roja es la parte de la curva azul que queda en la zona de rechazo: α. El área gris es la parte de la curva roja que queda en la zona de no rechazo: β. El área verde es el resto de la curva roja: la potencia, 1 − β.</li>
+      </ol>
+      <p>Cada control cambia una cosa. La <strong>diferencia real</strong> y el <strong>tamaño de muestra</strong> separan las dos curvas, sin mover la frontera. El <strong>nivel α</strong> mueve la frontera, sin mover las curvas. El <strong>tipo de contraste</strong> decide si hay una frontera o dos.</p>
+      <p><strong>Con la desviación típica σ</strong> (opcional), todo se lee en las unidades de tus datos: la diferencia se muestra como Δ = d × σ, y el eje y las fronteras pasan a ser valores de la media muestral, \(\mu_0 + z \cdot \sigma/\sqrt{n}\). Las probabilidades no cambian: es el mismo gráfico con otra escala. Por ejemplo, con σ = 8 g y n = 30, el error estándar es 8/√30 = 1,46 g; una diferencia real de 4 g equivale a d = 0,5 y separa las curvas 4/1,46 = 2,74 errores estándar.</p>
+      <p><strong>Si llegas desde un contraste de ProbLab</strong>, los campos vienen rellenos con tu α, tu n y la diferencia mínima que ese contraste detecta con un 80 % de probabilidad; por eso la potencia que ves ronda el 80 %.</p>
+    </section>
+
+    <section class="card content-card">
+      <h2>De dónde salen las fórmulas de β y de la potencia</h2>
+      <h3>Punto de partida: la distribución de la media muestral</h3>
+      <p>Si las observaciones tienen media μ y desviación típica σ, la media de n observaciones independientes sigue (exactamente con datos normales, aproximadamente en general, por el <a href="teorema-central-limite.html">teorema central del límite</a>) una normal con la misma media y desviación típica σ/√n:</p>
+      <div class="math-block">\[ \bar{X} \sim N\!\left(\mu,\ \frac{\sigma^2}{n}\right). \]</div>
+
+      <h3>El estadístico bajo H₀ y bajo H₁</h3>
+      <p>El estadístico del contraste resta μ₀ y divide entre el error estándar. Sumando y restando la media verdadera μ en el numerador, se separa en dos partes:</p>
+      <div class="math-block">\[ Z = \frac{\bar{X} - \mu_0}{\sigma/\sqrt{n}} = \underbrace{\frac{\bar{X} - \mu}{\sigma/\sqrt{n}}}_{N(0,\,1)} + \underbrace{\frac{\mu - \mu_0}{\sigma/\sqrt{n}}}_{\delta}. \]</div>
+      <p>La primera parte es siempre una normal estándar. La segunda es un número fijo, que mide la diferencia real en errores estándar:</p>
+      <div class="math-block">\[ \delta = \frac{(\mu - \mu_0)\sqrt{n}}{\sigma} = d\,\sqrt{n}, \qquad d = \frac{\mu - \mu_0}{\sigma}. \]</div>
+      <p>Por tanto, \(Z \sim N(\delta,\,1)\). Si H₀ es cierta, μ = μ₀, δ = 0 y queda la curva azul. Si no, queda la curva roja, la misma campana desplazada δ unidades. Todo el análisis de potencia se reduce a ese desplazamiento.</p>
+
+      <h3>Contraste unilateral derecho</h3>
+      <p>Se rechaza H₀ cuando \(Z > z_\alpha\), donde \(z_\alpha\) deja un área α a su derecha en la normal estándar (1,645 para α = 0,05). El error tipo II es no rechazar cuando la diferencia es real, es decir, que una \(N(\delta, 1)\) quede por debajo de \(z_\alpha\). Restando δ para tipificar:</p>
+      <div class="math-block">\[ \beta = P(Z \le z_\alpha \mid H_1) = \Phi(z_\alpha - \delta), \]</div>
+      <p>donde Φ es la función de distribución de la normal estándar. La potencia es el complementario:</p>
+      <div class="math-block">\[ 1 - \beta = 1 - \Phi(z_\alpha - \delta) = \Phi(\delta - z_\alpha). \]</div>
+
+      <h3>Contraste bilateral</h3>
+      <p>Ahora se rechaza cuando \(|Z| > z_{\alpha/2}\) (1,960 para α = 0,05), y hay dos zonas de rechazo. La potencia es la suma de las dos colas de la \(N(\delta, 1)\):</p>
+      <div class="math-block">\[ 1 - \beta = \Phi(\delta - z_{\alpha/2}) + \Phi(-\delta - z_{\alpha/2}). \]</div>
+      <p>El segundo sumando es la probabilidad de rechazar «por el lado equivocado» y es casi siempre despreciable. Como \(z_{\alpha/2} > z_\alpha\), el contraste bilateral tiene menos potencia que el unilateral para la misma diferencia: es el precio de vigilar las dos direcciones.</p>
+
+      <h3>De la potencia al tamaño muestral</h3>
+      <p>La misma fórmula, leída al revés, da el tamaño muestral. Para que la potencia sea al menos 1 − β hace falta \(\Phi(\delta - z_\alpha) \ge 1 - \beta\), es decir, \(\delta - z_\alpha \ge z_\beta\). Sustituyendo \(\delta = \Delta\sqrt{n}/\sigma\), con Δ = μ − μ₀, y despejando n:</p>
+      <div class="math-block">\[ n \ge \left( \frac{(z_\alpha + z_\beta)\,\sigma}{\Delta} \right)^{2} = \left( \frac{z_\alpha + z_\beta}{d} \right)^{2}. \]</div>
+      <p>En el contraste bilateral se usa \(z_{\alpha/2}\) en lugar de \(z_\alpha\). Es la fórmula de la <a href="../tamano-muestral-contraste-una-media.html">calculadora de tamaño muestral para el contraste de una media</a>. De ella se leen dos reglas: detectar una diferencia la mitad de grande exige cuatro veces más datos, y pasar del 80 % al 90 % de potencia, alrededor de un tercio más.</p>
+
+      <h3>Un ejemplo con números</h3>
+      <p>Con los valores iniciales de la herramienta, d = 0,5, n = 30 y α = 0,05 unilateral:</p>
+      <ul>
+        <li><strong>Separación:</strong> \(\delta = 0{,}5 \times \sqrt{30} = 2{,}739\).</li>
+        <li><strong>Valor crítico:</strong> \(z_{0{,}05} = 1{,}645\).</li>
+        <li><strong>Error tipo II:</strong> \(\beta = \Phi(1{,}645 - 2{,}739)\) \(= \Phi(-1{,}094) = 0{,}137\).</li>
+        <li><strong>Potencia:</strong> \(1 - 0{,}137 = 0{,}863\).</li>
+      </ul>
+      <p>Con el contraste bilateral, el valor crítico sube a 1,960 y la potencia baja a 0,782. Para alcanzar el 80 % en el unilateral bastarían \(((1{,}645 + 0{,}842)/0{,}5)^2 = 24{,}7\), es decir, 25 observaciones; en el bilateral, 32.</p>
+
+      <h3>Qué simplifica este modelo</h3>
+      <p>La herramienta trata σ como conocida. En un contraste real con σ desconocida se usa la t de Student y la potencia se calcula con la distribución t no central; el resultado es algo menor, sobre todo con muestras pequeñas (en el ejemplo anterior, 0,848 en lugar de 0,863). Las calculadoras de <a href="../contrastes-hipotesis/">contrastes</a> y de <a href="../tamano-muestral/">tamaño muestral</a> de ProbLab usan el cálculo exacto en cada caso. La lógica, sin embargo, es siempre la de este gráfico: dos distribuciones del estadístico, una frontera y las áreas a cada lado.</p>
+    </section>
+
+    <section class="card content-card">
       <h2>¿Qué son los errores tipo I y tipo II?</h2>
       <p>Cuando realizamos un contraste de hipótesis tomamos una decisión binaria: rechazar la hipótesis nula H₀ o no rechazarla. Como cualquier decisión basada en información incompleta (una muestra, no la población entera), esta decisión puede ser incorrecta de dos formas distintas, y a estas dos formas las denominamos <strong>error tipo I</strong> y <strong>error tipo II</strong>.</p>
 
@@ -505,7 +577,7 @@
         <li><strong>Tamaño del efecto (d de Cohen):</strong> la diferencia real entre medias expresada en unidades de desviación típica. Cuanto mayor es el efecto, más fácil es detectarlo. Un efecto de d = 0,2 se considera pequeño, d = 0,5 mediano y d = 0,8 grande.</li>
         <li><strong>Tamaño de muestra (n):</strong> el factor más fácilmente manipulable en el diseño. Al aumentar n, el error estándar de la media disminuye, las distribuciones se comprimen y el solapamiento se reduce. El parámetro de no-centralidad δ = d × √n captura conjuntamente el efecto del tamaño del efecto y del tamaño muestral.</li>
         <li><strong>Nivel de significación (α):</strong> aumentar α desplaza la región de rechazo hacia la izquierda (en un contraste unilateral derecho), lo que captura más área de la curva H₁ y aumenta la potencia. A cambio, incrementa la tasa de falsos positivos.</li>
-        <li><strong>Variabilidad de la medida (σ):</strong> una medida con menos ruido produce estadísticos más precisos. En el simulador, la desviación típica está estandarizada a σ = 1, pero en la práctica reducir la variabilidad experimental (mejor protocolo, mayor homogeneidad de las unidades de análisis) aumenta directamente la potencia.</li>
+        <li><strong>Variabilidad de la medida (σ):</strong> una medida con menos ruido produce estadísticos más precisos. El simulador trabaja en unidades estandarizadas (por eso σ no cambia las probabilidades, solo la escala en que se leen), pero en la práctica reducir la variabilidad experimental (mejor protocolo, mayor homogeneidad de las unidades de análisis) aumenta directamente la potencia.</li>
       </ul>
 
       <p>En la investigación científica y en los ensayos clínicos es habitual fijar como objetivo una <strong>potencia mínima del 80 % (β ≤ 0,20)</strong>. Esto significa que aceptamos hasta un 20 % de probabilidad de no detectar un efecto real cuando existe. Algunos ámbitos más exigentes, como los ensayos pivotales en farmacología, exigen potencias del 90 % o incluso superiores.</p>
@@ -550,6 +622,19 @@
         <summary>¿Qué es el tamaño del efecto de Cohen?</summary>
         <p>El <strong>d de Cohen</strong> es la diferencia entre dos medias expresada en unidades de desviación típica. Formalmente, d = (μ₁ − μ₀) / σ, donde σ es la desviación típica común de las poblaciones. Esta estandarización permite comparar efectos entre estudios con distintas escalas de medida. Jacob Cohen (1988) propuso los umbrales d = 0,2 (efecto pequeño), d = 0,5 (efecto mediano) y d = 0,8 (efecto grande). Sin embargo, estos umbrales son orientativos y no deben aplicarse mecánicamente: un efecto de d = 0,2 puede ser muy relevante en medicina preventiva (si afecta a millones de personas) e irrelevante en psicología experimental. El tamaño del efecto debe interpretarse siempre en el contexto sustantivo de la investigación.</p>
       </details>
+    </section>
+
+    <section class="card content-card">
+      <h2>Referencias y lecturas recomendadas</h2>
+      <ul>
+        <li><a href="https://es.wikipedia.org/wiki/Errores_de_tipo_I_y_de_tipo_II" target="_blank" rel="noopener noreferrer">Errores de tipo I y de tipo II</a> — Wikipedia. Definiciones y ejemplos.</li>
+        <li><a href="https://en.wikipedia.org/wiki/Power_(statistics)" target="_blank" rel="noopener noreferrer">Power (statistics)</a> — Wikipedia (en inglés). Potencia, factores que la determinan y análisis a priori.</li>
+        <li>Neyman, J. y Pearson, E. S. (1933). <a href="https://doi.org/10.1098/rsta.1933.0009" target="_blank" rel="noopener noreferrer">On the problem of the most efficient tests of statistical hypotheses</a>. <em>Philosophical Transactions of the Royal Society A</em>, 231, 289–337. El artículo que introduce los dos tipos de error y el lema de Neyman-Pearson.</li>
+        <li>Cohen, J. (1988). <a href="https://doi.org/10.4324/9780203771587" target="_blank" rel="noopener noreferrer">Statistical Power Analysis for the Behavioral Sciences</a> (2.ª ed.). Lawrence Erlbaum. El libro de referencia sobre potencia y tamaños del efecto.</li>
+        <li>Cohen, J. (1992). <a href="https://doi.org/10.1037/0033-2909.112.1.155" target="_blank" rel="noopener noreferrer">A power primer</a>. <em>Psychological Bulletin</em>, 112(1), 155–159. Resumen breve y práctico, con los umbrales de efecto pequeño, mediano y grande.</li>
+        <li>Ioannidis, J. P. A. (2005). <a href="https://doi.org/10.1371/journal.pmed.0020124" target="_blank" rel="noopener noreferrer">Why most published research findings are false</a>. <em>PLoS Medicine</em>, 2(8), e124.</li>
+        <li>Button, K. S. et al. (2013). <a href="https://doi.org/10.1038/nrn3475" target="_blank" rel="noopener noreferrer">Power failure: why small sample size undermines the reliability of neuroscience</a>. <em>Nature Reviews Neuroscience</em>, 14, 365–376. Consecuencias de trabajar con estudios de baja potencia.</li>
+      </ul>
     </section>
 
     <section class="card content-card">

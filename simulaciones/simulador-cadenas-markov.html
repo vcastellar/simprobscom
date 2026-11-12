@@ -315,6 +315,19 @@
     .ss-controls .matrix-table td { padding: 4px; }
     .ss-controls .matrix-table input[type="number"] { width: 60px; padding: 7px 4px; }
     .ss-controls .matrix-table input[type="text"] { width: 72px; }
+    /* ---- Fórmulas: sin recuadro ni barras de desplazamiento ---- */
+    .math-block { text-align: center; font-size: 1.05rem; margin: 14px 0; }
+    .math-block mjx-container[display="true"] { margin: 0; }
+    @media (max-width: 480px) {
+      .math-block { font-size: 0.82rem; }
+      .content-table { font-size: 0.8rem; }
+      .content-table th, .content-table td { padding: 6px 5px; }
+    }
+    @media (max-width: 360px) {
+      .math-block { font-size: 0.68rem; }
+      .content-table { font-size: 0.72rem; }
+      .content-table th, .content-table td { padding: 5px 3px; }
+    }
   </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
@@ -470,13 +483,13 @@
     <section class="card content-card">
       <h2>¿Qué es una cadena de Markov?</h2>
       <p>Una <strong>cadena de Markov</strong> es un proceso estocástico de tiempo discreto \(\{X_0, X_1, X_2, \ldots\}\) que toma valores en un conjunto finito de estados y satisface la <strong>propiedad de Markov</strong> o "falta de memoria":</p>
-      <div class="formula-box" style="margin:14px 0;">
-        $$P(X_{n+1} = j \mid X_0, X_1, \ldots, X_n) = P(X_{n+1} = j \mid X_n) = p_{ij}$$
+      <div class="math-block">
+        \[ \begin{gathered} P(X_{n+1} = j \mid X_0, X_1, \ldots, X_n) \\ = P(X_{n+1} = j \mid X_n) = p_{ij} \end{gathered} \]
       </div>
       <p>La probabilidad de pasar al estado siguiente depende <em>únicamente</em> del estado presente, no de cómo se llegó a él. Esto simplifica enormemente el análisis matemático sin sacrificar realismo en muchas aplicaciones.</p>
       <p>El comportamiento completo de la cadena queda especificado por la <strong>matriz de transición</strong> \(P\), donde el elemento \(p_{ij}\) es la probabilidad de pasar del estado \(i\) al estado \(j\) en un paso:</p>
-      <div class="formula-box" style="margin:14px 0;">
-        $$P = \begin{pmatrix} p_{11} & p_{12} & \cdots & p_{1n} \\ p_{21} & p_{22} & \cdots & p_{2n} \\ \vdots & \vdots & \ddots & \vdots \\ p_{n1} & p_{n2} & \cdots & p_{nn} \end{pmatrix}, \quad \sum_{j=1}^{n} p_{ij} = 1 \text{ para todo } i$$
+      <div class="math-block">
+        \[ \begin{gathered} P = \begin{pmatrix} p_{11} & p_{12} & \cdots & p_{1n} \\ p_{21} & p_{22} & \cdots & p_{2n} \\ \vdots & \vdots & \ddots & \vdots \\ p_{n1} & p_{n2} & \cdots & p_{nn} \end{pmatrix}, \\[6pt] \sum_{j=1}^{n} p_{ij} = 1 \text{ para todo } i \end{gathered} \]
       </div>
       <p>Cada fila de la matriz de transición es una distribución de probabilidad: los valores son no negativos y suman 1. Esto hace que \(P\) sea una <strong>matriz estocástica</strong> (o de Markov).</p>
     </section>
@@ -484,7 +497,7 @@
     <section class="card content-card">
       <h2>Distribución estacionaria</h2>
       <p>Una <strong>distribución estacionaria</strong> (o de equilibrio) es un vector de probabilidades \(\pi = (\pi_1, \pi_2, \ldots, \pi_n)\) tal que:</p>
-      <div class="formula-box" style="margin:14px 0;">
+      <div class="math-block">
         $$\pi P = \pi \quad \text{con} \quad \sum_{i=1}^{n} \pi_i = 1, \quad \pi_i \geq 0$$
       </div>
       <p>Intuitivamente, si la cadena se encuentra en la distribución estacionaria en el instante \(n\), permanecerá en esa distribución para siempre. En la práctica, representa la <strong>fracción de tiempo a largo plazo</strong> que la cadena pasa en cada estado.</p>
@@ -496,6 +509,79 @@
       </ul>
       <h3>Estado absorbente: preset Cliente / Churn</h3>
       <p>En el preset de Cliente, el estado "Churn" es un <strong>estado absorbente</strong>: \(p_{\text{churn}, \text{churn}} = 1\). Una vez que un cliente abandona, no regresa. Esto hace que la cadena sea <em>no ergódica</em>: eventualmente todos los clientes terminan en Churn. La distribución estacionaria asigna probabilidad 1 a ese estado y 0 al resto.</p>
+    </section>
+
+    <section class="card content-card">
+      <h2>Cómo funciona el simulador, paso a paso</h2>
+      <p>El simulador hace dos cosas distintas: recorre la cadena al azar, paso a paso, y calcula aparte la distribución estacionaria teórica. Después compara las dos.</p>
+      <ol>
+        <li><strong>Lee la matriz de transición</strong> y comprueba que cada fila suma 1 y que no hay valores negativos.</li>
+        <li><strong>Coloca la cadena en el estado inicial</strong> que hayas elegido.</li>
+        <li><strong>Da un paso.</strong> Mira solo la fila del estado actual, genera un número al azar entre 0 y 1 y lo compara con las probabilidades acumuladas de esa fila. En el preset Clima, desde Soleado la fila es 0,7; 0,2; 0,1: si el número es menor que 0,7, mañana sigue Soleado; entre 0,7 y 0,9, pasa a Nublado; y por encima de 0,9, a Lluvia.</li>
+        <li><strong>Repite</strong> el paso 3 tantas veces como pasos hayas pedido, anotando la secuencia de estados.</li>
+        <li><strong>Cuenta</strong> qué proporción del tiempo ha pasado la cadena en cada estado: es la <strong>distribución empírica</strong>.</li>
+        <li><strong>Calcula la distribución estacionaria π</strong> sin simular: parte de un reparto uniforme entre los estados y lo multiplica una y otra vez por la matriz hasta que deja de cambiar (cambio menor que 10<sup>−9</sup>). Con el preset Clima bastan 26 multiplicaciones.</li>
+      </ol>
+      <p>El paso 3 es la propiedad de Markov en acción: para decidir el siguiente estado no se consulta nada de la historia, solo dónde está la cadena ahora.</p>
+      <p><strong>Gráfico de evolución.</strong> Cada línea continua es la proporción del tiempo que la cadena ha pasado en un estado <em>hasta ese paso</em>; las líneas discontinuas son los valores de π. Al principio las líneas saltan mucho, porque hay pocos pasos acumulados, y después se van asentando hacia las discontinuas.</p>
+      <p><strong>Gráfico de barras.</strong> Compara la distribución empírica final con π. La «diferencia máxima» es la mayor distancia entre las dos barras de un mismo estado.</p>
+      <p><strong>Qué es aleatorio y qué no.</strong> La trayectoria es aleatoria: cada clic en «Simular» da una distinta. La distribución π no lo es: depende solo de la matriz. Con 100 pasos del preset Clima es normal ver diferencias máximas de unos 0,07; con 1000 pasos, de unos 0,02. No es un fallo: la proporción de tiempo se acerca a π despacio, a un ritmo de \(1/\sqrt{n}\), como cualquier promedio.</p>
+      <p><strong>Preset Cliente / Churn.</strong> Aquí π vale 1 en Churn, pero la proporción de tiempo en Churn no llega a 1: la cadena pasa de media sus primeros 11 pasos fuera de ese estado, y esos pasos siguen contando. Con 50 pasos, la proporción suele rondar el 0,8; con 1000, el 0,99.</p>
+      <p><strong>Personalizado.</strong> Puedes escribir tu propia matriz con 2 a 5 estados. Cada fila es el reparto de probabilidades de «a dónde voy desde aquí» y debe sumar 1.</p>
+    </section>
+
+    <section class="card content-card">
+      <h2>Las cuentas, con el preset Clima</h2>
+      <p>La matriz del preset, con los estados en el orden Soleado, Nublado y Lluvia, es</p>
+      <div class="math-block">\[ P = \begin{pmatrix} 0{,}7 & 0{,}2 & 0{,}1 \\ 0{,}3 & 0{,}4 & 0{,}3 \\ 0{,}2 & 0{,}3 & 0{,}5 \end{pmatrix}. \]</div>
+
+      <h3>La distribución dentro de n pasos</h3>
+      <p>Si hoy la probabilidad de estar en cada estado es el vector fila \(\pi^{(0)}\), la de mañana se obtiene con la regla de la probabilidad total: para estar mañana en el estado j hay que estar hoy en algún estado i y pasar de i a j.</p>
+      <div class="math-block">\[ \pi^{(1)}_j = \sum_i \pi^{(0)}_i\,p_{ij} \quad\Longleftrightarrow\quad \pi^{(1)} = \pi^{(0)}P. \]</div>
+      <p>Repitiendo el argumento, dentro de n pasos:</p>
+      <div class="math-block">\[ \pi^{(n)} = \pi^{(0)}P^{\,n}. \]</div>
+      <p>Por ejemplo, si hoy está Soleado, la probabilidad de que dentro de dos días vuelva a estarlo suma los tres caminos posibles (pasando por Soleado, por Nublado o por Lluvia):</p>
+      <div class="math-block">\[ 0{,}7 \cdot 0{,}7 + 0{,}2 \cdot 0{,}3 + 0{,}1 \cdot 0{,}2 = 0{,}57. \]</div>
+      <p>Siguiendo así, partiendo de Soleado:</p>
+      <div class="content-table-wrap">
+        <table class="content-table">
+          <thead>
+            <tr><th>Pasos</th><th>Soleado</th><th>Nublado</th><th>Lluvia</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+            <tr><td>1</td><td>0,700</td><td>0,200</td><td>0,100</td></tr>
+            <tr><td>2</td><td>0,570</td><td>0,250</td><td>0,180</td></tr>
+            <tr><td>3</td><td>0,510</td><td>0,268</td><td>0,222</td></tr>
+            <tr><td>5</td><td>0,469</td><td>0,279</td><td>0,252</td></tr>
+            <tr><td>8</td><td>0,458</td><td>0,282</td><td>0,260</td></tr>
+            <tr><td>Límite (π)</td><td>0,457</td><td>0,283</td><td>0,261</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>En una semana, la información de que hoy está Soleado casi se ha perdido. Partiendo de Lluvia se llega a los mismos valores límite.</p>
+
+      <h3>Resolver πP = π</h3>
+      <p>La distribución estacionaria es la que no cambia al dar un paso. Escribiendo \(\pi = (s, n, l)\), la condición \(\pi P = \pi\) da una ecuación por columna de P; bastan dos, junto con que las probabilidades sumen 1:</p>
+      <div class="math-block">\[ \begin{aligned} s &= 0{,}7\,s + 0{,}3\,n + 0{,}2\,l \\ n &= 0{,}2\,s + 0{,}4\,n + 0{,}3\,l \\ 1 &= s + n + l \end{aligned} \]</div>
+      <p>De la primera, \(3s = 3n + 2l\); de la segunda, \(6n = 2s + 3l\). Sustituyendo una en otra queda \(n = \tfrac{13}{12}\,l\) y \(s = \tfrac{21}{12}\,l\), y con la tercera:</p>
+      <div class="math-block">\[ \pi = \left( \frac{21}{46},\ \frac{13}{46},\ \frac{12}{46} \right) \approx (0{,}457;\ 0{,}283;\ 0{,}261). \]</div>
+      <p>A largo plazo, el 45,7 % de los días son soleados, haga el tiempo que haga hoy. Es el mismo resultado que el simulador obtiene multiplicando repetidamente por P.</p>
+
+      <h3>Con qué rapidez se llega</h3>
+      <p>La velocidad depende del segundo mayor valor propio de P en valor absoluto. En el preset Clima es \(\lambda_2 \approx 0{,}47\): en cada paso, la distancia entre \(\pi^{(n)}\) y \(\pi\) se multiplica aproximadamente por 0,47, y tras 8 pasos es inferior a 0,003. Con dos estados la cuenta es directa. Si la matriz es</p>
+      <div class="math-block">\[ P = \begin{pmatrix} 1-a & a \\ b & 1-b \end{pmatrix}, \]</div>
+      <p>en equilibrio el flujo de 1 a 2 iguala al de 2 a 1, \(\pi_1 a = \pi_2 b\), y por tanto</p>
+      <div class="math-block">\[ \pi = \left( \frac{b}{a+b},\ \frac{a}{a+b} \right), \qquad \lambda_2 = 1 - a - b. \]</div>
+      <p>Si a y b son pequeños, la cadena cambia poco de estado, \(\lambda_2\) está cerca de 1 y la convergencia es lenta. Puedes comprobarlo en el modo Personalizado con 2 estados.</p>
+
+      <h3>Dos formas de «converger»</h3>
+      <p>Conviene distinguir dos cosas. La <strong>distribución en el paso n</strong>, \(\pi^{(n)}\), converge a π muy deprisa (geométricamente), y es la de la tabla anterior. La <strong>proporción de tiempo</strong> que una sola trayectoria pasa en cada estado, que es lo que dibuja el simulador, también converge a π (es el teorema ergódico), pero mucho más despacio, como \(1/\sqrt{n}\), porque es un promedio sobre una trayectoria aleatoria.</p>
+
+      <h3>Preset Cliente / Churn: tiempo hasta el abandono</h3>
+      <p>Cuando hay un estado absorbente, la pregunta interesante no es dónde acaba la cadena, sino cuánto tarda. Sean \(t_A\) y \(t_D\) los pasos esperados hasta Churn partiendo de Activo y de Dormido. Dando un paso y viendo dónde se cae:</p>
+      <div class="math-block">\[ \begin{aligned} t_A &= 1 + 0{,}80\,t_A + 0{,}15\,t_D \\ t_D &= 1 + 0{,}20\,t_A + 0{,}60\,t_D \end{aligned} \]</div>
+      <p>Al resolver el sistema se obtiene \(t_A = 11\) y \(t_D = 8\): un cliente activo dura de media 11 periodos antes de abandonar, de los cuales 8 como activo y 3 como dormido.</p>
     </section>
 
     <section class="card content-card">
@@ -535,6 +621,17 @@
           <p>Las líneas discontinuas horizontales indican el valor teórico de la distribución estacionaria \(\pi_i\) para cada estado \(i\). A medida que la simulación avanza, las líneas sólidas (proporción acumulada de tiempo en cada estado) convergen hacia esos valores de referencia. Esta convergencia es la manifestación empírica del teorema ergódico.</p>
         </article>
       </div>
+    </section>
+
+    <section class="card content-card">
+      <h2>Referencias y lecturas recomendadas</h2>
+      <ul>
+        <li><a href="https://es.wikipedia.org/wiki/Cadena_de_M%C3%A1rkov" target="_blank" rel="noopener noreferrer">Cadena de Márkov</a> — Wikipedia. Definiciones, clasificación de estados y ejemplos.</li>
+        <li>Hayes, B. (2013). <a href="https://doi.org/10.1511/2013.101.92" target="_blank" rel="noopener noreferrer">First links in the Markov chain</a>. <em>American Scientist</em>, 101(2), 92. Artículo divulgativo sobre el origen de las cadenas: Márkov contando vocales y consonantes en un poema de Pushkin.</li>
+        <li>Norris, J. R. (1997). <a href="https://doi.org/10.1017/CBO9780511810633" target="_blank" rel="noopener noreferrer">Markov Chains</a>. Cambridge University Press. Manual de referencia, riguroso y accesible.</li>
+        <li>Levin, D. A. y Peres, Y. (2017). <a href="https://doi.org/10.1090/mbk/107" target="_blank" rel="noopener noreferrer">Markov Chains and Mixing Times</a> (2.ª ed.). American Mathematical Society. Sobre la velocidad de convergencia al equilibrio.</li>
+        <li>Brin, S. y Page, L. (1998). <a href="https://doi.org/10.1016/S0169-7552(98)00110-X" target="_blank" rel="noopener noreferrer">The anatomy of a large-scale hypertextual Web search engine</a>. <em>Computer Networks and ISDN Systems</em>, 30(1–7), 107–117. PageRank: la distribución estacionaria de un paseo aleatorio por la web.</li>
+      </ul>
     </section>
 
     <section class="card content-card">

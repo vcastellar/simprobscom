@@ -296,6 +296,19 @@
       border-color: rgba(148,163,184,0.3);
     }
     html.dark-mode #canvas2d { background: #1e293b; }
+    /* ---- Fórmulas: sin recuadro ni barras de desplazamiento ---- */
+    .math-block { text-align: center; font-size: 1.05rem; margin: 14px 0; }
+    .math-block mjx-container[display="true"] { margin: 0; }
+    @media (max-width: 480px) {
+      .math-block { font-size: 0.82rem; }
+      .content-table { font-size: 0.8rem; }
+      .content-table th, .content-table td { padding: 6px 5px; }
+    }
+    @media (max-width: 360px) {
+      .math-block { font-size: 0.68rem; }
+      .content-table { font-size: 0.72rem; }
+      .content-table th, .content-table td { padding: 5px 3px; }
+    }
   </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
@@ -559,6 +572,28 @@
     </section>
 
     <section class="card content-card">
+      <h2>Cómo funciona el simulador, paso a paso</h2>
+      <h3>Pestaña 1D</h3>
+      <ol>
+        <li><strong>Cada trayectoria empieza en 0.</strong></li>
+        <li><strong>En cada paso se «lanza una moneda»:</strong> se genera un número al azar entre 0 y 1; si es menor que p, la posición sube 1, y si no, baja 1. Con p = 0,5 la moneda es justa.</li>
+        <li><strong>Se repite n veces</strong> y se dibuja la posición después de cada paso.</li>
+        <li><strong>Todo lo anterior se repite</strong> para cada trayectoria, de forma independiente: ninguna influye en las demás.</li>
+      </ol>
+      <p>Las tarjetas resumen las <strong>posiciones finales</strong> de las trayectorias dibujadas: su media, su desviación típica, la menor y la mayor. Debajo de las dos primeras aparece el valor que predice la teoría, n(2p − 1) para la media y 2√(p(1 − p)n) para la desviación típica. Con pocas trayectorias, los valores empíricos pueden alejarse bastante de los teóricos (con una sola, la desviación típica es 0): usa 50 para compararlos.</p>
+      <p>La <strong>línea de media esperada</strong> es la posición media teórica en cada instante, t(2p − 1): horizontal si p = 0,5 e inclinada si hay deriva. Las <strong>bandas ±2σ</strong> están a dos desviaciones típicas de esa línea, 2 · 2√(p(1 − p)t), y por eso tienen forma de parábola tumbada. En cada instante contienen alrededor del 95 % de las trayectorias; a lo largo de todo el recorrido, es normal que una trayectoria se salga de ellas en algún momento.</p>
+
+      <h3>Pestaña 2D</h3>
+      <ol>
+        <li><strong>Cada trayectoria empieza en el origen</strong> (0, 0).</li>
+        <li><strong>En cada paso se elige al azar una de las cuatro direcciones</strong> (arriba, abajo, izquierda o derecha), cada una con probabilidad 1/4, y se avanza una unidad.</li>
+        <li><strong>Se repite n veces</strong> y se dibuja el camino completo en el plano.</li>
+      </ol>
+      <p>Las tarjetas muestran la <strong>distancia media final</strong> al origen (la teoría predice unos 0,886√n), la <strong>distancia al cuadrado media</strong> (la teoría predice exactamente n), el <strong>máximo desplazamiento</strong> (lo más lejos que ha llegado a estar una trayectoria en cualquier momento) y los <strong>pasos al origen</strong> (cuántas veces ha vuelto a pasar por (0, 0); solo se cuenta cuando hay una única trayectoria). El <strong>círculo discontinuo</strong> tiene radio √n.</p>
+      <p>En las dos pestañas, cada clic en «Simular» genera trayectorias nuevas. Las fórmulas de todos estos valores teóricos se deducen más abajo.</p>
+    </section>
+
+    <section class="card content-card">
       <h2>Propiedades matemáticas</h2>
 
       <h3>Media y varianza</h3>
@@ -575,10 +610,10 @@
       <p style="text-align:center; font-size:1.05rem; margin: 1rem 0;">
         \( X_n \approx \mathcal{N}\!\left(n(2p-1),\; 4p(1-p)\,n\right) \)
       </p>
-      <p>Esto justifica las bandas teóricas ±2σ que puedes ver en el simulador: aproximadamente el 95 % de las trayectorias deberían quedar dentro de la banda E[X<sub>n</sub>] ± 2 · 2√(p(1−p)n). Observa cómo las bandas se abren siguiendo la curva √n y no una línea recta.</p>
+      <p>Esto justifica las bandas teóricas ±2σ que puedes ver en el simulador: en cada instante, aproximadamente el 95 % de las trayectorias deberían estar dentro de la banda E[X<sub>n</sub>] ± 2 · 2√(p(1−p)n). Observa cómo las bandas se abren siguiendo la curva √n y no una línea recta.</p>
 
       <h3>El paseo aleatorio en 2D</h3>
-      <p>En dos dimensiones, la partícula se mueve con igual probabilidad 1/4 en cada uno de los cuatro ejes (norte, sur, este, oeste). Ahora X<sub>n</sub> e Y<sub>n</sub> son dos paseos aleatorios 1D independientes que evolucionan en pasos alternos: en promedio, cada componente recibe n/2 pasos efectivos.</p>
+      <p>En dos dimensiones, la partícula se mueve con igual probabilidad 1/4 en cada uno de los cuatro ejes (norte, sur, este, oeste). En cada paso solo cambia una de las dos coordenadas, así que X<sub>n</sub> e Y<sub>n</sub> no son independientes, pero cada una se comporta como un paseo 1D que recibe, en promedio, n/2 pasos.</p>
       <p>La distancia euclidiana al origen sigue siendo del orden √n:</p>
       <p style="text-align:center; font-size:1.05rem; margin: 1rem 0;">
         \( \mathrm{E}\!\left[\,r_n^2\,\right] = \mathrm{E}[X_n^2 + Y_n^2] = n \)
@@ -586,6 +621,62 @@
         <span style="margin-left:2rem;">\( r_{\mathrm{RMS}} = \sqrt{n} \)</span>
       </p>
       <p>El círculo discontinuo en el simulador 2D tiene radio √n y corresponde a esta distancia cuadrática media. Observa cómo los puntos finales de las trayectorias se agrupan aproximadamente dentro de ese círculo.</p>
+    </section>
+
+    <section class="card content-card">
+      <h2>De dónde salen las fórmulas</h2>
+      <h3>Media y varianza: de un paso a n pasos</h3>
+      <p>Un paso \(\xi\) vale +1 con probabilidad p y −1 con probabilidad 1 − p. Su media y su varianza son</p>
+      <div class="math-block">\[ E(\xi) = (+1)\,p + (-1)(1-p) = 2p - 1, \]</div>
+      <div class="math-block">\[ \begin{aligned} \operatorname{Var}(\xi) &= E(\xi^2) - E(\xi)^2 \\ &= 1 - (2p-1)^2 = 4p(1-p), \end{aligned} \]</div>
+      <p>porque \(\xi^2\) vale siempre 1. La posición es la suma de n pasos independientes; las medias se suman siempre, y las varianzas, por ser independientes:</p>
+      <div class="math-block">\[ \begin{gathered} E(X_n) = n(2p-1), \\ \operatorname{Var}(X_n) = 4p(1-p)\,n. \end{gathered} \]</div>
+      <p>La deriva crece como n y la desviación típica como √n. Esa es toda la explicación de que una ventaja pequeña se imponga a la larga: el cociente entre deriva y ruido crece como √n.</p>
+
+      <h3>La distribución exacta de la posición</h3>
+      <p>Si de los n pasos K han sido hacia arriba, la posición es \(X_n = K - (n - K) = 2K - n\), y K sigue una binomial de parámetros n y p. Por tanto:</p>
+      <div class="math-block">\[ P(X_n = x) = \binom{n}{\frac{n+x}{2}}\,p^{\frac{n+x}{2}}\,(1-p)^{\frac{n-x}{2}}, \]</div>
+      <p>para los valores de x con la misma paridad que n (tras un número par de pasos, la posición es par). Por ejemplo, la probabilidad de estar de vuelta en 0 tras 10 pasos de un paseo simétrico es \(\binom{10}{5}/2^{10} = 0{,}246\). Para n grande, la fórmula de Stirling da una aproximación muy útil:</p>
+      <div class="math-block">\[ P(X_{2m} = 0) = \binom{2m}{m}\frac{1}{4^m} \approx \frac{1}{\sqrt{\pi m}}. \]</div>
+
+      <h3>En 2D, la distancia al cuadrado media es exactamente n</h3>
+      <p>La posición es la suma de n pasos, cada uno un vector unitario \(S_i\). Desarrollando el cuadrado de la suma:</p>
+      <div class="math-block">\[ r_n^2 = \Big|\sum_{i=1}^{n} S_i\Big|^2 = \sum_{i=1}^{n} |S_i|^2 + \sum_{i \ne j} S_i \cdot S_j. \]</div>
+      <p>Cada \(|S_i|^2\) vale 1. Y cada producto cruzado tiene media 0, porque los pasos son independientes y cada uno tiene media 0. Queda</p>
+      <div class="math-block">\[ E(r_n^2) = n \quad\Longrightarrow\quad r_{\text{RMS}} = \sqrt{n}, \]</div>
+      <p>que es el radio del círculo discontinuo. El resultado es exacto para cualquier n y vale en cualquier dimensión.</p>
+
+      <h3>La distancia media es algo menor: 0,886√n</h3>
+      <p>Para n grande, cada coordenada es aproximadamente normal de media 0 y varianza n/2 (cada una recibe la mitad de los pasos). La distancia al origen de un punto con dos coordenadas así sigue una distribución de Rayleigh, cuya media es</p>
+      <div class="math-block">\[ E(r_n) \approx \sqrt{\frac{\pi}{2}} \cdot \sqrt{\frac{n}{2}} = \frac{\sqrt{\pi n}}{2} \approx 0{,}886\,\sqrt{n}. \]</div>
+      <p>Es menor que \(\sqrt{n}\) porque la media de una cantidad es siempre menor o igual que la raíz de la media de su cuadrado. Por eso, de media, los puntos finales quedan algo dentro del círculo.</p>
+
+      <h3>Por qué vuelve al origen en 1D y 2D, pero no en 3D</h3>
+      <p>El número esperado de visitas al origen es la suma, para todos los instantes, de la probabilidad de estar en él. Si esa suma es infinita, el paseo vuelve con seguridad una y otra vez; si es finita, llega un momento en que no vuelve más.</p>
+      <ul>
+        <li><strong>1D:</strong> la probabilidad de estar en 0 tras 2m pasos es aproximadamente \(1/\sqrt{\pi m}\), y la suma de \(1/\sqrt{m}\) es infinita.</li>
+        <li><strong>2D:</strong> las combinaciones \(X_n + Y_n\) y \(X_n - Y_n\) son dos paseos 1D independientes, y el paseo está en el origen cuando las dos valen 0. La probabilidad es el cuadrado de la anterior, aproximadamente \(1/(\pi m)\). La suma de \(1/m\) también es infinita, pero crece muy despacio, como un logaritmo.</li>
+        <li><strong>3D:</strong> la probabilidad decrece como \(1/m^{3/2}\), cuya suma es finita. El paseo acaba por no volver.</li>
+      </ul>
+      <p>La lentitud del caso 2D se ve en el simulador. Número esperado de regresos al origen:</p>
+      <div class="content-table-wrap">
+        <table class="content-table">
+          <thead>
+            <tr><th>Pasos</th><th>Paseo 1D simétrico</th><th>Paseo 2D</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>100</td><td>7,0</td><td>1,3</td></tr>
+            <tr><td>1 000</td><td>24,3</td><td>2,0</td></tr>
+            <tr><td>10 000</td><td>78,8</td><td>2,8</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Con 10 000 pasos en 2D, lo habitual es ver entre 0 y unos pocos regresos: la recurrencia es segura, pero a muy largo plazo.</p>
+
+      <h3>La ruina del jugador en el juego justo</h3>
+      <p>Sea \(P_k\) la probabilidad de arruinarse cuando se tienen k euros y entre los dos jugadores suman N = a + b. Tras una apuesta se tienen k + 1 o k − 1, con probabilidad ½ cada una:</p>
+      <div class="math-block">\[ P_k = \tfrac{1}{2}P_{k+1} + \tfrac{1}{2}P_{k-1}, \qquad P_0 = 1, \quad P_N = 0. \]</div>
+      <p>Cada valor es la media de sus dos vecinos, así que los \(P_k\) están sobre una recta. La que pasa por los dos extremos es \(P_k = 1 - k/N\), y con k = a queda \(P_a = b/(a+b)\). Con el mismo método se obtiene la duración media de la partida, \(a \cdot b\) apuestas: con 100 € contra 900 €, 90 000 apuestas.</p>
     </section>
 
     <section class="card content-card">
@@ -603,17 +694,17 @@
       <h2>La ruina del jugador</h2>
       <p>Imaginemos un jugador que comienza con €<em>a</em> y juega una serie de apuestas de €1 contra un rival con €<em>b</em>. En cada ronda, el jugador gana €1 con probabilidad p o pierde €1 con probabilidad q = 1 − p. El juego termina cuando alguien se arruina.</p>
       <p>Este problema clásico es equivalente a un paseo aleatorio con barreras absorbentes en 0 y a + b. La probabilidad de que el jugador se arruine vale:</p>
-      <p style="text-align:center; font-size:1.02rem; margin: 1rem 0;">
+      <div class="math-block">
         \[
           P(\text{ruina}) = \begin{cases}
             \dfrac{(q/p)^a - (q/p)^{a+b}}{1 - (q/p)^{a+b}} & \text{si } p \neq \tfrac{1}{2} \\[1.4em]
             \dfrac{b}{a+b} & \text{si } p = \tfrac{1}{2}
           \end{cases}
         \]
-      </p>
+      </div>
       <p>Para el juego justo (p = 0,5), la probabilidad de ruina depende solo de la proporción de capital: si el jugador tiene €100 y la banca tiene €900, la probabilidad de que el jugador se arruine es 900/1000 = 90 %. Incluso con un juego perfectamente justo, la asimetría de capital hace casi segura la ruina del jugador más pobre.</p>
       <p>Con p &lt; 0,5 (la situación real en un casino, donde la casa tiene ventaja), la ruina es prácticamente inevitable a largo plazo. Solo con p &gt; 0,5 puede el jugador tener probabilidad positiva de arruinar a su rival antes de arruinarse él.</p>
-      <p>En el simulador 1D, cambia p a 0,40 o 0,30 con derive negativa y observa cómo las trayectorias descienden sistemáticamente — eso es la ventaja de la casa actuando.</p>
+      <p>En el simulador 1D, cambia p a 0,40 o 0,30 con deriva negativa y observa cómo las trayectorias descienden sistemáticamente — eso es la ventaja de la casa actuando.</p>
     </section>
 
     <section class="card content-card">
@@ -678,6 +769,19 @@
         <h3>¿Qué son los vuelos de Lévy?</h3>
         <p>Los vuelos de Lévy son una generalización del paseo aleatorio donde los pasos no tienen varianza finita: la mayoría son pequeños, pero ocasionalmente ocurren saltos muy grandes que siguen una distribución de cola pesada (distribución de Lévy estable). Muchos animales, desde albatros hasta tiburones, usan estrategias de búsqueda que se asemejan a vuelos de Lévy porque son óptimas para explorar entornos donde las presas son escasas y distribuidas aleatoriamente.</p>
       </div>
+    </section>
+
+    <section class="card content-card">
+      <h2>Referencias y lecturas recomendadas</h2>
+      <ul>
+        <li><a href="https://es.wikipedia.org/wiki/Camino_aleatorio" target="_blank" rel="noopener noreferrer">Camino aleatorio</a> — Wikipedia. Definición, propiedades y aplicaciones.</li>
+        <li>Pearson, K. (1905). <a href="https://doi.org/10.1038/072294b0" target="_blank" rel="noopener noreferrer">The problem of the random walk</a>. <em>Nature</em>, 72, 294. La carta que da nombre al problema.</li>
+        <li>Pólya, G. (1921). <a href="https://doi.org/10.1007/BF01458701" target="_blank" rel="noopener noreferrer">Über eine Aufgabe der Wahrscheinlichkeitsrechnung betreffend die Irrfahrt im Straßennetz</a>. <em>Mathematische Annalen</em>, 84, 149–160. El teorema de recurrencia en 1 y 2 dimensiones (en alemán).</li>
+        <li>Einstein, A. (1905). <a href="https://doi.org/10.1002/andp.19053220806" target="_blank" rel="noopener noreferrer">Über die von der molekularkinetischen Theorie der Wärme geforderte Bewegung von in ruhenden Flüssigkeiten suspendierten Teilchen</a>. <em>Annalen der Physik</em>, 322(8), 549–560. La explicación del movimiento browniano (en alemán).</li>
+        <li>Feller, W. (1968). <em>An Introduction to Probability Theory and Its Applications</em>, vol. 1 (3.ª ed.). Wiley. Los capítulos III y XIV tratan el paseo aleatorio y la ruina del jugador.</li>
+        <li>Lawler, G. F. y Limic, V. (2010). <a href="https://doi.org/10.1017/CBO9780511750854" target="_blank" rel="noopener noreferrer">Random Walk: A Modern Introduction</a>. Cambridge University Press.</li>
+        <li>Fama, E. F. (1970). <a href="https://doi.org/10.2307/2325486" target="_blank" rel="noopener noreferrer">Efficient capital markets: a review of theory and empirical work</a>. <em>The Journal of Finance</em>, 25(2), 383–417.</li>
+      </ul>
     </section>
 
     <section class="card content-card">
@@ -1105,7 +1209,7 @@ function simulate2D() {
     }
 
     document.getElementById('s2d-dist').textContent  = fmtN(arrMean(dists));
-    document.getElementById('s2d-edist').textContent  = `Esperado ≈ ${fmtN(sqrtN * Math.sqrt(Math.PI/2), 2)}`;
+    document.getElementById('s2d-edist').textContent  = `Esperado ≈ ${fmtN(Math.sqrt(Math.PI * n) / 2, 2)}`;
     document.getElementById('s2d-dist2').textContent  = fmtN(arrMean(dists2), 1);
     document.getElementById('s2d-edist2').textContent = `Esperado: n = ${n}`;
     document.getElementById('s2d-maxdist').textContent = fmtN(maxDist, 1);
@@ -1114,10 +1218,10 @@ function simulate2D() {
 
     // interpretation
     const dMean  = arrMean(dists);
-    const thDist = sqrtN * Math.sqrt(Math.PI / 2);
+    const thDist = Math.sqrt(Math.PI * n) / 2;
     const ratio  = dMean / thDist;
     let txt2 = `Con n = ${n} pasos, la distancia al origen sigue siendo del orden √n ≈ ${fmtN(sqrtN, 1)}. `;
-    txt2 += `La distancia media empírica es ${fmtN(dMean, 2)} (teórica: √(πn/2) ≈ ${fmtN(thDist, 2)}). `;
+    txt2 += `La distancia media empírica es ${fmtN(dMean, 2)} (teórica: √(πn)/2 ≈ ${fmtN(thDist, 2)}). `;
     if (nPaths === 1) {
       txt2 += `La trayectoria ha regresado al origen <strong>${returns}</strong> veces, ilustrando la recurrencia del paseo 2D.`;
     } else {

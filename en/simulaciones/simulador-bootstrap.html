@@ -286,6 +286,19 @@
       width: 100% !important;
       height: 100% !important;
     }
+    /* ---- Fórmulas: sin recuadro ni barras de desplazamiento ---- */
+    .math-block { text-align: center; font-size: 1.05rem; margin: 14px 0; }
+    .math-block mjx-container[display="true"] { margin: 0; }
+    @media (max-width: 480px) {
+      .math-block { font-size: 0.82rem; }
+      .content-table { font-size: 0.8rem; }
+      .content-table th, .content-table td { padding: 6px 5px; }
+    }
+    @media (max-width: 360px) {
+      .math-block { font-size: 0.68rem; }
+      .content-table { font-size: 0.72rem; }
+      .content-table th, .content-table td { padding: 5px 3px; }
+    }
   </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
@@ -502,7 +515,7 @@
         replacement from the original sample. The distribution of \(\hat{\theta}^* - \hat{\theta}\) approximates
         the distribution of \(\hat{\theta} - \theta\).
       </p>
-      <div class="formula-box" style="text-align:center; padding: 16px;">
+      <div class="math-block">
         \[\widehat{SE}_{\text{boot}} = \sqrt{\frac{1}{B-1}\sum_{b=1}^{B}\left(\hat{\theta}^{*(b)} - \bar{\hat{\theta}}^*\right)^2}\]
       </div>
       <p>
@@ -512,6 +525,22 @@
     </section>
 
     <!-- Educational section 2 -->
+    <section class="card content-card">
+      <h2>What the simulator does, step by step</h2>
+      <p>The simulator has an advantage that does not exist with real data: it knows the population the sample comes from. That makes it possible to compare what the bootstrap says, seeing only the sample, with the truth.</p>
+      <ol>
+        <li><strong>"New sample" draws n observations</strong> from the chosen population distribution. This is the only time the population is used. The upper chart shows that sample (bars) next to the theoretical density (red line).</li>
+        <li><strong>It computes the statistic on the sample</strong> (mean, median or standard deviation): this is the estimate \(\hat{\theta}\), shown in the "Bootstrap / Sample" column.</li>
+        <li><strong>It resamples.</strong> It builds a bootstrap sample by choosing one of the n observations n times, at random and with replacement. Some appear more than once and others do not appear.</li>
+        <li><strong>It computes the statistic on the bootstrap sample</strong> and repeats steps 3 and 4 until it has B replicates. Their histogram is the lower chart.</li>
+        <li><strong>Bootstrap standard error:</strong> the standard deviation of the B replicates.</li>
+        <li><strong>Percentile interval:</strong> it sorts the B replicates from smallest to largest and takes the values that leave α/2 outside on each side. With B = 1000 and a 95% level, these are the 26th and the 975th sorted replicates. On the chart, the green bars lie inside the interval and the grey ones outside.</li>
+      </ol>
+      <p><strong>The two buttons separate two sources of variation.</strong> "Regenerate bootstrap" repeats steps 3 to 6 with the <em>same</em> sample: the results change very little, and that small difference is the Monte Carlo error, which shrinks as B grows. "New sample" changes the sample: now the interval really moves, and no value of B reduces that variation, only a larger n. It is the uncertainty the bootstrap is trying to measure.</p>
+      <p><strong>The "Theoretical" column</strong> holds what can only be known by knowing the population: the true value of the parameter and, when a simple formula exists, the theoretical standard error of the statistic (detailed below). If there is none, "—" is shown: these are precisely the cases where the bootstrap is most useful. The "Normal CI" row only appears for the mean and is the classical interval \(\bar{x} \pm z \cdot s/\sqrt{n}\).</p>
+      <p><strong>What to check:</strong> whether the bootstrap standard error is close to the theoretical one and whether the interval contains the true parameter. Clicking "New sample" several times, the 95% interval should contain it about 95 times out of 100 (somewhat fewer with small samples, as explained below).</p>
+    </section>
+
     <section class="card content-card" aria-labelledby="how-resampling-heading">
       <h2 id="how-resampling-heading">How the resampling works</h2>
       <p>The non-parametric bootstrap algorithm follows these steps:</p>
@@ -535,7 +564,7 @@
           between the \(\alpha/2\) and \(1-\alpha/2\) percentiles of the bootstrap distribution:
         </li>
       </ol>
-      <div class="formula-box" style="text-align:center; padding: 16px;">
+      <div class="math-block">
         \[\text{IC}_{\text{percentil}} = \left[\hat{\theta}^*_{(\alpha/2)},\; \hat{\theta}^*_{(1-\alpha/2)}\right]\]
       </div>
       <p>
@@ -551,6 +580,60 @@
     </section>
 
     <!-- Educational section 3 -->
+    <section class="card content-card">
+      <h2>Why it works and where the figures come from</h2>
+      <h3>The plug-in principle</h3>
+      <p>What you want to know is how much the statistic varies from one sample to another. To see it directly you would have to draw many samples from the population, and there is only one. The bootstrap replaces the unknown population with the best picture available of it, the sample itself, and repeats the experiment there:</p>
+      <div class="content-table-wrap">
+        <table class="content-table">
+          <thead>
+            <tr><th></th><th>Real world</th><th>Bootstrap world</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Where you draw from</td><td>The population F, unknown</td><td>The sample (empirical distribution \(\hat{F}_n\)), known</td></tr>
+            <tr><td>What you get</td><td>A sample and its statistic \(\hat{\theta}\)</td><td>A resample and its statistic \(\hat{\theta}^*\)</td></tr>
+            <tr><td>How many times you can repeat it</td><td>Once</td><td>As many as you like</td></tr>
+            <tr><td>What you want to measure</td><td>How \(\hat{\theta}\) varies around \(\theta\)</td><td>How \(\hat{\theta}^*\) varies around \(\hat{\theta}\)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The bet is that the second variation resembles the first. It works when the sample represents the population well in whatever affects the statistic, and fails when it does not (very small samples, or statistics that depend on the extreme values).</p>
+
+      <h3>For the mean, the bootstrap reproduces the classical formula</h3>
+      <p>In this case you can work out what will come out without simulating anything. Each value in a resample, \(X^*\), is one of the n observations with probability \(1/n\). Its mean and variance are therefore those of the sample:</p>
+      <div class="math-block">\[ \begin{gathered} E^*(X^*) = \bar{x}, \\ \operatorname{Var}^*(X^*) = \frac{1}{n}\sum_{i=1}^{n}(x_i - \bar{x})^2 = \hat{\sigma}^2. \end{gathered} \]</div>
+      <p>The mean of a resample is the average of n independent draws, so its variance is the one above divided by n:</p>
+      <div class="math-block">\[ \begin{gathered} \operatorname{Var}^*(\bar{x}^*) = \frac{\hat{\sigma}^2}{n}, \\ SE_{\text{boot}} \approx \frac{\hat{\sigma}}{\sqrt{n}} = \sqrt{\frac{n-1}{n}}\;\frac{s}{\sqrt{n}}. \end{gathered} \]</div>
+      <p>This is the usual standard error, \(s/\sqrt{n}\), times a factor slightly below 1 (0.95 with n = 10; 0.98 with n = 30). With B replicates, the simulator gets close to that value with a small random error. The bootstrap is not magic: it replaces a formula with computation. Its value lies in the statistics for which there is no formula.</p>
+
+      <h3>Why a third of the data is missing from each resample</h3>
+      <p>The probability that a particular observation is not picked in one draw is \(1 - 1/n\). Since the n draws are independent, the probability that it is not picked in any of them is</p>
+      <div class="math-block">\[ \left(1 - \frac{1}{n}\right)^{n} \;\longrightarrow\; e^{-1} \approx 0.368. \]</div>
+      <p>Each resample contains, on average, 63.2% of the distinct observations (65.1% with n = 10; 63.8% with n = 30), and the rest are repeats. The number of distinct possible resamples is \(\binom{2n-1}{n}\): 92,378 with n = 10 and about 69 billion with n = 20. The B replicates are a random sample of all of them, hence the Monte Carlo error.</p>
+
+      <h3>The theoretical standard error of the median</h3>
+      <p>For the median there is an approximate formula, valid for large n, which depends on the height of the density at the median, \(f(m)\):</p>
+      <div class="math-block">\[ SE(\text{median}) \approx \frac{1}{2\,f(m)\,\sqrt{n}}. \]</div>
+      <p>This is what the simulator uses in the "Theoretical" column. For the normal, \(f(m) = 1/(\sigma\sqrt{2\pi})\) and you get \(\sqrt{\pi/2}\;\sigma/\sqrt{n} \approx 1.25\,\sigma/\sqrt{n}\): with normal data, the median is 25% less precise than the mean. For the uniform between 0 and 10 it gives \(5/\sqrt{n}\), and for the exponential with λ = 0.5, \(2/\sqrt{n}\). For the standard deviation with normal data, \(\sigma/\sqrt{2(n-1)}\) is used.</p>
+      <p>The median formula has a practical drawback: it requires knowing the population density, which is exactly what is not known. The bootstrap reaches a similar value using the sample alone.</p>
+
+      <h3>How much the percentile interval really covers</h3>
+      <p>The percentile interval takes the central stretch of the bootstrap distribution. If that distribution is skewed, so is the interval, which is an advantage over \(\bar{x} \pm z \cdot s/\sqrt{n}\). But with small samples it falls short, because the sample underestimates the spread of the population and there is nothing equivalent to the Student's t correction. Actual coverage of the 95% percentile interval for the mean (obtained by simulation):</p>
+      <div class="content-table-wrap">
+        <table class="content-table">
+          <thead>
+            <tr><th>Sample size</th><th>Normal population</th><th>Exponential population</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>n = 10</td><td>89%</td><td>86%</td></tr>
+            <tr><td>n = 30</td><td>93%</td><td>92%</td></tr>
+            <tr><td>n = 100</td><td>95%</td><td>94%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>That is why, with small samples, variants such as BCa or the bootstrap-t are preferred. From n of about 30, the percentile method is a reasonable approximation.</p>
+    </section>
+
     <section class="card content-card" aria-labelledby="when-bootstrap-heading">
       <h2 id="when-bootstrap-heading">When to use the bootstrap</h2>
       <p>
@@ -663,6 +746,18 @@
     </section>
 
     <!-- Related tools -->
+    <section class="card content-card">
+      <h2>References and further reading</h2>
+      <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Bootstrapping_(statistics)" target="_blank" rel="noopener noreferrer">Bootstrapping (statistics)</a> — Wikipedia. Introduction to the method and its variants.</li>
+        <li>Efron, B. (1979). <a href="https://doi.org/10.1214/aos/1176344552" target="_blank" rel="noopener noreferrer">Bootstrap methods: another look at the jackknife</a>. <em>The Annals of Statistics</em>, 7(1), 1–26. The paper that introduces the bootstrap.</li>
+        <li>Efron, B. and Tibshirani, R. J. (1993). <a href="https://doi.org/10.1201/9780429246593" target="_blank" rel="noopener noreferrer">An Introduction to the Bootstrap</a>. Chapman &amp; Hall. The standard textbook, with a practical approach.</li>
+        <li>Efron, B. (1987). <a href="https://doi.org/10.1080/01621459.1987.10478410" target="_blank" rel="noopener noreferrer">Better bootstrap confidence intervals</a>. <em>Journal of the American Statistical Association</em>, 82(397), 171–185. The BCa method.</li>
+        <li>DiCiccio, T. J. and Efron, B. (1996). <a href="https://doi.org/10.1214/ss/1032280214" target="_blank" rel="noopener noreferrer">Bootstrap confidence intervals</a>. <em>Statistical Science</em>, 11(3), 189–228. A comparison of the different bootstrap intervals and their coverage.</li>
+        <li>Davison, A. C. and Hinkley, D. V. (1997). <a href="https://doi.org/10.1017/CBO9780511802843" target="_blank" rel="noopener noreferrer">Bootstrap Methods and their Application</a>. Cambridge University Press.</li>
+      </ul>
+    </section>
+
     <section class="card content-card" aria-labelledby="related-heading">
       <h2 id="related-heading">Related tools</h2>
       <ul>
