@@ -312,6 +312,20 @@
       line-height: 1.7;
       border-top: none;
     }
+    /* ---- Fórmulas: sin recuadro ni barras de desplazamiento ---- */
+    .math-block { text-align: center; font-size: 1.05rem; margin: 14px 0; }
+    .math-block mjx-container[display="true"] { margin: 0; }
+    @media (max-width: 480px) {
+      .math-block { font-size: 0.82rem; }
+      .content-table { font-size: 0.8rem; }
+      .content-table th, .content-table td { padding: 6px 5px; }
+    }
+    @media (max-width: 360px) {
+      .math-block { font-size: 0.68rem; }
+      .content-table { font-size: 0.72rem; }
+      .content-table th, .content-table td { padding: 5px 3px; }
+      .content-card table th, .content-card table td { padding: 6px 5px !important; font-size: 0.8rem; }
+    }
   </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
@@ -457,6 +471,64 @@
     <!-- ═══════════════════════════════ EDUCATIONAL ═══════════════════════ -->
 
     <section class="card content-card">
+      <h2>How this tool works, step by step</h2>
+      <p>Unlike other ProbLab simulators, this one does not draw random samples: it computes α, β and the power with exact formulas and plots them, so the result is always the same for the same values. The model is the <strong>one-mean z-test</strong>: a decision between H₀: μ = μ₀ and the alternative, based on the mean of n observations with standard deviation σ.</p>
+      <ol>
+        <li><strong>The sample is summarised in one number.</strong> The statistic \(Z = (\bar{x} - \mu_0)/(\sigma/\sqrt{n})\) measures how many standard errors the sample mean is from μ₀. It is the horizontal axis of the chart.</li>
+        <li><strong>Blue curve: what would happen if H₀ were true.</strong> In that case Z follows a standard normal, centred at 0.</li>
+        <li><strong>Red curve: what would happen if the difference were real.</strong> If the true mean is as far from μ₀ as the slider says, Z follows a normal with the same shape but shifted to δ = d × √n. That distance is the "Separation between curves" card.</li>
+        <li><strong>The level α sets the boundary.</strong> The dashed vertical line is the critical value: z<sub>α</sub> in the one-tailed test and ±z<sub>α/2</sub> in the two-tailed test. H₀ is rejected when Z falls beyond it.</li>
+        <li><strong>The areas are the probabilities.</strong> The red area is the part of the blue curve that lies in the rejection region: α. The grey area is the part of the red curve that lies in the non-rejection region: β. The green area is the rest of the red curve: the power, 1 − β.</li>
+      </ol>
+      <p>Each control changes one thing. The <strong>true difference</strong> and the <strong>sample size</strong> pull the two curves apart, without moving the boundary. The <strong>level α</strong> moves the boundary, without moving the curves. The <strong>type of test</strong> decides whether there is one boundary or two.</p>
+      <p><strong>With the standard deviation σ</strong> (optional), everything is read in the units of your data: the difference is shown as Δ = d × σ, and the axis and the boundaries become values of the sample mean, \(\mu_0 + z \cdot \sigma/\sqrt{n}\). The probabilities do not change: it is the same chart on another scale. For example, with σ = 8 g and n = 30, the standard error is 8/√30 = 1.46 g; a true difference of 4 g corresponds to d = 0.5 and separates the curves by 4/1.46 = 2.74 standard errors.</p>
+      <p><strong>If you arrive from a ProbLab test</strong>, the fields are filled in with your α, your n and the smallest difference that test detects with 80% probability; that is why the power you see is around 80%.</p>
+    </section>
+
+    <section class="card content-card">
+      <h2>Where the formulas for β and power come from</h2>
+      <h3>Starting point: the distribution of the sample mean</h3>
+      <p>If the observations have mean μ and standard deviation σ, the mean of n independent observations follows (exactly for normal data, approximately in general, by the <a href="teorema-central-limite.html">central limit theorem</a>) a normal with the same mean and standard deviation σ/√n:</p>
+      <div class="math-block">\[ \bar{X} \sim N\!\left(\mu,\ \frac{\sigma^2}{n}\right). \]</div>
+
+      <h3>The statistic under H₀ and under H₁</h3>
+      <p>The test statistic subtracts μ₀ and divides by the standard error. Adding and subtracting the true mean μ in the numerator splits it into two parts:</p>
+      <div class="math-block">\[ Z = \frac{\bar{X} - \mu_0}{\sigma/\sqrt{n}} = \underbrace{\frac{\bar{X} - \mu}{\sigma/\sqrt{n}}}_{N(0,\,1)} + \underbrace{\frac{\mu - \mu_0}{\sigma/\sqrt{n}}}_{\delta}. \]</div>
+      <p>The first part is always a standard normal. The second is a fixed number, which measures the true difference in standard errors:</p>
+      <div class="math-block">\[ \delta = \frac{(\mu - \mu_0)\sqrt{n}}{\sigma} = d\,\sqrt{n}, \qquad d = \frac{\mu - \mu_0}{\sigma}. \]</div>
+      <p>Therefore \(Z \sim N(\delta,\,1)\). If H₀ is true, μ = μ₀, δ = 0 and you get the blue curve. Otherwise you get the red curve, the same bell shifted by δ units. All of power analysis comes down to that shift.</p>
+
+      <h3>Right-tailed test</h3>
+      <p>H₀ is rejected when \(Z > z_\alpha\), where \(z_\alpha\) leaves an area α to its right under the standard normal (1.645 for α = 0.05). A type II error is failing to reject when the difference is real, that is, an \(N(\delta, 1)\) falling below \(z_\alpha\). Subtracting δ to standardise:</p>
+      <div class="math-block">\[ \beta = P(Z \le z_\alpha \mid H_1) = \Phi(z_\alpha - \delta), \]</div>
+      <p>where Φ is the standard normal distribution function. The power is the complement:</p>
+      <div class="math-block">\[ 1 - \beta = 1 - \Phi(z_\alpha - \delta) = \Phi(\delta - z_\alpha). \]</div>
+
+      <h3>Two-tailed test</h3>
+      <p>Now H₀ is rejected when \(|Z| > z_{\alpha/2}\) (1.960 for α = 0.05), and there are two rejection regions. The power is the sum of the two tails of the \(N(\delta, 1)\):</p>
+      <div class="math-block">\[ 1 - \beta = \Phi(\delta - z_{\alpha/2}) + \Phi(-\delta - z_{\alpha/2}). \]</div>
+      <p>The second term is the probability of rejecting "on the wrong side" and is almost always negligible. Since \(z_{\alpha/2} > z_\alpha\), the two-tailed test has less power than the one-tailed test for the same difference: that is the price of watching both directions.</p>
+
+      <h3>From power to sample size</h3>
+      <p>The same formula, read backwards, gives the sample size. For the power to be at least 1 − β you need \(\Phi(\delta - z_\alpha) \ge 1 - \beta\), that is, \(\delta - z_\alpha \ge z_\beta\). Substituting \(\delta = \Delta\sqrt{n}/\sigma\), with Δ = μ − μ₀, and solving for n:</p>
+      <div class="math-block">\[ n \ge \left( \frac{(z_\alpha + z_\beta)\,\sigma}{\Delta} \right)^{2} = \left( \frac{z_\alpha + z_\beta}{d} \right)^{2}. \]</div>
+      <p>In the two-tailed test, \(z_{\alpha/2}\) replaces \(z_\alpha\). This is the formula behind the <a href="../tamano-muestral-contraste-una-media.html">sample size calculator for the one-mean test</a>. Two rules follow from it: detecting a difference half as large takes four times as much data, and going from 80% to 90% power takes about a third more.</p>
+
+      <h3>A worked example</h3>
+      <p>With the tool's initial values, d = 0.5, n = 30 and α = 0.05 one-tailed:</p>
+      <ul>
+        <li><strong>Separation:</strong> \(\delta = 0.5 \times \sqrt{30} = 2.739\).</li>
+        <li><strong>Critical value:</strong> \(z_{0.05} = 1.645\).</li>
+        <li><strong>Type II error:</strong> \(\beta = \Phi(1.645 - 2.739)\) \(= \Phi(-1.094) = 0.137\).</li>
+        <li><strong>Power:</strong> \(1 - 0.137 = 0.863\).</li>
+      </ul>
+      <p>With the two-tailed test, the critical value rises to 1.960 and the power drops to 0.782. Reaching 80% in the one-tailed test would take \(((1.645 + 0.842)/0.5)^2 = 24.7\), that is, 25 observations; in the two-tailed test, 32.</p>
+
+      <h3>What this model simplifies</h3>
+      <p>The tool treats σ as known. In a real test with unknown σ, Student's t is used and the power is computed with the noncentral t distribution; the result is somewhat lower, especially with small samples (in the example above, 0.848 instead of 0.863). ProbLab's <a href="../contrastes-hipotesis/">hypothesis test</a> and <a href="../tamano-muestral/">sample size</a> calculators use the exact computation in each case. The logic, however, is always the one in this chart: two distributions of the statistic, a boundary and the areas on either side.</p>
+    </section>
+
+    <section class="card content-card">
       <h2>What are type I and type II errors?</h2>
       <p>When we run a hypothesis test we make a binary decision: reject the null hypothesis H₀ or fail to reject it. Like any decision based on incomplete information (a sample, not the entire population), this decision can be wrong in two distinct ways, and we call these two ways <strong>type I error</strong> and <strong>type II error</strong>.</p>
 
@@ -501,7 +573,7 @@
         <li><strong>Effect size (Cohen's d):</strong> the real difference between means expressed in units of standard deviation. The larger the effect, the easier it is to detect. An effect of d = 0.2 is considered small, d = 0.5 medium and d = 0.8 large.</li>
         <li><strong>Sample size (n):</strong> the factor most easily controlled in the design. As n increases, the standard error of the mean decreases, the distributions become narrower and their overlap shrinks. The non-centrality parameter δ = d × √n jointly captures the effect of the effect size and the sample size.</li>
         <li><strong>Significance level (α):</strong> increasing α shifts the rejection region to the left (in a right-tailed test), capturing more area under the H₁ curve and increasing power. In exchange, it raises the false-positive rate.</li>
-        <li><strong>Measurement variability (σ):</strong> a measure with less noise produces more precise statistics. In the simulator, the standard deviation is standardized to σ = 1, but in practice reducing experimental variability (a better protocol, more homogeneous analysis units) directly increases power.</li>
+        <li><strong>Measurement variability (σ):</strong> a measure with less noise produces more precise statistics. The simulator works in standardised units (which is why σ does not change the probabilities, only the scale they are read on), but in practice reducing experimental variability (a better protocol, more homogeneous analysis units) directly increases power.</li>
       </ul>
 
       <p>In scientific research and clinical trials it is common to set a <strong>minimum target power of 80% (β ≤ 0.20)</strong>. This means we accept up to a 20% probability of missing a real effect when it exists. Some more demanding fields, such as pivotal pharmacology trials, require power of 90% or even higher.</p>
@@ -546,6 +618,19 @@
         <summary>What is Cohen's effect size?</summary>
         <p><strong>Cohen's d</strong> is the difference between two means expressed in units of standard deviation. Formally, d = (μ₁ − μ₀) / σ, where σ is the common standard deviation of the populations. This standardization allows effects to be compared across studies with different measurement scales. Jacob Cohen (1988) proposed the thresholds d = 0.2 (small effect), d = 0.5 (medium effect) and d = 0.8 (large effect). However, these thresholds are only a guide and should not be applied mechanically: an effect of d = 0.2 can be highly relevant in preventive medicine (if it affects millions of people) and irrelevant in experimental psychology. Effect size should always be interpreted in the substantive context of the research.</p>
       </details>
+    </section>
+
+    <section class="card content-card">
+      <h2>References and further reading</h2>
+      <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Type_I_and_type_II_errors" target="_blank" rel="noopener noreferrer">Type I and type II errors</a> — Wikipedia. Definitions and examples.</li>
+        <li><a href="https://en.wikipedia.org/wiki/Power_(statistics)" target="_blank" rel="noopener noreferrer">Power (statistics)</a> — Wikipedia. Power, the factors that determine it and a priori analysis.</li>
+        <li>Neyman, J. and Pearson, E. S. (1933). <a href="https://doi.org/10.1098/rsta.1933.0009" target="_blank" rel="noopener noreferrer">On the problem of the most efficient tests of statistical hypotheses</a>. <em>Philosophical Transactions of the Royal Society A</em>, 231, 289–337. The paper that introduces the two types of error and the Neyman-Pearson lemma.</li>
+        <li>Cohen, J. (1988). <a href="https://doi.org/10.4324/9780203771587" target="_blank" rel="noopener noreferrer">Statistical Power Analysis for the Behavioral Sciences</a> (2nd ed.). Lawrence Erlbaum. The reference book on power and effect sizes.</li>
+        <li>Cohen, J. (1992). <a href="https://doi.org/10.1037/0033-2909.112.1.155" target="_blank" rel="noopener noreferrer">A power primer</a>. <em>Psychological Bulletin</em>, 112(1), 155–159. A short, practical summary, with the thresholds for small, medium and large effects.</li>
+        <li>Ioannidis, J. P. A. (2005). <a href="https://doi.org/10.1371/journal.pmed.0020124" target="_blank" rel="noopener noreferrer">Why most published research findings are false</a>. <em>PLoS Medicine</em>, 2(8), e124.</li>
+        <li>Button, K. S. et al. (2013). <a href="https://doi.org/10.1038/nrn3475" target="_blank" rel="noopener noreferrer">Power failure: why small sample size undermines the reliability of neuroscience</a>. <em>Nature Reviews Neuroscience</em>, 14, 365–376. The consequences of working with underpowered studies.</li>
+      </ul>
     </section>
 
     <section class="card content-card">

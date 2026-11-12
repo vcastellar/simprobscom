@@ -315,6 +315,19 @@
     .ss-controls .matrix-table td { padding: 4px; }
     .ss-controls .matrix-table input[type="number"] { width: 60px; padding: 7px 4px; }
     .ss-controls .matrix-table input[type="text"] { width: 72px; }
+    /* ---- Fórmulas: sin recuadro ni barras de desplazamiento ---- */
+    .math-block { text-align: center; font-size: 1.05rem; margin: 14px 0; }
+    .math-block mjx-container[display="true"] { margin: 0; }
+    @media (max-width: 480px) {
+      .math-block { font-size: 0.82rem; }
+      .content-table { font-size: 0.8rem; }
+      .content-table th, .content-table td { padding: 6px 5px; }
+    }
+    @media (max-width: 360px) {
+      .math-block { font-size: 0.68rem; }
+      .content-table { font-size: 0.72rem; }
+      .content-table th, .content-table td { padding: 5px 3px; }
+    }
   </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
@@ -466,13 +479,13 @@
     <section class="card content-card">
       <h2>What is a Markov chain?</h2>
       <p>A <strong>Markov chain</strong> is a discrete-time stochastic process \(\{X_0, X_1, X_2, \ldots\}\) that takes values in a finite set of states and satisfies the <strong>Markov property</strong>, or "memorylessness":</p>
-      <div class="formula-box" style="margin:14px 0;">
-        $$P(X_{n+1} = j \mid X_0, X_1, \ldots, X_n) = P(X_{n+1} = j \mid X_n) = p_{ij}$$
+      <div class="math-block">
+        \[ \begin{gathered} P(X_{n+1} = j \mid X_0, X_1, \ldots, X_n) \\ = P(X_{n+1} = j \mid X_n) = p_{ij} \end{gathered} \]
       </div>
       <p>The probability of moving to the next state depends <em>only</em> on the present state, not on how it was reached. This greatly simplifies the mathematical analysis without sacrificing realism in many applications.</p>
       <p>The complete behavior of the chain is fully specified by the <strong>transition matrix</strong> \(P\), where the element \(p_{ij}\) is the probability of moving from state \(i\) to state \(j\) in one step:</p>
-      <div class="formula-box" style="margin:14px 0;">
-        $$P = \begin{pmatrix} p_{11} & p_{12} & \cdots & p_{1n} \\ p_{21} & p_{22} & \cdots & p_{2n} \\ \vdots & \vdots & \ddots & \vdots \\ p_{n1} & p_{n2} & \cdots & p_{nn} \end{pmatrix}, \quad \sum_{j=1}^{n} p_{ij} = 1 \text{ for every } i$$
+      <div class="math-block">
+        \[ \begin{gathered} P = \begin{pmatrix} p_{11} & p_{12} & \cdots & p_{1n} \\ p_{21} & p_{22} & \cdots & p_{2n} \\ \vdots & \vdots & \ddots & \vdots \\ p_{n1} & p_{n2} & \cdots & p_{nn} \end{pmatrix}, \\[6pt] \sum_{j=1}^{n} p_{ij} = 1 \text{ for every } i \end{gathered} \]
       </div>
       <p>Each row of the transition matrix is a probability distribution: the values are non-negative and sum to 1. This makes \(P\) a <strong>stochastic matrix</strong> (or Markov matrix).</p>
     </section>
@@ -480,7 +493,7 @@
     <section class="card content-card">
       <h2>Stationary distribution</h2>
       <p>A <strong>stationary distribution</strong> (or equilibrium distribution) is a probability vector \(\pi = (\pi_1, \pi_2, \ldots, \pi_n)\) such that:</p>
-      <div class="formula-box" style="margin:14px 0;">
+      <div class="math-block">
         $$\pi P = \pi \quad \text{with} \quad \sum_{i=1}^{n} \pi_i = 1, \quad \pi_i \geq 0$$
       </div>
       <p>Intuitively, if the chain is in the stationary distribution at time \(n\), it will remain in that distribution forever. In practice, it represents the <strong>long-run fraction of time</strong> the chain spends in each state.</p>
@@ -492,6 +505,79 @@
       </ul>
       <h3>Absorbing state: the Customer / Churn preset</h3>
       <p>In the Customer preset, the "Churn" state is an <strong>absorbing state</strong>: \(p_{\text{churn}, \text{churn}} = 1\). Once a customer leaves, they don't come back. This makes the chain <em>non-ergodic</em>: eventually every customer ends up in Churn. The stationary distribution assigns probability 1 to that state and 0 to the rest.</p>
+    </section>
+
+    <section class="card content-card">
+      <h2>How the simulator works, step by step</h2>
+      <p>The simulator does two different things: it walks through the chain at random, step by step, and separately computes the theoretical stationary distribution. Then it compares the two.</p>
+      <ol>
+        <li><strong>It reads the transition matrix</strong> and checks that each row sums to 1 and that there are no negative values.</li>
+        <li><strong>It places the chain in the initial state</strong> you chose.</li>
+        <li><strong>It takes one step.</strong> It looks only at the row of the current state, draws a random number between 0 and 1 and compares it with the cumulative probabilities of that row. In the Weather preset, from Sunny the row is 0.7, 0.2, 0.1: if the number is below 0.7, tomorrow is Sunny again; between 0.7 and 0.9, it moves to Cloudy; and above 0.9, to Rainy.</li>
+        <li><strong>It repeats</strong> step 3 as many times as the number of steps you asked for, recording the sequence of states.</li>
+        <li><strong>It counts</strong> what fraction of the time the chain spent in each state: this is the <strong>empirical distribution</strong>.</li>
+        <li><strong>It computes the stationary distribution π</strong> without simulating: it starts from an even split across the states and multiplies it by the matrix over and over until it stops changing (change below 10<sup>−9</sup>). With the Weather preset, 26 multiplications are enough.</li>
+      </ol>
+      <p>Step 3 is the Markov property in action: to decide the next state, nothing of the history is consulted, only where the chain is now.</p>
+      <p><strong>Evolution chart.</strong> Each solid line is the fraction of the time the chain has spent in a state <em>up to that step</em>; the dashed lines are the values of π. At first the lines jump around a lot, because few steps have accumulated, and then they settle towards the dashed ones.</p>
+      <p><strong>Bar chart.</strong> It compares the final empirical distribution with π. The "maximum difference" is the largest gap between the two bars of the same state.</p>
+      <p><strong>What is random and what is not.</strong> The path is random: each click on "Simulate" gives a different one. The distribution π is not: it depends only on the matrix. With 100 steps of the Weather preset it is normal to see maximum differences of about 0.07; with 1000 steps, about 0.02. This is not a fault: the fraction of time approaches π slowly, at a rate of \(1/\sqrt{n}\), like any average.</p>
+      <p><strong>Customer / Churn preset.</strong> Here π equals 1 at Churn, but the fraction of time in Churn does not reach 1: on average the chain spends its first 11 steps outside that state, and those steps still count. With 50 steps, the fraction is usually around 0.8; with 1000, 0.99.</p>
+      <p><strong>Custom.</strong> You can enter your own matrix with 2 to 5 states. Each row is the split of probabilities for "where do I go from here" and must sum to 1.</p>
+    </section>
+
+    <section class="card content-card">
+      <h2>The arithmetic, with the Weather preset</h2>
+      <p>The preset's matrix, with the states in the order Sunny, Cloudy and Rainy, is</p>
+      <div class="math-block">\[ P = \begin{pmatrix} 0.7 & 0.2 & 0.1 \\ 0.3 & 0.4 & 0.3 \\ 0.2 & 0.3 & 0.5 \end{pmatrix}. \]</div>
+
+      <h3>The distribution n steps from now</h3>
+      <p>If today the probability of being in each state is the row vector \(\pi^{(0)}\), tomorrow's follows from the law of total probability: to be in state j tomorrow you must be in some state i today and move from i to j.</p>
+      <div class="math-block">\[ \pi^{(1)}_j = \sum_i \pi^{(0)}_i\,p_{ij} \quad\Longleftrightarrow\quad \pi^{(1)} = \pi^{(0)}P. \]</div>
+      <p>Repeating the argument, n steps from now:</p>
+      <div class="math-block">\[ \pi^{(n)} = \pi^{(0)}P^{\,n}. \]</div>
+      <p>For example, if today is Sunny, the probability that it is Sunny again in two days adds up the three possible paths (via Sunny, via Cloudy or via Rainy):</p>
+      <div class="math-block">\[ 0.7 \cdot 0.7 + 0.2 \cdot 0.3 + 0.1 \cdot 0.2 = 0.57. \]</div>
+      <p>Carrying on like this, starting from Sunny:</p>
+      <div class="content-table-wrap">
+        <table class="content-table">
+          <thead>
+            <tr><th>Steps</th><th>Sunny</th><th>Cloudy</th><th>Rainy</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+            <tr><td>1</td><td>0.700</td><td>0.200</td><td>0.100</td></tr>
+            <tr><td>2</td><td>0.570</td><td>0.250</td><td>0.180</td></tr>
+            <tr><td>3</td><td>0.510</td><td>0.268</td><td>0.222</td></tr>
+            <tr><td>5</td><td>0.469</td><td>0.279</td><td>0.252</td></tr>
+            <tr><td>8</td><td>0.458</td><td>0.282</td><td>0.260</td></tr>
+            <tr><td>Limit (π)</td><td>0.457</td><td>0.283</td><td>0.261</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Within a week, the information that today is Sunny has almost been lost. Starting from Rainy leads to the same limiting values.</p>
+
+      <h3>Solving πP = π</h3>
+      <p>The stationary distribution is the one that does not change after one step. Writing \(\pi = (s, c, r)\), the condition \(\pi P = \pi\) gives one equation per column of P; two are enough, together with the probabilities summing to 1:</p>
+      <div class="math-block">\[ \begin{aligned} s &= 0.7\,s + 0.3\,c + 0.2\,r \\ c &= 0.2\,s + 0.4\,c + 0.3\,r \\ 1 &= s + c + r \end{aligned} \]</div>
+      <p>From the first, \(3s = 3c + 2r\); from the second, \(6c = 2s + 3r\). Substituting one into the other gives \(c = \tfrac{13}{12}\,r\) and \(s = \tfrac{21}{12}\,r\), and with the third:</p>
+      <div class="math-block">\[ \pi = \left( \frac{21}{46},\ \frac{13}{46},\ \frac{12}{46} \right) \approx (0.457,\ 0.283,\ 0.261). \]</div>
+      <p>In the long run, 45.7% of days are sunny, whatever the weather today. It is the same result the simulator gets by multiplying repeatedly by P.</p>
+
+      <h3>How fast it gets there</h3>
+      <p>The speed depends on the second largest eigenvalue of P in absolute value. In the Weather preset it is \(\lambda_2 \approx 0.47\): at each step, the distance between \(\pi^{(n)}\) and \(\pi\) is multiplied by roughly 0.47, and after 8 steps it is below 0.003. With two states the calculation is direct. If the matrix is</p>
+      <div class="math-block">\[ P = \begin{pmatrix} 1-a & a \\ b & 1-b \end{pmatrix}, \]</div>
+      <p>at equilibrium the flow from 1 to 2 equals the flow from 2 to 1, \(\pi_1 a = \pi_2 b\), and therefore</p>
+      <div class="math-block">\[ \pi = \left( \frac{b}{a+b},\ \frac{a}{a+b} \right), \qquad \lambda_2 = 1 - a - b. \]</div>
+      <p>If a and b are small, the chain rarely changes state, \(\lambda_2\) is close to 1 and convergence is slow. You can check this in Custom mode with 2 states.</p>
+
+      <h3>Two ways of "converging"</h3>
+      <p>Two things are worth telling apart. The <strong>distribution at step n</strong>, \(\pi^{(n)}\), converges to π very quickly (geometrically), and is the one in the table above. The <strong>fraction of time</strong> a single path spends in each state, which is what the simulator plots, also converges to π (this is the ergodic theorem), but much more slowly, like \(1/\sqrt{n}\), because it is an average over a random path.</p>
+
+      <h3>Customer / Churn preset: time until churn</h3>
+      <p>When there is an absorbing state, the interesting question is not where the chain ends up, but how long it takes. Let \(t_A\) and \(t_D\) be the expected number of steps to Churn starting from Active and from Dormant. Taking one step and seeing where you land:</p>
+      <div class="math-block">\[ \begin{aligned} t_A &= 1 + 0.80\,t_A + 0.15\,t_D \\ t_D &= 1 + 0.20\,t_A + 0.60\,t_D \end{aligned} \]</div>
+      <p>Solving the system gives \(t_A = 11\) and \(t_D = 8\): an active customer lasts 11 periods on average before churning, 8 of them as active and 3 as dormant.</p>
     </section>
 
     <section class="card content-card">
@@ -531,6 +617,17 @@
           <p>The dashed horizontal lines mark the theoretical value of the stationary distribution \(\pi_i\) for each state \(i\). As the simulation progresses, the solid lines (cumulative proportion of time spent in each state) converge toward those reference values. This convergence is the empirical manifestation of the ergodic theorem.</p>
         </article>
       </div>
+    </section>
+
+    <section class="card content-card">
+      <h2>References and further reading</h2>
+      <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Markov_chain" target="_blank" rel="noopener noreferrer">Markov chain</a> — Wikipedia. Definitions, classification of states and examples.</li>
+        <li>Hayes, B. (2013). <a href="https://doi.org/10.1511/2013.101.92" target="_blank" rel="noopener noreferrer">First links in the Markov chain</a>. <em>American Scientist</em>, 101(2), 92. A popular account of the origin of the chains: Markov counting vowels and consonants in a poem by Pushkin.</li>
+        <li>Norris, J. R. (1997). <a href="https://doi.org/10.1017/CBO9780511810633" target="_blank" rel="noopener noreferrer">Markov Chains</a>. Cambridge University Press. A standard textbook, rigorous and accessible.</li>
+        <li>Levin, D. A. and Peres, Y. (2017). <a href="https://doi.org/10.1090/mbk/107" target="_blank" rel="noopener noreferrer">Markov Chains and Mixing Times</a> (2nd ed.). American Mathematical Society. On the speed of convergence to equilibrium.</li>
+        <li>Brin, S. and Page, L. (1998). <a href="https://doi.org/10.1016/S0169-7552(98)00110-X" target="_blank" rel="noopener noreferrer">The anatomy of a large-scale hypertextual Web search engine</a>. <em>Computer Networks and ISDN Systems</em>, 30(1–7), 107–117. PageRank: the stationary distribution of a random walk on the web.</li>
+      </ul>
     </section>
 
     <section class="card content-card">

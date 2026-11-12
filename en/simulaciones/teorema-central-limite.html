@@ -253,6 +253,19 @@
         grid-template-columns: 1fr;
       }
     }
+    /* ---- Fórmulas: sin recuadro ni barras de desplazamiento ---- */
+    .math-block { text-align: center; font-size: 1.05rem; margin: 14px 0; }
+    .math-block mjx-container[display="true"] { margin: 0; }
+    @media (max-width: 480px) {
+      .math-block { font-size: 0.82rem; }
+      .content-table { font-size: 0.8rem; }
+      .content-table th, .content-table td { padding: 6px 5px; }
+    }
+    @media (max-width: 360px) {
+      .math-block { font-size: 0.68rem; }
+      .content-table { font-size: 0.72rem; }
+      .content-table th, .content-table td { padding: 5px 3px; }
+    }
   </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
@@ -547,7 +560,7 @@
         Formally, let \(X_1, X_2, \ldots, X_n\) be i.i.d. random variables with mean \(\mu\) and finite variance \(\sigma^2 &lt; \infty\).
         Then the sample mean \(\bar{X}_n = \frac{1}{n}\sum_{i=1}^{n} X_i\) satisfies:
       </p>
-      <div class="formula-box" style="text-align:center; padding: 16px;">
+      <div class="math-block">
         \[\frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} \xrightarrow{d} \mathcal{N}(0,1) \quad \text{as } n \to \infty\]
       </div>
       <p>
@@ -556,13 +569,60 @@
         the distribution is, the faster the sample mean converges to normal. The <strong>Berry-Esseen theorem</strong> quantifies
         this speed with a uniform bound on the approximation error:
       </p>
-      <div class="formula-box" style="text-align:center; padding: 16px;">
+      <div class="math-block">
         \[\sup_x \left| F_n(x) - \Phi(x) \right| \leq \frac{C\, \rho}{\sigma^3 \sqrt{n}}\]
       </div>
       <p>
         where \(\rho = \mathbb{E}[|X-\mu|^3]\) is the third absolute centered moment and \(C \approx 0.4748\).
         This implies that distributions with greater skewness require larger samples for the normal approximation to be accurate.
       </p>
+    </section>
+
+    <section class="card content-card">
+      <h2>Where the mean, the standard error and the bell come from</h2>
+      <p>The "Theoretical" column of the table and the red curve in the lower chart come from three results. The first two are exact for any \(n\); the third is the central limit theorem proper.</p>
+
+      <h3>The mean of the means is μ</h3>
+      <p>The expectation of a sum is the sum of the expectations, and constants factor out:</p>
+      <div class="math-block">\[ E(\bar{X}_n) = \frac{1}{n}\sum_{i=1}^{n} E(X_i) = \frac{1}{n}\cdot n\mu = \mu. \]</div>
+      <p>That is why the histogram of the means is centred on the same value as the original distribution, whatever \(n\) is.</p>
+
+      <h3>The variance of the mean is σ²/n</h3>
+      <p>A constant taken out of a variance comes out squared; and the variance of a sum of <strong>independent</strong> variables is the sum of the variances:</p>
+      <div class="math-block">\[ \operatorname{Var}(\bar{X}_n) = \frac{1}{n^2}\sum_{i=1}^{n} \operatorname{Var}(X_i) = \frac{n\sigma^2}{n^2} = \frac{\sigma^2}{n}. \]</div>
+      <p>Its square root is the <strong>standard error</strong>, \(\sigma/\sqrt{n}\). Averaging reduces the spread because the overshoots of some observations partly cancel the undershoots of others; but the reduction goes with \(\sqrt{n}\), not with \(n\): halving the standard error takes four times as much data.</p>
+      <p>These two results do not depend on \(n\) being large. That is why, in the simulator, the mean and standard deviation rows match the theoretical ones even with \(n = 2\). What changes with \(n\) is the <em>shape</em>.</p>
+
+      <h3>Skewness shrinks like 1/√n</h3>
+      <p>The third central moment (the average of the cubed deviations, which measures asymmetry) also adds up when the variables are independent: that of the sum is \(n\mu_3\). Dividing by the cube of the standard deviation of the sum, \((\sqrt{n}\,\sigma)^3\), gives the skewness coefficient of the mean:</p>
+      <div class="math-block">\[ \gamma_1(\bar{X}_n) = \frac{n\,\mu_3}{n^{3/2}\,\sigma^3} = \frac{\gamma_1}{\sqrt{n}}. \]</div>
+      <p>This is the "Skewness" row of the simulator's table, and it explains the pace of convergence. For the six distributions in the simulator, the table gives the skewness γ₁ of the base distribution and, in the last three columns, that of the sample mean with that size n:</p>
+      <div class="content-table-wrap">
+        <table class="content-table">
+          <thead>
+            <tr><th>Distribution</th><th>γ₁</th><th>n = 5</th><th>n = 30</th><th>n = 100</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Normal</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>Uniform</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>Exponential</td><td>2</td><td>0.894</td><td>0.365</td><td>0.200</td></tr>
+            <tr><td>Bernoulli</td><td>0.873</td><td>0.390</td><td>0.159</td><td>0.087</td></tr>
+            <tr><td>Poisson</td><td>0.577</td><td>0.258</td><td>0.105</td><td>0.058</td></tr>
+            <tr><td>Chi-square</td><td>1.633</td><td>0.730</td><td>0.298</td><td>0.163</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>With the exponential it takes 100 observations for the skewness of the mean to drop to 0.2; with the normal and the uniform it is 0 from the start. For symmetric distributions, what remains to be corrected is the peakedness (kurtosis), which shrinks faster, like \(1/n\); that is why the uniform already looks like a bell with \(n = 5\).</p>
+
+      <h3>Why it is precisely the normal that appears</h3>
+      <p>A sketch of the proof, without full rigour. Standardise the observations, \(Y_i = (X_i - \mu)/\sigma\), so that they have mean 0 and variance 1. The standardised sample mean is then a sum:</p>
+      <div class="math-block">\[ Z_n = \frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} = \frac{1}{\sqrt{n}}\sum_{i=1}^{n} Y_i. \]</div>
+      <p>The tool is the <strong>moment generating function</strong>, \(M(t) = E(e^{tY})\), which characterises a distribution. Expanding it as a series, and since \(E(Y) = 0\) and \(E(Y^2) = 1\):</p>
+      <div class="math-block">\[ \begin{aligned} M(t) &= 1 + t\,E(Y) + \frac{t^2}{2}E(Y^2) + \cdots \\ &= 1 + \frac{t^2}{2} + o(t^2). \end{aligned} \]</div>
+      <p>The generating function of a sum of independent variables is the product of those of the terms. Since in \(Z_n\) each term is divided by \(\sqrt{n}\):</p>
+      <div class="math-block">\[ \begin{aligned} M_{Z_n}(t) &= \left[ M\!\left(\frac{t}{\sqrt{n}}\right) \right]^{n} \\ &= \left[ 1 + \frac{t^2}{2n} + o\!\left(\frac{1}{n}\right) \right]^{n} \;\longrightarrow\; e^{t^2/2}, \end{aligned} \]</div>
+      <p>by the limit \((1 + a/n)^n \to e^a\). And \(e^{t^2/2}\) is exactly the generating function of the standard normal. The rigorous proof follows the same path with the characteristic function, which always exists.</p>
+      <p>What matters is what survives the limit: only the mean and the variance. Every other feature of the original distribution (skewness, tails, whether it is discrete or continuous) sits in the \(o(1/n)\) terms, which vanish. That is why the result is the same wherever you start from, and why the variance has to be finite: without it there is no \(t^2/2\) term.</p>
     </section>
 
     <section class="card content-card" aria-labelledby="n-needed-heading">
@@ -672,7 +732,7 @@
         <summary>Do the variables need to be identically distributed?</summary>
         <p>
           The classical version of the CLT requires i.i.d. (independent and identically distributed) variables. However,
-          more general extensions exist: the <strong>Lindeberg-Lévy theorem</strong> relaxes the requirement of identical
+          more general extensions exist: the <strong>Lindeberg-Feller theorem</strong> relaxes the requirement of identical
           distribution and only requires that no single variable dominate the sum (Lindeberg's condition). This extension
           is key in econometrics and time series analysis.
         </p>
@@ -688,6 +748,18 @@
           in the simulator's histograms: as \(n\) grows, the bell curve of the sample mean becomes narrower.
         </p>
       </details>
+    </section>
+
+    <section class="card content-card">
+      <h2>References and further reading</h2>
+      <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Central_limit_theorem" target="_blank" rel="noopener noreferrer">Central limit theorem</a> — Wikipedia. Statement, variants and proof.</li>
+        <li><a href="https://en.wikipedia.org/wiki/Berry%E2%80%93Esseen_theorem" target="_blank" rel="noopener noreferrer">Berry–Esseen theorem</a> — Wikipedia. The bound on the rate of convergence and the known values of the constant.</li>
+        <li>Fischer, H. (2011). <a href="https://doi.org/10.1007/978-0-387-87857-7" target="_blank" rel="noopener noreferrer">A History of the Central Limit Theorem: From Classical to Modern Probability Theory</a>. Springer. The history of the theorem, from De Moivre and Laplace to Lindeberg and Lévy.</li>
+        <li>Le Cam, L. (1986). <a href="https://doi.org/10.1214/ss/1177013818" target="_blank" rel="noopener noreferrer">The central limit theorem around 1935</a>. <em>Statistical Science</em>, 1(1), 78–91.</li>
+        <li>Lindeberg, J. W. (1922). <a href="https://doi.org/10.1007/BF01494395" target="_blank" rel="noopener noreferrer">Eine neue Herleitung des Exponentialgesetzes in der Wahrscheinlichkeitsrechnung</a>. <em>Mathematische Zeitschrift</em>, 15, 211–225. The proof with the Lindeberg condition (in German).</li>
+        <li>Berry, A. C. (1941). <a href="https://doi.org/10.1090/S0002-9947-1941-0003498-3" target="_blank" rel="noopener noreferrer">The accuracy of the Gaussian approximation to the sum of independent variates</a>. <em>Transactions of the American Mathematical Society</em>, 49(1), 122–136.</li>
+      </ul>
     </section>
 
   </main>
