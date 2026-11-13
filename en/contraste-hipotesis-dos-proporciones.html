@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -240,7 +240,7 @@
             <p>It is the procedure for deciding whether the proportion of "successes" is the same in two independent groups. It lies behind a great many practical questions: does version B of the website convert more than version A? Do more patients recover with the new treatment than with the standard one? Do men and women vote the same way? Are there more defects on the night shift? In each group you count how many individuals meet the condition and compare the percentages.</p>
             <p>You start from the <strong>null hypothesis</strong> that the two population proportions are equal, \(H_0: p_1 = p_2\), and measure how far apart the sample proportions \(\hat{p}_1\) and \(\hat{p}_2\) are. Even if the groups were identical, their sample proportions would never match exactly; the question is whether the observed difference is larger than chance can reasonably explain.</p>
 
-            <h3>Hypotheses and test statistic</h3>
+            <details class="fold fold-sub"><summary><h3>Hypotheses and test statistic</h3></summary>
             <p class="formula-line">\(H_0: p_1 = p_2\)</p>
             <p class="formula-line">\(H_1: p_1 \neq p_2\), \(p_1 > p_2\) or \(p_1 < p_2\)</p>
             <p class="formula-line">\( z = \dfrac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1-\hat{p})\left(\dfrac{1}{n_1} + \dfrac{1}{n_2}\right)}}, \qquad \hat{p} = \dfrac{x_1 + x_2}{n_1 + n_2} \)</p>
@@ -252,10 +252,11 @@
             </ul>
             <p>The denominator is the standard error of the difference <em>if \(H_0\) were true</em>. Under \(H_0\) both groups share the same proportion, and the best estimate of that common proportion is the pooled \(\hat{p}\), which combines all the successes and all the individuals. With large enough samples, the statistic approximately follows a standard normal distribution.</p>
             <p>This z-test is equivalent to the <a href="contraste-independencia-chi-cuadrado.html">chi-square test of independence</a> on a 2×2 table: in the two-tailed case, \(z^2 = \chi^2\) and the p-values match. The advantage of z is that it allows one-tailed tests and directly gives the direction of the difference.</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to carry out the test, step by step</h3>
+            <details class="fold"><summary><h3>How to carry out the test, step by step</h3></summary>
             <ol>
                 <li><strong>Decide which group is 1 and which is 2</strong>, and what counts as a success. The difference is always computed as group 1 − group 2.</li>
                 <li><strong>State the hypotheses and set \(\alpha\)</strong>, usually 0.05.</li>
@@ -271,10 +272,11 @@
                 <li>Not rejecting \(H_0\) does not prove that the proportions are equal.</li>
             </ul>
             <p>With a one-tailed test, the direction is fixed before seeing the data: the right tail tests whether the proportion of group 1 is greater than that of group 2. In A/B tests the two-tailed test is usually recommended, because a change can also make results worse.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Difference, relative risk and odds ratio</h3>
+            <details class="fold"><summary><h3>Difference, relative risk and odds ratio</h3></summary>
             <p>There are three common ways of expressing how much two proportions differ, and they should not be confused:</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -289,19 +291,21 @@
                 </table>
             </div>
             <p>The absolute difference is the most useful for decisions: a 50% increase sounds spectacular, but it may mean going from 2% to 3%. Relative risk is intuitive for communicating results, and the <a href="contraste-hipotesis-odds-ratio.html">odds ratio</a> is the natural measure in case-control studies and logistic regression. All three indicate no difference at the same time (0 or 1), so the test of equality is the same; what changes is how the size of the effect is expressed.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Assumptions of the test</h3>
+            <details class="fold"><summary><h3>Assumptions of the test</h3></summary>
             <ul>
                 <li><strong>Two independent groups</strong>: each individual is in only one group. If they are the same individuals at two times or under two conditions, use <a href="contraste-hipotesis-proporciones-apareadas.html">McNemar's test</a>.</li>
                 <li><strong>Independent observations within each group</strong>. In an A/B test, for example, count users rather than page views, because visits by the same user are not independent.</li>
                 <li><strong>A large enough sample</strong>: as a rule of thumb, at least 5 expected successes and 5 expected failures in each group (using the pooled proportion). If not, use <a href="test-exacto-fisher.html">Fisher's exact test</a>; the calculator warns you and links to it already filled in.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example 1: one treatment against another</h3>
+            <details class="fold"><summary><h3>Worked example 1: one treatment against another</h3></summary>
             <p>With the new treatment, 62 of 120 patients improve (\(\hat{p}_1 = 0.517\)); with the standard one, 48 of 130 (\(\hat{p}_2 = 0.369\)). We test \(H_0\colon p_1 = p_2\) against \(H_1\colon p_1 \neq p_2\) with \(\alpha = 0.05\).</p>
             <p>The pooled proportion is \(\hat{p} = 110/250 = 0.44\), and the standard error under \(H_0\) is:</p>
             <p class="formula-line">\( SE = \sqrt{0.44 \times 0.56 \left(\dfrac{1}{120} + \dfrac{1}{130}\right)} \approx 0.0628 \)</p>
@@ -314,10 +318,11 @@
             <p class="formula-line">\( \hat{p} = \dfrac{900}{20{,}000} = 0.045, \qquad SE = \sqrt{0.045 \times 0.955 \times \dfrac{2}{10{,}000}} \approx 0.00293, \qquad z = \dfrac{0.042 - 0.048}{0.00293} \approx -2.05 \)</p>
             <p>The p-value is \(p \approx 0.041\): <strong>\(H_0\) is rejected</strong>, with version B ahead. Look at the size: 0.6 percentage points. With 10,000 visitors per version, the test detects with 80% probability differences of under 0.9 points, so small differences come out significant. Being significant does not mean it is worth it: you need to judge whether 0.6 more points of conversion justify the change. For this kind of analysis there are also the <a href="ab-testing/">A/B testing</a> calculators.</p>
             <p><strong>In the calculator:</strong> x₁ = 420, n₁ = 10000, x₂ = 480, n₂ = 10000 and "Two-tailed (≠)".</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that the difference between the proportions is too large to attribute to chance if both groups were equal. To judge whether it matters, look at the difference in percentage points and its confidence interval.</p>
             <p><strong>Not rejecting \(H_0\)</strong> (p-value ≥ α) does not prove that the proportions are equal. If what you want to show is precisely that one treatment is not worse than another, the correct approach is a <a href="contraste-hipotesis-no-inferioridad.html">non-inferiority test</a>.</p>
             <p>In the calculator, the result shows the decision with the p-value, the z statistic with both proportions and a sentence stating the conclusion. On the chart, the green area is the non-rejection region, the red areas are the critical regions and the amber line marks the observed statistic. Under "Calculation details" you will find the difference in points, the pooled proportion, the standard error, the confidence interval and the relative risk.</p>
@@ -327,10 +332,11 @@
 
             <h3>Relationship with the confidence interval</h3>
             <p>The other link opens the <a href="intervalo-confianza-diferencia-proporciones.html">confidence interval for the difference in proportions</a> with your data. Test and interval almost always agree: if the interval does not contain 0, the test is significant. They can disagree in borderline cases, because the test uses the standard error with the pooled proportion and the Wald interval uses each group's own.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Common mistakes</h3>
+            <details class="fold"><summary><h3>Common mistakes</h3></summary>
             <ul>
                 <li><strong>Using it with paired data</strong>, such as the answers of the same people before and after.</li>
                 <li><strong>Counting units that are not independent</strong>, such as page views instead of users.</li>
@@ -339,6 +345,7 @@
                 <li><strong>Concluding that two groups are equal</strong> because the test is not significant.</li>
                 <li><strong>Applying the z-test with very few successes</strong>; in that case, use Fisher's exact test.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -606,7 +613,7 @@ document.getElementById('calcTwoPropBtn').addEventListener('click', calculateTwo
 calculateTwoPropTest();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

@@ -138,7 +138,7 @@
   ]
 }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -241,7 +241,7 @@
             <p>It is the test for comparing two proportions when the data are <strong>paired</strong>: each individual gives a yes/no answer under two conditions or at two times. For example, the same patients on two drugs in a crossover trial, the same person before and after a campaign, two diagnostic tests applied to the same samples, or two raters classifying the same cases. The question is whether the proportion of "yes" changes from one condition to the other.</p>
             <p>The <a href="contraste-hipotesis-dos-proporciones.html">test for two independent proportions</a> will not do, because the two answers from the same individual are related: someone who improves on one drug tends to improve on the other. Ignoring that pairing gives wrong p-values.</p>
 
-            <h3>The 2×2 table for paired data</h3>
+            <details class="fold fold-sub"><summary><h3>The 2×2 table for paired data</h3></summary>
             <p>The data are summarised by counting how many individuals fall into each combination of answers:</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -257,10 +257,11 @@
             <p>With \(N = a + b + c + d\) individuals, the proportion of successes is \(p_1 = (a+b)/N\) under condition 1 and \(p_2 = (a+c)/N\) under condition 2. Their difference is</p>
             <p class="formula-line">\( p_1 - p_2 = \dfrac{(a + b) - (a + c)}{N} = \dfrac{b - c}{N} \)</p>
             <p>Cells <strong>a</strong> and <strong>d</strong> drop out: individuals who answer the same way under both conditions say nothing about which is better. All the information is in the <strong>discordant pairs</strong>, b and c. That is why the calculator only asks for them.</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Hypotheses and test statistic</h3>
+            <details class="fold"><summary><h3>Hypotheses and test statistic</h3></summary>
             <p class="formula-line">\(H_0: p_1 = p_2\) (equivalent to both types of change being equally frequent among the discordant pairs)</p>
             <p class="formula-line">\( \chi^2 = \dfrac{(b - c)^2}{b + c} \qquad \text{or, with continuity correction,} \qquad \chi^2 = \dfrac{(|b - c| - 1)^2}{b + c} \)</p>
             <p>If \(H_0\) is true, each discordant pair is equally likely to be of type b or type c, like tossing a coin. The statistic measures how far the observed split is from 50–50 and, under \(H_0\), approximately follows a <a href="chisquare.html">chi-square</a> distribution with 1 degree of freedom. It is the square of the statistic \(z = (b - c)/\sqrt{b + c}\).</p>
@@ -275,10 +276,11 @@
                 <li>If the p-value is greater than or equal to \(\alpha\), there is not enough evidence to reject \(H_0\).</li>
                 <li>The direction of the difference is given by the sign of \(b - c\): if b &gt; c, condition 1 has more successes.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Assumptions of the test</h3>
+            <details class="fold"><summary><h3>Assumptions of the test</h3></summary>
             <ul>
                 <li><strong>Paired data</strong>: each individual (or matched pair) gives one answer under each condition.</li>
                 <li><strong>A dichotomous response</strong> under both conditions.</li>
@@ -286,10 +288,11 @@
                 <li><strong>Enough discordant pairs</strong> for the chi-square approximation. With fewer than 25, use the exact p-value.</li>
             </ul>
             <p>McNemar's test is the yes/no counterpart of the <a href="contraste-hipotesis-medias-apareadas.html">paired means test</a>. With more than two conditions and a dichotomous response, the generalisation is Cochran's Q test.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example 1: crossover trial with two drugs</h3>
+            <details class="fold"><summary><h3>Worked example 1: crossover trial with two drugs</h3></summary>
             <p>In a crossover trial, 100 patients receive two drugs in different periods. 45 improve with both (a), 18 only with drug 1 (b), 8 only with drug 2 (c) and 29 with neither (d). The improvement rate is 63% with drug 1 and 53% with drug 2. We test \(H_0\colon p_1 = p_2\) with \(\alpha = 0.05\) and continuity correction.</p>
             <p class="formula-line">\( \chi^2 = \dfrac{(|18 - 8| - 1)^2}{18 + 8} = \dfrac{81}{26} \approx 3.115 \)</p>
             <p>With 1 degree of freedom, the critical value is 3.841 and the p-value is \(p \approx 0.078\). <strong>\(H_0\) is not rejected</strong>. Since there are only 26 discordant pairs, it is worth also looking at the exact p-value, 0.076: the conclusion does not change.</p>
@@ -301,10 +304,11 @@
             <p class="formula-line">\( \chi^2 = \dfrac{(|12 - 35| - 1)^2}{12 + 35} = \dfrac{484}{47} \approx 10.30 \)</p>
             <p>The p-value is \(p \approx 0.0013\): <strong>\(H_0\) is rejected</strong>. Brand awareness changed, in favour of after the campaign, because c &gt; b. The net increase is \((35 - 12)/200 = 11.5\) percentage points. Since this is a before-and-after design without a control group, the change may also be due to other causes.</p>
             <p><strong>In the calculator:</strong> b = 12, c = 35.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that the proportion of successes differs between the two conditions; the direction is set by which type of discordant pair is more frequent. To judge the size of the change, compute the difference \((b - c)/N\), which needs the total number of individuals, or the <strong>paired odds ratio</strong> \(b/c\), which the calculator shows with its confidence interval.</p>
             <p><strong>Not rejecting \(H_0\)</strong> does not prove that the conditions are equal: with few discordant pairs the test has little power.</p>
             <p>In the calculator, the result shows the decision with the p-value, the χ² statistic and a sentence stating the conclusion and the direction of the difference. On the chart, the red area is the rejection region on the chi-square distribution and the line marks the observed statistic. Under "Calculation details" you will find the exact p-value, the z statistic, the share of each type of discordant pair and the paired odds ratio.</p>
@@ -312,10 +316,11 @@
             <h3>Power: what matters is the number of discordant pairs</h3>
             <p>The power of McNemar's test does not depend on the total number of individuals, but on how many pairs are discordant and how unbalanced their split is. That is why, below the conclusion, the calculator shows the <strong>minimum detectable effect</strong> with your discordant pairs: how many times more frequent one type of change must be than the other for the test to detect it with 80% probability. With 26 discordant pairs you need a ratio of more than 3 to 1; with 100, about 1.8 to 1 is enough.</p>
             <p>Planning a study requires the expected proportions of each type of change over the total, which cannot be deduced from b and c alone. You can work it out with the <a href="tamano-muestral-proporciones-apareadas.html">sample size calculator for paired proportions</a>.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Common mistakes</h3>
+            <details class="fold"><summary><h3>Common mistakes</h3></summary>
             <ul>
                 <li><strong>Analysing paired data with the test for two independent proportions</strong>, comparing the two marginal proportions as if they were different groups.</li>
                 <li><strong>Entering a or d</strong> in the discordant fields: the test only uses b and c.</li>
@@ -323,6 +328,7 @@
                 <li><strong>Forgetting the direction</strong>: a significant result indicates a difference, and b against c shows which condition it favours.</li>
                 <li><strong>Attributing the change to the intervention</strong> in a before-and-after design without a control group.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -527,7 +533,7 @@ document.getElementById('calcBtn').addEventListener('click', calculate);
 calculate();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

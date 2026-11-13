@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261105-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
     {
@@ -243,7 +243,7 @@
             <p class="formula-line">\( \widehat{OR} = \dfrac{a/b}{c/d} = \dfrac{a\cdot d}{b\cdot c} \)</p>
             <p>In the example, \(\widehat{OR} = (35\cdot80)/(65\cdot20) \approx 2.154\). This means the observed odds of the event in the exposed group are approximately 2.15 times the observed odds in the unexposed group. An OR equal to 1 indicates no association; an OR greater than 1 indicates higher odds of the event in the exposed group; and an OR less than 1 indicates lower odds.</p>
 
-            <h3>Woolf's logarithmic method</h3>
+            <details class="fold fold-sub"><summary><h3>Woolf's logarithmic method</h3></summary>
             <p>Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area outside the interval. For 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\) in each tail.</p>
             <p>Woolf's method builds the interval on the logarithmic scale because the sampling distribution of \(\widehat{OR}\) is skewed and only takes positive values. After the log transform, \(\log(\widehat{OR})\) can be better approximated by a normal distribution when the counts are large enough.</p>
             <p>The first step is to calculate the point estimate \(\widehat{OR} = ad/(bc)\) and its logarithm. Then the standard error of \(\log(\widehat{OR})\) is estimated by summing the uncertainty contribution of the four cells:</p>
@@ -252,11 +252,13 @@
             <p class="formula-line">\( \log(\widehat{OR}) \pm z_{\alpha/2}\cdot SE\left[\log(\widehat{OR})\right] \)</p>
             <p>Finally, the exponential is applied to both limits to return to the original scale of the odds ratio. This step matters: the resulting interval is not symmetric around the OR itself, but rather it is symmetric on the \(\log(OR)\) scale. That's why the lower and upper limits are usually at different distances from the point estimate when viewed on the original scale.</p>
             <p>The method works best when all four cells have moderate counts. If some cells are small, the standard error increases and the interval widens; if a cell is 0, a correction such as Haldane-Anscombe is needed to avoid divisions by zero.</p>
+            </details>
 
-            <h3>Haldane-Anscombe correction</h3>
+            <details class="fold fold-sub"><summary><h3>Haldane-Anscombe correction</h3></summary>
             <p>If any cell is 0, the OR or the standard error cannot be computed directly because divisions by zero and undefined logarithms appear. The Haldane-Anscombe correction adds 0.5 to all four cells before calculating the interval.</p>
+            </details>
 
-            <h3>Worked example</h3>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>With a = 35, b = 65, c = 20 and d = 80, the estimated odds ratio is:</p>
             <p class="formula-line">\( \widehat{OR} = \dfrac{35\cdot80}{65\cdot20} \approx 2.154 \)</p>
             <p>For 95% confidence, \(C=0.95\), \(\alpha=0.05\), \(\alpha/2=0.025\) and the critical value is \(z_{0.025} \approx 1.960\). The standard error on the logarithmic scale is:</p>
@@ -266,20 +268,22 @@
             <p>Finally, the exponential is applied to both limits:</p>
             <p class="formula-line">\( CI_{95\%}(OR) = [e^{0.128},\;e^{1.407}] \approx [1.136,\;4.083] \)</p>
             <p>The entire interval lies above 1, so in this example the odds of the event are significantly higher in the exposed group at 95% confidence.</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Assumptions for the odds ratio CI</h3>
+            <details class="fold"><summary><h3>Assumptions for the odds ratio CI</h3></summary>
             <ul>
                 <li>The 2x2 table must represent independent counts of exposure and event, or correctly classified cases and controls.</li>
                 <li>Observations must be independent within each cell; if the data are paired, specific methods for matched pairs are needed.</li>
                 <li>Woolf's method uses a normal approximation for \(\log(OR)\), so it works best with moderate counts in all four cells.</li>
                 <li>If any cell is 0, apply the Haldane-Anscombe correction and consider interpreting the result as approximate.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How does it differ from the CI for the ratio of proportions?</h3>
+            <details class="fold"><summary><h3>How does it differ from the CI for the ratio of proportions?</h3></summary>
             <p>Although this calculator and the <a href="intervalo-confianza-ratio-proporciones.html">CI for ratio of proportions</a> both use a logarithmic scale and compare the interval with the null value 1, they estimate different measures.</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -309,10 +313,11 @@
             </div>
             <p>Using the same data from the example (35 events and 65 non-events among the exposed; 20 events and 80 non-events among the unexposed), the relative risk would be \(RR=(35/100)/(20/100)=1.75\), while the odds ratio is \(OR=(35/65)/(20/80)\approx2.154\). The OR is larger because it compares odds, not probabilities.</p>
             <p>The difference is small when the event is rare, because then odds and probability are similar. When the event is common, the OR can diverge substantially from the RR and should not be interpreted as if it were a relative risk.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p>The interval \([L, U]\) is the plausible range of the population odds ratio \(OR\) given the chosen confidence level. The null value for an OR is 1, which indicates no association between the exposure and the event. In frequentist terms: if you repeated the study many times and built the CI with the same procedure, a proportion \(C\) of those intervals would contain the true OR. The interval is built and presented symmetrically on the logarithmic scale but, once transformed back with the exponential, the limits are not equidistant from the point estimate on the original scale: the OR is always positive and its sampling distribution is skewed.</p>
             <p>Reading the result follows three straightforward cases. If \(1 \in [L, U]\), the data are compatible with no association at the chosen confidence level; equivalently, the two-sided test \(H_0\!: OR = 1\) would not be rejected at level \(\alpha = 1 - C\). If \(L > 1\) (the entire interval is above 1), the odds of the event are significantly higher in the exposed group. If \(U < 1\) (the entire interval is below 1), the odds are significantly lower. The chart shows the approximate normal distribution of \(\log(OR)\): the green region is the confidence zone and the red tails mark the critical values \(\pm z_{\alpha/2}\) on the logarithmic scale.</p>
             <ul>
@@ -320,6 +325,7 @@
                 <li><strong>Don't confuse OR with relative risk:</strong> the OR is not a relative risk. They only become close when the event is rare (\(p &lt; 0.1\)). With common events, the OR can be considerably more extreme than the RR and should not be interpreted as a ratio of probabilities.</li>
                 <li><strong>Width and counts:</strong> cells with small counts produce very wide intervals because the standard error of \(\log(OR)\) grows as the reciprocals \(1/a + 1/b + 1/c + 1/d\) are summed. If any cell is smaller than 5, interpret the result with caution.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -364,7 +370,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../ci-charts.js?v=20261110-1"></script>
+<script src="../ci-charts.js?v=20261113-1"></script>
 <script>
 
 document.getElementById('conf').addEventListener('change', function () {
@@ -474,7 +480,7 @@ window.CICharts && CICharts.customLevel({ onChange: calculate });
 calculate();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

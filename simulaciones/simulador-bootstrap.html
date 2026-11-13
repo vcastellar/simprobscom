@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Simulador bootstrap | ProbLab">
   <meta name="twitter:description" content="Simulador bootstrap: remuestreo con reemplazamiento, distribución de estadísticos e intervalos de confianza no paramétricos.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261113-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -531,7 +531,7 @@
 
     <!-- Educational section 2 -->
     <section class="card content-card">
-      <h2>Qué hace el simulador, paso a paso</h2>
+      <details class="fold"><summary><h2>Qué hace el simulador, paso a paso</h2></summary>
       <p>El simulador tiene una ventaja que no existe con datos reales: conoce la población de la que sale la muestra. Eso permite comparar lo que dice el bootstrap, que solo ve la muestra, con la verdad.</p>
       <ol>
         <li><strong>«Nueva muestra» extrae n observaciones</strong> de la distribución poblacional elegida. Es la única vez que se usa la población. El gráfico superior muestra esa muestra (barras) junto a la densidad teórica (línea roja).</li>
@@ -544,10 +544,11 @@
       <p><strong>Los dos botones separan dos fuentes de variación.</strong> «Regenerar bootstrap» repite los pasos 3 a 6 con la <em>misma</em> muestra: los resultados cambian muy poco, y esa pequeña diferencia es el error de Monte Carlo, que se reduce aumentando B. «Nueva muestra» cambia la muestra: ahora el intervalo se desplaza de verdad, y esa variación no la reduce ningún valor de B, solo un n mayor. Es la incertidumbre que el bootstrap intenta medir.</p>
       <p><strong>La columna «Teórico»</strong> contiene lo que solo puede saberse conociendo la población: el valor verdadero del parámetro y, cuando existe una fórmula sencilla, el error estándar teórico del estadístico (se detalla más abajo). Si no la hay, aparece «—»: son precisamente los casos en los que el bootstrap resulta más útil. La fila «IC normal» solo aparece para la media y es el intervalo clásico \(\bar{x} \pm z \cdot s/\sqrt{n}\).</p>
       <p><strong>Qué comprobar:</strong> si el error estándar bootstrap se parece al teórico y si el intervalo contiene el parámetro verdadero. Pulsando varias veces «Nueva muestra», el intervalo al 95 % debería contenerlo en torno a 95 de cada 100 veces (algo menos con muestras pequeñas, como se explica más abajo).</p>
+      </details>
     </section>
 
     <section class="card content-card" aria-labelledby="how-resampling-heading">
-      <h2 id="how-resampling-heading">Cómo funciona el remuestreo</h2>
+      <details class="fold"><summary><h2 id="how-resampling-heading">Cómo funciona el remuestreo</h2></summary>
       <p>El algoritmo bootstrap no paramétrico sigue estos pasos:</p>
       <ol>
         <li>Toma la muestra original \(\mathbf{x} = (x_1, \ldots, x_n)\) de tamaño \(n\).</li>
@@ -583,11 +584,12 @@
         en los percentiles extremos. Ninguna cifra es universalmente suficiente: depende del nivel
         de confianza y de cuántos decimales del intervalo se quieran interpretar.
       </p>
+      </details>
     </section>
 
     <!-- Educational section 3 -->
     <section class="card content-card">
-      <h2>Por qué funciona y de dónde salen las cifras</h2>
+      <details class="fold"><summary><h2>Por qué funciona y de dónde salen las cifras</h2></summary>
       <h3>El principio de sustitución</h3>
       <p>Lo que se quiere saber es cuánto varía el estadístico de una muestra a otra. Para verlo directamente habría que extraer muchas muestras de la población, y solo hay una. El bootstrap sustituye la población desconocida por la mejor imagen que se tiene de ella, la propia muestra, y repite ahí el experimento:</p>
       <div class="content-table-wrap">
@@ -638,10 +640,11 @@
         </table>
       </div>
       <p>Por eso, con muestras pequeñas, se prefieren variantes como el BCa o el bootstrap-t. Con n a partir de unos 30, el método percentil es una aproximación razonable.</p>
+      </details>
     </section>
 
     <section class="card content-card" aria-labelledby="when-bootstrap-heading">
-      <h2 id="when-bootstrap-heading">Cuándo usar el bootstrap</h2>
+      <details class="fold"><summary><h2 id="when-bootstrap-heading">Cuándo usar el bootstrap</h2></summary>
       <p>
         El bootstrap es especialmente útil cuando los métodos paramétricos clásicos no son directamente
         aplicables o sus supuestos no se cumplen:
@@ -675,6 +678,7 @@
         fuerte (para esto existe el <em>block bootstrap</em>). Tampoco «crea» información: si la muestra original
         es pequeña y poco representativa, el bootstrap solo puede distribuir la incertidumbre existente.
       </p>
+      </details>
     </section>
 
     <!-- Educational section 4: FAQ -->
@@ -1386,7 +1390,7 @@
 <script src="../field-hints.js?v=20260730-1"></script>
 <script src="../search.js?v=20261031-1"></script>
 <script src="../wizard.js?v=20260730-1"></script>
-<script src="../theme.js?v=20261031-1"></script>
+<script src="../theme.js?v=20261113-1"></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

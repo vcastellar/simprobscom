@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -241,12 +241,13 @@
             <p class="formula-line">\(H_1\): no todas las \(\mu_j\) son iguales</p>
             <p>El ANOVA no dice cuál o cuáles difieren, ni en qué sentido: es una pregunta global. Para saber qué parejas de grupos son distintas, se completa con comparaciones post hoc.</p>
 
-            <h3>¿Por qué no hacer varios contrastes t?</h3>
+            <details class="fold fold-sub"><summary><h3>¿Por qué no hacer varios contrastes t?</h3></summary>
             <p>Con tres grupos habría que hacer 3 comparaciones por parejas; con cinco, 10. Cada una tiene un 5 % de riesgo de falso positivo, y los riesgos se acumulan: con 10 comparaciones independientes, la probabilidad de encontrar al menos una diferencia «significativa» por puro azar ronda el 40 %. El ANOVA responde a la pregunta global con un único contraste que mantiene ese riesgo en \(\alpha\).</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>La idea: comparar dos fuentes de variabilidad</h3>
+            <details class="fold"><summary><h3>La idea: comparar dos fuentes de variabilidad</h3></summary>
             <p>Aunque su objetivo es comparar medias, el ANOVA lo hace comparando varianzas, de ahí su nombre. La variabilidad total de los datos se descompone en dos partes:</p>
             <ul>
                 <li><strong>Variabilidad entre grupos</strong>: cuánto se separan las medias de los grupos de la media global. Refleja el efecto del factor, más el ruido.</li>
@@ -275,20 +276,22 @@
                 </table>
             </div>
             <p>\(CM_{\text{dentro}}\) es la varianza combinada de todos los grupos: estima la varianza común \(\sigma^2\) tanto si \(H_0\) es cierta como si no.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Supuestos del ANOVA</h3>
+            <details class="fold"><summary><h3>Supuestos del ANOVA</h3></summary>
             <ul>
                 <li><strong>Independencia</strong>: grupos independientes entre sí y observaciones independientes dentro de cada grupo. Si los mismos sujetos pasan por todas las condiciones, hace falta un ANOVA de medidas repetidas.</li>
                 <li><strong>Normalidad aproximada</strong> de los datos de cada grupo (o de los residuos). Con grupos de tamaño moderado y parecido, el ANOVA es bastante robusto a desviaciones leves.</li>
                 <li><strong>Homogeneidad de varianzas</strong>: las varianzas de los grupos deberían ser parecidas. Es el supuesto más delicado cuando los grupos tienen tamaños distintos.</li>
             </ul>
             <p>Una regla práctica: si la mayor desviación típica no llega al doble de la menor y los grupos tienen tamaños parecidos, el ANOVA clásico funciona bien. Si no, usa el <strong>ANOVA de Welch</strong>, que no supone varianzas iguales; si los datos son muy asimétricos o hay valores atípicos con grupos pequeños, la alternativa no paramétrica es la prueba de Kruskal-Wallis. La calculadora muestra la desviación típica de cada grupo en «Detalles del cálculo» para que puedas comprobarlo, y puedes revisar la normalidad con el <a href="shapiro-wilk-normalidad.html">test de Shapiro-Wilk</a>.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto</h3>
+            <details class="fold"><summary><h3>Ejemplo resuelto</h3></summary>
             <p>Un agrónomo evalúa el efecto de tres fertilizantes sobre el rendimiento (kg) de parcelas agrícolas. Asigna al azar 5 parcelas a cada fertilizante y obtiene:</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -309,10 +312,11 @@
             <p>El valor crítico es \(F_{0{,}05;\,2,\,12} \approx 3{,}89\) y el p-valor, \(p \approx 0{,}000015\). Como \(F = 32\) supera con creces el valor crítico, <strong>se rechaza \(H_0\)</strong>: hay evidencia de que no todos los fertilizantes dan el mismo rendimiento medio.</p>
             <p>El tamaño del efecto es enorme: \(\eta^2 = 160/190 \approx 0{,}84\), es decir, el fertilizante explica el 84 % de la variabilidad del rendimiento en estas parcelas. Para saber qué fertilizantes difieren entre sí, el siguiente paso es una comparación post hoc. Fíjate también en que, con solo 5 parcelas por grupo, el ANOVA únicamente detecta con un 80 % de probabilidad efectos muy grandes (f ≈ 0,91): aquí ha funcionado porque el efecto real es grandísimo, pero para efectos moderados harían falta muchas más parcelas.</p>
             <p><strong>En la calculadora:</strong> los datos de ejemplo que aparecen al cargar la página son estos.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que al menos una media es distinta de las demás, pero no cuál ni en qué sentido. Mira las medias de cada grupo y aplica una comparación post hoc. Recuerda también que significativo no es lo mismo que importante: con grupos grandes, diferencias pequeñas entre medias dan un F significativo.</p>
             <p><strong>No rechazar \(H_0\)</strong> (p-valor ≥ α) no demuestra que las medias sean iguales: los datos son compatibles con la igualdad, pero puede que el estudio no tuviera potencia suficiente. Pocos datos por grupo o mucha variabilidad dentro de los grupos impiden detectar diferencias reales.</p>
             <p>El <strong>estadístico F</strong> compara la variabilidad entre grupos con la variabilidad dentro de ellos. Un F cercano a 1 indica que las medias se separan lo que cabría esperar por azar; cuanto mayor, más evidencia de que el factor influye. En el gráfico, la zona verde es la región de no rechazo, la roja es la cola crítica y la línea ámbar marca el F observado.</p>
@@ -323,10 +327,11 @@
 
             <h3>Potencia y efecto mínimo detectable</h3>
             <p>Debajo de la conclusión, la calculadora indica el <strong>tamaño del efecto mínimo detectable</strong>: el menor f de Cohen que, con tus tamaños de grupo, el ANOVA detectaría con un 80 % de probabilidad. Si es mayor que el efecto que te parecería relevante, un resultado no significativo dice poco. Como referencia, con 3 grupos de 20 datos solo se detectan con esa probabilidad efectos grandes (f ≈ 0,41), y para efectos medianos (f = 0,25) hacen falta unos 53 datos por grupo. El enlace del resultado abre la <a href="tamano-muestral-anova.html">calculadora de tamaño muestral para ANOVA</a> con tu número de grupos y tu α, para que calcules el tamaño necesario para el efecto que te interese.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Después de un ANOVA significativo: comparaciones post hoc</h3>
+            <details class="fold"><summary><h3>Después de un ANOVA significativo: comparaciones post hoc</h3></summary>
             <p>Si el ANOVA rechaza \(H_0\), las comparaciones post hoc indican qué parejas de grupos difieren, controlando el riesgo acumulado de falsos positivos:</p>
             <ul>
                 <li><strong>Tukey (HSD)</strong>: compara todas las parejas entre sí. Es la opción habitual cuando no hay hipótesis previas.</li>
@@ -335,10 +340,11 @@
                 <li><strong>Games-Howell</strong>: como Tukey, pero sin suponer varianzas iguales.</li>
             </ul>
             <p>En el ejemplo de los fertilizantes, las tres diferencias (C − A = 4, A − B = 4 y C − B = 8 kg) son significativas con la prueba de Tukey.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Errores frecuentes</h3>
+            <details class="fold"><summary><h3>Errores frecuentes</h3></summary>
             <ul>
                 <li><strong>Hacer todos los contrastes t por parejas</strong> en lugar de un ANOVA seguido de comparaciones post hoc.</li>
                 <li><strong>Interpretar un ANOVA significativo como «todas las medias son distintas»</strong>: basta con que una difiera.</li>
@@ -347,6 +353,7 @@
                 <li><strong>Ignorar varianzas muy distintas</strong> cuando los grupos tienen tamaños distintos: en ese caso, usa el ANOVA de Welch.</li>
                 <li><strong>Informar solo del p-valor</strong>, sin las medias de los grupos ni el tamaño del efecto.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -581,7 +588,7 @@ calculateAnova();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

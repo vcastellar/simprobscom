@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261105-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -226,7 +226,7 @@
             <h3>Explanation</h3>
             <p>This calculator estimates the sample size for testing a population mean with null hypothesis \(H_0: \mu=\mu_0\), significance level \(\alpha\), power \(1-\beta\) and minimum detectable difference \(\Delta=|\mu-\mu_0|\).</p>
             <p>You can configure a two-tailed alternative (\(H_a: \mu \neq \mu_0\)) or a one-tailed one (\(H_a: \mu \geq \mu_0\) or \(H_a: \mu \leq \mu_0\)). For a one-tailed test, the critical quantile is smaller and the sample size is usually reduced.</p>
-            <h3>Sample size formula</h3>
+            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
             <p class="formula-line">\( n = \left(\frac{(Z_{\alpha^*}+Z_{\beta})\sigma}{\Delta}\right)^2 \)</p>
             <ul>
                 <li><strong>\(\alpha^*\)</strong>: \(\alpha/2\) for a two-tailed alternative, \(\alpha\) for one-tailed.</li>
@@ -234,7 +234,8 @@
                 <li><strong>\(\Delta\)</strong>: minimum detectable difference \(|\mu-\mu_0|\).</li>
                 <li><strong>\(1-\beta\)</strong>: target power of the test.</li>
             </ul>
-            <h3>Quick setup</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>σ:</strong> use historical data, a pilot study, or the literature.</li>
                 <li><strong>Δ:</strong> define the minimum relevant difference in the original units.</li>
@@ -242,25 +243,30 @@
                 <li><strong>Power:</strong> 0.80 is a common minimum; 0.90 when you want to reduce false negatives.</li>
                 <li><strong>H0 and alternative:</strong> specify \(\mu_0\) and the direction of the test according to the scientific objective.</li>
             </ul>
-            <h3>Simple example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Simple example</h3></summary>
             <p>With \(\sigma=10\), \(\Delta=2\), \(\alpha=0.05\), power 0.80 and a two-tailed alternative, approximately \(n \approx 197\) is required.</p>
-            <h3>Worked example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>A quality control technician at a packaging plant wants to verify whether the mean fill volume of the containers is still at the nominal 50 ml. Process specifications indicate a standard deviation of \(\sigma = 6\) ml. The technician wants 90% power to detect any deviation of at least \(\Delta = 2\) ml from the nominal value, using a two-tailed test with \(\alpha = 0.05\) (\(z_{\alpha/2} = 1.960\), \(z_\beta = 1.282\)).</p>
             <p>The hypothesis to test is \(H_0: \mu = 50\) ml versus \(H_a: \mu \neq 50\) ml. Applying the formula:</p>
             <p class="formula-line">\( n = \left(\frac{(z_{\alpha/2}+z_\beta)\,\sigma}{\Delta}\right)^2 = \left(\frac{(1.960+1.282)\times 6}{2}\right)^2 = \left(\frac{3.242 \times 6}{2}\right)^2 = \left(\frac{19.452}{2}\right)^2 = (9.726)^2 = 94.6 \rightarrow n = 95 \)</p>
             <p>You need to measure <strong>95 containers</strong> from the production line for the test to have a 90% probability of detecting deviations of 2 ml or more, with a 5% type I error rate. If the total production batch has fewer than 1,000 units, it would also be worth applying a finite population correction.</p>
             <p>Practical interpretation: with this sample, if the process is centered at 48 ml or 52 ml (a 2 ml deviation), the test will detect the problem in 90% of inspections. Larger deviations will be detected with an even higher probability.</p>
             <p><strong>Variant with \(\alpha = 0.01\):</strong> if the packaging process has regulatory consequences and tighter control over false positives is required, you can use \(\alpha = 0.01\) (\(z_{\alpha/2} = 2.576\)): \( n = ((2.576 + 1.282) \times 6 / 2)^2 = (3.858 \times 3)^2 = (11.574)^2 = 133.97 \rightarrow n = 134 \). The stricter statistical rigor requires 41% more measurements to maintain the same 90% power.</p>
-            <h3>Model assumptions</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Model assumptions</h3></summary>
             <ul>
                 <li>Random sample and independence between observations.</li>
                 <li>Approximately normal distribution or large n (CLT).</li>
                 <li>Reasonably estimated expected standard deviation.</li>
             </ul>
-            <h3>How to interpret the result</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
                 <p>The value \(n\) is the <strong>minimum number of valid observations</strong> needed for the test \(H_0\!: \mu = \mu_0\) versus \(H_1\!: \mu = \mu_1\) to have the specified power \((1-\beta)\) at significance level \(\alpha\). Always round up. If you anticipate data loss or subjects who won't complete the study, the number to recruit is \(\lceil n / (1 - \text{dropout rate}) \rceil\); with an expected 15% dropout rate, recruit \(\lceil n / 0.85 \rceil\) individuals.</p>
                 <p>The parameters that most influence \(n\) are the effect size \(|\mu_1 - \mu_0| / \sigma\) and the power. Halving the minimum detectable difference \(\delta = |\mu_1 - \mu_0|\) quadruples \(n\); increasing power from 80% to 90% increases \(n\) by roughly 30%. Error in \(\sigma\) propagates quadratically: if the true standard deviation is 20% larger than assumed, you'll need 44% more subjects. For that reason, always run a <em>sensitivity analysis</em> calculating \(n\) for \(\sigma - 25\%\), \(\sigma\) and \(\sigma + 25\%\), and plan using the largest \(n\).</p>
                 <p>When the resulting \(n\) is impractical, the available levers are: (1) review whether \(\delta\) can be larger without losing practical relevance, (2) accept 80% power instead of 90%, or (3) use a one-tailed design if the context justifies it (which requires a somewhat smaller \(n\)). If \(n\) is very small (&lt; 20), check that the data distribution is approximately normal or apply a nonparametric test (one-sample Wilcoxon test) and adjust \(n\) with the corresponding relative efficiency factor. Once the data are collected, run the test with the <a href="contraste-hipotesis-una-media.html">hypothesis test calculator for one mean</a>.</p>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -347,7 +353,7 @@ document.getElementById("oneMeanCalculateBtn").addEventListener("click", calcula
 calculateOneMeanSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

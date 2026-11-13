@@ -138,7 +138,7 @@
   ]
 }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -245,7 +245,7 @@
             <p>Es el contraste para comparar dos proporciones cuando los datos están <strong>emparejados</strong>: cada individuo da una respuesta de sí o no en dos condiciones o dos momentos. Por ejemplo, los mismos pacientes con dos fármacos en un ensayo cruzado, la misma persona antes y después de una campaña, dos pruebas diagnósticas aplicadas a las mismas muestras o dos evaluadores que clasifican los mismos casos. La pregunta es si la proporción de «síes» cambia de una condición a otra.</p>
             <p>No sirve el <a href="contraste-hipotesis-dos-proporciones.html">contraste de dos proporciones independientes</a>, porque las dos respuestas de un mismo individuo están relacionadas: quien mejora con un fármaco tiende a mejorar con el otro. Ignorar ese emparejamiento da p-valores equivocados.</p>
 
-            <h3>La tabla 2×2 de datos apareados</h3>
+            <details class="fold fold-sub"><summary><h3>La tabla 2×2 de datos apareados</h3></summary>
             <p>Los datos se resumen contando cuántos individuos hay en cada combinación de respuestas:</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -261,10 +261,11 @@
             <p>Con \(N = a + b + c + d\) individuos, la proporción de éxitos es \(p_1 = (a+b)/N\) en la condición 1 y \(p_2 = (a+c)/N\) en la condición 2. Su diferencia es</p>
             <p class="formula-line">\( p_1 - p_2 = \dfrac{(a + b) - (a + c)}{N} = \dfrac{b - c}{N} \)</p>
             <p>Las casillas <strong>a</strong> y <strong>d</strong> desaparecen: los individuos que responden igual en las dos condiciones no dicen nada sobre cuál es mejor. Toda la información está en los <strong>pares discordantes</strong>, b y c. Por eso la calculadora solo los pide a ellos.</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Hipótesis y estadístico</h3>
+            <details class="fold"><summary><h3>Hipótesis y estadístico</h3></summary>
             <p class="formula-line">\(H_0: p_1 = p_2\) (equivalente a que, entre los discordantes, los dos tipos de cambio sean igual de frecuentes)</p>
             <p class="formula-line">\( \chi^2 = \dfrac{(b - c)^2}{b + c} \qquad \text{o, con corrección de continuidad,} \qquad \chi^2 = \dfrac{(|b - c| - 1)^2}{b + c} \)</p>
             <p>Si \(H_0\) es cierta, cada par discordante tiene la misma probabilidad de ser del tipo b que del tipo c, como lanzar una moneda. El estadístico mide cuánto se aleja el reparto observado del 50 %–50 % y, bajo \(H_0\), sigue aproximadamente una <a href="chisquare.html">chi-cuadrado</a> con 1 grado de libertad. Es el cuadrado del estadístico \(z = (b - c)/\sqrt{b + c}\).</p>
@@ -279,10 +280,11 @@
                 <li>Si el p-valor es mayor o igual que \(\alpha\), no hay evidencia suficiente para rechazar \(H_0\).</li>
                 <li>El sentido de la diferencia lo da el signo de \(b - c\): si b &gt; c, la condición 1 tiene más éxitos.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Supuestos del test</h3>
+            <details class="fold"><summary><h3>Supuestos del test</h3></summary>
             <ul>
                 <li><strong>Datos emparejados</strong>: cada individuo (o pareja emparejada) aporta una respuesta en cada condición.</li>
                 <li><strong>Respuesta dicotómica</strong> en las dos condiciones.</li>
@@ -290,10 +292,11 @@
                 <li><strong>Suficientes pares discordantes</strong> para la aproximación chi-cuadrado. Con menos de 25, usa el p-valor exacto.</li>
             </ul>
             <p>El test de McNemar es el equivalente, para respuestas de sí o no, del <a href="contraste-hipotesis-medias-apareadas.html">contraste de medias apareadas</a>. Si hay más de dos condiciones con respuesta dicotómica, la generalización es la prueba Q de Cochran.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto 1: ensayo cruzado con dos fármacos</h3>
+            <details class="fold"><summary><h3>Ejemplo resuelto 1: ensayo cruzado con dos fármacos</h3></summary>
             <p>En un ensayo cruzado, 100 pacientes reciben dos fármacos en periodos distintos. Mejoran con los dos 45 (a), solo con el fármaco 1 18 (b), solo con el fármaco 2 8 (c) y con ninguno 29 (d). La tasa de mejora es del 63 % con el fármaco 1 y del 53 % con el 2. Se contrasta \(H_0\colon p_1 = p_2\) con \(\alpha = 0{,}05\) y corrección de continuidad.</p>
             <p class="formula-line">\( \chi^2 = \dfrac{(|18 - 8| - 1)^2}{18 + 8} = \dfrac{81}{26} \approx 3{,}115 \)</p>
             <p>Con 1 grado de libertad, el valor crítico es 3,841 y el p-valor, \(p \approx 0{,}078\). <strong>No se rechaza \(H_0\)</strong>. Como solo hay 26 pares discordantes, conviene mirar también el p-valor exacto, que es 0,076: la conclusión no cambia.</p>
@@ -305,10 +308,11 @@
             <p class="formula-line">\( \chi^2 = \dfrac{(|12 - 35| - 1)^2}{12 + 35} = \dfrac{484}{47} \approx 10{,}30 \)</p>
             <p>El p-valor es \(p \approx 0{,}0013\): <strong>se rechaza \(H_0\)</strong>. El conocimiento de la marca cambió, y a favor de después de la campaña, porque c &gt; b. El aumento neto es \((35 - 12)/200 = 11{,}5\) puntos porcentuales. Como es un diseño antes y después sin grupo de control, el cambio puede deberse también a otras causas.</p>
             <p><strong>En la calculadora:</strong> b = 12, c = 35.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que la proporción de éxitos difiere entre las dos condiciones; el sentido lo marca qué tipo de par discordante es más frecuente. Para valorar el tamaño del cambio, calcula la diferencia \((b - c)/N\), que necesita el total de individuos, o el <strong>odds ratio apareado</strong> \(b/c\), que la calculadora muestra con su intervalo de confianza.</p>
             <p><strong>No rechazar \(H_0\)</strong> no demuestra que las condiciones sean iguales: con pocos pares discordantes el test tiene poca potencia.</p>
             <p>En la calculadora, el resultado muestra la decisión con el p-valor, el estadístico χ² y una frase con la conclusión y el sentido de la diferencia. En el gráfico, la zona roja es la región de rechazo sobre la chi-cuadrado y la línea marca el estadístico observado. En «Detalles del cálculo» tienes el p-valor exacto, el estadístico z, la proporción de discordantes de cada tipo y el odds ratio apareado.</p>
@@ -316,10 +320,11 @@
             <h3>Potencia: lo que importa es el número de discordantes</h3>
             <p>La potencia del test de McNemar no depende del total de individuos, sino de cuántos pares son discordantes y de lo desequilibrado que esté su reparto. Por eso, debajo de la conclusión, la calculadora indica el <strong>efecto mínimo detectable</strong> con tus pares discordantes: cuántas veces más frecuente tiene que ser un tipo de cambio que el otro para que el test lo detecte con un 80 % de probabilidad. Con 26 discordantes hace falta una proporción de más de 3 a 1; con 100, basta con unos 1,8 a 1.</p>
             <p>Para planificar un estudio hacen falta las proporciones esperadas de cada tipo de cambio sobre el total, que no se pueden deducir solo de b y c. Puedes calcularlo con la <a href="tamano-muestral-proporciones-apareadas.html">calculadora de tamaño muestral para proporciones apareadas</a>.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Errores frecuentes</h3>
+            <details class="fold"><summary><h3>Errores frecuentes</h3></summary>
             <ul>
                 <li><strong>Analizar datos emparejados con el contraste de dos proporciones independientes</strong>, comparando las dos proporciones marginales como si fueran grupos distintos.</li>
                 <li><strong>Introducir a o d</strong> en los campos de discordantes: el test solo usa b y c.</li>
@@ -327,6 +332,7 @@
                 <li><strong>Olvidar el sentido</strong>: un resultado significativo indica que hay diferencia, y b frente a c indica a favor de qué condición.</li>
                 <li><strong>Atribuir el cambio a la intervención</strong> en un diseño antes y después sin grupo de control.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -533,7 +539,7 @@ calculate();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

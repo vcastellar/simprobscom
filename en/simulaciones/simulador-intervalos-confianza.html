@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Confidence Interval Simulator | ProbLab">
   <meta name="twitter:description" content="Confidence interval simulator: observe empirical coverage, nominal coverage, and sampling variability.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../../style_new.css?v=20261102-1">
+  <link rel="stylesheet" href="../../style_new.css?v=20261113-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -444,8 +444,9 @@
                 <select id="methodProp">
                   <option value="wald">Wald (normal)</option>
                   <option value="wilson" selected>Wilson (recommended)</option>
+                  <option value="clopper">Clopper-Pearson (exact)</option>
                 </select>
-                  <p class="field-hint" hidden><strong>Wilson</strong> inverts Pearson's score test and usually gives coverage closer to the nominal level; <strong>Wald</strong> uses the direct normal approximation and degrades with small n or p near 0 or 1.</p>
+                  <p class="field-hint" hidden><strong>Wilson</strong> inverts Pearson's score test and usually gives coverage closer to the nominal level; <strong>Wald</strong> uses the direct normal approximation and degrades with small n or p near 0 or 1; <strong>Clopper-Pearson</strong> uses the exact binomial and guarantees coverage of at least the nominal level, with somewhat wider intervals.</p>
               </div>
             </div>
           </div>
@@ -514,7 +515,7 @@
          EDUCATIONAL SECTION 2: Nominal vs actual coverage
     ============================================================ -->
     <section class="card content-card">
-      <h2>How the simulator works, step by step</h2>
+      <details class="fold"><summary><h2>How the simulator works, step by step</h2></summary>
       <p>The simulator does what can never be done in practice: repeat the same study many times while knowing the true value. Each time you click <strong>Simulate</strong>:</p>
       <ol>
         <li><strong>It fixes the truth.</strong> It takes the value you entered as the real one: the mean μ (and the standard deviation σ) or the proportion p.</li>
@@ -525,10 +526,11 @@
       </ol>
       <p>On the chart, each row is a different study. The central dot of each segment is that sample's estimate (its mean or proportion), and the dashed vertical line is the true value. Note that the true value does not move: what changes from sample to sample is the interval. At the 95% level, in the long run 5 out of every 100 intervals end up red, and nothing in the data of those samples warns that it was their turn.</p>
       <p>The cards at the top summarise the simulation: the chosen nominal level, the empirical coverage, how many intervals covered and the mean width. With 100 intervals, it is normal for the empirical coverage to wobble a few points around the nominal level (91% or 98% do not indicate a problem); with more intervals, it gets closer.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Mean mode: known σ versus unknown σ</h2>
+      <details class="fold"><summary><h2>Mean mode: known σ versus unknown σ</h2></summary>
       <p>With both methods the samples are generated in the same way, from the true μ and σ you entered. The difference lies in <strong>which information each interval is allowed to use</strong>:</p>
       <div class="content-table-wrap">
         <table class="content-table">
@@ -549,10 +551,11 @@
       <p><strong>What would happen without t.</strong> If the sample standard deviation s were used with the normal critical value 1.96, a common mistake, the intervals would be too narrow: with n = 5 they would cover only 88% of the time instead of 95%; with n = 10, 92%; with n = 30, 94%. That is the whole point of Student's t.</p>
       <p><strong>Try it:</strong> choose n = 5 and simulate with each method. With known σ, all intervals have the same length; with unknown σ, their lengths differ a lot and the mean width is larger, but coverage still hovers around 95%. Go up to n = 100 and the two methods become almost indistinguishable.</p>
       <p>With both methods, the simulator generates normal data. With real non-normal data, coverage is only approximate and improves as n grows, by the <a href="../simulaciones/teorema-central-limite.html">central limit theorem</a>.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Proportion mode: how the Wald and Wilson intervals are built</h2>
+      <details class="fold"><summary><h2>Proportion mode: how the Wald, Wilson and Clopper-Pearson intervals are built</h2></summary>
       <p>Both intervals come from the same reasoning and only part ways at the last step. It is worth going through it slowly, because that is where the reason one works much better than the other lies.</p>
 
       <h3>Starting point: the sample proportion is nearly normal</h3>
@@ -603,6 +606,17 @@
       <p><strong>When n is large, it matches Wald.</strong> The terms \(z^2/n\), \(z^2/2n\) and \(z^2/4n^2\) become negligible and the formula reduces to \(\hat{p} \pm z\sqrt{\hat{p}(1-\hat{p})/n}\).</p>
       <p><strong>It is the test turned around.</strong> The starting inequality is the non-rejection rule of the <a href="../contraste-hipotesis-una-proporcion.html">one-proportion test</a>, which uses the standard error computed with \(p_0\). That is why the Wilson interval contains exactly the values \(p_0\) that the test would not reject with your data; it is said to "invert" the test. The Wald interval, by contrast, does not correspond exactly to that test.</p>
 
+      <h3>Clopper-Pearson: using the exact binomial</h3>
+      <p>The third method approximates nothing. The number of successes \(X\) follows a binomial \(B(n, p)\) exactly, and Clopper and Pearson (1934) define the ends of the interval with its tails: \(p_L\) is the value of \(p\) for which getting \(x\) successes or more has probability \(\alpha/2\), and \(p_U\), the value for which getting \(x\) or fewer does.</p>
+      <div class="math-block">\[ \begin{aligned} P(X \ge x \mid p_L) &= \tfrac{\alpha}{2}, \\ P(X \le x \mid p_U) &= \tfrac{\alpha}{2}. \end{aligned} \]</div>
+      <p><strong>How it is solved.</strong> The binomial tails coincide with the distribution function of a beta. If you generate \(n\) uniforms between 0 and 1, the number of them below \(p\) is a \(B(n, p)\), and there are at least \(x\) below \(p\) exactly when the \(x\)-th smallest, which follows a \(\mathrm{Beta}(x,\, n - x + 1)\), is below \(p\). Therefore:</p>
+      <div class="math-block">\[ P(X \ge x \mid p) = P\big(\mathrm{Beta}(x,\, n - x + 1) \le p\big), \]</div>
+      <p>and the ends are beta quantiles:</p>
+      <div class="math-block">\[ \begin{aligned} p_L &= \text{quantile } \tfrac{\alpha}{2} \text{ of } \mathrm{Beta}(x,\; n - x + 1), \\ p_U &= \text{quantile } 1 - \tfrac{\alpha}{2} \text{ of } \mathrm{Beta}(x + 1,\; n - x), \end{aligned} \]</div>
+      <p>with \(p_L = 0\) if \(x = 0\) and \(p_U = 1\) if \(x = n\). This is what the simulator computes for each sample.</p>
+      <p><strong>Why it never covers less than promised.</strong> For a fixed true \(p\), the interval leaves \(p\) out on the upper side only when an \(x\) comes out so small that \(P(X \le x \mid p) < \alpha/2\). Those values of \(x\) form a run \(0, \ldots, x^*\) whose total probability is \(P(X \le x^* \mid p) < \alpha/2\). The same happens on the lower side, so the probability of missing is at most \(\alpha\) and the coverage at least \(1 - \alpha\), for any \(p\) and any \(n\). Since \(X\) only takes whole values, the tails almost never equal exactly \(\alpha/2\) and the actual coverage ends up higher: the method is <strong>conservative</strong>.</p>
+      <p>The full step-by-step derivation is in the <a href="../intervalo-confianza-proporcion.html#clopper-pearson">confidence interval calculator for a proportion</a>.</p>
+
       <h3>A worked example</h3>
       <p>With 2 successes in 20 trials (\(\hat{p} = 0.10\)) at the 95% level:</p>
       <div class="content-table-wrap">
@@ -613,6 +627,7 @@
           <tbody>
             <tr><td>Wald</td><td>0.100</td><td>from −0.031 to 0.231, truncated to [0, 0.231]</td></tr>
             <tr><td>Wilson</td><td>0.164</td><td>[0.028, 0.301]</td></tr>
+            <tr><td>Clopper-Pearson</td><td>—</td><td>[0.012, 0.317]</td></tr>
           </tbody>
         </table>
       </div>
@@ -623,42 +638,45 @@
         <li><strong>Wilson, half-width:</strong> \(1.96\sqrt{0.0045 + 0.0024}\) \(/\,1.1921\) \(= 0.137\). Interval: \(0.164 \pm 0.137\).</li>
         <li><strong>Wald:</strong> \(SE = \sqrt{0.10 \cdot 0.90/20}\) \(= 0.067\), and the interval is \(0.10 \pm 1.96 \cdot 0.067\) \(= 0.10 \pm 0.131\).</li>
       </ul>
-      <p>With 0 successes in 20, Wald gives the interval [0, 0], whereas Wilson gives [0, 0.161].</p>
+      <p>With 0 successes in 20, Wald gives the interval [0, 0], whereas Wilson gives [0, 0.161] and Clopper-Pearson [0, 0.168]. Clopper-Pearson is not built as a centre plus a margin, which is why it has no "centre" in the table.</p>
       <h3>What you will see in the simulator</h3>
-      <p>The difference in coverage can be computed exactly, and it is what the simulator reproduces:</p>
+      <p>The actual coverage of each method (the probability that a 95% interval contains the true value) can be computed exactly, and it is what the simulator reproduces:</p>
       <div class="content-table-wrap">
         <table class="content-table">
           <thead>
-            <tr><th>Case</th><th>Actual coverage of Wald</th><th>Actual coverage of Wilson</th></tr>
+            <tr><th>Case</th><th>Wald</th><th>Wilson</th><th>Clopper-Pearson</th></tr>
           </thead>
           <tbody>
-            <tr><td>p = 0.05, n = 20</td><td>63.9%</td><td>92.5%</td></tr>
-            <tr><td>p = 0.05, n = 100</td><td>87.7%</td><td>96.6%</td></tr>
-            <tr><td>p = 0.10, n = 50</td><td>87.9%</td><td>97.0%</td></tr>
-            <tr><td>p = 0.50, n = 30</td><td>95.7%</td><td>95.7%</td></tr>
+            <tr><td>p&nbsp;=&nbsp;0.05, n&nbsp;=&nbsp;20</td><td>63.9%</td><td>92.5%</td><td>98.4%</td></tr>
+            <tr><td>p&nbsp;=&nbsp;0.05, n&nbsp;=&nbsp;100</td><td>87.7%</td><td>96.6%</td><td>98.3%</td></tr>
+            <tr><td>p&nbsp;=&nbsp;0.10, n&nbsp;=&nbsp;50</td><td>87.9%</td><td>97.0%</td><td>97.0%</td></tr>
+            <tr><td>p&nbsp;=&nbsp;0.50, n&nbsp;=&nbsp;30</td><td>95.7%</td><td>95.7%</td><td>95.7%</td></tr>
           </tbody>
         </table>
       </div>
-      <p>With p = 0.05 and n = 20, more than a third of the "95%" Wald intervals do not contain the true value, mainly because many samples come out with 0 successes. With p = 0.5 the two methods agree. Neither hits 95% exactly in every case, because the number of successes can only take whole values, but Wilson always stays close. The <a href="../intervalo-confianza-proporcion.html">confidence interval calculator for a proportion</a> computes both from your data, so you can compare them.</p>
+      <p>With p = 0.05 and n = 20, more than a third of the "95%" Wald intervals do not contain the true value, mainly because many samples come out with 0 successes. With p = 0.5 the three agree. None hits 95% exactly in every case, because the number of successes can only take whole values: Wilson stays close, sometimes above and sometimes below, and Clopper-Pearson never drops below 95%, at the cost of almost always overshooting. The <a href="../intervalo-confianza-proporcion.html">confidence interval calculator for a proportion</a> computes all three from your data, so you can compare them.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Nominal coverage vs actual coverage</h2>
+      <details class="fold"><summary><h2>Nominal coverage vs actual coverage</h2></summary>
       <p>The <strong>nominal level</strong> is the confidence value we specify when constructing the CI (90%, 95%, 99%). The <strong>actual (or empirical) coverage</strong> is the fraction of intervals that actually cover the true parameter across a long series of repetitions.</p>
       <p>For the CI of the mean with a normal population, as in this simulator (both with known σ and with Student's t), the actual coverage matches the nominal level exactly for any sample size, because the sample mean is exactly normal. If the population is not normal, the match is only approximate and improves with n by the CLT.</p>
       <p>For proportions, the situation is more complicated. The parameter p is continuous, but the binomial variable X ~ Bin(n, p) is discrete, and this discretization causes the actual coverage to fluctuate around the nominal level:</p>
       <ul>
         <li><strong>Wald interval:</strong> uses the normal approximation directly, \(\hat{p} \pm z_{\alpha/2}\sqrt{\hat{p}(1-\hat{p})/n}\). It works well for large n and p away from 0 and 1, but its coverage can be noticeably below the nominal level when n is small or p is near the extremes.</li>
         <li><strong>Wilson interval:</strong> obtained by inverting Pearson's score test. It tends to have actual coverage closer to the nominal level, especially at the extremes, though it can be slightly conservative (coverage above nominal) in some cases.</li>
+        <li><strong>Clopper-Pearson interval:</strong> obtained by inverting the exact binomial test. Its actual coverage never falls below the nominal level, but almost always exceeds it: it is conservative.</li>
       </ul>
-      <p>You can observe this phenomenon directly with the simulator: select Proportion mode, set p = 0.05 and n = 20, and compare the empirical coverage of Wald vs Wilson.</p>
+      <p>You can observe this phenomenon directly with the simulator: select Proportion mode, set p = 0.05 and n = 20, and compare the empirical coverage of Wald, Wilson and Clopper-Pearson.</p>
+      </details>
     </section>
 
     <!-- ============================================================
          EDUCATIONAL SECTION 3: Effect of sample size
     ============================================================ -->
     <section class="card content-card">
-      <h2>How does sample size affect it?</h2>
+      <details class="fold"><summary><h2>How does sample size affect it?</h2></summary>
       <p>The sample size n has a direct and clear effect on the width of the confidence interval. For the CI of the mean with known σ:</p>
       <div class="math-block">\[ \text{Width} = 2 \times z_{\alpha/2} \times \dfrac{\sigma}{\sqrt{n}} \]</div>
       <p>The width is proportional to \(1/\sqrt{n}\): if we <strong>quadruple n</strong>, the width is cut in half. To reduce the width to a third, we need to multiply n by 9.</p>
@@ -669,6 +687,7 @@
         <li>The intervals become progressively narrower as n increases.</li>
         <li>With small n, there's more variability in the position of the CI's endpoints.</li>
       </ul>
+      </details>
     </section>
 
     <!-- ============================================================
@@ -709,6 +728,7 @@
         <li>Neyman, J. (1937). <a href="https://doi.org/10.1098/rsta.1937.0005" target="_blank" rel="noopener noreferrer">Outline of a theory of statistical estimation based on the classical theory of probability</a>. <em>Philosophical Transactions of the Royal Society A</em>, 236, 333–380. The paper that defines confidence intervals and their interpretation as long-run coverage.</li>
         <li>Student (W. S. Gosset) (1908). <a href="https://doi.org/10.1093/biomet/6.1.1" target="_blank" rel="noopener noreferrer">The probable error of a mean</a>. <em>Biometrika</em>, 6(1), 1–25. The origin of the t distribution, for the unknown-σ case.</li>
         <li>Wilson, E. B. (1927). <a href="https://doi.org/10.1080/01621459.1927.10502953" target="_blank" rel="noopener noreferrer">Probable inference, the law of succession, and statistical inference</a>. <em>Journal of the American Statistical Association</em>, 22(158), 209–212. The original paper on the Wilson interval.</li>
+        <li>Clopper, C. J. and Pearson, E. S. (1934). <a href="https://doi.org/10.1093/biomet/26.4.404" target="_blank" rel="noopener noreferrer">The use of confidence or fiducial limits illustrated in the case of the binomial</a>. <em>Biometrika</em>, 26(4), 404–413. The original paper on the exact interval.</li>
         <li>Agresti, A. and Coull, B. A. (1998). <a href="https://doi.org/10.1080/00031305.1998.10480550" target="_blank" rel="noopener noreferrer">Approximate is better than "exact" for interval estimation of binomial proportions</a>. <em>The American Statistician</em>, 52(2), 119–126.</li>
         <li>Brown, L. D., Cai, T. T. and DasGupta, A. (2001). <a href="https://doi.org/10.1214/ss/1009213286" target="_blank" rel="noopener noreferrer">Interval estimation for a binomial proportion</a>. <em>Statistical Science</em>, 16(2), 101–133. The reference study on the poor coverage of the Wald interval; it recommends Wilson.</li>
       </ul>
@@ -778,6 +798,12 @@ function ciWilson(phat, n, conf) {
   return [Math.max(0, center - margin), Math.min(1, center + margin)];
 }
 
+/** CI for proportion: Clopper-Pearson (exacto), con cuantiles de la beta */
+function ciClopper(phat, n, conf) {
+  const x = Math.round(phat * n), a = 1 - conf;
+  return [x <= 0 ? 0 : jStat.beta.inv(a / 2, x, n - x + 1), x >= n ? 1 : jStat.beta.inv(1 - a / 2, x + 1, n - x)];
+}
+
 /** Sample one observation from N(mu, sigma) via Box-Muller */
 function sampleNormal(mu, sigma) {
   let u1;
@@ -822,7 +848,7 @@ function runSimulation(mode, params) {
     const { p, n, method } = params;
     for (let i = 0; i < numIntervals; i++) {
       const phat = sampleProportion(p, n);
-      const [lo, hi] = method === 'wilson' ? ciWilson(phat, n, conf) : ciWald(phat, n, conf);
+      const [lo, hi] = method === 'wilson' ? ciWilson(phat, n, conf) : method === 'clopper' ? ciClopper(phat, n, conf) : ciWald(phat, n, conf);
       results.push({ lo, hi, estimate: phat, covers: lo <= p && p <= hi });
     }
   }
@@ -1015,7 +1041,7 @@ function interpretCoverage(empiricalPct, nominalPct, mode, method, total) {
   }
   return {
     cls: 'info',
-    text: `The empirical coverage (${empiricalPct.toFixed(1)}%) is above the nominal level (${nominalPct}%) by more than two simulation standard errors (±${seText}). The procedure appears conservative: it produces wider intervals than necessary.`
+    text: `The empirical coverage (${empiricalPct.toFixed(1)}%) is above the nominal level (${nominalPct}%) by more than two simulation standard errors (±${seText}). The procedure appears conservative: it produces wider intervals than necessary.${method === 'clopper' ? ' This is to be expected with Clopper-Pearson: it guarantees at least the nominal coverage and, since the number of successes is discrete, it almost always exceeds it.' : ''}`
   };
 }
 
@@ -1113,7 +1139,7 @@ function runAndDisplay() {
   axisNote.style.display = 'block';
   axisNote.textContent = mode === 'media'
     ? `Horizontal axis: mean scale. Dashed line: μ = ${trueParam}. Each row = one CI (${params.method === 't' ? "Student's t, with each sample's s" : 'z, with known σ'}) computed from n = ${params.n} observations.`
-    : `Horizontal axis: proportion scale [0, 1]. Dashed line: p = ${trueParam}. Each row = one ${methodUsed === 'wilson' ? 'Wilson' : 'Wald'} CI computed from n = ${params.n} observations.`;
+    : `Horizontal axis: proportion scale [0, 1]. Dashed line: p = ${trueParam}. Each row = one ${methodUsed === 'wilson' ? 'Wilson' : methodUsed === 'clopper' ? 'Clopper-Pearson' : 'Wald'} CI computed from n = ${params.n} observations.`;
 }
 
 document.getElementById('simBtn').addEventListener('click', runAndDisplay);
@@ -1143,7 +1169,7 @@ document.getElementById('simBtn').addEventListener('click', runAndDisplay);
     if (['z', 't'].includes(q.get('method'))) document.getElementById('methodMedia').value = q.get('method');
   } else {
     if (num('p') > 0 && num('p') < 1) document.getElementById('trueP').value = num('p');
-    if (['wald', 'wilson'].includes(q.get('method'))) document.getElementById('methodProp').value = q.get('method');
+    if (['wald', 'wilson', 'clopper'].includes(q.get('method'))) document.getElementById('methodProp').value = q.get('method');
     document.getElementById('tabProp').click();
   }
   if (document.readyState === 'complete') runAndDisplay();
@@ -1165,7 +1191,7 @@ window.addEventListener('resize', () => {
 });
 </script>
 <script src="../../field-hints.js?v=20260730-1"></script>
-<script src="../../theme.js?v=20261031-1"></script>
+<script src="../../theme.js?v=20261113-1"></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

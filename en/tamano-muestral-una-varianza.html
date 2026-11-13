@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261105-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -209,7 +209,7 @@
             <h3>Explanation</h3>
             <p>The chi-square variance test checks \(H_0: \sigma^2 = \sigma_0^2\) using the statistic \(T = (n-1)S^2/\sigma_0^2\), which under \(H_0\) follows a \(\chi^2_{n-1}\) distribution.</p>
             <p>Under the alternative \(\sigma_1 = R\cdot\sigma_0\), the statistic \(T\) follows an \(R^2 \cdot \chi^2_{n-1}\) distribution, equivalently \(T/R^2 \sim \chi^2_{n-1}\). If the data are normal, the power is exact: it is evaluated with the central chi-square CDF, without normal approximations.</p>
-            <h3>Exact power formula</h3>
+            <details class="fold fold-sub"><summary><h3>Exact power formula</h3></summary>
             <p>For the two-sided alternative (\(H_a: \sigma \neq \sigma_0\)):</p>
             <p class="formula-line">\( \text{Power} = F_{\chi^2_{n-1}}\!\left(\frac{\chi^2_{\alpha/2,\,n-1}}{R^2}\right) + 1 - F_{\chi^2_{n-1}}\!\left(\frac{\chi^2_{1-\alpha/2,\,n-1}}{R^2}\right) \)</p>
             <p>For the upper one-sided alternative (\(H_a: \sigma \geq \sigma_0\)):</p>
@@ -217,7 +217,8 @@
             <p>For the lower one-sided alternative (\(H_a: \sigma \leq \sigma_0\)):</p>
             <p class="formula-line">\( \text{Power} = F_{\chi^2_{n-1}}\!\left(\frac{\chi^2_{\alpha,\,n-1}}{R^2}\right) \)</p>
             <p>The calculator finds the smallest \(n\) such that the exact power reaches the target value.</p>
-            <h3>Quick setup</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>R:</strong> specify the ratio σ₁/σ₀ you want to detect. R=1.5 (a 50% increase) is a moderate effect size. R=2 (quadruple variance) is detected with smaller samples.</li>
                 <li><strong>α:</strong> 0.05 is the standard; 0.01 for decisions with critical consequences.</li>
@@ -225,21 +226,25 @@
                 <li><strong>Alternative:</strong> two-sided if you have no prior direction; upper one-sided to detect increases in variability (quality control).</li>
                 <li><strong>Normality:</strong> this test is very sensitive to deviations from normality; check the assumption before applying it.</li>
             </ul>
-            <h3>Worked example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>A semiconductor manufacturer wants to detect an increase of at least 50% in the standard deviation of chip diameter (R = σ₁/σ₀ = 1.5). The nominal process has \(\sigma_0 = 2\) μm. A two-sided test is wanted with \(\alpha = 0.05\) and 80% power.</p>
             <p>The calculator finds the smallest \(n\) such that the exact power is ≥ 0.80 with R = 1.5, and returns <strong>n = 24 observations</strong> (power ≈ 0.81). With that sample, if the true variance is \((1.5 \times 2)^2 = 9\) μm² (instead of the nominal 4 μm²) and the data are normal, the test will detect the change about 81% of the time.</p>
             <p><strong>Sensitivity analysis:</strong> with R = 2 (quadruple variance), the sample shrinks to n = 9. To detect R = 1.25 (a 25% increase) with the same power requires n = 76. Variance tests need considerably larger samples than mean tests for the same relative effect size.</p>
-            <h3>Model assumptions</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Model assumptions</h3></summary>
             <ul>
                 <li>Simple random sampling with independent observations.</li>
                 <li>The variable follows a normal distribution: the \(\chi^2\) test on the variance is very sensitive to deviations from normality.</li>
                 <li>\(\sigma_0\) is the reference value of the standard deviation under \(H_0\).</li>
                 <li>The calculation uses the exact chi-square distribution with \(n-1\) degrees of freedom.</li>
             </ul>
-            <h3>How to interpret the result</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
                 <p>The value \(n\) obtained is the <strong>minimum number of observations needed</strong> for the hypothesis test on the variance to reach the specified power. With that sample size, if the true deviation of the variance from \(\sigma_0^2\) is at least the one indicated by the ratio \(R = \sigma_1/\sigma_0\), the test will detect it with the desired probability. Always round up. If you expect losses of observations, divide \(n\) by \((1 - \text{dropout rate})\) to get the recruitment size needed.</p>
                 <p>The power of the variance test depends on the relative deviation \(R\) in a nonlinear way: detecting small variations (for example \(R = 1.2\)) requires very large samples, while large variations (\(R = 2\) or more) are detected with few observations. Run a sensitivity analysis varying \(R\) by ±0.1 or ±0.2 to assess the robustness of the sample size to uncertainty about the true magnitude of the effect.</p>
                 <p>A critical assumption is <strong>normality of the data</strong>: the chi-square statistic for the variance is notably more sensitive to deviations from normality than the \(t\) statistic for the mean. If the data are skewed or heavy-tailed, the nominal \(\alpha\) level may not hold. Before using this result, check normality with the <a href="tamano-muestral-shapiro-wilk.html">sample size calculator for Shapiro-Wilk</a> or draw a Q-Q plot. Once the data are collected, run the test with the <a href="contraste-hipotesis-varianzas.html">hypothesis test calculator for variances</a>.</p>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -356,7 +361,7 @@ document.getElementById('varCalculateBtn').addEventListener('click', calculateOn
 calculateOneVarianceSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

@@ -31,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional"></noscript>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <style>
         .site-nav { position:sticky; top:0; z-index:100; background:rgba(255,255,255,0.92); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid rgba(15,23,42,0.08); }
         .site-nav-inner { width:min(1200px,94vw); margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 0; }
@@ -111,6 +111,19 @@
         .dist-diagram .dg-caption { margin: 6px 2px 0; font-size: 0.85rem; color: var(--text-muted); text-align: center; }
         .dist-diagram .dg-caption strong { color: var(--accent); font-weight: 700; }
         .dist-diagram .dg-hint { opacity: 0.7; }
+        /* Columna fija opaca: al desplazar la tabla en horizontal no deja ver los números que pasan por debajo. */
+        .dist-table tbody td:first-child { background:linear-gradient(rgba(37,99,235,0.07),rgba(37,99,235,0.07)),#fff; }
+        .dist-table tbody tr:nth-child(even) td:first-child { background:linear-gradient(rgba(37,99,235,0.1),rgba(37,99,235,0.1)),#fff; }
+        .dist-table tbody tr:hover td:first-child { background:linear-gradient(rgba(37,99,235,0.15),rgba(37,99,235,0.15)),#fff; }
+        html.dark-mode .dist-table tbody td:first-child { background:linear-gradient(rgba(96,165,250,0.12),rgba(96,165,250,0.12)),#1e293b; }
+        html.dark-mode .dist-table tbody tr:nth-child(even) td:first-child { background:linear-gradient(rgba(96,165,250,0.16),rgba(96,165,250,0.16)),#1e293b; }
+        html.dark-mode .dist-table tbody tr:hover td:first-child { background:linear-gradient(rgba(96,165,250,0.22),rgba(96,165,250,0.22)),#1e293b; }
+        /* Bloque «Para qué sirve esta tabla» */
+        .table-uses { margin:22px 0 0; padding:16px 20px; }
+        .table-uses h2 { font-size:1.05rem; margin:0 0 8px; }
+        .table-uses ul { margin:0; padding-left:1.15rem; display:grid; gap:6px; font-size:0.92rem; line-height:1.5; }
+        /* Sin mayúsculas: convertirían α, ν, λ y μ en A, N, Λ y M. */
+        .table-section-title { text-transform:none; letter-spacing:0.02em; }
     </style>
 
     <script type="application/ld+json">
@@ -273,27 +286,38 @@
             </div>
         </section>
 
+        <section class="card table-uses">
+            <h2>What this table is for</h2>
+            <ul>
+                <li><strong>Goodness of fit</strong> (ν = k − 1, with k categories) and <strong>independence</strong> in contingency tables (ν = (r − 1)(c − 1)): the right tail is used. Run the full <a href="chi-cuadrado-bondad-ajuste.html" data-goatcounter-click="tabla-chi/bondad" data-goatcounter-title="goodness-of-fit test">goodness-of-fit test</a> or <a href="contraste-independencia-chi-cuadrado.html" data-goatcounter-click="tabla-chi/independencia" data-goatcounter-title="test of independence">test of independence</a>.</li>
+                <li><strong>Variance of a normal population</strong> (ν = n − 1): <a href="contraste-hipotesis-varianzas.html" data-goatcounter-click="tabla-chi/contraste-varianza" data-goatcounter-title="test">test</a> and <a href="intervalo-confianza-varianza.html" data-goatcounter-click="tabla-chi/ic-varianza" data-goatcounter-title="confidence interval">confidence interval</a>. The interval uses two values from the table, one from each tail.</li>
+            </ul>
+        </section>
+
         <section class="card content-card" style="border-top:3px solid #2563eb;">
             <h3>How to use these tables</h3>
-            <h3>Chi-Square Distribution</h3>
+            <details class="fold fold-sub"><summary><h3>Chi-Square Distribution</h3></summary>
             <p>If Z₁, Z₂, …, Zᵥ are independent standard normal variables, then X = Z₁² + … + Zᵥ² follows a chi-square distribution with ν degrees of freedom. Its density function is:</p>
             <p class="formula-line">\( f(x,\nu) = \dfrac{x^{\nu/2-1}\,e^{-x/2}}{2^{\nu/2}\,\Gamma(\nu/2)}, \quad x \geq 0 \)</p>
             <p>The mean is ν and the variance is 2ν.</p>
+            </details>
 
-            <h3>Critical values table</h3>
+            <details class="fold fold-sub"><summary><h3>Critical values table</h3></summary>
             <p>Shows the chi-square critical values for each number of degrees of freedom ν. The <em>Tabulated area</em> switch sets how the columns are labelled:</p>
             <ul>
                 <li><strong>Right tail</strong> (default): each column is α = P(X &gt; χ²). This is the usual textbook layout, because chi-square tests reject for large values. Example: test at 5%, ν = 5 → column α = 0.05 → χ² = 11.070.</li>
                 <li><strong>Left tail</strong>: each column is the cumulative probability p = P(X ≤ χ²), the convention of some manuals and of functions such as R's <code>qchisq</code>. The same value 11.070 is in column p = 0.95.</li>
             </ul>
+            </details>
 
-            <h3>Main uses</h3>
+            <details class="fold fold-sub"><summary><h3>Main uses</h3></summary>
             <ul>
                 <li>Goodness-of-fit test</li>
                 <li>Test of independence in contingency tables</li>
                 <li>Variance estimation and confidence intervals for σ²</li>
                 <li>Homogeneity tests</li>
             </ul>
+            </details>
 
             <h3>Related calculators</h3>
             <ul class="distribution-links">
@@ -501,7 +525,7 @@
 </script>
 <script src="../table-diagram.js?v=20261102-2"></script>
 <script src="../table-actions.js?v=20261103-3"></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Simulador de paseo aleatorio 1D y 2D | ProbLab">
   <meta name="twitter:description" content="Simulador interactivo de paseo aleatorio en 1D y 2D. Visualiza trayectorias, bandas de difusión ±2σ y el comportamiento √n.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261113-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -572,7 +572,7 @@
     </section>
 
     <section class="card content-card">
-      <h2>Cómo funciona el simulador, paso a paso</h2>
+      <details class="fold"><summary><h2>Cómo funciona el simulador, paso a paso</h2></summary>
       <h3>Pestaña 1D</h3>
       <ol>
         <li><strong>Cada trayectoria empieza en 0.</strong></li>
@@ -591,10 +591,11 @@
       </ol>
       <p>Las tarjetas muestran la <strong>distancia media final</strong> al origen (la teoría predice unos 0,886√n), la <strong>distancia al cuadrado media</strong> (la teoría predice exactamente n), el <strong>máximo desplazamiento</strong> (lo más lejos que ha llegado a estar una trayectoria en cualquier momento) y los <strong>pasos al origen</strong> (cuántas veces ha vuelto a pasar por (0, 0); solo se cuenta cuando hay una única trayectoria). El <strong>círculo discontinuo</strong> tiene radio √n.</p>
       <p>En las dos pestañas, cada clic en «Simular» genera trayectorias nuevas. Las fórmulas de todos estos valores teóricos se deducen más abajo.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Propiedades matemáticas</h2>
+      <details class="fold"><summary><h2>Propiedades matemáticas</h2></summary>
 
       <h3>Media y varianza</h3>
       <p>Dado que E[\(\xi_i\)] = p − (1−p) = 2p − 1 y Var(\(\xi_i\)) = 1 − (2p−1)² = 4p(1−p), por linealidad de la esperanza y la independencia:</p>
@@ -621,10 +622,11 @@
         <span style="margin-left:2rem;">\( r_{\mathrm{RMS}} = \sqrt{n} \)</span>
       </p>
       <p>El círculo discontinuo en el simulador 2D tiene radio √n y corresponde a esta distancia cuadrática media. Observa cómo los puntos finales de las trayectorias se agrupan aproximadamente dentro de ese círculo.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>De dónde salen las fórmulas</h2>
+      <details class="fold"><summary><h2>De dónde salen las fórmulas</h2></summary>
       <h3>Media y varianza: de un paso a n pasos</h3>
       <p>Un paso \(\xi\) vale +1 con probabilidad p y −1 con probabilidad 1 − p. Su media y su varianza son</p>
       <div class="math-block">\[ E(\xi) = (+1)\,p + (-1)(1-p) = 2p - 1, \]</div>
@@ -677,10 +679,11 @@
       <p>Sea \(P_k\) la probabilidad de arruinarse cuando se tienen k euros y entre los dos jugadores suman N = a + b. Tras una apuesta se tienen k + 1 o k − 1, con probabilidad ½ cada una:</p>
       <div class="math-block">\[ P_k = \tfrac{1}{2}P_{k+1} + \tfrac{1}{2}P_{k-1}, \qquad P_0 = 1, \quad P_N = 0. \]</div>
       <p>Cada valor es la media de sus dos vecinos, así que los \(P_k\) están sobre una recta. La que pasa por los dos extremos es \(P_k = 1 - k/N\), y con k = a queda \(P_a = b/(a+b)\). Con el mismo método se obtiene la duración media de la partida, \(a \cdot b\) apuestas: con 100 € contra 900 €, 90 000 apuestas.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Recurrencia: el paseo siempre vuelve al origen</h2>
+      <details class="fold"><summary><h2>Recurrencia: el paseo siempre vuelve al origen</h2></summary>
       <p>Una de las propiedades más contraintuitivas del paseo aleatorio fue demostrada por el matemático polaco <strong>George Pólya en 1921</strong>. En su teorema más famoso establece:</p>
       <ul>
         <li><strong>En 1D y 2D:</strong> el paseo aleatorio simple es <em>recurrente</em> — la probabilidad de volver al punto de partida (y a cualquier punto visitado) es exactamente 1. Dado tiempo suficiente, el caminante siempre regresa.</li>
@@ -688,10 +691,11 @@
       </ul>
       <p>La intuición detrás de este resultado es que en baja dimensión el espacio es "pequeño" comparado con cuánto lo explora el paseo, mientras que en alta dimensión hay demasiadas direcciones posibles y la partícula se dispersa irreversiblemente. Esta propiedad tiene profundas implicaciones en física estadística, teoría de grafos y ecología.</p>
       <p>En el simulador 2D, activa muchos pasos (5.000–10.000) con una sola trayectoria y observa cómo la partícula regresa repetidamente al origen aunque parezca haberse alejado definitivamente.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>La ruina del jugador</h2>
+      <details class="fold"><summary><h2>La ruina del jugador</h2></summary>
       <p>Imaginemos un jugador que comienza con €<em>a</em> y juega una serie de apuestas de €1 contra un rival con €<em>b</em>. En cada ronda, el jugador gana €1 con probabilidad p o pierde €1 con probabilidad q = 1 − p. El juego termina cuando alguien se arruina.</p>
       <p>Este problema clásico es equivalente a un paseo aleatorio con barreras absorbentes en 0 y a + b. La probabilidad de que el jugador se arruine vale:</p>
       <div class="math-block">
@@ -705,10 +709,11 @@
       <p>Para el juego justo (p = 0,5), la probabilidad de ruina depende solo de la proporción de capital: si el jugador tiene €100 y la banca tiene €900, la probabilidad de que el jugador se arruine es 900/1000 = 90 %. Incluso con un juego perfectamente justo, la asimetría de capital hace casi segura la ruina del jugador más pobre.</p>
       <p>Con p &lt; 0,5 (la situación real en un casino, donde la casa tiene ventaja), la ruina es prácticamente inevitable a largo plazo. Solo con p &gt; 0,5 puede el jugador tener probabilidad positiva de arruinar a su rival antes de arruinarse él.</p>
       <p>En el simulador 1D, cambia p a 0,40 o 0,30 con deriva negativa y observa cómo las trayectorias descienden sistemáticamente — eso es la ventaja de la casa actuando.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Movimiento browniano: el límite continuo</h2>
+      <details class="fold"><summary><h2>Movimiento browniano: el límite continuo</h2></summary>
       <p>Cuando el tamaño del paso y el intervalo de tiempo tienden a 0 de manera coordinada, el paseo aleatorio converge en distribución al <strong>movimiento browniano</strong> (también llamado proceso de Wiener), que es el modelo continuo de difusión.</p>
       <p>Formalmente, si definimos B<sub>t</sub> = X<sub>⌊nt⌋</sub>/√n, entonces B<sub>t</sub> → W<sub>t</sub> donde W es un proceso de Wiener estándar con W₀ = 0, incrementos independientes y W<sub>t</sub> − W<sub>s</sub> ~ N(0, t − s).</p>
       <p>El movimiento browniano fue postulado por Robert Brown (1827) al observar el movimiento errático de granos de polen en agua, y explicado matemáticamente por Albert Einstein en 1905 como resultado del bombardeo molecular. La misma matemática del paseo aleatorio describe:</p>
@@ -718,10 +723,11 @@
         <li><strong>Precios financieros</strong> (modelo de Black-Scholes, movimiento browniano geométrico).</li>
         <li><strong>Polímeros</strong> en química (la conformación de una cadena polimérica sigue un paseo aleatorio en 3D).</li>
       </ul>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Aplicaciones del paseo aleatorio</h2>
+      <details class="fold"><summary><h2>Aplicaciones del paseo aleatorio</h2></summary>
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px;">
         <div class="app-card app-card--indigo">
           <h3>📈 Finanzas</h3>
@@ -740,6 +746,7 @@
           <p>La difusión de partículas cargadas en plasmas, la conducción de neutrones en reactores nucleares, la resistividad eléctrica en metales y la dinámica molecular en simulaciones computacionales utilizan el formalismo del paseo aleatorio.</p>
         </div>
       </div>
+      </details>
     </section>
 
     <section class="card content-card">
@@ -1241,7 +1248,7 @@ document.getElementById('btn2d').addEventListener('click', simulate2D);
 <script src="../field-hints.js?v=20260730-1"></script>
 <script src="../search.js?v=20261031-1"></script>
 <script src="../wizard.js?v=20260730-1"></script>
-<script src="../theme.js?v=20261031-1"></script>
+<script src="../theme.js?v=20261113-1"></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

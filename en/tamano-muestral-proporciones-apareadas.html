@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -210,7 +210,7 @@
             <p>For paired binary data (yes/no measured twice on the same unit), the appropriate test is <strong>McNemar's test</strong>. Its core logic is that <em>concordant pairs</em> (0→0 and 1→1) provide no information about change: only <strong>discordant pairs</strong> determine whether the intervention has an effect.</p>
             <p>Discordant pairs come in two types: \(p_{01}\) (the response changed from negative to positive, 0→1) and \(p_{10}\) (changed from positive to negative, 1→0). The effect of interest is the difference \(p_{10} - p_{01}\): if the intervention is effective, \(p_{10}\) will be larger than \(p_{01}\) (more subjects move to a negative response under treatment, or vice versa depending on the design).</p>
             <p>The efficiency of the paired design compared with two independent groups depends on concordance: the more concordant pairs there are (subjects who don't change), the less the pairing helps, because those pairs are effectively excluded from the analysis.</p>
-            <h3>Sample size formula</h3>
+            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
             <p class="formula-line">\( n = \left\lceil\frac{\left(Z_{\alpha/2}\sqrt{p_d}+Z_\beta\sqrt{p_d-\Delta^2}\right)^2}{\Delta^2}\right\rceil \)</p>
             <p style="font-size:0.9em;color:var(--text-muted)">where \(p_d = p_{01}+p_{10}\) and \(\Delta = |p_{10}-p_{01}|\). Connett <em>et al.</em>'s (1987) formula, more precise than Fleiss's approximation.</p>
             <ul>
@@ -219,16 +219,19 @@
                 <li><strong>p₁₀</strong>: probability that a pair changes from 1 to 0 (positive response → negative).</li>
                 <li><strong>Note:</strong> the denominator \((p_{10}-p_{01})^2\) requires \(p_{10} \neq p_{01}\); if they are equal, there is no effect to detect.</li>
             </ul>
-            <h3>Quick setup</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>p₀₁ and p₁₀:</strong> should be estimated from a pilot study or historical data. If you only have the prevalence before (p_before) and the expected effect, you need to make assumptions about the pair structure.</li>
                 <li><strong>If p₀₁ ≈ p₁₀:</strong> the difference is small and the required sample will be very large — check whether the effect is clinically relevant.</li>
                 <li><strong>Relation to prevalences:</strong> p_before = p₁₀ + p₁₁ (concordant positives); p_after = p₀₁ + p₁₁. If you know both prevalences and one of the discordant p's, you can compute the other.</li>
                 <li><strong>Alpha and power:</strong> 0.05 and 0.80 are the standard baseline.</li>
             </ul>
-            <h3>Simple example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Simple example</h3></summary>
             <p>Evaluation of a vaccination campaign: <strong>p₀₁ = 0.18</strong> (people who get vaccinated after the campaign who hadn't before), <strong>p₁₀ = 0.08</strong> (people who stop being vaccinated — very unlikely in practice). With <strong>α = 0.05</strong> and power <strong>0.80</strong>, the result is <strong>≈ 202 pairs</strong>.</p>
-            <h3>Worked example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>A clinical diagnostics team wants to compare a new detection method for an infectious disease against the current standard method. Both tests are applied to each patient, forming pairs. A pilot study with 100 patients finds that 15% of pairs are discordant of the type "new+/standard−" (\(p_{12} = 0.15\)) and 8% are discordant of the type "new−/standard+" (\(p_{21} = 0.08\)). The goal is to detect this difference with two-sided \(\alpha = 0.05\) and 80% power.</p>
             <p>In McNemar's test only discordant pairs carry information. The total proportion of discordant pairs is \(p_d = p_{12} + p_{21} = 0.23\) and the difference between discordant proportions is \(\Delta = |p_{12} - p_{21}| = 0.07\). With \(z_{\alpha/2} = 1.960\) and \(z_{\beta} = 0.842\):</p>
             <p class="formula-line">\( n = \frac{\left(z_{\alpha/2}\sqrt{p_d} + z_{\beta}\sqrt{p_d - \Delta^2}\right)^2}{\Delta^2} \)</p>
@@ -236,23 +239,27 @@
             <p class="formula-line">\( n = \frac{(1.960 \times 0.4796 + 0.842 \times 0.4745)^2}{0.07^2} = \frac{(0.9400 + 0.3995)^2}{0.0049} = \frac{(1.3395)^2}{0.0049} = \frac{1.7942}{0.0049} \approx 366.2 \rightarrow 367 \)</p>
             <p><strong>367 pairs</strong> of patients (each evaluated with both methods) are needed to reach 80% power. This large sample size reflects that the difference to detect (\(\Delta = 0.07\)) is small relative to the proportion of discordant pairs.</p>
             <p>If the expected difference were larger — for example \(p_{12} = 0.20\) and \(p_{21} = 0.08\), with \(\Delta = 0.12\) — the sample size would drop considerably, which illustrates the sensitivity of McNemar's test to the effect size among discordant pairs.</p>
-            <h3>Model assumptions</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Model assumptions</h3></summary>
             <ul>
                 <li>Pairs are independent of each other.</li>
                 <li>Within each pair, the two observations may be correlated (that's the whole point of McNemar's test).</li>
                 <li>The values of p₀₁ and p₁₀ are estimated correctly; errors in them directly affect the calculated n.</li>
             </ul>
-            <h3>Common uses</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Common uses</h3></summary>
             <ul>
                 <li>Evaluation of adherence to treatment or behavior before/after an intervention.</li>
                 <li>Comparison of a binary diagnosis by two observers or at two time points.</li>
                 <li>Studies of change in dichotomous variables (yes/no, positive/negative) in the same individual.</li>
                 <li>Crossover designs with a binary outcome.</li>
             </ul>
-            <h3>How to interpret the result</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
                 <p>The value \(n\) is the <strong>minimum total number of pairs</strong> (including concordant ones, i.e. pairs where both conditions produce the same result). Always round up. Add a margin for loss of complete pairs: if you expect 10% of subjects to not complete both measurements or conditions, recruit \(\lceil n / 0.90 \rceil\) pairs. It is essential to distinguish between the number of pairs and the number of observations: each pair contributes two binary observations, but McNemar's test only uses the <em>discordant</em> pairs.</p>
                 <p>The most important feature of this design is that statistical power depends fundamentally on the expected proportion of <strong>discordant pairs</strong> \((p_{01} + p_{10})\), not on the total number of pairs. If subjects respond very consistently under both conditions (high concordance), discordant pairs will be scarce and the study will be underpowered even if the total \(n\) is large. Therefore, when the proportion of discordant pairs is expected to be low (&lt; 20%), many more subjects will need to be recruited to accumulate enough discordant pairs. Run a <em>sensitivity analysis</em> varying \(p_{01}\) and \(p_{10}\) by ±0.05 to see the impact on \(n\).</p>
                 <p>If the required \(n\) turns out to be unfeasible, the alternatives are: (1) relax the power (e.g., from 90% to 80%), (2) relax the significance requirement (increase \(\alpha\)), or (3) reconsider the study design to increase the expected discordance rate by changing conditions. Once the data has been collected, analyze the results with the <a href="contraste-hipotesis-proporciones-apareadas.html">McNemar test for paired proportions</a> calculator; if the discordant pair counts are very low (&lt; 25 total), use the exact version of the test.</p>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -329,7 +336,7 @@ document.getElementById('pairedPropCalculateBtn').addEventListener('click', calc
 calculatePairedPropSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

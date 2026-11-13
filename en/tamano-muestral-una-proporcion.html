@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261105-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -205,7 +205,7 @@
             <p>This calculator applies Cochran's formula to determine the minimum number of observations needed to estimate a population proportion \(p\) with a preset precision. The goal is for the resulting confidence interval to have a maximum half-width equal to the margin of error \(E\).</p>
             <p>The most influential parameter is the expected proportion \(p\): the variance of a proportion is \(p(1-p)\), which reaches its maximum at \(p = 0.5\). That's why, if you have no prior information, using \(p = 0.5\) guarantees the sample will be sufficient whatever the true value is.</p>
             <p>This formula assumes simple random sampling from a very large population. If the sample will represent more than 5% of the total, use the <a href="tamano-muestral-proporcion-poblacion-finita.html">calculator with finite population correction</a>.</p>
-            <h3>Sample size formula</h3>
+            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
             <p class="formula-line">\( n = \frac{Z^2 \cdot p \cdot (1-p)}{E^2} \)</p>
             <ul>
                 <li><strong>n</strong>: minimum sample size (always rounded up to the nearest integer).</li>
@@ -213,9 +213,11 @@
                 <li><strong>p</strong>: expected proportion. Use 0.5 if you have no prior information.</li>
                 <li><strong>E</strong>: absolute margin of error (half-width of the desired confidence interval).</li>
             </ul>
-            <h3>Interpreting the margin of error</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Interpreting the margin of error</h3></summary>
             <p>A margin E = 0.05 means your sample estimate \(\hat{p}\) can differ from the true population value by ±5 percentage points, with the probability set by the confidence level. For example, if you get \(\hat{p} = 0.62\) with E = 0.05 at 95%, you can state with 95% confidence that the true proportion is between 57% and 67%. Halving E quadruples the required sample, since n is proportional to 1/E².</p>
-            <h3>Quick setup</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>If you don't know p:</strong> use <strong>0.5</strong> — it is the conservative scenario that maximizes the variance and therefore the sample size.</li>
                 <li><strong>If you have pilot data:</strong> use the observed proportion; the resulting sample will be smaller if \(p\) is far from 0.5.</li>
@@ -223,9 +225,11 @@
                 <li><strong>Margin of error E:</strong> between 0.03 and 0.05 is common in surveys; clinical prevalence studies may need E = 0.01–0.02.</li>
                 <li><strong>Expected dropout:</strong> divide n by (1 − expected non-response rate). With 15% dropout: n_recruited = n / 0.85.</li>
             </ul>
-            <h3>Simple example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Simple example</h3></summary>
             <p>You want to estimate the percentage of satisfied customers. With <strong>p = 0.5</strong>, <strong>95%</strong> confidence and a maximum error of <strong>±5%</strong> (E = 0.05), the result is <strong>n ≈ 385</strong>. If you reduce the margin to ±3% (E = 0.03), the sample rises to <strong>1,068</strong>.</p>
-            <h3>Worked example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>An e-commerce store wants to estimate the proportion of visitors who complete a purchase (conversion rate). Data from previous sessions suggest this proportion is approximately \(p = 0.08\) (8%). The analytics team wants an estimate with a margin of error of \(E = 0.02\) (±2 percentage points) and a 95% confidence level (\(Z = 1.960\)).</p>
             <p>We apply Cochran's formula with the known values:</p>
             <p class="formula-line">\( n = \frac{Z^2 \cdot p \cdot (1-p)}{E^2} = \frac{(1.960)^2 \times 0.08 \times 0.92}{(0.02)^2} = \frac{3.8416 \times 0.0736}{0.0004} = \frac{0.2828}{0.0004} = 707 \)</p>
@@ -233,23 +237,27 @@
             <p class="formula-line">\( n_{\text{adjusted}} = \frac{707}{1 - 0.10} = \frac{707}{0.90} \approx 786 \text{ sessions} \)</p>
             <p>The team will configure the analytics system to collect data on <strong>786 consecutive sessions</strong>, expecting to estimate the conversion rate with a precision of ±2 percentage points at 95% confidence.</p>
             <p><strong>Conservative scenario (unknown p):</strong> if no prior data on the conversion rate were available, common practice is to use \(p = 0.5\), which maximizes the variance \(p(1-p)\) and therefore the required sample size: \( n = (1.960)^2 \times 0.5 \times 0.5 / (0.02)^2 = 3.8416 \times 0.25 / 0.0004 = 2\,401 \). This conservative sample guarantees precision of ±2 pp regardless of the true value of the proportion, at the cost of requiring more than three times as many sessions as the informed estimate.</p>
-            <h3>Model assumptions</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Model assumptions</h3></summary>
             <ul>
                 <li>Simple random sampling (every unit has the same probability of selection).</li>
                 <li>Population very large relative to the sample (n/N &lt; 5%). If this doesn't hold, apply the <a href="tamano-muestral-proporcion-poblacion-finita.html">finite population correction</a>.</li>
                 <li>The normal approximation is valid when n·p ≥ 5 and n·(1−p) ≥ 5.</li>
             </ul>
-            <h3>Common uses</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Common uses</h3></summary>
             <ul>
                 <li>Customer satisfaction, opinion and preference surveys.</li>
                 <li>Estimating prevalence or incidence rates in public health.</li>
                 <li>Quality control: percentage of defects or non-conformities.</li>
                 <li>Election polls and voting intention.</li>
             </ul>
-            <h3>How to interpret the result</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
                 <p>The calculated \(n\) is the <strong>minimum number of valid responses</strong> needed so that the confidence interval does not exceed the specified margin of error \(E\). Always round up. Keep in mind that this \(n\) represents <em>complete, usable responses</em>, not simply the number of surveys sent out or individuals contacted. If you expect a non-response or exclusion rate of \(r\,\%\), the number of individuals to contact is \(\lceil n / (1 - r) \rceil\); with a 20% loss, for example, you'll need to contact \(\lceil n / 0.80 \rceil\) people.</p>
                 <p>The proportion \(p\) is the most influential parameter and, often, the most uncertain. The function \(p(1-p)\) reaches its maximum at \(p = 0.5\), which is also the most conservative scenario: using \(p = 0.5\) when the true proportion is unknown guarantees that \(n\) is never insufficient. If you have a pilot study or prior data pointing to a different value of \(p\), use it to get a more precise \(n\), but perform a <em>sensitivity analysis</em> by varying \(p\) by \(\pm 0.1\) to see how much the result changes; in the central zone (\(p\) between 0.3 and 0.7) the variation in \(n\) tends to be modest, but at the extremes (\(p < 0.1\) or \(p > 0.9\)) a small difference in \(p\) can substantially alter \(n\).</p>
                 <p>If the resulting \(n\) is unfeasible, the available levers are: (1) increase \(E\) (accept lower precision), (2) reduce the confidence level (e.g., from 95% to 90%), or (3) restrict the target population to make it more homogeneous. Once the data has been collected, use the <a href="intervalo-confianza-proporcion.html">confidence interval calculator for a proportion</a> to get the real CI; or the <a href="contraste-hipotesis-una-proporcion.html">hypothesis test calculator</a> if you want to compare \(\hat{p}\) against a reference value.</p>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -350,7 +358,7 @@ document.getElementById("onePropCalculateBtn").addEventListener("click", calcula
 calculateOnePropSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

@@ -31,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional"></noscript>
-    <link rel="stylesheet" href="style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <style>
         .site-nav { position:sticky; top:0; z-index:100; background:rgba(255,255,255,0.92); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid rgba(15,23,42,0.08); }
         .site-nav-inner { width:min(1200px,94vw); margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 0; }
@@ -93,6 +93,12 @@
         .dist-diagram .dg-caption { margin: 6px 2px 0; font-size: 0.85rem; color: var(--text-muted); text-align: center; }
         .dist-diagram .dg-caption strong { color: var(--accent); font-weight: 700; }
         .dist-diagram .dg-hint { opacity: 0.7; }
+        /* Bloque «Para qué sirve esta tabla» */
+        .table-uses { margin:22px 0 0; padding:16px 20px; }
+        .table-uses h2 { font-size:1.05rem; margin:0 0 8px; }
+        .table-uses ul { margin:0; padding-left:1.15rem; display:grid; gap:6px; font-size:0.92rem; line-height:1.5; }
+        /* Sin mayúsculas: convertirían α, ν, λ y μ en A, N, Λ y M. */
+        .table-section-title { text-transform:none; letter-spacing:0.02em; }
     </style>
 
     <script type="application/ld+json">
@@ -258,14 +264,24 @@
             </div>
         </section>
 
+        <section class="card table-uses">
+            <h2>Para qué sirve esta tabla</h2>
+            <ul>
+                <li><strong>Incertidumbre sobre una proporción</strong> (una tasa de conversión, una probabilidad de éxito): la beta toma valores entre 0 y 1. Para otros parámetros, usa la <a href="beta.html" data-goatcounter-click="tabla-beta/calculadora" data-goatcounter-title="calculadora de la beta">calculadora de la beta</a>.</li>
+                <li><strong>Estadística bayesiana:</strong> partiendo de una Beta(α, β), tras x éxitos en n ensayos la posterior es Beta(α + x, β + n − x). Es la base del <a href="ab-testing-bayesiano.html" data-goatcounter-click="tabla-beta/ab-bayesiano" data-goatcounter-title="test A/B bayesiano">test A/B bayesiano</a>.</li>
+                <li><strong>Intervalo exacto para una proporción</strong> (Clopper-Pearson): sus extremos son cuantiles de la beta. <a href="intervalo-confianza-proporcion.html?method=clopper" data-goatcounter-click="tabla-beta/ic-clopper" data-goatcounter-title="Calcularlo con tus datos">Calcularlo con tus datos</a>.</li>
+            </ul>
+        </section>
+
         <section class="card content-card" style="border-top:3px solid #2563eb;">
             <h3>Cómo usar estas tablas</h3>
-            <h3>Distribución Beta</h3>
+            <details class="fold fold-sub"><summary><h3>Distribución Beta</h3></summary>
             <p>La distribución Beta Be(α, β) tiene soporte en [0, 1] y es muy flexible para modelar proporciones y probabilidades. Su función de densidad es:</p>
             <p class="formula-line">\( f(x;\alpha,\beta) = \dfrac{x^{\alpha-1}(1-x)^{\beta-1}}{B(\alpha,\beta)}, \quad x \in (0,1) \)</p>
             <p>donde B(α, β) = Γ(α)Γ(β)/Γ(α+β) es la función beta. La media es μ = α/(α+β) y la varianza σ² = αβ / [(α+β)²(α+β+1)].</p>
+            </details>
 
-            <h3>Formas de la distribución</h3>
+            <details class="fold fold-sub"><summary><h3>Formas de la distribución</h3></summary>
             <ul>
                 <li><strong>α = β = 1:</strong> distribución Uniforme(0,1).</li>
                 <li><strong>α = β &gt; 1:</strong> unimodal y simétrica en torno a 0.5.</li>
@@ -273,9 +289,11 @@
                 <li><strong>α &lt; β:</strong> sesgada a la derecha (media &lt; 0.5).</li>
                 <li><strong>α &lt; 1 o β &lt; 1:</strong> forma en U (bimodal en los extremos).</li>
             </ul>
+            </details>
 
-            <h3>Relación con la F y la t</h3>
+            <details class="fold fold-sub"><summary><h3>Relación con la F y la t</h3></summary>
             <p>Si F ~ F(2α, 2β) entonces X = αF/(β + αF) ~ Be(α, β). La función beta incompleta regularizada es también la CDF de la distribución F y de la t de Student.</p>
+            </details>
 
             <h3>Calculadoras relacionadas</h3>
             <ul class="distribution-links">
@@ -461,7 +479,7 @@
 <script src="table-actions.js?v=20261103-3"></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

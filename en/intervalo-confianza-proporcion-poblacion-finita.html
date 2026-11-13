@@ -90,7 +90,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261105-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -194,7 +194,7 @@
             <p>When an appreciable fraction of a finite population of size \(N\) is sampled without replacement, the observations are no longer strictly independent. The <strong>finite population correction factor</strong> (FPC) adjusts the standard error to account for the fact that knowing part of the population reduces the uncertainty about the rest.</p>
             <p>The FPC is relevant when the sampling fraction \(f = n/N\) exceeds 5%. Below that threshold, the standard CI and the corrected one are practically identical.</p>
 
-            <h3>Formula for the CI with FPC</h3>
+            <details class="fold fold-sub"><summary><h3>Formula for the CI with FPC</h3></summary>
             <p class="formula-line">\( \hat{p} = \frac{x}{n} \)</p>
             <p class="formula-line">\( \text{FPC} = \sqrt{\frac{N-n}{N-1}} \)</p>
             <p class="formula-line">\( \text{SE}_{\text{FPC}} = \sqrt{\frac{\hat{p}(1-\hat{p})}{n}} \cdot \text{FPC} \)</p>
@@ -204,17 +204,19 @@
                 <li><strong>FPC</strong>: factor that reduces the standard error when \(n/N\) is large. If \(n \ll N\), FPC ≈ 1.</li>
                 <li><strong>z_{α/2}</strong>: standard normal quantile (1.645 for 90%; 1.960 for 95%; 2.576 for 99%).</li>
             </ul>
+            </details>
 
-            <h3>When the FPC matters</h3>
+            <details class="fold fold-sub"><summary><h3>When the FPC matters</h3></summary>
             <ul>
                 <li>\(f = n/N &gt; 5\,\%\): the correction noticeably narrows the CI.</li>
                 <li>\(f &gt; 20\,\%\): the reduction in the CI is substantial.</li>
                 <li>\(f &lt; 5\,\%\): the difference between the corrected and uncorrected CI is under 3% and can be ignored.</li>
             </ul>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example</h3>
+            <details class="fold"><summary><h3>Worked example</h3></summary>
             <p>In a company with 800 employees (N = 800), 200 are surveyed (n = 200) and 134 report being satisfied. The sampling fraction is \(f = 200/800 = 25\,\%\), well above the 5% threshold, so the correction is mandatory.</p>
             <p>\(\hat{p} = 134/200 = 0.67\). The FPC is \(\sqrt{(800-200)/(800-1)} = \sqrt{600/799} \approx 0.8665\).</p>
             <p>The standard error without correction is \(\sqrt{0.67 \cdot 0.33/200} \approx 0.03325\), and with FPC it is \(0.03325 \times 0.8665 \approx 0.02880\).</p>
@@ -227,16 +229,18 @@
                 <li>Normality condition: \(n\hat{p} \geq 5\) and \(n(1-\hat{p}) \geq 5\).</li>
                 <li>N is fixed and known before sampling; if there is uncertainty about N, use the standard CI without correction.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p>The interval \([L, U]\) is the plausible range for the population proportion \(p\) given the chosen confidence level. In frequentist terms, if you repeated the sampling many times and built the CI with the same method, a proportion \(C\) of those intervals would contain the true value of \(p\). The CI with FPC is always equal to or narrower than the standard one: this is not a less precise or less honest result, but a correct reflection of the extra information provided by sampling an appreciable fraction of the population without replacement.</p>
             <p>The magnitude of the effect depends directly on \(n/N\). With \(n/N &lt; 5\,\%\), the FPC is practically 1 and both CIs coincide. With \(n/N = 25\,\%\) (as in the example), the width reduction can exceed 10%. The chart shows both intervals side by side so you can see how much the correction gains in your specific case. If you want to report the proportion with the least uncertainty that is honestly justified, always choose the CI with FPC when the design is sampling without replacement and the fraction exceeds 5%.</p>
             <ul>
                 <li><strong>Connection with hypothesis testing:</strong> if a reference value \(p_0\) falls outside the CI with FPC, the data would reject \(H_0\!: p = p_0\) at significance level \(\alpha = 1 - C\) in the equivalent two-sided test.</li>
                 <li><strong>Limits and the normality condition:</strong> the CI is based on the normal (Wald) approximation with FPC; it is more reliable when \(n\hat{p} \geq 5\) and \(n(1-\hat{p}) \geq 5\). If these conditions are not met, the interval should be interpreted with caution.</li>
             </ul>
+      </details>
         </section>
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
@@ -272,7 +276,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../ci-charts.js?v=20261105-2"></script>
+<script src="../ci-charts.js?v=20261113-1"></script>
 <script>
 let fpChart;
 
@@ -410,7 +414,7 @@ document.getElementById('fpCalcBtn').addEventListener('click', calculateFp);
 calculateFp();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

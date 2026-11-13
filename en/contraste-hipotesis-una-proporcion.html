@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -261,7 +261,7 @@
             <p>It is the procedure for deciding, from a sample, whether the proportion of a population that meets a condition equals a reference value \(p_0\). It is used when each observation has only two possible outcomes —yes or no, defective or fine, buys or does not buy— and what matters is the percentage of "yes": is customer satisfaction still 65%? Does the defect rate exceed the 5% the supplier guarantees? Has a campaign reached its 30% response target?</p>
             <p>The logic is that of any test. You start from the <strong>null hypothesis</strong> that the proportion is \(p_0\) and look at how far the sample proportion \(\hat{p}\) is from it. A sample never reproduces the population proportion exactly: the question is whether the observed difference is larger than sampling variation can reasonably explain. If it is, \(H_0\) is rejected in favour of the <strong>alternative hypothesis</strong>.</p>
 
-            <h3>Hypotheses and test statistic</h3>
+            <details class="fold fold-sub"><summary><h3>Hypotheses and test statistic</h3></summary>
             <p class="formula-line">\(H_0: p = p_0\)</p>
             <p class="formula-line">\(H_1: p \neq p_0\), \(p > p_0\) or \(p < p_0\)</p>
             <p class="formula-line">\( z = \dfrac{\hat{p} - p_0}{\sqrt{p_0(1-p_0)/n}} \)</p>
@@ -272,10 +272,11 @@
             </ul>
             <p>The denominator is the <strong>standard error</strong> of the sample proportion if \(H_0\) were true. Note that it is computed with \(p_0\), not with \(\hat{p}\): the test asks what variability you would expect if the proportion really were \(p_0\). That is why, unlike the one-mean test, you do not need to enter any standard deviation here: for a yes/no variable, the variability is determined by the proportion itself.</p>
             <p>Thanks to the central limit theorem, with large enough samples the z statistic approximately follows a <a href="normal.html">standard normal</a> under \(H_0\). The statistic measures how many standard errors \(\hat{p}\) lies from \(p_0\).</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to carry out the test, step by step</h3>
+            <details class="fold"><summary><h3>How to carry out the test, step by step</h3></summary>
             <ol>
                 <li><strong>State the hypotheses</strong> before seeing the data: the value \(p_0\) and whether you care about any difference or only one direction.</li>
                 <li><strong>Set the significance level</strong> \(\alpha\), usually 0.05.</li>
@@ -305,27 +306,30 @@
                 </table>
             </div>
             <p>The tail must be chosen before seeing the data and for a reason rooted in the problem. Choosing it after seeing which way \(\hat{p}\) points doubles the real risk of a false positive. When in doubt, use the two-tailed test.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>When the normal approximation holds</h3>
+            <details class="fold"><summary><h3>When the normal approximation holds</h3></summary>
             <p>The z-test is an approximation: the number of successes actually follows a <a href="binomial.html">binomial distribution</a>, which looks like a normal when you expect plenty of successes and plenty of failures. The usual rule of thumb is</p>
             <p class="formula-line">\( n\,p_0 \geq 10 \quad \text{and} \quad n\,(1-p_0) \geq 10 \)</p>
             <p>(some texts accept 5). With \(p_0\) close to 0 or 1 you need large samples: for \(p_0 = 0.02\), at least 500 observations. If the rule fails, the p-value of the z-test can be quite inaccurate and an exact binomial test is preferable. The calculator warns you when the rule is not met.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Assumptions of the test</h3>
+            <details class="fold"><summary><h3>Assumptions of the test</h3></summary>
             <ul>
                 <li><strong>A dichotomous variable</strong>: each observation is a success or a failure. If your variable is numeric, use the <a href="contraste-hipotesis-una-media.html">one-mean test</a>.</li>
                 <li><strong>Independent observations</strong>: one response does not influence another. This fails, for example, if several people from the same household are surveyed as if they were independent.</li>
                 <li><strong>A random sample</strong> from the population you want to draw conclusions about. With convenience samples (volunteers, whoever answers an online survey) the test may be correct and the conclusion wrong.</li>
                 <li><strong>A large enough sample</strong> for the normal approximation, as explained above.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example 1: two-tailed test</h3>
+            <details class="fold"><summary><h3>Worked example 1: two-tailed test</h3></summary>
             <p>According to previous studies, 65% of a company's customers are satisfied with the service. After an improvement campaign, \(n = 120\) customers are surveyed and 85 say they are satisfied: \(\hat{p} = 85/120 \approx 0.708\). Has the proportion changed? We test \(H_0\colon p = 0.65\) against \(H_1\colon p \neq 0.65\) with \(\alpha = 0.05\).</p>
             <p>The normal approximation is valid: \(n p_0 = 78\) and \(n(1-p_0) = 42\). The standard error under \(H_0\) is</p>
             <p class="formula-line">\( SE = \sqrt{\dfrac{0.65 \times 0.35}{120}} \approx 0.0435 \)</p>
@@ -340,10 +344,11 @@
             <p class="formula-line">\( SE = \sqrt{\dfrac{0.05 \times 0.95}{400}} \approx 0.0109, \qquad z = \dfrac{0.075 - 0.05}{0.0109} \approx 2.29 \)</p>
             <p>The approximation is valid (\(n p_0 = 20\)). The right-tailed critical value is 1.645 and the p-value is \(P(Z \geq 2.29) \approx 0.011\). <strong>\(H_0\) is rejected</strong>: there is evidence that the defect rate exceeds the guaranteed 5%. The 95% Wilson interval for the real rate runs from 5.3% to 10.5%.</p>
             <p><strong>In the calculator:</strong> p₀ = 0.05, p̂ = 0.075, n = 400 and "Right-tailed (&gt;)".</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) means that, if the proportion really were \(p_0\), it would be very unlikely to obtain a sample proportion as far away as the one observed. But significant is not the same as important: with very large samples, differences of one percentage point become significant. Always look at how far \(\hat{p}\) is from \(p_0\), in percentage points, and at its confidence interval.</p>
             <p><strong>Not rejecting \(H_0\)</strong> (p-value ≥ α) does not prove that the proportion equals \(p_0\): the data are compatible with that value and often also with quite different ones, as in example 1.</p>
             <p>In the calculator, the result shows the decision with the p-value, the z statistic and a sentence stating the conclusion. On the chart, the green area is the non-rejection region, the red areas are the critical regions and the amber line marks the observed statistic. Under "Calculation details" you will find the sample proportion, the observed difference in points, the standard error, the critical value and the Wilson interval.</p>
@@ -353,10 +358,11 @@
 
             <h3>Relationship with the confidence interval</h3>
             <p>The other link in the result opens the <a href="intervalo-confianza-proporcion.html">confidence interval for a proportion</a> with your data. In the two-tailed test, \(H_0\) is rejected when \(p_0\) lies outside the interval. The correspondence is exact with the Wilson interval, which uses the same standard error as the test; with the Wald interval it can fail in borderline cases. The interval also tells you which values of the proportion are compatible with the data.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Common mistakes</h3>
+            <details class="fold"><summary><h3>Common mistakes</h3></summary>
             <ul>
                 <li><strong>Entering percentages instead of proportions</strong>: 65% is written 0.65.</li>
                 <li><strong>Using the z-test with very few expected successes or failures</strong>, without checking \(n p_0 \geq 10\).</li>
@@ -365,6 +371,7 @@
                 <li><strong>Forgetting how the sample was obtained</strong>: with a voluntary survey, the sample proportion can be biased even if the calculation is correct.</li>
                 <li><strong>Comparing two sample proportions with this test</strong>, treating one of them as if it were \(p_0\). For two groups, use the <a href="contraste-hipotesis-dos-proporciones.html">two-proportion test</a>.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -596,7 +603,7 @@ document.getElementById('calcPropBtn').addEventListener('click', calculatePropTe
 calculatePropTest();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

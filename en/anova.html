@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -237,12 +237,13 @@
             <p class="formula-line">\(H_1\): not all \(\mu_j\) are equal</p>
             <p>ANOVA does not say which mean or means differ, nor in which direction: it is a global question. To find out which pairs of groups differ, it is followed by post hoc comparisons.</p>
 
-            <h3>Why not run several t-tests?</h3>
+            <details class="fold fold-sub"><summary><h3>Why not run several t-tests?</h3></summary>
             <p>With three groups you would need 3 pairwise comparisons; with five, 10. Each carries a 5% risk of a false positive, and the risks add up: with 10 independent comparisons, the probability of finding at least one "significant" difference by pure chance is around 40%. ANOVA answers the global question with a single test that keeps that risk at \(\alpha\).</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>The idea: comparing two sources of variability</h3>
+            <details class="fold"><summary><h3>The idea: comparing two sources of variability</h3></summary>
             <p>Although its aim is to compare means, ANOVA does so by comparing variances, hence its name. The total variability of the data is split into two parts:</p>
             <ul>
                 <li><strong>Between-group variability</strong>: how far the group means are from the overall mean. It reflects the effect of the factor, plus noise.</li>
@@ -271,20 +272,22 @@
                 </table>
             </div>
             <p>\(MS_{\text{within}}\) is the pooled variance of all the groups: it estimates the common variance \(\sigma^2\) whether or not \(H_0\) is true.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Assumptions of ANOVA</h3>
+            <details class="fold"><summary><h3>Assumptions of ANOVA</h3></summary>
             <ul>
                 <li><strong>Independence</strong>: groups independent of each other and observations independent within each group. If the same subjects go through all the conditions, you need a repeated-measures ANOVA.</li>
                 <li><strong>Approximate normality</strong> of the data in each group (or of the residuals). With moderately sized groups of similar size, ANOVA is quite robust to mild departures.</li>
                 <li><strong>Homogeneity of variances</strong>: the group variances should be similar. This is the most delicate assumption when the groups have different sizes.</li>
             </ul>
             <p>A rule of thumb: if the largest standard deviation is less than twice the smallest and the groups have similar sizes, classic ANOVA works well. If not, use <strong>Welch's ANOVA</strong>, which does not assume equal variances; if the data are very skewed or there are outliers with small groups, the non-parametric alternative is the Kruskal-Wallis test. The calculator shows the standard deviation of each group under "Calculation details" so you can check this, and you can check normality with the <a href="shapiro-wilk-normalidad.html">Shapiro-Wilk test</a>.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example</h3>
+            <details class="fold"><summary><h3>Worked example</h3></summary>
             <p>An agronomist evaluates the effect of three fertilisers on the yield (kg) of farm plots. Five plots are randomly assigned to each fertiliser, with these results:</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -305,10 +308,11 @@
             <p>The critical value is \(F_{0.05;\,2,\,12} \approx 3.89\) and the p-value is \(p \approx 0.000015\). Since \(F = 32\) far exceeds the critical value, <strong>\(H_0\) is rejected</strong>: there is evidence that not all fertilisers give the same mean yield.</p>
             <p>The effect size is huge: \(\eta^2 = 160/190 \approx 0.84\), meaning that the fertiliser explains 84% of the variability in yield across these plots. To find out which fertilisers differ from each other, the next step is a post hoc comparison. Note also that, with only 5 plots per group, ANOVA detects with 80% probability only very large effects (f ≈ 0.91): it worked here because the real effect is enormous, but moderate effects would need many more plots.</p>
             <p><strong>In the calculator:</strong> these are the sample data shown when the page loads.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that at least one mean differs from the others, but not which one or in which direction. Look at the mean of each group and apply a post hoc comparison. Remember too that significant is not the same as important: with large groups, small differences between means give a significant F.</p>
             <p><strong>Not rejecting \(H_0\)</strong> (p-value ≥ α) does not prove that the means are equal: the data are compatible with equality, but the study may not have had enough power. Few observations per group or high within-group variability prevent real differences from being detected.</p>
             <p>The <strong>F statistic</strong> compares the variability between groups with the variability within them. An F close to 1 indicates that the means are as far apart as chance would lead you to expect; the larger it is, the more evidence that the factor has an influence. On the chart, the green area is the non-rejection region, the red area is the critical tail and the amber line marks the observed F.</p>
@@ -319,10 +323,11 @@
 
             <h3>Power and minimum detectable effect</h3>
             <p>Below the conclusion, the calculator shows the <strong>minimum detectable effect size</strong>: the smallest Cohen's f that, with your group sizes, ANOVA would detect with 80% probability. If it is larger than the effect that would matter to you, a non-significant result says little. For reference, with 3 groups of 20 observations only large effects (f ≈ 0.41) are detected with that probability, and medium effects (f = 0.25) require about 53 observations per group. The link in the result opens the <a href="tamano-muestral-anova.html">sample size calculator for ANOVA</a> with your number of groups and your α, so you can work out the size needed for the effect you care about.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>After a significant ANOVA: post hoc comparisons</h3>
+            <details class="fold"><summary><h3>After a significant ANOVA: post hoc comparisons</h3></summary>
             <p>If ANOVA rejects \(H_0\), post hoc comparisons show which pairs of groups differ, controlling the accumulated risk of false positives:</p>
             <ul>
                 <li><strong>Tukey (HSD)</strong>: compares every pair with every other. It is the usual choice when there are no prior hypotheses.</li>
@@ -331,10 +336,11 @@
                 <li><strong>Games-Howell</strong>: like Tukey, but without assuming equal variances.</li>
             </ul>
             <p>In the fertiliser example, all three differences (C − A = 4, A − B = 4 and C − B = 8 kg) are significant with Tukey's test.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Common mistakes</h3>
+            <details class="fold"><summary><h3>Common mistakes</h3></summary>
             <ul>
                 <li><strong>Running every pairwise t-test</strong> instead of an ANOVA followed by post hoc comparisons.</li>
                 <li><strong>Reading a significant ANOVA as "all the means are different"</strong>: one differing mean is enough.</li>
@@ -343,6 +349,7 @@
                 <li><strong>Ignoring very different variances</strong> when the groups have different sizes: in that case, use Welch's ANOVA.</li>
                 <li><strong>Reporting only the p-value</strong>, without the group means or the effect size.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -575,7 +582,7 @@ document.getElementById('calcAnovaBtn').addEventListener('click', calculateAnova
 calculateAnova();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

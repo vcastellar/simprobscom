@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261105-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -205,7 +205,7 @@
             <p>This calculator determines the minimum number of observations needed to estimate a population mean \(\mu\) with a maximum absolute margin of error \(E\) and a given confidence level. It is the analogous calculation to that of a proportion, but for continuous quantitative variables.</p>
             <p>The key parameter you must know in advance is the standard deviation \(\sigma\). If you don't have it, you can estimate it from historical data, from the literature, or from a pilot study. A conservative rule of thumb when the distribution is approximately normal: \(\sigma \approx \text{range} / 4\) (a quarter of the likely range of the data).</p>
             <p>This formula uses the normal quantile Z, which assumes that \(\sigma\) is known or that the sample is large enough for the t quantile to converge to Z. For small samples (&lt; 30) with unknown \(\sigma\), the real n may be somewhat larger (use the t quantile with n−1 degrees of freedom iteratively).</p>
-            <h3>Sample size formula</h3>
+            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
             <p class="formula-line">\( n = \left(\frac{Z \cdot \sigma}{E}\right)^2 \)</p>
             <ul>
                 <li><strong>n</strong>: minimum sample size (rounded up to the nearest integer).</li>
@@ -213,9 +213,11 @@
                 <li><strong>\(\sigma\)</strong>: expected standard deviation of the variable.</li>
                 <li><strong>E</strong>: maximum tolerable absolute margin of error (in the same units as \(\sigma\)).</li>
             </ul>
-            <h3>Relationship between σ, E and n</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Relationship between σ, E and n</h3></summary>
             <p>The sample size grows quadratically with the required precision: halving E quadruples n. It also grows quadratically with \(\sigma\): if the population's variability doubles, you need four times as many observations for the same precision. Always check that E is reasonable in practical terms: a very small E can make the study unfeasible.</p>
-            <h3>Quick setup</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>Standard deviation (σ):</strong> take it from previous studies, from the literature, or from a pilot sample of 10–30 observations.</li>
                 <li><strong>If you don't have σ:</strong> use the rule of range divided by 4 or by 6 as a conservative initial estimate.</li>
@@ -223,7 +225,8 @@
                 <li><strong>Maximum error E:</strong> define it in practical terms — from what difference relative to the true mean would you make a different decision?</li>
                 <li><strong>Expected dropout:</strong> divide n by (1 − expected dropout rate).</li>
             </ul>
-            <h3>Worked example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>A hospital wants to estimate the mean length of stay (in days) of its post-surgical patients to optimize bed planning. Previous records show that the standard deviation of the length of stay is \(\sigma \approx 4.2\) days. The management team sets that the estimate must be precise within \(E = 0.5\) days with a 95% confidence level (\(Z = 1.960\)).</p>
             <p>We apply the formula directly:</p>
             <p class="formula-line">\( n = \left(\frac{Z \cdot \sigma}{E}\right)^2 = \left(\frac{1.960 \times 4.2}{0.5}\right)^2 = (16.464)^2 = 271.06 \rightarrow n = 272 \)</p>
@@ -231,24 +234,28 @@
             <p class="formula-line">\( n_{\text{recruit}} = \frac{272}{1 - 0.15} = \frac{272}{0.85} \approx 320 \text{ patients} \)</p>
             <p>The team will plan data collection over 320 consecutive post-surgical patients, expecting to have at least 272 complete records and thus obtain an estimate of the mean length of stay with a precision of ±0.5 days at 95% confidence.</p>
             <p><strong>Sensitivity analysis:</strong> if the hospital decided that a precision of ±1 day is sufficient for decision-making, the required sample shrinks drastically: \( n = (1.960 \times 4.2 / 1.0)^2 = (8.232)^2 = 67.77 \rightarrow n = 68 \). This shows that doubling the tolerable margin of error reduces the sample by a factor of 4, making the study much more feasible in resource-constrained settings.</p>
-            <h3>Model assumptions</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Model assumptions</h3></summary>
             <ul>
                 <li>Simple random sampling from a very large (or infinite) population.</li>
                 <li>The variable follows an approximately normal distribution, or n is large enough for the CLT to guarantee normality of the estimator.</li>
                 <li>The standard deviation \(\sigma\) is known or reliably estimated.</li>
                 <li>If the population is finite and n/N &gt; 5%, apply the <a href="tamano-muestral-media-poblacion-finita.html">finite population correction</a>.</li>
             </ul>
-            <h3>Common uses</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Common uses</h3></summary>
             <ul>
                 <li>Estimating mean process or service times.</li>
                 <li>Measuring mean consumption or spending among customers or users.</li>
                 <li>Statistical process control in manufacturing and quality.</li>
                 <li>Surveys on continuous variables (weight, height, score).</li>
             </ul>
-            <h3>How to interpret the result</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
                 <p>The value \(n\) returned by the calculator is the <strong>minimum number of valid observations</strong> you must collect so that the resulting confidence interval has, at most, the specified margin of error \(E\). Always round up (never down), because working with even one fewer observation already makes the real margin exceed the target. If you anticipate that some participant will drop out of the study or that certain observations will be excluded by exclusion criteria, divide \(n\) by \((1 - \text{loss rate})\) to get the recruitment number; for example, with an expected loss of 15%, recruit \(\lceil n / 0.85 \rceil\) subjects.</p>
                 <p>The sensitivity of \(n\) to the input parameters is asymmetric: \(n\) grows with the <strong>square</strong> of \(\sigma\) and shrinks with the square of \(E\). This means that if the real standard deviation turns out to be 20% higher than expected, you will need approximately 44% more subjects \((1.2^2 = 1.44)\). For this reason a <em>sensitivity analysis</em> is recommended: calculate \(n\) for \(\sigma - 25\%\), \(\sigma\) and \(\sigma + 25\%\) and use the largest value as a safety margin. Halving \(E\) quadruples \(n\), so if the calculated size turns out to be unfeasible it is preferable to relax the required precision rather than lower the confidence level.</p>
                 <p>When the resulting \(n\) is very small (for example, &lt; 30), check that the data are reasonably normal or that the central limit theorem can be applied, since the formula is based on the normal distribution. If \(n\) turns out to be unaffordable due to time or cost constraints, consider accepting a larger margin of error or a 90% confidence level instead of 95%. Once the sample has been collected, use the <a href="intervalo-confianza-media.html">confidence interval calculator for the mean</a> to get the real CI with the observed data.</p>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -347,7 +354,7 @@ document.getElementById("oneMeanCalculateBtn").addEventListener("click", calcula
 calculateOneMeanSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

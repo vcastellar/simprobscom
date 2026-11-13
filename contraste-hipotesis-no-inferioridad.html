@@ -138,7 +138,7 @@
   ]
 }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -337,7 +337,7 @@
         </section>
 
         <section class="card content-card">
-            <h3>Hipótesis y estadísticos</h3>
+            <details class="fold"><summary><h3>Hipótesis y estadísticos</h3></summary>
             <p>Sea \(\hat{\Delta} = \hat{\theta}_1 - \hat{\theta}_2\) la diferencia observada y \(SE\) su error estándar:</p>
             <p class="formula-line">\( \hat{\Delta} = \bar{x}_1 - \bar{x}_2, \qquad SE = \sqrt{\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}} \quad \text{(medias)} \)</p>
             <p class="formula-line">\( \hat{\Delta} = \hat{p}_1 - \hat{p}_2, \qquad SE = \sqrt{\dfrac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \dfrac{\hat{p}_2(1-\hat{p}_2)}{n_2}} \quad \text{(proporciones)} \)</p>
@@ -354,10 +354,11 @@
                 </table>
             </div>
             <p>Cada contraste de una cola tiene p-valor \(p = 1 - \Phi(z)\), donde \(\Phi\) es la función de distribución de la <a href="normal.html">normal estándar</a>. En el TOST se rechaza \(H_0\) solo si se rechazan los dos contrastes, así que su p-valor es el mayor de los dos: \(p_{\text{TOST}} = \max(p_1, p_2)\). La calculadora usa la aproximación normal, adecuada con muestras moderadas o grandes, que son las habituales en este tipo de estudios.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>La regla del intervalo de confianza</h3>
+            <details class="fold"><summary><h3>La regla del intervalo de confianza</h3></summary>
             <p>La forma más clara de entender estos contrastes es con el intervalo de confianza de la diferencia al nivel \(100(1-2\alpha)\,\%\). Con \(\alpha = 0{,}05\), es el intervalo del 90 %:</p>
             <ul>
                 <li><strong>No inferioridad</strong>: se declara si el límite inferior del intervalo queda por encima de \(-\delta\).</li>
@@ -366,10 +367,11 @@
             </ul>
             <p>¿Por qué el 90 % y no el 95 %? Porque cada contraste de una cola usa \(\alpha = 0{,}05\) en un solo extremo, y un intervalo del 90 % deja precisamente un 5 % en cada extremo. Las guías regulatorias de ensayos clínicos (ICH E9, EMA, FDA) suelen exigir \(\alpha = 0{,}025\) por cada cola, lo que equivale a comprobar el intervalo del 95 %; si trabajas en ese contexto, escribe 0,025 en la calculadora.</p>
             <p>Este enfoque también aclara los posibles resultados. Un intervalo puede quedar entero por encima de \(-\delta\) (no inferior), cruzar \(-\delta\) (no concluyente) o incluso quedar entero por encima de 0 (no inferior y, además, superior). Lo que nunca permite es concluir equivalencia solo porque el intervalo contenga el 0.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo elegir el margen δ</h3>
+            <details class="fold"><summary><h3>Cómo elegir el margen δ</h3></summary>
             <p>El margen es la decisión más importante del diseño y debe fijarse <strong>antes de ver los datos</strong>, con criterio clínico, técnico o de negocio, no estadístico. Algunas pautas habituales:</p>
             <ul>
                 <li>En ensayos clínicos frente a un control activo, el margen suele ser una fracción (por ejemplo, la mitad) del efecto que el control ha demostrado frente a placebo, para asegurar que el tratamiento nuevo conserva buena parte de ese efecto.</li>
@@ -377,10 +379,11 @@
                 <li>En comparación de métodos o procesos, el margen es la diferencia que no cambiaría ninguna decisión técnica.</li>
             </ul>
             <p>Un margen demasiado amplio hace que casi cualquier tratamiento «demuestre» no inferioridad; uno demasiado estrecho exige muestras enormes. Cambiar el margen después de ver los resultados invalida el análisis.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto 1: no inferioridad de proporciones</h3>
+            <details class="fold"><summary><h3>Ejemplo resuelto 1: no inferioridad de proporciones</h3></summary>
             <p>Un tratamiento nuevo, más barato, cura a 144 de 200 pacientes (\(\hat{p}_1 = 0{,}72\)); el de referencia, a 150 de 200 (\(\hat{p}_2 = 0{,}75\)). Se fijó de antemano un margen de no inferioridad de 10 puntos porcentuales (\(\delta = 0{,}10\)) y \(\alpha = 0{,}05\).</p>
             <p class="formula-line">\( \hat{\Delta} = 0{,}72 - 0{,}75 = -0{,}03 \)</p>
             <p class="formula-line">\( SE = \sqrt{\dfrac{0{,}72 \cdot 0{,}28}{200} + \dfrac{0{,}75 \cdot 0{,}25}{200}} = \sqrt{0{,}001008 + 0{,}000938} \approx 0{,}0441 \)</p>
@@ -396,10 +399,11 @@
             <p>Los dos contrastes rechazan su hipótesis nula, y \(p_{\text{TOST}} = \max(0{,}017;\ 0{,}0000004) = 0{,}017 &lt; 0{,}05\): <strong>se declara la equivalencia</strong>. El intervalo del 90 %, \(-2 \pm 1{,}645 \times 1{,}414\), va de −4,33 a 0,33 y cabe entero dentro de \([-5, 5]\).</p>
             <p>Conclusión: la diferencia entre los dos métodos es, con un 90 % de confianza, menor de 5 unidades en cualquier sentido. Fíjate en que un contraste clásico de dos medias tampoco habría encontrado diferencias significativas (\(p \approx 0{,}16\)), pero eso, por sí solo, no habría permitido afirmar que los métodos son intercambiables.</p>
             <p><strong>En la calculadora:</strong> «Equivalencia (TOST)», «Medias», x̄₁ = 48, x̄₂ = 50, s₁ = s₂ = 10, n₁ = n₂ = 100 y δ = 5.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p><strong>Si se declara la no inferioridad</strong> (p-valor &lt; α), los datos indican que el tratamiento no es peor que el control en más de \(\delta\). No significa que sea igual ni mejor: solo que la posible pérdida es menor que el margen. Si, además, el intervalo completo queda por encima de 0, también hay evidencia de superioridad; pasar de no inferioridad a superioridad es aceptable, pero no al revés.</p>
             <p><strong>Si se declara la equivalencia</strong>, la diferencia es, con la confianza indicada, menor que \(\delta\) en los dos sentidos. No afirma que los tratamientos sean idénticos, sino que cualquier diferencia es demasiado pequeña para importar.</p>
             <p><strong>Si no se declara</strong>, el resultado es no concluyente: los datos no permiten descartar una diferencia mayor que el margen. No demuestra que el tratamiento sea inferior ni que los tratamientos sean distintos. Lo más habitual es que la muestra fuera pequeña para el margen elegido.</p>
@@ -408,10 +412,11 @@
             <h3>Potencia del estudio</h3>
             <p>Debajo de la conclusión, la calculadora indica la <strong>potencia</strong> del contraste bajo el supuesto habitual del diseño: que tratamiento y control sean en realidad igual de eficaces (\(\Delta = 0\)). Es la probabilidad de que un estudio con tus tamaños de muestra y tu variabilidad demuestre la no inferioridad o la equivalencia cuando de verdad la hay. Si es baja, un resultado no concluyente era esperable.</p>
             <p>Para medias, el enlace abre la <a href="tamano-muestral-no-inferioridad.html">calculadora de tamaño muestral para no inferioridad y equivalencia</a> con tu margen, tu α y una desviación típica común calculada a partir de tus datos, para ver cuántos sujetos por grupo harían falta para alcanzar una potencia del 80 %. La equivalencia necesita más muestra que la no inferioridad, porque hay que superar los dos contrastes a la vez.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Errores frecuentes</h3>
+            <details class="fold"><summary><h3>Errores frecuentes</h3></summary>
             <ul>
                 <li><strong>Concluir equivalencia porque un contraste clásico no es significativo.</strong> La ausencia de diferencias significativas no demuestra igualdad.</li>
                 <li><strong>Elegir o cambiar el margen después de ver los datos.</strong></li>
@@ -419,6 +424,7 @@
                 <li><strong>Invertir el orden de los grupos</strong>: la diferencia es tratamiento − control, y la no inferioridad se refiere a que no sea demasiado negativa.</li>
                 <li><strong>Olvidar la calidad del estudio</strong>: la mala adherencia, las pérdidas o una medición imprecisa acercan los dos grupos y favorecen falsas conclusiones de no inferioridad. Por eso se recomienda analizar tanto por intención de tratar como por protocolo.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -698,7 +704,7 @@ calculate();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

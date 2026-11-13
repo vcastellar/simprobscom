@@ -49,7 +49,7 @@
     ]
   }
   </script>
-  <link rel="stylesheet" href="../style_new.css?v=20261107-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261113-1">
   <style>
     .sim-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
     .sim-tab {
@@ -301,7 +301,7 @@
     </section>
 
         <section class="card content-card">
-            <h3>Worked example</h3>
+            <details class="fold"><summary><h3>Worked example</h3></summary>
             <p>A digital marketing team wants to evaluate whether a new email subject line (variant B) improves the open rate over the current subject line (variant A). Historical data shows the current open rate is <strong>p_A = 0.22</strong> (22%). Variant B is expected to reach a rate of <strong>p_B = 0.26</strong> (26%), an absolute improvement of 4 percentage points.</p>
             <p>The team sets a two-tailed α = 0.05 and 80% power, which with the standard analytical formula yields approximately <strong>n = 1,789 users per group</strong> (3,578 in total). Before launching the real experiment, the team decides to validate these results via Monte Carlo simulation with <strong>N = 5,000 replicates</strong>.</p>
             <p>In each replicate i, the tool generates \( n_A = n_B = 1789 \) Bernoulli observations with the true rates, computes the z statistic of the two-proportion test, and records whether H₀ is rejected:</p>
@@ -309,10 +309,11 @@
             <p>After the 5,000 replicates, the simulation yields the following results: the empirical rejection rate is <strong>79.6%</strong>. With 5,000 replicates, the Monte Carlo standard error of that proportion is \( \sqrt{0.8 \cdot 0.2/5000} \approx 0.006 \), so the result is consistent with the theoretical power of 80%. The histogram of the z statistic shifts to the right relative to the null N(0,1), with the empirical mean around \( \bar{z} \approx 2.8 \), reflecting the real effect of \( \Delta = 0.04 \). The p-value distribution shows a strong concentration near 0: in about 80% of the replicates, the p-value falls below 0.05.</p>
             <p>To check the control of the type I error, the team also runs the simulation under H₀ (setting p_B = p_A = 0.22). With the same 5,000 replicates, the empirical rejection rate turns out to be <strong>4.7%</strong>, consistent with the nominal level α = 0.05 (near 0.05, the Monte Carlo standard error with 5,000 replicates is \( \approx 0.003 \)), and the p-value distribution is approximately uniform on [0, 1], exactly as theory predicts.</p>
             <p>The practical conclusion is twofold: the simulation finds no discrepancy with the analytically calculated sample size (the empirical power is consistent with the theoretical power within Monte Carlo error), and the test maintains good control of the type I error. If the real improvement is 4pp, the team will have roughly an 80% probability of detecting it with statistically significant results. This check is only valid under the simulated assumptions (known true rates and independent observations): if the real effect is smaller than assumed, the power will be lower too.</p>
+      </details>
         </section>
 
     <section class="card content-card">
-      <h3>How to interpret the result</h3>
+      <details class="fold"><summary><h3>How to interpret the result</h3></summary>
       <p>Monte Carlo simulation lets you empirically verify the test's properties: whether the type I error is really α when p_A = p_B, whether the power matches the theoretical value, and how the distribution of the z statistic behaves in practice. It is especially useful when you want to understand the test's behavior under specific conditions, or when the model's assumptions are not exactly met. The empirical rejection rate returned by the simulation is a direct estimate of power: how many times out of 100 identical experiments you would correctly conclude that B differs from A.</p>
 
       <h3>How to read the z histogram</h3>
@@ -320,6 +321,7 @@
 
       <h3>How to read the p-value distribution</h3>
       <p>Under a perfect H₀, the p-values follow a Uniform(0,1) distribution: the bar from 0 to 0.05 should contain approximately 5% of the replicates, and all bars should have similar heights. Under H₁, the p-values concentrate near 0: the proportion of replicates with p &lt; α is the empirical power. A p-value distribution with a marked concentration in the first bar and a rapid decline indicates that the test has good ability to detect the configured effect.</p>
+      </details>
     </section>
 
     <section id="seo-support-content" class="card content-card">
@@ -591,7 +593,7 @@ document.querySelectorAll('.sim-tab').forEach(tab => {
 document.getElementById('simRunBtn').addEventListener('click', runSimulation);
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

@@ -138,7 +138,7 @@
   ]
 }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -261,7 +261,7 @@
             <p>It is the procedure for deciding whether two independent populations have the same <strong>variability</strong>. It is known as <strong>Snedecor's F test</strong> (or the Fisher-Snedecor test) of equality of variances. It answers questions such as: is one machine more consistent than another? Does one instrument measure more precisely than another? Are the grades of one group more homogeneous than those of another? Is one investment more volatile than another?</p>
             <p>The idea is very direct: one sample variance is divided by the other. If the two populations have the same variance, the ratio should be around 1; the further it is from 1, the more evidence that the variabilities differ.</p>
 
-            <h3>Hypotheses and test statistic</h3>
+            <details class="fold fold-sub"><summary><h3>Hypotheses and test statistic</h3></summary>
             <p class="formula-line">\(H_0: \sigma_1^2 = \sigma_2^2\)</p>
             <p class="formula-line">\(H_1: \sigma_1^2 \neq \sigma_2^2\), \(\sigma_1^2 > \sigma_2^2\) or \(\sigma_1^2 &lt; \sigma_2^2\)</p>
             <p class="formula-line">\( F = \dfrac{s_1^2}{s_2^2}, \quad df_1 = n_1 - 1, \quad df_2 = n_2 - 1 \)</p>
@@ -271,8 +271,9 @@
                 <li><strong>\(df_1, df_2\)</strong>: numerator and denominator degrees of freedom.</li>
             </ul>
             <p>If the data in both groups are normal and \(H_0\) is true, the statistic follows <strong>Snedecor's F distribution</strong> with \(df_1\) and \(df_2\) degrees of freedom. Order matters: the first degrees of freedom always belong to the variance in the numerator.</p>
+            </details>
 
-            <h3>Critical values and tails</h3>
+            <details class="fold fold-sub"><summary><h3>Critical values and tails</h3></summary>
             <p>The F distribution is not symmetric: it only takes positive values and has a long right tail. That is why the two-tailed test has two different critical values, and the lower one is obtained from the <a href="tabla-f-snedecor.html">F table</a> with the relationship</p>
             <p class="formula-line">\( F_{\alpha/2;\ df_1,\ df_2} = \dfrac{1}{F_{1-\alpha/2;\ df_2,\ df_1}} \)</p>
             <p>Many textbooks avoid that step by always putting the larger variance in the numerator, so that \(F \geq 1\) and only the upper critical value is needed. The calculator does not need this: it computes both tails and accepts any order.</p>
@@ -281,17 +282,19 @@
                 <li><strong>Right tail</strong>: is the variance of group 1 greater?</li>
                 <li><strong>Left tail</strong>: is the variance of group 1 smaller?</li>
             </ul>
+            </details>
 
-            <h3>Decision rule</h3>
+            <details class="fold fold-sub"><summary><h3>Decision rule</h3></summary>
             <ul>
                 <li>If the <strong>p-value</strong> is less than \(\alpha\), \(H_0\) is rejected: there is evidence that the variances differ.</li>
                 <li>If the p-value is greater than or equal to \(\alpha\), there is not enough evidence to reject \(H_0\).</li>
                 <li>Not rejecting \(H_0\) does not prove that the variances are equal.</li>
             </ul>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Assumptions: beware of normality</h3>
+            <details class="fold"><summary><h3>Assumptions: beware of normality</h3></summary>
             <ul>
                 <li><strong>Two independent samples</strong>, with independent observations within each one.</li>
                 <li><strong>Normal data in both groups.</strong> This is the critical assumption.</li>
@@ -301,10 +304,11 @@
 
             <h3>Is it useful for choosing the test for means?</h3>
             <p>For years the F test was taught as a preliminary step to the two-means test: if equality of variances was not rejected, Student's t with a pooled variance was used; if it was rejected, Welch's. This is now discouraged: that two-stage procedure does not control the type I error well, and the F test has little power with small samples, precisely when it would be needed. The recommendation is to use <a href="contraste-hipotesis-dos-medias.html">Welch's test</a> directly, which works well whether or not the variances are equal. The F test should be reserved for when variability is itself the question.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example 1: two-tailed test</h3>
+            <details class="fold"><summary><h3>Worked example 1: two-tailed test</h3></summary>
             <p>The variability of two production lines of metal parts is compared. Line 1: \(s_1^2 = 16\) mm² with \(n_1 = 20\) parts. Line 2: \(s_2^2 = 9\) mm² with \(n_2 = 18\) parts. We test \(H_0\colon \sigma_1^2 = \sigma_2^2\) against \(H_1\colon \sigma_1^2 \neq \sigma_2^2\) with \(\alpha = 0.05\).</p>
             <p class="formula-line">\( F = \dfrac{16}{9} \approx 1.778, \quad df_1 = 19, \quad df_2 = 17 \)</p>
             <p>The critical values are \(F_{0.025;\,19,\,17} \approx 0.39\) and \(F_{0.975;\,19,\,17} \approx 2.63\). Since \(0.39 < 1.778 < 2.63\), the statistic does not fall in the rejection region; the p-value is \(p \approx 0.238\). <strong>\(H_0\) is not rejected</strong>.</p>
@@ -316,10 +320,11 @@
             <p class="formula-line">\( F = \dfrac{36}{12} = 3.00, \quad df_1 = df_2 = 24 \)</p>
             <p>The right-tailed critical value is \(F_{0.95;\,24,\,24} \approx 1.98\) and the p-value is \(p \approx 0.005\). <strong>\(H_0\) is rejected</strong>: there is evidence that the old instrument is less precise. Its standard deviation is about 1.7 times that of the new one (\(\sqrt{3} \approx 1.73\)), with a 95% interval for that ratio from 1.15 to 2.61.</p>
             <p><strong>In the calculator:</strong> n₁ = 25, n₂ = 25, s₁² = 36, s₂² = 12 and "Right tail".</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that the two populations differ in variability, provided the data are normal. To judge by how much, the ratio of standard deviations is more intuitive than that of variances: an F of 4 means one standard deviation is twice the other.</p>
             <p><strong>Not rejecting \(H_0\)</strong> does not prove that the variances are equal. With small samples, the confidence interval for the ratio is very wide, as in example 1.</p>
             <p>In the calculator, the result shows the decision with the p-value, the F statistic with its degrees of freedom and a sentence stating the conclusion. On the chart, the green area is the non-rejection region on the F distribution, the red areas are the critical regions and the amber line marks the statistic. Under "Calculation details" you will find the critical values and the confidence intervals for the ratio of variances and of standard deviations.</p>
@@ -338,10 +343,11 @@
                     </tbody>
                 </table>
             </div>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Common mistakes</h3>
+            <details class="fold"><summary><h3>Common mistakes</h3></summary>
             <ul>
                 <li><strong>Applying the F test to non-normal data</strong>: this is its weak point. Use Levene if in doubt.</li>
                 <li><strong>Entering standard deviations instead of variances.</strong></li>
@@ -350,6 +356,7 @@
                 <li><strong>Concluding that the variances are equal</strong> because the test is not significant with small samples.</li>
                 <li><strong>Using it with paired data</strong>: the two samples must be independent.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -660,7 +667,7 @@ document.getElementById('calcBtn').addEventListener('click', calculateDosVarianz
 calculateDosVarianzas();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

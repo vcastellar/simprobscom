@@ -69,7 +69,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <style>
         .contingency-table {
             border-collapse: collapse;
@@ -305,7 +305,7 @@
             <p>It is the test for deciding whether there is an <strong>association between two dichotomous variables</strong> arranged in a 2×2 table —treatment or placebo against recovered or not, exposed or not against ill or not— when the sample is <strong>small</strong>. Unlike the <a href="contraste-independencia-chi-cuadrado.html">chi-square test</a> and the <a href="contraste-hipotesis-dos-proporciones.html">two-proportion z-test</a>, it does not rely on any normal approximation: it computes the exact probability of every possible table. That makes it the right choice for small trials, rare events, subgroup analyses and whenever an expected frequency is below 5.</p>
             <p>Ronald Fisher devised it with the famous experiment of the lady who claimed she could tell whether the milk or the tea had been poured first into her cup: with only 8 cups, the question was how many correct answers were needed to rule out that she was guessing.</p>
 
-            <h3>The table and the hypothesis</h3>
+            <details class="fold fold-sub"><summary><h3>The table and the hypothesis</h3></summary>
             <div class="content-table-wrap">
                 <table class="content-table">
                     <thead>
@@ -321,10 +321,11 @@
             <p class="formula-line">\(H_0\): rows and columns are independent (\(OR = 1\))</p>
             <p class="formula-line">\(H_1\): there is an association (\(OR \neq 1\), \(OR > 1\) or \(OR < 1\))</p>
             <p>Usually the rows are the groups (treatment and control) and the columns the outcome (yes and no). Then \(H_0\) says that the proportion of column A is the same in both rows: \(a/(a+b)\) against \(c/(c+d)\).</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>How the exact p-value is computed</h3>
+            <details class="fold"><summary><h3>How the exact p-value is computed</h3></summary>
             <p>The test fixes the row and column totals and asks: if there were no association, how likely would each possible way of distributing the individuals within the table be? With fixed margins, knowing cell a is enough to know the whole table, and under \(H_0\) that cell follows a <strong>hypergeometric</strong> distribution:</p>
             <p class="formula-line">\( P(X = k) = \dfrac{\dbinom{a+b}{k}\dbinom{c+d}{a+c-k}}{\dbinom{n}{a+c}} \)</p>
             <p>The p-value adds up the probabilities of the tables at least as extreme as the observed one:</p>
@@ -342,10 +343,11 @@
                 <li>If it is greater than or equal to \(\alpha\), there is not enough evidence to reject independence.</li>
                 <li>The direction is given by the odds ratio: OR &gt; 1 indicates that column A is more frequent in row 1.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Fisher, chi-square or z-test?</h3>
+            <details class="fold"><summary><h3>Fisher, chi-square or z-test?</h3></summary>
             <div class="content-table-wrap">
                 <table class="content-table">
                     <thead>
@@ -360,20 +362,22 @@
                 </table>
             </div>
             <p>With today's computers, Fisher can also be used with large samples. The reason for preferring chi-square or the z-test in that case is practical: they make confidence intervals and power easy to compute, and the results agree.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Assumptions of the test</h3>
+            <details class="fold"><summary><h3>Assumptions of the test</h3></summary>
             <ul>
                 <li><strong>Independent observations</strong>, each classified into a single cell.</li>
                 <li><strong>Two dichotomous variables</strong>.</li>
                 <li><strong>Fixed margins</strong>: strictly speaking, the test assumes fixed row and column totals. In practice it is also used when they are not, and it is then somewhat conservative.</li>
             </ul>
             <p>It requires no minimum sample size: it is valid even with zero cells, which give an odds ratio of 0 or infinity.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example 1: a small trial</h3>
+            <details class="fold"><summary><h3>Worked example 1: a small trial</h3></summary>
             <p>In a trial, 20 patients are randomly assigned to treatment or placebo, 10 in each group. With the treatment 7 of 10 recover; with placebo, 4 of 10. The table is a = 7, b = 3 (treatment) and c = 4, d = 6 (placebo). The margins are 10 and 10 per row, and 11 recovered and 9 not recovered in total.</p>
             <p>The probability of the observed table under \(H_0\) is</p>
             <p class="formula-line">\( P(X = 7) = \dfrac{\dbinom{10}{7}\dbinom{10}{4}}{\dbinom{20}{11}} \approx 0.150 \)</p>
@@ -385,10 +389,11 @@
             <p>With the table the calculator opens with, a = 8, b = 2, c = 1, d = 9, column A appears in 80% of row 1 and 10% of row 2. The two-tailed exact p-value is \(p \approx 0.0055\): <strong>\(H_0\) is rejected</strong>. The odds ratio is \((8 \times 9)/(2 \times 1) = 36\), with a very wide confidence interval, as expected from such a small sample.</p>
             <p>Pearson's chi-square would give \(p \approx 0.0017\) here, considerably smaller, but it is not reliable: the expected frequencies of the four cells are 4.5 and 5.5, at the limit of Cochran's rule. Fisher is the correct reference.</p>
             <p><strong>In the calculator:</strong> these are the values the page opens with.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that the two variables are associated. To judge the magnitude, look at the proportions in each row, their difference and the odds ratio with its confidence interval; in small samples, that interval tends to be very wide.</p>
             <p><strong>Not rejecting \(H_0\)</strong> does not prove independence. With little data, the power of the test is low, as in example 1.</p>
             <p>In the calculator, the result shows the decision with the exact p-value, the odds ratio, the proportion of column A in each row and a sentence stating the conclusion. Under "Calculation details" you will find the difference between rows in percentage points and the probability of the observed table.</p>
@@ -398,10 +403,11 @@
 
             <h3>Confidence interval for the odds ratio</h3>
             <p>The other link opens the <a href="intervalo-confianza-odds-ratio.html">odds ratio confidence interval calculator</a> with your table. If a cell is zero, it applies the 0.5 correction automatically.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Common mistakes</h3>
+            <details class="fold"><summary><h3>Common mistakes</h3></summary>
             <ul>
                 <li><strong>Using chi-square with very small expected frequencies</strong> instead of the exact test.</li>
                 <li><strong>Concluding that there is no effect</strong> in a small study because the test is not significant.</li>
@@ -409,6 +415,7 @@
                 <li><strong>Applying it to paired data</strong>: that is what McNemar's test is for.</li>
                 <li><strong>Reporting only the p-value</strong>, without the proportions or the odds ratio.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -675,7 +682,7 @@ document.getElementById('calcFisherBtn').addEventListener('click', calculateFish
 calculateFisher();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

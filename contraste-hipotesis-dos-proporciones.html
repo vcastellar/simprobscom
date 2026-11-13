@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -244,7 +244,7 @@
             <p>Es el procedimiento que permite decidir si la proporción de «éxitos» es la misma en dos grupos independientes. Es el contraste detrás de muchísimas preguntas prácticas: ¿convierte más la versión B de la web que la A? ¿Se curan más pacientes con el tratamiento nuevo que con el estándar? ¿Votan igual hombres y mujeres? ¿Hay más defectos en el turno de noche? En cada grupo se cuenta cuántos individuos cumplen la condición, y se compara el porcentaje.</p>
             <p>Se parte de la <strong>hipótesis nula</strong> de que las dos proporciones poblacionales son iguales, \(H_0: p_1 = p_2\), y se mide cuánto se separan las proporciones muestrales \(\hat{p}_1\) y \(\hat{p}_2\). Aunque los grupos fueran idénticos, sus proporciones muestrales nunca coincidirían exactamente; la pregunta es si la diferencia observada es mayor de lo que el azar explica razonablemente.</p>
 
-            <h3>Hipótesis y estadístico</h3>
+            <details class="fold fold-sub"><summary><h3>Hipótesis y estadístico</h3></summary>
             <p class="formula-line">\(H_0: p_1 = p_2\)</p>
             <p class="formula-line">\(H_1: p_1 \neq p_2\), \(p_1 > p_2\) o \(p_1 < p_2\)</p>
             <p class="formula-line">\( z = \dfrac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1-\hat{p})\left(\dfrac{1}{n_1} + \dfrac{1}{n_2}\right)}}, \qquad \hat{p} = \dfrac{x_1 + x_2}{n_1 + n_2} \)</p>
@@ -256,10 +256,11 @@
             </ul>
             <p>El denominador es el error estándar de la diferencia <em>si \(H_0\) fuera cierta</em>. Bajo \(H_0\) los dos grupos comparten la misma proporción, y la mejor estimación de esa proporción común es la combinada \(\hat{p}\), que junta todos los éxitos y todos los individuos. Con muestras suficientemente grandes, el estadístico sigue aproximadamente una normal estándar.</p>
             <p>Este contraste z es equivalente al <a href="contraste-independencia-chi-cuadrado.html">chi-cuadrado de independencia</a> en una tabla 2×2: en el bilateral, \(z^2 = \chi^2\) y los p-valores coinciden. La ventaja del z es que permite contrastes de una cola y da directamente el sentido de la diferencia.</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo se hace el contraste, paso a paso</h3>
+            <details class="fold"><summary><h3>Cómo se hace el contraste, paso a paso</h3></summary>
             <ol>
                 <li><strong>Define qué grupo es el 1 y cuál el 2</strong>, y qué cuenta como éxito. La diferencia se calcula siempre como grupo 1 − grupo 2.</li>
                 <li><strong>Plantea las hipótesis y fija \(\alpha\)</strong>, normalmente 0,05.</li>
@@ -275,10 +276,11 @@
                 <li>No rechazar \(H_0\) no demuestra que las proporciones sean iguales.</li>
             </ul>
             <p>Con una cola, la dirección se fija antes de ver los datos: la cola derecha contrasta que la proporción del grupo 1 es mayor que la del grupo 2. En los tests A/B suele recomendarse el bilateral, porque un cambio también puede empeorar los resultados.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Diferencia, riesgo relativo y odds ratio</h3>
+            <details class="fold"><summary><h3>Diferencia, riesgo relativo y odds ratio</h3></summary>
             <p>Hay tres formas habituales de expresar cuánto difieren dos proporciones, y conviene no confundirlas:</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -293,19 +295,21 @@
                 </table>
             </div>
             <p>La diferencia absoluta es la más útil para decidir: un aumento del 50 % suena espectacular, pero puede ser pasar del 2 % al 3 %. El riesgo relativo es intuitivo para comunicar, y el <a href="contraste-hipotesis-odds-ratio.html">odds ratio</a> es la medida natural en los estudios de casos y controles y en la regresión logística. Las tres son 0 o 1 a la vez, así que el contraste de igualdad es el mismo; lo que cambia es cómo se cuenta el tamaño del efecto.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Supuestos del contraste</h3>
+            <details class="fold"><summary><h3>Supuestos del contraste</h3></summary>
             <ul>
                 <li><strong>Dos grupos independientes</strong>: cada individuo está en un solo grupo. Si son los mismos individuos en dos momentos o condiciones, usa el <a href="contraste-hipotesis-proporciones-apareadas.html">test de McNemar</a>.</li>
                 <li><strong>Observaciones independientes dentro de cada grupo</strong>. En un test A/B, por ejemplo, conviene contar usuarios y no páginas vistas, porque las visitas de un mismo usuario no son independientes.</li>
                 <li><strong>Tamaño suficiente</strong>: como regla práctica, al menos 5 éxitos y 5 fracasos esperados en cada grupo (con la proporción combinada). Si no se cumple, usa el <a href="test-exacto-fisher.html">test exacto de Fisher</a>; la calculadora te avisa y enlaza con él ya rellenado.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto 1: un tratamiento frente a otro</h3>
+            <details class="fold"><summary><h3>Ejemplo resuelto 1: un tratamiento frente a otro</h3></summary>
             <p>Con el tratamiento nuevo mejoran 62 de 120 pacientes (\(\hat{p}_1 = 0{,}517\)); con el estándar, 48 de 130 (\(\hat{p}_2 = 0{,}369\)). Se contrasta \(H_0\colon p_1 = p_2\) frente a \(H_1\colon p_1 \neq p_2\) con \(\alpha = 0{,}05\).</p>
             <p>La proporción combinada es \(\hat{p} = 110/250 = 0{,}44\), y el error estándar bajo \(H_0\):</p>
             <p class="formula-line">\( SE = \sqrt{0{,}44 \times 0{,}56 \left(\dfrac{1}{120} + \dfrac{1}{130}\right)} \approx 0{,}0628 \)</p>
@@ -318,10 +322,11 @@
             <p class="formula-line">\( \hat{p} = \dfrac{900}{20\,000} = 0{,}045, \qquad SE = \sqrt{0{,}045 \times 0{,}955 \times \dfrac{2}{10\,000}} \approx 0{,}00293, \qquad z = \dfrac{0{,}042 - 0{,}048}{0{,}00293} \approx -2{,}05 \)</p>
             <p>El p-valor es \(p \approx 0{,}041\): <strong>se rechaza \(H_0\)</strong>, con la versión B por delante. Fíjate en el tamaño: 0,6 puntos porcentuales. Con 10 000 visitantes por versión, el contraste detecta con un 80 % de probabilidad diferencias de apenas 0,9 puntos, así que diferencias pequeñas salen significativas. Que sea significativa no significa que compense: hay que valorar si 0,6 puntos más de conversión justifican el cambio. Para este tipo de análisis tienes también las calculadoras de <a href="ab-testing/">test A/B</a>.</p>
             <p><strong>En la calculadora:</strong> x₁ = 420, n₁ = 10000, x₂ = 480, n₂ = 10000 y «Bilateral (≠)».</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que la diferencia entre las proporciones es demasiado grande para atribuirla al azar si los dos grupos fueran iguales. Para valorar si importa, mira la diferencia en puntos porcentuales y su intervalo de confianza.</p>
             <p><strong>No rechazar \(H_0\)</strong> (p-valor ≥ α) no demuestra que las proporciones sean iguales. Si quieres demostrar precisamente que un tratamiento no es peor que otro, el planteamiento correcto es un <a href="contraste-hipotesis-no-inferioridad.html">contraste de no inferioridad</a>.</p>
             <p>En la calculadora, el resultado muestra la decisión con el p-valor, el estadístico z con las dos proporciones y una frase con la conclusión. En el gráfico, la zona verde es la región de no rechazo, las rojas son las regiones críticas y la línea ámbar marca el estadístico observado. En «Detalles del cálculo» tienes la diferencia en puntos, la proporción combinada, el error estándar, el intervalo de confianza y el riesgo relativo.</p>
@@ -331,10 +336,11 @@
 
             <h3>Relación con el intervalo de confianza</h3>
             <p>El otro enlace abre el <a href="intervalo-confianza-diferencia-proporciones.html">intervalo de confianza para la diferencia de proporciones</a> con tus datos. Contraste e intervalo casi siempre coinciden: si el intervalo no contiene el 0, el contraste es significativo. Pueden discrepar en casos límite, porque el contraste usa el error estándar con la proporción combinada y el intervalo de Wald, el de cada grupo.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Errores frecuentes</h3>
+            <details class="fold"><summary><h3>Errores frecuentes</h3></summary>
             <ul>
                 <li><strong>Usarlo con datos emparejados</strong>, como las respuestas de las mismas personas antes y después.</li>
                 <li><strong>Contar unidades que no son independientes</strong>, como páginas vistas en lugar de usuarios.</li>
@@ -343,6 +349,7 @@
                 <li><strong>Concluir que dos grupos son iguales</strong> porque el contraste no es significativo.</li>
                 <li><strong>Aplicar el contraste z con muy pocos éxitos</strong>; en ese caso, usa el test exacto de Fisher.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -612,7 +619,7 @@ calculateTwoPropTest();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

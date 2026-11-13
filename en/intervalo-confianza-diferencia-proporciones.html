@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261105-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -216,41 +216,46 @@
 
             <p>Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area outside the interval. For 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\) in each tail.</p>
 
-            <h3>Wald method (normal approximation)</h3>
+            <details class="fold fold-sub"><summary><h3>Wald method (normal approximation)</h3></summary>
             <p class="formula-line">\( (\hat{p}_1 - \hat{p}_2) \pm z_{\alpha/2} \cdot \sqrt{\dfrac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \dfrac{\hat{p}_2(1-\hat{p}_2)}{n_2}} \)</p>
             <p>This is the classic method and is adequate when both groups have enough successes and failures: \(n_i\hat{p}_i \geq 5\) and \(n_i(1-\hat{p}_i) \geq 5\).</p>
+            </details>
 
-            <h3>Newcombe-Wilson method (recommended)</h3>
+            <details class="fold fold-sub"><summary><h3>Newcombe-Wilson method (recommended)</h3></summary>
             <p>The Newcombe-Wilson method does not apply the normal approximation directly to the difference \(\hat{p}_1-\hat{p}_2\). It first computes, separately, a Wilson score interval for each proportion: \([L_1, U_1]\) for \(p_1\) and \([L_2, U_2]\) for \(p_2\). The idea comes from Newcombe's (1998) work, which compared several methods for the difference of proportions and highlighted the good performance of Wilson-based methods.</p>
             <p>It then combines the distances from each observed proportion to its Wilson limits, keeping the sign of the estimated difference \(d = \hat{p}_1 - \hat{p}_2\). The combination is not simply \([L_1-U_2, U_1-L_2]\): the uncertainties of both groups are added quadratically to build each end of the interval:</p>
             <p class="formula-line">\( L = d - \sqrt{(\hat{p}_1-L_1)^2 + (U_2-\hat{p}_2)^2} \)</p>
             <p class="formula-line">\( U = d + \sqrt{(U_1-\hat{p}_1)^2 + (\hat{p}_2-L_2)^2} \)</p>
             <p>This combination tends to keep the actual coverage of the interval closer to nominal than Wald, especially with small samples or proportions near 0 or 1. That's why it's a good default choice for comparing two independent percentages. This page uses the version without continuity correction, which is the standard form for a fast, reproducible calculator.</p>
+            </details>
 
-            <h3>Worked example</h3>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>Group 1 has 84 successes out of 120 observations and group 2 has 57 successes out of 110 observations. \(\hat{p}_1 = 0.70\), \(\hat{p}_2 \approx 0.518\) and the estimated difference is \(0.182\). With 95% confidence (\(C=0.95\), \(\alpha=0.05\), Wald method):</p>
             <p class="formula-line">\( 0.182 \pm 1.960 \cdot \sqrt{\frac{0.70\cdot0.30}{120} + \frac{0.518\cdot0.482}{110}} \approx [0.058,\; 0.306] \)</p>
+            </details>
         </section>
 
 
 
         <section class="card content-card">
-            <h3>Assumptions for comparing two proportions</h3>
+            <details class="fold"><summary><h3>Assumptions for comparing two proportions</h3></summary>
             <ul>
                 <li>The two groups must be independent of each other; there must be no unit-to-unit pairing.</li>
                 <li>Within each group, every observation must be classified as a success or failure and have the same probability of success within that group.</li>
                 <li>Observations within each group must be independent.</li>
                 <li>Wald requires enough successes and failures in both groups: \(n_i\hat p_i\ge 5\) and \(n_i(1-\hat p_i)\ge 5\). If this doesn't hold, Newcombe-Wilson is usually preferable.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Wald or Newcombe-Wilson?</h3>
+            <details class="fold"><summary><h3>Wald or Newcombe-Wilson?</h3></summary>
             <p>Wald is easy to interpret and generally works well with large samples and non-extreme proportions. Newcombe-Wilson tends to be preferable by default if either group has few successes or few failures, because it uses individual Wilson intervals and combines their uncertainties quadratically, not through a direct subtraction of limits. This reduces the coverage problems of the classic normal interval.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p>The interval \([L, U]\) is the plausible range of the difference of population proportions \(p_1 - p_2\) given the chosen confidence level. If the experiment were repeated many times with samples of the same size, a proportion \(C\) of the intervals built with the same method would contain the true value of \(p_1 - p_2\). The width of the interval reflects precision: larger samples or proportions farther from 0.5 produce narrower intervals; lower variability and larger \(n\) lead to more precise estimates.</p>
             <p>The key decision hinges on whether 0 belongs to the interval. If \(0 \in [L, U]\), the data do not rule out \(p_1 = p_2\) at the chosen confidence level; equivalently, the two-sided test \(H_0\!: p_1 = p_2\) would not be rejected at level \(\alpha = 1 - C\). If \(0 \notin [L, U]\), there is evidence of a difference: if \(L > 0\) group 1's proportion is significantly higher; if \(U < 0\) group 2's proportion is significantly higher. The calculator automatically states which of the two cases applies, for both methods when shown together.</p>
             <ul>
@@ -258,6 +263,7 @@
                 <li><strong>Wald vs. Newcombe-Wilson:</strong> when Wald's normality condition holds in both groups, both methods usually agree on the conclusion. If either group has few successes or failures, Newcombe-Wilson tends to be more reliable because it uses individual Wilson intervals and combines their uncertainties quadratically.</li>
                 <li><strong>Reading the chart:</strong> the green region under the standard normal curve is the confidence zone and the red tails (area \(\alpha/2\) each) mark the critical values \(\pm z_{\alpha/2}\). The chart visualizes the z values compatible with the data; the CI on the original scale is obtained by mapping those values back to the difference of proportions.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -303,7 +309,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../ci-charts.js?v=20261110-1"></script>
+<script src="../ci-charts.js?v=20261113-1"></script>
 <script>
 
 document.getElementById('conf').addEventListener('change', function () {
@@ -423,7 +429,7 @@ window.CICharts && CICharts.customLevel({ onChange: calculate });
 calculate();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

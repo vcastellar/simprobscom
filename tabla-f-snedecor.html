@@ -31,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional"></noscript>
-    <link rel="stylesheet" href="style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <style>
         .site-nav { position:sticky; top:0; z-index:100; background:rgba(255,255,255,0.92); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid rgba(15,23,42,0.08); }
         .site-nav-inner { width:min(1200px,94vw); margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 0; }
@@ -92,6 +92,12 @@
         .dist-diagram .dg-caption { margin: 6px 2px 0; font-size: 0.85rem; color: var(--text-muted); text-align: center; }
         .dist-diagram .dg-caption strong { color: var(--accent); font-weight: 700; }
         .dist-diagram .dg-hint { opacity: 0.7; }
+        /* Bloque «Para qué sirve esta tabla» */
+        .table-uses { margin:22px 0 0; padding:16px 20px; }
+        .table-uses h2 { font-size:1.05rem; margin:0 0 8px; }
+        .table-uses ul { margin:0; padding-left:1.15rem; display:grid; gap:6px; font-size:0.92rem; line-height:1.5; }
+        /* Sin mayúsculas: convertirían α, ν, λ y μ en A, N, Λ y M. */
+        .table-section-title { text-transform:none; letter-spacing:0.02em; }
     </style>
 
     <script type="application/ld+json">
@@ -324,19 +330,30 @@
             </div>
         </section>
 
+        <section class="card table-uses">
+            <h2>Para qué sirve esta tabla</h2>
+            <ul>
+                <li><strong>ANOVA de un factor:</strong> el estadístico F se compara con el valor crítico de ν₁ = k − 1 y ν₂ = N − k grados de libertad (k grupos, N datos en total). <a href="anova.html" data-goatcounter-click="tabla-f/anova" data-goatcounter-title="Hacer el ANOVA completo">Hacer el ANOVA completo</a> o <a href="tamano-muestral-anova.html" data-goatcounter-click="tabla-f/tamano-anova" data-goatcounter-title="calcular el tamaño muestral">calcular el tamaño muestral</a>.</li>
+                <li><strong>Comparar dos varianzas:</strong> F = s₁²/s₂², con ν₁ = n₁ − 1 y ν₂ = n₂ − 1. <a href="contraste-hipotesis-dos-varianzas.html" data-goatcounter-click="tabla-f/dos-varianzas" data-goatcounter-title="Hacer el contraste">Hacer el contraste</a>.</li>
+                <li><strong>Valores de la cola izquierda:</strong> la tabla solo da el valor que deja un área α a la <em>derecha</em>. Para el que deja α a la <em>izquierda</em> (lo necesitas, por ejemplo, en el contraste bilateral de dos varianzas), intercambia los grados de libertad, busca ese valor y calcula su inverso. Por ejemplo, con ν₁ = 5, ν₂ = 10 y α = 0,05: en la tabla de α = 0,05, columna ν₁ = 10 y fila ν₂ = 5, aparece 4,735; el valor que deja un 5 % a la izquierda es 1/4,735 = 0,211. Funciona porque, si F sigue una F(ν₁, ν₂), su inverso 1/F sigue una F(ν₂, ν₁). Para cualquier otro valor, usa la <a href="centralf.html" data-goatcounter-click="tabla-f/calculadora" data-goatcounter-title="calculadora de la F">calculadora de la F</a>.</li>
+            </ul>
+        </section>
+
         <section class="card content-card" style="border-top:3px solid #2563eb;">
             <h3>Cómo usar estas tablas</h3>
-            <h3>Distribución F de Snedecor</h3>
+            <details class="fold fold-sub"><summary><h3>Distribución F de Snedecor</h3></summary>
             <p>Si X₁ ~ χ²(ν₁) y X₂ ~ χ²(ν₂) son independientes, entonces F = (X₁/ν₁) / (X₂/ν₂) sigue una distribución F con ν₁ y ν₂ grados de libertad. Su función de densidad es:</p>
             <p class="formula-line">\( f(f;\nu_1,\nu_2) = \dfrac{\sqrt{\dfrac{(\nu_1 f)^{\nu_1}\,\nu_2^{\nu_2}}{(\nu_1 f+\nu_2)^{\nu_1+\nu_2}}}}{f\,B\!\left(\tfrac{\nu_1}{2},\tfrac{\nu_2}{2}\right)}, \quad f > 0 \)</p>
             <p>La media es ν₂/(ν₂ − 2) para ν₂ > 2. Tiene asimetría positiva.</p>
+            </details>
 
-            <h3>Valores críticos</h3>
+            <details class="fold fold-sub"><summary><h3>Valores críticos</h3></summary>
             <p>La celda en la fila ν₂ y columna ν₁ muestra el cuantil F tal que P(F > f) = α. Para un ANOVA al 5 % con ν₁ = 3 grupos y ν₂ = 20 residuos, busca la tabla α = 0.05 → F = 3.098.</p>
             <ul>
                 <li>Para contrastes de igualdad de varianzas (bilateral), usa α/2 en la tabla y rechaza si F &gt; F(α/2) o F &lt; 1/F(α/2).</li>
                 <li>Cuando ν₁ → ∞ y ν₂ → ∞, la distribución F tiende a 1.</li>
             </ul>
+            </details>
 
             <h3>Tablas y calculadoras relacionadas</h3>
             <ul class="distribution-links">
@@ -554,7 +571,7 @@
 <script src="table-actions.js?v=20261103-3"></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

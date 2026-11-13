@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Simulador de proceso de Poisson | ProbLab">
   <meta name="twitter:description" content="Simulador del proceso de Poisson: trayectorias, número de eventos y tiempos entre llegadas con curvas teóricas.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261113-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -489,7 +489,7 @@
     </section>
 
     <section class="card content-card">
-      <h2>La distribución exponencial como tiempo entre eventos</h2>
+      <details class="fold"><summary><h2>La distribución exponencial como tiempo entre eventos</h2></summary>
       <p>Sea \(T_1\) el tiempo hasta el primer evento. Calcular su distribución es sencillo aprovechando la conexión con el proceso de Poisson:</p>
       <div class="math-block">
         \[ P(T_1 > t) = P(N(t) = 0) = e^{-\lambda t} \]
@@ -501,10 +501,11 @@
         \[ P(T > s + t \mid T > s) = P(T > t) \]
       </div>
       <p>Es decir, el tiempo restante hasta el próximo evento no depende del tiempo que ya lleva esperando. Esta es la única distribución continua con esta propiedad — el análogo continuo de la distribución geométrica (la única discreta con falta de memoria).</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Cómo funciona el simulador, paso a paso</h2>
+      <details class="fold"><summary><h2>Cómo funciona el simulador, paso a paso</h2></summary>
       <p>Las tres pestañas usan el mismo generador. El simulador no sortea «cuántos eventos hay» con una distribución de Poisson: construye el proceso evento a evento, a partir de los tiempos de espera, y deja que la distribución de Poisson aparezca sola.</p>
       <ol>
         <li><strong>El reloj empieza en t = 0.</strong></li>
@@ -519,10 +520,11 @@
         <li><strong>Tiempos entre llegadas.</strong> Reúne todos los tiempos de espera generados en todas las repeticiones y dibuja su histograma, en escala de densidad, junto a la curva exponencial λe<sup>−λt</sup>. Las tarjetas comparan la media (1/λ) y la mediana (ln 2/λ). Se incluye también el tiempo de espera que está en curso cuando se alcanza T; más abajo se explica por qué.</li>
       </ul>
       <p>Con los valores iniciales, λ = 3 y T = 5, se esperan λT = 15 eventos, con una desviación típica de √15 ≈ 3,9: es normal ver trayectorias con 11 o con 19 eventos. El número exacto 15 solo sale en torno al 10 % de las veces.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>De dónde salen las fórmulas</h2>
+      <details class="fold"><summary><h2>De dónde salen las fórmulas</h2></summary>
       <h3>Cómo se genera un tiempo exponencial</h3>
       <p>El ordenador solo sabe generar números U uniformes entre 0 y 1. Para convertirlos en tiempos exponenciales se usa el <strong>método de la transformada inversa</strong>: se iguala U a la función de distribución de la exponencial, \(F(t) = 1 - e^{-\lambda t}\), y se despeja el tiempo.</p>
       <div class="math-block">\[ U = 1 - e^{-\lambda W} \quad\Longrightarrow\quad W = -\frac{\ln(1-U)}{\lambda}. \]</div>
@@ -551,10 +553,11 @@
       <h3>La paradoja de la espera</h3>
       <p>Una consecuencia sorprendente: si se llega en un instante cualquiera, el intervalo entre eventos en el que se cae dura de media 2/λ, el doble de lo normal. No hay contradicción: es más fácil caer en un intervalo largo que en uno corto, precisamente porque ocupa más tiempo.</p>
       <p>Esto afecta a cómo se miden los tiempos en la tercera pestaña. El intervalo que está en curso cuando se alcanza T es uno de esos intervalos «largos». Si se descartara por estar incompleto, la muestra quedaría sesgada hacia tiempos cortos (con λ = 3 y T = 5, la media saldría un 7 % por debajo de 1/λ, y ningún tiempo podría superar T). Por eso el simulador lo incluye completo: con todos los intervalos que empiezan antes de T, la media y el histograma coinciden con los de la exponencial.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Aplicaciones del proceso de Poisson</h2>
+      <details class="fold"><summary><h2>Aplicaciones del proceso de Poisson</h2></summary>
       <p>El proceso de Poisson es el modelo de referencia para eventos raros o eventos que llegan de forma aleatoria a tasa constante. Algunas aplicaciones clásicas:</p>
       <ul>
         <li><strong>Teoría de colas (M/M/1):</strong> las llegadas de clientes a un servicio (banco, ventanilla, servidor web) se modelan frecuentemente con un proceso de Poisson con tasa λ. Las colas M/M/1 suponen además que el tiempo de servicio es exponencial con tasa μ. La estabilidad del sistema requiere ρ = λ/μ &lt; 1.</li>
@@ -564,10 +567,11 @@
         <li><strong>Epidemiología de enfermedades raras:</strong> la incidencia de enfermedades raras en una población de tamaño n, con probabilidad p pequeña de padecerla, puede aproximarse por Poisson(np).</li>
         <li><strong>Astronomía y física de partículas:</strong> los fotones que llegan a un detector, los cósmicos que impactan en un área, o las colisiones en un acelerador de partículas.</li>
       </ul>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Generalizaciones del proceso de Poisson</h2>
+      <details class="fold"><summary><h2>Generalizaciones del proceso de Poisson</h2></summary>
       <p>El proceso de Poisson homogéneo (tasa λ constante) tiene varias generalizaciones importantes:</p>
       <ul>
         <li><strong>Proceso de Poisson no homogéneo:</strong> la tasa varía con el tiempo, \(\lambda(t)\). El número esperado de eventos en \([0, T]\) es \(\int_0^T \lambda(t)\,dt\). Útil cuando la intensidad del proceso cambia a lo largo del día (p. ej., llamadas telefónicas: más frecuentes a mediodía que a las 3 de la madrugada).</li>
@@ -576,6 +580,7 @@
         <li><strong>Proceso de Hawkes:</strong> proceso de Poisson autoexcitante en el que cada evento aumenta temporalmente la intensidad futura. Modela fenómenos de contagio (p. ej., terremotos réplica, propagación de noticias en redes sociales, órdenes en mercados financieros).</li>
         <li><strong>Proceso de Poisson marcado:</strong> generalización en la que cada evento lleva una "marca" que puede contener información adicional (tipo de evento, ubicación espacial, magnitud, etc.).</li>
       </ul>
+      </details>
     </section>
 
     <section class="card content-card faq-section">
@@ -1180,7 +1185,7 @@ function simulateTiempos() {
 <script src="../field-hints.js?v=20260730-1"></script>
 <script src="../search.js?v=20261031-1"></script>
 <script src="../wizard.js?v=20260730-1"></script>
-<script src="../theme.js?v=20261031-1"></script>
+<script src="../theme.js?v=20261113-1"></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

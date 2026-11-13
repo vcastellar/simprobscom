@@ -146,7 +146,7 @@
   ]
 }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -262,7 +262,7 @@
             <p>Es el procedimiento que permite decidir si la <strong>relación lineal</strong> entre dos variables cuantitativas, observada en una muestra, existe de verdad en la población o puede deberse al azar. El coeficiente de correlación de Pearson \(r\) mide esa relación en una escala de −1 a 1: 0 indica ausencia de relación lineal, valores positivos indican que las dos variables crecen juntas y valores negativos, que una baja cuando la otra sube. ¿Está relacionada la estatura con el peso? ¿Las horas de estudio con la nota? ¿El gasto en publicidad con las ventas?</p>
             <p>Con pocos datos, es fácil obtener correlaciones de 0,3 o 0,4 entre variables que no tienen nada que ver. El contraste responde a la pregunta: si la correlación real \(\rho\) fuera 0, ¿sería raro observar una \(r\) como la mía con este tamaño de muestra?</p>
 
-            <h3>Hipótesis y estadísticos</h3>
+            <details class="fold fold-sub"><summary><h3>Hipótesis y estadísticos</h3></summary>
             <p class="formula-line">\(H_0: \rho = \rho_0\)</p>
             <p class="formula-line">\(H_1: \rho \neq \rho_0\), \(\rho > \rho_0\) o \(\rho &lt; \rho_0\)</p>
             <p>Lo más habitual es contrastar \(\rho_0 = 0\) («no hay correlación»). En ese caso se usa un estadístico t:</p>
@@ -270,17 +270,19 @@
             <p>Si la hipótesis nula plantea otro valor (\(\rho_0 \neq 0\); por ejemplo, «la correlación es al menos 0,5»), la distribución de \(r\) deja de ser simétrica y se usa la <strong>transformación z de Fisher</strong>:</p>
             <p class="formula-line">\( z_r = \tfrac{1}{2}\ln\dfrac{1+r}{1-r} = \operatorname{arctanh}(r), \qquad z = (z_r - z_{\rho_0})\,\sqrt{n-3} \)</p>
             <p>La transformación convierte \(r\), cuya distribución está comprimida cerca de ±1, en una cantidad aproximadamente normal con error estándar \(1/\sqrt{n-3}\), sea cual sea la correlación real. Con ella se calcula también el intervalo de confianza para \(\rho\), que la calculadora muestra en los detalles y que, por eso, no es simétrico alrededor de \(r\).</p>
+            </details>
 
-            <h3>Regla de decisión</h3>
+            <details class="fold fold-sub"><summary><h3>Regla de decisión</h3></summary>
             <ul>
                 <li>Si el <strong>p-valor</strong> es menor que \(\alpha\), se rechaza \(H_0\): hay evidencia de que la correlación es distinta de \(\rho_0\).</li>
                 <li>Si el p-valor es mayor o igual que \(\alpha\), no hay evidencia suficiente para rechazar \(H_0\).</li>
                 <li>No rechazar \(\rho = 0\) no demuestra que las variables sean independientes.</li>
             </ul>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Significativa no quiere decir fuerte</h3>
+            <details class="fold"><summary><h3>Significativa no quiere decir fuerte</h3></summary>
             <p>El contraste solo dice si la correlación es distinguible de \(\rho_0\); no dice si es grande. Con muestras grandes, correlaciones minúsculas son significativas, y con muestras pequeñas, correlaciones notables no lo son:</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -296,10 +298,11 @@
                 </table>
             </div>
             <p>Para valorar la magnitud se usa el propio \(r\) y el <strong>coeficiente de determinación</strong> \(r^2\), que es la proporción de la variabilidad de una variable que se explica linealmente por la otra. Una correlación de 0,3 solo explica el 9 %. Como referencia orientativa (Cohen), |r| en torno a 0,1 es una correlación débil, 0,3 moderada y 0,5 fuerte, aunque lo que es «fuerte» depende mucho del campo.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Supuestos del contraste</h3>
+            <details class="fold"><summary><h3>Supuestos del contraste</h3></summary>
             <ul>
                 <li><strong>Dos variables cuantitativas</strong> medidas en los mismos individuos (datos por parejas).</li>
                 <li><strong>Observaciones independientes</strong>: cada pareja de valores procede de un individuo distinto.</li>
@@ -308,10 +311,11 @@
                 <li><strong>Sin valores atípicos influyentes</strong>: un solo punto extremo puede crear o destruir una correlación.</li>
             </ul>
             <p>Antes de calcular nada, dibuja el diagrama de dispersión: es la única forma de ver si la relación es lineal y si hay puntos anómalos. Si la relación es monótona pero no lineal, o hay valores atípicos, la alternativa es la correlación por rangos de Spearman.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto 1: ¿hay correlación?</h3>
+            <details class="fold"><summary><h3>Ejemplo resuelto 1: ¿hay correlación?</h3></summary>
             <p>En una muestra de \(n = 30\) alumnos, la correlación entre horas de estudio y nota es \(r = 0{,}45\). Se contrasta \(H_0\colon \rho = 0\) frente a \(H_1\colon \rho \neq 0\) con \(\alpha = 0{,}05\).</p>
             <p class="formula-line">\( t = \dfrac{0{,}45\,\sqrt{28}}{\sqrt{1 - 0{,}45^2}} = \dfrac{2{,}381}{0{,}893} \approx 2{,}666 \)</p>
             <p>Con 28 grados de libertad, el valor crítico bilateral es 2,048 y el p-valor, \(p \approx 0{,}013\). <strong>Se rechaza \(H_0\)</strong>: hay evidencia de correlación lineal positiva.</p>
@@ -326,20 +330,22 @@
 
             <h3>Ejemplo 3: significativa pero irrelevante</h3>
             <p>Con \(n = 1000\) y \(r = 0{,}10\), el contraste de \(\rho = 0\) da \(t \approx 3{,}18\) y \(p \approx 0{,}0015\): muy significativo. Pero \(r^2 = 0{,}01\): una variable explica el 1 % de la otra. La correlación existe, y es prácticamente inútil para predecir.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) con \(\rho_0 = 0\) indica que hay una relación lineal entre las variables, y el signo de \(r\) dice en qué sentido. No indica que una cause la otra: las dos pueden depender de una tercera variable. Valora siempre la magnitud con \(r\), \(r^2\) y el intervalo de confianza.</p>
             <p><strong>No rechazar \(H_0\)</strong> no demuestra que no haya relación: puede ser débil, puede ser no lineal o la muestra puede ser pequeña.</p>
             <p>En la calculadora, el resultado muestra la decisión con el p-valor, la correlación con su calificación orientativa (débil, moderada o fuerte), el estadístico y una frase con la conclusión. En el gráfico, la zona verde es la región de no rechazo, las rojas son las regiones críticas y la línea ámbar marca el estadístico. En «Detalles del cálculo» tienes \(r^2\), el valor crítico y el intervalo de confianza de Fisher para \(\rho\).</p>
 
             <h3>Potencia y correlación mínima detectable</h3>
             <p>Debajo de la conclusión, la calculadora indica la <strong>correlación mínima detectable</strong>: la correlación real más débil que, con tu tamaño de muestra, el contraste detectaría con un 80 % de probabilidad. Si es más fuerte que la correlación que te parecería relevante, un resultado no significativo dice poco. Cuando contrastas \(\rho_0 = 0\), el enlace abre la <a href="tamano-muestral-correlacion.html">calculadora de tamaño muestral para la correlación</a> con tu α y el tipo de contraste. Como referencia, para detectar una correlación de 0,3 hacen falta unas 85 parejas de datos; para una de 0,1, unas 780.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Errores frecuentes</h3>
+            <details class="fold"><summary><h3>Errores frecuentes</h3></summary>
             <ul>
                 <li><strong>Confundir correlación con causalidad.</strong></li>
                 <li><strong>Confundir significativa con fuerte</strong>: con muestras grandes, casi cualquier correlación es significativa.</li>
@@ -348,6 +354,7 @@
                 <li><strong>Extrapolar</strong> la relación fuera del rango de valores observado.</li>
                 <li><strong>Calcular muchas correlaciones</strong> entre muchas variables y quedarse con las significativas: 1 de cada 20 lo será por azar.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -587,7 +594,7 @@ calculate();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

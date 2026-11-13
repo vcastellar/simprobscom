@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261105-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -199,7 +199,7 @@
 
         <aside class="sim-callout" aria-label="Simulación relacionada">
             <p class="sim-callout-kicker">Simulación interactiva</p>
-            <p class="sim-callout-text"><strong>¿Qué significa realmente un 95 % de confianza?</strong> Genera muchos intervalos con muestras distintas y comprueba qué fracción contiene el valor real. El simulador lo hace para la media y para una proporción, comparando los métodos de Wald y Wilson.</p>
+            <p class="sim-callout-text"><strong>¿Qué significa realmente un 95 % de confianza?</strong> Genera muchos intervalos con muestras distintas y comprueba qué fracción contiene el valor real. El simulador lo hace para la media y para una proporción, comparando los métodos de Wald, Wilson y Clopper-Pearson.</p>
             <a class="sim-callout-link" href="simulaciones/simulador-intervalos-confianza.html">Abrir el simulador de intervalos de confianza →</a>
         </aside>
 
@@ -208,7 +208,7 @@
             <p>En la práctica, la desviación típica poblacional \(\sigma\) raramente se conoce con exactitud. Cuando se estima a partir de los propios datos muestrales usando \(s\), aparece una incertidumbre adicional que modela la distribución t de Student con \(n-1\) grados de libertad.</p>
             <p>Con muestras grandes (n ≥ 30), la t de Student converge a la normal estándar y ambos intervalos dan resultados muy similares. Para muestras pequeñas, la t produce intervalos más anchos, reflejando correctamente la mayor incertidumbre.</p>
 
-            <h3>Fórmula</h3>
+            <details class="fold fold-sub"><summary><h3>Fórmula</h3></summary>
             <p>Denotamos por \(C\) el nivel de confianza y por \(\alpha=1-C\) el área total fuera del intervalo. Para un 95 % de confianza, \(C=0{,}95\), \(\alpha=0{,}05\) y \(\alpha/2=0{,}025\) en cada cola.</p>
             <p class="formula-line">\( \bar{x} \pm t_{\alpha/2,\, n-1} \cdot \dfrac{s}{\sqrt{n}} \)</p>
             <ul>
@@ -218,25 +218,28 @@
                 <li><strong>\(n\)</strong>: tamaño de la muestra.</li>
             </ul>
             <p>El margen de error es \(E = t_{\alpha/2,\, n-1} \cdot s/\sqrt{n}\) y el intervalo es \([\bar{x} - E,\; \bar{x} + E]\).</p>
+            </details>
 
-            <h3>Ejemplo resuelto</h3>
+            <details class="fold fold-sub"><summary><h3>Ejemplo resuelto</h3></summary>
             <p>Se mide el tiempo de respuesta (en ms) de un servicio web en 15 peticiones: \(\bar{x} = 245{,}3\) ms, \(s = 38{,}7\) ms. Con 95 % de confianza (\(C=0{,}95\), \(\alpha=0{,}05\)) y \(gl = 14\):</p>
             <p class="formula-line">\( 245{,}3 \pm 2{,}145 \cdot \frac{38{,}7}{\sqrt{15}} \approx [223{,}9,\; 266{,}7] \text{ ms} \)</p>
+            </details>
         </section>
 
 
 
         <section class="card content-card">
-            <h3>Supuestos del intervalo t</h3>
+            <details class="fold"><summary><h3>Supuestos del intervalo t</h3></summary>
             <ul>
                 <li>La muestra es aleatoria e independiente.</li>
                 <li>La variable se distribuye normalmente en la población (especialmente importante para muestras pequeñas). Para n grande, el teorema central del límite lo justifica aunque la distribución no sea exactamente normal.</li>
                 <li>\(\sigma\) es desconocida y se estima con \(s\).</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p>El intervalo \([L, U]\) es el rango de valores de la media poblacional \(\mu\) compatibles con los datos observados y el nivel de confianza elegido. El significado frecuentista es el siguiente: si repitieras el experimento muchas veces —tomando cada vez una muestra del mismo tamaño y construyendo el IC con el mismo procedimiento— aproximadamente un \(C \times 100\,\%\) de esos intervalos contendría el verdadero valor de \(\mu\). No es una afirmación probabilística sobre el parámetro concreto, sino sobre la fiabilidad del método a largo plazo.</p>
             <p>La amplitud del intervalo comunica directamente la precisión de la estimación. Un intervalo estrecho indica mayor precisión: se obtiene con muestras más grandes, con menor variabilidad en los datos o aceptando un nivel de confianza algo menor. Un intervalo ancho no es un error en sí mismo; refleja honestamente que con esa muestra hay mucha incertidumbre sobre \(\mu\). En el gráfico, la región verde es la zona de confianza bajo la curva t y las colas rojas representan cada una \(\alpha/2\) del área total; los valores críticos \(\pm t_{\alpha/2,\,n-1}\) delimitan esas regiones.</p>
             <ul>
@@ -244,6 +247,7 @@
                 <li><strong>Efecto del tamaño muestral:</strong> duplicar \(n\) reduce el margen de error en un factor \(\sqrt{2} \approx 1{,}41\); para reducirlo a la mitad hace falta cuadruplicar \(n\).</li>
                 <li><strong>Efecto de la confianza:</strong> aumentar la confianza del 95 % al 99 % ensancha el intervalo porque el valor crítico \(t\) crece; exigir mayor certeza tiene el coste de ser menos preciso.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -283,7 +287,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="ci-charts.js?v=20261110-2"></script>
+<script src="ci-charts.js?v=20261113-1"></script>
 <script>
 
 document.getElementById('conf').addEventListener('change', function () {
@@ -357,7 +361,7 @@ calculate();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

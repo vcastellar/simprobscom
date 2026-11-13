@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Simulador de cadenas de Markov | ProbLab">
   <meta name="twitter:description" content="Simulador de cadenas de Markov: define la matriz de transición y observa la convergencia hacia la distribución estacionaria.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261113-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -495,7 +495,7 @@
     </section>
 
     <section class="card content-card">
-      <h2>Distribución estacionaria</h2>
+      <details class="fold"><summary><h2>Distribución estacionaria</h2></summary>
       <p>Una <strong>distribución estacionaria</strong> (o de equilibrio) es un vector de probabilidades \(\pi = (\pi_1, \pi_2, \ldots, \pi_n)\) tal que:</p>
       <div class="math-block">
         $$\pi P = \pi \quad \text{con} \quad \sum_{i=1}^{n} \pi_i = 1, \quad \pi_i \geq 0$$
@@ -509,10 +509,11 @@
       </ul>
       <h3>Estado absorbente: preset Cliente / Churn</h3>
       <p>En el preset de Cliente, el estado "Churn" es un <strong>estado absorbente</strong>: \(p_{\text{churn}, \text{churn}} = 1\). Una vez que un cliente abandona, no regresa. Esto hace que la cadena sea <em>no ergódica</em>: eventualmente todos los clientes terminan en Churn. La distribución estacionaria asigna probabilidad 1 a ese estado y 0 al resto.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Cómo funciona el simulador, paso a paso</h2>
+      <details class="fold"><summary><h2>Cómo funciona el simulador, paso a paso</h2></summary>
       <p>El simulador hace dos cosas distintas: recorre la cadena al azar, paso a paso, y calcula aparte la distribución estacionaria teórica. Después compara las dos.</p>
       <ol>
         <li><strong>Lee la matriz de transición</strong> y comprueba que cada fila suma 1 y que no hay valores negativos.</li>
@@ -528,10 +529,11 @@
       <p><strong>Qué es aleatorio y qué no.</strong> La trayectoria es aleatoria: cada clic en «Simular» da una distinta. La distribución π no lo es: depende solo de la matriz. Con 100 pasos del preset Clima es normal ver diferencias máximas de unos 0,07; con 1000 pasos, de unos 0,02. No es un fallo: la proporción de tiempo se acerca a π despacio, a un ritmo de \(1/\sqrt{n}\), como cualquier promedio.</p>
       <p><strong>Preset Cliente / Churn.</strong> Aquí π vale 1 en Churn, pero la proporción de tiempo en Churn no llega a 1: la cadena pasa de media sus primeros 11 pasos fuera de ese estado, y esos pasos siguen contando. Con 50 pasos, la proporción suele rondar el 0,8; con 1000, el 0,99.</p>
       <p><strong>Personalizado.</strong> Puedes escribir tu propia matriz con 2 a 5 estados. Cada fila es el reparto de probabilidades de «a dónde voy desde aquí» y debe sumar 1.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Las cuentas, con el preset Clima</h2>
+      <details class="fold"><summary><h2>Las cuentas, con el preset Clima</h2></summary>
       <p>La matriz del preset, con los estados en el orden Soleado, Nublado y Lluvia, es</p>
       <div class="math-block">\[ P = \begin{pmatrix} 0{,}7 & 0{,}2 & 0{,}1 \\ 0{,}3 & 0{,}4 & 0{,}3 \\ 0{,}2 & 0{,}3 & 0{,}5 \end{pmatrix}. \]</div>
 
@@ -582,10 +584,11 @@
       <p>Cuando hay un estado absorbente, la pregunta interesante no es dónde acaba la cadena, sino cuánto tarda. Sean \(t_A\) y \(t_D\) los pasos esperados hasta Churn partiendo de Activo y de Dormido. Dando un paso y viendo dónde se cae:</p>
       <div class="math-block">\[ \begin{aligned} t_A &= 1 + 0{,}80\,t_A + 0{,}15\,t_D \\ t_D &= 1 + 0{,}20\,t_A + 0{,}60\,t_D \end{aligned} \]</div>
       <p>Al resolver el sistema se obtiene \(t_A = 11\) y \(t_D = 8\): un cliente activo dura de media 11 periodos antes de abandonar, de los cuales 8 como activo y 3 como dormido.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Aplicaciones reales</h2>
+      <details class="fold"><summary><h2>Aplicaciones reales</h2></summary>
       <ul>
         <li><strong>PageRank (Google):</strong> la web se modela como una cadena de Markov donde los estados son páginas y las transiciones son hipervínculos. La distribución estacionaria determina la relevancia de cada página.</li>
         <li><strong>Modelos meteorológicos:</strong> estados como Soleado, Nublado y Lluvia con probabilidades de transición ajustadas a datos históricos.</li>
@@ -595,6 +598,7 @@
         <li><strong>Genética de poblaciones:</strong> el modelo de Wright-Fisher describe cómo cambia la frecuencia de alelos en una población finita mediante una cadena de Markov.</li>
         <li><strong>Teoría de colas:</strong> las cadenas de Markov modelan el número de clientes en una cola M/M/1 o M/M/k, permitiendo calcular tiempos de espera y tasas de servicio.</li>
       </ul>
+      </details>
     </section>
 
     <section class="card content-card">
@@ -1186,7 +1190,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <script src="../field-hints.js?v=20260730-1"></script>
 <script src="../search.js?v=20261031-1"></script>
 <script src="../wizard.js?v=20260730-1"></script>
-<script src="../theme.js?v=20261031-1"></script>
+<script src="../theme.js?v=20261113-1"></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

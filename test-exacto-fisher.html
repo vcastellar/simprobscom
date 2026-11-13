@@ -69,7 +69,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <style>
         .contingency-table {
             border-collapse: collapse;
@@ -309,7 +309,7 @@
             <p>Es el contraste para decidir si hay <strong>asociación entre dos variables dicotómicas</strong> recogidas en una tabla 2×2 —tratamiento o placebo frente a curación sí o no, expuestos o no frente a enfermos o no— cuando la muestra es <strong>pequeña</strong>. A diferencia del <a href="contraste-independencia-chi-cuadrado.html">chi-cuadrado</a> y del <a href="contraste-hipotesis-dos-proporciones.html">contraste z de dos proporciones</a>, no se apoya en ninguna aproximación normal: calcula la probabilidad exacta de cada tabla posible. Por eso es la opción adecuada en ensayos pequeños, eventos raros, análisis de subgrupos y siempre que alguna frecuencia esperada sea menor que 5.</p>
             <p>Lo ideó Ronald Fisher con el célebre experimento de la dama que decía distinguir si en su taza se había echado primero la leche o el té: con solo 8 tazas, la pregunta era cuántos aciertos hacían falta para descartar que adivinara al azar.</p>
 
-            <h3>La tabla y la hipótesis</h3>
+            <details class="fold fold-sub"><summary><h3>La tabla y la hipótesis</h3></summary>
             <div class="content-table-wrap">
                 <table class="content-table">
                     <thead>
@@ -325,10 +325,11 @@
             <p class="formula-line">\(H_0\): filas y columnas son independientes (\(OR = 1\))</p>
             <p class="formula-line">\(H_1\): hay asociación (\(OR \neq 1\), \(OR > 1\) o \(OR < 1\))</p>
             <p>Lo habitual es que las filas sean los grupos (tratamiento y control) y las columnas, el desenlace (sí y no). Entonces \(H_0\) dice que la proporción de la columna A es la misma en las dos filas: \(a/(a+b)\) frente a \(c/(c+d)\).</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo se calcula el p-valor exacto</h3>
+            <details class="fold"><summary><h3>Cómo se calcula el p-valor exacto</h3></summary>
             <p>El test fija los totales de filas y columnas y se pregunta: si no hubiera asociación, ¿qué probabilidad tendría cada forma posible de repartir los casos dentro de la tabla? Con los márgenes fijos, basta con conocer la casilla a para conocer toda la tabla, y bajo \(H_0\) esa casilla sigue una distribución <strong>hipergeométrica</strong>:</p>
             <p class="formula-line">\( P(X = k) = \dfrac{\dbinom{a+b}{k}\dbinom{c+d}{a+c-k}}{\dbinom{n}{a+c}} \)</p>
             <p>El p-valor suma las probabilidades de las tablas al menos tan extremas como la observada:</p>
@@ -346,10 +347,11 @@
                 <li>Si es mayor o igual que \(\alpha\), no hay evidencia suficiente para rechazar la independencia.</li>
                 <li>La dirección la da el odds ratio: OR &gt; 1 indica que la columna A es más frecuente en la fila 1.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>¿Fisher, chi-cuadrado o contraste z?</h3>
+            <details class="fold"><summary><h3>¿Fisher, chi-cuadrado o contraste z?</h3></summary>
             <div class="content-table-wrap">
                 <table class="content-table">
                     <thead>
@@ -364,20 +366,22 @@
                 </table>
             </div>
             <p>Con los ordenadores actuales, Fisher puede usarse también con muestras grandes. La razón para preferir el chi-cuadrado o el contraste z en ese caso es práctica: permiten calcular intervalos de confianza y potencia de forma sencilla, y los resultados coinciden.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Supuestos del test</h3>
+            <details class="fold"><summary><h3>Supuestos del test</h3></summary>
             <ul>
                 <li><strong>Observaciones independientes</strong>, cada una clasificada en una sola casilla.</li>
                 <li><strong>Dos variables dicotómicas</strong>.</li>
                 <li><strong>Márgenes fijos</strong>: en sentido estricto, el test supone fijos los totales de filas y columnas. En la práctica se usa también cuando no lo son, y entonces es algo conservador.</li>
             </ul>
             <p>No requiere ningún tamaño mínimo: es válido incluso con casillas a cero, que dan un odds ratio de 0 o infinito.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto 1: un ensayo pequeño</h3>
+            <details class="fold"><summary><h3>Ejemplo resuelto 1: un ensayo pequeño</h3></summary>
             <p>En un ensayo, 20 pacientes se asignan al azar a tratamiento o placebo, 10 en cada grupo. Con el tratamiento se recuperan 7 de 10; con el placebo, 4 de 10. La tabla es a = 7, b = 3 (tratamiento) y c = 4, d = 6 (placebo). Los márgenes son 10 y 10 por fila, y 11 recuperados y 9 no recuperados en total.</p>
             <p>La probabilidad de la tabla observada bajo \(H_0\) es</p>
             <p class="formula-line">\( P(X = 7) = \dfrac{\dbinom{10}{7}\dbinom{10}{4}}{\dbinom{20}{11}} \approx 0{,}150 \)</p>
@@ -389,10 +393,11 @@
             <p>Con la tabla que trae la calculadora, a = 8, b = 2, c = 1, d = 9, la columna A aparece en el 80 % de la fila 1 y en el 10 % de la fila 2. El p-valor exacto bilateral es \(p \approx 0{,}0055\): <strong>se rechaza \(H_0\)</strong>. El odds ratio es \((8 \times 9)/(2 \times 1) = 36\), con un intervalo de confianza muy ancho, como corresponde a una muestra tan pequeña.</p>
             <p>El chi-cuadrado de Pearson daría aquí \(p \approx 0{,}0017\), bastante más pequeño, pero no es fiable: las frecuencias esperadas de las cuatro casillas son 4,5 y 5,5, en el límite de la regla de Cochran. Fisher es la referencia correcta.</p>
             <p><strong>En la calculadora:</strong> son los valores con los que se abre la página.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que las dos variables están asociadas. Para valorar la magnitud, mira las proporciones de cada fila, su diferencia y el odds ratio con su intervalo de confianza; en muestras pequeñas, ese intervalo suele ser muy ancho.</p>
             <p><strong>No rechazar \(H_0\)</strong> no demuestra independencia. Con pocos datos, la potencia del test es baja, como en el ejemplo 1.</p>
             <p>En la calculadora, el resultado muestra la decisión con el p-valor exacto, el odds ratio, las proporciones de la columna A en cada fila y una frase con la conclusión. En «Detalles del cálculo» tienes la diferencia entre filas en puntos porcentuales y la probabilidad de la tabla observada.</p>
@@ -402,10 +407,11 @@
 
             <h3>Intervalo de confianza para el odds ratio</h3>
             <p>El otro enlace abre la <a href="intervalo-confianza-odds-ratio.html">calculadora del intervalo de confianza para el odds ratio</a> con tu tabla. Si alguna casilla es cero, aplica la corrección de 0,5 automáticamente.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Errores frecuentes</h3>
+            <details class="fold"><summary><h3>Errores frecuentes</h3></summary>
             <ul>
                 <li><strong>Usar el chi-cuadrado con frecuencias esperadas muy pequeñas</strong> en lugar del test exacto.</li>
                 <li><strong>Concluir que no hay efecto</strong> en un estudio pequeño porque el test no es significativo.</li>
@@ -413,6 +419,7 @@
                 <li><strong>Aplicarlo a datos emparejados</strong>: para eso está el test de McNemar.</li>
                 <li><strong>Informar solo del p-valor</strong>, sin las proporciones ni el odds ratio.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -681,7 +688,7 @@ calculateFisher();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

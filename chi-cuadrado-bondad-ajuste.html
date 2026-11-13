@@ -65,7 +65,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -239,7 +239,7 @@
             <p class="formula-line">\(H_0: p_1 = p_{1,0},\ p_2 = p_{2,0},\ \ldots,\ p_k = p_{k,0}\)</p>
             <p class="formula-line">\(H_1\): alguna \(p_i\) es distinta de la que indica el modelo</p>
 
-            <h3>El estadístico</h3>
+            <details class="fold fold-sub"><summary><h3>El estadístico</h3></summary>
             <p class="formula-line">\( \chi^2 = \sum_{i=1}^{k} \dfrac{(O_i - E_i)^2}{E_i}, \qquad E_i = n\,p_{i,0}, \qquad gl = k - 1 \)</p>
             <ul>
                 <li><strong>\(O_i\)</strong>: frecuencia observada en la categoría \(i\).</li>
@@ -248,17 +248,19 @@
             </ul>
             <p>Cada término mide cuánto se aleja lo observado de lo esperado, elevado al cuadrado para que las diferencias por exceso y por defecto no se compensen, y dividido por lo esperado para ponerlo en proporción: una diferencia de 10 es enorme si se esperaban 20 y despreciable si se esperaban 2000. Si los datos encajan con el modelo, el estadístico es pequeño; cuanto mayor, peor es el ajuste.</p>
             <p>Bajo \(H_0\), sigue aproximadamente una distribución <a href="chisquare.html">chi-cuadrado</a> con \(k - 1\) grados de libertad. Se resta 1 porque las frecuencias suman \(n\): conocidas \(k - 1\), la última queda determinada. El contraste es siempre de <strong>cola derecha</strong>: solo los valores grandes son evidencia contra el modelo.</p>
+            </details>
 
-            <h3>Regla de decisión</h3>
+            <details class="fold fold-sub"><summary><h3>Regla de decisión</h3></summary>
             <ul>
                 <li>Si el <strong>p-valor</strong> es menor que \(\alpha\), se rechaza \(H_0\): los datos no encajan con la distribución teórica.</li>
                 <li>Si el p-valor es mayor o igual que \(\alpha\), los datos son compatibles con el modelo.</li>
                 <li>No rechazar \(H_0\) no demuestra que el modelo sea el verdadero.</li>
             </ul>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Condiciones de aplicación</h3>
+            <details class="fold"><summary><h3>Condiciones de aplicación</h3></summary>
             <ul>
                 <li><strong>Frecuencias, no porcentajes</strong>: el estadístico necesita recuentos. Con los mismos porcentajes, el resultado cambia por completo si detrás hay 50 observaciones o 5000.</li>
                 <li><strong>Observaciones independientes</strong>, cada una clasificada en una sola categoría.</li>
@@ -266,10 +268,11 @@
                 <li><strong>Probabilidades fijadas de antemano</strong>: si las probabilidades teóricas se calculan estimando parámetros con los propios datos (por ejemplo, ajustar una Poisson estimando su media), hay que restar un grado de libertad adicional por cada parámetro estimado. La calculadora usa \(k - 1\), que corresponde a probabilidades conocidas.</li>
             </ul>
             <p>Para datos continuos sin agrupar, es preferible un contraste específico como el de <a href="kolmogorov-smirnov-bondad-ajuste.html">Kolmogorov-Smirnov</a> o, para la normalidad, el de <a href="shapiro-wilk-normalidad.html">Shapiro-Wilk</a>. Y si lo que quieres es estudiar la relación entre dos variables categóricas, el contraste adecuado es el <a href="contraste-independencia-chi-cuadrado.html">chi-cuadrado de independencia</a>.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto 1: ¿está equilibrado el dado?</h3>
+            <details class="fold"><summary><h3>Ejemplo resuelto 1: ¿está equilibrado el dado?</h3></summary>
             <p>Se lanza un dado 60 veces y se obtienen estas frecuencias: 8, 12, 9, 11, 10 y 10. Si el dado es equilibrado, cada cara tiene probabilidad 1/6 y se esperan \(E_i = 60/6 = 10\) apariciones de cada una. Se contrasta con \(\alpha = 0{,}05\).</p>
             <p class="formula-line">\( \chi^2 = \dfrac{(8-10)^2}{10} + \dfrac{(12-10)^2}{10} + \dfrac{(9-10)^2}{10} + \dfrac{(11-10)^2}{10} + 0 + 0 = 0{,}4 + 0{,}4 + 0{,}1 + 0{,}1 = 1{,}0 \)</p>
             <p>Con \(gl = 5\), el valor crítico es 11,07 y el p-valor, \(p \approx 0{,}963\). <strong>No se rechaza \(H_0\)</strong>: los resultados son perfectamente compatibles con un dado equilibrado.</p>
@@ -293,10 +296,11 @@
             </div>
             <p>El estadístico es \(\chi^2 \approx 0{,}47\) con \(gl = 3\), y el p-valor, \(p \approx 0{,}925\). <strong>No se rechaza \(H_0\)</strong>: los datos encajan muy bien con la teoría. Aquí la muestra es grande: con 556 semillas se detectarían incluso desviaciones pequeñas (w ≈ 0,14), así que el buen ajuste dice bastante más que en el ejemplo del dado.</p>
             <p><strong>En la calculadora:</strong> frecuencias «315, 108, 101, 32» y probabilidades «0.5625, 0.1875, 0.1875, 0.0625».</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que la distribución observada difiere de la teórica, pero no dice en qué categorías. Para saberlo, compara las frecuencias observadas y esperadas de la tabla que acompaña al resultado: las categorías con mayor \((O-E)^2/E\) son las que más contribuyen. Recuerda también que, con muestras muy grandes, desviaciones mínimas e irrelevantes resultan significativas.</p>
             <p><strong>No rechazar \(H_0\)</strong> indica que los datos son compatibles con el modelo, no que el modelo sea cierto: también serían compatibles con otros modelos parecidos.</p>
             <p>En la calculadora, el resultado muestra la decisión con el p-valor, el estadístico χ² con sus grados de libertad y una frase con la conclusión. En el gráfico, la zona roja es la región de rechazo sobre la chi-cuadrado y la línea marca el estadístico observado. En «Detalles del cálculo» tienes el valor crítico, el tamaño del efecto y la frecuencia esperada mínima.</p>
@@ -306,10 +310,11 @@
 
             <h3>Potencia y desviación mínima detectable</h3>
             <p>Debajo de la conclusión, la calculadora indica la <strong>desviación mínima detectable</strong>: la menor w que, con tu tamaño de muestra y tu número de categorías, el contraste detectaría con un 80 % de probabilidad. Es la información que permite valorar un resultado no significativo: si solo se detectarían desviaciones grandes, que los datos «encajen» dice poco. El enlace abre la <a href="tamano-muestral-chi-cuadrado-bondad.html">calculadora de tamaño muestral para chi-cuadrado de bondad de ajuste</a> con tu número de categorías y tu α.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Errores frecuentes</h3>
+            <details class="fold"><summary><h3>Errores frecuentes</h3></summary>
             <ul>
                 <li><strong>Introducir porcentajes o proporciones</strong> en lugar de recuentos.</li>
                 <li><strong>Mirar las frecuencias observadas</strong>, y no las esperadas, para comprobar la regla de «al menos 5».</li>
@@ -318,6 +323,7 @@
                 <li><strong>Agrupar categorías después de ver los datos</strong> hasta conseguir el resultado deseado.</li>
                 <li><strong>Usarlo con observaciones que no son independientes</strong>, como varias respuestas de la misma persona.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -564,7 +570,7 @@ document.getElementById('calcChiBtn').click();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

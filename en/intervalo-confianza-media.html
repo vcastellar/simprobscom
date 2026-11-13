@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261105-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -195,7 +195,7 @@
 
         <aside class="sim-callout" aria-label="Related simulation">
             <p class="sim-callout-kicker">Interactive simulation</p>
-            <p class="sim-callout-text"><strong>What does 95% confidence really mean?</strong> Generate many intervals from different samples and see what fraction contains the true value. The simulator does it for the mean and for a proportion, comparing the Wald and Wilson methods.</p>
+            <p class="sim-callout-text"><strong>What does 95% confidence really mean?</strong> Generate many intervals from different samples and see what fraction contains the true value. The simulator does it for the mean and for a proportion, comparing the Wald, Wilson and Clopper-Pearson methods.</p>
             <a class="sim-callout-link" href="simulaciones/simulador-intervalos-confianza.html">Open the confidence interval simulator →</a>
         </aside>
 
@@ -204,7 +204,7 @@
             <p>In practice, the population standard deviation \(\sigma\) is rarely known exactly. When it is estimated from the sample data itself using \(s\), extra uncertainty appears, which Student's t distribution with \(n-1\) degrees of freedom models correctly.</p>
             <p>With large samples (n ≥ 30), Student's t converges to the standard normal and both intervals give very similar results. For small samples, t produces wider intervals, correctly reflecting the greater uncertainty.</p>
 
-            <h3>Formula</h3>
+            <details class="fold fold-sub"><summary><h3>Formula</h3></summary>
             <p>Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area outside the interval. For 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\) in each tail.</p>
             <p class="formula-line">\( \bar{x} \pm t_{\alpha/2,\, n-1} \cdot \dfrac{s}{\sqrt{n}} \)</p>
             <ul>
@@ -214,25 +214,28 @@
                 <li><strong>\(n\)</strong>: sample size.</li>
             </ul>
             <p>The margin of error is \(E = t_{\alpha/2,\, n-1} \cdot s/\sqrt{n}\) and the interval is \([\bar{x} - E,\; \bar{x} + E]\).</p>
+            </details>
 
-            <h3>Worked example</h3>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>The response time (in ms) of a web service is measured over 15 requests: \(\bar{x} = 245.3\) ms, \(s = 38.7\) ms. With 95% confidence (\(C=0.95\), \(\alpha=0.05\)) and \(df = 14\):</p>
             <p class="formula-line">\( 245.3 \pm 2.145 \cdot \frac{38.7}{\sqrt{15}} \approx [223.9,\; 266.7] \text{ ms} \)</p>
+            </details>
         </section>
 
 
 
         <section class="card content-card">
-            <h3>Assumptions of the t interval</h3>
+            <details class="fold"><summary><h3>Assumptions of the t interval</h3></summary>
             <ul>
                 <li>The sample is random and independent.</li>
                 <li>The variable is normally distributed in the population (especially important for small samples). For large n, the central limit theorem justifies it even if the distribution isn't exactly normal.</li>
                 <li>\(\sigma\) is unknown and estimated with \(s\).</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p>The interval \([L, U]\) is the range of values of the population mean \(\mu\) compatible with the observed data and the chosen confidence level. The frequentist meaning is the following: if you repeated the experiment many times — each time taking a sample of the same size and building the CI with the same procedure — approximately \(C \times 100\%\) of those intervals would contain the true value of \(\mu\). It is not a probability statement about the specific parameter, but about the long-run reliability of the method.</p>
             <p>The width of the interval directly communicates the precision of the estimate. A narrow interval indicates greater precision: it is obtained with larger samples, lower variability in the data, or by accepting a somewhat lower confidence level. A wide interval is not an error in itself; it honestly reflects that with that sample there is a lot of uncertainty about \(\mu\). In the chart, the green region is the confidence zone under the t curve and the red tails each represent \(\alpha/2\) of the total area; the critical values \(\pm t_{\alpha/2,\,n-1}\) delimit those regions.</p>
             <ul>
@@ -240,6 +243,7 @@
                 <li><strong>Effect of sample size:</strong> doubling \(n\) reduces the margin of error by a factor of \(\sqrt{2} \approx 1.41\); to halve it you need to quadruple \(n\).</li>
                 <li><strong>Effect of confidence level:</strong> increasing confidence from 95% to 99% widens the interval because the critical value \(t\) grows; demanding more certainty comes at the cost of less precision.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -279,7 +283,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../ci-charts.js?v=20261110-2"></script>
+<script src="../ci-charts.js?v=20261113-1"></script>
 <script>
 
 document.getElementById('conf').addEventListener('change', function () {
@@ -351,7 +355,7 @@ window.CICharts && CICharts.customLevel({ onChange: calculate });
 calculate();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

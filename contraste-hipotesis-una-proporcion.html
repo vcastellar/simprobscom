@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -265,7 +265,7 @@
             <p>Es el procedimiento que permite decidir, a partir de una muestra, si la proporción de una población que cumple una condición es igual a un valor de referencia \(p_0\). Se usa cuando cada observación tiene solo dos resultados posibles —sí o no, defectuosa o correcta, compra o no compra— y lo que interesa es el porcentaje de «síes»: ¿sigue siendo del 65 % la satisfacción de los clientes? ¿Supera el 5 % la tasa de piezas defectuosas que garantiza el proveedor? ¿Ha alcanzado una campaña el 30 % de respuesta que se fijó como objetivo?</p>
             <p>La lógica es la de cualquier contraste. Se parte de la <strong>hipótesis nula</strong> de que la proporción es \(p_0\) y se mira cuánto se aleja de ella la proporción muestral \(\hat{p}\). Una muestra nunca reproduce exactamente la proporción de la población: la pregunta es si la diferencia observada es mayor de lo que el azar del muestreo explica razonablemente. Si lo es, se rechaza \(H_0\) en favor de la <strong>hipótesis alternativa</strong>.</p>
 
-            <h3>Hipótesis y estadístico</h3>
+            <details class="fold fold-sub"><summary><h3>Hipótesis y estadístico</h3></summary>
             <p class="formula-line">\(H_0: p = p_0\)</p>
             <p class="formula-line">\(H_1: p \neq p_0\), \(p > p_0\) o \(p < p_0\)</p>
             <p class="formula-line">\( z = \dfrac{\hat{p} - p_0}{\sqrt{p_0(1-p_0)/n}} \)</p>
@@ -276,10 +276,11 @@
             </ul>
             <p>El denominador es el <strong>error estándar</strong> de la proporción muestral si \(H_0\) fuera cierta. Fíjate en que se calcula con \(p_0\), no con \(\hat{p}\): el contraste pregunta qué variabilidad cabría esperar si la proporción fuera de verdad \(p_0\). Por eso, a diferencia del contraste de una media, aquí no hay que introducir ninguna desviación típica: en una variable de sí o no, la variabilidad queda determinada por la propia proporción.</p>
             <p>Gracias al teorema central del límite, con muestras suficientemente grandes el estadístico z sigue aproximadamente una <a href="normal.html">normal estándar</a> bajo \(H_0\). El estadístico mide a cuántos errores estándar queda \(\hat{p}\) de \(p_0\).</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo se hace el contraste, paso a paso</h3>
+            <details class="fold"><summary><h3>Cómo se hace el contraste, paso a paso</h3></summary>
             <ol>
                 <li><strong>Plantea las hipótesis</strong> antes de ver los datos: el valor \(p_0\) y si te interesa cualquier diferencia o solo un sentido.</li>
                 <li><strong>Fija el nivel de significación</strong> \(\alpha\), normalmente 0,05.</li>
@@ -309,27 +310,30 @@
                 </table>
             </div>
             <p>La cola debe elegirse antes de ver los datos y por una razón del problema. Si la eliges después de ver hacia dónde apunta \(\hat{p}\), el riesgo real de falso positivo se duplica. En caso de duda, usa el bilateral.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cuándo vale la aproximación normal</h3>
+            <details class="fold"><summary><h3>Cuándo vale la aproximación normal</h3></summary>
             <p>El contraste z es una aproximación: el número de éxitos sigue en realidad una <a href="binomial.html">distribución binomial</a>, que se parece a una normal cuando se esperan bastantes éxitos y bastantes fracasos. La regla práctica habitual es</p>
             <p class="formula-line">\( n\,p_0 \geq 10 \quad \text{y} \quad n\,(1-p_0) \geq 10 \)</p>
             <p>(algunos textos aceptan 5). Con \(p_0\) cercano a 0 o a 1 hacen falta muestras grandes: para \(p_0 = 0{,}02\), al menos 500 observaciones. Si no se cumple, el p-valor del contraste z puede ser bastante inexacto y conviene un contraste binomial exacto. La calculadora te avisa cuando la regla no se cumple.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Supuestos del contraste</h3>
+            <details class="fold"><summary><h3>Supuestos del contraste</h3></summary>
             <ul>
                 <li><strong>Variable dicotómica</strong>: cada observación es un éxito o un fracaso. Si tu variable es numérica, usa el <a href="contraste-hipotesis-una-media.html">contraste para una media</a>.</li>
                 <li><strong>Observaciones independientes</strong>: la respuesta de una no condiciona la de otra. No se cumple, por ejemplo, si se encuesta a varias personas de un mismo hogar como si fueran independientes.</li>
                 <li><strong>Muestra aleatoria</strong> de la población sobre la que quieres concluir. Con muestras de conveniencia (voluntarios, quienes responden a una encuesta online) el contraste puede ser correcto y la conclusión, errónea.</li>
                 <li><strong>Tamaño suficiente</strong> para la aproximación normal, como se explica arriba.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto 1: contraste bilateral</h3>
+            <details class="fold"><summary><h3>Ejemplo resuelto 1: contraste bilateral</h3></summary>
             <p>Según estudios anteriores, el 65 % de los clientes de una empresa están satisfechos con el servicio. Tras una campaña de mejora, se encuesta a \(n = 120\) clientes y 85 se declaran satisfechos: \(\hat{p} = 85/120 \approx 0{,}708\). ¿Ha cambiado la proporción? Se contrasta \(H_0\colon p = 0{,}65\) frente a \(H_1\colon p \neq 0{,}65\) con \(\alpha = 0{,}05\).</p>
             <p>La aproximación normal es válida: \(n p_0 = 78\) y \(n(1-p_0) = 42\). El error estándar bajo \(H_0\) es</p>
             <p class="formula-line">\( SE = \sqrt{\dfrac{0{,}65 \times 0{,}35}{120}} \approx 0{,}0435 \)</p>
@@ -344,10 +348,11 @@
             <p class="formula-line">\( SE = \sqrt{\dfrac{0{,}05 \times 0{,}95}{400}} \approx 0{,}0109, \qquad z = \dfrac{0{,}075 - 0{,}05}{0{,}0109} \approx 2{,}29 \)</p>
             <p>La aproximación es válida (\(n p_0 = 20\)). El valor crítico de cola derecha es 1,645 y el p-valor, \(P(Z \geq 2{,}29) \approx 0{,}011\). <strong>Se rechaza \(H_0\)</strong>: hay evidencia de que la tasa de defectos supera el 5 % garantizado. El intervalo de Wilson del 95 % para la tasa real va del 5,3 % al 10,5 %.</p>
             <p><strong>En la calculadora:</strong> p₀ = 0.05, p̂ = 0.075, n = 400 y «Cola derecha (>)».</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) significa que, si la proporción fuera realmente \(p_0\), sería muy improbable obtener una proporción muestral tan alejada como la observada. Pero significativo no es lo mismo que importante: con muestras muy grandes, diferencias de un punto porcentual resultan significativas. Mira siempre cuánto se aleja \(\hat{p}\) de \(p_0\), en puntos porcentuales, y su intervalo de confianza.</p>
             <p><strong>No rechazar \(H_0\)</strong> (p-valor ≥ α) no demuestra que la proporción sea \(p_0\): los datos son compatibles con ese valor y, a menudo, también con otros bastante distintos, como en el ejemplo 1.</p>
             <p>En la calculadora, el resultado muestra la decisión con el p-valor, el estadístico z y una frase con la conclusión. En el gráfico, la zona verde es la región de no rechazo, las rojas son las regiones críticas y la línea ámbar marca el estadístico observado. En «Detalles del cálculo» tienes la proporción muestral, la diferencia observada en puntos, el error estándar, el valor crítico y el intervalo de Wilson.</p>
@@ -357,10 +362,11 @@
 
             <h3>Relación con el intervalo de confianza</h3>
             <p>El otro enlace del resultado abre el <a href="intervalo-confianza-proporcion.html">intervalo de confianza para una proporción</a> con tus datos. En el contraste bilateral, se rechaza \(H_0\) cuando \(p_0\) queda fuera del intervalo. La correspondencia es exacta con el intervalo de Wilson, que usa el mismo error estándar que el contraste; con el de Wald puede fallar en casos límite. El intervalo, además, dice qué valores de la proporción son compatibles con los datos.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Errores frecuentes</h3>
+            <details class="fold"><summary><h3>Errores frecuentes</h3></summary>
             <ul>
                 <li><strong>Introducir porcentajes en lugar de proporciones</strong>: 65 % se escribe 0.65.</li>
                 <li><strong>Usar el contraste z con muy pocos éxitos o fracasos esperados</strong>, sin comprobar \(n p_0 \geq 10\).</li>
@@ -369,6 +375,7 @@
                 <li><strong>Olvidar cómo se obtuvo la muestra</strong>: con una encuesta voluntaria, la proporción muestral puede estar sesgada aunque el cálculo sea correcto.</li>
                 <li><strong>Comparar dos proporciones muestrales con este contraste</strong>, tratando una de ellas como si fuera \(p_0\). Para dos grupos, usa el <a href="contraste-hipotesis-dos-proporciones.html">contraste de dos proporciones</a>.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -602,7 +609,7 @@ calculatePropTest();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

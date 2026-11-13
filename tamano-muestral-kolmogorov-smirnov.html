@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -205,7 +205,7 @@
             <p class="formula-line">\( D_n = \sup_x \left| \hat{F}_n(x) - F_0(x) \right| \)</p>
             <p>El tamaño del efecto es \(d = \max_x |F_{\text{verdadera}}(x) - F_0(x)|\), es decir, la máxima distancia vertical entre la CDF real y la hipotética. Bajo \(H_0\), la distribución asintótica de \(\sqrt{n}\,D_n\) es la distribución de Kolmogorov.</p>
             <p>La potencia real depende de la forma completa de la alternativa, no solo de \(d\). Por eso la calculadora usa una <strong>cota inferior</strong> (Massey, 1951): calcula el tamaño que garantiza al menos la potencia pedida para cualquier distribución que se aleje \(d\) de la teórica. Es un tamaño <em>suficiente</em>: para muchas alternativas concretas bastará con menos datos (véase la nota del ejemplo).</p>
-            <h3>Fórmula de potencia</h3>
+            <details class="fold fold-sub"><summary><h3>Fórmula de potencia</h3></summary>
             <p>La CDF de la distribución de Kolmogorov es:</p>
             <p class="formula-line">\( P(K \leq x) = 1 - 2\sum_{k=1}^{\infty} (-1)^{k+1} e^{-2k^2 x^2}, \quad x > 0 \)</p>
             <p>El cuantil crítico \(k_\alpha\) se define por \(P(K > k_\alpha) = \alpha\), es decir, \(1 - P(K \leq k_\alpha) = \alpha\). Se halla mediante búsqueda binaria.</p>
@@ -214,7 +214,8 @@
             <p>donde \(\Phi\) es la función de distribución normal estándar. Igualando la cota a la potencia objetivo \(1-\beta\) se obtiene el tamaño muestral:</p>
             <p class="formula-line">\( n = \left\lceil \left( \dfrac{k_\alpha + z_{1-\beta}/2}{d} \right)^{2} \right\rceil \)</p>
             <p>Con \(\alpha = 0{,}05\) y potencia del 80 %, \(k_\alpha \approx 1{,}358\) y \(z_{0{,}80} \approx 0{,}842\), de modo que \(n \approx (1{,}779/d)^2\).</p>
-            <h3>Configuración rápida</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Configuración rápida</h3></summary>
             <ul>
                 <li><strong>d = 0,10:</strong> efecto pequeño. La distribución real se aleja de la teórica como máximo 0,10 en la CDF. Requiere muestras grandes.</li>
                 <li><strong>d = 0,20:</strong> efecto mediano. Desviación claramente visible en un gráfico P-P o Q-Q. Tamaño muestral moderado.</li>
@@ -223,7 +224,8 @@
                 <li><strong>Potencia:</strong> 0,80 como mínimo habitual; 0,90 si los falsos negativos tienen consecuencias importantes.</li>
                 <li><strong>Distribución completamente especificada:</strong> si estimas parámetros de los datos (media, varianza…), la distribución del estadístico cambia y el nivel nominal ya no es válido; en ese caso usa el test de Lilliefors.</li>
             </ul>
-            <h3>Ejemplo resuelto</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Ejemplo resuelto</h3></summary>
             <p>Un ingeniero de procesos quiere contrastar si los tiempos de fallo de un componente siguen una distribución exponencial con tasa \(\lambda_0 = 0{,}1\) (completamente especificada). Basándose en datos históricos, cree que la CDF real se desvía como máximo \(d = 0{,}15\) de la exponencial teórica.</p>
             <p>Con \(d = 0{,}15\), \(\alpha = 0{,}05\) y potencia del 80 %, la calculadora encuentra:</p>
             <ol>
@@ -233,17 +235,20 @@
             <p>El resultado es <strong>n = 141 observaciones</strong>. Con esa muestra, si la CDF real se aleja 0,15 de la exponencial teórica, el test lo detectará al menos el 80 % de las veces, sea cual sea la forma de la desviación.</p>
             <p><strong>Nota sobre la cota:</strong> el tamaño es conservador. Corresponde al caso más desfavorable, en el que la desviación se concentra en un punto cercano a la mediana. Con alternativas más habituales, la potencia real es mayor: en simulaciones frente a un desplazamiento de la media con \(d = 0{,}15\), la potencia con \(n = 141\) fue del 97 %, y el 80 % se alcanzó con unas 75–80 observaciones. Si el tamaño muestral es crítico o costoso, conviene afinarlo con una simulación de Monte Carlo para la alternativa concreta que se espera.</p>
             <p><strong>Análisis de sensibilidad:</strong> con \(d = 0{,}10\) (efecto pequeño) se necesitan 317 observaciones; con \(d = 0{,}20\), 80; y con \(d = 0{,}30\) (efecto grande), 36. La muestra necesaria crece como \(1/d^2\): detectar una desviación la mitad de grande exige cuatro veces más datos.</p>
-            <h3>Supuestos del modelo</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Supuestos del modelo</h3></summary>
             <ul>
                 <li>Muestra aleatoria de una variable continua, con observaciones independientes e idénticamente distribuidas.</li>
                 <li>La distribución teórica de referencia está completamente especificada (sus parámetros no se estiman a partir de los datos).</li>
                 <li>El tamaño del efecto es la desviación máxima \(d\) entre la distribución teórica y la alternativa.</li>
                 <li>El valor crítico usa la distribución asintótica de Kolmogorov y la potencia, la cota inferior de Massey con aproximación normal; no se usa la distribución exacta de \(D_n\) para \(n\) finito.</li>
             </ul>
-            <h3>Cómo interpretar el resultado</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Cómo interpretar el resultado</h3></summary>
                 <p>El valor \(n\) es el número de observaciones con el que, según la cota de Massey, el test de Kolmogorov-Smirnov (KS) alcanza al menos la potencia indicada al nivel \(\alpha\) frente a cualquier desviación del tamaño especificado. Es un tamaño <strong>suficiente y conservador</strong>: frente a muchas alternativas concretas bastará con menos datos. Redondea siempre hacia arriba. Si prevés pérdidas de datos o exclusiones, divide \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener el número de unidades a recoger. Un supuesto crítico es que la distribución teórica bajo \(H_0\) debe estar <strong>completamente especificada</strong> (todos sus parámetros conocidos a priori): si en cambio los parámetros se estiman a partir de los propios datos (como en el test de Lilliefors para normalidad), las tablas críticas del KS estándar no son válidas y el p-valor estará inflado.</p>
                 <p>La potencia del test KS depende de la distancia máxima \(D = \sup_x |F_n(x) - F_0(x)|\) que se desea detectar. El test KS es relativamente potente para detectar diferencias en la zona central de la distribución, pero tiene poca potencia para diferencias en las colas. Si las desviaciones que te interesan son principalmente en los extremos (colas pesadas, asimetría), el test de Anderson-Darling o el test de Cramér-von Mises son más potentes y requieren menor \(n\) para la misma eficacia. Realiza un <em>análisis de sensibilidad</em> variando la distancia \(D\) mínima detectable en ±0,05 para evaluar cuánto cambia \(n\).</p>
                 <p>Si el \(n\) calculado supera varios cientos, ten en cuenta que con muestras muy grandes el test KS detectará desviaciones triviales de la distribución teórica que no tienen relevancia práctica: un \(p < 0{,}05\) no implica que la distribución sea "demasiado distinta" para los propósitos del análisis. En ese contexto, complementa el test con gráficos Q-Q y valora si las desviaciones son sustantivas. Con los datos recogidos, realiza el test con la <a href="kolmogorov-smirnov-bondad-ajuste.html">calculadora de Kolmogorov-Smirnov</a>; si el objetivo es contrastar normalidad específicamente, usa la <a href="tamano-muestral-shapiro-wilk.html">calculadora de Shapiro-Wilk</a> para muestras pequeñas o medianas.</p>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -379,7 +384,7 @@ calculateKSSampleSize();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

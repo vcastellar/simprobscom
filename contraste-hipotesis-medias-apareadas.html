@@ -146,7 +146,7 @@
   ]
 }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -275,7 +275,7 @@
             <p>La idea es muy sencilla: para cada pareja se calcula la diferencia \(d_i = x_{i1} - x_{i2}\), y el problema se convierte en un <a href="contraste-hipotesis-una-media.html">contraste para una media</a> sobre esas diferencias. Si la intervención no tiene efecto, las diferencias deberían oscilar alrededor de 0; si su media se aleja de 0 más de lo que el azar explica, se concluye que hay un cambio sistemático.</p>
             <p>La gran ventaja del diseño apareado es que <strong>cada sujeto actúa como su propio control</strong>. Las diferencias entre personas (unas tienen la presión alta, otras baja; unos alumnos sacan mejores notas que otros) desaparecen al restar, y solo queda la variabilidad del cambio. Por eso, con el mismo número de sujetos, suele detectar efectos mucho más pequeños que la comparación de dos grupos independientes.</p>
 
-            <h3>Hipótesis y estadístico</h3>
+            <details class="fold fold-sub"><summary><h3>Hipótesis y estadístico</h3></summary>
             <p class="formula-line">\(H_0: \mu_d = \mu_{d0}\)</p>
             <p class="formula-line">\(H_1: \mu_d \neq \mu_{d0}\), \(\mu_d > \mu_{d0}\) o \(\mu_d &lt; \mu_{d0}\)</p>
             <p class="formula-line">\( t = \dfrac{\bar{d} - \mu_{d0}}{s_d / \sqrt{n}}, \quad gl = n - 1 \)</p>
@@ -287,10 +287,11 @@
             </ul>
             <p>El denominador \(s_d/\sqrt{n}\) es el error estándar de la diferencia media. El estadístico mide a cuántos errores estándar queda \(\bar{d}\) del valor de \(H_0\) y, si \(H_0\) es cierta, sigue una t de Student con \(n-1\) grados de libertad.</p>
             <p>Fíjate en que el signo depende del orden de la resta. Si calculas «antes − después», una reducción da diferencias positivas; si calculas «después − antes», negativas. Decide el orden antes de empezar y elige la cola del contraste de acuerdo con él.</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo se hace el contraste, paso a paso</h3>
+            <details class="fold"><summary><h3>Cómo se hace el contraste, paso a paso</h3></summary>
             <ol>
                 <li><strong>Calcula la diferencia de cada pareja</strong>, siempre en el mismo orden.</li>
                 <li><strong>Calcula la media \(\bar{d}\) y la desviación típica \(s_d\)</strong> de las diferencias. Son los dos datos que pide la calculadora, junto con el número de parejas.</li>
@@ -305,29 +306,32 @@
                 <li>Si el p-valor es mayor o igual que \(\alpha\), no hay evidencia suficiente para rechazar \(H_0\).</li>
                 <li>Un resultado no significativo no prueba que no haya cambio; puede deberse a falta de potencia.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>¿Por qué el diseño apareado es más potente?</h3>
+            <details class="fold"><summary><h3>¿Por qué el diseño apareado es más potente?</h3></summary>
             <p>La varianza de una diferencia entre dos mediciones es</p>
             <p class="formula-line">\( \sigma_d^2 = \sigma_1^2 + \sigma_2^2 - 2\rho\,\sigma_1\sigma_2 \)</p>
             <p>donde \(\rho\) es la correlación entre las dos mediciones de cada pareja. Cuando las mediciones de un mismo sujeto se parecen (\(\rho\) positiva, lo habitual), el término \(2\rho\sigma_1\sigma_2\) resta, y las diferencias varían mucho menos que los datos originales. Un error estándar más pequeño significa un estadístico mayor para la misma diferencia, es decir, más potencia.</p>
             <p>El ejemplo 2 de más abajo lo muestra con números: con los mismos 8 alumnos, el contraste apareado da \(p \approx 0{,}0005\); si se analizaran los datos como si fueran dos grupos independientes, el p-valor sería 0,14 y no se detectaría nada. Por eso es un error analizar datos emparejados con el contraste de dos medias independientes.</p>
             <p>La otra cara es que, en un diseño antes-después sin grupo de control, un cambio significativo no prueba que lo haya causado la intervención: pudo influir el paso del tiempo, el aprendizaje de la prueba o la regresión a la media. Siempre que sea posible, conviene comparar con un grupo de control.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Supuestos del contraste</h3>
+            <details class="fold"><summary><h3>Supuestos del contraste</h3></summary>
             <ul>
                 <li><strong>Datos emparejados</strong>: cada medición de una condición tiene su pareja en la otra. Si los grupos son personas distintas sin emparejar, usa el <a href="contraste-hipotesis-dos-medias.html">contraste de dos medias independientes</a>.</li>
                 <li><strong>Parejas independientes entre sí</strong>: las dos mediciones de una pareja están relacionadas, pero una pareja no debe influir en otra.</li>
                 <li><strong>Normalidad aproximada de las diferencias</strong> (no de los datos originales), o un número de parejas lo bastante grande, en torno a 30 o más, para que el teorema central del límite haga el trabajo.</li>
             </ul>
             <p>Con pocas parejas, revisa las diferencias con un histograma o con el <a href="shapiro-wilk-normalidad.html">test de Shapiro-Wilk</a> y busca valores atípicos: una sola pareja con un cambio extremo puede arrastrar \(\bar{d}\) y disparar \(s_d\). Si las diferencias son claramente asimétricas y hay pocas, la alternativa no paramétrica es la prueba de los rangos con signo de Wilcoxon.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto 1: contraste bilateral</h3>
+            <details class="fold"><summary><h3>Ejemplo resuelto 1: contraste bilateral</h3></summary>
             <p>Se mide la presión arterial sistólica de 25 pacientes antes y después de un tratamiento. La media de las diferencias (antes − después) es \(\bar{d} = 2{,}5\) mmHg con desviación típica \(s_d = 8\) mmHg. Se contrasta \(H_0\colon \mu_d = 0\) frente a \(H_1\colon \mu_d \neq 0\) con \(\alpha = 0{,}05\).</p>
             <p class="formula-line">\( t = \dfrac{2{,}5 - 0}{8 / \sqrt{25}} = \dfrac{2{,}5}{1{,}6} = 1{,}5625 \)</p>
             <p>Con \(gl = 24\), el valor crítico bilateral es \(t_{0{,}025;\,24} \approx 2{,}064\). Como \(|t| = 1{,}5625 < 2{,}064\), el p-valor es \(p \approx 0{,}131 > 0{,}05\): <strong>no se rechaza \(H_0\)</strong>.</p>
@@ -353,10 +357,11 @@
             <p>Con 7 grados de libertad, el valor crítico de cola derecha es \(t_{0{,}05;\,7} \approx 1{,}895\), y el p-valor es \(p \approx 0{,}0005\). <strong>Se rechaza \(H_0\)</strong>: hay evidencia de que la nota media sube tras el curso, unos 4 puntos.</p>
             <p>Compara con lo que habría pasado si se hubieran tratado las notas de antes y de después como dos grupos independientes: las desviaciones típicas de las notas son de 6,5 y 8,1 puntos, porque los alumnos son muy distintos entre sí, y el contraste de Welch daría \(t \approx 1{,}13\) y \(p \approx 0{,}14\). El emparejamiento elimina esa variabilidad entre alumnos (la correlación entre las dos notas es de 0,98), y por eso el efecto aparece con tanta claridad.</p>
             <p><strong>En la calculadora:</strong> d̄ = 4,125, s_d = 2,167, n = 8, μ_d0 = 0 y «Cola derecha (>)».</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que la diferencia media entre las dos mediciones es incompatible con \(\mu_{d0}\): hay un cambio sistemático. Su relevancia práctica depende de su tamaño, así que mira la diferencia media y su intervalo de confianza, y valora si ese cambio importa en tu contexto.</p>
             <p><strong>No rechazar \(H_0\)</strong> (p-valor ≥ α) no demuestra que no haya cambio. El error más frecuente es concluir «el tratamiento no funciona» cuando la muestra era demasiado pequeña para detectarlo, como en el ejemplo 1.</p>
             <p>En la calculadora, el resultado muestra la decisión con el p-valor, el estadístico con sus grados de libertad y una frase con la conclusión. En el gráfico, la zona verde es la región de no rechazo, las rojas son las regiones críticas y la línea ámbar marca el estadístico observado. En «Detalles del cálculo» tienes la diferencia observada, el error estándar, el valor crítico, el intervalo de confianza (en el contraste bilateral) y el tamaño del efecto.</p>
@@ -369,10 +374,11 @@
 
             <h3>Tamaño del efecto</h3>
             <p>En datos apareados, el tamaño del efecto más habitual es \(d_z = (\bar{d} - \mu_{d0})/s_d\), que expresa la diferencia media en desviaciones típicas de las diferencias. Ojo al compararlo con la d de Cohen de dos grupos independientes: \(d_z\) suele ser mucho mayor para el mismo cambio, porque \(s_d\) es menor que la desviación típica de los datos originales. En el ejemplo 2, \(d_z \approx 1{,}90\).</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Errores frecuentes</h3>
+            <details class="fold"><summary><h3>Errores frecuentes</h3></summary>
             <ul>
                 <li><strong>Analizar datos emparejados como dos grupos independientes</strong>, perdiendo casi toda la ventaja del diseño.</li>
                 <li><strong>Introducir el número de mediciones en lugar del de parejas</strong>: con 25 pacientes medidos dos veces, \(n = 25\).</li>
@@ -381,6 +387,7 @@
                 <li><strong>Atribuir el cambio a la intervención</strong> en un diseño antes-después sin grupo de control.</li>
                 <li><strong>Concluir que no hay efecto</strong> porque el contraste no es significativo.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -594,7 +601,7 @@ calculate();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

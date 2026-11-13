@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -287,7 +287,7 @@
             <p>The logic resembles a trial. You start from a <strong>null hypothesis</strong> \(H_0\) ("the mean is \(\mu_0\)"), which stands as long as there is no evidence against it, just like the presumption of innocence. Then you look at how far the sample mean \(\bar{x}\) is from \(\mu_0\) and ask: if \(H_0\) were true, would a difference like this be unusual by chance alone? If it would be very unusual, \(H_0\) is rejected in favour of the <strong>alternative hypothesis</strong> \(H_1\); if not, the data are compatible with \(H_0\) and it is not rejected.</p>
             <p>There are two scenarios. If you know the population standard deviation \(\sigma\), you use the <strong>z-test</strong>; if \(\sigma\) is unknown and is estimated with the sample standard deviation \(s\) — the usual case in practice — you use <strong>Student's t-test</strong>, which accounts for the extra uncertainty of estimating variability from the sample itself.</p>
 
-            <h3>Hypotheses and test statistic</h3>
+            <details class="fold fold-sub"><summary><h3>Hypotheses and test statistic</h3></summary>
             <p class="formula-line">\(H_0: \mu = \mu_0\)</p>
             <p class="formula-line">\(H_1: \mu \neq \mu_0\), \(\mu > \mu_0\) or \(\mu < \mu_0\)</p>
             <p class="formula-line">If \(\sigma\) is known: \( z = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}} \)</p>
@@ -300,10 +300,11 @@
                 <li><strong>\(n\)</strong>: sample size.</li>
             </ul>
             <p>The denominator, \(\sigma/\sqrt{n}\) or \(s/\sqrt{n}\), is the <strong>standard error</strong> of the mean: it measures how much \(\bar{x}\) varies from one sample to another. The statistic therefore expresses <em>how many standard errors</em> the observed mean lies from the hypothesized value. A statistic close to 0 means the data fit \(H_0\); the larger it is in absolute value, the harder it is to attribute the difference to chance. That is why the same difference \(\bar{x}-\mu_0\) carries more weight with a large sample or with tightly clustered data.</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to run the test, step by step</h3>
+            <details class="fold"><summary><h3>How to run the test, step by step</h3></summary>
             <ol>
                 <li><strong>State the hypotheses</strong> before looking at the data: \(H_0: \mu = \mu_0\) and the alternative you care about (different, greater or less).</li>
                 <li><strong>Set the significance level</strong> \(\alpha\): the risk you accept of rejecting \(H_0\) when it is true. The usual choice is 0.05.</li>
@@ -320,10 +321,11 @@
                 <li>A non-significant result does not prove that \(H_0\) is true.</li>
             </ul>
             <p>Deciding with the p-value or with the critical value is equivalent: the p-value is below \(\alpha\) exactly when the statistic falls in the rejection region.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Two-tailed or one-tailed test?</h3>
+            <details class="fold"><summary><h3>Two-tailed or one-tailed test?</h3></summary>
             <p>It depends on the question. If you want to know whether the mean is <em>different</em> from \(\mu_0\), in either direction, the test is two-tailed. If only one direction matters — greater, or less — it is one-tailed.</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -339,10 +341,11 @@
             </div>
             <p>A one-tailed test puts all of \(\alpha\) on one side, so it detects a difference in that direction more easily; in exchange, it cannot detect a difference in the opposite direction. When the statistic falls in the expected direction, its p-value is half the two-tailed one.</p>
             <p>The direction must be chosen <strong>before seeing the data</strong> and for a reason grounded in the problem (for example, "I only care whether the mean weight is below the stated one"). Choosing the tail after seeing which way the data point effectively doubles the false-positive risk. When in doubt, use the two-tailed test.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>z-test or t-test?</h3>
+            <details class="fold"><summary><h3>z-test or t-test?</h3></summary>
             <p><strong>z-test</strong>: used when the population \(\sigma\) is known, which is uncommon; it happens, for example, with industrial processes that have a long track record or with standardized tests designed with a fixed standard deviation. The statistic follows a standard normal distribution under \(H_0\).</p>
             <p><strong>t-test</strong>: used when \(\sigma\) is unknown and is replaced by \(s\). Because \(s\) is only an estimate and changes from sample to sample, the statistic is more variable than a normal: it follows Student's t distribution with \(n-1\) degrees of freedom, which has heavier tails. This makes the critical value larger and demands somewhat more evidence to reject \(H_0\), especially with small samples.</p>
             <div class="content-table-wrap">
@@ -360,10 +363,11 @@
                 </table>
             </div>
             <p>As \(n\) grows, the t distribution gets closer and closer to the normal, which is why both methods converge for large samples. Even so, if you estimated the standard deviation from the sample, the right choice is always t, whatever the sample size: using z with \(s\) in a small sample produces more false positives than \(\alpha\) indicates. The well-known "\(n \geq 30\)" rule is about something else: when non-normal data stop being a concern (see the assumptions).</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>What the p-value is (and what it is not)</h3>
+            <details class="fold"><summary><h3>What the p-value is (and what it is not)</h3></summary>
             <p>The <strong>p-value</strong> is the probability of obtaining a result as far from \(\mu_0\) as the one observed, or farther, <em>assuming that \(H_0\) is true</em>. It measures how surprising your data would be if the mean really were \(\mu_0\): the smaller it is, the worse the data fit the null hypothesis.</p>
             <p>For example, a p-value of 0.073 means that, if the mean really were \(\mu_0\), about 7 in every 100 samples of the same size would give a mean as far off as yours, or farther. That is not exceptional, which is why \(H_0\) is not rejected at \(\alpha = 0.05\).</p>
             <p>The p-value is <strong>not</strong>:</p>
@@ -373,10 +377,11 @@
                 <li>A measure of the size or importance of the difference: a tiny difference can give a very small p-value if the sample is huge.</li>
             </ul>
             <p>Nor should it be confused with \(\alpha\). The significance level is set <em>before</em> collecting the data and is the decision threshold; the p-value is computed <em>afterwards</em>, from the data. Report the exact p-value (\(p = 0.073\)) rather than just "significant" or "not significant".</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Assumptions of the test</h3>
+            <details class="fold"><summary><h3>Assumptions of the test</h3></summary>
             <ul>
                 <li><strong>A random sample</strong> from the population you want to draw conclusions about.</li>
                 <li><strong>Independent observations</strong>: the value of one does not affect another. This fails with repeated measurements on the same individuals or with data clustered in batches or families.</li>
@@ -385,10 +390,11 @@
             </ul>
             <p>With small samples, normality matters more. You can check it with a histogram or with the <a href="shapiro-wilk-normalidad.html">Shapiro-Wilk test</a>, and you should look for outliers, because a single extreme value can drag the mean and inflate the standard deviation. If the data are clearly skewed and the sample is small, a non-parametric test such as the Wilcoxon signed-rank test is preferable.</p>
             <p>If you have two measurements on the same individual (before and after), the right test is the one for <a href="contraste-hipotesis-medias-apareadas.html">paired means</a>; if you are comparing two different groups, the one for <a href="contraste-hipotesis-dos-medias.html">two independent means</a>.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example 1: two-tailed t-test</h3>
+            <details class="fold"><summary><h3>Worked example 1: two-tailed t-test</h3></summary>
             <p>A factory claims that its machine produces parts with an average weight of \(\mu_0 = 500\) g. To verify this, an inspector takes a sample of \(n = 25\) parts and obtains \(\bar{x} = 497\) g and sample standard deviation \(s = 8\) g. The goal is to test whether the mean weight differs significantly from 500 g with \(\alpha = 0.05\) (two-tailed).</p>
             <p>The hypotheses are \(H_0\colon \mu = 500\) versus \(H_1\colon \mu \neq 500\). Since \(\sigma\) is unknown, the Student's t statistic is used with \(df = n - 1 = 24\) degrees of freedom:</p>
             <p class="formula-line">\( t = \dfrac{\bar{x} - \mu_0}{s/\sqrt{n}} = \dfrac{497 - 500}{8/\sqrt{25}} = \dfrac{-3}{1.6} = -1.875 \)</p>
@@ -405,10 +411,11 @@
             <p>The right-tailed critical value with \(\alpha = 0.05\) is \(z_{0.95} \approx 1.645\). Since \(z = 2.00 > 1.645\), the statistic falls in the rejection region. The p-value is \(P(Z \geq 2.00) \approx 0.0228\), below \(\alpha\): <strong>\(H_0\) is rejected</strong>.</p>
             <p>Conclusion: there is statistical evidence that the mean score of the centre's students exceeds 100. The observed difference is 5 points, a third of a standard deviation (\(d = 5/15 \approx 0.33\)): a real effect, but small to moderate in size. With a two-tailed test, the p-value would have been twice as large, 0.0455.</p>
             <p><strong>In the calculator:</strong> μ₀ = 100, x̄ = 105, deviation = 15, n = 36, "I know the population σ (z-test)" and "Right-tailed (>)".</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) means that, if the population mean were really \(\mu_0\), it would be very unlikely to have observed a sample value as far off as the one obtained. It is concluded that there is statistical evidence that \(\mu \neq \mu_0\) (or &gt; / &lt;, depending on the chosen alternative). However, rejecting \(H_0\) does not mean the difference is large or important: with very large samples even a difference of a few tenths can turn out to be significant.</p>
             <p><strong>Failing to reject \(H_0\)</strong> (p-value ≥ α) does not prove that the mean equals \(\mu_0\); it only indicates that the data are compatible with that value at the chosen significance level. Low power — due to a small sample or high variance — can prevent detecting real differences. Before concluding "there is no effect," check the power of the test and the confidence interval.</p>
             <p>Regarding the <strong>z or t statistic</strong> shown by the tool: its magnitude indicates how many standard errors \(\bar{x}\) is away from \(\mu_0\). In the chart, the green zone is the non-rejection region, the red zones are the critical regions and the amber line marks the observed statistic. If the amber line falls in red, p-value &lt; α.</p>
@@ -426,10 +433,11 @@
 
             <h3>Statistical significance and practical relevance</h3>
             <p>A statistically significant difference is not necessarily one that matters. To judge its magnitude, use the <strong>effect size</strong>; the most common one here is Cohen's d, \(d = (\bar{x}-\mu_0)/s\), which expresses the difference in standard deviations. As a rough guide, 0.2 is considered a small effect, 0.5 medium and 0.8 large, although what counts is which difference is relevant in your problem: 3 g may be irrelevant in a bag of cement and critical in a medicine.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Common mistakes</h3>
+            <details class="fold"><summary><h3>Common mistakes</h3></summary>
             <ul>
                 <li><strong>Reading "\(H_0\) is not rejected" as "\(H_0\) is true".</strong> Absence of evidence is not evidence of absence, especially with small samples.</li>
                 <li><strong>Choosing a tail after seeing the data</strong>, or switching from two-tailed to one-tailed to "achieve" significance.</li>
@@ -438,6 +446,7 @@
                 <li><strong>Applying it to data that are not independent</strong>, such as before/after measurements on the same individuals.</li>
                 <li><strong>Repeating the test many times</strong> (with different variables or subgroups) and keeping the one that comes out significant: with \(\alpha = 0.05\), 1 in every 20 tests of true null hypotheses will be significant by chance alone.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -736,7 +745,7 @@ updateDispersionLabel();
 calculateMeanTest();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

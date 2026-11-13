@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <style>
         .theory-table-wrap { margin: 10px 0 16px; overflow-x: auto; border-radius: 12px; border: 1px solid rgba(79, 70, 229, 0.18); }
         .theory-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; line-height: 1.5; font-variant-numeric: tabular-nums; }
@@ -246,35 +246,40 @@
             <p class="formula-line">\( \chi^2 = \sum_{i=1}^{k} \frac{(O_i - E_i)^2}{E_i}, \qquad E_i = N \cdot p_{0,i} \)</p>
             <p>Cada sumando mide cuánto se aleja una categoría de lo esperado: la diferencia se eleva al cuadrado para que las desviaciones por exceso y por defecto no se cancelen, y se divide entre \(E_i\) para que una diferencia de 10 observaciones pese más en una categoría donde se esperaban 20 que en otra donde se esperaban 200. Si \(H_0\) es cierta, las desviaciones se deben solo al azar del muestreo y el estadístico sigue aproximadamente (con frecuencias esperadas suficientemente grandes) una distribución chi-cuadrado con \(df = k - 1\) grados de libertad. Son \(k - 1\) y no \(k\) porque las frecuencias observadas suman siempre \(N\): conocidas \(k - 1\) de ellas, la última queda determinada. Si además hay que estimar \(p\) parámetros de la distribución teórica a partir de los datos, se pierde un grado de libertad por cada uno (\(df = k - 1 - p\)); lo tratamos más abajo.</p>
 
-            <h3>La lógica del cálculo de potencia</h3>
+            <details class="fold fold-sub"><summary><h3>La lógica del cálculo de potencia</h3></summary>
             <p>Antes de recoger los datos no sabemos qué valor tomará \(\chi^2\), pero sí podemos razonar sobre los dos escenarios posibles:</p>
             <ul>
                 <li><strong>Si \(H_0\) es cierta</strong>, el estadístico sigue la chi-cuadrado central con \(df\) grados de libertad. Fijamos el nivel de significación \(\alpha\) y con él el <strong>valor crítico</strong> \(\chi^2_{1-\alpha,\,df}\): el punto que la chi-cuadrado central solo supera con probabilidad \(\alpha\). Rechazaremos \(H_0\) si el estadístico queda por encima. Con \(df = 4\) y \(\alpha = 0{,}05\), ese valor es \(9{,}49\).</li>
                 <li><strong>Si \(H_1\) es cierta</strong> (las proporciones reales son otras, \(p_{1,i}\)), las frecuencias observadas se alejan de forma sistemática de las esperadas bajo \(H_0\) y el estadístico tiende a ser mayor. La <strong>potencia</strong> es la probabilidad de que, en ese escenario, el estadístico supere el valor crítico y por tanto detectemos la desviación.</li>
             </ul>
             <p>El valor crítico depende solo de \(\alpha\) y de \(df\); no cambia con el tamaño de la muestra. Lo que sí cambia con \(N\) es cuánto se desplaza el estadístico hacia la derecha cuando \(H_1\) es cierta. Para calcular la potencia necesitamos, por tanto, describir la distribución del estadístico bajo \(H_1\). Lo haremos en tres pasos: medir el tamaño de la desviación (\(w\)), traducirla a un desplazamiento de la distribución (\(\lambda\)) y calcular el área que queda a la derecha del valor crítico.</p>
+            </details>
 
-            <h3>Paso 1: medir la desviación con la \(w\) de Cohen</h3>
+            <details class="fold fold-sub"><summary><h3>Paso 1: medir la desviación con la \(w\) de Cohen</h3></summary>
             <p>Necesitamos un número que diga cuánto se alejan las proporciones reales \(p_{1,i}\) de las teóricas \(p_{0,i}\) y que no dependa del tamaño de la muestra. La \(w\) de Cohen se construye con la misma receta que el estadístico, pero sobre proporciones en lugar de frecuencias:</p>
             <p class="formula-line">\( w = \sqrt{\sum_{i=1}^{k} \frac{(p_{1,i} - p_{0,i})^2}{p_{0,i}}} \)</p>
             <p>En el asistente de la calculadora, \(p_{1,i}\) son las «proporciones H1» (\(p_{\text{obs}}\)) y \(p_{0,i}\) las «proporciones H0» (\(p_{\text{teo}}\)). La interpretación es directa: si una muestra de \(N\) observaciones reprodujera exactamente las proporciones \(p_{1,i}\), su estadístico chi-cuadrado frente a \(H_0\) valdría exactamente \(N \cdot w^2\). Por eso conviene pensar en \(w^2\) como <strong>el estadístico chi-cuadrado por observación</strong>: es una propiedad de las dos distribuciones que se comparan, no de la muestra. Cohen propuso como referencia \(w = 0{,}1\) (desviación pequeña), \(0{,}3\) (mediana) y \(0{,}5\) (grande), aunque siempre es preferible calcularla a partir de las proporciones que esperas realmente.</p>
+            </details>
 
-            <h3>Paso 2: del efecto al desplazamiento, \(\lambda = N \cdot w^2\)</h3>
+            <details class="fold fold-sub"><summary><h3>Paso 2: del efecto al desplazamiento, \(\lambda = N \cdot w^2\)</h3></summary>
             <p>Cuando \(H_1\) es cierta, el estadístico ya no sigue la chi-cuadrado central. Sigue, de forma aproximada, una <strong>chi-cuadrado no central</strong>: la misma familia de distribuciones, pero desplazada hacia la derecha y más dispersa. El tamaño del desplazamiento lo controla el <strong>parámetro de no centralidad</strong> \(\lambda\), que en este test vale:</p>
             <p class="formula-line">\( \lambda = N \cdot w^2 \qquad\text{y, en consecuencia,}\qquad E\!\left[\chi^2 \mid H_1\right] = df + \lambda \)</p>
             <p>Una forma útil de verlo es descomponer el valor esperado del estadístico bajo \(H_1\), que es \(df + \lambda\). El término \(df\) es la parte «de ruido»: lo que el estadístico vale de media aunque \(H_0\) sea cierta, solo por el azar del muestreo. El término \(\lambda\) es la parte «de señal»: lo que aporta la desviación real. Y esa señal crece de forma proporcional a \(N\), porque con el doble de observaciones la distancia sistemática entre lo observado y lo esperado se duplica, mientras que el valor crítico sigue en el mismo sitio. Ese es exactamente el mecanismo por el que una muestra mayor da más potencia: la distribución bajo \(H_1\) se aleja del valor crítico y cada vez queda más área a su derecha.</p>
             <p>De aquí sale también la regla práctica más importante: para una potencia dada, la \(\lambda\) necesaria es casi constante, así que \(N \approx \lambda / w^2\). El tamaño muestral es <strong>inversamente proporcional al cuadrado del efecto</strong>: detectar una desviación la mitad de grande requiere cuatro veces más observaciones.</p>
+            </details>
 
-            <h3>Paso 3: la potencia como área a la derecha del valor crítico</h3>
+            <details class="fold fold-sub"><summary><h3>Paso 3: la potencia como área a la derecha del valor crítico</h3></summary>
             <p class="formula-line">\( \text{Potencia} = P\!\left(\chi^2 > \chi^2_{1-\alpha,\,df} \mid H_1\right) = 1 - F_{\chi^2_{df,\,\lambda}}\!\left(\chi^2_{1-\alpha,\,df}\right) \)</p>
             <p>Leída de derecha a izquierda: \(F_{\chi^2_{df,\lambda}}\) es la función de distribución de la chi-cuadrado no central con \(df\) grados de libertad y no centralidad \(\lambda\). Evaluada en el valor crítico, da la probabilidad de que el estadístico <em>no</em> lo supere aunque \(H_1\) sea cierta, es decir, la probabilidad de error de tipo II, \(\beta\). La potencia es su complementario, \(1 - \beta\).</p>
+            </details>
 
-            <h3>Cómo se calcula la chi-cuadrado no central</h3>
+            <details class="fold fold-sub"><summary><h3>Cómo se calcula la chi-cuadrado no central</h3></summary>
             <p>La chi-cuadrado no central no tiene una fórmula cerrada sencilla, pero sí una representación que la calculadora aprovecha: es una <strong>mezcla de chi-cuadrados centrales con pesos de Poisson</strong>. Imagina que primero se sortea un número entero \(J\) con distribución de Poisson de media \(\lambda/2\), y después se genera una chi-cuadrado central con \(df + 2J\) grados de libertad. La variable resultante es exactamente una chi-cuadrado no central con parámetros \(df\) y \(\lambda\). Su función de distribución es, por tanto, la media ponderada de funciones de distribución centrales:</p>
             <p class="formula-line">\( F_{\chi^2_{df,\lambda}}(x) = \sum_{j=0}^{\infty} \underbrace{\frac{e^{-\lambda/2}(\lambda/2)^j}{j!}}_{\text{peso de Poisson}} \cdot \underbrace{F_{\chi^2_{df+2j}}(x)}_{\text{chi-cuadrado central}} \)</p>
             <p>Cada sumando combina dos ingredientes conocidos: la probabilidad de Poisson de que \(J = j\) y la función de distribución de una chi-cuadrado central con \(df + 2j\) grados de libertad. Con \(\lambda = 12\) (el valor del ejemplo de más abajo), los pesos mayores corresponden a \(j = 5\) y \(j = 6\) (\(0{,}16\) cada uno), es decir, a chi-cuadrados centrales con 14 y 16 grados de libertad, que superan el valor crítico \(9{,}49\) con facilidad; los pesos se vuelven despreciables a partir de \(j \approx 20\). La calculadora suma términos hasta que el peso cae por debajo de \(10^{-14}\), lo que evalúa esa distribución con un error numérico despreciable y sin recurrir a aproximaciones normales. Eso no hace exacto el tamaño muestral: la propia chi-cuadrado no central es una aproximación asintótica al comportamiento del estadístico, de modo que el \(N\) obtenido es aproximado, sobre todo si alguna frecuencia esperada es pequeña.</p>
+            </details>
 
-            <h3>Cómo encuentra la calculadora el tamaño muestral</h3>
+            <details class="fold fold-sub"><summary><h3>Cómo encuentra la calculadora el tamaño muestral</h3></summary>
             <p>No existe una fórmula que despeje \(N\) directamente, porque \(N\) aparece dentro de la distribución no central. La calculadora hace una búsqueda:</p>
             <ol>
                 <li>Obtiene el valor crítico \(\chi^2_{1-\alpha,\,df}\) a partir de \(\alpha\) y \(df = k - 1\).</li>
@@ -291,11 +296,13 @@
                     <tr><td>df = 4 (k = 5)</td><td class="num">1194</td><td class="num">299</td><td class="num">133</td><td class="num">48</td><td class="num">≈ 11,9</td></tr>
                 </tbody>
             </table></div>
+            </details>
 
-            <h3>Grados de libertad cuando se estiman parámetros</h3>
+            <details class="fold fold-sub"><summary><h3>Grados de libertad cuando se estiman parámetros</h3></summary>
             <p>La calculadora usa \(df = k - 1\), lo que supone que la distribución teórica está completamente especificada de antemano. Si vas a estimar \(p\) parámetros a partir de los propios datos (por ejemplo, la media de una Poisson antes de comprobar si los recuentos son Poisson), el test tiene \(df = k - 1 - p\) grados de libertad. Para reflejarlo, introduce \(k - p\) en el campo «Número de categorías»: la \(w\) no cambia y los grados de libertad serán los correctos. Eso sí, la comprobación de la frecuencia mínima por celda hazla con el \(k\) real, dividiendo \(N\) entre el número verdadero de categorías.</p>
+            </details>
 
-            <h3>Configuración rápida</h3>
+            <details class="fold fold-sub"><summary><h3>Configuración rápida</h3></summary>
             <ul>
                 <li><strong>w:</strong> 0,1 (pequeño), 0,3 (mediano), 0,5 (grande) según Cohen. Si conoces las proporciones que esperas, usa el asistente: el valor calculado siempre es mejor que una referencia genérica.</li>
                 <li><strong>k:</strong> número total de categorías. Los grados de libertad son df = k − 1 (sin parámetros estimados).</li>
@@ -303,8 +310,9 @@
                 <li><strong>Potencia:</strong> 0,80 como mínimo habitual; 0,90 en estudios confirmatorios.</li>
                 <li><strong>Frecuencias esperadas:</strong> comprueba que \(N \cdot p_{0,i} \ge 5\) en todas las categorías (y, como mínimo, que \(N/k \ge 5\)) para que la aproximación chi-cuadrado sea válida.</li>
             </ul>
+            </details>
 
-            <h3>Ejemplo resuelto paso a paso</h3>
+            <details class="fold fold-sub"><summary><h3>Ejemplo resuelto paso a paso</h3></summary>
             <p>Un biólogo quiere contrastar si el color de ciertos insectos (5 categorías: amarillo, rojo, verde, azul y negro) sigue una distribución uniforme, es decir, \(p_{0,i} = 0{,}20\) para cada color. Basándose en datos previos, cree que la distribución real es (0,30; 0,25; 0,20; 0,15; 0,10). Quiere \(\alpha = 0{,}05\) y una potencia del 80 %.</p>
             <p><strong>Paso 1: calcular \(w\).</strong> Se evalúa cada término de la suma y se toma la raíz cuadrada del total:</p>
             <div class="theory-table-wrap"><table class="theory-table">
@@ -336,8 +344,9 @@
             <p>Con 30 insectos, la media del estadístico bajo \(H_1\) (7,75) ni siquiera alcanza el valor crítico, y la desviación solo se detectaría el 30 % de las veces. Con 95 la potencia se queda en el 79,78 %, un pelo por debajo del objetivo, y con 96 lo supera. La calculadora devuelve por tanto <strong>N = 96 insectos</strong> (potencia alcanzada: 80,25 %). Puedes reproducirlo introduciendo las dos listas de proporciones en el asistente, pulsando «Calcular w y actualizar» y después «Calcular tamaño muestral».</p>
             <p><strong>Comprobación:</strong> \(N/k = 96/5 = 19{,}2 \ge 5\), así que las frecuencias esperadas por celda (todas iguales a 19,2 bajo \(H_0\)) son suficientes para la aproximación chi-cuadrado.</p>
             <p><strong>Variantes:</strong> si el biólogo quisiera una potencia del 90 %, necesitaría \(N = 124\); si mantuviera el 80 % pero bajara \(\alpha\) a \(0{,}01\) (valor crítico \(13{,}28\)), necesitaría \(N = 134\). En ambos casos la exigencia sube, y \(\lambda\), y con ella \(N\), tienen que crecer para compensar.</p>
+            </details>
 
-            <h3>Supuestos del modelo</h3>
+            <details class="fold fold-sub"><summary><h3>Supuestos del modelo</h3></summary>
             <ul>
                 <li>Muestra aleatoria de observaciones independientes.</li>
                 <li>Variable categórica con \(k\) categorías mutuamente excluyentes y exhaustivas.</li>
@@ -345,12 +354,14 @@
                 <li>Las proporciones bajo \(H_1\) con las que calculas \(w\) son una hipótesis de trabajo: si el efecto verdadero es más pequeño, la potencia real será menor que la planificada.</li>
                 <li>El tamaño del efecto se expresa con la \(w\) de Cohen y la potencia se calcula con la distribución chi-cuadrado no central.</li>
             </ul>
+            </details>
 
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold fold-sub"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p>El valor \(N\) es el <strong>total de observaciones necesarias</strong> (suma de todas las categorías) para que el test chi-cuadrado de bondad de ajuste tenga la potencia y el nivel de significación especificados. Redondea siempre hacia arriba. Si prevés que algunos registros se descartarán por errores o valores faltantes, divide \(N\) entre \((1 - \text{tasa de pérdida})\) para obtener el número que realmente debes recoger.</p>
             <p>Comprueba las frecuencias esperadas: el número de observaciones esperadas en cada categoría \(i\) bajo \(H_0\) es \(N \cdot p_{0,i}\), y todas deberían ser \(\ge 5\). Si alguna proporción teórica es muy pequeña, esa categoría puede quedarse corta aunque \(N/k\) sea holgado; en ese caso, fusiona categorías con sentido teórico hasta alcanzar frecuencias esperadas \(\ge 5\) y recalcula \(k\), \(w\) y los grados de libertad.</p>
             <p>Ten presente que la sensibilidad de \(N\) a \(w\) es cuadrática: si el efecto real es un 30 % menor de lo que has supuesto, \(N\) debería ser aproximadamente el doble \((1/0{,}7^2 \approx 2{,}04)\). Por eso conviene calcular \(w\) con proporciones realistas y, si hay incertidumbre, planificar con un valor algo conservador.</p>
             <p>Cuando el \(N\) calculado resulte inviable, las palancas son tres: (1) aceptar un \(w\) mayor, es decir, conformarse con detectar solo desviaciones más grandes; (2) reducir la potencia objetivo; o (3) reducir el número de categorías fusionando las más pequeñas, lo que baja \(df\) y la \(\lambda\) necesaria (recalcula \(w\), porque también cambia). Si alguna frecuencia esperada sigue por debajo de 5 incluso con el \(N\) calculado, recurre a un test exacto multinomial. Con los datos recogidos, realiza el contraste con la <a href="chi-cuadrado-bondad-ajuste.html">calculadora de chi-cuadrado de bondad de ajuste</a> y examina los residuos estandarizados por categoría para localizar dónde se concentran las diferencias respecto a la distribución teórica.</p>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -496,7 +507,7 @@ calculateBondadSampleSize();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

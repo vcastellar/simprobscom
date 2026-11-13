@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -263,7 +263,7 @@
             <p>Es el contraste que se usa para decidir si hay <strong>asociación entre una exposición y un desenlace</strong> a partir de una tabla 2×2, midiendo esa asociación con el odds ratio (OR, también llamado razón de momios o razón de odds). Es la herramienta habitual de los <strong>estudios de casos y controles</strong>: se reúne un grupo de personas con la enfermedad (casos) y otro sin ella (controles), y se compara con qué frecuencia estuvieron expuestas a un factor —tabaco, un fármaco, un contaminante— en cada grupo.</p>
             <p>Si la exposición no tiene relación con la enfermedad, la proporción de expuestos debería ser parecida entre casos y controles, y el OR, cercano a 1. Un OR mayor que 1 indica que la exposición es más frecuente entre los casos (factor de riesgo); menor que 1, que es menos frecuente (factor protector).</p>
 
-            <h3>Odds y odds ratio</h3>
+            <details class="fold fold-sub"><summary><h3>Odds y odds ratio</h3></summary>
             <p>La <em>odds</em> de un suceso es el cociente entre la probabilidad de que ocurra y la de que no ocurra: con una probabilidad del 40 %, la odds es 0,4/0,6 = 0,67, es decir, 2 a 3. El odds ratio compara dos odds. Con la tabla que pide la calculadora:</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -278,10 +278,11 @@
             </div>
             <p class="formula-line">\( \widehat{OR} = \dfrac{a/b}{c/d} = \dfrac{a \cdot d}{b \cdot c} \)</p>
             <p>Es la odds de exposición entre los casos dividida por la odds de exposición entre los controles. Una propiedad muy útil es que coincide con la odds ratio de enfermedad entre expuestos y no expuestos, que es lo que interesa de verdad. Por eso el OR se puede estimar en un estudio de casos y controles, donde la proporción de enfermos la fija el investigador y no se puede calcular el riesgo.</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Hipótesis y estadístico</h3>
+            <details class="fold"><summary><h3>Hipótesis y estadístico</h3></summary>
             <p class="formula-line">\(H_0: OR = 1\) (no hay asociación)</p>
             <p class="formula-line">\(H_1: OR \neq 1\), \(OR > 1\) o \(OR < 1\)</p>
             <p>El OR tiene una distribución muy asimétrica (va de 0 a infinito, con el 1 en medio), así que el contraste se hace sobre su logaritmo, que se aproxima bien a una normal:</p>
@@ -295,26 +296,29 @@
                 <li>En el contraste bilateral, equivale a que el intervalo de confianza del OR no contenga el 1.</li>
                 <li>No rechazar \(H_0\) no demuestra que no haya asociación.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Odds ratio y riesgo relativo</h3>
+            <details class="fold"><summary><h3>Odds ratio y riesgo relativo</h3></summary>
             <p>El riesgo relativo (RR) compara probabilidades: el riesgo de enfermar de los expuestos dividido entre el de los no expuestos. Es más intuitivo, pero solo se puede calcular en estudios de cohortes o ensayos, donde se sigue a expuestos y no expuestos. El OR se parece al RR cuando la enfermedad es <strong>poco frecuente</strong> (menos del 10 % de la población, aproximadamente): en ese caso, un OR de 2 significa, en la práctica, que el riesgo se duplica. Cuando el desenlace es frecuente, el OR exagera la asociación respecto al RR, y no deben leerse como si fueran lo mismo.</p>
             <p>Si tus dos grupos son de expuestos y no expuestos y lo que mides es el desenlace, puedes comparar directamente las proporciones con el <a href="contraste-hipotesis-dos-proporciones.html">contraste de dos proporciones</a> o calcular el <a href="intervalo-confianza-ratio-proporciones.html">intervalo del cociente de proporciones</a>.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Supuestos del contraste</h3>
+            <details class="fold"><summary><h3>Supuestos del contraste</h3></summary>
             <ul>
                 <li><strong>Observaciones independientes</strong>: cada persona aparece una sola vez en la tabla. Si cada caso está emparejado con un control concreto, hace falta un análisis para datos apareados (McNemar o regresión logística condicional).</li>
                 <li><strong>Casillas no demasiado pequeñas</strong>: la aproximación normal del logaritmo del OR funciona bien con todas las casillas en torno a 5 o más.</li>
                 <li><strong>Sin casillas a cero</strong>: con un cero, el OR es 0 o infinito. La calculadora exige al menos 1 en cada casilla; con ceros, usa el test exacto de Fisher o el intervalo con corrección de 0,5.</li>
                 <li><strong>Sin sesgos de selección ni de confusión</strong>: un OR distinto de 1 puede deberse a otra variable relacionada con la exposición y con la enfermedad. El contraste mide asociación, no causalidad.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto 1: asociación no significativa</h3>
+            <details class="fold"><summary><h3>Ejemplo resuelto 1: asociación no significativa</h3></summary>
             <p>En un estudio de 100 casos y 100 controles, estuvieron expuestos 40 casos (a) y 30 controles (c); no lo estuvieron 60 casos (b) y 70 controles (d). Se contrasta \(H_0\colon OR = 1\) con \(\alpha = 0{,}05\), bilateral.</p>
             <p class="formula-line">\( \widehat{OR} = \dfrac{40 \times 70}{60 \times 30} \approx 1{,}556, \qquad \ln \widehat{OR} \approx 0{,}442 \)</p>
             <p class="formula-line">\( SE = \sqrt{\dfrac{1}{40} + \dfrac{1}{60} + \dfrac{1}{30} + \dfrac{1}{70}} \approx 0{,}299, \qquad z = \dfrac{0{,}442}{0{,}299} \approx 1{,}48 \)</p>
@@ -327,10 +331,11 @@
             <p class="formula-line">\( \widehat{OR} = \dfrac{60 \times 65}{40 \times 35} \approx 2{,}79, \qquad SE \approx 0{,}293, \qquad z = \dfrac{\ln 2{,}79}{0{,}293} \approx 3{,}50 \)</p>
             <p>El p-valor es \(p \approx 0{,}0005\): <strong>se rechaza \(H_0\)</strong>. La odds de exposición es unas 2,8 veces mayor entre los casos, con un intervalo de confianza del 95 % de 1,57 a 4,94. Si la enfermedad es poco frecuente, se puede leer como que la exposición multiplica el riesgo por algo menos de 3.</p>
             <p><strong>En la calculadora:</strong> a = 60, b = 40, c = 35, d = 65.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que hay asociación entre la exposición y el desenlace: con OR &gt; 1, la exposición se comporta como factor de riesgo; con OR &lt; 1, como factor protector. Para valorar su importancia, mira el OR y su intervalo de confianza: un OR de 1,2 puede ser significativo en un estudio enorme y tener poca relevancia práctica.</p>
             <p><strong>No rechazar \(H_0\)</strong> no demuestra que no haya asociación: mira el intervalo, que en estudios pequeños suele ser muy ancho.</p>
             <p>En la calculadora, el resultado muestra la decisión con el p-valor, el OR con el estadístico z y una frase con la conclusión. En el gráfico, la zona verde es la región de no rechazo sobre la normal estándar, las rojas son las regiones críticas y la línea ámbar marca el estadístico. En «Detalles del cálculo» tienes el logaritmo del OR, su error estándar, el intervalo de Woolf, la proporción de expuestos en casos y controles y el chi-cuadrado de Pearson como verificación.</p>
@@ -340,10 +345,11 @@
 
             <h3>Intervalo de confianza</h3>
             <p>El otro enlace abre la <a href="intervalo-confianza-odds-ratio.html">calculadora del intervalo de confianza para el odds ratio</a> con tu tabla. Esa calculadora ordena la tabla por exposición (filas) y desenlace (columnas), así que el enlace reordena las casillas por ti; el OR es el mismo.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Errores frecuentes</h3>
+            <details class="fold"><summary><h3>Errores frecuentes</h3></summary>
             <ul>
                 <li><strong>Colocar las casillas en otro orden</strong>: si intercambias b y c, obtienes el inverso del OR.</li>
                 <li><strong>Leer el OR como un riesgo relativo</strong> cuando el desenlace es frecuente.</li>
@@ -352,6 +358,7 @@
                 <li><strong>Analizar como independientes casos y controles emparejados</strong> uno a uno.</li>
                 <li><strong>Informar del OR sin intervalo de confianza</strong>.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -667,7 +674,7 @@ calculateORTest();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

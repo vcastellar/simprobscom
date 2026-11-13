@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261105-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -230,48 +230,53 @@
             <p>Este intervalo es para muestras independientes: las observaciones del grupo 1 no están emparejadas con observaciones concretas del grupo 2. Si son las mismas personas antes/después, o las mismas unidades medidas dos veces, conviene usar el <a href="intervalo-confianza-medias-apareadas.html">IC para medias apareadas</a>, que trabaja sobre las diferencias individuales.</p>
             <p>Existen dos variantes según si las varianzas poblacionales son iguales o distintas. Denotamos por \(C\) el nivel de confianza y por \(\alpha=1-C\) el área total de las colas; por ejemplo, para 95 % de confianza, \(C=0{,}95\), \(\alpha=0{,}05\) y \(\alpha/2=0{,}025\). Si 0 queda fuera del intervalo, hay evidencia de que las medias difieren.</p>
 
-            <h3>Varianzas iguales (pooled)</h3>
+            <details class="fold fold-sub"><summary><h3>Varianzas iguales (pooled)</h3></summary>
             <p>El método <em>pooled</em> supone que los dos grupos comparten una misma varianza poblacional: \(\sigma_1^2=\sigma_2^2\). Como esa varianza común no se conoce, se estima combinando las dos varianzas muestrales en una única varianza agrupada \(s_p^2\).</p>
             <p class="formula-line">\( (\bar{x}_1 - \bar{x}_2) \pm t_{\alpha/2,\, n_1+n_2-2} \cdot s_p\sqrt{\dfrac{1}{n_1} + \dfrac{1}{n_2}} \)</p>
             <p>La varianza agrupada pondera cada varianza por sus grados de libertad. El grupo con más observaciones aporta más información a la estimación común:</p>
             <p class="formula-line">\( s_p^2 = \dfrac{(n_1-1)s_1^2 + (n_2-1)s_2^2}{n_1 + n_2 - 2} \)</p>
             <p>Este método puede ser algo más eficiente si de verdad las varianzas son iguales, pero puede dar intervalos poco fiables si el supuesto no se cumple, especialmente con tamaños muestrales desiguales.</p>
+            </details>
 
-            <h3>Varianzas distintas (Welch)</h3>
+            <details class="fold fold-sub"><summary><h3>Varianzas distintas (Welch)</h3></summary>
             <p>El método de Welch no fuerza que las varianzas poblacionales sean iguales. Calcula el error estándar sumando la incertidumbre de cada grupo por separado, \(s_1^2/n_1\) y \(s_2^2/n_2\), y ajusta los grados de libertad con la aproximación de Welch–Satterthwaite.</p>
             <p class="formula-line">\( (\bar{x}_1 - \bar{x}_2) \pm t_{\alpha/2,\, \nu} \cdot \sqrt{\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}} \)</p>
             <p>Los grados de libertad \(\nu\) suelen no ser enteros y reflejan la pérdida de precisión causada por estimar dos varianzas separadas:</p>
             <p class="formula-line">\( \nu = \dfrac{\left(\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}\right)^2}{\dfrac{(s_1^2/n_1)^2}{n_1-1} + \dfrac{(s_2^2/n_2)^2}{n_2-1}} \)</p>
             <p>En la práctica, Welch suele ser la opción recomendada por defecto: funciona bien aunque las varianzas sean distintas y apenas pierde eficiencia cuando las varianzas son parecidas.</p>
+            </details>
 
-            <h3>Ejemplo resuelto</h3>
+            <details class="fold fold-sub"><summary><h3>Ejemplo resuelto</h3></summary>
             <p>Grupo A (nuevo fármaco): \(\bar{x}_1 = 5{,}2\), \(s_1 = 1{,}4\), \(n_1 = 20\). Grupo B (placebo): \(\bar{x}_2 = 4{,}7\), \(s_2 = 1{,}6\), \(n_2 = 22\). La diferencia observada es \(\bar{x}_1-\bar{x}_2=0{,}5\).</p>
             <p>Con 95 % de confianza, \(C=0{,}95\), \(\alpha=0{,}05\) y \(\alpha/2=0{,}025\). Usando Welch, el error estándar es:</p>
             <p class="formula-line">\( SE=\sqrt{\dfrac{1{,}4^2}{20}+\dfrac{1{,}6^2}{22}}\approx0{,}463 \)</p>
             <p>Los grados de libertad de Welch son aproximadamente \(\nu\approx39{,}95\), por lo que \(t_{0{,}025,\nu}\approx2{,}021\). El intervalo queda:</p>
             <p class="formula-line">\( 0{,}5 \pm 2{,}021\cdot0{,}463 \approx [-0{,}44,\;1{,}44] \)</p>
             <p>Como el intervalo incluye 0, los datos no descartan igualdad de medias al 95 % de confianza. Si se asumieran varianzas iguales, la varianza agrupada sería \(s_p^2\approx2{,}275\), \(s_p\approx1{,}508\), y el intervalo pooled sería muy parecido: aproximadamente \([-0{,}44,\;1{,}44]\). En este ejemplo las conclusiones coinciden, pero si las varianzas o tamaños muestrales fueran muy distintos, Welch sería más seguro.</p>
+            </details>
         </section>
 
 
 
         <section class="card content-card">
-            <h3>Supuestos para la diferencia de medias independientes</h3>
+            <details class="fold"><summary><h3>Supuestos para la diferencia de medias independientes</h3></summary>
             <ul>
                 <li>Los dos grupos deben ser independientes; si son mediciones antes/después o unidades emparejadas, usa el <a href="intervalo-confianza-medias-apareadas.html">IC para medias apareadas</a>.</li>
                 <li>Las observaciones dentro de cada grupo deben ser independientes y proceder de muestras representativas.</li>
                 <li>La distribución de la variable debe ser aproximadamente normal en cada grupo, especialmente con tamaños muestrales pequeños. Con muestras grandes, el teorema central del límite hace más robusto el intervalo.</li>
                 <li>Para el método pooled debe ser razonable asumir varianzas poblacionales iguales. Si no hay evidencia clara de igualdad, Welch suele ser la opción más segura.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>¿Varianzas iguales o distintas?</h3>
+            <details class="fold"><summary><h3>¿Varianzas iguales o distintas?</h3></summary>
             <p>En la práctica se recomienda usar Welch por defecto: es robusto tanto si las varianzas son iguales como si no, y su pérdida de potencia con varianzas iguales es mínima. El supuesto de varianzas iguales solo debería adoptarse si hay fuerte evidencia previa de que \(\sigma_1 = \sigma_2\).</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p>El intervalo \([L, U]\) es el rango de valores plausibles para la diferencia de medias poblacionales \(\mu_1 - \mu_2\) dado el nivel de confianza elegido. Si el intervalo se repitiera muchas veces con muestras del mismo tamaño, una proporción \(C\) de esos intervalos contendría la verdadera diferencia \(\mu_1 - \mu_2\). La amplitud depende de la variabilidad de cada grupo (\(s_1\), \(s_2\)), de los tamaños muestrales (\(n_1\), \(n_2\)) y del nivel de confianza: cuantas más observaciones o menor variabilidad, más estrecho y preciso será el intervalo.</p>
             <p>La clave para la toma de decisiones está en si el valor 0 pertenece al intervalo o no. Si \(0 \in [L, U]\), los datos son compatibles con la hipótesis de que ambas medias son iguales (\(\mu_1 = \mu_2\)) al nivel de confianza elegido; equivalentemente, el contraste bilateral \(H_0\!: \mu_1 = \mu_2\) no se rechazaría al nivel \(\alpha = 1 - C\). Si \(0 \notin [L, U]\), hay evidencia de que las medias difieren: si \(L > 0\), la media del grupo 1 es significativamente mayor; si \(U < 0\), la media del grupo 2 es significativamente mayor. La calculadora indica esto explícitamente en el resultado.</p>
             <ul>
@@ -279,6 +284,7 @@
                 <li><strong>Welch vs. pooled:</strong> con Welch los grados de libertad son fraccionarios; eso acorta ligeramente el IC respecto a forzar varianzas iguales cuando las varianzas son muy distintas. En el gráfico se muestra la distribución t con los grados de libertad efectivos del método elegido.</li>
                 <li><strong>Relevancia práctica:</strong> un IC significativo pero muy cercano a 0 puede indicar una diferencia estadística real pero de escasa importancia práctica. Valora siempre la magnitud del efecto junto con la significación.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -317,7 +323,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="ci-charts.js?v=20261110-1"></script>
+<script src="ci-charts.js?v=20261113-1"></script>
 <script>
 
 document.getElementById('conf').addEventListener('change', function () {
@@ -426,7 +432,7 @@ calculate();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

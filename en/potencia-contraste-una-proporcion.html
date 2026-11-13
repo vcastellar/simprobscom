@@ -97,7 +97,7 @@
   }
   </script>
 
-  <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261113-1">
   <style>
     .mode-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
     .mode-tab {
@@ -286,7 +286,7 @@
       <p class="formula-line">\( Z \sim N\!\left(\delta,\; \sigma_1^2\right) \quad \text{where} \quad \delta = \frac{(p_1 - p_0)\sqrt{n}}{\sqrt{p_0(1-p_0)}},\quad \sigma_1 = \sqrt{\frac{p_1(1-p_1)}{p_0(1-p_0)}} \)</p>
       <p>The parameter \(\delta\) is the <strong>non-centrality</strong>: how many standard deviations (under H₀) the statistic shifts when p = p₁. The larger \(|\delta|\), the easier it is to distinguish H₁ from H₀.</p>
 
-      <h3>Power formulas</h3>
+      <details class="fold fold-sub"><summary><h3>Power formulas</h3></summary>
       <ul>
         <li><strong>Two-tailed</strong> (\(H_a: p \neq p_0\)):
           <p class="formula-line">\( 1 - \beta \;=\; 1 - \Phi\!\left(\frac{z_{\alpha/2} - \delta}{\sigma_1}\right) + \Phi\!\left(\frac{-z_{\alpha/2} - \delta}{\sigma_1}\right) \)</p>
@@ -298,15 +298,17 @@
           <p class="formula-line">\( 1 - \beta \;=\; \Phi\!\left(\frac{-z_\alpha - \delta}{\sigma_1}\right) \)</p>
         </li>
       </ul>
+            </details>
 
-      <h3>Sample size formula</h3>
+      <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
       <p>To achieve power \(1-\beta\) with level \(\alpha\) and effect \(\Delta = |p_1 - p_0|\):</p>
       <p class="formula-line">\( n \;=\; \left\lceil\left(\frac{z_{\alpha^*}\sqrt{p_0(1-p_0)} + z_{1-\beta}\sqrt{p_1(1-p_1)}}{\Delta}\right)^2\right\rceil \)</p>
       <p>where \(z_{\alpha^*} = z_{\alpha/2}\) for two-tailed tests and \(z_{\alpha^*} = z_\alpha\) for one-tailed tests.</p>
+            </details>
     </section>
 
     <section class="card content-card">
-      <h3>Worked example</h3>
+      <details class="fold"><summary><h3>Worked example</h3></summary>
       <p>A company wants to check whether its satisfaction rate p₀ = 0.30 has changed after an improvement campaign, expecting it to rise to p₁ = 0.40. A two-tailed test H₀: p = 0.30 is run with α = 0.05 and a sample of n = 172 respondents.</p>
 
       <p><strong>Step 1 — Standard error under H₀:</strong></p>
@@ -322,10 +324,11 @@
       <p class="formula-line">\( 1-\beta = 1 - \Phi\!\left(\frac{1.960 - 2.862}{1.069}\right) + \Phi\!\left(\frac{-1.960 - 2.862}{1.069}\right) = 1 - \Phi(-0.844) + \Phi(-4.511) \approx 0.801 \)</p>
 
       <p>With n = 172 and p₁ = 0.40, the power is <strong>≈ 80.1%</strong>. If the real proportion has risen to 0.40, the test will correctly detect it in about 8 out of every 10 studies. The type II error is β ≈ 0.199: there is a 20% probability of not detecting the improvement even though it is real.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h3>How to interpret the results</h3>
+      <details class="fold"><summary><h3>How to interpret the results</h3></summary>
 
       <h3>Power (1−β)</h3>
       <p>A power of 80% means that if the real proportion is p₁, the test will reject H₀ 80% of the time. In confirmatory studies, a power of ≥ 0.80 is recommended; in decisions where the cost of a false negative is high, ≥ 0.90.</p>
@@ -343,6 +346,7 @@
         <li>When p₀ or p₁ are extreme (&lt; 0.10 or &gt; 0.90) with a small n, consider the exact binomial test instead of the normal approximation.</li>
         <li>Run a sensitivity analysis varying p₁ ±0.05 to assess the robustness of the design.</li>
       </ul>
+      </details>
     </section>
 
     <section id="seo-support-content" class="card content-card">
@@ -641,7 +645,7 @@ document.getElementById('calcNBtn').addEventListener('click', doN);
 doPower();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

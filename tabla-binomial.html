@@ -31,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional"></noscript>
-    <link rel="stylesheet" href="style_new.css?v=20261102-2">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <style>
         .site-nav { position:sticky; top:0; z-index:100; background:rgba(255,255,255,0.92); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid rgba(15,23,42,0.08); }
         .site-nav-inner { width:min(1200px,94vw); margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 0; }
@@ -97,6 +97,12 @@
         .dist-diagram .dg-caption { margin: 6px 2px 0; font-size: 0.85rem; color: var(--text-muted); text-align: center; }
         .dist-diagram .dg-caption strong { color: var(--accent); font-weight: 700; }
         .dist-diagram .dg-hint { opacity: 0.7; }
+        /* Bloque «Para qué sirve esta tabla» */
+        .table-uses { margin:22px 0 0; padding:16px 20px; }
+        .table-uses h2 { font-size:1.05rem; margin:0 0 8px; }
+        .table-uses ul { margin:0; padding-left:1.15rem; display:grid; gap:6px; font-size:0.92rem; line-height:1.5; }
+        /* Sin mayúsculas: convertirían α, ν, λ y μ en A, N, Λ y M. */
+        .table-section-title { text-transform:none; letter-spacing:0.02em; }
     </style>
 
     <script type="application/ld+json">
@@ -300,6 +306,15 @@
             </div>
         </section>
 
+        <section class="card table-uses">
+            <h2>Para qué sirve esta tabla</h2>
+            <ul>
+                <li><strong>Número de éxitos en n ensayos</strong> con la misma probabilidad p (piezas defectuosas, respuestas acertadas…). Para otros valores, usa la <a href="binomial.html" data-goatcounter-click="tabla-binomial/calculadora" data-goatcounter-title="calculadora binomial">calculadora binomial</a>.</li>
+                <li><strong>Contraste de una proporción con pocos datos:</strong> el p-valor exacto, P(X ≥ k) o P(X ≤ k), se lee en la tabla acumulada. Con muestras grandes: <a href="contraste-hipotesis-una-proporcion.html" data-goatcounter-click="tabla-binomial/contraste-proporcion" data-goatcounter-title="contraste de una proporción">contraste de una proporción</a> e <a href="intervalo-confianza-proporcion.html" data-goatcounter-click="tabla-binomial/ic-proporcion" data-goatcounter-title="intervalo de confianza">intervalo de confianza</a>.</li>
+                <li><strong>Aproximaciones:</strong> por la <a href="tabla-normal.html" data-goatcounter-click="tabla-binomial/tabla-normal" data-goatcounter-title="normal">normal</a> si np y n(1 − p) superan 5; por la <a href="tabla-poisson.html" data-goatcounter-click="tabla-binomial/tabla-poisson" data-goatcounter-title="Poisson">Poisson</a> de media np si n es grande y p pequeña.</li>
+            </ul>
+        </section>
+
         <aside class="sim-callout" aria-label="Simulación relacionada">
             <p class="sim-callout-kicker">Simulación interactiva</p>
             <p class="sim-callout-text"><strong>La binomial en movimiento</strong> En un paseo aleatorio cada paso es +1 con probabilidad p o −1 en caso contrario, así que el número de pasos hacia arriba sigue una binomial. El simulador dibuja muchas trayectorias y muestra cómo su dispersión crece con √n.</p>
@@ -318,12 +333,13 @@
             </ol>
             <p><strong>Ejemplo:</strong> si se realizan 10 ensayos con p = 0.30 y se quiere la probabilidad de exactamente 4 éxitos, elige n = 10, abre P(X = k) y cruza la fila k = 4 con la columna p = 0.30.</p>
 
-            <h3>Distribución Binomial</h3>
+            <details class="fold fold-sub"><summary><h3>Distribución Binomial</h3></summary>
             <p>Un experimento binomial consiste en n ensayos independientes, cada uno con probabilidad p de éxito. El número de éxitos X sigue una distribución B(n, p) con función de masa:</p>
             <p class="formula-line">\( P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}, \quad k = 0, 1, \ldots, n \)</p>
             <p>La media es μ = np y la varianza σ² = np(1 − p).</p>
+            </details>
 
-            <h3>Propiedades útiles</h3>
+            <details class="fold fold-sub"><summary><h3>Propiedades útiles</h3></summary>
             <ul>
                 <li><strong>Simetría:</strong> P(X = k; n, p) = P(X = n − k; n, 1 − p). Usa esto para p &gt; 0.5 mirando la columna equivalente con p' = 1 − p.</li>
                 <li><strong>Complemento:</strong> P(X &gt; k) = 1 − P(X ≤ k).</li>
@@ -331,6 +347,7 @@
                 <li>Para n grande y p pequeño, la binomial se aproxima a una Poisson con λ = np.</li>
                 <li>Para n grande, la binomial se aproxima a una Normal N(np, np(1−p)).</li>
             </ul>
+            </details>
 
             <h3>Tablas y calculadoras relacionadas</h3>
             <ul class="distribution-links">
@@ -488,7 +505,7 @@
 <script src="table-actions.js?v=20261103-3"></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

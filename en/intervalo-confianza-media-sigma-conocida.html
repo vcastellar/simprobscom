@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261105-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -198,7 +198,7 @@
             <p>When you know the population standard deviation \(\sigma\) (or can safely assume it is known), the confidence interval for the mean is built using the standard normal distribution. It is the simplest case and serves as a starting point for understanding the logic of confidence intervals.</p>
             <p>In practice, \(\sigma\) is rarely known exactly. However, this interval is a good approximation when the sample size is large (n ≥ 30) and the population variance is stable and known from previous studies.</p>
 
-            <h3>Formula</h3>
+            <details class="fold fold-sub"><summary><h3>Formula</h3></summary>
             <p>Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area outside the interval. For 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\) in each tail.</p>
             <p class="formula-line">\( \bar{x} \pm z_{\alpha/2} \cdot \dfrac{\sigma}{\sqrt{n}} \)</p>
             <ul>
@@ -208,33 +208,37 @@
                 <li><strong>\(n\)</strong>: sample size.</li>
             </ul>
             <p>The margin of error is \(E = z_{\alpha/2} \cdot \sigma/\sqrt{n}\), and the interval is \([\bar{x} - E,\; \bar{x} + E]\).</p>
+            </details>
 
-            <h3>Common critical z values</h3>
+            <details class="fold fold-sub"><summary><h3>Common critical z values</h3></summary>
             <ul>
                 <li>90% confidence: \(z_{0.05} = 1.645\)</li>
                 <li>95% confidence: \(z_{0.025} = 1.960\)</li>
                 <li>99% confidence: \(z_{0.005} = 2.576\)</li>
             </ul>
+            </details>
 
-            <h3>Worked example</h3>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>A screw factory knows from technical specifications that \(\sigma = 0.08\) mm. A sample of 50 screws is measured, giving \(\bar{x} = 10.02\) mm. With 95% confidence (\(C=0.95\), \(\alpha=0.05\)), the interval is:</p>
             <p class="formula-line">\( 10.02 \pm 1.960 \cdot \frac{0.08}{\sqrt{50}} \approx [9.998,\; 10.042] \text{ mm} \)</p>
+            </details>
         </section>
 
 
 
         <section class="card content-card">
-            <h3>Assumptions of the z interval</h3>
+            <details class="fold"><summary><h3>Assumptions of the z interval</h3></summary>
             <ul>
                 <li>The sample must be random and the observations independent.</li>
                 <li>The population standard deviation \(\sigma\) must be known, or fixed with sufficient certainty by information external to the study.</li>
                 <li>The sample mean must be approximately normally distributed: this holds if the population is normal or if the sample size is large, by the central limit theorem.</li>
                 <li>If \(\sigma\) is estimated from the sample and \(n\) is small, use the <a href="intervalo-confianza-media.html">CI with Student's t</a> instead of the z interval.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p>The interval \([L, U]\) defines the range of values of \(\mu\) compatible with the data and the chosen confidence level. The correct interpretation is frequentist: if you repeated the sampling many times and built the CI with the same procedure, a proportion \(C\) of those intervals would contain the true value of \(\mu\). For the specific interval in front of you, \(\mu\) is either inside or outside; the \(C\%\) probability refers to the method, not to the individual result.</p>
             <p>In the chart, the green region under the standard normal curve represents the confidence zone and the red tails (each with area \(\alpha/2\)) mark the critical values \(\pm z_{\alpha/2}\). The observed z statistic, shown in yellow, indicates where the current sample falls on the standardized scale. If the z statistic falls inside the green region, the interval contains the reference value; if it falls in the red tails, it excludes it.</p>
             <ul>
@@ -242,6 +246,7 @@
                 <li><strong>Connection with hypothesis testing:</strong> if a reference value \(\mu_0\) falls outside \([L, U]\), the data would reject \(H_0\!: \mu = \mu_0\) at significance level \(\alpha = 1 - C\) in the equivalent two-sided z test.</li>
                 <li><strong>When known \(\sigma\) matters:</strong> using the exact \(\sigma\) (instead of estimating it with \(s\)) introduces no extra uncertainty, so the CI is narrower than the t interval for the same sample. This makes it especially useful when the process variability is very stable and known in advance.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -282,7 +287,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../ci-charts.js?v=20261110-2"></script>
+<script src="../ci-charts.js?v=20261113-1"></script>
 <script>
 
 document.getElementById('conf').addEventListener('change', function () {
@@ -352,7 +357,7 @@ window.CICharts && CICharts.customLevel({ onChange: calculate });
 calculate();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

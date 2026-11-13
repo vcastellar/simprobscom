@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Random Walk Simulator: 1D and 2D | ProbLab">
   <meta name="twitter:description" content="Interactive random walk simulator in 1D and 2D. Visualize trajectories, ±2σ diffusion bands and the √n behavior.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../../style_new.css?v=20261102-1">
+  <link rel="stylesheet" href="../../style_new.css?v=20261113-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -566,7 +566,7 @@
     </section>
 
     <section class="card content-card">
-      <h2>How the simulator works, step by step</h2>
+      <details class="fold"><summary><h2>How the simulator works, step by step</h2></summary>
       <h3>1D tab</h3>
       <ol>
         <li><strong>Each path starts at 0.</strong></li>
@@ -585,10 +585,11 @@
       </ol>
       <p>The cards show the <strong>mean final distance</strong> from the origin (theory predicts about 0.886√n), the <strong>mean squared distance</strong> (theory predicts exactly n), the <strong>maximum displacement</strong> (the farthest any path has been at any time) and the <strong>returns to the origin</strong> (how many times it has passed through (0, 0) again; only counted when there is a single path). The <strong>dashed circle</strong> has radius √n.</p>
       <p>On both tabs, each click on "Simulate" generates new paths. The formulas for all these theoretical values are derived below.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Mathematical properties</h2>
+      <details class="fold"><summary><h2>Mathematical properties</h2></summary>
 
       <h3>Mean and variance</h3>
       <p>Since E[\(\xi_i\)] = p − (1−p) = 2p − 1 and Var(\(\xi_i\)) = 1 − (2p−1)² = 4p(1−p), by linearity of expectation and independence:</p>
@@ -615,10 +616,11 @@
         <span style="margin-left:2rem;">\( r_{\mathrm{RMS}} = \sqrt{n} \)</span>
       </p>
       <p>The dashed circle in the 2D simulator has radius √n and corresponds to this root-mean-square distance. Notice how the endpoints of the trajectories cluster roughly within that circle.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Where the formulas come from</h2>
+      <details class="fold"><summary><h2>Where the formulas come from</h2></summary>
       <h3>Mean and variance: from one step to n steps</h3>
       <p>A step \(\xi\) equals +1 with probability p and −1 with probability 1 − p. Its mean and variance are</p>
       <div class="math-block">\[ E(\xi) = (+1)\,p + (-1)(1-p) = 2p - 1, \]</div>
@@ -671,10 +673,11 @@
       <p>Let \(P_k\) be the probability of ruin when you hold k euros and the two players hold N = a + b between them. After one bet you hold k + 1 or k − 1, each with probability ½:</p>
       <div class="math-block">\[ P_k = \tfrac{1}{2}P_{k+1} + \tfrac{1}{2}P_{k-1}, \qquad P_0 = 1, \quad P_N = 0. \]</div>
       <p>Each value is the average of its two neighbours, so the \(P_k\) lie on a straight line. The one through the two end points is \(P_k = 1 - k/N\), and with k = a you get \(P_a = b/(a+b)\). The same method gives the mean length of the game, \(a \cdot b\) bets: with €100 against €900, 90,000 bets.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Recurrence: the walk always returns to the origin</h2>
+      <details class="fold"><summary><h2>Recurrence: the walk always returns to the origin</h2></summary>
       <p>One of the most counterintuitive properties of the random walk was proved by the Polish mathematician <strong>George Pólya in 1921</strong>. His most famous theorem states:</p>
       <ul>
         <li><strong>In 1D and 2D:</strong> the simple random walk is <em>recurrent</em> — the probability of returning to the starting point (and to any point already visited) is exactly 1. Given enough time, the walker always comes back.</li>
@@ -682,10 +685,11 @@
       </ul>
       <p>The intuition behind this result is that in low dimensions the space is "small" compared to how thoroughly the walk explores it, whereas in high dimensions there are too many possible directions and the particle disperses irreversibly. This property has deep implications in statistical physics, graph theory and ecology.</p>
       <p>In the 2D simulator, set a large number of steps (5,000–10,000) with a single trajectory and watch how the particle repeatedly returns to the origin even though it seems to have wandered off for good.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>The gambler's ruin</h2>
+      <details class="fold"><summary><h2>The gambler's ruin</h2></summary>
       <p>Imagine a gambler who starts with $<em>a</em> and plays a series of $1 bets against an opponent with $<em>b</em>. On each round, the gambler wins $1 with probability p or loses $1 with probability q = 1 − p. The game ends when someone goes broke.</p>
       <p>This classic problem is equivalent to a random walk with absorbing barriers at 0 and a + b. The probability that the gambler goes broke is:</p>
       <div class="math-block">
@@ -699,10 +703,11 @@
       <p>For a fair game (p = 0.5), the probability of ruin depends only on the ratio of capital: if the gambler has $100 and the house has $900, the probability that the gambler goes broke is 900/1000 = 90%. Even with a perfectly fair game, the asymmetry in capital makes ruin nearly certain for the poorer player.</p>
       <p>With p &lt; 0.5 (the real situation in a casino, where the house has the edge), ruin is practically inevitable in the long run. Only with p &gt; 0.5 can the gambler have a positive probability of ruining the opponent before going broke.</p>
       <p>In the 1D simulator, change p to 0.40 or 0.30 with negative drift and watch how the trajectories decline systematically — that's the house edge at work.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Brownian motion: the continuous limit</h2>
+      <details class="fold"><summary><h2>Brownian motion: the continuous limit</h2></summary>
       <p>When the step size and the time interval both shrink toward 0 in a coordinated way, the random walk converges in distribution to <strong>Brownian motion</strong> (also called the Wiener process), the continuous model of diffusion.</p>
       <p>Formally, if we define B<sub>t</sub> = X<sub>⌊nt⌋</sub>/√n, then B<sub>t</sub> → W<sub>t</sub> where W is a standard Wiener process with W₀ = 0, independent increments and W<sub>t</sub> − W<sub>s</sub> ~ N(0, t − s).</p>
       <p>Brownian motion was first observed by Robert Brown (1827), who noted the erratic movement of pollen grains in water, and was explained mathematically by Albert Einstein in 1905 as the result of molecular bombardment. The same mathematics of the random walk describes:</p>
@@ -712,10 +717,11 @@
         <li><strong>Financial prices</strong> (the Black-Scholes model, geometric Brownian motion).</li>
         <li><strong>Polymers</strong> in chemistry (the conformation of a polymer chain follows a random walk in 3D).</li>
       </ul>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Applications of the random walk</h2>
+      <details class="fold"><summary><h2>Applications of the random walk</h2></summary>
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px;">
         <div class="app-card app-card--indigo">
           <h3>📈 Finance</h3>
@@ -734,6 +740,7 @@
           <p>The diffusion of charged particles in plasmas, neutron transport in nuclear reactors, electrical resistivity in metals, and molecular dynamics in computer simulations all use the random-walk formalism.</p>
         </div>
       </div>
+      </details>
     </section>
 
     <section class="card content-card">
@@ -1233,7 +1240,7 @@ function simulate2D() {
 document.getElementById('btn2d').addEventListener('click', simulate2D);
 </script>
 <script src="../../field-hints.js?v=20260730-1"></script>
-<script src="../../theme.js?v=20261031-1"></script>
+<script src="../../theme.js?v=20261113-1"></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

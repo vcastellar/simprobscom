@@ -97,7 +97,7 @@
   }
   </script>
 
-  <link rel="stylesheet" href="../style_new.css?v=20261107-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261113-1">
   <style>
     .mode-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
     .mode-tab {
@@ -293,7 +293,7 @@
       <p>where \(\bar{p} = (p_A + p_B)/2\) is the pooled proportion. Under the alternative hypothesis \(H_1: p_B - p_A = \Delta\), the statistic is distributed approximately as:</p>
       <p class="formula-line">\( Z \;\sim\; N\!\left(\delta,\; \sigma_1^2\right) \quad \text{where} \quad \delta = \frac{\Delta\sqrt{n}}{\sqrt{2\bar{p}(1-\bar{p})}},\quad \sigma_1 = \sqrt{\frac{p_A(1-p_A) + p_B(1-p_B)}{2\bar{p}(1-\bar{p})}} \)</p>
 
-      <h3>Power formulas</h3>
+      <details class="fold fold-sub"><summary><h3>Power formulas</h3></summary>
       <ul>
         <li><strong>Two-tailed</strong>:
           <p class="formula-line">\( 1-\beta \;=\; 1 - \Phi\!\left(\frac{z_{\alpha/2}\cdot\sqrt{2\bar{p}(1-\bar{p})} - \Delta\sqrt{n}}{\sqrt{p_A(1-p_A)+p_B(1-p_B)}}\right) + \Phi\!\left(\frac{-z_{\alpha/2}\cdot\sqrt{2\bar{p}(1-\bar{p})} - \Delta\sqrt{n}}{\sqrt{p_A(1-p_A)+p_B(1-p_B)}}\right) \)</p>
@@ -302,16 +302,19 @@
           <p class="formula-line">\( 1-\beta \;=\; 1 - \Phi\!\left(\frac{z_\alpha\cdot\sqrt{2\bar{p}(1-\bar{p})} - \Delta\sqrt{n}}{\sqrt{p_A(1-p_A)+p_B(1-p_B)}}\right) \)</p>
         </li>
       </ul>
+            </details>
 
-      <h3>Sample size per group</h3>
+      <details class="fold fold-sub"><summary><h3>Sample size per group</h3></summary>
       <p class="formula-line">\( n = \left\lceil \dfrac{\left(z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})} + z_{1-\beta}\sqrt{p_A(1-p_A)+p_B(1-p_B)}\right)^2}{\Delta^2} \right\rceil \)</p>
+            </details>
 
-      <h3>Minimum detectable effect (MDE)</h3>
+      <details class="fold fold-sub"><summary><h3>Minimum detectable effect (MDE)</h3></summary>
       <p>The MDE is the smallest \(|\Delta|\) that achieves the target power with the available n. It is computed via binary search over \(\Delta\).</p>
+            </details>
     </section>
 
     <section class="card content-card">
-      <h3>Worked example</h3>
+      <details class="fold"><summary><h3>Worked example</h3></summary>
       <p>An e-commerce team wants to test a new checkout flow (variant B) against the current one (group A). The conversion rate of A is p_A = 0.12, and B is expected to improve it to p_B = 0.138 (a +15% relative lift). The experiment is designed with α = 0.05, a two-tailed test, and n = 1,500 users per group.</p>
 
       <p><strong>Auxiliary parameters:</strong></p>
@@ -324,10 +327,11 @@
 
       <p>With n = 1,500 per group and a 15% lift, the power is only <strong>≈ 31%</strong>: the experiment is severely underpowered for this effect. To reach 80% power, approximately <strong>5,443 users per group</strong> would be needed.</p>
       <p>This illustrates a common mistake in A/B testing: launching experiments without correctly sizing the sample to detect the effect of interest.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h3>How to interpret the results</h3>
+      <details class="fold"><summary><h3>How to interpret the results</h3></summary>
 
       <h3>Power</h3>
       <p>A power of 80% means that if the real difference is p_B − p_A, the test will reject H₀ 80% of the time. Below 70%, the experiment has a high probability of missing real effects. Above 90%, the design is very conservative: you may be able to shorten the experiment's duration.</p>
@@ -345,6 +349,7 @@
         <li>With limited traffic, increase the minimum effect of interest or extend the duration instead of lowering α.</li>
         <li>For full sizing (sample size, power, and MDE all at once), use the <a href="ab-testing-potencia.html">full A/B power calculator</a>.</li>
       </ul>
+      </details>
     </section>
 
     <section id="seo-support-content" class="card content-card">
@@ -650,7 +655,7 @@ document.getElementById('calcNBtn').addEventListener('click', doN);
 doPower();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

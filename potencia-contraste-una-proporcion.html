@@ -97,7 +97,7 @@
   }
   </script>
 
-  <link rel="stylesheet" href="style_new.css?v=20261031-1">
+  <link rel="stylesheet" href="style_new.css?v=20261113-1">
   <style>
     .mode-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
     .mode-tab {
@@ -292,7 +292,7 @@
       <p class="formula-line">\( Z \sim N\!\left(\delta,\; \sigma_1^2\right) \quad \text{donde} \quad \delta = \frac{(p_1 - p_0)\sqrt{n}}{\sqrt{p_0(1-p_0)}},\quad \sigma_1 = \sqrt{\frac{p_1(1-p_1)}{p_0(1-p_0)}} \)</p>
       <p>El parámetro \(\delta\) es la <strong>no-centralidad</strong>: cuántas desviaciones típicas (bajo H₀) se desplaza el estadístico cuando p = p₁. Cuanto mayor es \(|\delta|\), más fácil es distinguir H₁ de H₀.</p>
 
-      <h3>Fórmulas de potencia</h3>
+      <details class="fold fold-sub"><summary><h3>Fórmulas de potencia</h3></summary>
       <ul>
         <li><strong>Bilateral</strong> (\(H_a: p \neq p_0\)):
           <p class="formula-line">\( 1 - \beta \;=\; 1 - \Phi\!\left(\frac{z_{\alpha/2} - \delta}{\sigma_1}\right) + \Phi\!\left(\frac{-z_{\alpha/2} - \delta}{\sigma_1}\right) \)</p>
@@ -304,15 +304,17 @@
           <p class="formula-line">\( 1 - \beta \;=\; \Phi\!\left(\frac{-z_\alpha - \delta}{\sigma_1}\right) \)</p>
         </li>
       </ul>
+            </details>
 
-      <h3>Fórmula de tamaño muestral</h3>
+      <details class="fold fold-sub"><summary><h3>Fórmula de tamaño muestral</h3></summary>
       <p>Para obtener potencia \(1-\beta\) con nivel \(\alpha\) y efecto \(\Delta = |p_1 - p_0|\):</p>
       <p class="formula-line">\( n \;=\; \left\lceil\left(\frac{z_{\alpha^*}\sqrt{p_0(1-p_0)} + z_{1-\beta}\sqrt{p_1(1-p_1)}}{\Delta}\right)^2\right\rceil \)</p>
       <p>donde \(z_{\alpha^*} = z_{\alpha/2}\) en bilateral y \(z_{\alpha^*} = z_\alpha\) en unilateral.</p>
+            </details>
     </section>
 
     <section class="card content-card">
-      <h3>Ejemplo resuelto</h3>
+      <details class="fold"><summary><h3>Ejemplo resuelto</h3></summary>
       <p>Una empresa quiere verificar si su tasa de satisfacción p₀ = 0,30 ha cambiado tras una campaña de mejora, esperando que suba a p₁ = 0,40. Se realiza el contraste bilateral H₀: p = 0,30 con α = 0,05 y una muestra de n = 172 encuestados.</p>
 
       <p><strong>Paso 1 — Error estándar bajo H₀:</strong></p>
@@ -328,10 +330,11 @@
       <p class="formula-line">\( 1-\beta = 1 - \Phi\!\left(\frac{1{,}960 - 2{,}862}{1{,}069}\right) + \Phi\!\left(\frac{-1{,}960 - 2{,}862}{1{,}069}\right) = 1 - \Phi(-0{,}844) + \Phi(-4{,}511) \approx 0{,}801 \)</p>
 
       <p>Con n = 172 y p₁ = 0,40, la potencia es del <strong>≈ 80,1 %</strong>. Si la proporción real ha subido a 0,40, el contraste lo detectará correctamente en aproximadamente 8 de cada 10 estudios. El error de tipo II es β ≈ 0,199: hay un 20 % de probabilidad de no detectar la mejora aunque sea real.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h3>Cómo interpretar los resultados</h3>
+      <details class="fold"><summary><h3>Cómo interpretar los resultados</h3></summary>
 
       <h3>Potencia (1−β)</h3>
       <p>Una potencia del 80 % significa que si la proporción real es p₁, el test rechazará H₀ el 80 % de las veces. En estudios confirmatorios se recomienda potencia ≥ 0,80; en decisiones donde el coste del falso negativo es alto, ≥ 0,90.</p>
@@ -349,6 +352,7 @@
         <li>Cuando p₀ o p₁ son extremas (&lt; 0,10 o &gt; 0,90) con n pequeño, considera el test exacto binomial en lugar de la aproximación normal.</li>
         <li>Realiza un análisis de sensibilidad variando p₁ ±0,05 para valorar la robustez del diseño.</li>
       </ul>
+      </details>
     </section>
 
     <section id="seo-support-content" class="card content-card">
@@ -649,7 +653,7 @@ doPower();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

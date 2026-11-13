@@ -74,7 +74,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -192,7 +192,7 @@
             <h3>Explanation</h3>
             <p><strong>Non-inferiority</strong> trials aim to show that the new treatment (T) is not worse than the reference treatment (C) by more than a preset margin M. <strong>Equivalence</strong> trials (TOST, <em>Two One-Sided Tests</em>) require the difference to fall within ±M in both directions. In both cases, α is <em>one-sided</em>; the usual value is 0.025 (equivalent to a 95% confidence interval for the difference).</p>
             <p>This type of trial contrasts with <strong>superiority</strong> trials, where the goal is to show that T is better than C. In non-inferiority, the null hypothesis is "T is worse than C by more than M," and rejecting it — by showing that the difference falls above −M — is enough to conclude non-inferiority. Choosing the margin M is the most critical clinical decision in the design: it must represent the maximum loss of efficacy that would be clinically and regulatorily acceptable.</p>
-            <h3>Formulas</h3>
+            <details class="fold fold-sub"><summary><h3>Formulas</h3></summary>
             <p><strong>Non-inferiority</strong> — with assumed \(\delta = \mu_T - \mu_C\):</p>
             <p class="formula-line">\( n = \left\lceil \frac{2\,\sigma^2\,(Z_\alpha + Z_\beta)^2}{(M + \delta)^2} \right\rceil \)</p>
             <p><strong>Equivalence (TOST)</strong> — with \(\delta = 0\):</p>
@@ -205,14 +205,16 @@
                 <li><strong>Z<sub>α</sub></strong>: one-sided normal quantile. For α = 0.025 this corresponds to Z = 1.96.</li>
                 <li>Equivalence requires \(M > |\delta|\) and needs a larger sample than non-inferiority: both one-sided tests must be passed at once, which is why \(Z_{\beta/2}\) appears instead of \(Z_\beta\) when δ = 0.</li>
             </ul>
-            <h3>Quick settings</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Quick settings</h3></summary>
             <ul>
                 <li><strong>M:</strong> define it clinically before the study; it reflects the maximum acceptable loss of efficacy. Regulatory guidance typically sets it between 50% and 80% of the comparator's effect versus placebo.</li>
                 <li><strong>δ = 0:</strong> conservative assumption; it means T and C have exactly the same mean efficacy. If you expect T to be somewhat worse, a negative δ will increase n; if you believe T is somewhat better, a positive δ reduces it.</li>
                 <li><strong>α = 0.025 one-sided:</strong> the regulatory standard (EMA/FDA) for non-inferiority trials, equivalent to a 95% CI for the difference.</li>
                 <li><strong>Power:</strong> typically 0.80; 0.90 in pivotal studies or those with regulatory consequences.</li>
             </ul>
-            <h3>Worked example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>A pharmaceutical company is developing a new generic antihypertensive drug to replace the reference (branded) treatment. The primary outcome is the reduction in diastolic blood pressure in mmHg after eight weeks of treatment. Historical data for the reference drug indicate a standard deviation of σ = 10 mmHg.</p>
             <p>The clinical committee sets the non-inferiority margin at M = 5 mmHg: a difference of less than 5 mmHg between treatments is considered clinically irrelevant and does not justify keeping the more expensive branded drug. Under the most conservative working hypothesis, both drugs are assumed to have exactly the same mean effect, i.e., δ = 0.</p>
             <p>The design parameters follow EMA/FDA regulatory guidance for non-inferiority trials: a one-sided significance level α = 0.025 (equivalent to a 95% confidence interval for the difference) and 80% power (β = 0.20). The corresponding quantiles are \( z_{\alpha} = 1.960 \) and \( z_{\beta} = 0.842 \).</p>
@@ -222,7 +224,8 @@
             <p class="formula-line">\( n = \dfrac{2 \times 100 \times (1.960+0.842)^{2}}{(5-0)^{2}} = \dfrac{200 \times 7.851}{25} = \dfrac{1{,}570.2}{25} \approx 62.8 \rightarrow 63 \text{ per group} \)</p>
             <p>Applying the standard 15% adjustment for loss to follow-up, the trial needs to recruit approximately <strong>75 patients per group</strong> (total ≈ 150), since 63 / (1 − 0.15) = 74.1 → 75. This margin ensures that even if 15% of participants do not complete follow-up, the intention-to-treat analysis will retain the planned 80% power.</p>
             <p>The regulatory conclusion is that if the lower bound of the 95% CI for the difference (generic − reference) is above −5 mmHg, non-inferiority will be declared and the drug can be marketed as a therapeutically equivalent alternative to the branded product.</p>
-            <h3>Model assumptions</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Model assumptions</h3></summary>
             <ul>
                 <li><strong>Normality:</strong> the outcome variable follows a normal distribution (or n is large enough to apply the CLT).</li>
                 <li><strong>Equal variances:</strong> the formula assumes \(\sigma_T = \sigma_C = \sigma\). If they differ, use the quadratic mean as an approximation or more elaborate methods.</li>
@@ -230,17 +233,20 @@
                 <li><strong>Margin defined a priori:</strong> the margin M must be set before seeing the data; changing it post hoc invalidates the analysis.</li>
                 <li><strong>Known σ:</strong> in practice σ is estimated; for small samples, consider using t quantiles instead of Z (this slightly increases n).</li>
             </ul>
-            <h3>Common uses</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Common uses</h3></summary>
             <ul>
                 <li>Trials of generic or biosimilar drugs versus the branded product.</li>
                 <li>Comparing a less toxic or more convenient treatment with the proven efficacy standard.</li>
                 <li>Validating alternative diagnostic or surgical procedures.</li>
                 <li>Pharmacokinetic bioequivalence (although PK studies typically use crossover ANOVA models with specific 80–125% limits).</li>
             </ul>
-            <h3>How to interpret the result</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
                 <p>The value \(n\) is the <strong>minimum size per group</strong> (1:1 balanced design) needed to demonstrate non-inferiority of the experimental treatment relative to control with the specified power and \(\alpha\) level. The total number of participants to recruit is \(2n\) plus the adjustment for dropout: divide each \(n\) by \((1 - \text{dropout rate})\). The hypothesis being tested is \(H_0\!: \mu_E - \mu_C \leq -M\) versus \(H_1\!: \mu_E - \mu_C > -M\), where \(M > 0\) is the non-inferiority margin; a significant result (\(p < \alpha\)) supports the conclusion that the experimental treatment is not worse than the control by more than \(M\) units.</p>
                 <p>Choosing the margin \(M\) is the most critical decision in the design and must be made using clinical judgment before seeing the data, not post hoc. A margin that is too wide makes the study trivially easy to pass but does not guarantee real clinical efficacy; one that is too narrow can make \(n\) impractically large. Increasing \(M\) reduces \(n\) quadratically (doubling \(M\) cuts \(n\) to a quarter); reducing \(\sigma\) also decreases it quadratically. Run a <em>sensitivity analysis</em> varying \(M\) by ±20% and \(\sigma\) by ±25% to see the impact on the required \(n\). 80% power is the usual minimum for this type of study; the EMA and FDA often recommend 90% power for non-inferiority trials, which increases \(n\) by approximately 30%.</p>
                 <p>Keep in mind that non-inferiority trials carry a special risk of type I error: poor study quality (high variability, poor adherence) can make an inferior treatment appear non-inferior. It is therefore essential to pre-specify the margin in the protocol, maximize study quality, and analyze both the intention-to-treat (ITT) and per-protocol (PP) populations; if both analyses agree on non-inferiority, the conclusion is more robust. Once the study is complete, build the 95% CI for the difference in means and check whether the lower bound exceeds \(-M\); use the <a href="intervalo-confianza-diferencia-medias.html">confidence interval calculator for the difference in means</a> for this analysis.</p>
+            </details>
             <h3>External references</h3>
             <ul>
                 <li><a href="https://en.wikipedia.org/wiki/Non-inferiority_trial" target="_blank" rel="noopener">Non-inferiority trial (Wikipedia)</a> — trial design, null and alternative hypotheses, margin M</li>
@@ -359,7 +365,7 @@ document.getElementById("niCalculateBtn").addEventListener("click", calculateNIS
 calculateNISampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

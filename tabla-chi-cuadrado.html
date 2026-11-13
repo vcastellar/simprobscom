@@ -31,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional"></noscript>
-    <link rel="stylesheet" href="style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <style>
         .site-nav { position:sticky; top:0; z-index:100; background:rgba(255,255,255,0.92); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid rgba(15,23,42,0.08); }
         .site-nav-inner { width:min(1200px,94vw); margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 0; }
@@ -111,6 +111,19 @@
         .dist-diagram .dg-caption { margin: 6px 2px 0; font-size: 0.85rem; color: var(--text-muted); text-align: center; }
         .dist-diagram .dg-caption strong { color: var(--accent); font-weight: 700; }
         .dist-diagram .dg-hint { opacity: 0.7; }
+        /* Columna fija opaca: al desplazar la tabla en horizontal no deja ver los números que pasan por debajo. */
+        .dist-table tbody td:first-child { background:linear-gradient(rgba(37,99,235,0.07),rgba(37,99,235,0.07)),#fff; }
+        .dist-table tbody tr:nth-child(even) td:first-child { background:linear-gradient(rgba(37,99,235,0.1),rgba(37,99,235,0.1)),#fff; }
+        .dist-table tbody tr:hover td:first-child { background:linear-gradient(rgba(37,99,235,0.15),rgba(37,99,235,0.15)),#fff; }
+        html.dark-mode .dist-table tbody td:first-child { background:linear-gradient(rgba(96,165,250,0.12),rgba(96,165,250,0.12)),#1e293b; }
+        html.dark-mode .dist-table tbody tr:nth-child(even) td:first-child { background:linear-gradient(rgba(96,165,250,0.16),rgba(96,165,250,0.16)),#1e293b; }
+        html.dark-mode .dist-table tbody tr:hover td:first-child { background:linear-gradient(rgba(96,165,250,0.22),rgba(96,165,250,0.22)),#1e293b; }
+        /* Bloque «Para qué sirve esta tabla» */
+        .table-uses { margin:22px 0 0; padding:16px 20px; }
+        .table-uses h2 { font-size:1.05rem; margin:0 0 8px; }
+        .table-uses ul { margin:0; padding-left:1.15rem; display:grid; gap:6px; font-size:0.92rem; line-height:1.5; }
+        /* Sin mayúsculas: convertirían α, ν, λ y μ en A, N, Λ y M. */
+        .table-section-title { text-transform:none; letter-spacing:0.02em; }
     </style>
 
     <script type="application/ld+json">
@@ -306,20 +319,30 @@
             </div>
         </section>
 
+        <section class="card table-uses">
+            <h2>Para qué sirve esta tabla</h2>
+            <ul>
+                <li><strong>Bondad de ajuste</strong> (ν = k − 1, con k categorías) e <strong>independencia</strong> en tablas de contingencia (ν = (r − 1)(c − 1)): se usa la cola derecha. Haz el contraste completo de <a href="chi-cuadrado-bondad-ajuste.html" data-goatcounter-click="tabla-chi/bondad" data-goatcounter-title="bondad de ajuste">bondad de ajuste</a> o de <a href="contraste-independencia-chi-cuadrado.html" data-goatcounter-click="tabla-chi/independencia" data-goatcounter-title="independencia">independencia</a>.</li>
+                <li><strong>Varianza de una población normal</strong> (ν = n − 1): <a href="contraste-hipotesis-varianzas.html" data-goatcounter-click="tabla-chi/contraste-varianza" data-goatcounter-title="contraste">contraste</a> e <a href="intervalo-confianza-varianza.html" data-goatcounter-click="tabla-chi/ic-varianza" data-goatcounter-title="intervalo de confianza">intervalo de confianza</a>. El intervalo usa dos valores de la tabla, uno de cada cola.</li>
+            </ul>
+        </section>
+
         <section class="card content-card" style="border-top:3px solid #2563eb;">
             <h3>Cómo usar estas tablas</h3>
-            <h3>Distribución Chi-cuadrado</h3>
+            <details class="fold fold-sub"><summary><h3>Distribución Chi-cuadrado</h3></summary>
             <p>Si Z₁, Z₂, …, Zᵥ son variables normales estándar independientes, entonces X = Z₁² + … + Zᵥ² sigue una distribución chi-cuadrado con ν grados de libertad. Su función de densidad es:</p>
             <p class="formula-line">\( f(x,\nu) = \dfrac{x^{\nu/2-1}\,e^{-x/2}}{2^{\nu/2}\,\Gamma(\nu/2)}, \quad x \geq 0 \)</p>
             <p>La media es ν y la varianza es 2ν.</p>
+            </details>
 
-            <h3>Tabla de valores críticos</h3>
+            <details class="fold fold-sub"><summary><h3>Tabla de valores críticos</h3></summary>
             <p>Muestra los valores críticos χ² para cada grado de libertad ν. El selector <em>Área tabulada</em> decide cómo se etiquetan las columnas:</p>
             <ul>
                 <li><strong>Cola derecha</strong> (por defecto): cada columna es α = P(X &gt; χ²). Es la forma habitual en los libros, porque los contrastes chi-cuadrado rechazan con valores grandes. Ejemplo: contraste al 5 %, ν = 5 → columna α = 0.05 → χ² = 11.070.</li>
                 <li><strong>Cola izquierda</strong>: cada columna es la probabilidad acumulada p = P(X ≤ χ²), la convención de algunos manuales y de funciones como <code>qchisq</code> en R. El mismo valor 11.070 aparece en la columna p = 0.95.</li>
             </ul>
-            <h3>Cómo encontrar un valor crítico de chi-cuadrado</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Cómo encontrar un valor crítico de chi-cuadrado</h3></summary>
             <ol>
                 <li><strong>Calcula los grados de libertad ν</strong> según el contraste: k − 1 en bondad de ajuste con k categorías (resta además un grado por cada parámetro estimado con los datos), (r − 1)(c − 1) en independencia con una tabla r × c, y n − 1 para la varianza de una muestra de tamaño n.</li>
                 <li><strong>Identifica la cola.</strong> Los contrastes de bondad de ajuste y de independencia rechazan con valores grandes de χ², así que usan la cola derecha.</li>
@@ -328,14 +351,16 @@
             <p><strong>Ejemplo (independencia):</strong> en una tabla de contingencia 3 × 3, ν = (3 − 1)(3 − 1) = 4. Con α = 0,05 en la cola derecha, la columna es α = 0.05 (p = 0.95 en la vista de cola izquierda) y el valor crítico es <strong>χ² = 9.488</strong>. Rechazas la independencia si el estadístico observado supera 9.488.</p>
             <p><strong>Ejemplo (intervalo para la varianza):</strong> con n = 10 observaciones, ν = 9. Un intervalo de confianza del 95 % deja 2,5 % en cada cola, así que necesitas dos valores: <strong>2.700</strong> (columna α = 0.975 en cola derecha, o p = 0.025 en cola izquierda) y <strong>19.023</strong> (α = 0.025, o p = 0.975).</p>
             <p><strong>Atención a la convención de la tabla.</strong> Unos libros tabulan el área de la cola derecha (α) y otros la acumulada (p). Las dos tablas contienen los mismos valores, pero en columnas con etiquetas distintas: la columna «α = 0,05» de cola derecha es la columna «p = 0,95» de cola izquierda. Leer una tabla con la convención de la otra da un valor crítico erróneo; por eso aquí puedes cambiar de vista para que coincida con tu libro.</p>
+            </details>
 
-            <h3>Usos principales</h3>
+            <details class="fold fold-sub"><summary><h3>Usos principales</h3></summary>
             <ul>
                 <li>Contraste de bondad de ajuste (goodness-of-fit)</li>
                 <li>Contraste de independencia en tablas de contingencia</li>
                 <li>Estimación de varianzas e intervalos de confianza para σ²</li>
                 <li>Contrastes de homogeneidad</li>
             </ul>
+            </details>
 
             <h3>Calculadoras relacionadas</h3>
             <ul class="distribution-links">
@@ -565,7 +590,7 @@
 <script src="table-actions.js?v=20261103-3"></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

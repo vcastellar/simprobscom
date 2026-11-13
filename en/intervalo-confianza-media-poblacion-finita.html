@@ -90,7 +90,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261105-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -201,7 +201,7 @@
             <p>When the total population has a known size \(N\) and is sampled without replacement, the observations are not strictly independent. The <strong>finite population correction factor</strong> (FPC) reduces the standard error in proportion to the sampled fraction \(f = n/N\).</p>
             <p>The result is a narrower CI than the standard one: the larger \(f\) is, the greater the gain in precision. If \(N \to \infty\) (or \(f &lt; 5\,\%\)), FPC ≈ 1 and both CIs coincide.</p>
 
-            <h3>Formula for the CI with FPC</h3>
+            <details class="fold fold-sub"><summary><h3>Formula for the CI with FPC</h3></summary>
             <p class="formula-line">\( \text{FPC} = \sqrt{\frac{N-n}{N-1}} \)</p>
             <p class="formula-line">\( \text{SE}_{\text{FPC}} = \frac{s}{\sqrt{n}} \cdot \text{FPC} \)</p>
             <p class="formula-line">\( \text{CI} = \bar{x} \pm t_{\alpha/2,\;n-1} \cdot \text{SE}_{\text{FPC}} \)</p>
@@ -211,17 +211,19 @@
                 <li><strong>FPC</strong>: finite population correction factor.</li>
                 <li><strong>\(t_{\alpha/2,n-1}\)</strong>: Student's t quantile with \(n-1\) degrees of freedom. For large n it converges to the normal quantile z.</li>
             </ul>
+            </details>
 
-            <h3>When the FPC matters</h3>
+            <details class="fold fold-sub"><summary><h3>When the FPC matters</h3></summary>
             <ul>
                 <li>\(f = n/N &gt; 5\,\%\): the correction noticeably narrows the CI.</li>
                 <li>\(f &gt; 20\,\%\): the reduction in the CI is substantial.</li>
                 <li>\(f &lt; 5\,\%\): the difference between the corrected and standard CI is under 3% and can be ignored.</li>
             </ul>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example</h3>
+            <details class="fold"><summary><h3>Worked example</h3></summary>
             <p>A company with N = 1,200 employees takes a sample of n = 127. The average time for a task is \(\bar{x} = 72\) minutes with sample standard deviation \(s = 12\) minutes. We want the 95% CI.</p>
             <p>The sampling fraction is \(f = 127/1{,}200 \approx 10.6\,\%\), above the 5% threshold, so the correction is relevant.</p>
             <p>\(\text{FPC} = \sqrt{(1200-127)/(1200-1)} = \sqrt{1073/1199} \approx 0.9463\).</p>
@@ -237,16 +239,18 @@
                 <li>N is fixed and known before sampling.</li>
                 <li>The t distribution is used (σ unknown). If σ is known, replace t with z.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p>The interval \([L, U]\) is the plausible range for the population mean \(\mu\) given the chosen confidence level. The frequentist interpretation is the same as for any CI: if you repeated the sampling and built the CI with the same procedure many times, approximately \(C \times 100\,\%\) of those intervals would contain the true value of \(\mu\). The CI corrected by FPC is always equal to or narrower than the standard one: this is not a bias, but the correct reflection of the fact that sampling \(n/N\,\%\) of the population without replacement provides more information than sampling with replacement.</p>
             <p>The difference between the two CIs depends directly on the sampling fraction. If \(n/N &lt; 5\,\%\), the FPC is close to 1 and both intervals practically coincide. If \(n/N\) exceeds 20%, the width reduction can be substantial, as the calculator shows by comparing the two CIs side by side in the chart. When the entire population is sampled (\(n = N\)), the CI collapses to a point: the uncertainty disappears because every element is known.</p>
             <ul>
                 <li><strong>Connection with hypothesis testing:</strong> if a reference value \(\mu_0\) falls outside the CI with FPC, the data reject it at significance level \(\alpha = 1 - C\) in the equivalent two-sided test for finite populations.</li>
                 <li><strong>Which interval to use:</strong> always use the CI with FPC when \(n/N &gt; 5\,\%\) and the design is simple random sampling without replacement. Reporting only the standard CI when the fraction is large overstates the real uncertainty.</li>
             </ul>
+      </details>
         </section>
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
@@ -283,7 +287,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="../ci-charts.js?v=20261105-2"></script>
+<script src="../ci-charts.js?v=20261113-1"></script>
 <script>
 let fmChart;
 
@@ -421,7 +425,7 @@ document.getElementById('fmCalcBtn').addEventListener('click', calculateFm);
 calculateFm();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

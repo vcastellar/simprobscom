@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261105-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
     {
@@ -247,7 +247,7 @@
             <p class="formula-line">\( \widehat{OR} = \dfrac{a/b}{c/d} = \dfrac{a\cdot d}{b\cdot c} \)</p>
             <p>En el ejemplo, \(\widehat{OR} = (35\cdot80)/(65\cdot20) \approx 2{,}154\). Esto significa que las odds observadas del evento en expuestos son aproximadamente 2,15 veces las odds observadas en no expuestos. Una OR igual a 1 indica ausencia de asociación; una OR mayor que 1 indica mayores odds del evento en el grupo expuesto; y una OR menor que 1 indica menores odds.</p>
 
-            <h3>Método logarítmico de Woolf</h3>
+            <details class="fold fold-sub"><summary><h3>Método logarítmico de Woolf</h3></summary>
             <p>Denotamos por \(C\) el nivel de confianza y por \(\alpha=1-C\) el área total fuera del intervalo. Para un 95 % de confianza, \(C=0{,}95\), \(\alpha=0{,}05\) y \(\alpha/2=0{,}025\) en cada cola.</p>
             <p>El método de Woolf construye el intervalo en la escala logarítmica porque la distribución muestral de \(\widehat{OR}\) es asimétrica y solo toma valores positivos. Al transformar con logaritmos, \(\log(\widehat{OR})\) puede aproximarse mejor por una distribución normal cuando los recuentos son suficientemente grandes.</p>
             <p>El primer paso es calcular la estimación puntual \(\widehat{OR} = ad/(bc)\) y su logaritmo. Después se estima el error estándar de \(\log(\widehat{OR})\) sumando la contribución de incertidumbre de las cuatro celdas:</p>
@@ -256,11 +256,13 @@
             <p class="formula-line">\( \log(\widehat{OR}) \pm z_{\alpha/2}\cdot SE\left[\log(\widehat{OR})\right] \)</p>
             <p>Por último, se aplica la exponencial a ambos límites para volver a la escala original de la odds ratio. Este paso es importante: el intervalo final no queda centrado de forma simétrica alrededor de la OR, sino que es simétrico en la escala \(\log(OR)\). Por eso los límites inferior y superior suelen estar a distancias diferentes de la estimación puntual cuando se miran en la escala original.</p>
             <p>El método funciona mejor si las cuatro celdas tienen recuentos moderados. Si hay celdas pequeñas, el error estándar aumenta y el intervalo se ensancha; si una celda vale 0, se necesita una corrección como Haldane-Anscombe para evitar divisiones por cero.</p>
+            </details>
 
-            <h3>Corrección de Haldane-Anscombe</h3>
+            <details class="fold fold-sub"><summary><h3>Corrección de Haldane-Anscombe</h3></summary>
             <p>Si alguna celda es 0, la OR o el error estándar no pueden calcularse directamente porque aparecen divisiones por cero y logaritmos indefinidos. La corrección de Haldane-Anscombe suma 0,5 a las cuatro celdas antes de calcular el intervalo.</p>
+            </details>
 
-            <h3>Ejemplo resuelto</h3>
+            <details class="fold fold-sub"><summary><h3>Ejemplo resuelto</h3></summary>
             <p>Con a = 35, b = 65, c = 20 y d = 80, la odds ratio estimada es:</p>
             <p class="formula-line">\( \widehat{OR} = \dfrac{35\cdot80}{65\cdot20} \approx 2{,}154 \)</p>
             <p>Para un 95 % de confianza, \(C=0{,}95\), \(\alpha=0{,}05\), \(\alpha/2=0{,}025\) y el valor crítico es \(z_{0{,}025} \approx 1{,}960\). El error estándar en escala logarítmica es:</p>
@@ -270,20 +272,22 @@
             <p>Finalmente se aplica la exponencial a ambos límites:</p>
             <p class="formula-line">\( IC_{95\%}(OR) = [e^{0{,}128},\;e^{1{,}407}] \approx [1{,}136,\;4{,}083] \)</p>
             <p>El intervalo completo queda por encima de 1, por lo que en este ejemplo las odds del evento son significativamente mayores en el grupo expuesto al 95 % de confianza.</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Supuestos para el IC de odds ratio</h3>
+            <details class="fold"><summary><h3>Supuestos para el IC de odds ratio</h3></summary>
             <ul>
                 <li>La tabla 2x2 debe representar recuentos independientes de exposición y evento, o casos y controles correctamente clasificados.</li>
                 <li>Las observaciones deben ser independientes dentro de cada celda; si hay datos emparejados, se necesitan métodos específicos para pares.</li>
                 <li>El método de Woolf usa una aproximación normal para \(\log(OR)\), por lo que funciona mejor con recuentos moderados en las cuatro celdas.</li>
                 <li>Si alguna celda vale 0, aplica la corrección de Haldane-Anscombe y considera interpretar el resultado como aproximado.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>¿En qué se diferencia del IC para ratio de proporciones?</h3>
+            <details class="fold"><summary><h3>¿En qué se diferencia del IC para ratio de proporciones?</h3></summary>
             <p>Aunque esta calculadora y la de <a href="intervalo-confianza-ratio-proporciones.html">IC para ratio de proporciones</a> usan una escala logarítmica y comparan el intervalo con el valor nulo 1, estiman medidas distintas.</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -313,10 +317,11 @@
             </div>
             <p>Con los mismos datos del ejemplo (35 eventos y 65 no eventos en expuestos; 20 eventos y 80 no eventos en no expuestos), el riesgo relativo sería \(RR=(35/100)/(20/100)=1{,}75\), mientras que la odds ratio es \(OR=(35/65)/(20/80)\approx2{,}154\). La OR es mayor porque compara odds, no probabilidades.</p>
             <p>La diferencia es pequeña cuando el evento es raro, porque entonces odds y probabilidad son parecidas. Cuando el evento es frecuente, la OR puede alejarse bastante del RR y no conviene interpretarla como si fuera un riesgo relativo.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p>El intervalo \([L, U]\) es el rango plausible de la odds ratio poblacional \(OR\) dado el nivel de confianza elegido. El valor nulo para una OR es 1, que indica ausencia de asociación entre la exposición y el evento. En términos frecuentistas: si repitieras el estudio muchas veces y construyeras el IC con el mismo procedimiento, una proporción \(C\) de esos intervalos contendría la verdadera OR. El intervalo se construye y se presenta simétricamente en escala logarítmica pero, al transformar de vuelta con la exponencial, los límites no están equidistantes de la estimación puntual en la escala original: la OR siempre es positiva y su distribución muestral es asimétrica.</p>
             <p>La lectura del resultado sigue tres casos directos. Si \(1 \in [L, U]\), los datos son compatibles con ausencia de asociación al nivel de confianza elegido; equivalentemente, el contraste bilateral \(H_0\!: OR = 1\) no se rechazaría al nivel \(\alpha = 1 - C\). Si \(L > 1\) (el intervalo completo está por encima de 1), las odds del evento son significativamente mayores en el grupo expuesto. Si \(U < 1\) (el intervalo completo está por debajo de 1), las odds son significativamente menores. En el gráfico se representa la distribución normal aproximada de \(\log(OR)\): la región verde es la zona de confianza y las colas rojas delimitan los valores críticos \(\pm z_{\alpha/2}\) en escala logarítmica.</p>
             <ul>
@@ -324,6 +329,7 @@
                 <li><strong>No confundir OR con riesgo relativo:</strong> la OR no es un riesgo relativo. Solo cuando el evento es raro (\(p &lt; 0{,}1\)) se aproximan. Con eventos frecuentes, la OR puede ser bastante más extrema que el RR y no debe interpretarse como si fuera un cociente de probabilidades.</li>
                 <li><strong>Amplitud y recuentos:</strong> celdas con recuentos pequeños producen intervalos muy anchos porque el error estándar de \(\log(OR)\) crece al sumar los recíprocos \(1/a + 1/b + 1/c + 1/d\). Si alguna celda es menor que 5, interpreta el resultado con cautela.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -368,7 +374,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="ci-charts.js?v=20261110-1"></script>
+<script src="ci-charts.js?v=20261113-1"></script>
 <script>
 
 document.getElementById('conf').addEventListener('change', function () {
@@ -480,7 +486,7 @@ calculate();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

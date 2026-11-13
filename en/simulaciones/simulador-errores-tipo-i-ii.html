@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Type I and Type II Error Visualizer | ProbLab">
   <meta name="twitter:description" content="Interactive simulator of type I (α) and type II (β) errors in hypothesis tests. Visualize statistical power and the α–β trade-off.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../../style_new.css?v=20261102-1">
+  <link rel="stylesheet" href="../../style_new.css?v=20261113-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -486,7 +486,7 @@
     </section>
 
     <section class="card content-card">
-      <h2>Where the formulas for β and power come from</h2>
+      <details class="fold"><summary><h2>Where the formulas for β and power come from</h2></summary>
       <h3>Starting point: the distribution of the sample mean</h3>
       <p>If the observations have mean μ and standard deviation σ, the mean of n independent observations follows (exactly for normal data, approximately in general, by the <a href="teorema-central-limite.html">central limit theorem</a>) a normal with the same mean and standard deviation σ/√n:</p>
       <div class="math-block">\[ \bar{X} \sim N\!\left(\mu,\ \frac{\sigma^2}{n}\right). \]</div>
@@ -526,10 +526,11 @@
 
       <h3>What this model simplifies</h3>
       <p>The tool treats σ as known. In a real test with unknown σ, Student's t is used and the power is computed with the noncentral t distribution; the result is somewhat lower, especially with small samples (in the example above, 0.848 instead of 0.863). ProbLab's <a href="../contrastes-hipotesis/">hypothesis test</a> and <a href="../tamano-muestral/">sample size</a> calculators use the exact computation in each case. The logic, however, is always the one in this chart: two distributions of the statistic, a boundary and the areas on either side.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>What are type I and type II errors?</h2>
+      <details class="fold"><summary><h2>What are type I and type II errors?</h2></summary>
       <p>When we run a hypothesis test we make a binary decision: reject the null hypothesis H₀ or fail to reject it. Like any decision based on incomplete information (a sample, not the entire population), this decision can be wrong in two distinct ways, and we call these two ways <strong>type I error</strong> and <strong>type II error</strong>.</p>
 
       <p>A <strong>type I error</strong> occurs when we reject H₀ while it is actually true in the population. The probability of making this error is precisely the <strong>significance level α</strong> that we fix before running the test. If we set α = 0.05, we are accepting that there is a 5% probability of declaring a significant effect when in fact none exists. This error is also called a <em>false positive</em> or <em>false alarm</em>.</p>
@@ -561,10 +562,11 @@
           </tr>
         </tbody>
       </table>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Statistical power</h2>
+      <details class="fold"><summary><h2>Statistical power</h2></summary>
       <p><strong>Statistical power</strong> (1 − β) is the probability that a test correctly detects a real effect. It is, in a sense, the "sensitivity" of the test: a high-power test rarely misses effects that truly exist in the population.</p>
 
       <p>In the simulator, power corresponds to the green region under the H₁ curve within the rejection zone. The greater the overlap between the two distributions (H₀ and H₁), the lower the power; the more separated they are, the higher the power. Four factors determine power:</p>
@@ -579,10 +581,11 @@
       <p>In scientific research and clinical trials it is common to set a <strong>minimum target power of 80% (β ≤ 0.20)</strong>. This means we accept up to a 20% probability of missing a real effect when it exists. Some more demanding fields, such as pivotal pharmacology trials, require power of 90% or even higher.</p>
 
       <p>A frequent and problematic practice is the <em>underpowered study</em>: a study with insufficient power that, if it obtains a significant result, probably did so due to chance (the Ioannidis effect, 2005). Underpowered studies that do detect effects also tend to overestimate the effect size, the so-called <em>winner's curse</em>.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>The α vs β trade-off</h2>
+      <details class="fold"><summary><h2>The α vs β trade-off</h2></summary>
       <p>The tension between the type I error and the type II error is one of the most fundamental problems in statistical inference. With a fixed sample size, it is not possible to minimize both simultaneously: any change in α inevitably affects β in the opposite direction.</p>
 
       <p>To visualize this intuitively: the critical value z<sub>α</sub> is the point that separates the non-rejection region from the rejection region. Lowering α, for example moving from z<sub>0.05</sub> = 1.645 to z<sub>0.01</sub> = 2.326, shifts the decision threshold to the right. This shift means the rejection region captures less area of the distribution under H₁, which increases β and reduces power.</p>
@@ -594,6 +597,7 @@
       <p>In practice, the choice of α depends on context: basic research conventionally uses α = 0.05; exploratory studies may relax it to α = 0.10 to avoid missing potentially interesting findings; applications with high consequences for type I error (medical diagnosis, safety quality control) use much stricter values (α = 0.001 or lower). In any case, the choice should be explicit, justified and set <em>before</em> collecting the data.</p>
 
       <p>When the economic or human consequences of both types of error are quantifiable, statistical decision theory proposes balancing the two errors by weighting their respective costs. If the cost of a false positive is C<sub>I</sub> and the cost of a false negative is C<sub>II</sub>, the optimal decision threshold depends on the ratio C<sub>I</sub>/C<sub>II</sub> and on the prior prevalence of H₁, which connects to the Bayesian approach to inference.</p>
+      </details>
     </section>
 
     <section class="card content-card">
@@ -1071,7 +1075,7 @@ initChart();
 update();
 </script>
 <script src="../../field-hints.js?v=20260730-1"></script>
-<script src="../../theme.js?v=20261031-1"></script>
+<script src="../../theme.js?v=20261113-1"></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261105-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -197,7 +197,7 @@
             <p>Mientras los intervalos para la media usan la distribución normal o t (que son simétricas), el intervalo para la varianza usa la distribución chi-cuadrado, que es asimétrica y positiva. Por eso los límites del intervalo no están equidistantes del estimador puntual \(s^2\).</p>
             <p>Este intervalo es fundamental en control de procesos (SPC), donde importa no solo la media de un proceso sino también su variabilidad. También aparece en metaanálisis, diseño de experimentos y auditoría de procesos de medición.</p>
 
-            <h3>Fórmula para la varianza</h3>
+            <details class="fold fold-sub"><summary><h3>Fórmula para la varianza</h3></summary>
             <p>Denotamos por \(C\) el nivel de confianza y por \(\alpha=1-C\) el área total fuera del intervalo. Para un 95 % de confianza, \(C=0{,}95\), \(\alpha=0{,}05\) y \(\alpha/2=0{,}025\) en cada cola.</p>
             <p class="formula-line">\( \left[\dfrac{(n-1)s^2}{\chi^2_{1-\alpha/2,\, n-1}},\;\; \dfrac{(n-1)s^2}{\chi^2_{\alpha/2,\, n-1}}\right] \)</p>
             <ul>
@@ -206,26 +206,30 @@
                 <li><strong>\(\chi^2_{1-\alpha/2,\, n-1}\)</strong>: percentil superior de la chi-cuadrado (percentil \(1-\alpha/2\), cola derecha); es el valor <em>mayor</em> y va en el denominador del extremo inferior del IC.</li>
                 <li><strong>\(\chi^2_{\alpha/2,\, n-1}\)</strong>: percentil inferior de la chi-cuadrado (percentil \(\alpha/2\), cola izquierda); es el valor <em>menor</em> y va en el denominador del extremo superior del IC.</li>
             </ul>
+            </details>
 
-            <h3>Fórmula para la desviación típica</h3>
+            <details class="fold fold-sub"><summary><h3>Fórmula para la desviación típica</h3></summary>
             <p class="formula-line">\( \left[\sqrt{\dfrac{(n-1)s^2}{\chi^2_{1-\alpha/2,\, n-1}}},\;\; \sqrt{\dfrac{(n-1)s^2}{\chi^2_{\alpha/2,\, n-1}}}\right] \)</p>
             <p>Se obtiene aplicando raíz cuadrada a cada extremo del IC de la varianza.</p>
+            </details>
 
-            <h3>Ejemplo resuelto</h3>
+            <details class="fold fold-sub"><summary><h3>Ejemplo resuelto</h3></summary>
             <p>Una línea de envasado llena botellas con \(s = 2{,}3\) ml a partir de \(n = 25\) mediciones. Con 95 % de confianza (\(C=0{,}95\), \(\alpha=0{,}05\), \(gl = 24\), \(\chi^2_{0{,}975} \approx 39{,}36\), \(\chi^2_{0{,}025} \approx 12{,}40\)):</p>
             <p class="formula-line">\( \sigma^2 \in \left[\frac{24 \cdot 5{,}29}{39{,}36},\;\frac{24 \cdot 5{,}29}{12{,}40}\right] \approx [3{,}23,\; 10{,}24] \text{ ml}^2 \)</p>
             <p class="formula-line">\( \sigma \in [1{,}80,\; 3{,}20] \text{ ml} \)</p>
+            </details>
         </section>
 
 
 
         <section class="card content-card">
-            <h3>Supuestos del intervalo chi-cuadrado</h3>
+            <details class="fold"><summary><h3>Supuestos del intervalo chi-cuadrado</h3></summary>
             <p>Este intervalo asume que la variable subyacente sigue una distribución normal. A diferencia del IC para la media, el IC para la varianza no está protegido por el teorema central del límite: es muy sensible a desviaciones de la normalidad. Si los datos no son normales, considera transformaciones o métodos robustos.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p>El intervalo para \(\sigma^2\) es el rango de valores de la varianza poblacional compatibles con los datos al nivel de confianza elegido. El intervalo para \(\sigma\) expresa la misma incertidumbre en las unidades originales de la variable: se obtiene simplemente aplicando la raíz cuadrada a cada límite. En términos frecuentistas, si repitieras el experimento muchas veces y construyeras el IC con el mismo método, una proporción \(C\) de esos intervalos contendría la verdadera varianza \(\sigma^2\). La distribución chi-cuadrado es asimétrica y solo toma valores positivos, por eso el intervalo no es simétrico: el límite superior está más alejado de \(s^2\) que el límite inferior.</p>
             <p>En el gráfico, la región verde bajo la curva chi-cuadrado es la zona de confianza y las colas rojas (cada una con área \(\alpha/2\)) indican los percentiles inferior \(\chi^2_{\alpha/2,\,n-1}\) y superior \(\chi^2_{1-\alpha/2,\,n-1}\). Cuanto mayor sea \(n\), más simétrica y concentrada será la distribución chi-cuadrado y, en consecuencia, el intervalo será más estrecho y más próximo a la simetría.</p>
             <ul>
@@ -233,6 +237,7 @@
                 <li><strong>Límite superior en control de calidad:</strong> si el objetivo es controlar la dispersión de un proceso, el límite superior \(U(\sigma^2)\) es el valor más relevante; superar un valor de especificación con ese límite indica que la variabilidad puede exceder lo tolerado incluso con los datos actuales.</li>
                 <li><strong>Conexión con el contraste:</strong> si un valor de referencia \(\sigma_0^2\) queda fuera del intervalo, los datos rechazarían \(H_0\!: \sigma^2 = \sigma_0^2\) al nivel \(\alpha = 1 - C\) en el contraste chi-cuadrado bilateral equivalente. Si \(\sigma_0^2\) está dentro del intervalo, no hay evidencia para rechazarlo.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -271,7 +276,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
-<script src="ci-charts.js?v=20261110-2"></script>
+<script src="ci-charts.js?v=20261113-1"></script>
 <script>
 
 document.getElementById('conf').addEventListener('change', function () {
@@ -345,7 +350,7 @@ calculate();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

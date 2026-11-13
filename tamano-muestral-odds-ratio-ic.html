@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261105-2">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -210,7 +210,7 @@
             <p>La odds ratio (OR) mide la asociación entre una exposición y un evento en una tabla 2×2. Para planificar cuántos sujetos se necesitan para estimarla con una precisión dada, el cálculo se realiza en la escala logarítmica, porque \(\log(\widehat{OR})\) se distribuye aproximadamente normal con un error estándar que depende de los recuentos de cada celda.</p>
             <p>Los inputs son: la OR que se espera encontrar, la proporción del evento en el grupo de referencia (\(p_2\)) y la precisión deseada expresada como semi-amplitud del IC en escala \(\log(OR)\). A partir de \(p_2\) y OR, la calculadora deriva \(p_1\) (proporción del evento en el grupo expuesto). Con ambas proporciones calcula el número mínimo de sujetos por grupo para que el IC tenga la amplitud fijada.</p>
             <p>La fórmula asume asignación equilibrada (mismo número de sujetos en cada grupo) y suficientes recuentos en las cuatro celdas para que la aproximación normal sea válida.</p>
-            <h3>Fórmulas</h3>
+            <details class="fold fold-sub"><summary><h3>Fórmulas</h3></summary>
             <p>Dada la OR esperada y \(p_2\), la proporción del evento en el grupo expuesto se obtiene invirtiendo la definición de odds ratio:</p>
             <p class="formula-line">\( p_1 = \frac{OR \cdot p_2}{1 + (OR - 1)\cdot p_2} \)</p>
             <p>El error estándar de \(\log(\widehat{OR})\) para una tabla con \(n\) observaciones por grupo es:</p>
@@ -222,9 +222,11 @@
                 <li><strong>Z</strong>: cuantil normal — 1,645 (90 %), 1,960 (95 %), 2,576 (99 %).</li>
                 <li><strong>\(E_{\log}\)</strong>: semi-amplitud del IC en escala \(\log(OR)\). El IC para OR queda entre \(OR \cdot e^{-E_{\log}}\) y \(OR \cdot e^{+E_{\log}}\).</li>
             </ul>
-            <h3>Cómo interpretar E_log</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Cómo interpretar E_log</h3></summary>
             <p>La semi-amplitud \(E_{\log}\) determina cuánto puede alejarse cada límite del IC de la OR estimada en escala multiplicativa. Con OR = 2 y \(E_{\log} = 0{,}5\), el IC va de \(2 \cdot e^{-0{,}5} \approx 1{,}21\) a \(2 \cdot e^{+0{,}5} \approx 3{,}30\). Una referencia útil: \(E_{\log} = \log(2) \approx 0{,}693\) produce un IC donde el límite superior es exactamente el doble del inferior.</p>
-            <h3>Configuración rápida</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Configuración rápida</h3></summary>
             <ul>
                 <li><strong>OR esperada:</strong> basada en estudios previos o en la mínima asociación que consideras relevante.</li>
                 <li><strong>p₂ (grupo de referencia):</strong> frecuencia del evento en la población no expuesta. Es el parámetro que más influye junto con OR.</li>
@@ -232,7 +234,8 @@
                 <li><strong>Nivel de confianza:</strong> 95 % es el estándar; usa 99 % en decisiones regulatorias o de alto impacto.</li>
                 <li><strong>Pérdidas esperadas:</strong> divide n por grupo entre (1 − tasa de pérdida).</li>
             </ul>
-            <h3>Ejemplo resuelto</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Ejemplo resuelto</h3></summary>
             <p>Un epidemiólogo quiere estimar la odds ratio de una enfermedad en expuestos vs. no expuestos a un factor de riesgo. Según la literatura, la proporción de la enfermedad en no expuestos es \(p_2 = 0{,}20\) y la OR esperada es 2,0. Se desea un IC al 95 % con una semi-amplitud de \(E_{\log} = 0{,}5\) en escala logarítmica.</p>
             <p>Primero derivamos \(p_1\):</p>
             <p class="formula-line">\( p_1 = \frac{2{,}0 \times 0{,}20}{1 + (2{,}0 - 1) \times 0{,}20} = \frac{0{,}40}{1{,}20} = 0{,}333 \)</p>
@@ -240,23 +243,27 @@
             <p class="formula-line">\( n = \frac{(1{,}960)^2 \cdot \left[\dfrac{1}{0{,}333 \times 0{,}667} + \dfrac{1}{0{,}20 \times 0{,}80}\right]}{(0{,}5)^2} = \frac{3{,}8416 \times (4{,}502 + 6{,}25)}{0{,}25} = \frac{41{,}30}{0{,}25} = 165{,}2 \rightarrow n = 166 \text{ por grupo} \)</p>
             <p>Se necesitan <strong>166 sujetos por grupo</strong> (332 en total). El IC resultante para OR irá aproximadamente de \(2{,}0 \cdot e^{-0{,}5} \approx 1{,}21\) a \(2{,}0 \cdot e^{+0{,}5} \approx 3{,}30\), lo que corresponde a un cociente U/L = e ≈ 2,72.</p>
             <p><strong>Análisis de sensibilidad:</strong> si la OR real fuese 3,0 en lugar de 2,0, el n se reduciría porque las proporciones estarían más separadas y la OR sería más fácil de estimar con precisión. Siempre es recomendable recalcular para un rango plausible de OR.</p>
-            <h3>Supuestos del modelo</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Supuestos del modelo</h3></summary>
             <ul>
                 <li>Diseño con dos grupos de igual tamaño (asignación 1:1 entre expuestos y no expuestos).</li>
                 <li>Suficientes recuentos en las cuatro celdas (\(n \cdot p_i\) y \(n \cdot (1-p_i)\) ≥ 5 en ambos grupos) para que la aproximación normal a \(\log(OR)\) sea válida.</li>
                 <li>Los valores de p₂ y OR son estimados de forma fiable; la incertidumbre en estos supuestos se propaga al tamaño muestral.</li>
                 <li>Para estudios caso-control con ratio cases:controls ≠ 1:1, la fórmula debe ajustarse.</li>
             </ul>
-            <h3>Usos frecuentes</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Usos frecuentes</h3></summary>
             <ul>
                 <li>Diseño de estudios de cohortes o transversales donde la medida de asociación principal es la OR.</li>
                 <li>Planificación de análisis de regresión logística cuando se quiere caracterizar la OR con precisión suficiente.</li>
                 <li>Estudios de prevalencia de factores de riesgo en epidemiología analítica.</li>
             </ul>
-            <h3>Cómo interpretar el resultado</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Cómo interpretar el resultado</h3></summary>
                 <p>El valor \(n\) es el <strong>tamaño mínimo por grupo</strong> para que el intervalo de confianza del odds ratio en escala logarítmica tenga una semiancho máximo de \(E_{\log}\) con el nivel de confianza especificado. En términos del OR natural, esto significa que el cociente entre el límite superior e inferior del IC será como mucho \(e^{2E_{\log}}\). Redondea \(n\) siempre hacia arriba. Añade el margen por pérdidas dividiendo \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener el número de reclutamiento por grupo; el total a reclutar es \(2n\) ajustado.</p>
                 <p>Los parámetros más influyentes son \(p_2\) (la proporción de referencia) y el OR especificado, ya que determinan conjuntamente \(p_1 = \text{OR} \times p_2 / (1 + p_2(\text{OR} - 1))\) y la varianza del estimador. Realiza un <em>análisis de sensibilidad</em> variando \(p_2\) en ±0,05 y el OR en un rango razonable: cuando \(p_2\) es muy pequeña o muy grande, la varianza del \(\log(\widehat{\text{OR}})\) es mayor y se necesitan más sujetos. Igualmente, un OR más cercano a 1 requiere más sujetos para estimar el log-OR con la misma precisión absoluta. Ten en cuenta que \(E_{\log}\) es la precisión en escala logarítmica; si necesitas interpretar el resultado en escala natural, calcula que \(E_{\log} = 0{,}3\) corresponde a un factor multiplicativo de \(e^{0{,}3} \approx 1{,}35\) en el límite superior respecto al centro del IC.</p>
                 <p>Este enfoque (IC) difiere del de contraste de hipótesis: aquí el objetivo es <em>estimar</em> el OR con cierta precisión, no decidir si difiere de 1. Si lo que necesitas es detectar un OR \(\neq 1\) con determinada potencia, usa la <a href="tamano-muestral-odds-ratio.html">calculadora de tamaño muestral para contraste del OR</a>. Con los datos recogidos, calcula el OR y su IC con la <a href="intervalo-confianza-odds-ratio.html">calculadora de odds ratio</a> e interpreta los límites del IC en el contexto clínico o epidemiológico del estudio.</p>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -365,7 +372,7 @@ calculateORSampleSize();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {
