@@ -271,6 +271,10 @@
         html.dark-mode .dist-table tbody td:first-child { background:linear-gradient(rgba(96,165,250,0.12),rgba(96,165,250,0.12)),#1e293b; }
         html.dark-mode .dist-table tbody tr:nth-child(even) td:first-child { background:linear-gradient(rgba(96,165,250,0.16),rgba(96,165,250,0.16)),#1e293b; }
         html.dark-mode .dist-table tbody tr:hover td:first-child { background:linear-gradient(rgba(96,165,250,0.22),rgba(96,165,250,0.22)),#1e293b; }
+        /* Bloque «Para qué sirve esta tabla» */
+        .table-uses { margin:4px 0 18px; padding:16px 20px; }
+        .table-uses h2 { font-size:1.05rem; margin:0 0 8px; }
+        .table-uses ul { margin:0; padding-left:1.15rem; display:grid; gap:6px; font-size:0.92rem; line-height:1.5; }
     </style>
 
     <script type="application/ld+json">
@@ -415,6 +419,15 @@
     </header>
 
     <main>
+        <section class="card table-uses">
+            <h2>Para qué sirve esta tabla</h2>
+            <ul>
+                <li><strong>Probabilidades de cualquier normal:</strong> tipifica con z = (x − μ)/σ y busca Φ(z). O calcúlalo directamente, sin tipificar, en la <a href="normal.html" data-goatcounter-click="tabla-normal/calculadora" data-goatcounter-title="calculadora de la distribución normal">calculadora de la distribución normal</a>.</li>
+                <li><strong>Intervalos de confianza:</strong> los valores críticos más usados son 1,645 (90 %), 1,960 (95 %) y 2,576 (99 %). Calcula el intervalo completo para una <a href="intervalo-confianza-media-sigma-conocida.html" data-goatcounter-click="tabla-normal/ic-media" data-goatcounter-title="media con σ conocida">media con σ conocida</a> o para una <a href="intervalo-confianza-proporcion.html" data-goatcounter-click="tabla-normal/ic-proporcion" data-goatcounter-title="proporción">proporción</a>.</li>
+                <li><strong>Contrastes z:</strong> si z es tu estadístico, el p-valor bilateral es 2·P(Z &gt; |z|). Haz el contraste completo para una <a href="contraste-hipotesis-una-media.html" data-goatcounter-click="tabla-normal/contraste-media" data-goatcounter-title="media">media</a> o para una <a href="contraste-hipotesis-una-proporcion.html" data-goatcounter-click="tabla-normal/contraste-proporcion" data-goatcounter-title="proporción">proporción</a>.</li>
+            </ul>
+        </section>
+
         <section class="card" style="margin-top:4px;">
             <div class="tab-bar" role="tablist">
                 <button class="tab-btn active" role="tab" aria-selected="true"  onclick="switchTab('cdf',this)">Φ(z) = P(Z ≤ z) &mdash; Distribución acumulada</button>
@@ -778,7 +791,6 @@
             resultEl.innerHTML = `Para <strong>z = ${z >= 0 ? '+' : ''}${z.toFixed(2)}</strong>: <strong>f(z) = ${val}</strong>`;
         }
         if (type === 'cdf') resultEl.innerHTML += ` &nbsp;·&nbsp; P(Z &gt; ${z.toFixed(2)}) = ${fmtPrecise(jStat.normal.cdf(-z, 0, 1))}`;
-        if (window.TableLinks) TableLinks.show(type === 'cdf' ? TableLinks.normalCdf(z) : null);
     }
 
     // ── Init ──────────────────────────────────────────────────────────────────
@@ -788,7 +800,6 @@
     buildNormalTable('tbl-pdf-pos', 'pdf',  1);
 </script>
 <script src="table-diagram.js?v=20261102-2"></script>
-<script src="table-links.js?v=20261113-1"></script>
 <script src="table-actions.js?v=20261103-3"></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>

@@ -118,6 +118,10 @@
         html.dark-mode .dist-table tbody td:first-child { background:linear-gradient(rgba(96,165,250,0.12),rgba(96,165,250,0.12)),#1e293b; }
         html.dark-mode .dist-table tbody tr:nth-child(even) td:first-child { background:linear-gradient(rgba(96,165,250,0.16),rgba(96,165,250,0.16)),#1e293b; }
         html.dark-mode .dist-table tbody tr:hover td:first-child { background:linear-gradient(rgba(96,165,250,0.22),rgba(96,165,250,0.22)),#1e293b; }
+        /* Bloque «Para qué sirve esta tabla» */
+        .table-uses { margin:4px 0 18px; padding:16px 20px; }
+        .table-uses h2 { font-size:1.05rem; margin:0 0 8px; }
+        .table-uses ul { margin:0; padding-left:1.15rem; display:grid; gap:6px; font-size:0.92rem; line-height:1.5; }
     </style>
 
     <script type="application/ld+json">
@@ -240,6 +244,14 @@
     </header>
 
     <main>
+        <section class="card table-uses">
+            <h2>Para qué sirve esta tabla</h2>
+            <ul>
+                <li><strong>Bondad de ajuste</strong> (ν = k − 1, con k categorías) e <strong>independencia</strong> en tablas de contingencia (ν = (r − 1)(c − 1)): se usa la cola derecha. Haz el contraste completo de <a href="chi-cuadrado-bondad-ajuste.html" data-goatcounter-click="tabla-chi/bondad" data-goatcounter-title="bondad de ajuste">bondad de ajuste</a> o de <a href="contraste-independencia-chi-cuadrado.html" data-goatcounter-click="tabla-chi/independencia" data-goatcounter-title="independencia">independencia</a>.</li>
+                <li><strong>Varianza de una población normal</strong> (ν = n − 1): <a href="contraste-hipotesis-varianzas.html" data-goatcounter-click="tabla-chi/contraste-varianza" data-goatcounter-title="contraste">contraste</a> e <a href="intervalo-confianza-varianza.html" data-goatcounter-click="tabla-chi/ic-varianza" data-goatcounter-title="intervalo de confianza">intervalo de confianza</a>. El intervalo usa dos valores de la tabla, uno de cada cola.</li>
+            </ul>
+        </section>
+
         <section class="card" style="margin-top:4px;">
             <div class="tab-bar" role="tablist">
                 <button class="tab-btn active" role="tab" aria-selected="true"  onclick="switchTab('crit',this)">Valores críticos χ²</button>
@@ -546,7 +558,6 @@
             el.innerHTML = `ν = ${df}, <strong>x = ${x.toFixed(1)}</strong>: <strong>f(x, ν) = ${val}</strong>`;
         }
         if (type === 'cdf') el.innerHTML += ` &nbsp;·&nbsp; P(X &gt; ${x.toFixed(1)}) = ${fmtPrecise(1 - jStat.chisquare.cdf(x, +df))}`;
-        if (window.TableLinks) TableLinks.show(type === 'cdf' ? TableLinks.chiCdf(x, +df) : null);
     }
 
     function critCellClick(td) {
@@ -561,7 +572,6 @@
         document.getElementById('lookup-crit').innerHTML = critTail === 'right'
             ? `ν = ${df}, <strong>α = ${a}</strong>: <strong>χ² = ${val}</strong> &nbsp;→ P(X &gt; ${val}) = ${a} &nbsp;<span>(equivale a P(X ≤ ${val}) = ${p})</span>`
             : `ν = ${df}, <strong>p = ${p}</strong>: <strong>χ² = ${val}</strong> &nbsp;→ P(X ≤ ${val}) = ${p} &nbsp;<span>(cola derecha: P(X &gt; ${val}) = ${a})</span>`;
-        if (window.TableLinks) TableLinks.show(TableLinks.chiCrit(+df, +p));
     }
 
     buildDfSelector('df-cdf');
@@ -571,7 +581,6 @@
     buildChiTable('tbl-pdf', 'pdf', 5);
 </script>
 <script src="table-diagram.js?v=20261102-2"></script>
-<script src="table-links.js?v=20261113-1"></script>
 <script src="table-actions.js?v=20261103-3"></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>

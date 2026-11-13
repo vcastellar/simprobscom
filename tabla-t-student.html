@@ -188,6 +188,10 @@
         html.dark-mode .dist-table tbody td:first-child { background:linear-gradient(rgba(96,165,250,0.12),rgba(96,165,250,0.12)),#1e293b; }
         html.dark-mode .dist-table tbody tr:nth-child(even) td:first-child { background:linear-gradient(rgba(96,165,250,0.16),rgba(96,165,250,0.16)),#1e293b; }
         html.dark-mode .dist-table tbody tr:hover td:first-child { background:linear-gradient(rgba(96,165,250,0.22),rgba(96,165,250,0.22)),#1e293b; }
+        /* Bloque «Para qué sirve esta tabla» */
+        .table-uses { margin:4px 0 18px; padding:16px 20px; }
+        .table-uses h2 { font-size:1.05rem; margin:0 0 8px; }
+        .table-uses ul { margin:0; padding-left:1.15rem; display:grid; gap:6px; font-size:0.92rem; line-height:1.5; }
     </style>
 
     <script type="application/ld+json">
@@ -324,6 +328,15 @@
     </header>
 
     <main>
+        <section class="card table-uses">
+            <h2>Para qué sirve esta tabla</h2>
+            <ul>
+                <li><strong>Intervalos de confianza para la media</strong> cuando no se conoce σ: x̄ ± t·s/√n, con ν = n − 1 grados de libertad. <a href="intervalo-confianza-media.html" data-goatcounter-click="tabla-t/ic-media" data-goatcounter-title="Calcular el intervalo">Calcular el intervalo</a>.</li>
+                <li><strong>Contrastes t:</strong> de <a href="contraste-hipotesis-una-media.html" data-goatcounter-click="tabla-t/contraste-media" data-goatcounter-title="una media">una media</a> (ν = n − 1), de <a href="contraste-hipotesis-medias-apareadas.html" data-goatcounter-click="tabla-t/contraste-apareadas" data-goatcounter-title="medias apareadas">medias apareadas</a> (ν = n − 1, con n pares) y de <a href="contraste-hipotesis-dos-medias.html" data-goatcounter-click="tabla-t/contraste-dos-medias" data-goatcounter-title="dos medias">dos medias</a> (ν = n₁ + n₂ − 2 si las varianzas son iguales).</li>
+                <li><strong>Una o dos colas:</strong> en un contraste bilateral al 5 %, el valor crítico está en la columna α = 0,05 de dos colas, que es la misma que α = 0,025 de una cola.</li>
+            </ul>
+        </section>
+
         <section class="card" style="margin-top:4px;">
             <div class="tab-bar" role="tablist">
                 <button class="tab-btn active" role="tab" aria-selected="true"  onclick="switchTab('crit',this)">Valores críticos t<sub>α,ν</sub></button>
@@ -681,7 +694,6 @@
             el.innerHTML = `ν = ${df}, <strong>t = ${t >= 0 ? '+' : ''}${t.toFixed(2)}</strong>: <strong>f(t,ν) = ${val}</strong>`;
         }
         if (type === 'cdf') el.innerHTML += ` &nbsp;·&nbsp; P(T &gt; ${t.toFixed(2)}) = ${fmtPrecise(jStat.studentt.cdf(-t, +df))}`;
-        if (window.TableLinks) TableLinks.show(type === 'cdf' ? TableLinks.tCdf(t, +df) : null);
     }
 
     function critCellClick(td) {
@@ -696,7 +708,6 @@
         document.getElementById('lookup-crit').innerHTML = critTail === 'two'
             ? `ν = ${df}, <strong>α = ${a2}</strong> (dos colas): <strong>t = ${val}</strong> &nbsp;→ P(|T| &gt; ${val}) = ${a2} &nbsp;<span>(equivale a una cola con α = ${a1})</span>`
             : `ν = ${df}, <strong>α = ${a1}</strong> (una cola): <strong>t = ${val}</strong> &nbsp;→ P(T &gt; ${val}) = ${a1} &nbsp;<span>(equivale a dos colas con α = ${a2})</span>`;
-        if (window.TableLinks) TableLinks.show(TableLinks.tCrit(+df, +a1, +a2, critTail));
     }
 
     // ── Init ──────────────────────────────────────────────────────────────────
@@ -711,7 +722,6 @@
     buildStudentTable('tbl-pdf-pos', 'pdf',  1, defaultDf);
 </script>
 <script src="table-diagram.js?v=20261102-2"></script>
-<script src="table-links.js?v=20261113-1"></script>
 <script src="table-actions.js?v=20261103-3"></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>

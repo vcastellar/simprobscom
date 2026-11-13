@@ -189,6 +189,10 @@
         html.dark-mode .dist-table tbody td:first-child { background:linear-gradient(rgba(96,165,250,0.12),rgba(96,165,250,0.12)),#1e293b; }
         html.dark-mode .dist-table tbody tr:nth-child(even) td:first-child { background:linear-gradient(rgba(96,165,250,0.16),rgba(96,165,250,0.16)),#1e293b; }
         html.dark-mode .dist-table tbody tr:hover td:first-child { background:linear-gradient(rgba(96,165,250,0.22),rgba(96,165,250,0.22)),#1e293b; }
+        /* Bloque «Para qué sirve esta tabla» */
+        .table-uses { margin:4px 0 18px; padding:16px 20px; }
+        .table-uses h2 { font-size:1.05rem; margin:0 0 8px; }
+        .table-uses ul { margin:0; padding-left:1.15rem; display:grid; gap:6px; font-size:0.92rem; line-height:1.5; }
     </style>
 
     <script type="application/ld+json">
@@ -321,6 +325,15 @@
     </header>
 
     <main>
+        <section class="card table-uses">
+            <h2>What this table is for</h2>
+            <ul>
+                <li><strong>Confidence intervals for the mean</strong> when σ is unknown: x̄ ± t·s/√n, with ν = n − 1 degrees of freedom. <a href="intervalo-confianza-media.html" data-goatcounter-click="tabla-t/ic-media" data-goatcounter-title="Compute the interval">Compute the interval</a>.</li>
+                <li><strong>t-tests:</strong> for <a href="contraste-hipotesis-una-media.html" data-goatcounter-click="tabla-t/contraste-media" data-goatcounter-title="one mean">one mean</a> (ν = n − 1), for <a href="contraste-hipotesis-medias-apareadas.html" data-goatcounter-click="tabla-t/contraste-apareadas" data-goatcounter-title="paired means">paired means</a> (ν = n − 1, with n pairs) and for <a href="contraste-hipotesis-dos-medias.html" data-goatcounter-click="tabla-t/contraste-dos-medias" data-goatcounter-title="two means">two means</a> (ν = n₁ + n₂ − 2 if the variances are equal).</li>
+                <li><strong>One or two tails:</strong> in a two-tailed test at 5%, the critical value is in the two-tailed α = 0.05 column, which is the same as the one-tailed α = 0.025 column.</li>
+            </ul>
+        </section>
+
         <section class="card" style="margin-top:4px;">
             <div class="tab-bar" role="tablist">
                 <button class="tab-btn active" role="tab" aria-selected="true"  onclick="switchTab('crit',this)">Critical values t<sub>α,ν</sub></button>
@@ -665,7 +678,6 @@
             el.innerHTML = `ν = ${df}, <strong>t = ${t >= 0 ? '+' : ''}${t.toFixed(2)}</strong>: <strong>f(t,ν) = ${val}</strong>`;
         }
         if (type === 'cdf') el.innerHTML += ` &nbsp;·&nbsp; P(T &gt; ${t.toFixed(2)}) = ${fmtPrecise(jStat.studentt.cdf(-t, +df))}`;
-        if (window.TableLinks) TableLinks.show(type === 'cdf' ? TableLinks.tCdf(t, +df) : null);
     }
 
     function critCellClick(td) {
@@ -680,7 +692,6 @@
         document.getElementById('lookup-crit').innerHTML = critTail === 'two'
             ? `ν = ${df}, <strong>α = ${a2}</strong> (two tails): <strong>t = ${val}</strong> &nbsp;→ P(|T| &gt; ${val}) = ${a2} &nbsp;<span>(same as one tail with α = ${a1})</span>`
             : `ν = ${df}, <strong>α = ${a1}</strong> (one tail): <strong>t = ${val}</strong> &nbsp;→ P(T &gt; ${val}) = ${a1} &nbsp;<span>(same as two tails with α = ${a2})</span>`;
-        if (window.TableLinks) TableLinks.show(TableLinks.tCrit(+df, +a1, +a2, critTail));
     }
 
     // ── Init ──────────────────────────────────────────────────────────────────
@@ -695,7 +706,6 @@
     buildStudentTable('tbl-pdf-pos', 'pdf',  1, defaultDf);
 </script>
 <script src="../table-diagram.js?v=20261102-2"></script>
-<script src="../table-links.js?v=20261113-1"></script>
 <script src="../table-actions.js?v=20261103-3"></script>
 <script src="../theme.js?v=20261031-1" defer></script>
 <script>
