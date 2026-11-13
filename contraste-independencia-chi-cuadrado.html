@@ -731,6 +731,7 @@ window.MathJax = {
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+    <script src="url-prefill.js?v=20261113-1"></script>
 <script src="test-results.js?v=20261111-4"></script>
 <script>
 const T = {
@@ -1376,6 +1377,13 @@ new MutationObserver(() => {
   if(dark!==lastDark){ lastDark=dark; renderCharts(); }
 }).observe(document.documentElement, {attributes:true, attributeFilter:['class']});
 
+if (window.UrlPrefill) {
+  UrlPrefill.apply({ alpha: 'alpha' });
+  // Tamaño de la tabla con (r − 1)(c − 1) = ν, si viene de la tabla chi-cuadrado.
+  const q = UrlPrefill.params(), r = parseInt(q && q.get('rows'), 10), c = parseInt(q && q.get('cols'), 10);
+  if (r >= 2 && r <= 8 && c >= 2 && c <= 8) { state.rows = r; state.cols = c; }
+  UrlPrefill.note('alpha');
+}
 buildGrid();
 runCalculation();
 </script>

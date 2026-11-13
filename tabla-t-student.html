@@ -181,6 +181,13 @@
         .dist-diagram .dg-caption { margin: 6px 2px 0; font-size: 0.85rem; color: var(--text-muted); text-align: center; }
         .dist-diagram .dg-caption strong { color: var(--accent); font-weight: 700; }
         .dist-diagram .dg-hint { opacity: 0.7; }
+        /* Columna fija opaca: al desplazar la tabla en horizontal no deja ver los números que pasan por debajo. */
+        .dist-table tbody td:first-child { background:linear-gradient(rgba(37,99,235,0.07),rgba(37,99,235,0.07)),#fff; }
+        .dist-table tbody tr:nth-child(even) td:first-child { background:linear-gradient(rgba(37,99,235,0.1),rgba(37,99,235,0.1)),#fff; }
+        .dist-table tbody tr:hover td:first-child { background:linear-gradient(rgba(37,99,235,0.15),rgba(37,99,235,0.15)),#fff; }
+        html.dark-mode .dist-table tbody td:first-child { background:linear-gradient(rgba(96,165,250,0.12),rgba(96,165,250,0.12)),#1e293b; }
+        html.dark-mode .dist-table tbody tr:nth-child(even) td:first-child { background:linear-gradient(rgba(96,165,250,0.16),rgba(96,165,250,0.16)),#1e293b; }
+        html.dark-mode .dist-table tbody tr:hover td:first-child { background:linear-gradient(rgba(96,165,250,0.22),rgba(96,165,250,0.22)),#1e293b; }
     </style>
 
     <script type="application/ld+json">
@@ -674,6 +681,7 @@
             el.innerHTML = `ν = ${df}, <strong>t = ${t >= 0 ? '+' : ''}${t.toFixed(2)}</strong>: <strong>f(t,ν) = ${val}</strong>`;
         }
         if (type === 'cdf') el.innerHTML += ` &nbsp;·&nbsp; P(T &gt; ${t.toFixed(2)}) = ${fmtPrecise(jStat.studentt.cdf(-t, +df))}`;
+        if (window.TableLinks) TableLinks.show(type === 'cdf' ? TableLinks.tCdf(t, +df) : null);
     }
 
     function critCellClick(td) {
@@ -688,6 +696,7 @@
         document.getElementById('lookup-crit').innerHTML = critTail === 'two'
             ? `ν = ${df}, <strong>α = ${a2}</strong> (dos colas): <strong>t = ${val}</strong> &nbsp;→ P(|T| &gt; ${val}) = ${a2} &nbsp;<span>(equivale a una cola con α = ${a1})</span>`
             : `ν = ${df}, <strong>α = ${a1}</strong> (una cola): <strong>t = ${val}</strong> &nbsp;→ P(T &gt; ${val}) = ${a1} &nbsp;<span>(equivale a dos colas con α = ${a2})</span>`;
+        if (window.TableLinks) TableLinks.show(TableLinks.tCrit(+df, +a1, +a2, critTail));
     }
 
     // ── Init ──────────────────────────────────────────────────────────────────
@@ -702,6 +711,7 @@
     buildStudentTable('tbl-pdf-pos', 'pdf',  1, defaultDf);
 </script>
 <script src="table-diagram.js?v=20261102-2"></script>
+<script src="table-links.js?v=20261113-1"></script>
 <script src="table-actions.js?v=20261103-3"></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>

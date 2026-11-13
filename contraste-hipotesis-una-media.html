@@ -489,6 +489,7 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
+    <script src="url-prefill.js?v=20261113-1"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
 <script>
 let meanTestChart;
@@ -737,6 +738,7 @@ function updateDispersionLabel() {
 
 document.getElementById('dispersionType').addEventListener('change', () => { updateDispersionLabel(); calculateMeanTest(); });
 document.getElementById('calcMeanBtn').addEventListener('click', calculateMeanTest);
+if (window.UrlPrefill) { UrlPrefill.apply({ n: 'n', alpha: 'alpha', tail: 'tail', disp: 'dispersionType' }); UrlPrefill.note('mu0'); }
 updateDispersionLabel();
 calculateMeanTest();
 </script>
