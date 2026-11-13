@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -291,7 +291,7 @@
             <p>La lógica se parece a la de un juicio. Se parte de una <strong>hipótesis nula</strong> \(H_0\) («la media es \(\mu_0\)»), que se mantiene mientras no haya pruebas en contra, igual que la presunción de inocencia. Después se mira cuánto se aleja la media muestral \(\bar{x}\) de \(\mu_0\) y se pregunta: si \(H_0\) fuera cierta, ¿sería raro observar una diferencia así solo por azar? Si sería muy raro, se rechaza \(H_0\) en favor de la <strong>hipótesis alternativa</strong> \(H_1\); si no lo sería, los datos son compatibles con \(H_0\) y no se rechaza.</p>
             <p>Hay dos escenarios. Si conoces la desviación típica poblacional \(\sigma\), se emplea el <strong>contraste z</strong>; si \(\sigma\) es desconocida y se estima con la desviación muestral \(s\) —lo habitual en la práctica—, se emplea el <strong>contraste t de Student</strong>, que tiene en cuenta la incertidumbre añadida de estimar la variabilidad con la propia muestra.</p>
 
-            <h3>Hipótesis y estadístico</h3>
+            <details class="fold fold-sub"><summary><h3>Hipótesis y estadístico</h3></summary>
             <p class="formula-line">\(H_0: \mu = \mu_0\)</p>
             <p class="formula-line">\(H_1: \mu \neq \mu_0\), \(\mu > \mu_0\) o \(\mu < \mu_0\)</p>
             <p class="formula-line">Si \(\sigma\) es conocida: \( z = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}} \)</p>
@@ -304,10 +304,11 @@
                 <li><strong>\(n\)</strong>: tamaño de la muestra.</li>
             </ul>
             <p>El denominador, \(\sigma/\sqrt{n}\) o \(s/\sqrt{n}\), es el <strong>error estándar</strong> de la media: mide cuánto varía \(\bar{x}\) de una muestra a otra. El estadístico expresa, por tanto, <em>a cuántos errores estándar</em> queda la media observada del valor hipotético. Un estadístico cercano a 0 indica que los datos encajan con \(H_0\); cuanto mayor es en valor absoluto, más difícil es atribuir la diferencia al azar. Por eso la misma diferencia \(\bar{x}-\mu_0\) pesa más con una muestra grande o con datos poco dispersos.</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo se hace el contraste, paso a paso</h3>
+            <details class="fold"><summary><h3>Cómo se hace el contraste, paso a paso</h3></summary>
             <ol>
                 <li><strong>Plantea las hipótesis</strong> antes de mirar los datos: \(H_0: \mu = \mu_0\) y la alternativa que te interesa (distinta, mayor o menor).</li>
                 <li><strong>Fija el nivel de significación</strong> \(\alpha\): el riesgo que aceptas de rechazar \(H_0\) siendo cierta. Lo habitual es 0,05.</li>
@@ -324,10 +325,11 @@
                 <li>Un resultado no significativo no demuestra que \(H_0\) sea verdadera.</li>
             </ul>
             <p>Decidir con el p-valor o con el valor crítico es equivalente: el p-valor es menor que \(\alpha\) exactamente cuando el estadístico cae en la región de rechazo.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>¿Contraste bilateral o de una cola?</h3>
+            <details class="fold"><summary><h3>¿Contraste bilateral o de una cola?</h3></summary>
             <p>Depende de la pregunta. Si te interesa saber si la media es <em>distinta</em> de \(\mu_0\), en cualquier sentido, el contraste es bilateral. Si solo te interesa un sentido —que sea mayor, o que sea menor—, es de una cola.</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -343,10 +345,11 @@
             </div>
             <p>El contraste de una cola concentra todo el \(\alpha\) en un lado, así que detecta con más facilidad una diferencia en ese sentido; a cambio, no puede detectar una diferencia en el sentido contrario. Cuando el estadístico cae en el sentido previsto, su p-valor es la mitad del bilateral.</p>
             <p>La dirección debe elegirse <strong>antes de ver los datos</strong> y por una razón del problema (por ejemplo, «solo me preocupa que el peso medio esté por debajo del declarado»). Elegir la cola después de ver hacia dónde apuntan los datos duplica en la práctica el riesgo de falso positivo. En caso de duda, usa el bilateral.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>¿Contraste z o contraste t?</h3>
+            <details class="fold"><summary><h3>¿Contraste z o contraste t?</h3></summary>
             <p><strong>Contraste z</strong>: se usa cuando \(\sigma\) poblacional es conocida, algo poco frecuente; ocurre, por ejemplo, con procesos industriales con un largo historial o con pruebas estandarizadas diseñadas con una desviación típica fija. El estadístico sigue una normal estándar bajo \(H_0\).</p>
             <p><strong>Contraste t</strong>: se usa cuando \(\sigma\) es desconocida y se sustituye por \(s\). Como \(s\) es solo una estimación y cambia de una muestra a otra, el estadístico es más variable que una normal: sigue una t de Student con \(n-1\) grados de libertad, de colas más pesadas. Eso hace que el valor crítico sea mayor y que se exija algo más de evidencia para rechazar \(H_0\), sobre todo con muestras pequeñas.</p>
             <div class="content-table-wrap">
@@ -364,10 +367,11 @@
                 </table>
             </div>
             <p>Cuando \(n\) crece, la t se parece cada vez más a la normal, por eso ambos métodos convergen con muestras grandes. Aun así, si has estimado la desviación típica con la muestra, lo correcto es usar siempre la t, sea cual sea el tamaño: usar z con \(s\) en una muestra pequeña produce más falsos positivos de los que indica \(\alpha\). La conocida regla «\(n \geq 30\)» se refiere a otra cosa: a cuándo deja de preocupar que los datos no sean normales (véanse los supuestos).</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Qué es el p-valor (y qué no es)</h3>
+            <details class="fold"><summary><h3>Qué es el p-valor (y qué no es)</h3></summary>
             <p>El <strong>p-valor</strong> es la probabilidad de obtener un resultado tan alejado de \(\mu_0\) como el observado, o más, <em>suponiendo que \(H_0\) es cierta</em>. Mide lo sorprendentes que serían tus datos si la media fuera realmente \(\mu_0\): cuanto menor es, peor encajan los datos con la hipótesis nula.</p>
             <p>Por ejemplo, un p-valor de 0,073 significa que, si la media fuera de verdad \(\mu_0\), unas 7 de cada 100 muestras del mismo tamaño darían una media tan alejada como la tuya, o más. No es algo excepcional, y por eso con \(\alpha = 0{,}05\) no se rechaza \(H_0\).</p>
             <p>El p-valor <strong>no</strong> es:</p>
@@ -377,10 +381,11 @@
                 <li>Una medida del tamaño o de la importancia de la diferencia: una diferencia minúscula puede dar un p-valor muy pequeño si la muestra es enorme.</li>
             </ul>
             <p>Tampoco hay que confundirlo con \(\alpha\). El nivel de significación se fija <em>antes</em> de recoger los datos y es el umbral de decisión; el p-valor se calcula <em>después</em>, a partir de ellos. Conviene informar del p-valor exacto (\(p = 0{,}073\)) y no solo de «significativo» o «no significativo».</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Supuestos del contraste</h3>
+            <details class="fold"><summary><h3>Supuestos del contraste</h3></summary>
             <ul>
                 <li><strong>Muestra aleatoria</strong> de la población sobre la que quieres concluir.</li>
                 <li><strong>Observaciones independientes</strong>: el valor de una no condiciona el de otra. No se cumple con medidas repetidas sobre los mismos individuos ni con datos agrupados por lotes o familias.</li>
@@ -389,10 +394,11 @@
             </ul>
             <p>Con muestras pequeñas, la normalidad importa más. Puedes comprobarla con un histograma o con el <a href="shapiro-wilk-normalidad.html">test de Shapiro-Wilk</a>, y conviene revisar si hay valores atípicos, porque un solo dato extremo puede arrastrar la media y disparar la desviación típica. Si los datos son claramente asimétricos y la muestra es pequeña, es preferible una prueba no paramétrica, como la de los rangos con signo de Wilcoxon.</p>
             <p>Si tienes dos medidas del mismo individuo (antes y después), el contraste adecuado es el de <a href="contraste-hipotesis-medias-apareadas.html">medias apareadas</a>; si comparas dos grupos distintos, el de <a href="contraste-hipotesis-dos-medias.html">dos medias independientes</a>.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto 1: contraste t bilateral</h3>
+            <details class="fold"><summary><h3>Ejemplo resuelto 1: contraste t bilateral</h3></summary>
             <p>Una fábrica afirma que su máquina produce piezas con un peso medio de \(\mu_0 = 500\) g. Para verificarlo, un inspector toma una muestra de \(n = 25\) piezas y obtiene \(\bar{x} = 497\) g y desviación típica muestral \(s = 8\) g. Se quiere contrastar si el peso medio difiere significativamente de 500 g con \(\alpha = 0{,}05\) (bilateral).</p>
             <p>Las hipótesis son \(H_0\colon \mu = 500\) frente a \(H_1\colon \mu \neq 500\). Como \(\sigma\) es desconocida, se usa el estadístico t de Student con \(gl = n - 1 = 24\) grados de libertad:</p>
             <p class="formula-line">\( t = \dfrac{\bar{x} - \mu_0}{s/\sqrt{n}} = \dfrac{497 - 500}{8/\sqrt{25}} = \dfrac{-3}{1{,}6} = -1{,}875 \)</p>
@@ -409,10 +415,11 @@
             <p>El valor crítico de cola derecha con \(\alpha = 0{,}05\) es \(z_{0{,}95} \approx 1{,}645\). Como \(z = 2{,}00 > 1{,}645\), el estadístico cae en la región de rechazo. El p-valor es \(P(Z \geq 2{,}00) \approx 0{,}0228\), menor que \(\alpha\): <strong>se rechaza \(H_0\)</strong>.</p>
             <p>Conclusión: hay evidencia estadística de que la puntuación media de los alumnos del centro supera 100. La diferencia observada es de 5 puntos, un tercio de desviación típica (\(d = 5/15 \approx 0{,}33\)): un efecto real, pero de tamaño pequeño a moderado. Con un contraste bilateral, el p-valor habría sido el doble, 0,0455.</p>
             <p><strong>En la calculadora:</strong> μ₀ = 100, x̄ = 105, desviación = 15, n = 36, «Conozco σ poblacional (test z)» y «Cola derecha (>)».</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) significa que, si la media poblacional fuera realmente \(\mu_0\), sería muy improbable haber observado un valor muestral tan alejado como el obtenido. Se concluye que hay evidencia estadística de que \(\mu \neq \mu_0\) (o &gt; / &lt;, según la alternativa elegida). No obstante, rechazar \(H_0\) no equivale a afirmar que la diferencia sea grande ni importante: con muestras muy grandes incluso una desviación de décimas puede resultar significativa.</p>
             <p><strong>No rechazar \(H_0\)</strong> (p-valor ≥ α) no prueba que la media sea igual a \(\mu_0\); solo indica que los datos son compatibles con ese valor al nivel de significación elegido. Una potencia baja —por muestra pequeña o varianza alta— puede impedir detectar diferencias reales. Antes de concluir «no hay efecto», revisa la potencia del contraste y el intervalo de confianza.</p>
             <p>En cuanto al <strong>estadístico z o t</strong> que muestra la herramienta: su magnitud indica a cuántos errores estándar queda \(\bar{x}\) de \(\mu_0\). En la visualización, la zona verde es la región de no rechazo, las zonas rojas son las regiones críticas y la línea ámbar señala el estadístico observado. Si la línea ámbar cae en rojo, p-valor &lt; α.</p>
@@ -430,10 +437,11 @@
 
             <h3>Significación estadística y relevancia práctica</h3>
             <p>Que una diferencia sea estadísticamente significativa no significa que importe. Para valorar su magnitud se usa el <strong>tamaño del efecto</strong>; el más habitual aquí es la d de Cohen, \(d = (\bar{x}-\mu_0)/s\), que expresa la diferencia en desviaciones típicas. Como referencia orientativa, 0,2 se considera un efecto pequeño, 0,5 mediano y 0,8 grande, aunque lo que cuenta es qué diferencia es relevante en tu problema: 3 g pueden ser irrelevantes en un saco de cemento y críticos en un medicamento.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Errores frecuentes</h3>
+            <details class="fold"><summary><h3>Errores frecuentes</h3></summary>
             <ul>
                 <li><strong>Leer «no se rechaza \(H_0\)» como «\(H_0\) es cierta».</strong> La ausencia de evidencia no es evidencia de ausencia, sobre todo con muestras pequeñas.</li>
                 <li><strong>Elegir una cola después de ver los datos</strong>, o cambiar de bilateral a unilateral para «conseguir» significación.</li>
@@ -442,6 +450,7 @@
                 <li><strong>Aplicarlo a datos que no son independientes</strong>, como medidas antes/después de los mismos individuos.</li>
                 <li><strong>Repetir el contraste muchas veces</strong> (con distintas variables o subgrupos) y quedarse con el que sale significativo: con \(\alpha = 0{,}05\), 1 de cada 20 contrastes sobre hipótesis nulas ciertas lo será por puro azar.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -743,7 +752,7 @@ calculateMeanTest();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

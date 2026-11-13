@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Simulador del teorema central del límite | ProbLab">
   <meta name="twitter:description" content="Simulador del teorema central del límite: elige distribución, tamaño de muestra y simulaciones para ver convergencia normal.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261113-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -473,7 +473,7 @@
         </li>
       </ol>
 
-      <h3>Gráfico superior: distribución original</h3>
+      <details class="fold fold-sub"><summary><h3>Gráfico superior: distribución original</h3></summary>
       <p>
         Las <strong>barras</strong> son el histograma de las observaciones individuales. Su altura está en escala de densidad,
         es decir, la altura de cada barra es la proporción de observaciones que caen en ese intervalo dividida por la anchura
@@ -485,8 +485,9 @@
         a la derecha (Exponencial, Chi-cuadrado) o dos únicos valores (Bernoulli). Cuanto menos se parezca a una campana, más
         llamativo resulta el gráfico inferior.
       </p>
+            </details>
 
-      <h3>Gráfico inferior: distribución de la media muestral</h3>
+      <details class="fold fold-sub"><summary><h3>Gráfico inferior: distribución de la media muestral</h3></summary>
       <p>
         Las <strong>barras</strong> son el histograma de las medias muestrales, una por simulación, también en escala de densidad:
         la altura de cada barra indica qué proporción de las simulaciones produjo una media dentro de ese intervalo.
@@ -527,8 +528,9 @@
         la media de \(n\) valores Bernoulli solo puede tomar los \(n + 1\) valores \(0, 1/n, 2/n, \ldots, 1\), y la de \(n\) valores
         Poisson solo múltiplos de \(1/n\). Al aumentar \(n\) los valores posibles se multiplican y el histograma se rellena.
       </p>
+            </details>
 
-      <h3>Tabla teórico frente a empírico</h3>
+      <details class="fold fold-sub"><summary><h3>Tabla teórico frente a empírico</h3></summary>
       <p>
         La columna <strong>Teórico</strong> se calcula con fórmulas, sin usar los datos simulados: la media \(\mu\) de la distribución
         base, el error estándar \(\sigma/\sqrt{n}\), la varianza \(\sigma^2/n\) y la asimetría \(\gamma_1/\sqrt{n}\), donde
@@ -540,8 +542,9 @@
         se ve con claridad por qué las distribuciones muy asimétricas (Exponencial, Chi-cuadrado) necesitan un \(n\) mayor que las
         simétricas (Normal, Uniforme), cuya asimetría ya es 0 de partida.
       </p>
+            </details>
 
-      <h3>Experimentos sugeridos</h3>
+      <details class="fold fold-sub"><summary><h3>Experimentos sugeridos</h3></summary>
       <ul>
         <li><strong>Exponencial con n = 1, 2, 5, 30:</strong> la cola larga a la derecha se va encogiendo hasta formar una campana.</li>
         <li><strong>Uniforme con n = 2:</strong> la meseta se convierte en un triángulo; con n = 5 ya es casi una campana.</li>
@@ -549,11 +552,12 @@
         <li><strong>Chi-cuadrado con n = 10 y n = 100:</strong> compara la fila de asimetría de la tabla en ambos casos.</li>
         <li><strong>100 frente a 10&nbsp;000 simulaciones con el mismo n:</strong> la forma no cambia, solo el ruido del histograma.</li>
       </ul>
+            </details>
     </section>
 
     <!-- Educational content -->
     <section class="card content-card" aria-labelledby="tcl-def-heading">
-      <h2 id="tcl-def-heading">¿Qué establece el teorema central del límite?</h2>
+      <details class="fold"><summary><h2 id="tcl-def-heading">¿Qué establece el teorema central del límite?</h2></summary>
       <p>
         El <strong>teorema central del límite (TCL)</strong> es uno de los resultados fundamentales de la estadística matemática.
         Establece que, bajo condiciones generales, la distribución de la suma (o la media) de un gran número de variables
@@ -580,10 +584,11 @@
         donde \(\rho = \mathbb{E}[|X-\mu|^3]\) es el tercer momento absoluto centrado y \(C \approx 0.4748\).
         Esto implica que distribuciones con mayor asimetría requieren muestras más grandes para que la aproximación normal sea precisa.
       </p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>De dónde salen la media, el error estándar y la campana</h2>
+      <details class="fold"><summary><h2>De dónde salen la media, el error estándar y la campana</h2></summary>
       <p>La columna «Teórico» de la tabla y la curva roja del gráfico inferior salen de tres resultados. Los dos primeros son exactos para cualquier \(n\); el tercero es el teorema central del límite propiamente dicho.</p>
 
       <h3>La media de las medias es μ</h3>
@@ -627,10 +632,11 @@
       <div class="math-block">\[ \begin{aligned} M_{Z_n}(t) &= \left[ M\!\left(\frac{t}{\sqrt{n}}\right) \right]^{n} \\ &= \left[ 1 + \frac{t^2}{2n} + o\!\left(\frac{1}{n}\right) \right]^{n} \;\longrightarrow\; e^{t^2/2}, \end{aligned} \]</div>
       <p>por el límite \((1 + a/n)^n \to e^a\). Y \(e^{t^2/2}\) es justamente la función generadora de la normal estándar. La demostración rigurosa sigue el mismo camino con la función característica, que existe siempre.</p>
       <p>Lo importante es qué sobrevive al límite: solo la media y la varianza. Todos los demás rasgos de la distribución original (asimetría, colas, que sea discreta o continua) están en los términos \(o(1/n)\), que desaparecen. Por eso el resultado es el mismo se parta de donde se parta, y por eso hace falta que la varianza sea finita: sin ella no existe el término \(t^2/2\).</p>
+      </details>
     </section>
 
     <section class="card content-card" aria-labelledby="n-needed-heading">
-      <h2 id="n-needed-heading">¿Para qué tamaño <em>n</em> se cumple el TCL?</h2>
+      <details class="fold"><summary><h2 id="n-needed-heading">¿Para qué tamaño <em>n</em> se cumple el TCL?</h2></summary>
       <p>
         No existe un umbral único: la velocidad de convergencia depende de la distribución de origen.
         Como guía práctica:
@@ -662,10 +668,11 @@
         distribuciones habituales en ciencias aplicadas. Sin embargo, para distribuciones muy sesgadas o con colas muy pesadas
         puede ser insuficiente.
       </p>
+      </details>
     </section>
 
     <section class="card content-card" aria-labelledby="implications-heading">
-      <h2 id="implications-heading">Implicaciones prácticas del TCL</h2>
+      <details class="fold"><summary><h2 id="implications-heading">Implicaciones prácticas del TCL</h2></summary>
       <p>
         El TCL tiene consecuencias de largo alcance en la estadística aplicada:
       </p>
@@ -694,6 +701,7 @@
           al garantizar que los estadísticos basados en medias tienen distribuciones asintóticamente normales.
         </li>
       </ul>
+      </details>
     </section>
 
     <section class="card content-card" aria-labelledby="faq-heading">
@@ -1199,7 +1207,7 @@
 <script src="../field-hints.js?v=20260730-1"></script>
 <script src="../search.js?v=20261031-1"></script>
 <script src="../wizard.js?v=20260730-1"></script>
-<script src="../theme.js?v=20261031-1"></script>
+<script src="../theme.js?v=20261113-1"></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261105-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -241,7 +241,7 @@
             <p>This calculation determines the minimum number of observations per group needed to detect a difference between two independent proportions with a specified power and significance level. Unlike estimating a single proportion, the goal here is a two-tailed hypothesis test: \(H_0\!: p_1 = p_2\) versus \(H_1\!: p_1 \neq p_2\).</p>
             <p>The formula implemented is that of Fleiss, Levin and Paik (2003), which is more precise than Cohen's arcsine approximation because it accounts for the separate variability of each group under \(H_1\).</p>
             <p>The effect size here is the absolute difference \(|p_1 - p_2|\): the smaller it is, the harder it is to detect and the larger the required sample. For very small effects (differences &lt; 0.05), consider whether the effect is clinically or practically relevant before planning the study.</p>
-            <h3>Sample size formula</h3>
+            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
             <p class="formula-line">\( n_1 = \frac{\left(Z_{\alpha/2}\sqrt{(1+1/k)\bar{p}(1-\bar{p})} + Z_\beta\sqrt{p_1(1-p_1)+\frac{p_2(1-p_2)}{k}}\right)^2}{(p_1-p_2)^2} \)</p>
             <p class="formula-line">\( n_2 = k\,n_1,\quad \bar{p}=\frac{p_1 + kp_2}{1+k} \)</p>
             <ul>
@@ -250,7 +250,8 @@
                 <li><strong>\(\bar{p}\)</strong>: pooled proportion under H0.</li>
                 <li><strong>\(Z_{\alpha/2}\)</strong> and <strong>\(Z_\beta\)</strong>: normal quantiles for two-tailed alpha and power; with a one-tailed test, \(Z_{\alpha}\) replaces \(Z_{\alpha/2}\).</li>
             </ul>
-            <h3>Quick settings</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Quick settings</h3></summary>
             <ul>
                 <li><strong>p1 and p2:</strong> use estimates from a pilot study, historical data or the literature. If p2 is the control group, p1 is what you expect to observe in the intervention group.</li>
                 <li><strong>Alpha (α):</strong> 0.05 two-tailed is the most common value. For confirmatory studies use 0.01.</li>
@@ -258,9 +259,11 @@
                 <li><strong>1:1 allocation:</strong> the most efficient design when the cost of both groups is similar. Unequal allocations increase the total.</li>
                 <li><strong>Attrition:</strong> divide n by (1 − expected dropout rate).</li>
             </ul>
-            <h3>Simple example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Simple example</h3></summary>
             <p>You are comparing conversion between two campaigns: <strong>p1 = 0.50</strong>, <strong>p2 = 0.40</strong>, <strong>α = 0.05</strong>, power <strong>0.80</strong>, 1:1 allocation. Result: approximately <strong>388 participants per group</strong> (total ≈ 776).</p>
-            <h3>Worked example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>A digital commerce company wants to compare the conversion rate of two versions of its product page. Design A (current) has a conversion rate of \(p_1 = 0.12\) (12%), and design B (new) is expected to reach \(p_2 = 0.16\) (16%). The goal is to detect this 4-percentage-point difference with 80% power (\(z_\beta = 0.842\)) and a two-tailed significance level \(\alpha = 0.05\) (\(z_{\alpha/2} = 1.960\)), with 1:1 allocation (\(k = 1\)).</p>
             <p>First we compute the pooled proportion under \(H_0\) with \(k=1\): \(\bar{p} = (p_1 + p_2)/2 = (0.12 + 0.16)/2 = 0.14\). Then we apply the Fleiss formula:</p>
             <p class="formula-line">\( n_1 = \frac{\left(z_{\alpha/2}\sqrt{2\,\bar{p}(1-\bar{p})} + z_\beta\sqrt{p_1(1-p_1)+p_2(1-p_2)}\right)^2}{(p_1-p_2)^2} \)</p>
@@ -268,24 +271,28 @@
             <p class="formula-line">\( n_1 = \frac{(1.960 \times 0.4907 + 0.842 \times 0.4899)^2}{(0.04)^2} = \frac{(0.9618 + 0.4125)^2}{0.0016} = \frac{(1.3743)^2}{0.0016} = \frac{1.889}{0.0016} \approx 1{,}180.5 \rightarrow n_1 = 1{,}181 \)</p>
             <p>You need <strong>1,181 sessions per version</strong> (2,362 in total). With this sample size, the test will have an 80% probability of detecting the 4-pp improvement if it truly exists, while keeping the false positive rate at 5%.</p>
             <p><strong>More demanding scenario (minimum difference of 3 pp):</strong> if the team considers it relevant to detect even a difference of \(p_2 = 0.15\) versus \(p_1 = 0.12\), the minimum difference drops to 3 pp. Since this is harder to detect, the required sample size grows considerably, to approximately <strong>1,392 sessions per group</strong> (2,784 in total), which can mean additional weeks of A/B testing depending on the site's traffic volume.</p>
-            <h3>Model assumptions</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Model assumptions</h3></summary>
             <ul>
                 <li>The two groups are independent of each other.</li>
                 <li>Random sampling within each group.</li>
                 <li>The binomial distribution is approximated by the normal (valid for n·p ≥ 5 and n·(1−p) ≥ 5 in each group).</li>
                 <li>Two-tailed test (if you have a directional hypothesis, the sample can be reduced somewhat using a one-tailed test, although this is less conservative).</li>
             </ul>
-            <h3>Common uses</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Common uses</h3></summary>
             <ul>
                 <li>A/B tests in marketing and digital product (conversion or click-through rates).</li>
                 <li>Comparing response rates to two treatments in clinical trials.</li>
                 <li>Evaluating changes in processes with a binary outcome (yes/no, success/failure).</li>
                 <li>Epidemiological cohort studies with a dichotomous outcome.</li>
             </ul>
-            <h3>How to interpret the result</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
                 <p>The calculated \(n\) is the <strong>minimum size per group</strong> needed to detect the difference \(|p_1 - p_2|\) with the specified power and significance level. In a balanced design (\(k = 1\)) the total is \(2n\); in an unbalanced one (\(k \neq 1\)) the reference group needs \(n\) subjects and the intervention group needs \(k \cdot n\). Always round up, and divide by \((1 - \text{dropout rate})\) to get the actual recruitment target. If the expected non-response rate is 20%, plan for \(\lceil n / 0.80 \rceil\) per group.</p>
                 <p>The sensitivity to effect size is very pronounced: when \(p_1\) and \(p_2\) are both close to 0.5, or when the difference between them is small (&lt; 0.05), \(n\) can balloon to impractical values. In this case, run a <em>sensitivity analysis</em> varying \(p_1\) and \(p_2\) by ±0.05 to assess the robustness of the plan. If the required difference is very small, consider whether it is <em>practically relevant</em>: a statistically detectable difference without practical relevance does not justify the cost of recruiting thousands of participants. Conversely, if \(p_1\) or \(p_2\) are very extreme (\(<0.05\) or \(>0.95\)), consider using the arcsine transformation or a logistic regression model in the analysis.</p>
                 <p>When the resulting \(n\) is small and the expected frequencies in some cell are below 5, the chi-square test may not be appropriate; in that case, use <a href="tamano-muestral-fisher.html">Fisher's exact test</a> as an alternative. If the design is feasible, once the data has been collected, test the results with the <a href="contraste-hipotesis-dos-proporciones.html">hypothesis test calculator for two proportions</a> or build a <a href="tamano-muestral-diferencia-proporciones-ic.html">confidence interval for the difference</a> if the goal is to estimate the magnitude of the effect.</p>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -433,7 +440,7 @@ updateTwoPropControls();
 calculateTwoPropSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

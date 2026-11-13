@@ -138,7 +138,7 @@
   ]
 }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -333,7 +333,7 @@
         </section>
 
         <section class="card content-card">
-            <h3>Hypotheses and test statistics</h3>
+            <details class="fold"><summary><h3>Hypotheses and test statistics</h3></summary>
             <p>Let \(\hat{\Delta} = \hat{\theta}_1 - \hat{\theta}_2\) be the observed difference and \(SE\) its standard error:</p>
             <p class="formula-line">\( \hat{\Delta} = \bar{x}_1 - \bar{x}_2, \qquad SE = \sqrt{\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}} \quad \text{(means)} \)</p>
             <p class="formula-line">\( \hat{\Delta} = \hat{p}_1 - \hat{p}_2, \qquad SE = \sqrt{\dfrac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \dfrac{\hat{p}_2(1-\hat{p}_2)}{n_2}} \quad \text{(proportions)} \)</p>
@@ -350,10 +350,11 @@
                 </table>
             </div>
             <p>Each one-tailed test has p-value \(p = 1 - \Phi(z)\), where \(\Phi\) is the cumulative distribution function of the <a href="normal.html">standard normal</a>. In TOST, \(H_0\) is rejected only if both tests reject, so its p-value is the larger of the two: \(p_{\text{TOST}} = \max(p_1, p_2)\). The calculator uses the normal approximation, which is appropriate with the moderate or large samples usual in this kind of study.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>The confidence interval rule</h3>
+            <details class="fold"><summary><h3>The confidence interval rule</h3></summary>
             <p>The clearest way to understand these tests is through the confidence interval for the difference at the \(100(1-2\alpha)\%\) level. With \(\alpha = 0.05\), that is the 90% interval:</p>
             <ul>
                 <li><strong>Non-inferiority</strong>: declared if the lower limit of the interval lies above \(-\delta\).</li>
@@ -362,10 +363,11 @@
             </ul>
             <p>Why 90% and not 95%? Because each one-tailed test uses \(\alpha = 0.05\) in a single tail, and a 90% interval leaves exactly 5% in each tail. Regulatory guidelines for clinical trials (ICH E9, EMA, FDA) usually require \(\alpha = 0.025\) per tail, which amounts to checking the 95% interval; if you work in that setting, enter 0.025 in the calculator.</p>
             <p>This approach also clarifies the possible outcomes. An interval can lie entirely above \(-\delta\) (non-inferior), cross \(-\delta\) (inconclusive) or even lie entirely above 0 (non-inferior and also superior). What it never allows is concluding equivalence just because the interval contains 0.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to choose the margin δ</h3>
+            <details class="fold"><summary><h3>How to choose the margin δ</h3></summary>
             <p>The margin is the most important design decision and must be set <strong>before seeing the data</strong>, on clinical, technical or business grounds, not statistical ones. Some common guidelines:</p>
             <ul>
                 <li>In clinical trials against an active control, the margin is usually a fraction (for example, half) of the effect the control has shown against placebo, to ensure that the new treatment retains a good part of that effect.</li>
@@ -373,10 +375,11 @@
                 <li>When comparing methods or processes, the margin is the difference that would not change any technical decision.</li>
             </ul>
             <p>A margin that is too wide lets almost any treatment "show" non-inferiority; one that is too narrow requires huge samples. Changing the margin after seeing the results invalidates the analysis.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example 1: non-inferiority of proportions</h3>
+            <details class="fold"><summary><h3>Worked example 1: non-inferiority of proportions</h3></summary>
             <p>A new, cheaper treatment cures 144 of 200 patients (\(\hat{p}_1 = 0.72\)); the reference treatment, 150 of 200 (\(\hat{p}_2 = 0.75\)). A non-inferiority margin of 10 percentage points (\(\delta = 0.10\)) and \(\alpha = 0.05\) were set in advance.</p>
             <p class="formula-line">\( \hat{\Delta} = 0.72 - 0.75 = -0.03 \)</p>
             <p class="formula-line">\( SE = \sqrt{\dfrac{0.72 \cdot 0.28}{200} + \dfrac{0.75 \cdot 0.25}{200}} = \sqrt{0.001008 + 0.000938} \approx 0.0441 \)</p>
@@ -392,10 +395,11 @@
             <p>Both tests reject their null hypothesis, and \(p_{\text{TOST}} = \max(0.017,\ 0.0000004) = 0.017 &lt; 0.05\): <strong>equivalence is declared</strong>. The 90% interval, \(-2 \pm 1.645 \times 1.414\), runs from −4.33 to 0.33 and fits entirely within \([-5, 5]\).</p>
             <p>Conclusion: the difference between the two methods is, with 90% confidence, less than 5 units in either direction. Note that a classic two-means test would not have found a significant difference either (\(p \approx 0.16\)), but that alone would not have allowed you to claim that the methods are interchangeable.</p>
             <p><strong>In the calculator:</strong> "Equivalence (TOST)", "Means", x̄₁ = 48, x̄₂ = 50, s₁ = s₂ = 10, n₁ = n₂ = 100 and δ = 5.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p><strong>If non-inferiority is declared</strong> (p-value &lt; α), the data indicate that the treatment is not worse than the control by more than \(\delta\). It does not mean that it is equal or better: only that any loss is smaller than the margin. If, in addition, the whole interval lies above 0, there is also evidence of superiority; moving from non-inferiority to superiority is acceptable, but not the other way round.</p>
             <p><strong>If equivalence is declared</strong>, the difference is, with the stated confidence, smaller than \(\delta\) in both directions. It does not claim that the treatments are identical, but that any difference is too small to matter.</p>
             <p><strong>If it is not declared</strong>, the result is inconclusive: the data do not rule out a difference larger than the margin. It does not prove that the treatment is inferior or that the treatments differ. The most common reason is that the sample was small for the chosen margin.</p>
@@ -404,10 +408,11 @@
             <h3>Power of the study</h3>
             <p>Below the conclusion, the calculator shows the <strong>power</strong> of the test under the usual design assumption: that treatment and control are in fact equally effective (\(\Delta = 0\)). It is the probability that a study with your sample sizes and your variability shows non-inferiority or equivalence when it really holds. If it is low, an inconclusive result was to be expected.</p>
             <p>For means, the link opens the <a href="tamano-muestral-no-inferioridad.html">sample size calculator for non-inferiority and equivalence</a> with your margin, your α and a common standard deviation computed from your data, so you can see how many subjects per group would be needed to reach 80% power. Equivalence needs a larger sample than non-inferiority, because both tests have to be passed at once.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Common mistakes</h3>
+            <details class="fold"><summary><h3>Common mistakes</h3></summary>
             <ul>
                 <li><strong>Concluding equivalence because a classic test is not significant.</strong> The absence of significant differences does not prove equality.</li>
                 <li><strong>Choosing or changing the margin after seeing the data.</strong></li>
@@ -415,6 +420,7 @@
                 <li><strong>Swapping the order of the groups</strong>: the difference is treatment − control, and non-inferiority means that it is not too negative.</li>
                 <li><strong>Forgetting study quality</strong>: poor adherence, dropouts or imprecise measurement bring the two groups closer and favour false conclusions of non-inferiority. That is why analysing both by intention to treat and per protocol is recommended.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -692,7 +698,7 @@ updateDirectionVisibility();
 calculate();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

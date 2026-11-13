@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Simulador de intervalos de confianza | ProbLab">
   <meta name="twitter:description" content="Simulador de intervalos de confianza: observa cobertura empírica, cobertura nominal y variabilidad muestral.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261113-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -521,7 +521,7 @@
          EDUCATIONAL SECTION 2: Nominal vs actual coverage
     ============================================================ -->
     <section class="card content-card">
-      <h2>Cómo funciona el simulador, paso a paso</h2>
+      <details class="fold"><summary><h2>Cómo funciona el simulador, paso a paso</h2></summary>
       <p>El simulador hace lo que en la práctica nunca se puede hacer: repetir el mismo estudio muchas veces conociendo el valor verdadero. Cada vez que pulsas <strong>Simular</strong>:</p>
       <ol>
         <li><strong>Fija la verdad.</strong> Toma como valor real el que has escrito: la media μ (y la desviación típica σ) o la proporción p.</li>
@@ -532,10 +532,11 @@
       </ol>
       <p>En el gráfico, cada fila es un estudio distinto. El punto central de cada segmento es la estimación de esa muestra (su media o su proporción), y la línea vertical discontinua es el valor verdadero. Fíjate en que el valor verdadero no se mueve: lo que cambia de una muestra a otra es el intervalo. Con un nivel del 95 %, a la larga 5 de cada 100 intervalos quedan en rojo, y nada en los datos de esas muestras avisa de que les ha tocado.</p>
       <p>Las tarjetas de arriba resumen la simulación: el nivel nominal elegido, la cobertura empírica, cuántos intervalos han cubierto y la anchura media. Con 100 intervalos, es normal que la cobertura empírica oscile unos puntos alrededor de la nominal (91 % o 98 % no indican ningún fallo); con más intervalos, se acerca.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Modo Media: σ conocida frente a σ desconocida</h2>
+      <details class="fold"><summary><h2>Modo Media: σ conocida frente a σ desconocida</h2></summary>
       <p>En los dos métodos las muestras se generan igual, a partir de la μ y la σ verdaderas que has escrito. La diferencia está en <strong>qué información se permite usar al construir cada intervalo</strong>:</p>
       <div class="content-table-wrap">
         <table class="content-table">
@@ -556,10 +557,11 @@
       <p><strong>Qué pasaría sin la t.</strong> Si se usara la desviación muestral s con el valor crítico 1,96 de la normal, que es un error frecuente, los intervalos serían demasiado estrechos: con n = 5, solo cubrirían el 88 % de las veces en lugar del 95 %; con n = 10, el 92 %; con n = 30, el 94 %. Esa es la razón de ser de la t de Student.</p>
       <p><strong>Pruébalo:</strong> elige n = 5 y simula con cada método. Con σ conocida, todos los intervalos miden lo mismo; con σ desconocida, sus longitudes son muy distintas y la anchura media es mayor, pero la cobertura sigue rondando el 95 %. Sube a n = 100 y verás que los dos métodos se vuelven casi indistinguibles.</p>
       <p>En los dos métodos, el simulador genera datos normales. Con datos reales no normales, la cobertura es solo aproximada y mejora al crecer n, por el <a href="../simulaciones/teorema-central-limite.html">teorema central del límite</a>.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Modo Proporción: cómo se construyen los intervalos de Wald, Wilson y Clopper-Pearson</h2>
+      <details class="fold"><summary><h2>Modo Proporción: cómo se construyen los intervalos de Wald, Wilson y Clopper-Pearson</h2></summary>
       <p>Los dos intervalos salen del mismo razonamiento y solo se separan en el último paso. Conviene verlo despacio, porque ahí está la razón de que uno funcione mucho mejor que el otro.</p>
 
       <h3>Punto de partida: la proporción muestral es casi normal</h3>
@@ -659,10 +661,11 @@
         </table>
       </div>
       <p>Con p = 0,05 y n = 20, más de un tercio de los intervalos de Wald «al 95 %» no contienen el valor verdadero, sobre todo porque muchas muestras salen con 0 éxitos. Con p = 0,5 los tres coinciden. Ninguno clava el 95 % en todos los casos, porque el número de éxitos solo puede tomar valores enteros: Wilson se mantiene cerca, unas veces por encima y otras por debajo, y Clopper-Pearson nunca baja del 95 %, a cambio de pasarse casi siempre. La <a href="../intervalo-confianza-proporcion.html">calculadora de intervalo de confianza para una proporción</a> calcula los tres con tus datos, para que puedas compararlos.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Cobertura nominal vs cobertura real</h2>
+      <details class="fold"><summary><h2>Cobertura nominal vs cobertura real</h2></summary>
       <p>El <strong>nivel nominal</strong> es el valor de confianza que especificamos al construir el IC (90%, 95%, 99%). La <strong>cobertura real</strong> (o empírica) es la fracción de intervalos que efectivamente cubren el parámetro verdadero en una larga serie de repeticiones.</p>
       <p>Para el IC de la media con una población normal, como en este simulador (tanto con σ conocida como con la t de Student), la cobertura real coincide exactamente con la nominal para cualquier tamaño muestral, porque la media muestral es exactamente normal. Si la población no es normal, la coincidencia solo es aproximada y mejora con n por el TCL.</p>
       <p>Para proporciones, la situación es más complicada. El parámetro p es continuo, pero la variable binomial X ~ Bin(n, p) es discreta, y esta discretización causa que la cobertura real fluctúe alrededor del nivel nominal:</p>
@@ -672,13 +675,14 @@
         <li><strong>Intervalo de Clopper-Pearson:</strong> se obtiene invirtiendo el contraste binomial exacto. Su cobertura real nunca baja del nivel nominal, pero casi siempre lo supera: es conservador.</li>
       </ul>
       <p>Puedes observar este fenómeno directamente con el simulador: selecciona el modo Proporción, fija p = 0.05 y n = 20, y compara la cobertura empírica de Wald, Wilson y Clopper-Pearson.</p>
+      </details>
     </section>
 
     <!-- ============================================================
          EDUCATIONAL SECTION 3: Effect of sample size
     ============================================================ -->
     <section class="card content-card">
-      <h2>¿Cómo afecta el tamaño muestral?</h2>
+      <details class="fold"><summary><h2>¿Cómo afecta el tamaño muestral?</h2></summary>
       <p>El tamaño muestral n tiene un efecto directo y claro sobre la anchura del intervalo de confianza. Para el IC de la media con σ conocida:</p>
       <div class="math-block">\[ \text{Anchura} = 2 \times z_{\alpha/2} \times \dfrac{\sigma}{\sqrt{n}} \]</div>
       <p>La anchura es proporcional a \(1/\sqrt{n}\): si <strong>cuadruplicamos n</strong>, la anchura se reduce a la mitad. Para reducir la anchura a un tercio, necesitamos multiplicar n por 9.</p>
@@ -689,6 +693,7 @@
         <li>Los intervalos se vuelven progresivamente más estrechos al aumentar n.</li>
         <li>Con n pequeño, hay más variabilidad en la posición de los extremos del IC.</li>
       </ul>
+      </details>
     </section>
 
     <!-- ============================================================
@@ -1194,7 +1199,7 @@ window.addEventListener('resize', () => {
 <script src="../field-hints.js?v=20260730-1"></script>
 <script src="../search.js?v=20261031-1"></script>
 <script src="../wizard.js?v=20260730-1"></script>
-<script src="../theme.js?v=20261031-1"></script>
+<script src="../theme.js?v=20261113-1"></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

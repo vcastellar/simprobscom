@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -297,7 +297,7 @@
         </section>
 
         <section class="card content-card">
-            <h3>Contraste para una varianza</h3>
+            <details class="fold"><summary><h3>Contraste para una varianza</h3></summary>
             <p class="formula-line">\(H_0: \sigma^2 = \sigma_0^2\)</p>
             <p class="formula-line">\(H_1: \sigma^2 \neq \sigma_0^2\), \(\sigma^2 > \sigma_0^2\) o \(\sigma^2 &lt; \sigma_0^2\)</p>
             <p class="formula-line">\( \chi^2 = \dfrac{(n-1)\,s^2}{\sigma_0^2}, \quad gl = n - 1 \)</p>
@@ -320,10 +320,11 @@
                 <li>Si el p-valor es mayor o igual que \(\alpha\), no hay evidencia suficiente para rechazar \(H_0\).</li>
                 <li>No rechazar \(H_0\) no demuestra que la varianza sea la de referencia, ni que dos varianzas sean iguales.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>El supuesto de normalidad importa mucho</h3>
+            <details class="fold"><summary><h3>El supuesto de normalidad importa mucho</h3></summary>
             <p>Los contrastes sobre medias toleran bien que los datos no sean normales, gracias al teorema central del límite. Los contrastes sobre varianzas, <strong>no</strong>: tanto el chi-cuadrado como el F dependen de que los datos sigan una distribución normal, y esa dependencia no desaparece al aumentar la muestra. Con distribuciones de colas pesadas (más valores extremos que una normal), rechazan \(H_0\) mucho más a menudo de lo que indica \(\alpha\), aunque la varianza sea la correcta.</p>
             <ul>
                 <li><strong>Comprueba la normalidad</strong> antes de usarlos, con un histograma o con el <a href="shapiro-wilk-normalidad.html">test de Shapiro-Wilk</a>.</li>
@@ -331,10 +332,11 @@
                 <li>Para comparar dos o más varianzas con datos no normales, es preferible el <strong>test de Levene</strong> (o su variante de Brown-Forsythe, basada en la mediana), que es mucho más robusto.</li>
             </ul>
             <p>Los demás supuestos son los habituales: muestra aleatoria, observaciones independientes y, en el caso de dos varianzas, grupos independientes entre sí.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto 1: una varianza, contraste bilateral</h3>
+            <details class="fold"><summary><h3>Ejemplo resuelto 1: una varianza, contraste bilateral</h3></summary>
             <p>Un proceso está ajustado para producir piezas con una varianza de \(\sigma_0^2 = 10\) mm². En una muestra de \(n = 25\) piezas se obtiene \(s^2 = 14\) mm². ¿Ha cambiado la variabilidad? Se contrasta \(H_0\colon \sigma^2 = 10\) frente a \(H_1\colon \sigma^2 \neq 10\) con \(\alpha = 0{,}05\).</p>
             <p class="formula-line">\( \chi^2 = \dfrac{24 \times 14}{10} = 33{,}6 \)</p>
             <p>Con 24 grados de libertad, los valores críticos son 12,40 y 39,36. Como \(12{,}40 < 33{,}6 < 39{,}36\), el estadístico no cae en la región de rechazo; el p-valor es \(p \approx 0{,}184\). <strong>No se rechaza \(H_0\)</strong>.</p>
@@ -350,10 +352,11 @@
             <h3>Ejemplo resuelto 3: dos varianzas</h3>
             <p>Se compara la variabilidad de dos líneas de producción. Línea 1: \(s_1^2 = 16\) con \(n_1 = 20\). Línea 2: \(s_2^2 = 9\) con \(n_2 = 18\). El estadístico es \(F = 16/9 \approx 1{,}78\) con 19 y 17 grados de libertad; los valores críticos bilaterales son 0,39 y 2,63, y el p-valor, \(p \approx 0{,}238\). <strong>No se rechaza \(H_0\)</strong>: no hay evidencia de que las varianzas difieran, aunque con estos tamaños el contraste solo detecta con seguridad desviaciones típicas que difieran casi en un factor 2.</p>
             <p><strong>En la calculadora:</strong> «Comparación de dos varianzas», n₁ = 20, n₂ = 18, s₁² = 16 y s₂² = 9.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que la variabilidad es distinta de la de referencia, o distinta entre los dos grupos. Para valorar cuánto, mira el cociente de varianzas y, mejor aún, el de desviaciones típicas, que está en las unidades de los datos: una varianza doble equivale a una desviación típica solo un 41 % mayor.</p>
             <p><strong>No rechazar \(H_0\)</strong> no demuestra que la variabilidad sea la esperada. Los intervalos de confianza para una varianza son muy anchos con muestras pequeñas, como en el ejemplo 1.</p>
             <p>En la calculadora, el resultado muestra la decisión con el p-valor, el estadístico con sus grados de libertad y una frase con la conclusión. En el gráfico, la zona verde es la región de no rechazo, las rojas son las regiones críticas y la línea ámbar marca el estadístico. En «Detalles del cálculo» tienes los valores críticos y los intervalos de confianza para la varianza y para la desviación típica.</p>
@@ -363,10 +366,11 @@
 
             <h3>Intervalo de confianza</h3>
             <p>En el contraste de una varianza, el otro enlace abre el <a href="intervalo-confianza-varianza.html">intervalo de confianza para la varianza</a> con tus datos. En el contraste bilateral, se rechaza \(H_0\) exactamente cuando \(\sigma_0^2\) queda fuera del intervalo.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Errores frecuentes</h3>
+            <details class="fold"><summary><h3>Errores frecuentes</h3></summary>
             <ul>
                 <li><strong>Introducir desviaciones típicas en lugar de varianzas</strong>: la calculadora pide \(s^2\) y \(\sigma_0^2\).</li>
                 <li><strong>Aplicar estos contrastes a datos no normales</strong> sin comprobarlo.</li>
@@ -374,6 +378,7 @@
                 <li><strong>Concluir que la variabilidad es la correcta</strong> porque el contraste no es significativo.</li>
                 <li><strong>Olvidar que la chi-cuadrado y la F no son simétricas</strong> al buscar valores críticos bilaterales.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -895,7 +900,7 @@ calculateVarianceTest();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

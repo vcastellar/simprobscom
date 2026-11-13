@@ -49,7 +49,7 @@
     ]
   }
   </script>
-  <link rel="stylesheet" href="style_new.css?v=20261107-1">
+  <link rel="stylesheet" href="style_new.css?v=20261113-1">
   <style>
     .sim-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
     .sim-tab {
@@ -307,7 +307,7 @@
     </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto</h3>
+            <details class="fold"><summary><h3>Ejemplo resuelto</h3></summary>
             <p>Un equipo de marketing digital quiere evaluar si un nuevo asunto de correo electrónico (variante B) mejora la tasa de apertura respecto al asunto actual (variante A). Los datos históricos indican que la tasa de apertura actual es del <strong>p_A = 0,22</strong> (22 %). Se espera que la variante B alcance una tasa de <strong>p_B = 0,26</strong> (26 %), una mejora absoluta de 4 puntos porcentuales.</p>
             <p>El equipo fija α = 0,05 bilateral y potencia del 80 %, lo que con la fórmula analítica estándar arroja aproximadamente <strong>n = 1 789 usuarios por grupo</strong> (3 578 en total). Antes de lanzar el experimento real, decide validar estos resultados mediante simulación Monte Carlo con <strong>N = 5 000 réplicas</strong>.</p>
             <p>En cada réplica i la herramienta genera \( n_A = n_B = 1789 \) observaciones Bernoulli con las tasas verdaderas, calcula el estadístico z del test de dos proporciones y registra si se rechaza H₀:</p>
@@ -315,10 +315,11 @@
             <p>Tras las 5 000 réplicas, la simulación da los siguientes resultados: la tasa de rechazo empírica es del <strong>79,6 %</strong>. Con 5 000 réplicas, el error estándar de Monte Carlo de esa proporción es \( \sqrt{0{,}8 \cdot 0{,}2/5000} \approx 0{,}006 \), así que el resultado es compatible con la potencia teórica del 80 %. El histograma del estadístico z se desplaza hacia la derecha respecto a la N(0,1) nula, con la media empírica en torno a \( \bar{z} \approx 2{,}8 \), reflejando el efecto real de \( \Delta = 0{,}04 \). La distribución de p-valores muestra una fuerte concentración cerca de 0: en torno al 80 % de las réplicas el p-valor queda por debajo de 0,05.</p>
             <p>Para comprobar el control del error de tipo I, el equipo también ejecuta la simulación bajo H₀ (fijando p_B = p_A = 0,22). Con las mismas 5 000 réplicas, la tasa de rechazo empírica resulta del <strong>4,7 %</strong>, compatible con el nivel nominal α = 0,05 (cerca de 0,05, el error estándar de Monte Carlo con 5 000 réplicas es \( \approx 0{,}003 \)), y la distribución de p-valores es aproximadamente uniforme en [0, 1], tal y como predice la teoría.</p>
             <p>La conclusión práctica es doble: la simulación no detecta discrepancias con el tamaño de muestra calculado analíticamente (la potencia empírica es compatible con la teórica dentro del error de Monte Carlo), y el test mantiene un buen control del error de tipo I. Si la mejora real es de 4 pp, el equipo tendrá aproximadamente un 80 % de probabilidad de detectarla con resultados estadísticamente significativos. Esta comprobación solo es válida bajo los supuestos simulados (tasas verdaderas conocidas y observaciones independientes): si el efecto real es menor que el supuesto, la potencia también lo será.</p>
+      </details>
         </section>
 
     <section class="card content-card">
-      <h3>Cómo interpretar el resultado</h3>
+      <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
       <p>La simulación Monte Carlo permite verificar empíricamente las propiedades del test: si el error de tipo I es realmente α cuando p_A = p_B, si la potencia coincide con la teórica, y cómo se comporta la distribución del estadístico z en la práctica. Es especialmente útil cuando quieres entender el comportamiento del test bajo condiciones concretas o cuando los supuestos del modelo no se cumplen exactamente. La tasa de rechazo empírica que devuelve la simulación es la estimación directa de la potencia: cuántas veces en 100 experimentos idénticos concluirías correctamente que B es diferente de A.</p>
 
       <h3>Cómo leer el histograma de z</h3>
@@ -326,6 +327,7 @@
 
       <h3>Cómo leer la distribución de p-valores</h3>
       <p>Bajo H₀ perfecta, los p-valores siguen una distribución Uniforme(0,1): la barra de 0 a 0.05 debería contener aproximadamente el 5 % de las réplicas, y todas las barras deberían tener alturas similares. Bajo H₁, los p-valores se concentran cerca de 0: la proporción de réplicas con p &lt; α es la potencia empírica. Una distribución de p-valores con marcada concentración en la primera barra y descenso rápido indica que el test tiene buena capacidad para detectar el efecto configurado.</p>
+      </details>
     </section>
 
     <section id="seo-support-content" class="card content-card">
@@ -599,7 +601,7 @@ document.getElementById('simRunBtn').addEventListener('click', runSimulation);
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

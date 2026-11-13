@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -273,7 +273,7 @@
             <p>La lógica es la de cualquier contraste. Se parte de la <strong>hipótesis nula</strong> de que las dos medias poblacionales son iguales, \(H_0: \mu_1 = \mu_2\), y se mide cuánto se separan las medias muestrales \(\bar{x}_1\) y \(\bar{x}_2\). Aunque las poblaciones tuvieran la misma media, dos muestras nunca darían exactamente la misma media: la pregunta es si la diferencia observada es mayor de lo que el azar del muestreo explica razonablemente. Si lo es, se rechaza \(H_0\) en favor de la <strong>hipótesis alternativa</strong>.</p>
             <p>Esta calculadora aplica la versión de <strong>Welch</strong> de la prueba t, que no exige que las dos poblaciones tengan la misma varianza. Es la opción recomendada por defecto, como se explica más abajo.</p>
 
-            <h3>Hipótesis y estadístico</h3>
+            <details class="fold fold-sub"><summary><h3>Hipótesis y estadístico</h3></summary>
             <p class="formula-line">\(H_0: \mu_1 = \mu_2\) (es decir, \(\mu_1 - \mu_2 = 0\))</p>
             <p class="formula-line">\(H_1: \mu_1 \neq \mu_2\), \(\mu_1 > \mu_2\) o \(\mu_1 < \mu_2\)</p>
             <p class="formula-line">\( t = \dfrac{\bar{x}_1 - \bar{x}_2}{\sqrt{\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}}} \)</p>
@@ -286,10 +286,11 @@
             <p>Bajo \(H_0\), el estadístico sigue aproximadamente una t de Student con los grados de libertad de <strong>Welch-Satterthwaite</strong>, que no suelen ser enteros:</p>
             <p class="formula-line">\( \nu = \dfrac{\left(s_1^2/n_1 + s_2^2/n_2\right)^2}{\dfrac{(s_1^2/n_1)^2}{n_1-1} + \dfrac{(s_2^2/n_2)^2}{n_2-1}} \)</p>
             <p>\(\nu\) está siempre entre el menor de \(n_1-1\) y \(n_2-1\) y la suma \(n_1+n_2-2\). Cuando las varianzas y los tamaños son parecidos, se acerca a \(n_1+n_2-2\); cuando un grupo es mucho más variable o más pequeño que el otro, baja, y el contraste se vuelve más exigente.</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo se hace el contraste, paso a paso</h3>
+            <details class="fold"><summary><h3>Cómo se hace el contraste, paso a paso</h3></summary>
             <ol>
                 <li><strong>Plantea las hipótesis</strong> antes de ver los datos y decide qué grupo es el 1 y cuál el 2: la diferencia se calcula siempre como grupo 1 − grupo 2.</li>
                 <li><strong>Fija el nivel de significación</strong> \(\alpha\), normalmente 0,05.</li>
@@ -305,10 +306,11 @@
                 <li>Si el p-valor es mayor o igual que \(\alpha\), no hay evidencia suficiente para rechazar \(H_0\).</li>
                 <li>No rechazar \(H_0\) no demuestra que las medias sean iguales: puede que la muestra sea demasiado pequeña para detectar la diferencia real.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>¿Welch o t de Student con varianzas iguales?</h3>
+            <details class="fold"><summary><h3>¿Welch o t de Student con varianzas iguales?</h3></summary>
             <p>Hay dos versiones clásicas del contraste t para dos muestras independientes. La de <strong>Student</strong> supone que las dos poblaciones tienen la misma varianza y la estima combinando ambas muestras (varianza agrupada). La de <strong>Welch</strong> no hace esa suposición: usa cada varianza por separado y corrige los grados de libertad.</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -326,10 +328,11 @@
             </div>
             <p>Por eso hoy se recomienda usar Welch <strong>por defecto</strong>. Cuando las varianzas son iguales, apenas se pierde nada; cuando no lo son, sobre todo si el grupo más pequeño es el más variable, la versión de Student puede equivocarse mucho. Tampoco es buena idea decidir entre las dos haciendo antes un contraste de igualdad de varianzas (como el test F o el de Levene): ese procedimiento en dos etapas no controla bien el error de tipo I.</p>
             <p>Si en tu caso conoces de verdad las desviaciones típicas poblacionales \(\sigma_1\) y \(\sigma_2\), algo poco habitual, el contraste adecuado es el <strong>z de dos muestras</strong>. Con muestras grandes, los resultados de z y Welch prácticamente coinciden.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>¿Contraste bilateral o de una cola?</h3>
+            <details class="fold"><summary><h3>¿Contraste bilateral o de una cola?</h3></summary>
             <div class="content-table-wrap">
                 <table class="content-table">
                     <thead>
@@ -343,10 +346,11 @@
                 </table>
             </div>
             <p>El contraste de una cola solo está justificado si, antes de ver los datos, únicamente te interesa un sentido y una diferencia en el contrario no cambiaría ninguna decisión. Si eliges la cola después de ver hacia dónde apuntan las medias, el riesgo real de falso positivo se duplica. En caso de duda, usa el bilateral: es lo que esperan la mayoría de revistas y revisores.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Supuestos del contraste</h3>
+            <details class="fold"><summary><h3>Supuestos del contraste</h3></summary>
             <ul>
                 <li><strong>Dos grupos independientes</strong>: cada individuo pertenece a un solo grupo y no hay emparejamiento entre ellos. Si mides a las mismas personas dos veces (antes y después), o formas parejas, usa el <a href="contraste-hipotesis-medias-apareadas.html">contraste de medias apareadas</a>.</li>
                 <li><strong>Observaciones independientes dentro de cada grupo</strong>: no se cumple, por ejemplo, con alumnos de la misma clase o pacientes del mismo hospital analizados como si fueran independientes.</li>
@@ -354,10 +358,11 @@
                 <li><strong>Normalidad aproximada en cada grupo</strong>, o muestras lo bastante grandes para que las medias sean aproximadamente normales por el <a href="simulaciones/teorema-central-limite.html">teorema central del límite</a>. Con 30 o más datos por grupo, suele bastar si las distribuciones no son muy asimétricas.</li>
             </ul>
             <p>No hace falta que las varianzas sean iguales ni que los grupos tengan el mismo tamaño: Welch se encarga de ambas cosas. Con muestras pequeñas conviene revisar la normalidad (histograma o <a href="shapiro-wilk-normalidad.html">test de Shapiro-Wilk</a>) y los valores atípicos, que pueden mover mucho una media. Si los datos son claramente asimétricos y hay pocos, la alternativa no paramétrica es la prueba U de Mann-Whitney. Para comparar tres o más grupos, usa el <a href="anova.html">ANOVA de un factor</a> en lugar de varios contrastes por parejas.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto 1: contraste bilateral</h3>
+            <details class="fold"><summary><h3>Ejemplo resuelto 1: contraste bilateral</h3></summary>
             <p>Se comparan dos tratamientos para reducir la presión arterial. Con el tratamiento A (grupo 1), \(n_1 = 30\) pacientes obtienen una reducción media de \(\bar{x}_1 = 82\) mmHg con \(s_1 = 12\); con el B (grupo 2), \(n_2 = 28\) pacientes obtienen \(\bar{x}_2 = 76\) mmHg con \(s_2 = 15\). Se contrasta \(H_0\colon \mu_1 = \mu_2\) frente a \(H_1\colon \mu_1 \neq \mu_2\) con \(\alpha = 0{,}05\).</p>
             <p>El error estándar de la diferencia es:</p>
             <p class="formula-line">\( SE = \sqrt{\dfrac{12^2}{30} + \dfrac{15^2}{28}} = \sqrt{4{,}800 + 8{,}036} \approx 3{,}583 \)</p>
@@ -375,10 +380,11 @@
             <p>Con \(\nu \approx 82{,}7\) grados de libertad, el valor crítico de cola derecha es \(t_{0{,}05;\,82{,}7} \approx 1{,}663\). Como \(t = 2{,}513 > 1{,}663\), <strong>se rechaza \(H_0\)</strong>; el p-valor es \(p \approx 0{,}0070\).</p>
             <p>Conclusión: hay evidencia estadística de que el método nuevo obtiene una nota media mayor. La diferencia es de 6 puntos, algo más de media desviación típica (\(d \approx 0{,}54\)), un efecto moderado. Recuerda que, al ser un estudio observacional entre grupos ya formados, la diferencia podría deberse también a otras diferencias entre los alumnos; solo la asignación aleatoria al método permitiría atribuírsela con seguridad.</p>
             <p><strong>En la calculadora:</strong> x̄₁ = 78, x̄₂ = 72, s₁ = 10, s₂ = 12, n₁ = 40, n₂ = 45 y «Cola derecha (>)».</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) significa que, si las dos poblaciones tuvieran la misma media, sería muy improbable observar una diferencia entre las medias muestrales tan grande como la obtenida. Pero significativo no es lo mismo que importante: con muestras grandes, diferencias minúsculas resultan significativas. Mira siempre la diferencia observada, su intervalo de confianza y el tamaño del efecto.</p>
             <p><strong>No rechazar \(H_0\)</strong> (p-valor ≥ α) no demuestra que las medias sean iguales. Solo indica que los datos son compatibles con la igualdad, y quizá también con diferencias relevantes, como en el ejemplo 1. Si lo que quieres demostrar es precisamente que dos tratamientos son equivalentes, el planteamiento correcto es un <a href="contraste-hipotesis-no-inferioridad.html">contraste de equivalencia o de no inferioridad</a>.</p>
             <p>En la calculadora, el resultado muestra la decisión con el p-valor, el estadístico t con sus grados de libertad de Welch y una frase con la conclusión. En el gráfico, la zona verde es la región de no rechazo, las rojas son las regiones críticas y la línea ámbar marca el estadístico observado. En «Detalles del cálculo» tienes la diferencia observada, el error estándar, el valor crítico, el intervalo de confianza (en el contraste bilateral) y la d de Cohen.</p>
@@ -393,10 +399,11 @@
 
             <h3>Tamaño del efecto: la d de Cohen</h3>
             <p>Para expresar la diferencia en una escala comparable entre estudios se usa la d de Cohen, \(d = (\bar{x}_1 - \bar{x}_2)/s_p\), donde \(s_p\) es la desviación típica agrupada de los dos grupos. Como referencia orientativa, 0,2 es un efecto pequeño, 0,5 mediano y 0,8 grande. En el ejemplo 1, \(d \approx 0{,}44\); en el ejemplo 2, \(d \approx 0{,}54\).</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Errores frecuentes</h3>
+            <details class="fold"><summary><h3>Errores frecuentes</h3></summary>
             <ul>
                 <li><strong>Usar este contraste con datos emparejados</strong> (antes y después en las mismas personas). Se pierde la ventaja del emparejamiento y, normalmente, mucha potencia.</li>
                 <li><strong>Concluir que dos grupos son iguales</strong> porque el contraste no es significativo.</li>
@@ -405,6 +412,7 @@
                 <li><strong>Ignorar la dirección de la resta</strong>: la cola derecha contrasta que el grupo 1 tiene mayor media que el grupo 2, no al revés.</li>
                 <li><strong>Atribuir la diferencia a la causa estudiada</strong> sin asignación aleatoria: en estudios observacionales, los grupos pueden diferir en otras cosas.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -634,7 +642,7 @@ calculateTwoMeansTest();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

@@ -4193,3 +4193,39 @@ html.dark-mode .hub-main .tools-grid a:focus-visible {
         font-size: 1.25rem;
     }
 }
+
+/* ── Teoría plegada ──────────────────────────────────────────────────────
+   Las secciones y apartados de teoría, a partir del segundo, se muestran
+   cerrados (<details class="fold">) con su título visible. */
+details.fold > summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 8px;
+}
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary > h2,
+details.fold > summary > h3 { margin: 0; flex: 1; }
+details.fold > summary::after {
+    content: "";
+    flex: none;
+    width: 9px;
+    height: 9px;
+    margin: 0 6px 4px 0;
+    border-right: 2px solid #64748b;
+    border-bottom: 2px solid #64748b;
+    transform: rotate(45deg);
+    transition: transform 0.15s ease;
+}
+details.fold[open] > summary::after { transform: rotate(-135deg); margin-bottom: -4px; }
+details.fold[open] > summary { margin-bottom: 12px; }
+details.fold > summary:hover > h2,
+details.fold > summary:hover > h3 { color: #4f46e5; }
+details.fold > summary:focus-visible { outline: 2px solid #4f46e5; outline-offset: 4px; }
+details.fold-sub { margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(148, 163, 184, 0.25); }
+html.dark-mode details.fold > summary::after { border-color: #94a3b8; }
+html.dark-mode details.fold > summary:hover > h2,
+html.dark-mode details.fold > summary:hover > h3 { color: #a5b4fc; }
+@media print { details.fold > summary::after { display: none; } }

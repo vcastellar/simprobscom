@@ -31,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional"></noscript>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <style>
         .site-nav { position:sticky; top:0; z-index:100; background:rgba(255,255,255,0.92); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid rgba(15,23,42,0.08); }
         .site-nav-inner { width:min(1200px,94vw); margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 0; }
@@ -93,7 +93,7 @@
         .dist-diagram .dg-caption strong { color: var(--accent); font-weight: 700; }
         .dist-diagram .dg-hint { opacity: 0.7; }
         /* Bloque «Para qué sirve esta tabla» */
-        .table-uses { margin:4px 0 18px; padding:16px 20px; }
+        .table-uses { margin:22px 0 0; padding:16px 20px; }
         .table-uses h2 { font-size:1.05rem; margin:0 0 8px; }
         .table-uses ul { margin:0; padding-left:1.15rem; display:grid; gap:6px; font-size:0.92rem; line-height:1.5; }
         /* Sin mayúsculas: convertirían α, ν, λ y μ en A, N, Λ y M. */
@@ -230,15 +230,6 @@
     </header>
 
     <main>
-        <section class="card table-uses">
-            <h2>What this table is for</h2>
-            <ul>
-                <li><strong>One-way ANOVA:</strong> the F statistic is compared with the critical value for ν₁ = k − 1 and ν₂ = N − k degrees of freedom (k groups, N observations in total). <a href="anova.html" data-goatcounter-click="tabla-f/anova" data-goatcounter-title="Run the full ANOVA">Run the full ANOVA</a> or <a href="tamano-muestral-anova.html" data-goatcounter-click="tabla-f/tamano-anova" data-goatcounter-title="compute the sample size">compute the sample size</a>.</li>
-                <li><strong>Comparing two variances:</strong> F = s₁²/s₂², with ν₁ = n₁ − 1 and ν₂ = n₂ − 1. <a href="contraste-hipotesis-dos-varianzas.html" data-goatcounter-click="tabla-f/dos-varianzas" data-goatcounter-title="Run the test">Run the test</a>.</li>
-                <li><strong>Left-tail values:</strong> the table only gives the value that leaves an area α to the <em>right</em>. For the one that leaves α to the <em>left</em> (needed, for example, in the two-tailed test of two variances), swap the degrees of freedom, look up that value and take its reciprocal. For example, with ν₁ = 5, ν₂ = 10 and α = 0.05: in the α = 0.05 table, column ν₁ = 10 and row ν₂ = 5, you find 4.735; the value that leaves 5% to the left is 1/4.735 = 0.211. It works because, if F follows an F(ν₁, ν₂), its reciprocal 1/F follows an F(ν₂, ν₁). For any other value, use the <a href="centralf.html" data-goatcounter-click="tabla-f/calculadora" data-goatcounter-title="F calculator">F calculator</a>.</li>
-            </ul>
-        </section>
-
         <section class="card" style="margin-top:4px;">
             <div class="tab-bar" role="tablist">
                 <button class="tab-btn active" role="tab" aria-selected="true"  onclick="switchTab('a10',this)">α = 0.10</button>
@@ -335,19 +326,30 @@
             </div>
         </section>
 
+        <section class="card table-uses">
+            <h2>What this table is for</h2>
+            <ul>
+                <li><strong>One-way ANOVA:</strong> the F statistic is compared with the critical value for ν₁ = k − 1 and ν₂ = N − k degrees of freedom (k groups, N observations in total). <a href="anova.html" data-goatcounter-click="tabla-f/anova" data-goatcounter-title="Run the full ANOVA">Run the full ANOVA</a> or <a href="tamano-muestral-anova.html" data-goatcounter-click="tabla-f/tamano-anova" data-goatcounter-title="compute the sample size">compute the sample size</a>.</li>
+                <li><strong>Comparing two variances:</strong> F = s₁²/s₂², with ν₁ = n₁ − 1 and ν₂ = n₂ − 1. <a href="contraste-hipotesis-dos-varianzas.html" data-goatcounter-click="tabla-f/dos-varianzas" data-goatcounter-title="Run the test">Run the test</a>.</li>
+                <li><strong>Left-tail values:</strong> the table only gives the value that leaves an area α to the <em>right</em>. For the one that leaves α to the <em>left</em> (needed, for example, in the two-tailed test of two variances), swap the degrees of freedom, look up that value and take its reciprocal. For example, with ν₁ = 5, ν₂ = 10 and α = 0.05: in the α = 0.05 table, column ν₁ = 10 and row ν₂ = 5, you find 4.735; the value that leaves 5% to the left is 1/4.735 = 0.211. It works because, if F follows an F(ν₁, ν₂), its reciprocal 1/F follows an F(ν₂, ν₁). For any other value, use the <a href="centralf.html" data-goatcounter-click="tabla-f/calculadora" data-goatcounter-title="F calculator">F calculator</a>.</li>
+            </ul>
+        </section>
+
         <section class="card content-card" style="border-top:3px solid #2563eb;">
             <h3>How to use these tables</h3>
-            <h3>F Distribution (Snedecor)</h3>
+            <details class="fold fold-sub"><summary><h3>F Distribution (Snedecor)</h3></summary>
             <p>If X₁ ~ χ²(ν₁) and X₂ ~ χ²(ν₂) are independent, then F = (X₁/ν₁) / (X₂/ν₂) follows an F distribution with ν₁ and ν₂ degrees of freedom. Its density function is:</p>
             <p class="formula-line">\( f(f;\nu_1,\nu_2) = \dfrac{\sqrt{\dfrac{(\nu_1 f)^{\nu_1}\,\nu_2^{\nu_2}}{(\nu_1 f+\nu_2)^{\nu_1+\nu_2}}}}{f\,B\!\left(\tfrac{\nu_1}{2},\tfrac{\nu_2}{2}\right)}, \quad f > 0 \)</p>
             <p>The mean is ν₂/(ν₂ − 2) for ν₂ &gt; 2. It has positive skew.</p>
+            </details>
 
-            <h3>Critical values</h3>
+            <details class="fold fold-sub"><summary><h3>Critical values</h3></summary>
             <p>The cell in row ν₂ and column ν₁ shows the quantile F such that P(F &gt; f) = α. For an ANOVA at the 5% level with ν₁ = 3 groups and ν₂ = 20 residuals, look up the α = 0.05 table → F = 3.098.</p>
             <ul>
                 <li>For equality-of-variances tests (two-sided), use α/2 in the table and reject if F &gt; F(α/2) or F &lt; 1/F(α/2).</li>
                 <li>As ν₁ → ∞ and ν₂ → ∞, the F distribution tends to 1.</li>
             </ul>
+            </details>
 
             <h3>Related tables and calculators</h3>
             <ul class="distribution-links">
@@ -559,7 +561,7 @@
 </script>
 <script src="../table-diagram.js?v=20261102-2"></script>
 <script src="../table-actions.js?v=20261103-3"></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

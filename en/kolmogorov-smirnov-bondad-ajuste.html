@@ -65,7 +65,7 @@
     }
     </script>
 
-    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -283,18 +283,19 @@
                 theoretical model, in any region of the distribution.
             </p>
 
-            <h3>Hypotheses and statistic</h3>
+            <details class="fold fold-sub"><summary><h3>Hypotheses and statistic</h3></summary>
             <p class="formula-line">\(H_0\): the sample comes from the theoretical distribution \(F_0\)</p>
             <p class="formula-line">\(H_1\): the sample does not come from \(F_0\)</p>
             <p class="formula-line">
                 \(D_n = \sup_x \left| F_n(x) - F_0(x) \right|\)
             </p>
+            </details>
         </section>
 
 
 
         <section class="card content-card">
-            <h3>Quick check</h3>
+            <details class="fold"><summary><h3>Quick check</h3></summary>
 
             <p>
                 The data are sorted from smallest to largest: \(x_{(1)} \leq x_{(2)} \leq \cdots \leq x_{(n)}\).
@@ -328,10 +329,11 @@
                 conservative. In that case, the Lilliefors test is recommended for normality; for
                 other distributions, analogous variants with specific corrections exist.
             </p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example</h3>
+            <details class="fold"><summary><h3>Worked example</h3></summary>
             <p>The waiting times (in minutes) of 8 customers at an office are measured: 1.2, 2.1, 2.8, 3.4, 4.1, 5.0, 5.8, 6.5. We want to check, with \(\alpha = 0.05\), whether these data come from a Uniform distribution on the interval \([0,\, 8]\).</p>
             <p>The hypotheses are \(H_0\): the sample follows a \(\text{Uniform}(0,8)\) distribution versus \(H_1\): the sample does not follow that distribution. The theoretical distribution function is \(F_0(x) = x/8\) for \(x \in [0,8]\).</p>
             <p>With the data already sorted, the empirical distribution function \(F_n(x_i) = i/n\) is built and the maximum difference \(D = \max_i |F_n(x_i) - F_0(x_i)|\) is computed:</p>
@@ -339,10 +341,11 @@
             <p>At each observation two differences are computed: the upper step \(|i/n - F_0(x_i)|\) and the lower step \(|(i-1)/n - F_0(x_i)|\), and the larger one is kept. The most notable values are: for \(x_1 = 1.2\), lower step \(|0/8 - 0.150| = 0.150\); for \(x_7 = 5.8\), upper step \(|7/8 - 0.725| = 0.150\); for \(x_8 = 6.5\), upper step \(|8/8 - 0.8125| = 0.1875\). The overall maximum is \(D = 0.1875\), attained at \(x_8 = 6.5\).</p>
             <p>The tabulated critical value for \(n = 8\) and \(\alpha = 0.05\) is \(D_{0.05;\,8} \approx 0.457\). Since \(D = 0.1875 < 0.457\), \(H_0\) is not rejected.</p>
             <p>Conclusion: at a 5% significance level, there is not enough evidence to claim that the waiting times differ from a Uniform distribution on \([0, 8]\). The maximum observed discrepancy between the empirical and theoretical distributions is small relative to the variability expected for samples of that size.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
 
                 <p>
                 <strong>Rejecting \(H_0\)</strong> (p-value &lt; \(\alpha\)) means that the empirical
@@ -376,11 +379,13 @@
                 itself, the critical values must be corrected (the Lilliefors test for normality,
                 for example).
                 </p>
+      </details>
         </section>
         <section class="card content-card">
-            <h3>What the test can detect with your sample</h3>
+            <details class="fold"><summary><h3>What the test can detect with your sample</h3></summary>
             <p>Below the conclusion, the calculator shows the value of the statistic above which \(H_0\) is rejected with your sample size. The critical value is approximately \(1.36/\sqrt{n}\) for \(\alpha = 0.05\): with 20 observations, \(H_0\) is rejected only if the empirical distribution function is more than 0.30 away from the theoretical one at some point; with 100 observations, more than 0.14. Smaller departures go unnoticed, so with small samples not rejecting \(H_0\) says little about whether the data really follow that distribution.</p>
             <p>The link in the result opens the <a href="tamano-muestral-kolmogorov-smirnov.html">sample size calculator for Kolmogorov-Smirnov</a> with your \(\alpha\), so you can work out how much data would be needed to detect the difference you care about.</p>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -744,7 +749,7 @@ document.getElementById('calcKsBtn').click();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

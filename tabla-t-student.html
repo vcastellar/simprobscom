@@ -31,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional"></noscript>
-    <link rel="stylesheet" href="style_new.css?v=20261102-2">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <style>
         .site-nav {
             position: sticky;
@@ -189,7 +189,7 @@
         html.dark-mode .dist-table tbody tr:nth-child(even) td:first-child { background:linear-gradient(rgba(96,165,250,0.16),rgba(96,165,250,0.16)),#1e293b; }
         html.dark-mode .dist-table tbody tr:hover td:first-child { background:linear-gradient(rgba(96,165,250,0.22),rgba(96,165,250,0.22)),#1e293b; }
         /* Bloque «Para qué sirve esta tabla» */
-        .table-uses { margin:4px 0 18px; padding:16px 20px; }
+        .table-uses { margin:22px 0 0; padding:16px 20px; }
         .table-uses h2 { font-size:1.05rem; margin:0 0 8px; }
         .table-uses ul { margin:0; padding-left:1.15rem; display:grid; gap:6px; font-size:0.92rem; line-height:1.5; }
         /* Sin mayúsculas: convertirían α, ν, λ y μ en A, N, Λ y M. */
@@ -330,15 +330,6 @@
     </header>
 
     <main>
-        <section class="card table-uses">
-            <h2>Para qué sirve esta tabla</h2>
-            <ul>
-                <li><strong>Intervalos de confianza para la media</strong> cuando no se conoce σ: x̄ ± t·s/√n, con ν = n − 1 grados de libertad. <a href="intervalo-confianza-media.html" data-goatcounter-click="tabla-t/ic-media" data-goatcounter-title="Calcular el intervalo">Calcular el intervalo</a>.</li>
-                <li><strong>Contrastes t:</strong> de <a href="contraste-hipotesis-una-media.html" data-goatcounter-click="tabla-t/contraste-media" data-goatcounter-title="una media">una media</a> (ν = n − 1), de <a href="contraste-hipotesis-medias-apareadas.html" data-goatcounter-click="tabla-t/contraste-apareadas" data-goatcounter-title="medias apareadas">medias apareadas</a> (ν = n − 1, con n pares) y de <a href="contraste-hipotesis-dos-medias.html" data-goatcounter-click="tabla-t/contraste-dos-medias" data-goatcounter-title="dos medias">dos medias</a> (ν = n₁ + n₂ − 2 si las varianzas son iguales).</li>
-                <li><strong>Una o dos colas:</strong> en un contraste bilateral al 5 %, el valor crítico está en la columna α = 0,05 de dos colas, que es la misma que α = 0,025 de una cola.</li>
-            </ul>
-        </section>
-
         <section class="card" style="margin-top:4px;">
             <div class="tab-bar" role="tablist">
                 <button class="tab-btn active" role="tab" aria-selected="true"  onclick="switchTab('crit',this)">Valores críticos t<sub>α,ν</sub></button>
@@ -422,6 +413,15 @@
             </div>
         </section>
 
+        <section class="card table-uses">
+            <h2>Para qué sirve esta tabla</h2>
+            <ul>
+                <li><strong>Intervalos de confianza para la media</strong> cuando no se conoce σ: x̄ ± t·s/√n, con ν = n − 1 grados de libertad. <a href="intervalo-confianza-media.html" data-goatcounter-click="tabla-t/ic-media" data-goatcounter-title="Calcular el intervalo">Calcular el intervalo</a>.</li>
+                <li><strong>Contrastes t:</strong> de <a href="contraste-hipotesis-una-media.html" data-goatcounter-click="tabla-t/contraste-media" data-goatcounter-title="una media">una media</a> (ν = n − 1), de <a href="contraste-hipotesis-medias-apareadas.html" data-goatcounter-click="tabla-t/contraste-apareadas" data-goatcounter-title="medias apareadas">medias apareadas</a> (ν = n − 1, con n pares) y de <a href="contraste-hipotesis-dos-medias.html" data-goatcounter-click="tabla-t/contraste-dos-medias" data-goatcounter-title="dos medias">dos medias</a> (ν = n₁ + n₂ − 2 si las varianzas son iguales).</li>
+                <li><strong>Una o dos colas:</strong> en un contraste bilateral al 5 %, el valor crítico está en la columna α = 0,05 de dos colas, que es la misma que α = 0,025 de una cola.</li>
+            </ul>
+        </section>
+
         <aside class="sim-callout" aria-label="Simulación relacionada">
             <p class="sim-callout-kicker">Simulación interactiva</p>
             <p class="sim-callout-text"><strong>Valor crítico, α y potencia</strong> El valor crítico marca la frontera de la región de rechazo, y el área de cola que deja es α, la probabilidad de error tipo I. En el simulador puedes mover α, el tamaño del efecto y n, y ver cómo cambian el error tipo II y la potencia.</p>
@@ -430,19 +430,21 @@
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
             <h3>Cómo usar estas tablas</h3>
-            <h3>Distribución t de Student</h3>
+            <details class="fold fold-sub"><summary><h3>Distribución t de Student</h3></summary>
             <p>La distribución t de Student con ν grados de libertad tiene función de densidad:</p>
             <p class="formula-line">\( f(t,\nu) = \dfrac{\Gamma\!\left(\tfrac{\nu+1}{2}\right)}{\sqrt{\nu\pi}\;\Gamma\!\left(\tfrac{\nu}{2}\right)} \left(1+\dfrac{t^2}{\nu}\right)^{-\frac{\nu+1}{2}} \)</p>
             <p>Conforme ν → ∞ la distribución converge a la Normal estándar N(0,1).</p>
+            </details>
 
-            <h3>Tabla de valores críticos</h3>
+            <details class="fold fold-sub"><summary><h3>Tabla de valores críticos</h3></summary>
             <p>Muestra los valores críticos t para cada grado de libertad ν. El selector <em>Tipo de contraste</em> decide cómo se etiquetan las columnas:</p>
             <ul>
                 <li><strong>Dos colas</strong> (por defecto): cada columna es α = P(|T| &gt; t), el área repartida entre ambos extremos. Es la que necesitas en un contraste bilateral o en un intervalo de confianza. Ejemplo: α = 0.05, ν = 20 → t = 2.086.</li>
                 <li><strong>Una cola</strong>: cada columna es α = P(T &gt; t), el área a la derecha, para contrastes unilaterales. El mismo 2.086 aparece en la columna α = 0.025, porque α (dos colas) = 2 × α (una cola).</li>
                 <li>Cuando ν = ∞ los valores coinciden con los cuantiles de la Normal estándar.</li>
             </ul>
-            <h3>Una cola o dos colas: ejemplo con ν = 20 y α = 0,05</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Una cola o dos colas: ejemplo con ν = 20 y α = 0,05</h3></summary>
             <p>Supón un contraste sobre una media con una muestra de n = 21 observaciones, de modo que ν = n − 1 = <strong>20</strong> grados de libertad, y un nivel de significación α = 0,05. El valor crítico depende de la hipótesis alternativa:</p>
             <ul>
                 <li><strong>Dos colas</strong> (H₁: μ ≠ μ₀): el 5 % se reparte entre ambos extremos, 2,5 % en cada uno. Con la vista de <em>dos colas</em>, busca la columna α = 0.05 (en la vista de una cola es α = 0.025) en la fila 20 → <strong>t = 2.086</strong>. Rechazas H₀ si |t<sub>obs</sub>| &gt; 2.086.</li>
@@ -450,9 +452,11 @@
                 <li><strong>Una cola, izquierda</strong> (H₁: μ &lt; μ₀): por simetría, el valor crítico es <strong>−1.725</strong>. Rechazas H₀ si t<sub>obs</sub> &lt; −1.725.</li>
             </ul>
             <p>Con el mismo α, el valor crítico de dos colas es siempre mayor que el de una cola, porque cada extremo recibe solo la mitad del área. Confundir las dos vistas es el error más habitual al usar la tabla t.</p>
+            </details>
 
-            <h3>Tabla de distribución acumulada</h3>
+            <details class="fold fold-sub"><summary><h3>Tabla de distribución acumulada</h3></summary>
             <p>Cada celda muestra P(T ≤ t) para el número de grados de libertad seleccionado. Para calcular p-valores bilaterales: p = 2 · P(T &gt; |t<sub>obs</sub>|) = 2 · (1 − P(T ≤ |t<sub>obs</sub>|)).</p>
+            </details>
 
             <h3>Tablas y calculadoras relacionadas</h3>
             <ul class="distribution-links">
@@ -727,7 +731,7 @@
 <script src="table-actions.js?v=20261103-3"></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

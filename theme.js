@@ -169,11 +169,40 @@
     delegateClick('.hero-cta-wizard', '.site-nav-links .wz-nav-btn');
   }
 
+  // ── Teoría plegada (details.fold) ──────────────────────────────────
+  // Abre el desplegable que contiene el destino de un enlace con ancla
+  // (#seccion) y todos al imprimir, para que no se pierda contenido.
+  function openFoldsFor(el) {
+    var opened = false;
+    for (var d = el.closest('details.fold'); d; d = d.parentElement ? d.parentElement.closest('details.fold') : null) {
+      if (!d.open) { d.open = true; opened = true; }
+    }
+    var own = el.querySelector(':scope > details.fold');
+    if (own && !own.open) { own.open = true; opened = true; }
+    return opened;
+  }
+  function initFolds() {
+    if (!document.querySelector('details.fold')) return;
+    function fromHash() {
+      var id = '';
+      try { id = decodeURIComponent(location.hash.slice(1)); } catch (e) { return; }
+      var el = id && document.getElementById(id);
+      if (el && openFoldsFor(el)) el.scrollIntoView();
+    }
+    fromHash();
+    window.addEventListener('hashchange', fromHash);
+    window.addEventListener('beforeprint', function () {
+      var all = document.querySelectorAll('details.fold');
+      for (var i = 0; i < all.length; i++) all[i].open = true;
+    });
+  }
+
   function init() {
     initTheme();
     initNavToggle();
     initActiveLink();
     initHeroCtas();
+    initFolds();
   }
 
   if (document.readyState === 'loading') {

@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261105-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -219,7 +219,7 @@
             <p>In a paired design the same experimental unit is measured under two conditions (before/after, crossover treatment/control, right eye/left eye). The comparison of interest is not the difference of means between two independent groups, but the <strong>mean of the individual differences</strong> \(\bar{d} = \bar{X}_1 - \bar{X}_2\).</p>
             <p>The key advantage of the paired design is that it removes between-subject variability, which is usually the largest source of noise. That's why the relevant parameter is \(\sigma_d\) (the standard deviation of the within-subject differences), which is generally much smaller than the \(\sigma\) of each group taken separately. This translates into significantly smaller samples compared with an independent two-group design.</p>
             <p>The relationship between \(\sigma_d\) and the standard deviations of each measurement is: \(\sigma_d^2 = \sigma_1^2 + \sigma_2^2 - 2\rho\sigma_1\sigma_2\), where \(\rho\) is the correlation between the two measurements. The larger \(\rho\) is, the smaller \(\sigma_d\) is, and the more efficient the paired design becomes.</p>
-            <h3>Sample size formula</h3>
+            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
             <p class="formula-line">\( n = \left\lceil\left(\frac{(Z_{\alpha/2}+Z_\beta)\,\sigma_d}{\Delta}\right)^2\right\rceil \)</p>
             <ul>
                 <li><strong>n</strong>: number of pairs (individuals or units, not total observations).</li>
@@ -227,16 +227,19 @@
                 <li><strong>\(\Delta\)</strong>: the smallest mean difference you want to detect.</li>
                 <li><strong>\(Z_{\alpha/2}\)</strong> and <strong>\(Z_\beta\)</strong>: normal quantiles for two-sided alpha and power; with a one-tailed test, \(Z_{\alpha}\) replaces \(Z_{\alpha/2}\).</li>
             </ul>
-            <h3>Quick setup</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>σd:</strong> estimate it from a paired pilot study (measure differences within each pair) or from the literature. <em>Do not</em> use the individual σ of each group separately.</li>
                 <li><strong>If you only have the individual σ and an estimated ρ:</strong> compute σd = σ·√(2(1−ρ)) assuming equal variances.</li>
                 <li><strong>Δ:</strong> the smallest practically relevant difference (minimum clinically important change, minimum operational improvement).</li>
                 <li><strong>Alpha and power:</strong> 0.05 and 0.80 as a baseline; 0.90 if false negatives are costly.</li>
             </ul>
-            <h3>Simple example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Simple example</h3></summary>
             <p>A training intervention: <strong>σd = 8</strong>, minimum change to detect <strong>Δ = 3</strong>, <strong>α = 0.05</strong>, power <strong>0.80</strong>. Result: <strong>≈ 56 pairs</strong>. For the same situation with two independent groups (σ = 8) you would need ~113 per group if ρ = 0, but only ~56 pairs if ρ = 0.5 thanks to the paired design.</p>
-            <h3>Worked example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>A physiotherapy clinic wants to evaluate the effectiveness of a new treatment protocol by measuring pain level (0–10 scale) before and after the intervention in each patient. A previous pilot study estimates the standard deviation of the individual differences as \(\sigma_d = 2.1\) points. The clinical team considers it relevant to detect a minimum mean improvement of \(\delta = 1.0\) point. A two-sided significance level \(\alpha = 0.05\) and 80% power are set.</p>
             <p>The corresponding critical values are \(z_{\alpha/2} = 1.960\) (97.5th percentile of the standard normal) and \(z_{\beta} = 0.842\) (80th percentile). Substituting into the formula:</p>
             <p class="formula-line">\( n = \frac{(z_{\alpha/2} + z_{\beta})^2 \cdot \sigma_d^2}{\delta^2} = \frac{(1.960 + 0.842)^2 \times 2.1^2}{1.0^2} = \frac{(2.802)^2 \times 4.41}{1} = \frac{7.851 \times 4.41}{1} \approx 34.6 \)</p>
@@ -245,24 +248,28 @@
             <p class="formula-line">\( n = \frac{(1.960 + 1.282)^2 \times 4.41}{1.0^2} = \frac{(3.242)^2 \times 4.41}{1} = \frac{10.511 \times 4.41}{1} \approx 46.4 \)</p>
             <p>That would require <strong>47 pairs</strong>. This increase of 12 pairs illustrates how raising power from 80% to 90% requires roughly 34% more sample.</p>
             <p>If the true variability were larger — say \(\sigma_d = 3.0\) — with 80% power the sample size would rise to \(n = 7.851 \times 9.0 / 1.0 \approx 71\) pairs, which highlights the importance of a reliable pilot study to estimate \(\sigma_d\) accurately.</p>
-            <h3>Model assumptions</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Model assumptions</h3></summary>
             <ul>
                 <li>The differences \(d_i = X_{1i} - X_{2i}\) are independent across pairs.</li>
                 <li>The differences are approximately normally distributed (or n is large).</li>
                 <li>\(\sigma_d\) is constant across all pairs (homoscedasticity of the differences).</li>
                 <li>Order effects do not contaminate the measurements (in crossover designs, use adequate washout periods).</li>
             </ul>
-            <h3>Common uses</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Common uses</h3></summary>
             <ul>
                 <li>Pre-post intervention studies (before and after treatment).</li>
                 <li>Crossover designs in clinical trials.</li>
                 <li>Comparison of two measurement methods applied to the same subject.</li>
                 <li>Evaluations of change in skill, weight, blood pressure, etc.</li>
             </ul>
-            <h3>How to interpret the result</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
                 <p>The value \(n\) is the <strong>minimum number of subjects</strong>, each of whom contributes two measurements (before/after, or condition A/condition B). The total number of observations is \(2n\), but the number of independent statistical units remains \(n\). Always round up, and apply a dropout adjustment: if you expect 15% attrition between the first and second measurement, recruit \(\lceil n / 0.85 \rceil\) subjects in the first phase.</p>
                 <p>The key and most delicate parameter is \(\sigma_d\), the <strong>standard deviation of the within-subject differences</strong>, which should not be confused with the standard deviations of each measurement separately. If \(\sigma\) from a single measurement is used instead of \(\sigma_d\), the calculated \(n\) may be over- or underestimated depending on the correlation between the two measurements: when the within-subject correlation \(\rho\) is high, \(\sigma_d \approx \sigma\sqrt{2(1-\rho)}\) is considerably smaller than \(\sigma\), and the paired design requires far fewer subjects than the independent design. Run a <em>sensitivity analysis</em> with \(\sigma_d \pm 25\%\) and use the larger resulting \(n\).</p>
                 <p>If the calculated \(n\) turns out very small (&lt; 15 pairs), check that the distribution of the differences is approximately normal, since the paired t-test relies on that assumption. With very few pairs, consider the Wilcoxon signed-rank test for related samples. When \(n\) turns out unmanageably large, review whether the minimum detectable difference \(\delta\) is practically relevant or could be relaxed. Once the data has been collected, use the <a href="contraste-hipotesis-medias-apareadas.html">paired-means hypothesis test calculator</a> for the main analysis.</p>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -349,7 +356,7 @@ document.getElementById('pairedMeanCalculateBtn').addEventListener('click', calc
 calculatePairedMeanSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

@@ -90,7 +90,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261105-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -205,7 +205,7 @@
             <p>Cuando la población total tiene un tamaño \(N\) conocido y se muestrea sin reemplazamiento, las observaciones no son estrictamente independientes. El <strong>factor de corrección por población finita</strong> (FPC) reduce el error estándar en proporción a la fracción muestreada \(f = n/N\).</p>
             <p>El resultado es un IC más estrecho que el estándar: cuanto mayor es \(f\), mayor es el ahorro en precisión. Si \(N \to \infty\) (o \(f &lt; 5\,\%\)), FPC ≈ 1 y ambos ICs coinciden.</p>
 
-            <h3>Fórmula del IC con FPC</h3>
+            <details class="fold fold-sub"><summary><h3>Fórmula del IC con FPC</h3></summary>
             <p class="formula-line">\( \text{FPC} = \sqrt{\frac{N-n}{N-1}} \)</p>
             <p class="formula-line">\( \text{SE}_{\text{FPC}} = \frac{s}{\sqrt{n}} \cdot \text{FPC} \)</p>
             <p class="formula-line">\( \text{IC} = \bar{x} \pm t_{\alpha/2,\;n-1} \cdot \text{SE}_{\text{FPC}} \)</p>
@@ -215,17 +215,19 @@
                 <li><strong>FPC</strong>: factor de corrección por población finita.</li>
                 <li><strong>\(t_{\alpha/2,n-1}\)</strong>: cuantil t de Student con \(n-1\) grados de libertad. Para n grande converge al cuantil normal z.</li>
             </ul>
+            </details>
 
-            <h3>Cuándo el FPC es importante</h3>
+            <details class="fold fold-sub"><summary><h3>Cuándo el FPC es importante</h3></summary>
             <ul>
                 <li>\(f = n/N &gt; 5\,\%\): la corrección reduce perceptiblemente el IC.</li>
                 <li>\(f &gt; 20\,\%\): la reducción del IC es sustancial.</li>
                 <li>\(f &lt; 5\,\%\): la diferencia entre IC corregido y estándar es menor del 3 % y puede ignorarse.</li>
             </ul>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto</h3>
+            <details class="fold"><summary><h3>Ejemplo resuelto</h3></summary>
             <p>Una empresa con N = 1 200 empleados toma una muestra de n = 127. El tiempo medio de una tarea es \(\bar{x} = 72\) minutos con desviación típica muestral \(s = 12\) minutos. Se quiere el IC al 95 %.</p>
             <p>La fracción de muestreo es \(f = 127/1\,200 \approx 10{,}6\,\%\), superior al umbral del 5 %, por lo que la corrección es relevante.</p>
             <p>\(\text{FPC} = \sqrt{(1200-127)/(1200-1)} = \sqrt{1073/1199} \approx 0{,}9463\).</p>
@@ -241,16 +243,18 @@
                 <li>N es fijo y conocido antes del muestreo.</li>
                 <li>Se usa la distribución t (σ desconocida). Si σ es conocida, sustituye t por z.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p>El intervalo \([L, U]\) es el rango plausible de la media poblacional \(\mu\) dado el nivel de confianza elegido. La interpretación frecuentista es la misma que en cualquier IC: si repitieras el muestreo y construyeras el IC con el mismo procedimiento muchas veces, aproximadamente un \(C \times 100\,\%\) de esos intervalos contendría el verdadero valor de \(\mu\). El IC corregido por FPC es siempre igual o más estrecho que el estándar: esto no es un sesgo, sino el reflejo correcto de que muestrear el \(n/N\,\%\) de la población sin reemplazamiento proporciona más información que muestrear con reemplazamiento.</p>
             <p>La diferencia entre ambos ICs depende directamente de la fracción de muestreo. Si \(n/N &lt; 5\,\%\), el FPC es cercano a 1 y ambos intervalos coinciden prácticamente. Si \(n/N\) supera el 20 %, la reducción de amplitud puede ser sustancial, como muestra la calculadora al comparar los dos ICs simultáneamente en el gráfico. Cuando se muestrea la totalidad de la población (\(n = N\)), el IC se colapsa a un punto: la incertidumbre desaparece porque se conocen todos los elementos.</p>
             <ul>
                 <li><strong>Conexión con el contraste:</strong> si un valor de referencia \(\mu_0\) queda fuera del IC con FPC, los datos lo rechazan al nivel \(\alpha = 1 - C\) en el contraste bilateral equivalente para poblaciones finitas.</li>
                 <li><strong>Qué intervalo usar:</strong> usa siempre el IC con FPC cuando \(n/N &gt; 5\,\%\) y el diseño sea muestreo aleatorio simple sin reemplazamiento. Informar solo el IC estándar cuando la fracción es grande sobreestima la incertidumbre real.</li>
             </ul>
+      </details>
         </section>
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">
@@ -427,7 +431,7 @@ calculateFm();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

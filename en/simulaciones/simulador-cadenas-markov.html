@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Markov Chain Simulator | ProbLab">
   <meta name="twitter:description" content="Markov chain simulator: define the transition matrix and watch the convergence toward the stationary distribution.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../../style_new.css?v=20261102-1">
+  <link rel="stylesheet" href="../../style_new.css?v=20261113-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -491,7 +491,7 @@
     </section>
 
     <section class="card content-card">
-      <h2>Stationary distribution</h2>
+      <details class="fold"><summary><h2>Stationary distribution</h2></summary>
       <p>A <strong>stationary distribution</strong> (or equilibrium distribution) is a probability vector \(\pi = (\pi_1, \pi_2, \ldots, \pi_n)\) such that:</p>
       <div class="math-block">
         $$\pi P = \pi \quad \text{with} \quad \sum_{i=1}^{n} \pi_i = 1, \quad \pi_i \geq 0$$
@@ -505,10 +505,11 @@
       </ul>
       <h3>Absorbing state: the Customer / Churn preset</h3>
       <p>In the Customer preset, the "Churn" state is an <strong>absorbing state</strong>: \(p_{\text{churn}, \text{churn}} = 1\). Once a customer leaves, they don't come back. This makes the chain <em>non-ergodic</em>: eventually every customer ends up in Churn. The stationary distribution assigns probability 1 to that state and 0 to the rest.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>How the simulator works, step by step</h2>
+      <details class="fold"><summary><h2>How the simulator works, step by step</h2></summary>
       <p>The simulator does two different things: it walks through the chain at random, step by step, and separately computes the theoretical stationary distribution. Then it compares the two.</p>
       <ol>
         <li><strong>It reads the transition matrix</strong> and checks that each row sums to 1 and that there are no negative values.</li>
@@ -524,10 +525,11 @@
       <p><strong>What is random and what is not.</strong> The path is random: each click on "Simulate" gives a different one. The distribution π is not: it depends only on the matrix. With 100 steps of the Weather preset it is normal to see maximum differences of about 0.07; with 1000 steps, about 0.02. This is not a fault: the fraction of time approaches π slowly, at a rate of \(1/\sqrt{n}\), like any average.</p>
       <p><strong>Customer / Churn preset.</strong> Here π equals 1 at Churn, but the fraction of time in Churn does not reach 1: on average the chain spends its first 11 steps outside that state, and those steps still count. With 50 steps, the fraction is usually around 0.8; with 1000, 0.99.</p>
       <p><strong>Custom.</strong> You can enter your own matrix with 2 to 5 states. Each row is the split of probabilities for "where do I go from here" and must sum to 1.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>The arithmetic, with the Weather preset</h2>
+      <details class="fold"><summary><h2>The arithmetic, with the Weather preset</h2></summary>
       <p>The preset's matrix, with the states in the order Sunny, Cloudy and Rainy, is</p>
       <div class="math-block">\[ P = \begin{pmatrix} 0.7 & 0.2 & 0.1 \\ 0.3 & 0.4 & 0.3 \\ 0.2 & 0.3 & 0.5 \end{pmatrix}. \]</div>
 
@@ -578,10 +580,11 @@
       <p>When there is an absorbing state, the interesting question is not where the chain ends up, but how long it takes. Let \(t_A\) and \(t_D\) be the expected number of steps to Churn starting from Active and from Dormant. Taking one step and seeing where you land:</p>
       <div class="math-block">\[ \begin{aligned} t_A &= 1 + 0.80\,t_A + 0.15\,t_D \\ t_D &= 1 + 0.20\,t_A + 0.60\,t_D \end{aligned} \]</div>
       <p>Solving the system gives \(t_A = 11\) and \(t_D = 8\): an active customer lasts 11 periods on average before churning, 8 of them as active and 3 as dormant.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Real-world applications</h2>
+      <details class="fold"><summary><h2>Real-world applications</h2></summary>
       <ul>
         <li><strong>PageRank (Google):</strong> the web is modeled as a Markov chain in which the states are pages and the transitions are hyperlinks. The stationary distribution determines the relevance of each page.</li>
         <li><strong>Weather models:</strong> states such as Sunny, Cloudy and Rainy with transition probabilities fitted to historical data.</li>
@@ -591,6 +594,7 @@
         <li><strong>Population genetics:</strong> the Wright-Fisher model describes how allele frequencies change in a finite population through a Markov chain.</li>
         <li><strong>Queueing theory:</strong> Markov chains model the number of customers in an M/M/1 or M/M/k queue, allowing the computation of waiting times and service rates.</li>
       </ul>
+      </details>
     </section>
 
     <section class="card content-card">
@@ -1180,7 +1184,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 <script src="../../field-hints.js?v=20260730-1"></script>
-<script src="../../theme.js?v=20261031-1"></script>
+<script src="../../theme.js?v=20261113-1"></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

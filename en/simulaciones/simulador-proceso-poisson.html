@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Poisson Process Simulator | ProbLab">
   <meta name="twitter:description" content="Poisson process simulator: sample paths, number of events, and inter-arrival times with theoretical curves.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../../style_new.css?v=20261102-1">
+  <link rel="stylesheet" href="../../style_new.css?v=20261113-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -482,7 +482,7 @@
     </section>
 
     <section class="card content-card">
-      <h2>The exponential distribution as inter-event time</h2>
+      <details class="fold"><summary><h2>The exponential distribution as inter-event time</h2></summary>
       <p>Let \(T_1\) be the time to the first event. Its distribution is easy to derive using the connection to the Poisson process:</p>
       <div class="math-block">
         \[ P(T_1 > t) = P(N(t) = 0) = e^{-\lambda t} \]
@@ -494,10 +494,11 @@
         \[ P(T > s + t \mid T > s) = P(T > t) \]
       </div>
       <p>In other words, the remaining time until the next event does not depend on how long you have already been waiting. This is the only continuous distribution with this property — the continuous analogue of the geometric distribution (the only discrete one with the memoryless property).</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>How the simulator works, step by step</h2>
+      <details class="fold"><summary><h2>How the simulator works, step by step</h2></summary>
       <p>The three tabs use the same generator. The simulator does not draw "how many events there are" from a Poisson distribution: it builds the process event by event, from the waiting times, and lets the Poisson distribution emerge by itself.</p>
       <ol>
         <li><strong>The clock starts at t = 0.</strong></li>
@@ -512,10 +513,11 @@
         <li><strong>Inter-arrival times.</strong> It pools all the waiting times generated in all the repetitions and plots their histogram, on a density scale, next to the exponential curve λe<sup>−λt</sup>. The cards compare the mean (1/λ) and the median (ln 2/λ). The waiting time in progress when T is reached is also included; the reason is explained below.</li>
       </ul>
       <p>With the initial values, λ = 3 and T = 5, λT = 15 events are expected, with a standard deviation of √15 ≈ 3.9: it is normal to see paths with 11 or with 19 events. The exact number 15 only comes up about 10% of the time.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Where the formulas come from</h2>
+      <details class="fold"><summary><h2>Where the formulas come from</h2></summary>
       <h3>How an exponential time is generated</h3>
       <p>The computer only knows how to generate numbers U that are uniform between 0 and 1. To turn them into exponential times, the <strong>inverse transform method</strong> is used: set U equal to the exponential distribution function, \(F(t) = 1 - e^{-\lambda t}\), and solve for the time.</p>
       <div class="math-block">\[ U = 1 - e^{-\lambda W} \quad\Longrightarrow\quad W = -\frac{\ln(1-U)}{\lambda}. \]</div>
@@ -544,10 +546,11 @@
       <h3>The waiting-time paradox</h3>
       <p>A surprising consequence: if you arrive at an arbitrary time, the interval between events you land in lasts 2/λ on average, twice the usual length. There is no contradiction: it is easier to land in a long interval than in a short one, precisely because it takes up more time.</p>
       <p>This affects how times are measured on the third tab. The interval in progress when T is reached is one of those "long" intervals. If it were discarded for being incomplete, the sample would be biased towards short times (with λ = 3 and T = 5, the mean would come out 7% below 1/λ, and no time could exceed T). That is why the simulator includes it in full: with all the intervals that start before T, the mean and the histogram match those of the exponential.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Applications of the Poisson process</h2>
+      <details class="fold"><summary><h2>Applications of the Poisson process</h2></summary>
       <p>The Poisson process is the reference model for rare events, or events that arrive randomly at a constant rate. Some classic applications:</p>
       <ul>
         <li><strong>Queueing theory (M/M/1):</strong> customer arrivals at a service point (a bank, a counter, a web server) are frequently modeled with a Poisson process with rate λ. M/M/1 queues also assume that service times are exponential with rate μ. System stability requires ρ = λ/μ &lt; 1.</li>
@@ -557,10 +560,11 @@
         <li><strong>Epidemiology of rare diseases:</strong> the incidence of rare diseases in a population of size n, with small probability p of contracting it, can be approximated by Poisson(np).</li>
         <li><strong>Astronomy and particle physics:</strong> photons arriving at a detector, cosmic rays hitting a given area, or collisions in a particle accelerator.</li>
       </ul>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Generalizations of the Poisson process</h2>
+      <details class="fold"><summary><h2>Generalizations of the Poisson process</h2></summary>
       <p>The homogeneous Poisson process (constant rate λ) has several important generalizations:</p>
       <ul>
         <li><strong>Non-homogeneous Poisson process:</strong> the rate varies with time, \(\lambda(t)\). The expected number of events in \([0, T]\) is \(\int_0^T \lambda(t)\,dt\). Useful when the intensity of the process changes over the course of the day (e.g., phone calls: more frequent at noon than at 3 a.m.).</li>
@@ -569,6 +573,7 @@
         <li><strong>Hawkes process:</strong> a self-exciting Poisson process in which each event temporarily raises the future intensity. It models contagion phenomena (e.g., earthquake aftershocks, the spread of news on social media, orders in financial markets).</li>
         <li><strong>Marked Poisson process:</strong> a generalization in which each event carries a "mark" that can contain additional information (event type, spatial location, magnitude, etc.).</li>
       </ul>
+      </details>
     </section>
 
     <section class="card content-card faq-section">
@@ -1171,7 +1176,7 @@ function simulateTiempos() {
 }
 </script>
 <script src="../../field-hints.js?v=20260730-1"></script>
-<script src="../../theme.js?v=20261031-1"></script>
+<script src="../../theme.js?v=20261113-1"></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

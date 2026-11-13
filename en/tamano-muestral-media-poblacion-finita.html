@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -218,7 +218,7 @@
             <h3>Explanation</h3>
             <p>When you estimate a population mean and the total population size N is known and finite, the standard formula overestimates the sample needed. The <strong>finite population correction factor</strong> (FPC) takes advantage of the fact that sampling a large fraction of the population provides more information than the infinite formula predicts.</p>
             <p>The correction is relevant when n₀/N &gt; 5%. For example, for N = 1,000 and n₀ = 139, the sampling fraction is 13.9%, which justifies the correction. If N &gt; 10,000 and n₀ is small, the savings are minimal and you can use the <a href="tamano-muestral-una-media.html">standard formula for a mean</a>.</p>
-            <h3>Sample size formula</h3>
+            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
             <p class="formula-line">\( n_0 = \left(\frac{Z\,\sigma}{E}\right)^2 \)</p>
             <p class="formula-line">\( n = \frac{n_0}{1 + \dfrac{n_0-1}{N}} \)</p>
             <ul>
@@ -228,7 +228,8 @@
                 <li><strong>E</strong>: maximum tolerable absolute margin of error.</li>
                 <li><strong>N</strong>: known total population size.</li>
             </ul>
-            <h3>Quick setup</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>σ:</strong> obtain from historical data, a pilot study or the literature. If you don't have it, use range/4 as a conservative estimate.</li>
                 <li><strong>N:</strong> must be the exact, known count of the target population before sampling.</li>
@@ -236,7 +237,8 @@
                 <li><strong>Confidence level:</strong> 95% is the standard; 99% for critical decisions.</li>
                 <li><strong>Finite population correction:</strong> keep it on (default) when N is exact and known; turn it off to see the standard sample size, as if the population were infinite, and compare the savings the correction provides.</li>
             </ul>
-            <h3>Worked example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>The HR department of an industrial plant wants to estimate the average time operators spend on a specific assembly task. The plant has <strong>N = 1,200 workers</strong> on staff, an exactly known number, which makes the finite population correction mandatory.</p>
             <p>Previous ergonomic studies indicate that the standard deviation of task time is <strong>σ = 12 minutes</strong>. The methods engineer sets an acceptable margin of error of <strong>E = 2 minutes</strong> and works with a <strong>95%</strong> confidence level (z = 1.96).</p>
             <p>The first step is to calculate the sample size without correction, as if the population were infinite:</p>
@@ -245,23 +247,27 @@
             <p class="formula-line">\( n = \dfrac{n_0}{1 + \dfrac{n_0 - 1}{N}} = \dfrac{139}{1 + \dfrac{138}{1200}} = \dfrac{139}{1.115} \approx 124.7 \rightarrow \mathbf{125} \)</p>
             <p>The savings amount to 14 interviews compared with the uncorrected design. The sampling fraction is \( f \approx 125/1200 \approx 10.4\,\% \), large enough for the correction to be relevant (rule of thumb: correct whenever f &gt; 5%).</p>
             <p>With a sample of 125 randomly selected operators, it can be stated with 95% confidence that the estimated mean time does not deviate by more than ±2 minutes from the true mean time of the entire workforce. This result makes it possible to size cycle times and detect bottlenecks with sufficient precision for decision-making.</p>
-            <h3>Model assumptions</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Model assumptions</h3></summary>
             <ul>
                 <li>Simple random sampling without replacement from a population of exactly known size N.</li>
                 <li>The variable approximately follows a normal distribution, or n is large enough (CLT).</li>
                 <li>N is fixed and does not change during sampling.</li>
             </ul>
-            <h3>Common uses</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Common uses</h3></summary>
             <ul>
                 <li>Average task time in a specific plant or department.</li>
                 <li>Average spending of active customers in a loyalty program.</li>
                 <li>Average consumption in a closed community (building, campus, residence).</li>
                 <li>Inventory: average weight or value of items in a known warehouse.</li>
             </ul>
-            <h3>How to interpret the result</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
                 <p>The value \(n\) is the <strong>minimum sample size corrected for the finiteness of the population</strong> to estimate a mean with the specified margin of error \(E\) and confidence level. The finite population correction (FPC) reduces \(n\) relative to the infinite-population case: the larger the sampling fraction \(f = n/N\), the greater the savings. If \(f < 5\,\%\), the FPC is practically irrelevant (it reduces \(n\) by less than 5%) and the standard formula would be sufficient; if \(f > 20\,\%\), the savings are substantial and the correction is necessary to avoid oversizing the study.</p>
                 <p>It is essential that \(N\) represents the <strong>actual size of the target population</strong>, not the approximate sampling frame nor the general reference population. For example, if the study targets the employees of a specific company with 450 employees, \(N = 450\); using an inflated \(N\) (such as the workforce of every company in the sector) would eliminate the advantage of the correction. Run a sensitivity analysis testing \(N \pm 10\,\%\) to assess how much an imprecise estimate of the population size affects the resulting \(n\); with large populations the sensitivity is low, but with small populations it can be significant.</p>
                 <p>If you anticipate non-response or exclusion rates, calculate the recruitment \(n\) by dividing the corrected \(n\) by \((1 - \text{dropout rate})\), always verifying that the result does not exceed \(N\). If, after the adjustment, the required sample size exceeds 80% of the population, consider a <em>census</em> instead of sampling. Once the data has been collected, use the <a href="intervalo-confianza-media.html">confidence interval calculator for the mean</a>, also applying the FPC, to obtain the study's actual CI.</p>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -351,7 +357,7 @@ document.getElementById('finiteMeanCalculateBtn').addEventListener('click', calc
 calculateFiniteMeanSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

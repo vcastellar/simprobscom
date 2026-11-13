@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -262,7 +262,7 @@
             <p>The logic is that of any test. You start from the <strong>null hypothesis</strong> that the two population means are equal, \(H_0: \mu_1 = \mu_2\), and measure how far apart the sample means \(\bar{x}_1\) and \(\bar{x}_2\) are. Even if the populations had the same mean, two samples would never give exactly the same mean: the question is whether the observed difference is larger than sampling variation can reasonably explain. If it is, \(H_0\) is rejected in favour of the <strong>alternative hypothesis</strong>.</p>
             <p>This calculator uses <strong>Welch's</strong> version of the t-test, which does not require the two populations to have the same variance. It is the recommended default, as explained below.</p>
 
-            <h3>Hypotheses and test statistic</h3>
+            <details class="fold fold-sub"><summary><h3>Hypotheses and test statistic</h3></summary>
             <p class="formula-line">\(H_0: \mu_1 = \mu_2\) (that is, \(\mu_1 - \mu_2 = 0\))</p>
             <p class="formula-line">\(H_1: \mu_1 \neq \mu_2\), \(\mu_1 > \mu_2\) or \(\mu_1 < \mu_2\)</p>
             <p class="formula-line">\( t = \dfrac{\bar{x}_1 - \bar{x}_2}{\sqrt{\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}}} \)</p>
@@ -275,10 +275,11 @@
             <p>Under \(H_0\), the statistic approximately follows a Student's t distribution with the <strong>Welch-Satterthwaite</strong> degrees of freedom, which are usually not whole numbers:</p>
             <p class="formula-line">\( \nu = \dfrac{\left(s_1^2/n_1 + s_2^2/n_2\right)^2}{\dfrac{(s_1^2/n_1)^2}{n_1-1} + \dfrac{(s_2^2/n_2)^2}{n_2-1}} \)</p>
             <p>\(\nu\) always lies between the smaller of \(n_1-1\) and \(n_2-1\) and the sum \(n_1+n_2-2\). When the variances and sizes are similar, it gets close to \(n_1+n_2-2\); when one group is much more variable or much smaller than the other, it drops, and the test becomes more demanding.</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to carry out the test, step by step</h3>
+            <details class="fold"><summary><h3>How to carry out the test, step by step</h3></summary>
             <ol>
                 <li><strong>State the hypotheses</strong> before looking at the data and decide which group is 1 and which is 2: the difference is always computed as group 1 − group 2.</li>
                 <li><strong>Set the significance level</strong> \(\alpha\), usually 0.05.</li>
@@ -294,10 +295,11 @@
                 <li>If the p-value is greater than or equal to \(\alpha\), there is not enough evidence to reject \(H_0\).</li>
                 <li>Not rejecting \(H_0\) does not prove that the means are equal: the sample may be too small to detect the real difference.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Welch or Student's t with equal variances?</h3>
+            <details class="fold"><summary><h3>Welch or Student's t with equal variances?</h3></summary>
             <p>There are two classic versions of the independent two-sample t-test. <strong>Student's</strong> version assumes that both populations have the same variance and estimates it by combining both samples (pooled variance). <strong>Welch's</strong> version makes no such assumption: it uses each variance separately and corrects the degrees of freedom.</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -315,10 +317,11 @@
             </div>
             <p>That is why Welch is now recommended <strong>by default</strong>. When the variances are equal, hardly anything is lost; when they are not, especially if the smaller group is the more variable one, Student's version can go badly wrong. Nor is it a good idea to choose between them by first running a test of equal variances (such as the F test or Levene's test): that two-stage procedure does not control the type I error well.</p>
             <p>If you really do know the population standard deviations \(\sigma_1\) and \(\sigma_2\), which is rare, the appropriate test is the <strong>two-sample z-test</strong>. With large samples, z and Welch give practically the same result.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Two-tailed or one-tailed test?</h3>
+            <details class="fold"><summary><h3>Two-tailed or one-tailed test?</h3></summary>
             <div class="content-table-wrap">
                 <table class="content-table">
                     <thead>
@@ -332,10 +335,11 @@
                 </table>
             </div>
             <p>A one-tailed test is only justified if, before seeing the data, you are interested in just one direction and a difference in the other direction would not change any decision. Choosing the tail after seeing which way the means point doubles the real risk of a false positive. When in doubt, use the two-tailed test: it is what most journals and reviewers expect.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Assumptions of the test</h3>
+            <details class="fold"><summary><h3>Assumptions of the test</h3></summary>
             <ul>
                 <li><strong>Two independent groups</strong>: each individual belongs to only one group and there is no pairing between them. If you measure the same people twice (before and after), or form pairs, use the <a href="contraste-hipotesis-medias-apareadas.html">paired means test</a>.</li>
                 <li><strong>Independent observations within each group</strong>: this fails, for example, with students from the same class or patients from the same hospital analysed as if they were independent.</li>
@@ -343,10 +347,11 @@
                 <li><strong>Approximate normality in each group</strong>, or samples large enough for the means to be approximately normal by the <a href="simulaciones/teorema-central-limite.html">central limit theorem</a>. With 30 or more observations per group, this is usually enough unless the distributions are very skewed.</li>
             </ul>
             <p>The variances do not need to be equal, nor the groups the same size: Welch takes care of both. With small samples, it is worth checking normality (histogram or <a href="shapiro-wilk-normalidad.html">Shapiro-Wilk test</a>) and outliers, which can move a mean a lot. If the data are clearly skewed and there are few of them, the non-parametric alternative is the Mann-Whitney U test. To compare three or more groups, use <a href="anova.html">one-way ANOVA</a> instead of several pairwise tests.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example 1: two-tailed test</h3>
+            <details class="fold"><summary><h3>Worked example 1: two-tailed test</h3></summary>
             <p>Two treatments for lowering blood pressure are compared. With treatment A (group 1), \(n_1 = 30\) patients achieve a mean reduction of \(\bar{x}_1 = 82\) mmHg with \(s_1 = 12\); with B (group 2), \(n_2 = 28\) patients achieve \(\bar{x}_2 = 76\) mmHg with \(s_2 = 15\). We test \(H_0\colon \mu_1 = \mu_2\) against \(H_1\colon \mu_1 \neq \mu_2\) with \(\alpha = 0.05\).</p>
             <p>The standard error of the difference is:</p>
             <p class="formula-line">\( SE = \sqrt{\dfrac{12^2}{30} + \dfrac{15^2}{28}} = \sqrt{4.800 + 8.036} \approx 3.583 \)</p>
@@ -364,10 +369,11 @@
             <p>With \(\nu \approx 82.7\) degrees of freedom, the right-tailed critical value is \(t_{0.05;\,82.7} \approx 1.663\). Since \(t = 2.513 > 1.663\), <strong>\(H_0\) is rejected</strong>; the p-value is \(p \approx 0.0070\).</p>
             <p>Conclusion: there is statistical evidence that the new method achieves a higher mean grade. The difference is 6 points, just over half a standard deviation (\(d \approx 0.54\)), a moderate effect. Bear in mind that, because this is an observational study of groups that already existed, the difference could also be due to other differences between the students; only random assignment to the method would allow it to be attributed to the method with confidence.</p>
             <p><strong>In the calculator:</strong> x̄₁ = 78, x̄₂ = 72, s₁ = 10, s₂ = 12, n₁ = 40, n₂ = 45 and "Right-tailed (&gt;)".</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) means that, if both populations had the same mean, it would be very unlikely to observe a difference between the sample means as large as the one obtained. But significant is not the same as important: with large samples, tiny differences become significant. Always look at the observed difference, its confidence interval and the effect size.</p>
             <p><strong>Not rejecting \(H_0\)</strong> (p-value ≥ α) does not prove that the means are equal. It only shows that the data are compatible with equality, and perhaps also with relevant differences, as in example 1. If what you want to show is precisely that two treatments are equivalent, the correct approach is an <a href="contraste-hipotesis-no-inferioridad.html">equivalence or non-inferiority test</a>.</p>
             <p>In the calculator, the result shows the decision with the p-value, the t statistic with its Welch degrees of freedom and a sentence stating the conclusion. On the chart, the green area is the non-rejection region, the red areas are the critical regions and the amber line marks the observed statistic. Under "Calculation details" you will find the observed difference, the standard error, the critical value, the confidence interval (for the two-tailed test) and Cohen's d.</p>
@@ -382,10 +388,11 @@
 
             <h3>Effect size: Cohen's d</h3>
             <p>To express the difference on a scale that can be compared across studies, Cohen's d is used: \(d = (\bar{x}_1 - \bar{x}_2)/s_p\), where \(s_p\) is the pooled standard deviation of the two groups. As a rough guide, 0.2 is a small effect, 0.5 medium and 0.8 large. In example 1, \(d \approx 0.44\); in example 2, \(d \approx 0.54\).</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Common mistakes</h3>
+            <details class="fold"><summary><h3>Common mistakes</h3></summary>
             <ul>
                 <li><strong>Using this test with paired data</strong> (before and after in the same people). You lose the advantage of pairing and, usually, a lot of power.</li>
                 <li><strong>Concluding that two groups are equal</strong> because the test is not significant.</li>
@@ -394,6 +401,7 @@
                 <li><strong>Ignoring the direction of the subtraction</strong>: the right-tailed test checks whether group 1 has a higher mean than group 2, not the other way round.</li>
                 <li><strong>Attributing the difference to the cause under study</strong> without random assignment: in observational studies, the groups may differ in other ways.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -621,7 +629,7 @@ document.getElementById('calcTwoMeansBtn').addEventListener('click', calculateTw
 calculateTwoMeansTest();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

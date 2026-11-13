@@ -97,7 +97,7 @@
   }
   </script>
 
-  <link rel="stylesheet" href="style_new.css?v=20261107-1">
+  <link rel="stylesheet" href="style_new.css?v=20261113-1">
   <style>
     .mode-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
     .mode-tab {
@@ -299,7 +299,7 @@
       <p>donde \(\bar{p} = (p_A + p_B)/2\) es la proporción ponderada. Bajo la hipótesis alternativa \(H_1: p_B - p_A = \Delta\), el estadístico se distribuye aproximadamente como:</p>
       <p class="formula-line">\( Z \;\sim\; N\!\left(\delta,\; \sigma_1^2\right) \quad \text{donde} \quad \delta = \frac{\Delta\sqrt{n}}{\sqrt{2\bar{p}(1-\bar{p})}},\quad \sigma_1 = \sqrt{\frac{p_A(1-p_A) + p_B(1-p_B)}{2\bar{p}(1-\bar{p})}} \)</p>
 
-      <h3>Fórmulas de potencia</h3>
+      <details class="fold fold-sub"><summary><h3>Fórmulas de potencia</h3></summary>
       <ul>
         <li><strong>Bilateral</strong>:
           <p class="formula-line">\( 1-\beta \;=\; 1 - \Phi\!\left(\frac{z_{\alpha/2}\cdot\sqrt{2\bar{p}(1-\bar{p})} - \Delta\sqrt{n}}{\sqrt{p_A(1-p_A)+p_B(1-p_B)}}\right) + \Phi\!\left(\frac{-z_{\alpha/2}\cdot\sqrt{2\bar{p}(1-\bar{p})} - \Delta\sqrt{n}}{\sqrt{p_A(1-p_A)+p_B(1-p_B)}}\right) \)</p>
@@ -308,16 +308,19 @@
           <p class="formula-line">\( 1-\beta \;=\; 1 - \Phi\!\left(\frac{z_\alpha\cdot\sqrt{2\bar{p}(1-\bar{p})} - \Delta\sqrt{n}}{\sqrt{p_A(1-p_A)+p_B(1-p_B)}}\right) \)</p>
         </li>
       </ul>
+            </details>
 
-      <h3>Tamaño muestral por grupo</h3>
+      <details class="fold fold-sub"><summary><h3>Tamaño muestral por grupo</h3></summary>
       <p class="formula-line">\( n = \left\lceil \dfrac{\left(z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})} + z_{1-\beta}\sqrt{p_A(1-p_A)+p_B(1-p_B)}\right)^2}{\Delta^2} \right\rceil \)</p>
+            </details>
 
-      <h3>Diferencia mínima detectable (MDE)</h3>
+      <details class="fold fold-sub"><summary><h3>Diferencia mínima detectable (MDE)</h3></summary>
       <p>El MDE es la mínima \(|\Delta|\) que consigue la potencia objetivo con el n disponible. Se calcula por búsqueda binaria sobre \(\Delta\).</p>
+            </details>
     </section>
 
     <section class="card content-card">
-      <h3>Ejemplo resuelto</h3>
+      <details class="fold"><summary><h3>Ejemplo resuelto</h3></summary>
       <p>Un equipo de e-commerce quiere probar un nuevo flujo de pago (variante B) frente al actual (grupo A). La tasa de conversión de A es p_A = 0,12 y se espera que B mejore a p_B = 0,138 (+15 % relativo). Se diseña el experimento con α = 0,05, contraste bilateral y n = 1 500 usuarios por grupo.</p>
 
       <p><strong>Parámetros auxiliares:</strong></p>
@@ -330,10 +333,11 @@
 
       <p>Con n = 1 500 por grupo y un lift del 15 %, la potencia es solo del <strong>≈ 31 %</strong>: el experimento está muy infrapotenciado para este efecto. Para alcanzar el 80 % de potencia se necesitarían aproximadamente <strong>5 443 usuarios por grupo</strong>.</p>
       <p>Esto ilustra un error habitual en A/B testing: lanzar experimentos sin dimensionar correctamente la muestra para detectar el efecto de interés.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h3>Cómo interpretar los resultados</h3>
+      <details class="fold"><summary><h3>Cómo interpretar los resultados</h3></summary>
 
       <h3>Potencia</h3>
       <p>Una potencia del 80 % significa que si la diferencia real es p_B − p_A, el test rechazará H₀ el 80 % de las veces. Por debajo del 70 %, el experimento tiene alta probabilidad de no detectar efectos reales. Por encima del 90 %, el diseño es muy conservador: quizás puedes reducir la duración del experimento.</p>
@@ -351,6 +355,7 @@
         <li>Con tráfico limitado, aumenta el efecto mínimo de interés o alarga la duración en lugar de bajar α.</li>
         <li>Para dimensionado completo (sample size, potencia y MDE a la vez), usa la <a href="ab-testing-potencia.html">calculadora completa de potencia A/B</a>.</li>
       </ul>
+      </details>
     </section>
 
     <section id="seo-support-content" class="card content-card">
@@ -658,7 +663,7 @@ doPower();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

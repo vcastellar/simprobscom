@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -215,7 +215,7 @@
             <h3>Explanation</h3>
             <p>When the population size N is known and finite, Cochran's standard formula overestimates the required sample size. The <strong>finite population correction factor</strong> (FPC) corrects this: the larger the sampling fraction n₀/N, the greater the reduction obtained.</p>
             <p>The correction is significant when the uncorrected sample represents more than 5% of the total population (n₀/N &gt; 0.05). If N is very large (for example, &gt; 100,000) and n₀/N &lt; 5%, the correction practically doesn't change the result and you can use the <a href="tamano-muestral-una-proporcion.html">standard formula for a proportion</a>.</p>
-            <h3>Sample size formula</h3>
+            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
             <p class="formula-line">\( n_0 = \frac{Z^2\,p(1-p)}{E^2} \)</p>
             <p class="formula-line">\( n = \frac{n_0}{1 + \dfrac{n_0-1}{N}} \)</p>
             <ul>
@@ -225,16 +225,19 @@
                 <li><strong>E</strong>: maximum absolute margin of error.</li>
                 <li><strong>N</strong>: known total population size.</li>
             </ul>
-            <h3>Effect of the correction factor</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Effect of the correction factor</h3></summary>
             <p>The FPC is \(\sqrt{(N-n)/(N-1)}\). For N = 500 and n₀ = 217, the correction reduces the sample to 145 (a 33% reduction). For N = 10,000 and n₀ = 385, it drops to 369 (less than a 5% reduction). The gain is larger the smaller N is and the larger n₀/N is.</p>
-            <h3>Quick setup</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>p:</strong> if you don't know the proportion, use 0.5 (conservative scenario).</li>
                 <li><strong>N:</strong> must be the real, known count of the population. If N is not well defined, use the uncorrected calculator.</li>
                 <li><strong>E:</strong> 0.05 (±5%) is common in organizational surveys; 0.03 if you need more precision.</li>
                 <li><strong>Confidence level:</strong> 95% is the standard.</li>
             </ul>
-            <h3>Worked example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>The People department of a services company wants to measure the proportion of employees satisfied with the internal training plan. The company has <strong>N = 2,000 employees</strong> on payroll, an exactly known and closed census, which makes it possible — and worthwhile — to apply the finite population correction.</p>
             <p>There is no historical satisfaction data, so the most conservative estimate is adopted: <strong>p = 0.5</strong> (maximum variance, which oversizes the sample). The acceptable margin of error is <strong>E = 0.05</strong> (±5 percentage points) with a <strong>95%</strong> confidence level (z = 1.96).</p>
             <p>First, the sample size without correction is calculated using Cochran's formula:</p>
@@ -243,23 +246,27 @@
             <p class="formula-line">\( n = \dfrac{n_0}{1 + \dfrac{n_0 - 1}{N}} = \dfrac{385}{1 + \dfrac{384}{2000}} = \dfrac{385}{1.192} \approx 322.9 \rightarrow \mathbf{323} \)</p>
             <p>The correction reduces the sample from 385 to <strong>323 surveys</strong>, a savings of 62 interviews (≈ 16%). The sampling fraction is \( f = 323/2000 \approx 16.2\,\% \), clearly above the 5% threshold above which the correction is recommended.</p>
             <p>With the 323 surveys completed by randomly selected employees, it can be stated with 95% confidence that the true proportion of satisfied employees does not deviate by more than ±5 percentage points from the observed sample value. If greater precision is desired — for example, ±3 pp — the corrected sample would rise to approximately 638 employees.</p>
-            <h3>Model assumptions</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Model assumptions</h3></summary>
             <ul>
                 <li>Simple random sampling without replacement from a population of known size N.</li>
                 <li>N is a fixed and well-defined number before sampling.</li>
                 <li>The normal approximation is valid for n·p ≥ 5 and n·(1−p) ≥ 5.</li>
             </ul>
-            <h3>Common uses</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Common uses</h3></summary>
             <ul>
                 <li>Surveys of company or institution staff.</li>
                 <li>Studies of students or patients at a specific center.</li>
                 <li>Audits of client, supplier or closed record portfolios.</li>
                 <li>Quality control on batches or inventories of known size.</li>
             </ul>
-            <h3>How to interpret the result</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
                 <p>The value \(n\) is the <strong>minimum sample size corrected for finite population</strong> to estimate a proportion with the specified margin of error \(E\) and confidence level. The finite population correction reduces \(n\) relative to the standard formula for infinite populations: if the sampling fraction \(f = n/N < 5\,\%\), the reduction is practically negligible; if \(f > 20\,\%\), the savings are substantial and the correction is necessary to avoid recruiting more individuals than needed. In extreme cases (\(f > 50\,\%\)), consider whether it would be more efficient to conduct a full census.</p>
                 <p>The proportion \(p\) remains the most uncertain parameter. If you have no prior information, use \(p = 0.5\) (conservative scenario). It is essential that \(N\) represents the <strong>actual, verified size of the target population</strong>: if you are studying satisfaction among the active customers of a business with 800 active accounts, \(N = 800\). Using an approximate or incorrect \(N\) eliminates the advantage of the FPC. Run a sensitivity analysis varying \(p\) by ±0.10 and \(N\) by ±10% to see how \(n\) changes; when \(N\) is large, the FPC is insensitive to small errors in \(N\), but with a small \(N\) it can be significant.</p>
                 <p>If you anticipate non-response rates, calculate the number of individuals to contact as \(\lceil n / (1 - \text{non-response rate}) \rceil\), verifying that the total does not exceed \(N\). Once the data has been collected, build the actual confidence interval with the <a href="intervalo-confianza-proporcion.html">CI calculator for a proportion</a>; if the sampling fraction was significant (\(f > 5\,\%\)), also apply the FPC in the CI calculation to obtain a more precise estimate.</p>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -340,7 +347,7 @@ document.getElementById('finitePropCalculateBtn').addEventListener('click', calc
 calculateFinitePropSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

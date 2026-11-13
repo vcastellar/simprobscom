@@ -49,7 +49,7 @@
     ]
   }
   </script>
-  <link rel="stylesheet" href="../style_new.css?v=20261107-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261113-1">
   <style>
     .mode-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
     .mode-tab {
@@ -316,31 +316,36 @@
       <h3>Key concepts before you start</h3>
       <p>These three parameters control the balance between risk, resources, and sensitivity of the experiment. Understanding them is essential to interpreting any result.</p>
 
-      <h3>Significance level α — risk of a false positive</h3>
+      <details class="fold fold-sub"><summary><h3>Significance level α — risk of a false positive</h3></summary>
       <p>This is the probability of concluding that B is better than A when in reality <em>there is no difference</em>. With α = 0.05, one in every 20 experiments where no real effect exists will produce a "statistically significant" result by pure chance. <strong>Lowering α</strong> reduces false positives, but requires a larger sample to maintain power.</p>
+            </details>
 
-      <h3>Statistical power 1−β — ability to detect a real effect</h3>
+      <details class="fold fold-sub"><summary><h3>Statistical power 1−β — ability to detect a real effect</h3></summary>
       <p>This is the probability of <em>actually</em> detecting the difference when it truly exists. With power = 80% and a real effect equal to the one you specified, the experiment will correctly detect it 8 out of 10 times. The remaining 20% are <strong>false negatives</strong> (β): the effect exists but the test doesn't see it. For critical decisions, it's worth raising power to 90% or more.</p>
+            </details>
 
-      <h3>MDE — minimum detectable effect</h3>
+      <details class="fold fold-sub"><summary><h3>MDE — minimum detectable effect</h3></summary>
       <p>This is the smallest absolute difference between p_A and p_B that the experiment can detect at the configured power and α. If the true effect is smaller than the MDE, the test will probably not detect it, even if it exists. The MDE depends directly on n: <strong>the larger the sample, the smaller the MDE</strong>, and therefore the greater the sensitivity.</p>
+            </details>
 
-      <h3>Baseline rate p_A and expected rate p_B</h3>
+      <details class="fold fold-sub"><summary><h3>Baseline rate p_A and expected rate p_B</h3></summary>
       <p>p_A is the current conversion rate of the control group (for example, 12% clicks → 0.12). p_B is the rate you expect, or the minimum improvement you would care to detect in the variant. The difference \(\Delta = p_B - p_A\) is the effect of the experiment.</p>
+            </details>
 
-      <h3>Formulas used</h3>
+      <details class="fold fold-sub"><summary><h3>Formulas used</h3></summary>
       <p>For a comparison of two proportions with 1:1 allocation, the required sample size per group is:</p>
       <p class="formula-line">\( n = \left\lceil \dfrac{\left(z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})} + z_\beta\sqrt{p_A(1-p_A)+p_B(1-p_B)}\right)^2}{(p_A - p_B)^2} \right\rceil \)</p>
       <p>where \(\bar{p} = (p_A + p_B)/2\), \(z_{\alpha/2}\) is the normal quantile for the two-tailed significance level (or \(z_{\alpha}\) for one-tailed) and \(z_{1-\beta}\) is the quantile for the desired power.</p>
       <p>The power given n is obtained with the equivalent normal approximation; for a two-tailed test both rejection tails are added:</p>
       <p class="formula-line">\( 1-\beta \approx P\!\left(\hat{p}_B-\hat{p}_A > z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})/n}\right) + P\!\left(\hat{p}_B-\hat{p}_A < -z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})/n}\right) \)</p>
       <p>The <strong>MDE</strong> is obtained by binary search over the effect that achieves the target power with the available n.</p>
+            </details>
     </section>
 
 
 
         <section class="card content-card">
-            <h3>Worked example</h3>
+            <details class="fold"><summary><h3>Worked example</h3></summary>
             <p>An e-commerce team wants to test a new, simplified checkout flow (variant B) against the current flow (variant A). The current conversion rate is <strong>12%</strong>, and the team feels the change is only worth implementing if it improves conversion by at least 2 percentage points, i.e., the target rate for B is <strong>14%</strong>. The experiment is designed with two-tailed α = 0.05 and 80% power (β = 0.20).</p>
             <p>The auxiliary parameters are calculated. The weighted average of both rates is \( \bar{p} = (0.12 + 0.14)/2 = 0.13 \). The required quantiles are \( z_{\alpha/2} = z_{0.025} = 1.960 \) and \( z_{1-\beta} = z_{0.80} = 0.842 \). The sample size formula per group is:</p>
             <p class="formula-line">\( n = \left\lceil \dfrac{\left(z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})} + z_\beta\sqrt{p_A(1-p_A)+p_B(1-p_B)}\right)^2}{(p_A - p_B)^2} \right\rceil \)</p>
@@ -348,10 +353,11 @@
             <p class="formula-line">\( n = \left\lceil \dfrac{\left(1.960\,\sqrt{2 \times 0.13 \times 0.87} + 0.842\,\sqrt{0.12 \times 0.88 + 0.14 \times 0.86}\right)^2}{(0.12 - 0.14)^2} \right\rceil \)</p>
             <p class="formula-line">\( = \left\lceil \dfrac{\left(1.960 \times 0.4757 + 0.842 \times 0.4754\right)^2}{0.0004} \right\rceil = \left\lceil \dfrac{(0.9324 + 0.4003)^2}{0.0004} \right\rceil = \left\lceil \dfrac{(1.3327)^2}{0.0004} \right\rceil \approx \mathbf{4{,}438} \text{ per group} \)</p>
             <p>The experiment requires approximately <strong>4,438 users per group</strong> (8,876 in total). If the site receives 3,000 visits per day and 50% is allocated to the experiment, it would take about 6 days to accumulate the necessary traffic. With a real conversion rate for B of 14%, the probability of detecting the improvement is 80%; if the real improvement is larger (e.g., 15%), the effective power would exceed 95%.</p>
+      </details>
         </section>
 
     <section class="card content-card">
-      <h3>How to interpret the result</h3>
+      <details class="fold"><summary><h3>How to interpret the result</h3></summary>
       <p>Depending on the selected mode, the calculator returns one of the three key metrics of experimental design. Each answers a different question and must be read differently.</p>
 
       <h3>Mode: Sample size</h3>
@@ -374,6 +380,7 @@
         <li>The relative MDE is usually more relevant than the absolute one: a 10% MDE over a 5% baseline rate corresponds to p_B = 0.055, a difference of only 0.5pp.</li>
         <li>With limited traffic, accept detecting only larger effects (higher MDE) or extend the duration of the experiment instead of lowering α to compensate.</li>
       </ul>
+      </details>
     </section>
 
     <section id="seo-support-content" class="card content-card">
@@ -630,7 +637,7 @@ document.getElementById('calcMDEBtn').addEventListener('click', calcMDE);
 calcSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

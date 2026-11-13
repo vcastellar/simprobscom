@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261105-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -193,10 +193,10 @@
                         <div class="form-group">
                             <label for="method">Método <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
                             <select id="method">
-                                <option value="both" selected>Comparar (Wilson, Wald y Clopper-Pearson)</option>
-                                <option value="wald">Solo Wald</option>
-                                <option value="wilson">Solo Wilson</option>
-                                <option value="clopper">Solo Clopper-Pearson (exacto)</option>
+                                <option value="wilson" selected>Wilson</option>
+                                <option value="wald">Wald</option>
+                                <option value="clopper">Clopper-Pearson (exacto)</option>
+                                <option value="both">Comparar los tres</option>
                             </select>
                             <p class="field-hint" hidden><strong>Wilson</strong> es el método recomendado por defecto: mantiene mejor la cobertura real con muestras pequeñas o proporciones extremas. <strong>Wald</strong> es más simple pero puede fallar cuando hay pocos éxitos o fracasos. <strong>Clopper-Pearson</strong> usa la binomial exacta y garantiza que la cobertura no baje del nivel elegido, a cambio de intervalos algo más anchos.</p>
                         </div>
@@ -232,30 +232,33 @@
 
             <p>Denotamos por \(C\) el nivel de confianza y por \(\alpha=1-C\) el área total fuera del intervalo. Para un 95 % de confianza, \(C=0{,}95\), \(\alpha=0{,}05\) y \(\alpha/2=0{,}025\) en cada cola.</p>
 
-            <h3>Método de Wald (aproximación normal)</h3>
+            <details class="fold fold-sub"><summary><h3>Método de Wald (aproximación normal)</h3></summary>
             <p>Wald aplica directamente la aproximación normal a la proporción muestral \(\hat{p}\). Es el intervalo más sencillo y el más fácil de calcular a mano:</p>
             <p class="formula-line">\( \hat{p} \pm z_{\alpha/2} \cdot \sqrt{\dfrac{\hat{p}(1-\hat{p})}{n}} \)</p>
             <p>Funciona razonablemente bien cuando la muestra es grande y la proporción no está cerca de 0 ni de 1. Como regla práctica, conviene exigir \(n\hat{p} \geq 5\) y \(n(1-\hat{p}) \geq 5\), aunque con muestras moderadas esta regla no siempre garantiza una cobertura real buena.</p>
             <p>Su principal limitación es que centra el intervalo exactamente en \(\hat{p}\) y usa un error estándar estimado solo con \(\hat{p}\). Por eso puede producir límites por debajo de 0 o por encima de 1, y puede subestimar la incertidumbre cuando hay pocos éxitos, pocos fracasos o proporciones extremas.</p>
+            </details>
 
-            <h3>Método de Wilson (score, recomendado)</h3>
+            <details class="fold fold-sub"><summary><h3>Método de Wilson (score, recomendado)</h3></summary>
             <p>Wilson parte del contraste score para una proporción y resuelve qué valores de \(p\) serían compatibles con los datos. No se limita a sumar y restar el mismo margen alrededor de \(\hat{p}\); el centro del intervalo se desplaza ligeramente hacia valores menos extremos y los límites quedan dentro de \([0,1]\).</p>
             <p class="formula-line">\( \dfrac{\hat{p} + \dfrac{z^2}{2n} \pm z\sqrt{\dfrac{\hat{p}(1-\hat{p})}{n} + \dfrac{z^2}{4n^2}}}{1 + \dfrac{z^2}{n}} \)</p>
             <p>Wilson suele recomendarse porque mantiene mejor la cobertura real del nivel de confianza, especialmente con muestras pequeñas o proporciones cercanas a 0 o 1. También maneja correctamente casos extremos como \(x=0\) o \(x=n\), donde Wald puede dar intervalos degenerados o poco informativos.</p>
+            </details>
 
-            <h3>Ejemplo resuelto</h3>
+            <details class="fold fold-sub"><summary><h3>Ejemplo resuelto</h3></summary>
             <p>En una encuesta a 200 clientes, 134 declaran estar satisfechos. \(\hat{p} = 134/200 = 0{,}67\). Con 95 % de confianza (\(C=0{,}95\), \(\alpha=0{,}05\), \(z_{0{,}025}=1{,}960\)):</p>
             <p>Con Wald, el error estándar es \(\sqrt{0{,}67\cdot0{,}33/200}\approx0{,}03325\), y el intervalo queda:</p>
             <p class="formula-line">\( 0{,}67 \pm 1{,}960 \cdot 0{,}03325 \approx [0{,}605,\; 0{,}735] \)</p>
             <p>Con Wilson, aplicando la fórmula score al mismo \(x=134\), \(n=200\) y \(z=1{,}960\), se obtiene:</p>
             <p class="formula-line">\( IC_{Wilson} \approx [0{,}602,\;0{,}731] \)</p>
             <p>En este ejemplo ambos métodos son parecidos porque la muestra es grande y la proporción no es extrema. Si hubiéramos observado muy pocos éxitos, muy pocos fracasos o una muestra pequeña, la diferencia sería mayor y Wilson sería la opción más fiable.</p>
+            </details>
         </section>
 
 
 
         <section class="card content-card" id="clopper-pearson">
-            <h3>Método de Clopper-Pearson (exacto)</h3>
+            <details class="fold"><summary><h3>Método de Clopper-Pearson (exacto)</h3></summary>
             <p>Wald y Wilson se apoyan en la aproximación normal de \(\hat{p}\). Clopper y Pearson (1934) propusieron no aproximar nada: el número de éxitos \(X\) sigue exactamente una binomial \(B(n, p)\), y el intervalo se construye con esa distribución. Por eso se le llama <strong>exacto</strong>.</p>
 
             <h4>En qué consiste</h4>
@@ -305,20 +308,22 @@
                 </table>
             </div>
             <p>Promediando sobre todos los valores de \(p\) con \(n = 20\), Wald cubre un 85 %, Wilson un 95 % y Clopper-Pearson un 98 %. Wilson acierta de media, pero para algunos valores de \(p\) baja hasta cerca del 89 %; Clopper-Pearson nunca baja del 95 %, a cambio de pasarse casi siempre. Puedes verlo con muestras simuladas en el <a href="simulaciones/simulador-intervalos-confianza.html?mode=prop&amp;method=clopper&amp;p=0.05&amp;n=20&amp;conf=0.95">simulador de intervalos de confianza</a>.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Supuestos para el IC de una proporción</h3>
+            <details class="fold"><summary><h3>Supuestos para el IC de una proporción</h3></summary>
             <ul>
                 <li>Los datos deben proceder de ensayos Bernoulli: cada observación se clasifica como éxito o fracaso.</li>
                 <li>Las observaciones deben ser independientes; si se muestrea sin reemplazo en una población finita, la muestra debería ser pequeña respecto a la población o aplicarse una corrección específica.</li>
                 <li>La probabilidad de éxito debe ser la misma para todas las observaciones dentro del grupo analizado.</li>
                 <li>Para Wald se necesitan suficientes éxitos y fracasos: \(n\hat p\ge 5\) y \(n(1-\hat p)\ge 5\). Wilson es más fiable cuando esta condición es dudosa.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Diferencias entre Wald, Wilson y Clopper-Pearson</h3>
+            <details class="fold"><summary><h3>Diferencias entre Wald, Wilson y Clopper-Pearson</h3></summary>
             <div class="content-table-wrap">
                 <table class="content-table compare-table">
                     <thead>
@@ -358,10 +363,11 @@
                 </table>
             </div>
             <p>En resumen: Wald es útil como aproximación didáctica y rápida; Wilson es preferible como resultado principal porque respeta mejor la naturaleza binomial de los datos y evita límites imposibles. Clopper-Pearson es la opción prudente: nunca cubre menos de lo prometido, aunque sus intervalos son algo más anchos.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>¿Cuándo usar cada método?</h3>
+            <details class="fold"><summary><h3>¿Cuándo usar cada método?</h3></summary>
             <ul>
                 <li><strong>Usa Wilson por defecto</strong> si quieres un intervalo robusto para la mayoría de situaciones.</li>
                 <li><strong>Usa Wald</strong> solo como aproximación rápida cuando \(n\) es grande y hay suficientes éxitos y fracasos.</li>
@@ -369,10 +375,11 @@
                 <li><strong>Usa Clopper-Pearson</strong> si necesitas la garantía de que la cobertura real no baje del nivel nominal, aunque el intervalo salga algo más ancho.</li>
                 <li><strong>Compara los métodos</strong> si estás en una zona intermedia: si difieren mucho, interpreta Wald con cautela y prioriza Wilson o Clopper-Pearson.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p>El intervalo \([L, U]\) es el rango de valores de la proporción poblacional \(p\) compatibles con los datos observados al nivel de confianza elegido. En términos frecuentistas: si repitieras el muestreo muchas veces y construyeras el IC con el mismo método, una proporción \(C\) de esos intervalos contendría el verdadero valor de \(p\). La amplitud depende del tamaño muestral \(n\) y de la propia proporción estimada \(\hat{p}\): la variabilidad es máxima cuando \(\hat{p} = 0{,}5\) y decrece al alejarse de ese valor. En el gráfico, la región verde bajo la curva normal estándar es la zona de confianza y las colas rojas (área \(\alpha/2\) cada una) delimitan los valores críticos \(\pm z_{\alpha/2}\).</p>
             <p>Para reducir la amplitud del intervalo a la mitad manteniendo el mismo nivel de confianza, necesitas cuadruplicar el tamaño muestral, ya que el margen de error es proporcional a \(1/\sqrt{n}\). Aumentar la confianza del 95 % al 99 % amplía el intervalo porque \(z_{0{,}005} = 2{,}576 > z_{0{,}025} = 1{,}960\); es decir, exigir más certeza tiene el coste de una estimación menos precisa.</p>
             <ul>
@@ -380,6 +387,7 @@
                 <li><strong>Conexión con el contraste:</strong> si un valor de referencia \(p_0\) queda fuera del intervalo, los datos rechazarían \(H_0\!: p = p_0\) al nivel \(\alpha = 1 - C\) en el contraste bilateral equivalente. Si \(p_0\) queda dentro, no hay evidencia suficiente para rechazarlo.</li>
                 <li><strong>Relevancia práctica:</strong> un IC muy estrecho indica alta precisión, pero recuerda que la precisión estadística y la relevancia práctica son conceptos distintos. Un intervalo del 67 % al 68 % es muy preciso pero podría ser irrelevante en contextos donde solo importa superar el 70 %.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -551,7 +559,7 @@ calculate();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

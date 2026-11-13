@@ -146,7 +146,7 @@
   ]
 }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -271,7 +271,7 @@
             <p>The idea is very simple: for each pair you compute the difference \(d_i = x_{i1} - x_{i2}\), and the problem becomes a <a href="contraste-hipotesis-una-media.html">one-mean test</a> on those differences. If the intervention has no effect, the differences should hover around 0; if their mean moves away from 0 by more than chance can explain, you conclude that there is a systematic change.</p>
             <p>The great advantage of the paired design is that <strong>each subject acts as their own control</strong>. Differences between people (some have high blood pressure, others low; some students get better grades than others) disappear when you subtract, and only the variability of the change remains. That is why, with the same number of subjects, it can usually detect much smaller effects than a comparison of two independent groups.</p>
 
-            <h3>Hypotheses and test statistic</h3>
+            <details class="fold fold-sub"><summary><h3>Hypotheses and test statistic</h3></summary>
             <p class="formula-line">\(H_0: \mu_d = \mu_{d0}\)</p>
             <p class="formula-line">\(H_1: \mu_d \neq \mu_{d0}\), \(\mu_d > \mu_{d0}\) or \(\mu_d &lt; \mu_{d0}\)</p>
             <p class="formula-line">\( t = \dfrac{\bar{d} - \mu_{d0}}{s_d / \sqrt{n}}, \quad df = n - 1 \)</p>
@@ -283,10 +283,11 @@
             </ul>
             <p>The denominator \(s_d/\sqrt{n}\) is the standard error of the mean difference. The statistic measures how many standard errors \(\bar{d}\) lies from the value under \(H_0\) and, if \(H_0\) is true, follows a Student's t distribution with \(n-1\) degrees of freedom.</p>
             <p>Note that the sign depends on the order of the subtraction. If you compute "before − after", a reduction gives positive differences; if you compute "after − before", negative ones. Decide the order before you start and choose the tail of the test accordingly.</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to carry out the test, step by step</h3>
+            <details class="fold"><summary><h3>How to carry out the test, step by step</h3></summary>
             <ol>
                 <li><strong>Compute the difference for each pair</strong>, always in the same order.</li>
                 <li><strong>Compute the mean \(\bar{d}\) and the standard deviation \(s_d\)</strong> of the differences. These are the two values the calculator asks for, together with the number of pairs.</li>
@@ -301,29 +302,32 @@
                 <li>If the p-value is greater than or equal to \(\alpha\), there is not enough evidence to reject \(H_0\).</li>
                 <li>A non-significant result does not prove that there is no change; it may be due to low power.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Why is the paired design more powerful?</h3>
+            <details class="fold"><summary><h3>Why is the paired design more powerful?</h3></summary>
             <p>The variance of a difference between two measurements is</p>
             <p class="formula-line">\( \sigma_d^2 = \sigma_1^2 + \sigma_2^2 - 2\rho\,\sigma_1\sigma_2 \)</p>
             <p>where \(\rho\) is the correlation between the two measurements in each pair. When the measurements of the same subject are similar (positive \(\rho\), the usual case), the term \(2\rho\sigma_1\sigma_2\) is subtracted, and the differences vary much less than the original data. A smaller standard error means a larger statistic for the same difference, that is, more power.</p>
             <p>Example 2 below shows it with numbers: with the same 8 students, the paired test gives \(p \approx 0.0005\); if the data were analysed as if they were two independent groups, the p-value would be 0.14 and nothing would be detected. That is why it is a mistake to analyse paired data with the independent two-sample test.</p>
             <p>The flip side is that, in a before-and-after design without a control group, a significant change does not prove that the intervention caused it: the passage of time, practice with the test or regression to the mean may have played a part. Whenever possible, it is worth comparing with a control group.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Assumptions of the test</h3>
+            <details class="fold"><summary><h3>Assumptions of the test</h3></summary>
             <ul>
                 <li><strong>Paired data</strong>: each measurement in one condition has its partner in the other. If the groups are different people with no matching, use the <a href="contraste-hipotesis-dos-medias.html">independent two-sample test</a>.</li>
                 <li><strong>Pairs independent of each other</strong>: the two measurements of a pair are related, but one pair must not influence another.</li>
                 <li><strong>Approximate normality of the differences</strong> (not of the original data), or a number of pairs large enough, around 30 or more, for the central limit theorem to do its job.</li>
             </ul>
             <p>With few pairs, check the differences with a histogram or the <a href="shapiro-wilk-normalidad.html">Shapiro-Wilk test</a> and look for outliers: a single pair with an extreme change can drag \(\bar{d}\) and inflate \(s_d\). If the differences are clearly skewed and there are few of them, the non-parametric alternative is the Wilcoxon signed-rank test.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example 1: two-tailed test</h3>
+            <details class="fold"><summary><h3>Worked example 1: two-tailed test</h3></summary>
             <p>Systolic blood pressure is measured in 25 patients before and after a treatment. The mean of the differences (before − after) is \(\bar{d} = 2.5\) mmHg with standard deviation \(s_d = 8\) mmHg. We test \(H_0\colon \mu_d = 0\) against \(H_1\colon \mu_d \neq 0\) with \(\alpha = 0.05\).</p>
             <p class="formula-line">\( t = \dfrac{2.5 - 0}{8 / \sqrt{25}} = \dfrac{2.5}{1.6} = 1.5625 \)</p>
             <p>With \(df = 24\), the two-tailed critical value is \(t_{0.025;\,24} \approx 2.064\). Since \(|t| = 1.5625 < 2.064\), the p-value is \(p \approx 0.131 > 0.05\): <strong>\(H_0\) is not rejected</strong>.</p>
@@ -349,10 +353,11 @@
             <p>With 7 degrees of freedom, the right-tailed critical value is \(t_{0.05;\,7} \approx 1.895\), and the p-value is \(p \approx 0.0005\). <strong>\(H_0\) is rejected</strong>: there is evidence that the mean grade rises after the course, by about 4 points.</p>
             <p>Compare this with what would have happened if the before and after grades had been treated as two independent groups: the standard deviations of the grades are 6.5 and 8.1 points, because the students are very different from each other, and Welch's test would give \(t \approx 1.13\) and \(p \approx 0.14\). Pairing removes that variability between students (the correlation between the two grades is 0.98), which is why the effect shows up so clearly.</p>
             <p><strong>In the calculator:</strong> d̄ = 4.125, s_d = 2.167, n = 8, μ_d0 = 0 and "Right tail (&gt;)".</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that the mean difference between the two measurements is incompatible with \(\mu_{d0}\): there is a systematic change. Its practical relevance depends on its size, so look at the mean difference and its confidence interval, and judge whether that change matters in your context.</p>
             <p><strong>Not rejecting \(H_0\)</strong> (p-value ≥ α) does not prove that there is no change. The most common mistake is to conclude "the treatment does not work" when the sample was too small to detect it, as in example 1.</p>
             <p>In the calculator, the result shows the decision with the p-value, the statistic with its degrees of freedom and a sentence stating the conclusion. On the chart, the green area is the non-rejection region, the red areas are the critical regions and the amber line marks the observed statistic. Under "Calculation details" you will find the observed difference, the standard error, the critical value, the confidence interval (for the two-tailed test) and the effect size.</p>
@@ -365,10 +370,11 @@
 
             <h3>Effect size</h3>
             <p>With paired data, the most common effect size is \(d_z = (\bar{d} - \mu_{d0})/s_d\), which expresses the mean difference in standard deviations of the differences. Be careful when comparing it with Cohen's d for two independent groups: \(d_z\) is usually much larger for the same change, because \(s_d\) is smaller than the standard deviation of the original data. In example 2, \(d_z \approx 1.90\).</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Common mistakes</h3>
+            <details class="fold"><summary><h3>Common mistakes</h3></summary>
             <ul>
                 <li><strong>Analysing paired data as two independent groups</strong>, losing almost all the advantage of the design.</li>
                 <li><strong>Entering the number of measurements instead of the number of pairs</strong>: with 25 patients measured twice, \(n = 25\).</li>
@@ -377,6 +383,7 @@
                 <li><strong>Attributing the change to the intervention</strong> in a before-and-after design without a control group.</li>
                 <li><strong>Concluding that there is no effect</strong> because the test is not significant.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -588,7 +595,7 @@ document.getElementById('calcBtn').addEventListener('click', calculate);
 calculate();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

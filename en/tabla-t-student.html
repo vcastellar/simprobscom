@@ -32,7 +32,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional"></noscript>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <style>
         .site-nav {
             position: sticky;
@@ -190,7 +190,7 @@
         html.dark-mode .dist-table tbody tr:nth-child(even) td:first-child { background:linear-gradient(rgba(96,165,250,0.16),rgba(96,165,250,0.16)),#1e293b; }
         html.dark-mode .dist-table tbody tr:hover td:first-child { background:linear-gradient(rgba(96,165,250,0.22),rgba(96,165,250,0.22)),#1e293b; }
         /* Bloque «Para qué sirve esta tabla» */
-        .table-uses { margin:4px 0 18px; padding:16px 20px; }
+        .table-uses { margin:22px 0 0; padding:16px 20px; }
         .table-uses h2 { font-size:1.05rem; margin:0 0 8px; }
         .table-uses ul { margin:0; padding-left:1.15rem; display:grid; gap:6px; font-size:0.92rem; line-height:1.5; }
         /* Sin mayúsculas: convertirían α, ν, λ y μ en A, N, Λ y M. */
@@ -327,15 +327,6 @@
     </header>
 
     <main>
-        <section class="card table-uses">
-            <h2>What this table is for</h2>
-            <ul>
-                <li><strong>Confidence intervals for the mean</strong> when σ is unknown: x̄ ± t·s/√n, with ν = n − 1 degrees of freedom. <a href="intervalo-confianza-media.html" data-goatcounter-click="tabla-t/ic-media" data-goatcounter-title="Compute the interval">Compute the interval</a>.</li>
-                <li><strong>t-tests:</strong> for <a href="contraste-hipotesis-una-media.html" data-goatcounter-click="tabla-t/contraste-media" data-goatcounter-title="one mean">one mean</a> (ν = n − 1), for <a href="contraste-hipotesis-medias-apareadas.html" data-goatcounter-click="tabla-t/contraste-apareadas" data-goatcounter-title="paired means">paired means</a> (ν = n − 1, with n pairs) and for <a href="contraste-hipotesis-dos-medias.html" data-goatcounter-click="tabla-t/contraste-dos-medias" data-goatcounter-title="two means">two means</a> (ν = n₁ + n₂ − 2 if the variances are equal).</li>
-                <li><strong>One or two tails:</strong> in a two-tailed test at 5%, the critical value is in the two-tailed α = 0.05 column, which is the same as the one-tailed α = 0.025 column.</li>
-            </ul>
-        </section>
-
         <section class="card" style="margin-top:4px;">
             <div class="tab-bar" role="tablist">
                 <button class="tab-btn active" role="tab" aria-selected="true"  onclick="switchTab('crit',this)">Critical values t<sub>α,ν</sub></button>
@@ -419,6 +410,15 @@
             </div>
         </section>
 
+        <section class="card table-uses">
+            <h2>What this table is for</h2>
+            <ul>
+                <li><strong>Confidence intervals for the mean</strong> when σ is unknown: x̄ ± t·s/√n, with ν = n − 1 degrees of freedom. <a href="intervalo-confianza-media.html" data-goatcounter-click="tabla-t/ic-media" data-goatcounter-title="Compute the interval">Compute the interval</a>.</li>
+                <li><strong>t-tests:</strong> for <a href="contraste-hipotesis-una-media.html" data-goatcounter-click="tabla-t/contraste-media" data-goatcounter-title="one mean">one mean</a> (ν = n − 1), for <a href="contraste-hipotesis-medias-apareadas.html" data-goatcounter-click="tabla-t/contraste-apareadas" data-goatcounter-title="paired means">paired means</a> (ν = n − 1, with n pairs) and for <a href="contraste-hipotesis-dos-medias.html" data-goatcounter-click="tabla-t/contraste-dos-medias" data-goatcounter-title="two means">two means</a> (ν = n₁ + n₂ − 2 if the variances are equal).</li>
+                <li><strong>One or two tails:</strong> in a two-tailed test at 5%, the critical value is in the two-tailed α = 0.05 column, which is the same as the one-tailed α = 0.025 column.</li>
+            </ul>
+        </section>
+
         <aside class="sim-callout" aria-label="Related simulation">
             <p class="sim-callout-kicker">Interactive simulation</p>
             <p class="sim-callout-text"><strong>Critical value, α and power</strong> The critical value marks the boundary of the rejection region, and the tail area beyond it is α, the type I error probability. In the simulator you can move α, the effect size and n, and see how the type II error and the power change.</p>
@@ -427,21 +427,24 @@
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
             <h3>How to use these tables</h3>
-            <h3>Student's t Distribution</h3>
+            <details class="fold fold-sub"><summary><h3>Student's t Distribution</h3></summary>
             <p>Student's t distribution with ν degrees of freedom has density function:</p>
             <p class="formula-line">\( f(t,\nu) = \dfrac{\Gamma\!\left(\tfrac{\nu+1}{2}\right)}{\sqrt{\nu\pi}\;\Gamma\!\left(\tfrac{\nu}{2}\right)} \left(1+\dfrac{t^2}{\nu}\right)^{-\frac{\nu+1}{2}} \)</p>
             <p>As ν → ∞ the distribution converges to the standard Normal N(0,1).</p>
+            </details>
 
-            <h3>Critical values table</h3>
+            <details class="fold fold-sub"><summary><h3>Critical values table</h3></summary>
             <p>Shows the critical values t for each degrees of freedom ν. The <em>Test type</em> selector decides how the columns are labelled:</p>
             <ul>
                 <li><strong>Two tails</strong> (default): each column is α = P(|T| &gt; t), the area split between both ends. This is what you need for a two-sided test or a confidence interval. Example: α = 0.05, ν = 20 → t = 2.086.</li>
                 <li><strong>One tail</strong>: each column is α = P(T &gt; t), the right-tail area, for one-sided tests. The same 2.086 appears in column α = 0.025, because α (two tails) = 2 × α (one tail).</li>
                 <li>When ν = ∞ the values match the quantiles of the standard Normal.</li>
             </ul>
+            </details>
 
-            <h3>Cumulative distribution table</h3>
+            <details class="fold fold-sub"><summary><h3>Cumulative distribution table</h3></summary>
             <p>Each cell shows P(T ≤ t) for the selected number of degrees of freedom. To compute two-tailed p-values: p = 2 · P(T &gt; |t<sub>obs</sub>|) = 2 · (1 − P(T ≤ |t<sub>obs</sub>|)).</p>
+            </details>
 
             <h3>Related tables and calculators</h3>
             <ul class="distribution-links">
@@ -709,7 +712,7 @@
 </script>
 <script src="../table-diagram.js?v=20261102-2"></script>
 <script src="../table-actions.js?v=20261103-3"></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

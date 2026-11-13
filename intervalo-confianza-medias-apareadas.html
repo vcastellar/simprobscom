@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261105-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
     {
@@ -214,7 +214,7 @@
             <p>Se usan muestras apareadas cuando hay una correspondencia natural unidad a unidad y esa correspondencia aporta información: el mismo paciente antes y después de un tratamiento, el mismo lote medido por dos métodos, o sujetos emparejados por edad, sexo u otra característica. En cambio, el <a href="intervalo-confianza-diferencia-medias.html">IC para diferencia de medias independientes</a> se usa cuando los grupos son distintos y no existe emparejamiento observación a observación.</p>
             <p>La clave es no tratar los grupos como independientes. Primero se calcula una diferencia individual para cada par, por ejemplo \(d_i = \text{después}_i - \text{antes}_i\). Después se construye un intervalo t para la media poblacional de esas diferencias, \(\mu_d\). Así se aprovecha la correlación dentro de cada par y se elimina parte de la variabilidad entre individuos.</p>
 
-            <h3>Fórmula</h3>
+            <details class="fold fold-sub"><summary><h3>Fórmula</h3></summary>
             <p>Denotamos por \(C\) el nivel de confianza y por \(\alpha=1-C\) el área total fuera del intervalo. Para un 95 % de confianza, \(C=0{,}95\), \(\alpha=0{,}05\) y \(\alpha/2=0{,}025\) en cada cola.</p>
             <p class="formula-line">\( \bar{d} \pm t_{\alpha/2,\, n-1}\cdot \dfrac{s_d}{\sqrt{n}} \)</p>
             <ul>
@@ -224,8 +224,9 @@
                 <li><strong>\(t_{\alpha/2,\,n-1}\)</strong>: valor crítico de la t de Student con \(n-1\) grados de libertad.</li>
             </ul>
             <p>El margen de error es \(E=t_{\alpha/2,\,n-1}s_d/\sqrt{n}\), y el intervalo es \([\bar{d}-E,\;\bar{d}+E]\).</p>
+            </details>
 
-            <h3>Ejemplo resuelto</h3>
+            <details class="fold fold-sub"><summary><h3>Ejemplo resuelto</h3></summary>
             <p>En 18 pacientes se mide una variable antes y después de una intervención, definiendo \(d=\text{después}-\text{antes}\). La media de las diferencias es \(\bar{d}=4{,}2\) y su desviación típica es \(s_d=6{,}1\). Es importante que \(s_d\) sea la desviación típica de las diferencias individuales, no la desviación típica de las mediciones antes ni de las mediciones después por separado.</p>
             <p>Para un 95 % de confianza se toma \(C=0{,}95\), por tanto \(\alpha=1-C=0{,}05\) y \(\alpha/2=0{,}025\). Con \(n=18\), los grados de libertad son \(gl=n-1=17\), y el valor crítico bilateral es aproximadamente \(t_{0{,}025,17}=2{,}110\).</p>
             <p>El error estándar de la media de las diferencias es:</p>
@@ -235,20 +236,22 @@
             <p>Por tanto, el intervalo de confianza queda:</p>
             <p class="formula-line">\( 4{,}2 \pm 3{,}03 \approx [1{,}17,\;7{,}23] \)</p>
             <p>Como el intervalo no incluye 0, el cambio medio es positivo al 95 % de confianza según la definición \(d=\text{después}-\text{antes}\). Si se hubiera definido \(d=\text{antes}-\text{después}\), los mismos datos producirían el intervalo con signo contrario.</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Supuestos para medias apareadas</h3>
+            <details class="fold"><summary><h3>Supuestos para medias apareadas</h3></summary>
             <ul>
                 <li>Los pares son independientes entre sí.</li>
                 <li>La distribución de las diferencias es aproximadamente normal, especialmente importante con pocos pares.</li>
                 <li>El 0 es el valor nulo: si el IC incluye 0, los datos son compatibles con ausencia de cambio medio.</li>
                 <li>El signo depende de cómo definas la diferencia. Si cambias de \(\text{después}-\text{antes}\) a \(\text{antes}-\text{después}\), el intervalo cambia de signo.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>¿En qué se diferencia del IC para diferencia de medias independientes?</h3>
+            <details class="fold"><summary><h3>¿En qué se diferencia del IC para diferencia de medias independientes?</h3></summary>
             <p>En muestras independientes se comparan dos grupos distintos y la variabilidad depende de \(s_1\), \(s_2\), \(n_1\) y \(n_2\). En medias apareadas, cada par se resume en una sola diferencia \(d_i\), y la variabilidad relevante es \(s_d\).</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -277,10 +280,11 @@
                 </table>
             </div>
             <p>Ignorar el apareamiento suele perder información: si las mediciones dentro de cada par están correlacionadas, analizar las diferencias puede reducir mucho el error estándar.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p>El intervalo \([L, U]\) es el rango plausible para la media poblacional de las diferencias individuales \(\mu_d\) al nivel de confianza elegido. Recuerda que \(\mu_d\) no es la diferencia de dos medias independientes, sino la media del cambio dentro de cada par: el mismo parámetro que mediría, de promediarse, todos los cambios individuales posibles de la población. Si el experimento se repitiera muchas veces con \(n\) pares, una proporción \(C\) de los ICs construidos con el mismo método contendría el verdadero valor de \(\mu_d\).</p>
             <p>El valor de referencia en este tipo de intervalo es el 0, que representa ausencia de cambio medio. Si \(0 \in [L, U]\), los datos son compatibles con que no hay cambio sistemático al nivel de confianza elegido; equivalentemente, el contraste bilateral \(H_0\!: \mu_d = 0\) no se rechazaría al nivel \(\alpha = 1 - C\). Si \(L > 0\), el cambio medio es positivo según la definición de diferencia elegida; si \(U < 0\), el cambio medio es negativo. La dirección del intervalo depende directamente de cómo se define \(d_i\): cambiar de "después − antes" a "antes − después" invierte los signos de todos los límites.</p>
             <ul>
@@ -288,6 +292,7 @@
                 <li><strong>Amplitud e incertidumbre:</strong> la amplitud del intervalo depende de \(s_d\) (la variabilidad del cambio entre individuos), de \(n\) (el número de pares) y del nivel de confianza. Aumentar \(n\) o reducir \(s_d\) (por ejemplo, mejorando la homogeneidad del apareamiento) reduce el margen de error.</li>
                 <li><strong>Lectura del gráfico:</strong> la región verde bajo la curva t es la zona de confianza y las colas rojas (área \(\alpha/2\) cada una) delimitan los valores críticos \(\pm t_{\alpha/2,\,n-1}\). El intervalo en la escala original \([\bar{d} - E, \bar{d} + E]\) corresponde a los valores de \(\mu_d\) cuyo estadístico t caería dentro de la región verde.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -429,7 +434,7 @@ calculate();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

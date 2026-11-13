@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -241,7 +241,7 @@
             <p>This calculator determines the minimum number of observations per group needed to detect a difference between the means of two independent groups. The underlying test is the two-sample Student's t-test: \(H_0\!: \mu_1 = \mu_2\) versus \(H_1\!: |\mu_1 - \mu_2| \geq \Delta\).</p>
             <p>Unlike estimating a single mean, here the goal is not precision but power: we want to ensure that, if the true difference is at least \(\Delta\), the test will detect it with the specified probability \(1-\beta\).</p>
             <p>The effect size is <em>Cohen's d</em>: \(d = \Delta / \sigma\). Reference values: d = 0.2 (small effect), d = 0.5 (medium), d = 0.8 (large). For d = 0.5 with α = 0.05 and power 0.80 the result is n ≈ 64 per group.</p>
-            <h3>Sample size formula</h3>
+            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
             <p class="formula-line">\( n_1 = \frac{(Z_{\alpha/2}+Z_\beta)^2(\sigma_1^2+\sigma_2^2/k)}{\Delta^2} \)</p>
             <p class="formula-line">\( n_2 = k\,n_1 \)</p>
             <ul>
@@ -251,7 +251,8 @@
                 <li><strong>k</strong>: allocation ratio n2/n1 (k = 1 for a balanced design).</li>
                 <li><strong>\(Z_{\alpha/2}\)</strong> and <strong>\(Z_\beta\)</strong>: normal quantiles (two-sided α and power; with a one-tailed test, \(Z_{\alpha}\) replaces \(Z_{\alpha/2}\)).</li>
             </ul>
-            <h3>Quick setup</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>σ1 and σ2:</strong> use historical data, a pilot study, or literature references. If you assume equal variances, use the same σ in both fields.</li>
                 <li><strong>Δ:</strong> define the minimum <em>practically relevant</em> difference — not the expected difference, but the smallest one that would justify an action or decision.</li>
@@ -259,33 +260,39 @@
                 <li><strong>Power:</strong> 0.80 is the accepted minimum; 0.90 in pivotal studies or when false negatives are costly.</li>
                 <li><strong>1:1 allocation:</strong> is always the most efficient when the cost per subject is similar in both groups.</li>
             </ul>
-            <h3>Simple example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Simple example</h3></summary>
             <p>You compare the processing time of two lines with <strong>σ1 = σ2 = 10</strong>, minimum detectable difference <strong>Δ = 5</strong>, <strong>α = 0.05</strong> and power <strong>0.80</strong>. Result: <strong>≈ 63 subjects per group</strong> (total ≈ 126). Cohen's d is Δ/σ = 5/10 = 0.5 (medium effect).</p>
-            <h3>Worked example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>A research group wants to compare the effectiveness of two diets (diet A and diet B) on weight loss after 12 weeks. From a pilot study, the standard deviation of weight loss is \(\sigma \approx 8\) kg in both groups. The researchers consider a difference of at least \(\Delta = 3\) kg between diets to be clinically relevant. They set a power of 80% (\(z_\beta = 0.842\)) and a two-sided significance level \(\alpha = 0.05\) (\(z_{\alpha/2} = 1.960\)), with 1:1 allocation.</p>
             <p>For equal-sized groups (\(k = 1\)) and \(\sigma_1 = \sigma_2 = \sigma\), the formula simplifies to:</p>
             <p class="formula-line">\( n = \frac{2\sigma^2\,(z_{\alpha/2}+z_\beta)^2}{\Delta^2} = \frac{2 \times 64 \times (1.960 + 0.842)^2}{9} = \frac{128 \times (2.802)^2}{9} = \frac{128 \times 7.851}{9} = \frac{1{,}004.9}{9} \approx 111.7 \rightarrow n = 112 \)</p>
             <p>They need <strong>112 participants per group</strong>, for a total of <strong>224 participants</strong> in the trial. Cohen's d for the effect is \(d = 3/8 = 0.375\), a small-to-medium effect requiring moderate samples.</p>
             <p>If the researchers anticipate a 12% dropout rate, they must recruit \(112 / 0.88 \approx 128\) participants per group (256 in total) to preserve the planned power.</p>
             <p><strong>Sensitivity analysis (90% power):</strong> if the team decides to raise the power to 90% (\(z_\beta = 1.282\)) to reduce the risk of false negatives, the calculation gives: \( n = 2 \times 64 \times (1.960 + 1.282)^2 / 9 = 128 \times (3.242)^2 / 9 = 128 \times 10.510 / 9 \approx 149.5 \rightarrow n = 150 \) per group (300 in total). Going from 80% to 90% power increases the sample size by 34%, a cost the researchers must weigh against the reduction in type II error risk.</p>
-            <h3>Model assumptions</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Model assumptions</h3></summary>
             <ul>
                 <li>The two groups are independent of each other.</li>
                 <li>The variable is approximately normally distributed in each group (or n is large enough for the CLT to apply).</li>
                 <li>The standard deviations σ1 and σ2 are known or reliably estimated.</li>
                 <li>Two-sided test. For non-inferiority or equivalence studies, use the <a href="tamano-muestral-no-inferioridad.html">dedicated calculator</a>.</li>
             </ul>
-            <h3>Common uses</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Common uses</h3></summary>
             <ul>
                 <li>Randomized clinical trials with a continuous outcome variable.</li>
                 <li>Performance comparison between two systems, processes or pieces of equipment.</li>
                 <li>A/B experiments with a quantitative variable (load time, score).</li>
                 <li>Educational or psychological intervention studies.</li>
             </ul>
-            <h3>How to interpret the result</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
                 <p>The value \(n\) returned by the calculator is the <strong>minimum size per group</strong> in a balanced design. The total number of participants to recruit is \(2n\) (one per group). Always round up and add a margin for losses: if you expect a dropout rate of \(r\,\%\), the number of subjects to recruit per group is \(\lceil n / (1 - r) \rceil\). The difference \(\Delta\) should be the <em>minimum clinically or practically relevant difference</em>, not simply the expected difference: specifying too small a difference inflates the sample size until it becomes infeasible.</p>
                 <p>The sensitivity of \(n\) to the parameters is critical in this design. Errors in \(\sigma\) propagate squared: if the true standard deviation is 20% larger than assumed, the required \(n\) increases by 44% \((1.2^2 = 1.44)\). It is therefore essential to run a <em>sensitivity analysis</em>: calculate \(n\) for \(\sigma - 25\%\), \(\sigma\) and \(\sigma + 25\%\), and plan for the least favorable scenario. Likewise, if \(\Delta\) is halved, \(n\) quadruples. Increasing power from 80% to 90% increases \(n\) by roughly 30%.</p>
                 <p>If the resulting \(n\) is too large to be feasible, the alternatives are: (1) increase \(\Delta\) if there is clinical consensus to do so, (2) accept lower power (e.g., 80% instead of 90%), (3) design the study with repeated measures that exploit within-subject correlation, or (4) use an adaptive design. When \(n\) is very small (&lt; 20 per group), verify that the normality of the data or the size of the deviations does not invalidate the assumptions of the two-sample t-test. Once the data are collected, analyze the results with the <a href="contraste-hipotesis-dos-medias.html">hypothesis test calculator for difference of means</a>.</p>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -426,7 +433,7 @@ updateTwoMeanControls();
 calculateTwoMeanSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

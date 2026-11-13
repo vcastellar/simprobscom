@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Simulador de errores tipo I y tipo II | ProbLab">
   <meta name="twitter:description" content="Simulador interactivo de errores tipo I (α) y tipo II (β) en contrastes de hipótesis. Visualiza la potencia estadística y el dilema α–β.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../style_new.css?v=20261102-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261113-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -490,7 +490,7 @@
     </section>
 
     <section class="card content-card">
-      <h2>De dónde salen las fórmulas de β y de la potencia</h2>
+      <details class="fold"><summary><h2>De dónde salen las fórmulas de β y de la potencia</h2></summary>
       <h3>Punto de partida: la distribución de la media muestral</h3>
       <p>Si las observaciones tienen media μ y desviación típica σ, la media de n observaciones independientes sigue (exactamente con datos normales, aproximadamente en general, por el <a href="teorema-central-limite.html">teorema central del límite</a>) una normal con la misma media y desviación típica σ/√n:</p>
       <div class="math-block">\[ \bar{X} \sim N\!\left(\mu,\ \frac{\sigma^2}{n}\right). \]</div>
@@ -530,10 +530,11 @@
 
       <h3>Qué simplifica este modelo</h3>
       <p>La herramienta trata σ como conocida. En un contraste real con σ desconocida se usa la t de Student y la potencia se calcula con la distribución t no central; el resultado es algo menor, sobre todo con muestras pequeñas (en el ejemplo anterior, 0,848 en lugar de 0,863). Las calculadoras de <a href="../contrastes-hipotesis/">contrastes</a> y de <a href="../tamano-muestral/">tamaño muestral</a> de ProbLab usan el cálculo exacto en cada caso. La lógica, sin embargo, es siempre la de este gráfico: dos distribuciones del estadístico, una frontera y las áreas a cada lado.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>¿Qué son los errores tipo I y tipo II?</h2>
+      <details class="fold"><summary><h2>¿Qué son los errores tipo I y tipo II?</h2></summary>
       <p>Cuando realizamos un contraste de hipótesis tomamos una decisión binaria: rechazar la hipótesis nula H₀ o no rechazarla. Como cualquier decisión basada en información incompleta (una muestra, no la población entera), esta decisión puede ser incorrecta de dos formas distintas, y a estas dos formas las denominamos <strong>error tipo I</strong> y <strong>error tipo II</strong>.</p>
 
       <p>El <strong>error tipo I</strong> ocurre cuando rechazamos H₀ siendo ésta verdadera en la población. La probabilidad de cometer este error es precisamente el <strong>nivel de significación α</strong> que fijamos antes de realizar el contraste. Si establecemos α = 0,05, estamos aceptando que existe un 5 % de probabilidad de declarar un efecto significativo cuando en realidad no existe ninguno. Este error también se denomina <em>falso positivo</em> o <em>alarma falsa</em>.</p>
@@ -565,10 +566,11 @@
           </tr>
         </tbody>
       </table>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>La potencia estadística</h2>
+      <details class="fold"><summary><h2>La potencia estadística</h2></summary>
       <p>La <strong>potencia estadística</strong> (1 − β) es la probabilidad de que un contraste detecte correctamente un efecto real. Es, en cierta medida, la "sensibilidad" del test: un test de alta potencia raramente pasa por alto los efectos que realmente existen en la población.</p>
 
       <p>En el simulador, la potencia corresponde a la región verde bajo la curva de H₁ en la zona de rechazo. Cuanto mayor es el solapamiento entre las dos distribuciones (H₀ y H₁), menor es la potencia; cuanto más separadas estén, mayor es la potencia. Cuatro factores determinan la potencia:</p>
@@ -583,10 +585,11 @@
       <p>En la investigación científica y en los ensayos clínicos es habitual fijar como objetivo una <strong>potencia mínima del 80 % (β ≤ 0,20)</strong>. Esto significa que aceptamos hasta un 20 % de probabilidad de no detectar un efecto real cuando existe. Algunos ámbitos más exigentes, como los ensayos pivotales en farmacología, exigen potencias del 90 % o incluso superiores.</p>
 
       <p>Una práctica frecuente y problemática es la del <em>underpowered study</em>: un estudio con potencia insuficiente que, si obtiene un resultado significativo, probablemente lo haga gracias al azar (efecto Ioannidis, 2005). Los estudios con baja potencia que sí detectan efectos tienden además a sobreestimar el tamaño del efecto, el denominado <em>winner's curse</em> o efecto de amplificación del ganador.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>El dilema α vs β</h2>
+      <details class="fold"><summary><h2>El dilema α vs β</h2></summary>
       <p>La tensión entre el error tipo I y el error tipo II es uno de los problemas más fundamentales de la inferencia estadística. Con un tamaño de muestra fijo, no es posible minimizar ambos simultáneamente: cualquier cambio en α afecta inevitablemente a β en la dirección opuesta.</p>
 
       <p>Para visualizarlo intuitivamente: el valor crítico z<sub>α</sub> es el punto que separa la región de no rechazo de la región de rechazo. Al reducir α pasamos de, por ejemplo, z<sub>0,05</sub> = 1,645 a z<sub>0,01</sub> = 2,326, desplazando el umbral de decisión hacia la derecha. Este desplazamiento hace que la región de rechazo capture menos área de la distribución bajo H₁, lo que aumenta β y reduce la potencia.</p>
@@ -598,6 +601,7 @@
       <p>En la práctica, la elección de α depende del contexto: en la investigación básica se suele usar α = 0,05 por convención; en estudios exploratorios puede relajarse a α = 0,10 para no pasar por alto hallazgos potencialmente interesantes; en aplicaciones con alta consecuencia del error tipo I (diagnóstico médico, control de calidad de seguridad) se usan valores mucho más estrictos (α = 0,001 o menos). En cualquier caso, la elección debería ser explícita, justificada y establecida <em>antes</em> de recoger los datos.</p>
 
       <p>Cuando las consecuencias económicas o humanas de ambos tipos de error son cuantificables, la teoría de la decisión estadística propone equilibrar ambos errores ponderando sus costes respectivos. Si el coste de un falso positivo es C<sub>I</sub> y el de un falso negativo es C<sub>II</sub>, el umbral de decisión óptimo depende del cociente C<sub>I</sub>/C<sub>II</sub> y de la prevalencia a priori de H₁, lo que conecta con el enfoque bayesiano de la inferencia.</p>
+      </details>
     </section>
 
     <section class="card content-card">
@@ -1077,7 +1081,7 @@ update();
 <script src="../field-hints.js?v=20260730-1"></script>
 <script src="../search.js?v=20261031-1"></script>
 <script src="../wizard.js?v=20260730-1"></script>
-<script src="../theme.js?v=20261031-1"></script>
+<script src="../theme.js?v=20261113-1"></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

@@ -31,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional"></noscript>
-    <link rel="stylesheet" href="style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <style>
         .site-nav { position:sticky; top:0; z-index:100; background:rgba(255,255,255,0.92); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid rgba(15,23,42,0.08); }
         .site-nav-inner { width:min(1200px,94vw); margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 0; }
@@ -94,7 +94,7 @@
         .dist-diagram .dg-caption strong { color: var(--accent); font-weight: 700; }
         .dist-diagram .dg-hint { opacity: 0.7; }
         /* Bloque «Para qué sirve esta tabla» */
-        .table-uses { margin:4px 0 18px; padding:16px 20px; }
+        .table-uses { margin:22px 0 0; padding:16px 20px; }
         .table-uses h2 { font-size:1.05rem; margin:0 0 8px; }
         .table-uses ul { margin:0; padding-left:1.15rem; display:grid; gap:6px; font-size:0.92rem; line-height:1.5; }
         /* Sin mayúsculas: convertirían α, ν, λ y μ en A, N, Λ y M. */
@@ -192,15 +192,6 @@
     </header>
 
     <main>
-        <section class="card table-uses">
-            <h2>Para qué sirve esta tabla</h2>
-            <ul>
-                <li><strong>Tiempos de espera:</strong> en un proceso de Poisson de ritmo λ, el tiempo hasta el k-ésimo suceso sigue una Gamma(α = k, β = 1/λ). Puedes verlo en el <a href="simulaciones/simulador-proceso-poisson.html" data-goatcounter-click="tabla-gamma/simulador" data-goatcounter-title="simulador del proceso de Poisson">simulador del proceso de Poisson</a>.</li>
-                <li><strong>Casos particulares:</strong> con α = 1 es la <a href="exponential.html" data-goatcounter-click="tabla-gamma/exponencial" data-goatcounter-title="distribución exponencial">distribución exponencial</a> de media β; con α = ν/2 y β = 2, la chi-cuadrado de ν grados de libertad (<a href="tabla-chi-cuadrado.html" data-goatcounter-click="tabla-gamma/tabla-chi" data-goatcounter-title="tabla chi-cuadrado">tabla chi-cuadrado</a>).</li>
-                <li><strong>Variables positivas y asimétricas</strong>, como importes de siniestros, tiempos de servicio o precipitaciones. Para otros parámetros, usa la <a href="gamma.html" data-goatcounter-click="tabla-gamma/calculadora" data-goatcounter-title="calculadora de la gamma">calculadora de la gamma</a>.</li>
-            </ul>
-        </section>
-
         <section class="card" style="margin-top:4px;">
             <div class="tab-bar" role="tablist">
                 <button class="tab-btn active" role="tab" aria-selected="true"  onclick="switchTab('cdf',this)">P(X ≤ x) — Acumulada</button>
@@ -273,22 +264,34 @@
             </div>
         </section>
 
+        <section class="card table-uses">
+            <h2>Para qué sirve esta tabla</h2>
+            <ul>
+                <li><strong>Tiempos de espera:</strong> en un proceso de Poisson de ritmo λ, el tiempo hasta el k-ésimo suceso sigue una Gamma(α = k, β = 1/λ). Puedes verlo en el <a href="simulaciones/simulador-proceso-poisson.html" data-goatcounter-click="tabla-gamma/simulador" data-goatcounter-title="simulador del proceso de Poisson">simulador del proceso de Poisson</a>.</li>
+                <li><strong>Casos particulares:</strong> con α = 1 es la <a href="exponential.html" data-goatcounter-click="tabla-gamma/exponencial" data-goatcounter-title="distribución exponencial">distribución exponencial</a> de media β; con α = ν/2 y β = 2, la chi-cuadrado de ν grados de libertad (<a href="tabla-chi-cuadrado.html" data-goatcounter-click="tabla-gamma/tabla-chi" data-goatcounter-title="tabla chi-cuadrado">tabla chi-cuadrado</a>).</li>
+                <li><strong>Variables positivas y asimétricas</strong>, como importes de siniestros, tiempos de servicio o precipitaciones. Para otros parámetros, usa la <a href="gamma.html" data-goatcounter-click="tabla-gamma/calculadora" data-goatcounter-title="calculadora de la gamma">calculadora de la gamma</a>.</li>
+            </ul>
+        </section>
+
         <section class="card content-card" style="border-top:3px solid #2563eb;">
             <h3>Cómo usar estas tablas</h3>
-            <h3>Distribución Gamma</h3>
+            <details class="fold fold-sub"><summary><h3>Distribución Gamma</h3></summary>
             <p>La distribución Gamma Γ(α, β) generaliza la distribución exponencial. Su función de densidad es:</p>
             <p class="formula-line">\( f(x;\alpha,\beta) = \dfrac{x^{\alpha-1}\,e^{-x/\beta}}{\beta^\alpha\,\Gamma(\alpha)}, \quad x > 0, \;\alpha > 0,\; \beta > 0 \)</p>
             <p>La media es μ = αβ y la varianza σ² = αβ². El parámetro α controla la forma y β la escala.</p>
+            </details>
 
-            <h3>Casos particulares</h3>
+            <details class="fold fold-sub"><summary><h3>Casos particulares</h3></summary>
             <ul>
                 <li><strong>Γ(1, β):</strong> coincide con la distribución Exponencial de media β.</li>
                 <li><strong>Γ(ν/2, 2):</strong> coincide con la distribución Chi-cuadrado con ν grados de libertad.</li>
                 <li><strong>Γ(k, 1) con k entero:</strong> suma de k exponenciales independientes de media 1 (distribución de Erlang).</li>
             </ul>
+            </details>
 
-            <h3>Parameterización</h3>
+            <details class="fold fold-sub"><summary><h3>Parameterización</h3></summary>
             <p>Esta tabla usa la parameterización (α, β) donde β es la <em>escala</em> (scale) y 1/β es la <em>tasa</em> (rate). Verifica la parametrización que usa tu software antes de comparar valores.</p>
+            </details>
 
             <h3>Calculadoras relacionadas</h3>
             <ul class="distribution-links">
@@ -471,7 +474,7 @@
 <script src="table-actions.js?v=20261103-3"></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

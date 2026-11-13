@@ -138,7 +138,7 @@
   ]
 }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -265,7 +265,7 @@
             <p>Es el procedimiento que permite decidir si dos poblaciones independientes tienen la misma <strong>variabilidad</strong>. Se conoce como <strong>test F de Snedecor</strong> (o de Fisher-Snedecor) de igualdad de varianzas. Sirve para preguntas como: ¿es una máquina más regular que otra? ¿Mide un instrumento con más precisión que otro? ¿Son las notas de un grupo más homogéneas que las de otro? ¿Es más volátil una inversión que otra?</p>
             <p>La idea es muy directa: se divide una varianza muestral entre la otra. Si las dos poblaciones tienen la misma varianza, el cociente debería rondar 1; cuanto más se aleja de 1, más evidencia de que las variabilidades son distintas.</p>
 
-            <h3>Hipótesis y estadístico</h3>
+            <details class="fold fold-sub"><summary><h3>Hipótesis y estadístico</h3></summary>
             <p class="formula-line">\(H_0: \sigma_1^2 = \sigma_2^2\)</p>
             <p class="formula-line">\(H_1: \sigma_1^2 \neq \sigma_2^2\), \(\sigma_1^2 > \sigma_2^2\) o \(\sigma_1^2 &lt; \sigma_2^2\)</p>
             <p class="formula-line">\( F = \dfrac{s_1^2}{s_2^2}, \quad gl_1 = n_1 - 1, \quad gl_2 = n_2 - 1 \)</p>
@@ -275,8 +275,9 @@
                 <li><strong>\(gl_1, gl_2\)</strong>: grados de libertad del numerador y del denominador.</li>
             </ul>
             <p>Si los datos de los dos grupos son normales y \(H_0\) es cierta, el estadístico sigue una <strong>distribución F de Snedecor</strong> con \(gl_1\) y \(gl_2\) grados de libertad. El orden importa: los primeros grados de libertad son siempre los de la varianza del numerador.</p>
+            </details>
 
-            <h3>Valores críticos y colas</h3>
+            <details class="fold fold-sub"><summary><h3>Valores críticos y colas</h3></summary>
             <p>La distribución F no es simétrica: solo toma valores positivos y tiene una cola larga a la derecha. Por eso, en el contraste bilateral hay dos valores críticos distintos, y el inferior se obtiene a partir de la <a href="tabla-f-snedecor.html">tabla F</a> con la relación</p>
             <p class="formula-line">\( F_{\alpha/2;\ gl_1,\ gl_2} = \dfrac{1}{F_{1-\alpha/2;\ gl_2,\ gl_1}} \)</p>
             <p>Muchos libros evitan ese paso colocando siempre la varianza mayor en el numerador, de modo que \(F \geq 1\) y basta con el valor crítico superior. La calculadora no lo necesita: calcula las dos colas y admite cualquier orden.</p>
@@ -285,17 +286,19 @@
                 <li><strong>Cola derecha</strong>: ¿es mayor la varianza del grupo 1?</li>
                 <li><strong>Cola izquierda</strong>: ¿es menor la varianza del grupo 1?</li>
             </ul>
+            </details>
 
-            <h3>Regla de decisión</h3>
+            <details class="fold fold-sub"><summary><h3>Regla de decisión</h3></summary>
             <ul>
                 <li>Si el <strong>p-valor</strong> es menor que \(\alpha\), se rechaza \(H_0\): hay evidencia de que las varianzas difieren.</li>
                 <li>Si el p-valor es mayor o igual que \(\alpha\), no hay evidencia suficiente para rechazar \(H_0\).</li>
                 <li>No rechazar \(H_0\) no demuestra que las varianzas sean iguales.</li>
             </ul>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Supuestos: cuidado con la normalidad</h3>
+            <details class="fold"><summary><h3>Supuestos: cuidado con la normalidad</h3></summary>
             <ul>
                 <li><strong>Dos muestras independientes</strong>, con observaciones independientes dentro de cada una.</li>
                 <li><strong>Datos normales en los dos grupos.</strong> Es el supuesto crítico.</li>
@@ -305,10 +308,11 @@
 
             <h3>¿Sirve para elegir el contraste de medias?</h3>
             <p>Durante años se enseñó a usar el test F como paso previo al contraste de dos medias: si no se rechazaba la igualdad de varianzas, se usaba la t de Student con varianza común; si se rechazaba, la de Welch. Hoy se desaconseja: ese procedimiento en dos etapas no controla bien el error de tipo I, y el test F, con muestras pequeñas, tiene poca potencia justo cuando haría falta. Lo recomendable es usar directamente el <a href="contraste-hipotesis-dos-medias.html">contraste de Welch</a>, que funciona bien tanto si las varianzas son iguales como si no. El test F debe reservarse para cuando la variabilidad es, en sí misma, la pregunta.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto 1: contraste bilateral</h3>
+            <details class="fold"><summary><h3>Ejemplo resuelto 1: contraste bilateral</h3></summary>
             <p>Se compara la variabilidad de dos líneas de producción de piezas metálicas. Línea 1: \(s_1^2 = 16\) mm² con \(n_1 = 20\) piezas. Línea 2: \(s_2^2 = 9\) mm² con \(n_2 = 18\) piezas. Se contrasta \(H_0\colon \sigma_1^2 = \sigma_2^2\) frente a \(H_1\colon \sigma_1^2 \neq \sigma_2^2\) con \(\alpha = 0{,}05\).</p>
             <p class="formula-line">\( F = \dfrac{16}{9} \approx 1{,}778, \quad gl_1 = 19, \quad gl_2 = 17 \)</p>
             <p>Los valores críticos son \(F_{0{,}025;\,19,\,17} \approx 0{,}39\) y \(F_{0{,}975;\,19,\,17} \approx 2{,}63\). Como \(0{,}39 < 1{,}778 < 2{,}63\), el estadístico no cae en la región de rechazo; el p-valor es \(p \approx 0{,}238\). <strong>No se rechaza \(H_0\)</strong>.</p>
@@ -320,10 +324,11 @@
             <p class="formula-line">\( F = \dfrac{36}{12} = 3{,}00, \quad gl_1 = gl_2 = 24 \)</p>
             <p>El valor crítico de cola derecha es \(F_{0{,}95;\,24,\,24} \approx 1{,}98\) y el p-valor, \(p \approx 0{,}005\). <strong>Se rechaza \(H_0\)</strong>: hay evidencia de que el instrumento antiguo es menos preciso. Su desviación típica es unas 1,7 veces la del nuevo (\(\sqrt{3} \approx 1{,}73\)), con un intervalo del 95 % para ese cociente de 1,15 a 2,61.</p>
             <p><strong>En la calculadora:</strong> n₁ = 25, n₂ = 25, s₁² = 36, s₂² = 12 y «Cola derecha».</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que las dos poblaciones tienen distinta variabilidad, siempre que los datos sean normales. Para valorar cuánto, es más intuitivo el cociente de desviaciones típicas que el de varianzas: un F de 4 significa que una desviación típica es el doble de la otra.</p>
             <p><strong>No rechazar \(H_0\)</strong> no demuestra que las varianzas sean iguales. Con muestras pequeñas, el intervalo de confianza del cociente es muy ancho, como en el ejemplo 1.</p>
             <p>En la calculadora, el resultado muestra la decisión con el p-valor, el estadístico F con sus grados de libertad y una frase con la conclusión. En el gráfico, la zona verde es la región de no rechazo sobre la distribución F, las rojas son las regiones críticas y la línea ámbar marca el estadístico. En «Detalles del cálculo» tienes los valores críticos y los intervalos de confianza para el cociente de varianzas y de desviaciones típicas.</p>
@@ -342,10 +347,11 @@
                     </tbody>
                 </table>
             </div>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Errores frecuentes</h3>
+            <details class="fold"><summary><h3>Errores frecuentes</h3></summary>
             <ul>
                 <li><strong>Aplicar el test F a datos no normales</strong>: es su punto débil. Usa Levene si hay dudas.</li>
                 <li><strong>Introducir desviaciones típicas en lugar de varianzas.</strong></li>
@@ -354,6 +360,7 @@
                 <li><strong>Concluir que las varianzas son iguales</strong> porque el contraste no es significativo con muestras pequeñas.</li>
                 <li><strong>Usarlo con datos emparejados</strong>: las dos muestras deben ser independientes.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -666,7 +673,7 @@ calculateDosVarianzas();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

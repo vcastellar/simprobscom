@@ -31,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional"></noscript>
-    <link rel="stylesheet" href="style_new.css?v=20261102-2">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <style>
         .site-nav {
             position: sticky;
@@ -272,7 +272,7 @@
         html.dark-mode .dist-table tbody tr:nth-child(even) td:first-child { background:linear-gradient(rgba(96,165,250,0.16),rgba(96,165,250,0.16)),#1e293b; }
         html.dark-mode .dist-table tbody tr:hover td:first-child { background:linear-gradient(rgba(96,165,250,0.22),rgba(96,165,250,0.22)),#1e293b; }
         /* Bloque «Para qué sirve esta tabla» */
-        .table-uses { margin:4px 0 18px; padding:16px 20px; }
+        .table-uses { margin:22px 0 0; padding:16px 20px; }
         .table-uses h2 { font-size:1.05rem; margin:0 0 8px; }
         .table-uses ul { margin:0; padding-left:1.15rem; display:grid; gap:6px; font-size:0.92rem; line-height:1.5; }
         /* Sin mayúsculas: convertirían α, ν, λ y μ en A, N, Λ y M. */
@@ -421,15 +421,6 @@
     </header>
 
     <main>
-        <section class="card table-uses">
-            <h2>Para qué sirve esta tabla</h2>
-            <ul>
-                <li><strong>Probabilidades de cualquier normal:</strong> tipifica con z = (x − μ)/σ y busca Φ(z). O calcúlalo directamente, sin tipificar, en la <a href="normal.html" data-goatcounter-click="tabla-normal/calculadora" data-goatcounter-title="calculadora de la distribución normal">calculadora de la distribución normal</a>.</li>
-                <li><strong>Intervalos de confianza:</strong> los valores críticos más usados son 1,645 (90 %), 1,960 (95 %) y 2,576 (99 %). Calcula el intervalo completo para una <a href="intervalo-confianza-media-sigma-conocida.html" data-goatcounter-click="tabla-normal/ic-media" data-goatcounter-title="media con σ conocida">media con σ conocida</a> o para una <a href="intervalo-confianza-proporcion.html" data-goatcounter-click="tabla-normal/ic-proporcion" data-goatcounter-title="proporción">proporción</a>.</li>
-                <li><strong>Contrastes z:</strong> si z es tu estadístico, el p-valor bilateral es 2·P(Z &gt; |z|). Haz el contraste completo para una <a href="contraste-hipotesis-una-media.html" data-goatcounter-click="tabla-normal/contraste-media" data-goatcounter-title="media">media</a> o para una <a href="contraste-hipotesis-una-proporcion.html" data-goatcounter-click="tabla-normal/contraste-proporcion" data-goatcounter-title="proporción">proporción</a>.</li>
-            </ul>
-        </section>
-
         <section class="card" style="margin-top:4px;">
             <div class="tab-bar" role="tablist">
                 <button class="tab-btn active" role="tab" aria-selected="true"  onclick="switchTab('cdf',this)">Φ(z) = P(Z ≤ z) &mdash; Distribución acumulada</button>
@@ -596,6 +587,15 @@
             </div>
         </section>
 
+        <section class="card table-uses">
+            <h2>Para qué sirve esta tabla</h2>
+            <ul>
+                <li><strong>Probabilidades de cualquier normal:</strong> tipifica con z = (x − μ)/σ y busca Φ(z). O calcúlalo directamente, sin tipificar, en la <a href="normal.html" data-goatcounter-click="tabla-normal/calculadora" data-goatcounter-title="calculadora de la distribución normal">calculadora de la distribución normal</a>.</li>
+                <li><strong>Intervalos de confianza:</strong> los valores críticos más usados son 1,645 (90 %), 1,960 (95 %) y 2,576 (99 %). Calcula el intervalo completo para una <a href="intervalo-confianza-media-sigma-conocida.html" data-goatcounter-click="tabla-normal/ic-media" data-goatcounter-title="media con σ conocida">media con σ conocida</a> o para una <a href="intervalo-confianza-proporcion.html" data-goatcounter-click="tabla-normal/ic-proporcion" data-goatcounter-title="proporción">proporción</a>.</li>
+                <li><strong>Contrastes z:</strong> si z es tu estadístico, el p-valor bilateral es 2·P(Z &gt; |z|). Haz el contraste completo para una <a href="contraste-hipotesis-una-media.html" data-goatcounter-click="tabla-normal/contraste-media" data-goatcounter-title="media">media</a> o para una <a href="contraste-hipotesis-una-proporcion.html" data-goatcounter-click="tabla-normal/contraste-proporcion" data-goatcounter-title="proporción">proporción</a>.</li>
+            </ul>
+        </section>
+
         <aside class="sim-callout" aria-label="Simulación relacionada">
             <p class="sim-callout-kicker">Simulación interactiva</p>
             <p class="sim-callout-text"><strong>¿Por qué la normal aparece en todas partes?</strong> Lo explica el teorema central del límite: la media de muchas observaciones sigue aproximadamente una normal aunque los datos no la sigan. Compruébalo en el simulador eligiendo una distribución de partida y un tamaño de muestra.</p>
@@ -604,17 +604,19 @@
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
             <h3>Cómo usar estas tablas</h3>
-            <h3>Distribución Normal Estándar</h3>
+            <details class="fold fold-sub"><summary><h3>Distribución Normal Estándar</h3></summary>
             <p>La distribución Normal estándar tiene media μ = 0 y varianza σ² = 1. Su función de densidad es:</p>
             <p class="formula-line">\( f(z) = \dfrac{1}{\sqrt{2\pi}}\,e^{-z^2/2} \)</p>
             <p>Y su función de distribución acumulada Φ(z) = P(Z ≤ z) no tiene expresión cerrada, por lo que se consulta en tablas.</p>
+            </details>
 
-            <h3>Cómo leer una fila y una columna</h3>
+            <details class="fold fold-sub"><summary><h3>Cómo leer una fila y una columna</h3></summary>
             <p>Primero elige la pestaña según el resultado que necesites: <strong>Φ(z)</strong> para una probabilidad acumulada o <strong>f(z)</strong> para la altura de la densidad. Después selecciona <strong>z ≥ 0</strong> o <strong>z &lt; 0</strong>. En ambas tablas, la primera columna contiene la parte entera y el primer decimal de z, mientras que la cabecera superior aporta el segundo decimal. La celda donde se cruzan ambos valores es el resultado.</p>
             <p>Por ejemplo, para leer <strong>z = 1.96</strong>, busca la fila <strong>1.9</strong> y la columna <strong>.06</strong>. En la tabla acumulada, su intersección muestra <strong>Φ(1.96) = 0.9750</strong>: el 97,50 % del área queda a la izquierda de 1.96. Para <strong>z = −1.96</strong>, activa la tabla negativa y cruza la fila <strong>−1.9</strong> con la columna <strong>.06</strong>; obtendrás <strong>Φ(−1.96) = 0.0250</strong>.</p>
             <p>En la pestaña <strong>f(z)</strong> se combinan la fila y la columna del mismo modo, pero la celda representa una densidad, no un área ni una probabilidad. Puedes hacer clic en cualquier celda para que la página confirme el z completo y su valor. Si partes de una probabilidad y buscas z, localiza en el cuerpo de la tabla Φ(z) el valor más cercano y reconstruye z uniendo la etiqueta de su fila con la de su columna.</p>
+            </details>
 
-            <h3>Cómo calcular probabilidades con la tabla normal</h3>
+            <details class="fold fold-sub"><summary><h3>Cómo calcular probabilidades con la tabla normal</h3></summary>
             <p>La tabla da siempre el área a la <strong>izquierda</strong> de z, Φ(z) = P(Z ≤ z). Los tres tipos de problema habituales se resuelven con ese único dato:</p>
             <ol>
                 <li><strong>P(Z ≤ z): se lee directamente.</strong> Para z = 1.25, cruza la fila <strong>1.2</strong> con la columna <strong>.05</strong>: P(Z ≤ 1.25) = Φ(1.25) = <strong>0.8944</strong>.</li>
@@ -622,18 +624,21 @@
                 <li><strong>P(a &lt; Z &lt; b): se restan dos valores de la tabla.</strong> P(a &lt; Z &lt; b) = Φ(b) − Φ(a). Por ejemplo, P(−0.50 &lt; Z &lt; 1.50) = Φ(1.50) − Φ(−0.50) = 0.9332 − 0.3085 = <strong>0.6247</strong>. Φ(−0.50) se lee en la tabla z &lt; 0 (fila −0.5, columna .00).</li>
             </ol>
             <p><strong>Si la variable no es estándar</strong>, X ~ N(μ, σ), tipifica primero con z = (x − μ) / σ y después usa la tabla. Por ejemplo, con μ = 100 y σ = 15, P(X ≤ 120) = P(Z ≤ (120 − 100) / 15) ≈ P(Z ≤ 1.33) = <strong>0.9082</strong>. Para resultados sin redondear z a dos decimales, usa la <a href="normal.html">calculadora de la distribución normal</a>.</p>
-            <h3>Tabla Φ(z) — Distribución acumulada</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Tabla Φ(z) — Distribución acumulada</h3></summary>
             <p>Cada celda muestra la probabilidad de que una variable Normal estándar sea <strong>menor o igual</strong> que z. Para z negativo, recuerda que Φ(−z) = 1 − Φ(z), o consulta directamente la pestaña z &lt; 0.</p>
             <ul>
                 <li><strong>Φ(0) = 0.5000</strong> (la media divide la distribución en dos mitades iguales).</li>
                 <li><strong>Φ(1.96) ≈ 0.9750</strong> → el 95 % de los valores caen entre −1.96 y 1.96.</li>
                 <li><strong>Φ(2.576) ≈ 0.9950</strong> → el 99 % caen entre −2.576 y 2.576.</li>
             </ul>
+            </details>
 
-            <h3>Tabla f(z) — Función de densidad</h3>
+            <details class="fold fold-sub"><summary><h3>Tabla f(z) — Función de densidad</h3></summary>
             <p>Cada celda muestra el valor de la densidad en el punto z. Recuerda que la densidad <em>no es</em> una probabilidad puntual; se integra para obtener probabilidades. Es simétrica: f(−z) = f(z).</p>
+            </details>
 
-            <h3>Percentiles clave de la Normal estándar</h3>
+            <details class="fold fold-sub"><summary><h3>Percentiles clave de la Normal estándar</h3></summary>
             <ul>
                 <li>z₀.₉₀ = 1.282 &nbsp;→&nbsp; P(Z ≤ 1.282) = 0.90</li>
                 <li>z₀.₉₅ = 1.645 &nbsp;→&nbsp; P(Z ≤ 1.645) = 0.95</li>
@@ -641,9 +646,11 @@
                 <li>z₀.₉₉ = 2.326 &nbsp;→&nbsp; P(Z ≤ 2.326) = 0.99</li>
                 <li>z₀.₉₉₅ = 2.576 &nbsp;→&nbsp; P(Z ≤ 2.576) = 0.995 &nbsp;(bilateral 99 %)</li>
             </ul>
+            </details>
 
-            <h3>Ejemplo resuelto: buscar un valor crítico Z</h3>
+            <details class="fold fold-sub"><summary><h3>Ejemplo resuelto: buscar un valor crítico Z</h3></summary>
             <p>Para construir un intervalo bilateral del 95% necesitas el valor que deja 97,5% acumulado en la normal estándar. En la tabla normal, Φ(z)=0,975 corresponde aproximadamente a z=1,96; para 99%, el acumulado 0,995 corresponde aproximadamente a z=2,576.</p>
+            </details>
             <h3>Tablas y calculadoras relacionadas</h3>
             <ul class="distribution-links">
                 <li><a href="normal.html">Calculadora Normal</a></li>
@@ -805,7 +812,7 @@
 <script src="table-actions.js?v=20261103-3"></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

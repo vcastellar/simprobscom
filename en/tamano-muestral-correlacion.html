@@ -74,7 +74,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -197,7 +197,7 @@
             <h3>Explanation</h3>
             <p>This calculation determines how many pairs of observations (n) are needed to detect a population correlation \(\rho\) different from zero with a given power and significance level. The logic differs from the mean or proportion calculators: here we use <strong>Fisher's z transformation</strong>, which stabilizes the variance of \(\hat{\rho}\).</p>
             <p>The sample estimator \(\hat{\rho}\) (Pearson correlation) has a skewed, asymmetric distribution when \(\rho \neq 0\), with variance that depends on \(\rho\) itself. The transformation \(z = \operatorname{arctanh}(\hat{\rho})\) converts this distribution into an approximately normal one with variance \(1/(n-3)\), independent of \(\rho\). This allows n to be derived directly from the signal-to-noise ratio.</p>
-            <h3>Sample size formula</h3>
+            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
             <p>Let \(z_\rho = \operatorname{arctanh}(\rho) = \frac{1}{2}\ln\!\left(\frac{1+\rho}{1-\rho}\right)\). Then:</p>
             <p class="formula-line">\( n = \left\lceil \frac{(Z_{\alpha/2} + Z_\beta)^2}{z_\rho^2} \right\rceil + 3 \)</p>
             <p>where \(Z_{\alpha/2}\) is the normal quantile for a two-tailed test (or \(Z_\alpha\) for a one-tailed test) and \(Z_\beta = \Phi^{-1}(1-\beta)\).</p>
@@ -207,16 +207,19 @@
                 <li><strong>+3</strong>: comes from the fact that the variance of \(z = \operatorname{arctanh}(\hat{\rho})\) is approximately \(1/(n-3)\); it is an approximation that improves the result for small n, not an exact value.</li>
                 <li>Reference (Cohen, 1988): ρ = 0.10 (small), 0.30 (moderate), 0.50 (large).</li>
             </ul>
-            <h3>Quick setup</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>Unknown ρ:</strong> use ρ = 0.30 as a conservative reference for a moderate effect.</li>
                 <li><strong>Two-tailed test:</strong> use when you have no prior directional hypothesis.</li>
                 <li><strong>One-tailed test:</strong> only if you have solid reasons to expect a positive (or negative) correlation — it reduces n but requires a priori justification.</li>
                 <li><strong>Power:</strong> 0.80 is the usual minimum; 0.90 for confirmatory studies or psychometric validation.</li>
             </ul>
-            <h3>Simple example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Simple example</h3></summary>
             <p>You want to detect a correlation of at least ρ = 0.30 with α = 0.05 two-tailed and power 0.80. The transformation gives z<sub>ρ</sub> = arctanh(0.30) ≈ 0.3095. You need approximately <strong>85 pairs of observations</strong>.</p>
-            <h3>Worked example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>An educational research team wants to study whether there is a correlation between weekly hours of independent study and the grade obtained on the final exam. Based on prior literature, they estimate the population Pearson correlation to be \(\rho \approx 0.40\) (moderate correlation). The test is two-tailed with \(\alpha = 0.05\) and a power of 80% is desired to detect correlations of magnitude \(\rho \geq 0.40\).</p>
             <p>The first step is to apply Fisher's transformation \(z_r\) to stabilize the variance:</p>
             <p class="formula-line">\( z_r = \frac{1}{2} \ln\!\left(\frac{1 + \rho}{1 - \rho}\right) = \frac{1}{2} \ln\!\left(\frac{1.40}{0.60}\right) = \frac{1}{2} \ln(2.333) = \frac{1}{2} \times 0.8473 \approx 0.424 \)</p>
@@ -226,24 +229,28 @@
             <p>If the expected correlation were weaker, say \(\rho = 0.25\), Fisher's transformation would give \(z_r = 0.5 \times \ln(1.25/0.75) \approx 0.5 \times 0.5108 = 0.2554\). In that case:</p>
             <p class="formula-line">\( n = \frac{7.851}{(0.2554)^2} + 3 = \frac{7.851}{0.0652} + 3 \approx 120.4 + 3 = 124 \)</p>
             <p><strong>124 participants</strong> would be needed, almost triple the requirement for \(\rho = 0.40\). This comparison illustrates the high sensitivity of the sample size to the expected correlation value, especially in the range \(\rho < 0.30\).</p>
-            <h3>Model assumptions</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Model assumptions</h3></summary>
             <ul>
                 <li><strong>Bivariate normality:</strong> the formula assumes that (X, Y) follows a bivariate normal distribution. Severe deviations affect the distribution of \(\hat{\rho}\).</li>
                 <li><strong>Independence:</strong> each pair (x<sub>i</sub>, y<sub>i</sub>) is independent of the others.</li>
                 <li><strong>Linear relationship:</strong> Pearson correlation measures only linear association; a strong curvilinear relationship with ρ ≈ 0 would not be detected.</li>
                 <li><strong>Absence of influential outliers:</strong> outliers can seriously distort \(\hat{\rho}\); this is especially relevant in small samples.</li>
             </ul>
-            <h3>Common uses</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Common uses</h3></summary>
             <ul>
                 <li>Validation of psychometric scales and questionnaires (item-total correlation, test-retest reliability).</li>
                 <li>Association studies between two continuous variables (biomarkers, clinical scales, physiological parameters).</li>
                 <li>Inter-observer agreement analysis using Pearson or intraclass correlation.</li>
                 <li>Validation studies of measurement methods (e.g., comparison of two laboratory techniques).</li>
             </ul>
-            <h3>How to interpret the result</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
                 <p>The value \(n\) is the <strong>minimum number of pairs of observations</strong> (subjects with both required measurements) needed to detect a Pearson correlation \(\rho_1\) when the null hypothesis is \(\rho = \rho_0\) (usually \(\rho_0 = 0\)) with the specified power and significance level. Always round up. If you expect that some subjects will not be measurable on both variables (loss to follow-up, missing data), divide \(n\) by \((1 - \text{loss rate})\) to obtain the required recruitment number.</p>
                 <p>The formula uses Fisher's \(z\) transformation \(z = \frac{1}{2}\ln\!\left(\frac{1+\rho}{1-\rho}\right)\) to stabilize the variance. This transformation is more accurate when \(n \geq 10\) and \(|\rho| < 0.9\); for very high correlations (\(|\rho| > 0.9\)) the approximation may underestimate the required \(n\). Perform a <em>sensitivity analysis</em> by varying \(\rho_1\) by ±0.10: an expected correlation of 0.5 instead of 0.6 may require 40–60% more pairs. If the actual correlation turns out to be larger than expected, the test will have more power than planned (generally good news), but if it turns out to be smaller, the study may end up underpowered.</p>
                 <p>When the calculated \(n\) is very small (&lt; 20 pairs), verify that the relationship between the variables is reasonably linear and that there are no influential outliers, since Pearson correlation is sensitive to both factors. If the data show nonlinearity or heavy tails, consider Spearman correlation and adjust \(n\) with a relative efficiency factor. Once the data are collected, calculate the correlation and its CI with the <a href="contraste-hipotesis-correlacion.html">hypothesis test calculator for correlation</a> or run the formal test with the corresponding tool.</p>
+            </details>
             <h3>External references</h3>
             <ul>
                 <li><a href="https://en.wikipedia.org/wiki/Pearson_correlation_coefficient" target="_blank" rel="noopener">Pearson correlation coefficient (Wikipedia)</a></li>
@@ -350,7 +357,7 @@ document.getElementById("corrCalculateBtn").addEventListener("click", calculateC
 calculateCorrSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

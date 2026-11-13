@@ -66,7 +66,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261107-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -259,7 +259,7 @@
             <p>It is the test used to decide whether there is an <strong>association between an exposure and an outcome</strong> from a 2×2 table, measuring that association with the odds ratio (OR). It is the standard tool of <strong>case-control studies</strong>: you gather a group of people with the disease (cases) and another without it (controls), and compare how often each group was exposed to a factor —tobacco, a drug, a pollutant.</p>
             <p>If the exposure has nothing to do with the disease, the proportion exposed should be similar among cases and controls, and the OR close to 1. An OR greater than 1 indicates that the exposure is more frequent among cases (risk factor); less than 1, that it is less frequent (protective factor).</p>
 
-            <h3>Odds and odds ratio</h3>
+            <details class="fold fold-sub"><summary><h3>Odds and odds ratio</h3></summary>
             <p>The <em>odds</em> of an event is the ratio between the probability that it happens and the probability that it does not: with a probability of 40%, the odds are 0.4/0.6 = 0.67, that is, 2 to 3. The odds ratio compares two odds. With the table the calculator asks for:</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -274,10 +274,11 @@
             </div>
             <p class="formula-line">\( \widehat{OR} = \dfrac{a/b}{c/d} = \dfrac{a \cdot d}{b \cdot c} \)</p>
             <p>It is the odds of exposure among cases divided by the odds of exposure among controls. A very useful property is that it equals the odds ratio of disease between exposed and unexposed people, which is what really matters. That is why the OR can be estimated in a case-control study, where the proportion of cases is set by the researcher and risk cannot be computed.</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Hypotheses and test statistic</h3>
+            <details class="fold"><summary><h3>Hypotheses and test statistic</h3></summary>
             <p class="formula-line">\(H_0: OR = 1\) (no association)</p>
             <p class="formula-line">\(H_1: OR \neq 1\), \(OR > 1\) or \(OR < 1\)</p>
             <p>The OR has a very skewed distribution (it ranges from 0 to infinity, with 1 in the middle), so the test is carried out on its logarithm, which is well approximated by a normal distribution:</p>
@@ -291,26 +292,29 @@
                 <li>In the two-tailed test, this is equivalent to the OR confidence interval not containing 1.</li>
                 <li>Not rejecting \(H_0\) does not prove that there is no association.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Odds ratio and relative risk</h3>
+            <details class="fold"><summary><h3>Odds ratio and relative risk</h3></summary>
             <p>The relative risk (RR) compares probabilities: the risk of disease among the exposed divided by that among the unexposed. It is more intuitive, but it can only be computed in cohort studies or trials, which follow exposed and unexposed people. The OR approximates the RR when the disease is <strong>rare</strong> (below roughly 10% of the population): in that case, an OR of 2 means, in practice, that the risk doubles. When the outcome is common, the OR exaggerates the association compared with the RR, and the two should not be read as the same thing.</p>
             <p>If your two groups are exposed and unexposed people and you measure the outcome, you can compare the proportions directly with the <a href="contraste-hipotesis-dos-proporciones.html">two-proportion test</a> or compute the <a href="intervalo-confianza-ratio-proporciones.html">interval for the ratio of proportions</a>.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Assumptions of the test</h3>
+            <details class="fold"><summary><h3>Assumptions of the test</h3></summary>
             <ul>
                 <li><strong>Independent observations</strong>: each person appears only once in the table. If each case is matched to a specific control, you need an analysis for paired data (McNemar or conditional logistic regression).</li>
                 <li><strong>Cells that are not too small</strong>: the normal approximation of the log OR works well with all cells around 5 or more.</li>
                 <li><strong>No zero cells</strong>: with a zero, the OR is 0 or infinite. The calculator requires at least 1 in each cell; with zeros, use Fisher's exact test or the interval with a 0.5 correction.</li>
                 <li><strong>No selection bias or confounding</strong>: an OR different from 1 may be due to another variable related to both the exposure and the disease. The test measures association, not causation.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Worked example 1: a non-significant association</h3>
+            <details class="fold"><summary><h3>Worked example 1: a non-significant association</h3></summary>
             <p>In a study of 100 cases and 100 controls, 40 cases (a) and 30 controls (c) were exposed; 60 cases (b) and 70 controls (d) were not. We test \(H_0\colon OR = 1\) with \(\alpha = 0.05\), two-tailed.</p>
             <p class="formula-line">\( \widehat{OR} = \dfrac{40 \times 70}{60 \times 30} \approx 1.556, \qquad \ln \widehat{OR} \approx 0.442 \)</p>
             <p class="formula-line">\( SE = \sqrt{\dfrac{1}{40} + \dfrac{1}{60} + \dfrac{1}{30} + \dfrac{1}{70}} \approx 0.299, \qquad z = \dfrac{0.442}{0.299} \approx 1.48 \)</p>
@@ -323,10 +327,11 @@
             <p class="formula-line">\( \widehat{OR} = \dfrac{60 \times 65}{40 \times 35} \approx 2.79, \qquad SE \approx 0.293, \qquad z = \dfrac{\ln 2.79}{0.293} \approx 3.50 \)</p>
             <p>The p-value is \(p \approx 0.0005\): <strong>\(H_0\) is rejected</strong>. The odds of exposure are about 2.8 times higher among cases, with a 95% confidence interval from 1.57 to 4.94. If the disease is rare, this can be read as the exposure multiplying the risk by just under 3.</p>
             <p><strong>In the calculator:</strong> a = 60, b = 40, c = 35, d = 65.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that there is an association between the exposure and the outcome: with OR &gt; 1, the exposure behaves as a risk factor; with OR &lt; 1, as a protective factor. To judge its importance, look at the OR and its confidence interval: an OR of 1.2 can be significant in a huge study and have little practical relevance.</p>
             <p><strong>Not rejecting \(H_0\)</strong> does not prove that there is no association: look at the interval, which tends to be very wide in small studies.</p>
             <p>In the calculator, the result shows the decision with the p-value, the OR with the z statistic and a sentence stating the conclusion. On the chart, the green area is the non-rejection region on the standard normal, the red areas are the critical regions and the amber line marks the statistic. Under "Calculation details" you will find the log OR, its standard error, Woolf's interval, the proportion exposed among cases and controls, and Pearson's chi-square as a check.</p>
@@ -336,10 +341,11 @@
 
             <h3>Confidence interval</h3>
             <p>The other link opens the <a href="intervalo-confianza-odds-ratio.html">odds ratio confidence interval calculator</a> with your table. That calculator arranges the table by exposure (rows) and outcome (columns), so the link reorders the cells for you; the OR is the same.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Common mistakes</h3>
+            <details class="fold"><summary><h3>Common mistakes</h3></summary>
             <ul>
                 <li><strong>Entering the cells in a different order</strong>: swapping b and c gives you the inverse of the OR.</li>
                 <li><strong>Reading the OR as a relative risk</strong> when the outcome is common.</li>
@@ -348,6 +354,7 @@
                 <li><strong>Analysing one-to-one matched cases and controls as independent</strong>.</li>
                 <li><strong>Reporting the OR without a confidence interval</strong>.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -661,7 +668,7 @@ document.getElementById('calcORBtn').addEventListener('click', calculateORTest);
 calculateORTest();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

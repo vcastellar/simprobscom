@@ -102,7 +102,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261102-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -226,7 +226,7 @@
             <h3>Explicación</h3>
             <p>El test de Shapiro–Wilk contrasta la hipótesis nula de que una muestra proviene de una distribución normal. Su potencia depende de cuánto difiere la distribución real (alternativa) de la normal, y esa diferencia se cuantifica principalmente mediante la <strong>asimetría</strong> (\(\gamma_1\)) y la <strong>curtosis en exceso</strong> (\(\gamma_2\)) de la distribución alternativa. Para la distribución normal, \(\gamma_1 = 0\) y \(\gamma_2 = 0\).</p>
             <p>Dado que el test de Shapiro–Wilk no dispone de una fórmula analítica de potencia en función de \(n\), esta calculadora utiliza la <strong>aproximación de Jarque–Bera</strong>, que combina asimetría y curtosis en un estadístico ómnibus cuya distribución bajo \(H_0\) es asintóticamente \(\chi^2(2)\). El resultado es aproximado en dos sentidos: sustituye el test de Shapiro–Wilk por el de Jarque–Bera y, además, supone que el estadístico JB sigue una chi-cuadrado no central, algo que con muestras pequeñas puede alejarse mucho de la realidad. Por eso la estimación <strong>no es conservadora</strong>: como muestra la tabla de referencia, frente a alternativas asimétricas o de colas pesadas el \(n\) que realmente necesita Shapiro–Wilk puede ser varias veces mayor que el calculado, mientras que frente a alternativas de colas ligeras (uniforme) puede ser menor.</p>
-            <h3>Fórmula de potencia (aproximación Jarque–Bera)</h3>
+            <details class="fold fold-sub"><summary><h3>Fórmula de potencia (aproximación Jarque–Bera)</h3></summary>
             <p>Bajo la alternativa con parámetros de forma \(\gamma_1\) y \(\gamma_2\), el parámetro de no centralidad del estadístico Jarque–Bera para una muestra de tamaño \(n\) es:</p>
             <p class="formula-line">\( \lambda(n) = n \left(\frac{\gamma_1^2}{6} + \frac{\gamma_2^2}{24}\right) \)</p>
             <p>Bajo \(H_1\), el estadístico JB sigue aproximadamente una distribución chi-cuadrado no central con 2 grados de libertad y parámetro \(\lambda(n)\). La potencia del test al nivel \(\alpha\) es:</p>
@@ -234,7 +234,8 @@
             <p>La distribución chi-cuadrado no central se evalúa mediante la mezcla de Poisson de chi-cuadrados centrales:</p>
             <p class="formula-line">\( F_{\chi^2(df,\lambda)}(x) = \sum_{k=0}^{\infty} \frac{e^{-\lambda/2}(\lambda/2)^k}{k!} \cdot F_{\chi^2(df+2k)}(x) \)</p>
             <p>La calculadora busca el mínimo entero \(n \geq 3\) para el que la potencia calculada supera el objetivo.</p>
-            <h3>Distribuciones de referencia</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Distribuciones de referencia</h3></summary>
             <p>La siguiente tabla muestra los momentos de varias distribuciones, el tamaño muestral que devuelve esta calculadora (aproximación JB) y el que necesita realmente el test de Shapiro–Wilk según simulación, en ambos casos para una potencia del 80 % con \(\alpha = 0{,}05\).</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -294,7 +295,8 @@
                 </table>
             </div>
             <p style="font-size:0.875rem; color:var(--text-muted);">La última columna es el menor \(n\) con el que el test de Shapiro–Wilk alcanza una potencia del 80 % (\(\alpha = 0{,}05\)) en simulaciones de Monte Carlo con 10 000–20 000 réplicas por valor de \(n\); son cifras aproximadas. La comparación muestra que la aproximación JB puede equivocarse mucho y en ambos sentidos.</p>
-            <h3>Configuración rápida</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Configuración rápida</h3></summary>
             <ul>
                 <li><strong>Distribución alternativa desconocida:</strong> si no tienes información sobre γ₁ y γ₂, usa los valores de la distribución más parecida en la tabla anterior o aplica uno de los presets.</li>
                 <li><strong>Solo curtosis (distribuciones simétricas):</strong> fija γ₁ = 0 e introduce el γ₂ esperado. Ten en cuenta que detectar curtosis sin asimetría requiere muestras considerablemente mayores.</li>
@@ -302,7 +304,8 @@
                 <li><strong>Alfa:</strong> 0,05 es el estándar. En estudios confirmatorios donde la normalidad es un supuesto crítico, considera α = 0,10 para ganar potencia.</li>
                 <li><strong>Potencia:</strong> 0,80 es el mínimo habitual. Para estudios donde el incumplimiento de normalidad tiene consecuencias graves, usa 0,90.</li>
             </ul>
-            <h3>Ejemplo resuelto</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Ejemplo resuelto</h3></summary>
             <p>Un investigador espera que los tiempos de respuesta en un experimento sigan una distribución exponencial (\(\gamma_1 = 2\), \(\gamma_2 = 6\)). Quiere planificar su estudio de forma que, si los datos realmente provienen de una exponencial, el test de Shapiro–Wilk rechace la normalidad al menos el 80 % de las veces con \(\alpha = 0{,}05\).</p>
             <p><strong>Paso 1 — Parámetro de no centralidad:</strong></p>
             <p class="formula-line">\( \lambda(n) = n\!\left(\frac{2^2}{6} + \frac{6^2}{24}\right) = n\!\left(\frac{4}{6} + \frac{36}{24}\right) = n\!\left(0{,}6\overline{6} + 1{,}5\right) = n \cdot 2{,}1\overline{6} \)</p>
@@ -311,17 +314,20 @@
             <p class="formula-line">\( \lambda(4) \approx 8{,}67 \;\Rightarrow\; 1 - \beta \approx 1 - F_{\chi^2(2,\,8{,}67)}(5{,}991) \approx 0{,}75 &lt; 0{,}80 \)</p>
             <p class="formula-line">\( \lambda(5) \approx 10{,}83 \;\Rightarrow\; 1 - \beta \approx 1 - F_{\chi^2(2,\,10{,}83)}(5{,}991) \approx 0{,}85 \geq 0{,}80 \checkmark \)</p>
             <p>Según la aproximación JB bastarían <strong>n = 5 observaciones</strong>, que es lo que devuelve la calculadora con el preset "Exponencial". Sin embargo, en simulación la potencia real del test de Shapiro–Wilk frente a una exponencial es de solo un 16 % con \(n = 5\) y de un 44 % con \(n = 10\); hacen falta unas <strong>19 observaciones</strong> para llegar al 80 %. El ejemplo ilustra por qué el resultado debe tomarse como orientativo y contrastarse por simulación cuando el tamaño muestral es importante.</p>
-            <h3>Supuestos del modelo</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Supuestos del modelo</h3></summary>
             <ul>
                 <li>Muestra aleatoria de observaciones independientes de una única variable continua.</li>
                 <li>Se contrasta la hipótesis nula de normalidad frente a una alternativa con asimetría y/o curtosis dadas.</li>
                 <li>La potencia se aproxima mediante el estadístico de Jarque–Bera.</li>
                 <li>La aproximación es asintótica, por lo que es menos fiable precisamente con muestras pequeñas.</li>
             </ul>
-            <h3>Cómo interpretar el resultado</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Cómo interpretar el resultado</h3></summary>
                 <p>El valor \(n\) es una <strong>estimación orientativa</strong> del tamaño muestral para que el test de Shapiro-Wilk (SW) detecte la desviación de normalidad especificada con la potencia deseada. La fórmula usa la aproximación asintótica de Jarque-Bera, que no es conservadora: frente a alternativas asimétricas o de colas pesadas puede subestimar varias veces el \(n\) necesario (véase la tabla de referencia), así que conviene verificarlo por simulación. Redondea siempre hacia arriba. Si prevés pérdidas de datos, divide \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener el reclutamiento necesario. Ten en cuenta que el SW solo está diseñado para \(3 \leq n \leq 5000\); para \(n > 5000\) no es aplicable directamente.</p>
                 <p>La potencia de SW para detectar no-normalidad depende del tipo de desviación y del \(n\): las alternativas claramente asimétricas se detectan con muestras relativamente pequeñas, mientras que las simétricas requieren bastantes más observaciones, sobre todo si tienen colas pesadas (véase la tabla de referencia). Para \(n < 8\), la potencia de SW es muy baja independientemente del efecto; si tu muestra es muy pequeña, los tests de normalidad tienen poca utilidad práctica y es preferible apoyarse en el diseño y los gráficos (histograma, Q-Q plot). Realiza un <em>análisis de sensibilidad</em> variando el parámetro de asimetría o curtosis objetivo para ver cuánto cambia el \(n\) requerido.</p>
                 <p>Si el \(n\) calculado supera 5000, el test SW no es aplicable y deberías usar alternativas como Kolmogorov-Smirnov (con la corrección de Lilliefors para parámetros estimados), Anderson-Darling, o simplemente evaluar la normalidad mediante métodos gráficos (Q-Q plot, histograma). Con muestras grandes, recuerda que el p-valor del test de normalidad se vuelve muy sensible a desviaciones triviales; en ese contexto, la pregunta relevante no es «¿son los datos exactamente normales?» sino «¿se alejan tanto de la normalidad que el procedimiento estadístico se ve comprometido?». Con los datos recogidos, realiza el contraste de normalidad con la <a href="shapiro-wilk-normalidad.html">calculadora de Shapiro-Wilk</a> e interpreta el resultado junto con el Q-Q plot.</p>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -457,7 +463,7 @@ calculateSWsampleSize();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

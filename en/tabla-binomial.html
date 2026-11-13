@@ -31,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional"></noscript>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <style>
         .site-nav { position:sticky; top:0; z-index:100; background:rgba(255,255,255,0.92); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid rgba(15,23,42,0.08); }
         .site-nav-inner { width:min(1200px,94vw); margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 0; }
@@ -98,7 +98,7 @@
         .dist-diagram .dg-caption strong { color: var(--accent); font-weight: 700; }
         .dist-diagram .dg-hint { opacity: 0.7; }
         /* Bloque «Para qué sirve esta tabla» */
-        .table-uses { margin:4px 0 18px; padding:16px 20px; }
+        .table-uses { margin:22px 0 0; padding:16px 20px; }
         .table-uses h2 { font-size:1.05rem; margin:0 0 8px; }
         .table-uses ul { margin:0; padding-left:1.15rem; display:grid; gap:6px; font-size:0.92rem; line-height:1.5; }
         /* Sin mayúsculas: convertirían α, ν, λ y μ en A, N, Λ y M. */
@@ -235,15 +235,6 @@
     </header>
 
     <main>
-        <section class="card table-uses">
-            <h2>What this table is for</h2>
-            <ul>
-                <li><strong>Number of successes in n trials</strong> with the same probability p (defective items, correct answers…). For other values, use the <a href="binomial.html" data-goatcounter-click="tabla-binomial/calculadora" data-goatcounter-title="binomial calculator">binomial calculator</a>.</li>
-                <li><strong>Test for one proportion with little data:</strong> the exact p-value, P(X ≥ k) or P(X ≤ k), is read from the cumulative table. With large samples: <a href="contraste-hipotesis-una-proporcion.html" data-goatcounter-click="tabla-binomial/contraste-proporcion" data-goatcounter-title="one-proportion test">one-proportion test</a> and <a href="intervalo-confianza-proporcion.html" data-goatcounter-click="tabla-binomial/ic-proporcion" data-goatcounter-title="confidence interval">confidence interval</a>.</li>
-                <li><strong>Approximations:</strong> by the <a href="tabla-normal.html" data-goatcounter-click="tabla-binomial/tabla-normal" data-goatcounter-title="normal">normal</a> if np and n(1 − p) exceed 5; by the <a href="tabla-poisson.html" data-goatcounter-click="tabla-binomial/tabla-poisson" data-goatcounter-title="Poisson">Poisson</a> with mean np if n is large and p small.</li>
-            </ul>
-        </section>
-
         <section class="card" style="margin-top:4px;">
             <div class="tab-bar" role="tablist">
                 <button class="tab-btn active" role="tab" aria-selected="true"  onclick="switchTab('pmf',this)">P(X = k) — Probability mass function</button>
@@ -311,6 +302,15 @@
             </div>
         </section>
 
+        <section class="card table-uses">
+            <h2>What this table is for</h2>
+            <ul>
+                <li><strong>Number of successes in n trials</strong> with the same probability p (defective items, correct answers…). For other values, use the <a href="binomial.html" data-goatcounter-click="tabla-binomial/calculadora" data-goatcounter-title="binomial calculator">binomial calculator</a>.</li>
+                <li><strong>Test for one proportion with little data:</strong> the exact p-value, P(X ≥ k) or P(X ≤ k), is read from the cumulative table. With large samples: <a href="contraste-hipotesis-una-proporcion.html" data-goatcounter-click="tabla-binomial/contraste-proporcion" data-goatcounter-title="one-proportion test">one-proportion test</a> and <a href="intervalo-confianza-proporcion.html" data-goatcounter-click="tabla-binomial/ic-proporcion" data-goatcounter-title="confidence interval">confidence interval</a>.</li>
+                <li><strong>Approximations:</strong> by the <a href="tabla-normal.html" data-goatcounter-click="tabla-binomial/tabla-normal" data-goatcounter-title="normal">normal</a> if np and n(1 − p) exceed 5; by the <a href="tabla-poisson.html" data-goatcounter-click="tabla-binomial/tabla-poisson" data-goatcounter-title="Poisson">Poisson</a> with mean np if n is large and p small.</li>
+            </ul>
+        </section>
+
         <aside class="sim-callout" aria-label="Related simulation">
             <p class="sim-callout-kicker">Interactive simulation</p>
             <p class="sim-callout-text"><strong>The binomial distribution in motion</strong> In a random walk each step is +1 with probability p and −1 otherwise, so the number of up-steps follows a binomial distribution. The simulator draws many paths and shows how their spread grows with √n.</p>
@@ -329,12 +329,13 @@
             </ol>
             <p><strong>Example:</strong> for 10 trials with p = 0.30, to find the probability of exactly 4 successes, choose n = 10, open P(X = k), and use the cell where row k = 4 meets column p = 0.30.</p>
 
-            <h3>Binomial Distribution</h3>
+            <details class="fold fold-sub"><summary><h3>Binomial Distribution</h3></summary>
             <p>A binomial experiment consists of n independent trials, each with probability p of success. The number of successes X follows a B(n, p) distribution with probability mass function:</p>
             <p class="formula-line">\( P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}, \quad k = 0, 1, \ldots, n \)</p>
             <p>The mean is μ = np and the variance σ² = np(1 − p).</p>
+            </details>
 
-            <h3>Useful properties</h3>
+            <details class="fold fold-sub"><summary><h3>Useful properties</h3></summary>
             <ul>
                 <li><strong>Symmetry:</strong> P(X = k; n, p) = P(X = n − k; n, 1 − p). Use this for p &gt; 0.5 by looking at the equivalent column with p' = 1 − p.</li>
                 <li><strong>Complement:</strong> P(X &gt; k) = 1 − P(X ≤ k).</li>
@@ -342,6 +343,7 @@
                 <li>For large n and small p, the binomial is well approximated by a Poisson distribution with λ = np.</li>
                 <li>For large n, the binomial is well approximated by a Normal distribution N(np, np(1−p)).</li>
             </ul>
+            </details>
 
             <h3>Related tables and calculators</h3>
             <ul class="distribution-links">
@@ -494,7 +496,7 @@
 </script>
 <script src="../table-diagram.js?v=20261102-2"></script>
 <script src="../table-actions.js?v=20261103-3"></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

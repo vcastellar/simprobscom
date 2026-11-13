@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="style_new.css?v=20261105-1">
+    <link rel="stylesheet" href="style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
     {
@@ -247,7 +247,7 @@
             <p class="formula-line">\( \widehat{RR} = \dfrac{\hat{p}_1}{\hat{p}_2} = \dfrac{x_1/n_1}{x_2/n_2} \)</p>
             <p>Un valor igual a 1 indica igualdad de proporciones. Valores mayores que 1 indican que la proporción del grupo 1 es mayor; valores menores que 1 indican que es menor.</p>
 
-            <h3>Método logarítmico para el ratio de proporciones</h3>
+            <details class="fold fold-sub"><summary><h3>Método logarítmico para el ratio de proporciones</h3></summary>
             <p>Denotamos por \(C\) el nivel de confianza y por \(\alpha=1-C\) el área total fuera del intervalo. Para un 95 % de confianza, \(C=0{,}95\), \(\alpha=0{,}05\) y \(\alpha/2=0{,}025\) en cada cola.</p>
             <p>El intervalo se construye en escala logarítmica porque el ratio solo puede tomar valores positivos y su distribución suele ser asimétrica. En la escala \(\log(RR)\), la aproximación normal es más estable para muestras moderadas o grandes.</p>
             <p>Primero se calcula \(\widehat{RR} = (x_1/n_1)/(x_2/n_2)\). Después se estima el error estándar de \(\log(\widehat{RR})\) con:</p>
@@ -255,11 +255,13 @@
             <p>El intervalo bilateral en escala logarítmica es:</p>
             <p class="formula-line">\( \log(\widehat{RR}) \pm z_{\alpha/2}\cdot SE\left[\log(\widehat{RR})\right] \)</p>
             <p>Finalmente se aplica la exponencial a los dos límites. El resultado final queda en la escala original del ratio de proporciones y se interpreta comparándolo con el valor nulo 1.</p>
+            </details>
 
-            <h3>Corrección para celdas cero</h3>
+            <details class="fold fold-sub"><summary><h3>Corrección para celdas cero</h3></summary>
             <p>Si alguno de los grupos no tiene eventos, \(\log(\widehat{RR})\) no se puede calcular directamente. La opción de corrección 0,5 suma 0,5 a las cuatro celdas de la tabla 2x2 antes de calcular proporciones, ratio e intervalo.</p>
+            </details>
 
-            <h3>Ejemplo resuelto</h3>
+            <details class="fold fold-sub"><summary><h3>Ejemplo resuelto</h3></summary>
             <p>Con x₁ = 35, n₁ = 100, x₂ = 20 y n₂ = 100:</p>
             <p class="formula-line">\( \widehat{RR} = \dfrac{35/100}{20/100} = 1{,}75 \)</p>
             <p>Para un 95 % de confianza, \(C=0{,}95\), \(\alpha=0{,}05\), \(\alpha/2=0{,}025\) y \(z_{0{,}025} \approx 1{,}960\). El error estándar en escala logarítmica es:</p>
@@ -269,20 +271,22 @@
             <p>Al transformar con la exponencial:</p>
             <p class="formula-line">\( IC_{95\%}(RR) = [e^{0{,}085},\;e^{1{,}034}] \approx [1{,}089,\;2{,}812] \)</p>
             <p>Como el intervalo no incluye 1, la proporción del grupo 1 es significativamente mayor que la del grupo 2 al 95 % de confianza.</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Supuestos para el ratio de proporciones</h3>
+            <details class="fold"><summary><h3>Supuestos para el ratio de proporciones</h3></summary>
             <ul>
                 <li>Los dos grupos deben ser independientes y tener denominadores reales de riesgo o proporción.</li>
                 <li>En cada grupo, las observaciones deben ser binarias e independientes.</li>
                 <li>El método logarítmico necesita eventos positivos en ambos grupos; si algún grupo tiene 0 eventos, usa la corrección 0,5 e interpreta con cautela.</li>
                 <li>La aproximación normal de \(\log(RR)\) funciona mejor con muestras moderadas o grandes y con recuentos no extremos.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>¿En qué se diferencia del IC para odds ratio?</h3>
+            <details class="fold"><summary><h3>¿En qué se diferencia del IC para odds ratio?</h3></summary>
             <p>Aunque esta calculadora y la de <a href="intervalo-confianza-odds-ratio.html">IC para odds ratio</a> usan una escala logarítmica y comparan el intervalo con el valor nulo 1, estiman medidas distintas.</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -312,10 +316,11 @@
             </div>
             <p>Con los mismos datos del ejemplo (35 eventos y 65 no eventos en el grupo 1; 20 eventos y 80 no eventos en el grupo 2), esta herramienta calcula \(RR=(35/100)/(20/100)=1{,}75\). La herramienta de odds ratio calcularía \(OR=(35/65)/(20/80)\approx2{,}154\).</p>
             <p>El RR responde a “cuántas veces mayor es la probabilidad del evento”. La OR responde a “cuántas veces mayores son las odds del evento”. Si el evento es raro, ambos valores suelen ser parecidos; si el evento es frecuente, la OR puede ser bastante mayor que el RR y no debe interpretarse como un riesgo relativo.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Cómo interpretar el resultado</h3>
+            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
             <p>El intervalo \([L, U]\) es el rango plausible del ratio de proporciones poblacional \(RR = p_1/p_2\) dado el nivel de confianza elegido. El valor nulo es 1, que indica igualdad de proporciones (\(p_1 = p_2\)). En términos frecuentistas: si repitieras el estudio muchas veces con los mismos tamaños muestrales y construyeras el IC con el mismo procedimiento, una proporción \(C\) de esos intervalos contendría el verdadero ratio. Al igual que con la odds ratio, el intervalo se construye simétricamente en escala logarítmica y luego se transforma con la exponencial; esto produce un IC asimétrico en la escala original (la distancia de \(\widehat{RR}\) a \(L\) no es igual a la distancia de \(\widehat{RR}\) a \(U\)).</p>
             <p>La interpretación sigue tres casos. Si \(1 \in [L, U]\), los datos son compatibles con igualdad de proporciones al nivel de confianza elegido; el contraste \(H_0\!: p_1 = p_2\) no se rechazaría al nivel \(\alpha = 1 - C\). Si \(L > 1\), la proporción del grupo 1 es significativamente mayor. Si \(U < 1\), la proporción del grupo 1 es significativamente menor. En el gráfico se representa la distribución normal aproximada de \(\log(RR)\): la región verde es la zona de confianza y las colas rojas (área \(\alpha/2\) cada una) delimitan los valores críticos \(\pm z_{\alpha/2}\) en escala logarítmica.</p>
             <ul>
@@ -323,6 +328,7 @@
                 <li><strong>Diferencia con la odds ratio:</strong> el RR compara proporciones directamente. La OR compara odds. Con el mismo ejemplo (35/100 frente a 20/100), \(RR = 1{,}75\) pero \(OR \approx 2{,}15\). Si el evento es raro, ambos se aproximan; si el evento es frecuente, la OR puede ser mucho más extrema que el RR y no debe usarse para estimar riesgos relativos.</li>
                 <li><strong>Amplitud y recuentos:</strong> el error estándar de \(\log(RR)\) crece cuando los recuentos de eventos (\(x_1\), \(x_2\)) son pequeños. Con pocos eventos en algún grupo, el intervalo será muy ancho e impreciso; si algún grupo tiene 0 eventos, es obligatorio aplicar la corrección 0,5.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -493,7 +499,7 @@ calculate();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

@@ -74,7 +74,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 </head>
 <body>
@@ -184,7 +184,7 @@
             <p>One-way ANOVA tests the null hypothesis that the means of <strong>k ≥ 2</strong> independent groups are equal against the alternative that at least two of them differ. When k = 2 it is equivalent to the two-sample t-test, but for k ≥ 3 it controls the overall type I error rate without requiring multiple pairwise comparisons.</p>
             <p>The parameter that summarizes the effect size is <strong>Cohen's f</strong>, defined as \(f = \sigma_{\text{means}} / \sigma_{\text{residual}}\), where \(\sigma_{\text{means}}\) is the standard deviation of the group means and \(\sigma_{\text{residual}}\) is the variability within groups. f is related to \(\eta^2\) (eta squared) by \(f = \sqrt{\eta^2/(1-\eta^2)}\).</p>
             <p>The power calculation is based on the <strong>noncentral F distribution</strong>: under H₁, the F statistic follows a noncentral F with noncentrality parameter \(\lambda = n \cdot k \cdot f^2\). This calculator searches for the minimum integer n for which the power exceeds the target using an iterative search.</p>
-            <h3>Formula and calculation method</h3>
+            <details class="fold fold-sub"><summary><h3>Formula and calculation method</h3></summary>
             <p>With <em>n</em> observations per group (balanced design):</p>
             <p class="formula-line">\( \lambda = n \cdot k \cdot f^2 \)</p>
             <p class="formula-line">\( 1-\beta = P\!\left(F'(k-1,\;k(n-1),\;\lambda) > F_{\alpha,\,k-1,\,k(n-1)}\right) \)</p>
@@ -194,11 +194,13 @@
                 <li><strong>λ</strong>: noncentrality parameter; it grows linearly with n and k, and quadratically with f.</li>
                 <li><strong>k−1 and k(n−1)</strong>: numerator and denominator degrees of freedom of the F statistic.</li>
             </ul>
-            <h3>How to calculate f from prior data</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>How to calculate f from prior data</h3></summary>
             <p>If you know the expected means of each group \(\mu_1, \ldots, \mu_k\) and the common residual standard deviation \(\sigma\):</p>
             <p class="formula-line">\( \sigma_{\text{means}} = \sqrt{\frac{1}{k}\sum_{i=1}^{k}(\mu_i - \bar{\mu})^2}, \quad f = \frac{\sigma_{\text{means}}}{\sigma} \)</p>
             <p>Alternatively, if you have \(\eta^2\) from a prior study: \(f = \sqrt{\eta^2/(1-\eta^2)}\).</p>
-            <h3>Quick setup</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>Unknown f:</strong> use f = 0.25 (medium) as a conservative starting point.</li>
                 <li><strong>f from means and σ:</strong> calculate \(\sigma_{\text{means}}\) from the expected means of each group and divide it by the residual σ.</li>
@@ -206,33 +208,39 @@
                 <li><strong>Alpha:</strong> 0.05 is the standard; 0.01 for confirmatory studies or when multiple post-hoc comparisons are planned.</li>
                 <li><strong>Power:</strong> 0.80 minimum; 0.90 in studies where post-hoc comparisons are the main goal.</li>
             </ul>
-            <h3>Simple example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Simple example</h3></summary>
             <p>A trial comparing 3 diets (k = 3) with a medium effect (f = 0.25), α = 0.05 and power 0.80: <strong>n ≈ 52 per group</strong> (total ≈ 156). With 4 groups and the same f: n ≈ 45 per group (total ≈ 180) — the total sample grows as groups are added even though the per-group n goes down.</p>
-            <h3>Worked example</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>An education researcher wants to compare the academic performance achieved with three different teaching methods (\(k = 3\) groups): lecture-based instruction, project-based learning and the flipped classroom. Based on prior studies, the standard deviation within each group is estimated at \(\sigma = 10\) points out of 100. The group means are expected to be approximately 75, 80 and 85 points, with an overall mean of 80.</p>
             <p>To calculate Cohen's effect size \(f\), the between-group standard deviation is obtained first:</p>
             <p class="formula-line">\( \sigma_{\text{between}} = \sqrt{\frac{(75-80)^2 + (80-80)^2 + (85-80)^2}{3}} = \sqrt{\frac{25 + 0 + 25}{3}} = \sqrt{\frac{50}{3}} \approx 4.08 \)</p>
             <p>The effect size is \(f = \sigma_{\text{between}} / \sigma = 4.08 / 10 \approx 0.408\), considered large by Cohen's criteria (\(f \geq 0.40\)). With \(\alpha = 0.05\) and 80% power, the approximation gives a sample size of approximately <strong>21 participants per group</strong>, that is, <strong>63 participants in total</strong>.</p>
             <p>If the differences among methods were more modest — for example means of 76, 80 and 84 — the between-group standard deviation would be \(\sqrt{(16+0+16)/3} \approx 3.27\), with \(f \approx 0.327\) (medium-to-large effect). In that case <strong>32 participants per group</strong> (96 in total) would be needed.</p>
             <p>Note that the number of groups \(k\) also affects the calculation: for the same \(f\), adding a fourth group increases the numerator degrees of freedom in the ANOVA and changes the required sample size. It is therefore advisable to use the tool to explore different scenarios before planning data collection.</p>
-            <h3>Model assumptions</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Model assumptions</h3></summary>
             <ul>
                 <li>The k groups are independent of each other.</li>
                 <li>The variable follows a normal distribution within each group (or n is large enough).</li>
                 <li>The group variances are equal (homoscedasticity). If not, consider Welch's ANOVA.</li>
                 <li>Balanced design (same n per group). For unequal groups, use the harmonic n as an approximation.</li>
             </ul>
-            <h3>Common uses</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>Common uses</h3></summary>
             <ul>
                 <li>Comparison of 3 or more treatments, doses or experimental conditions.</li>
                 <li>One-factor factorial designs with several levels.</li>
                 <li>Studies where the analysis will be followed by post-hoc comparisons (Tukey, Bonferroni, etc.).</li>
                 <li>Experimental psychology, agronomy, pharmacology, education.</li>
             </ul>
-            <h3>How to interpret the result</h3>
+            </details>
+            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
                 <p>The value \(n\) is the <strong>minimum sample size per group</strong> in a balanced one-way ANOVA design with \(k\) groups. The total number of participants to recruit is \(k \times n\). Always round up. If you anticipate losses or dropouts, calculate the per-group recruitment number as \(\lceil n / (1 - \text{loss rate}) \rceil\). A key feature of the ANOVA design is that imbalance between groups (different \(n\) per group) does not invalidate the analysis, but it does reduce power and complicate interpretation; if you anticipate unequal groups, use the formula for unbalanced designs or increase the \(n\) of the smallest group.</p>
                 <p>Cohen's effect size \(f\) (or the between-means variance \(\sigma_\mu^2\)) is the hardest parameter to specify. A value \(f = 0.10\) is considered small, \(f = 0.25\) medium and \(f = 0.40\) large. Small errors in \(f\) have a quadratic impact on \(n\): if the real effect is 20% smaller than expected, the required \(n\) increases by approximately 56% \((1/0.8^2 \approx 1.56)\). Perform a <em>sensitivity analysis</em> by evaluating \(n\) for different values of \(f\) or of the within-group variance \(\sigma^2\). Keep in mind that the calculated \(n\) protects the overall significance level of the ANOVA F test, but <strong>not the post-hoc comparisons</strong>: if you plan to make all pairwise comparisons between groups with a Bonferroni correction (\(\alpha/\binom{k}{2}\)), the \(n\) needed for each individual comparison is considerably larger.</p>
                 <p>When \(n\) is very small per group (&lt; 15), verify that normality of the residuals and homoscedasticity are reasonable, or use the nonparametric equivalent (Kruskal-Wallis test) with its own adjusted \(n\). If the total \(n\), \(kn\), turns out to be unfeasible, consider whether the number of groups \(k\) can be reduced (by merging similar groups) or whether the design could be more efficient as a repeated-measures ANOVA. Once the data have been collected, use the <a href="anova.html">ANOVA calculator</a> for the analysis of variance and the relevant post-hoc tests.</p>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -356,7 +364,7 @@ document.getElementById("anovaCalculateBtn").addEventListener("click", calculate
 calculateAnovaSampleSize();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

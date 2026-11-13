@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Central Limit Theorem Simulator | ProbLab">
   <meta name="twitter:description" content="Central limit theorem simulator: choose a base distribution, sample size and number of simulations to see normal convergence.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../../style_new.css?v=20261102-1">
+  <link rel="stylesheet" href="../../style_new.css?v=20261113-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -469,7 +469,7 @@
         </li>
       </ol>
 
-      <h3>Upper chart: original distribution</h3>
+      <details class="fold fold-sub"><summary><h3>Upper chart: original distribution</h3></summary>
       <p>
         The <strong>bars</strong> are the histogram of the individual observations. Their height is on a density scale,
         meaning that each bar's height is the proportion of observations falling in that interval divided by the interval width,
@@ -481,8 +481,9 @@
         right tail (Exponential, Chi-square) or just two values (Bernoulli). The less it looks like a bell, the more striking
         the lower chart becomes.
       </p>
+            </details>
 
-      <h3>Lower chart: sampling distribution of the mean</h3>
+      <details class="fold fold-sub"><summary><h3>Lower chart: sampling distribution of the mean</h3></summary>
       <p>
         The <strong>bars</strong> are the histogram of the sample means, one per simulation, also on a density scale:
         each bar's height shows what proportion of the simulations produced a mean within that interval.
@@ -523,8 +524,9 @@
         the mean of \(n\) Bernoulli values can only take the \(n + 1\) values \(0, 1/n, 2/n, \ldots, 1\), and the mean of \(n\)
         Poisson values only multiples of \(1/n\). As \(n\) grows, the possible values multiply and the histogram fills in.
       </p>
+            </details>
 
-      <h3>Theoretical vs. empirical table</h3>
+      <details class="fold fold-sub"><summary><h3>Theoretical vs. empirical table</h3></summary>
       <p>
         The <strong>Theoretical</strong> column is computed from formulas, without using the simulated data: the mean \(\mu\) of the
         base distribution, the standard error \(\sigma/\sqrt{n}\), the variance \(\sigma^2/n\) and the skewness
@@ -536,8 +538,9 @@
         \(\sqrt{n}\), it becomes clear why highly skewed distributions (Exponential, Chi-square) need a larger \(n\) than symmetric
         ones (Normal, Uniform), whose skewness is already 0 to begin with.
       </p>
+            </details>
 
-      <h3>Suggested experiments</h3>
+      <details class="fold fold-sub"><summary><h3>Suggested experiments</h3></summary>
       <ul>
         <li><strong>Exponential with n = 1, 2, 5, 30:</strong> the long right tail shrinks until it forms a bell.</li>
         <li><strong>Uniform with n = 2:</strong> the plateau becomes a triangle; with n = 5 it is already almost a bell.</li>
@@ -545,11 +548,12 @@
         <li><strong>Chi-square with n = 10 and n = 100:</strong> compare the skewness row of the table in both cases.</li>
         <li><strong>100 vs. 10,000 simulations with the same n:</strong> the shape does not change, only the histogram noise.</li>
       </ul>
+            </details>
     </section>
 
     <!-- Educational content -->
     <section class="card content-card" aria-labelledby="tcl-def-heading">
-      <h2 id="tcl-def-heading">What does the central limit theorem state?</h2>
+      <details class="fold"><summary><h2 id="tcl-def-heading">What does the central limit theorem state?</h2></summary>
       <p>
         The <strong>central limit theorem (CLT)</strong> is one of the fundamental results of mathematical statistics.
         It states that, under general conditions, the distribution of the sum (or the mean) of a large number of independent
@@ -576,10 +580,11 @@
         where \(\rho = \mathbb{E}[|X-\mu|^3]\) is the third absolute centered moment and \(C \approx 0.4748\).
         This implies that distributions with greater skewness require larger samples for the normal approximation to be accurate.
       </p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Where the mean, the standard error and the bell come from</h2>
+      <details class="fold"><summary><h2>Where the mean, the standard error and the bell come from</h2></summary>
       <p>The "Theoretical" column of the table and the red curve in the lower chart come from three results. The first two are exact for any \(n\); the third is the central limit theorem proper.</p>
 
       <h3>The mean of the means is μ</h3>
@@ -623,10 +628,11 @@
       <div class="math-block">\[ \begin{aligned} M_{Z_n}(t) &= \left[ M\!\left(\frac{t}{\sqrt{n}}\right) \right]^{n} \\ &= \left[ 1 + \frac{t^2}{2n} + o\!\left(\frac{1}{n}\right) \right]^{n} \;\longrightarrow\; e^{t^2/2}, \end{aligned} \]</div>
       <p>by the limit \((1 + a/n)^n \to e^a\). And \(e^{t^2/2}\) is exactly the generating function of the standard normal. The rigorous proof follows the same path with the characteristic function, which always exists.</p>
       <p>What matters is what survives the limit: only the mean and the variance. Every other feature of the original distribution (skewness, tails, whether it is discrete or continuous) sits in the \(o(1/n)\) terms, which vanish. That is why the result is the same wherever you start from, and why the variance has to be finite: without it there is no \(t^2/2\) term.</p>
+      </details>
     </section>
 
     <section class="card content-card" aria-labelledby="n-needed-heading">
-      <h2 id="n-needed-heading">What sample size <em>n</em> does the CLT need?</h2>
+      <details class="fold"><summary><h2 id="n-needed-heading">What sample size <em>n</em> does the CLT need?</h2></summary>
       <p>
         There is no single threshold: the speed of convergence depends on the underlying distribution.
         As a practical guide:
@@ -658,10 +664,11 @@
         distributions commonly encountered in applied sciences. However, for highly skewed distributions or distributions
         with very heavy tails, it may be insufficient.
       </p>
+      </details>
     </section>
 
     <section class="card content-card" aria-labelledby="implications-heading">
-      <h2 id="implications-heading">Practical implications of the CLT</h2>
+      <details class="fold"><summary><h2 id="implications-heading">Practical implications of the CLT</h2></summary>
       <p>
         The CLT has far-reaching consequences in applied statistics:
       </p>
@@ -690,6 +697,7 @@
           analysis, by guaranteeing that statistics based on means have asymptotically normal distributions.
         </li>
       </ul>
+      </details>
     </section>
 
     <section class="card content-card" aria-labelledby="faq-heading">
@@ -1193,7 +1201,7 @@
   });
 </script>
 <script src="../../field-hints.js?v=20260730-1"></script>
-<script src="../../theme.js?v=20261031-1"></script>
+<script src="../../theme.js?v=20261113-1"></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

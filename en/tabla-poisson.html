@@ -31,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional"></noscript>
-    <link rel="stylesheet" href="../style_new.css?v=20261102-2">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <style>
         .site-nav { position:sticky; top:0; z-index:100; background:rgba(255,255,255,0.92); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid rgba(15,23,42,0.08); }
         .site-nav-inner { width:min(1200px,94vw); margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 0; }
@@ -93,7 +93,7 @@
         .dist-diagram .dg-caption strong { color: var(--accent); font-weight: 700; }
         .dist-diagram .dg-hint { opacity: 0.7; }
         /* Bloque «Para qué sirve esta tabla» */
-        .table-uses { margin:4px 0 18px; padding:16px 20px; }
+        .table-uses { margin:22px 0 0; padding:16px 20px; }
         .table-uses h2 { font-size:1.05rem; margin:0 0 8px; }
         .table-uses ul { margin:0; padding-left:1.15rem; display:grid; gap:6px; font-size:0.92rem; line-height:1.5; }
         /* Sin mayúsculas: convertirían α, ν, λ y μ en A, N, Λ y M. */
@@ -230,15 +230,6 @@
     </header>
 
     <main>
-        <section class="card table-uses">
-            <h2>What this table is for</h2>
-            <ul>
-                <li><strong>Number of events in an interval</strong> when they occur at random at a constant rate λ (calls per hour, breakdowns per month…). For other λ, use the <a href="poisson.html" data-goatcounter-click="tabla-poisson/calculadora" data-goatcounter-title="Poisson calculator">Poisson calculator</a>; to see it in action, the <a href="simulaciones/simulador-proceso-poisson.html" data-goatcounter-click="tabla-poisson/simulador" data-goatcounter-title="Poisson process simulator">Poisson process simulator</a>.</li>
-                <li><strong>Rare events:</strong> it approximates a <a href="tabla-binomial.html" data-goatcounter-click="tabla-poisson/tabla-binomial" data-goatcounter-title="binomial">binomial</a> with large n and small p, with λ = np. The time between events follows an <a href="exponential.html" data-goatcounter-click="tabla-poisson/exponencial" data-goatcounter-title="exponential">exponential</a> with mean 1/λ.</li>
-                <li><strong>Are your data Poisson?</strong> Check it with a <a href="chi-cuadrado-bondad-ajuste.html" data-goatcounter-click="tabla-poisson/bondad" data-goatcounter-title="goodness-of-fit test">goodness-of-fit test</a> (if you estimate λ from the data, subtract one more degree of freedom).</li>
-            </ul>
-        </section>
-
         <section class="card" style="margin-top:4px;">
             <div class="tab-bar" role="tablist">
                 <button class="tab-btn active" role="tab" aria-selected="true"  onclick="switchTab('pmf',this)">P(X = k) — Probability mass function</button>
@@ -294,6 +285,15 @@
             </div>
         </section>
 
+        <section class="card table-uses">
+            <h2>What this table is for</h2>
+            <ul>
+                <li><strong>Number of events in an interval</strong> when they occur at random at a constant rate λ (calls per hour, breakdowns per month…). For other λ, use the <a href="poisson.html" data-goatcounter-click="tabla-poisson/calculadora" data-goatcounter-title="Poisson calculator">Poisson calculator</a>; to see it in action, the <a href="simulaciones/simulador-proceso-poisson.html" data-goatcounter-click="tabla-poisson/simulador" data-goatcounter-title="Poisson process simulator">Poisson process simulator</a>.</li>
+                <li><strong>Rare events:</strong> it approximates a <a href="tabla-binomial.html" data-goatcounter-click="tabla-poisson/tabla-binomial" data-goatcounter-title="binomial">binomial</a> with large n and small p, with λ = np. The time between events follows an <a href="exponential.html" data-goatcounter-click="tabla-poisson/exponencial" data-goatcounter-title="exponential">exponential</a> with mean 1/λ.</li>
+                <li><strong>Are your data Poisson?</strong> Check it with a <a href="chi-cuadrado-bondad-ajuste.html" data-goatcounter-click="tabla-poisson/bondad" data-goatcounter-title="goodness-of-fit test">goodness-of-fit test</a> (if you estimate λ from the data, subtract one more degree of freedom).</li>
+            </ul>
+        </section>
+
         <aside class="sim-callout" aria-label="Related simulation">
             <p class="sim-callout-kicker">Interactive simulation</p>
             <p class="sim-callout-text"><strong>Watch a Poisson process in action</strong> Simulate random arrivals at rate λ: the number of events in an interval follows a Poisson distribution and the times between arrivals follow an exponential. The simulator compares both with their theoretical distributions.</p>
@@ -302,17 +302,19 @@
 
         <section class="card content-card" style="border-top:3px solid #2563eb;">
             <h3>How to use these tables</h3>
-            <h3>Poisson Distribution</h3>
+            <details class="fold fold-sub"><summary><h3>Poisson Distribution</h3></summary>
             <p>The Poisson distribution models the number of events occurring in an interval of time or space, when the events occur independently at a mean rate λ. Its probability mass function is:</p>
             <p class="formula-line">\( P(X = k) = \dfrac{e^{-\lambda}\,\lambda^k}{k!}, \quad k = 0, 1, 2, \ldots \)</p>
             <p>The mean and variance coincide: E[X] = Var[X] = λ.</p>
+            </details>
 
-            <h3>Useful properties</h3>
+            <details class="fold fold-sub"><summary><h3>Useful properties</h3></summary>
             <ul>
                 <li><strong>Sum of Poissons:</strong> if X ~ Po(λ₁) and Y ~ Po(λ₂) are independent, then X + Y ~ Po(λ₁ + λ₂).</li>
                 <li><strong>Approximation to the binomial:</strong> B(n, p) ≈ Po(np) when n is large and p is small (np ≤ 5 as a guideline).</li>
                 <li><strong>Normal approximation:</strong> for large λ, Po(λ) ≈ N(λ, λ).</li>
             </ul>
+            </details>
 
             <h3>Related tables and calculators</h3>
             <ul class="distribution-links">
@@ -437,7 +439,7 @@
 </script>
 <script src="../table-diagram.js?v=20261102-2"></script>
 <script src="../table-actions.js?v=20261103-3"></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

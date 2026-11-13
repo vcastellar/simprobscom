@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261105-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
     {
@@ -210,7 +210,7 @@
             <p>Paired samples are used when there is a natural unit-to-unit correspondence and that correspondence carries information: the same patient before and after a treatment, the same batch measured by two methods, or subjects matched by age, sex, or another characteristic. By contrast, the <a href="intervalo-confianza-diferencia-medias.html">CI for the difference of independent means</a> is used when the groups are distinct and there is no observation-to-observation pairing.</p>
             <p>The key is not to treat the groups as independent. First, an individual difference is computed for each pair, for example \(d_i = \text{after}_i - \text{before}_i\). Then a t interval is built for the population mean of those differences, \(\mu_d\). This takes advantage of the correlation within each pair and removes part of the between-individual variability.</p>
 
-            <h3>Formula</h3>
+            <details class="fold fold-sub"><summary><h3>Formula</h3></summary>
             <p>Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area outside the interval. For 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\) in each tail.</p>
             <p class="formula-line">\( \bar{d} \pm t_{\alpha/2,\, n-1}\cdot \dfrac{s_d}{\sqrt{n}} \)</p>
             <ul>
@@ -220,8 +220,9 @@
                 <li><strong>\(t_{\alpha/2,\,n-1}\)</strong>: critical value of Student's t with \(n-1\) degrees of freedom.</li>
             </ul>
             <p>The margin of error is \(E=t_{\alpha/2,\,n-1}s_d/\sqrt{n}\), and the interval is \([\bar{d}-E,\;\bar{d}+E]\).</p>
+            </details>
 
-            <h3>Worked example</h3>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>In 18 patients a variable is measured before and after an intervention, defining \(d=\text{after}-\text{before}\). The mean of the differences is \(\bar{d}=4.2\) and its standard deviation is \(s_d=6.1\). It's important that \(s_d\) be the standard deviation of the individual differences, not the standard deviation of the before measurements or the after measurements separately.</p>
             <p>For 95% confidence we take \(C=0.95\), so \(\alpha=1-C=0.05\) and \(\alpha/2=0.025\). With \(n=18\), the degrees of freedom are \(df=n-1=17\), and the two-sided critical value is approximately \(t_{0.025,17}=2.110\).</p>
             <p>The standard error of the mean of the differences is:</p>
@@ -231,20 +232,22 @@
             <p>Therefore, the confidence interval is:</p>
             <p class="formula-line">\( 4.2 \pm 3.03 \approx [1.17,\;7.23] \)</p>
             <p>Since the interval does not include 0, the mean change is positive at 95% confidence under the definition \(d=\text{after}-\text{before}\). Had \(d=\text{before}-\text{after}\) been used instead, the same data would produce the interval with the opposite sign.</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Assumptions for paired means</h3>
+            <details class="fold"><summary><h3>Assumptions for paired means</h3></summary>
             <ul>
                 <li>The pairs are independent of one another.</li>
                 <li>The distribution of the differences is approximately normal, especially important with few pairs.</li>
                 <li>0 is the null value: if the CI includes 0, the data are compatible with no mean change.</li>
                 <li>The sign depends on how you define the difference. If you switch from \(\text{after}-\text{before}\) to \(\text{before}-\text{after}\), the interval changes sign.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How does it differ from the CI for the difference of independent means?</h3>
+            <details class="fold"><summary><h3>How does it differ from the CI for the difference of independent means?</h3></summary>
             <p>With independent samples, two distinct groups are compared and the variability depends on \(s_1\), \(s_2\), \(n_1\) and \(n_2\). With paired means, each pair is summarized into a single difference \(d_i\), and the relevant variability is \(s_d\).</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -273,10 +276,11 @@
                 </table>
             </div>
             <p>Ignoring the pairing usually loses information: if the measurements within each pair are correlated, analyzing the differences can substantially reduce the standard error.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p>The interval \([L, U]\) is the plausible range for the population mean of the individual differences \(\mu_d\) at the chosen confidence level. Remember that \(\mu_d\) is not the difference of two independent means, but the mean change within each pair: the same parameter that would be measured, on average, over all possible individual changes in the population. If the experiment were repeated many times with \(n\) pairs, a proportion \(C\) of the CIs built with the same method would contain the true value of \(\mu_d\).</p>
             <p>The reference value for this type of interval is 0, which represents no mean change. If \(0 \in [L, U]\), the data are compatible with there being no systematic change at the chosen confidence level; equivalently, the two-sided test \(H_0\!: \mu_d = 0\) would not be rejected at level \(\alpha = 1 - C\). If \(L > 0\), the mean change is positive under the chosen difference definition; if \(U < 0\), the mean change is negative. The direction of the interval depends directly on how \(d_i\) is defined: switching from "after − before" to "before − after" flips the signs of all the bounds.</p>
             <ul>
@@ -284,6 +288,7 @@
                 <li><strong>Width and uncertainty:</strong> the width of the interval depends on \(s_d\) (the variability of the change between individuals), \(n\) (the number of pairs), and the confidence level. Increasing \(n\) or reducing \(s_d\) (for example, by improving the homogeneity of the pairing) reduces the margin of error.</li>
                 <li><strong>Reading the chart:</strong> the green region under the t curve is the confidence zone and the red tails (area \(\alpha/2\) each) delimit the critical values \(\pm t_{\alpha/2,\,n-1}\). The interval on the original scale \([\bar{d} - E, \bar{d} + E]\) corresponds to the values of \(\mu_d\) whose t statistic would fall inside the green region.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -423,7 +428,7 @@ document.getElementById('direction').addEventListener('change', calculate);
 calculate();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

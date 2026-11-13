@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261105-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
     {
@@ -243,7 +243,7 @@
             <p class="formula-line">\( \widehat{RR} = \dfrac{\hat{p}_1}{\hat{p}_2} = \dfrac{x_1/n_1}{x_2/n_2} \)</p>
             <p>A value equal to 1 indicates equal proportions. Values greater than 1 indicate that group 1's proportion is higher; values less than 1 indicate that it is lower.</p>
 
-            <h3>Logarithmic method for the ratio of proportions</h3>
+            <details class="fold fold-sub"><summary><h3>Logarithmic method for the ratio of proportions</h3></summary>
             <p>Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area outside the interval. For 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\) in each tail.</p>
             <p>The interval is built on a logarithmic scale because the ratio can only take positive values and its distribution is usually skewed. On the \(\log(RR)\) scale, the normal approximation is more stable for moderate or large samples.</p>
             <p>First \(\widehat{RR} = (x_1/n_1)/(x_2/n_2)\) is computed. Then the standard error of \(\log(\widehat{RR})\) is estimated with:</p>
@@ -251,11 +251,13 @@
             <p>The two-sided interval on the logarithmic scale is:</p>
             <p class="formula-line">\( \log(\widehat{RR}) \pm z_{\alpha/2}\cdot SE\left[\log(\widehat{RR})\right] \)</p>
             <p>Finally, the exponential is applied to both limits. The final result is on the original scale of the ratio of proportions and is interpreted by comparing it with the null value 1.</p>
+            </details>
 
-            <h3>Zero-cell correction</h3>
+            <details class="fold fold-sub"><summary><h3>Zero-cell correction</h3></summary>
             <p>If either group has no events, \(\log(\widehat{RR})\) cannot be computed directly. The 0.5 correction option adds 0.5 to the four cells of the 2x2 table before computing proportions, ratio and interval.</p>
+            </details>
 
-            <h3>Worked example</h3>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>With x₁ = 35, n₁ = 100, x₂ = 20 and n₂ = 100:</p>
             <p class="formula-line">\( \widehat{RR} = \dfrac{35/100}{20/100} = 1.75 \)</p>
             <p>For 95% confidence, \(C=0.95\), \(\alpha=0.05\), \(\alpha/2=0.025\) and \(z_{0.025} \approx 1.960\). The standard error on the logarithmic scale is:</p>
@@ -265,20 +267,22 @@
             <p>Transforming with the exponential:</p>
             <p class="formula-line">\( CI_{95\%}(RR) = [e^{0.085},\;e^{1.034}] \approx [1.089,\;2.812] \)</p>
             <p>Since the interval does not include 1, group 1's proportion is significantly higher than group 2's at 95% confidence.</p>
+            </details>
         </section>
 
         <section class="card content-card">
-            <h3>Assumptions for the ratio of proportions</h3>
+            <details class="fold"><summary><h3>Assumptions for the ratio of proportions</h3></summary>
             <ul>
                 <li>The two groups must be independent and have real risk or proportion denominators.</li>
                 <li>Within each group, observations must be binary and independent.</li>
                 <li>The logarithmic method needs positive events in both groups; if either group has 0 events, use the 0.5 correction and interpret with caution.</li>
                 <li>The normal approximation of \(\log(RR)\) works better with moderate or large samples and non-extreme counts.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How does it differ from the CI for odds ratio?</h3>
+            <details class="fold"><summary><h3>How does it differ from the CI for odds ratio?</h3></summary>
             <p>Although this calculator and the <a href="intervalo-confianza-odds-ratio.html">CI for odds ratio</a> both use a logarithmic scale and compare the interval with the null value 1, they estimate different measures.</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -308,10 +312,11 @@
             </div>
             <p>With the same example data (35 events and 65 non-events in group 1; 20 events and 80 non-events in group 2), this tool computes \(RR=(35/100)/(20/100)=1.75\). The odds ratio tool would compute \(OR=(35/65)/(20/80)\approx2.154\).</p>
             <p>RR answers "how many times greater is the probability of the event." OR answers "how many times greater are the odds of the event." If the event is rare, both values tend to be similar; if the event is common, OR can be considerably larger than RR and should not be interpreted as a relative risk.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p>The interval \([L, U]\) is the plausible range of the population ratio of proportions \(RR = p_1/p_2\) given the chosen confidence level. The null value is 1, indicating equal proportions (\(p_1 = p_2\)). In frequentist terms: if you repeated the study many times with the same sample sizes and built the CI with the same procedure, a proportion \(C\) of those intervals would contain the true ratio. As with the odds ratio, the interval is built symmetrically on the logarithmic scale and then transformed with the exponential; this produces an asymmetric CI on the original scale (the distance from \(\widehat{RR}\) to \(L\) is not equal to the distance from \(\widehat{RR}\) to \(U\)).</p>
             <p>The interpretation follows three cases. If \(1 \in [L, U]\), the data are compatible with equal proportions at the chosen confidence level; the test \(H_0\!: p_1 = p_2\) would not be rejected at level \(\alpha = 1 - C\). If \(L > 1\), group 1's proportion is significantly higher. If \(U < 1\), group 1's proportion is significantly lower. The chart shows the approximate normal distribution of \(\log(RR)\): the green region is the confidence zone and the red tails (area \(\alpha/2\) each) delimit the critical values \(\pm z_{\alpha/2}\) on the logarithmic scale.</p>
             <ul>
@@ -319,6 +324,7 @@
                 <li><strong>Difference from odds ratio:</strong> RR compares proportions directly. OR compares odds. With the same example (35/100 versus 20/100), \(RR = 1.75\) but \(OR \approx 2.15\). If the event is rare, both converge; if the event is common, OR can be much more extreme than RR and should not be used to estimate relative risks.</li>
                 <li><strong>Width and counts:</strong> the standard error of \(\log(RR)\) grows when the event counts (\(x_1\), \(x_2\)) are small. With few events in either group, the interval will be very wide and imprecise; if either group has 0 events, applying the 0.5 correction is mandatory.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -487,7 +493,7 @@ window.CICharts && CICharts.customLevel({ onChange: calculate });
 calculate();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

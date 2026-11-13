@@ -50,7 +50,7 @@
     ]
   }
   </script>
-  <link rel="stylesheet" href="../style_new.css?v=20261107-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -212,30 +212,35 @@
       <h3>Hypotheses and test statistic</h3>
       <p>The test contrasts \(H_0: p_A = p_B\) against the selected alternative. Under \(H_0\), both groups share the same population proportion, so the pooled proportion \(\hat{p}\) is used to estimate the standard error.</p>
       <p class="formula-line">\( z = \dfrac{\hat{p}_B - \hat{p}_A}{\sqrt{\hat{p}(1-\hat{p})\!\left(\tfrac{1}{n_A}+\tfrac{1}{n_B}\right)}}, \quad \hat{p}=\dfrac{x_A+x_B}{n_A+n_B} \)</p>
-      <h3>Yates' continuity correction</h3>
+      <details class="fold fold-sub"><summary><h3>Yates' continuity correction</h3></summary>
       <p>With small samples, the discrete distribution of the statistic is better approximated by the normal by subtracting the correction:</p>
       <p class="formula-line">\( z_{\text{corr}} = \dfrac{\operatorname{sgn}(\hat{p}_B - \hat{p}_A)\cdot\max\!\left(0,\;\left|\hat{p}_B - \hat{p}_A\right| - \tfrac{1}{2}\!\left(\tfrac{1}{n_A}+\tfrac{1}{n_B}\right)\right)}{\sqrt{\hat{p}(1-\hat{p})\!\left(\tfrac{1}{n_A}+\tfrac{1}{n_B}\right)}} \)</p>
-      <h3>Confidence interval for the difference</h3>
+            </details>
+      <details class="fold fold-sub"><summary><h3>Confidence interval for the difference</h3></summary>
       <p>The CI for \(\Delta = p_B - p_A\) is built with the Wald standard error (unpooled), more conservative than the one used in the test:</p>
       <p class="formula-line">\( \Delta \pm z_{\alpha/2}\sqrt{\dfrac{\hat{p}_A(1-\hat{p}_A)}{n_A} + \dfrac{\hat{p}_B(1-\hat{p}_B)}{n_B}} \)</p>
+            </details>
     </section>
 
 
 
     <section class="card content-card">
-        <h3>Worked example: z-test in A/B testing</h3>
+        <details class="fold"><summary><h3>Worked example: z-test in A/B testing</h3></summary>
             <p>With A = 10,000 visits and 420 conversions, and B = 10,000 visits and 480 conversions, the tool compares two independent proportions. Use a two-tailed test if you only want to detect a difference, or a one-tailed test only if the improvement hypothesis was fixed before seeing the data.</p>
+      </details>
     </section>
 <section class="card content-card">
-        <h3>When to use Yates' correction</h3>
+        <details class="fold"><summary><h3>When to use Yates' correction</h3></summary>
         <p>The continuity correction improves the approximation to the normal distribution when sample sizes are small (generally n &lt; 50 per group) or when the proportion is close to 0 or 1. With large samples it produces results nearly identical to the uncorrected test and is slightly more conservative.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-        <h3>How to interpret the result</h3>
+        <details class="fold"><summary><h3>How to interpret the result</h3></summary>
         <p>The <strong>z statistic</strong> measures how many standard deviations the observed difference \(\hat{p}_B - \hat{p}_A\) is away from zero under the null hypothesis. The larger \(|z|\) is in absolute value, the further the data are from what we would expect if there were no real difference. The <strong>p-value</strong> translates that statistic into a probability: it is the probability of obtaining a z as extreme or more extreme in repeated experiments where H₀ were true. A p-value &lt; α (typically 0.05) does not mean that B is better with probability 1 − p; it means that the evidence against the hypothesis of equality is strong enough according to the chosen threshold.</p>
         <p>The <strong>relative lift</strong> \(((\hat{p}_B - \hat{p}_A) / \hat{p}_A) \times 100\,\%\) expresses B's improvement as a percentage over A's baseline rate. It is the most direct metric for judging the practical relevance of the result: an experiment can be statistically significant with a lift of 0.5% that has no real business impact, and another may not reach significance but show a 15% lift that deserves further investigation with more samples.</p>
         <p>The <strong>confidence interval</strong> for \(\Delta = p_B - p_A\) complements the p-value with information about the magnitude and uncertainty of the difference. If the CI does not include zero, the difference is significant at the chosen level. More importantly, the CI bounds indicate the plausible range of the true difference: if even the lower bound of the CI represents an improvement large enough for your business, you can confidently roll out B. If the CI includes both negative and positive values, the direction of the effect is uncertain and the experiment should be extended.</p>
+      </details>
     </section>
     <section id="seo-support-content" class="card content-card">
       <section class="related-tools">
@@ -402,7 +407,7 @@ document.getElementById('calcZBtn').addEventListener('click', calculateZTest);
 calculateZTest();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

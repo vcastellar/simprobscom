@@ -49,7 +49,7 @@
     ]
   }
   </script>
-  <link rel="stylesheet" href="style_new.css?v=20261107-1">
+  <link rel="stylesheet" href="style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -214,17 +214,19 @@
       <p>En el modelo bayesiano conjugado para proporciones, la prior es una distribución Beta y la likelihood es binomial. La posterior resultante es también una Beta, lo que permite obtener de forma analítica las distribuciones posteriores y sus intervalos de credibilidad. La probabilidad P(B &gt; A), en cambio, se estima por Monte Carlo y tiene un pequeño error de simulación.</p>
       <p class="formula-line">\( p_A \sim \text{Beta}(\alpha_0, \beta_0) \xrightarrow{\text{datos}} p_A \mid \text{datos} \sim \text{Beta}(\alpha_0 + x_A,\; \beta_0 + n_A - x_A) \)</p>
       <p class="formula-line">\( p_B \sim \text{Beta}(\alpha_0, \beta_0) \xrightarrow{\text{datos}} p_B \mid \text{datos} \sim \text{Beta}(\alpha_0 + x_B,\; \beta_0 + n_B - x_B) \)</p>
-      <h3>Elección de la prior</h3>
+      <details class="fold fold-sub"><summary><h3>Elección de la prior</h3></summary>
       <p>La prior Beta(1, 1) es uniforme: expresa ignorancia total sobre la tasa de conversión. Una prior Beta(α₀, β₀) con α₀ + β₀ grande equivale a tener datos históricos previos. La calculadora permite personalizarla.</p>
-      <h3>P(B &gt; A) mediante Monte Carlo</h3>
+            </details>
+      <details class="fold fold-sub"><summary><h3>P(B &gt; A) mediante Monte Carlo</h3></summary>
       <p>La probabilidad de que la tasa de conversión de B supere a la de A se estima muestreando de ambas posteriores:</p>
       <p class="formula-line">\( P(p_B > p_A) \approx \frac{1}{N}\sum_{i=1}^{N} \mathbf{1}\!\left[p_B^{(i)} > p_A^{(i)}\right], \quad p_A^{(i)}, p_B^{(i)} \sim \text{posteriores} \)</p>
+            </details>
     </section>
 
 
 
         <section class="card content-card">
-            <h3>Ejemplo resuelto</h3>
+            <details class="fold"><summary><h3>Ejemplo resuelto</h3></summary>
             <p>Un equipo de producto quiere mejorar la tasa de registro en la página de inicio de una aplicación SaaS. La versión actual (A) tiene una tasa de conversión conocida de aproximadamente el 8 %. La variante B incorpora un nuevo titular y un botón de llamada a la acción más prominente. Se adopta una prior no informativa Beta(1, 1) para ambas variantes, que expresa ignorancia total sobre la tasa real antes de observar datos.</p>
             <p>Tras 14 días de experimento se recogen los siguientes datos: el grupo A recibe <strong>1 200 visitantes</strong> y registra <strong>94 conversiones</strong>; el grupo B recibe <strong>1 200 visitantes</strong> y registra <strong>113 conversiones</strong>.</p>
             <p>La actualización bayesiana es inmediata gracias a la conjugación Beta-Binomial. La distribución posterior de cada tasa es:</p>
@@ -234,24 +236,27 @@
             <p class="formula-line">\( P(p_B > p_A) \approx 0{,}916 \)</p>
             <p>Con 30 000 muestras, el error estándar de Monte Carlo de esta estimación es \( \sqrt{0{,}916 \cdot 0{,}084/30\,000} \approx 0{,}002 \), así que el resultado puede variar en el tercer decimal de una ejecución a otra.</p>
             <p>El lift esperado de B sobre A es aproximadamente \( (9{,}5 - 7{,}9)/7{,}9 \approx +20\,\% \) en términos relativos. Con una probabilidad posterior del 91,6 % de que la variante B sea mejor, la evidencia favorece a B, pero el equipo <strong>no alcanza</strong> el umbral de decisión habitual del 95 %. Puede prolongar el experimento para reunir más datos o decidir valorando el coste de cada posible error; si finalmente despliega B, la estimación central es de unos 16 registros adicionales por cada 1 000 visitas, con una incertidumbre considerable.</p>
+      </details>
         </section>
 
     <section class="card content-card">
-        <h3>Ventajas del enfoque bayesiano</h3>
+        <details class="fold"><summary><h3>Ventajas del enfoque bayesiano</h3></summary>
         <ul>
         <li>P(B &gt; A) es directamente interpretable por stakeholders sin formación estadística.</li>
         <li>No requiere fijar el tamaño muestral a priori; puede actualizarse con datos nuevos (aunque hay que controlar el peeking).</li>
         <li>La prior permite incorporar conocimiento histórico sobre la tasa de conversión base.</li>
         <li>Evita el problema del p-valor: no hay umbral binario de significación.</li>
         </ul>
+      </details>
     </section>
 
 
     <section class="card content-card">
-      <h3>Cómo interpretar el resultado</h3>
+      <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
       <p>El resultado central del análisis bayesiano es <strong>P(B &gt; A)</strong>: la probabilidad posterior de que la tasa de conversión de B sea genuinamente superior a la de A, dado lo observado. A diferencia del p-valor frecuentista, esta probabilidad es directamente interpretable: si P(B &gt; A) = 0.97, significa que, con los datos actuales, hay un 97 % de credibilidad en que B supera a A. En la práctica, valores por encima de <strong>0.95</strong> suelen considerarse suficiente evidencia para tomar la decisión de implementar la variante B, aunque el umbral exacto depende del contexto y del coste relativo de los errores posibles.</p>
       <p>Las <strong>distribuciones posteriores</strong> representan el conocimiento actualizado sobre la tasa de conversión de cada variante tras combinar la prior con los datos del experimento. Siguiendo el modelo Beta-Binomial, la posterior de A es \(\text{Beta}(\alpha_0 + x_A,\; \beta_0 + n_A - x_A)\) y la de B es \(\text{Beta}(\alpha_0 + x_B,\; \beta_0 + n_B - x_B)\). La media de cada posterior es la estimación puntual de la tasa real; cuando las dos distribuciones se solapan poco en el gráfico, la diferencia entre variantes es clara; cuando el solapamiento es grande, la incertidumbre es alta y conviene seguir recogiendo datos.</p>
       <p>El <strong>intervalo de credibilidad</strong> al nivel seleccionado (90 %, 95 % o 99 %) indica el rango de valores de la tasa de conversión que contiene el nivel de credibilidad seleccionado de la masa posterior. A diferencia del intervalo de confianza frecuentista, puede interpretarse directamente: con un nivel del 95 %, "hay un 95 % de probabilidad de que la tasa real de B esté entre estos dos valores" (y de forma análoga para el 90 % o el 99 %). Si los intervalos de A y B no se solapan, la evidencia de diferencia es muy sólida. El <strong>lift esperado</strong> complementa este análisis mostrando la mejora relativa media de B sobre A según las posteriores, un indicador de relevancia práctica más directo que el p-valor.</p>
+      </details>
     </section>
     <section id="seo-support-content" class="card content-card">
       <section class="related-tools">
@@ -421,7 +426,7 @@ calculateBayes();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

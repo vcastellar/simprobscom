@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261105-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -226,48 +226,53 @@
             <p>This interval is for independent samples: the observations in group 1 are not paired with specific observations in group 2. If they are the same people before/after, or the same units measured twice, you should use the <a href="intervalo-confianza-medias-apareadas.html">CI for paired means</a>, which works on the individual differences.</p>
             <p>There are two variants depending on whether the population variances are equal or unequal. Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area of the tails; for example, for 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\). If 0 falls outside the interval, there is evidence that the means differ.</p>
 
-            <h3>Equal variances (pooled)</h3>
+            <details class="fold fold-sub"><summary><h3>Equal variances (pooled)</h3></summary>
             <p>The <em>pooled</em> method assumes that the two groups share the same population variance: \(\sigma_1^2=\sigma_2^2\). Since that common variance is unknown, it is estimated by combining the two sample variances into a single pooled variance \(s_p^2\).</p>
             <p class="formula-line">\( (\bar{x}_1 - \bar{x}_2) \pm t_{\alpha/2,\, n_1+n_2-2} \cdot s_p\sqrt{\dfrac{1}{n_1} + \dfrac{1}{n_2}} \)</p>
             <p>The pooled variance weights each variance by its degrees of freedom. The group with more observations contributes more to the common estimate:</p>
             <p class="formula-line">\( s_p^2 = \dfrac{(n_1-1)s_1^2 + (n_2-1)s_2^2}{n_1 + n_2 - 2} \)</p>
             <p>This method can be somewhat more efficient if the variances really are equal, but it can give unreliable intervals if the assumption doesn't hold, especially with unequal sample sizes.</p>
+            </details>
 
-            <h3>Unequal variances (Welch)</h3>
+            <details class="fold fold-sub"><summary><h3>Unequal variances (Welch)</h3></summary>
             <p>The Welch method does not force the population variances to be equal. It computes the standard error by adding the uncertainty of each group separately, \(s_1^2/n_1\) and \(s_2^2/n_2\), and adjusts the degrees of freedom using the Welch–Satterthwaite approximation.</p>
             <p class="formula-line">\( (\bar{x}_1 - \bar{x}_2) \pm t_{\alpha/2,\, \nu} \cdot \sqrt{\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}} \)</p>
             <p>The degrees of freedom \(\nu\) are usually not integers and reflect the loss of precision caused by estimating two separate variances:</p>
             <p class="formula-line">\( \nu = \dfrac{\left(\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}\right)^2}{\dfrac{(s_1^2/n_1)^2}{n_1-1} + \dfrac{(s_2^2/n_2)^2}{n_2-1}} \)</p>
             <p>In practice, Welch is usually the recommended default: it works well even when the variances differ and it barely loses efficiency when the variances are similar.</p>
+            </details>
 
-            <h3>Worked example</h3>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>Group A (new drug): \(\bar{x}_1 = 5.2\), \(s_1 = 1.4\), \(n_1 = 20\). Group B (placebo): \(\bar{x}_2 = 4.7\), \(s_2 = 1.6\), \(n_2 = 22\). The observed difference is \(\bar{x}_1-\bar{x}_2=0.5\).</p>
             <p>With 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\). Using Welch, the standard error is:</p>
             <p class="formula-line">\( SE=\sqrt{\dfrac{1.4^2}{20}+\dfrac{1.6^2}{22}}\approx0.463 \)</p>
             <p>The Welch degrees of freedom are approximately \(\nu\approx39.95\), so \(t_{0.025,\nu}\approx2.021\). The interval is:</p>
             <p class="formula-line">\( 0.5 \pm 2.021\cdot0.463 \approx [-0.44,\;1.44] \)</p>
             <p>Since the interval includes 0, the data do not rule out equal means at 95% confidence. If equal variances were assumed, the pooled variance would be \(s_p^2\approx2.275\), \(s_p\approx1.508\), and the pooled interval would be very similar: approximately \([-0.44,\;1.44]\). In this example the conclusions agree, but if the variances or sample sizes were very different, Welch would be safer.</p>
+            </details>
         </section>
 
 
 
         <section class="card content-card">
-            <h3>Assumptions for the difference of independent means</h3>
+            <details class="fold"><summary><h3>Assumptions for the difference of independent means</h3></summary>
             <ul>
                 <li>The two groups must be independent; if they are before/after measurements or paired units, use the <a href="intervalo-confianza-medias-apareadas.html">CI for paired means</a>.</li>
                 <li>The observations within each group must be independent and come from representative samples.</li>
                 <li>The distribution of the variable should be approximately normal in each group, especially with small sample sizes. With large samples, the central limit theorem makes the interval more robust.</li>
                 <li>For the pooled method it must be reasonable to assume equal population variances. If there is no clear evidence of equality, Welch is usually the safer option.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Equal or unequal variances?</h3>
+            <details class="fold"><summary><h3>Equal or unequal variances?</h3></summary>
             <p>In practice it is recommended to use Welch by default: it is robust whether or not the variances are equal, and its loss of power when variances are equal is minimal. The equal-variances assumption should only be adopted if there is strong prior evidence that \(\sigma_1 = \sigma_2\).</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p>The interval \([L, U]\) is the range of plausible values for the difference of population means \(\mu_1 - \mu_2\) given the chosen confidence level. If the interval were repeated many times with samples of the same size, a proportion \(C\) of those intervals would contain the true difference \(\mu_1 - \mu_2\). The width depends on the variability of each group (\(s_1\), \(s_2\)), the sample sizes (\(n_1\), \(n_2\)) and the confidence level: the more observations or the lower the variability, the narrower and more precise the interval.</p>
             <p>The key for decision-making is whether the value 0 belongs to the interval or not. If \(0 \in [L, U]\), the data are compatible with the hypothesis that both means are equal (\(\mu_1 = \mu_2\)) at the chosen confidence level; equivalently, the two-sided test \(H_0\!: \mu_1 = \mu_2\) would not be rejected at level \(\alpha = 1 - C\). If \(0 \notin [L, U]\), there is evidence that the means differ: if \(L > 0\), the mean of group 1 is significantly greater; if \(U < 0\), the mean of group 2 is significantly greater. The calculator states this explicitly in the result.</p>
             <ul>
@@ -275,6 +280,7 @@
                 <li><strong>Welch vs. pooled:</strong> with Welch the degrees of freedom are fractional; this slightly shortens the CI compared to forcing equal variances when the variances are very different. The chart shows the t distribution with the effective degrees of freedom of the chosen method.</li>
                 <li><strong>Practical relevance:</strong> a significant CI that is very close to 0 can indicate a real statistical difference but of little practical importance. Always assess the magnitude of the effect together with significance.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -420,7 +426,7 @@ window.CICharts && CICharts.customLevel({ onChange: calculate });
 calculate();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

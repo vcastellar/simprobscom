@@ -48,7 +48,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="../style_new.css?v=20261105-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -189,10 +189,10 @@
                         <div class="form-group">
                             <label for="method">Method <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                             <select id="method">
-                                <option value="both" selected>Compare (Wilson, Wald and Clopper-Pearson)</option>
-                                <option value="wald">Wald only</option>
-                                <option value="wilson">Wilson only</option>
-                                <option value="clopper">Clopper-Pearson only (exact)</option>
+                                <option value="wilson" selected>Wilson</option>
+                                <option value="wald">Wald</option>
+                                <option value="clopper">Clopper-Pearson (exact)</option>
+                                <option value="both">Compare all three</option>
                             </select>
                             <p class="field-hint" hidden><strong>Wilson</strong> is the recommended default: it keeps actual coverage closer to the nominal level with small samples or extreme proportions. <strong>Wald</strong> is simpler but can fail when there are few successes or failures. <strong>Clopper-Pearson</strong> uses the exact binomial and guarantees that coverage does not fall below the chosen level, at the cost of somewhat wider intervals.</p>
                         </div>
@@ -228,30 +228,33 @@
 
             <p>Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area outside the interval. For 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\) in each tail.</p>
 
-            <h3>Wald method (normal approximation)</h3>
+            <details class="fold fold-sub"><summary><h3>Wald method (normal approximation)</h3></summary>
             <p>Wald applies the normal approximation directly to the sample proportion \(\hat{p}\). It is the simplest interval and the easiest to compute by hand:</p>
             <p class="formula-line">\( \hat{p} \pm z_{\alpha/2} \cdot \sqrt{\dfrac{\hat{p}(1-\hat{p})}{n}} \)</p>
             <p>It works reasonably well when the sample is large and the proportion isn't close to 0 or 1. As a practical rule, it is advisable to require \(n\hat{p} \geq 5\) and \(n(1-\hat{p}) \geq 5\), although with moderate sample sizes this rule doesn't always guarantee good actual coverage.</p>
             <p>Its main limitation is that it centers the interval exactly on \(\hat{p}\) and uses a standard error estimated only from \(\hat{p}\). Because of this it can produce bounds below 0 or above 1, and it can underestimate the uncertainty when there are few successes, few failures, or extreme proportions.</p>
+            </details>
 
-            <h3>Wilson method (score, recommended)</h3>
+            <details class="fold fold-sub"><summary><h3>Wilson method (score, recommended)</h3></summary>
             <p>Wilson starts from the score test for a proportion and works out which values of \(p\) would be compatible with the data. It doesn't simply add and subtract the same margin around \(\hat{p}\); the center of the interval shifts slightly toward less extreme values and the bounds stay within \([0,1]\).</p>
             <p class="formula-line">\( \dfrac{\hat{p} + \dfrac{z^2}{2n} \pm z\sqrt{\dfrac{\hat{p}(1-\hat{p})}{n} + \dfrac{z^2}{4n^2}}}{1 + \dfrac{z^2}{n}} \)</p>
             <p>Wilson is generally recommended because it better maintains the actual coverage of the confidence level, especially with small samples or proportions close to 0 or 1. It also correctly handles extreme cases such as \(x=0\) or \(x=n\), where Wald can give degenerate or uninformative intervals.</p>
+            </details>
 
-            <h3>Worked example</h3>
+            <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>In a survey of 200 customers, 134 report being satisfied. \(\hat{p} = 134/200 = 0.67\). With 95% confidence (\(C=0.95\), \(\alpha=0.05\), \(z_{0.025}=1.960\)):</p>
             <p>With Wald, the standard error is \(\sqrt{0.67\cdot0.33/200}\approx0.03325\), and the interval is:</p>
             <p class="formula-line">\( 0.67 \pm 1.960 \cdot 0.03325 \approx [0.605,\; 0.735] \)</p>
             <p>With Wilson, applying the score formula to the same \(x=134\), \(n=200\) and \(z=1.960\), we get:</p>
             <p class="formula-line">\( CI_{Wilson} \approx [0.602,\;0.731] \)</p>
             <p>In this example both methods are similar because the sample is large and the proportion isn't extreme. If we had observed very few successes, very few failures, or a small sample, the difference would be larger and Wilson would be the more reliable choice.</p>
+            </details>
         </section>
 
 
 
         <section class="card content-card" id="clopper-pearson">
-            <h3>The Clopper-Pearson method (exact)</h3>
+            <details class="fold"><summary><h3>The Clopper-Pearson method (exact)</h3></summary>
             <p>Wald and Wilson rely on the normal approximation of \(\hat{p}\). Clopper and Pearson (1934) proposed approximating nothing: the number of successes \(X\) follows a binomial \(B(n, p)\) exactly, and the interval is built from that distribution. That is why it is called <strong>exact</strong>.</p>
 
             <h4>What it consists of</h4>
@@ -301,20 +304,22 @@
                 </table>
             </div>
             <p>Averaging over all values of \(p\) with \(n = 20\), Wald covers 85%, Wilson 95% and Clopper-Pearson 98%. Wilson is right on average, but for some values of \(p\) it drops to around 89%; Clopper-Pearson never drops below 95%, at the cost of almost always overshooting. You can see it with simulated samples in the <a href="simulaciones/simulador-intervalos-confianza.html?mode=prop&amp;method=clopper&amp;p=0.05&amp;n=20&amp;conf=0.95">confidence interval simulator</a>.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Assumptions for the CI of a proportion</h3>
+            <details class="fold"><summary><h3>Assumptions for the CI of a proportion</h3></summary>
             <ul>
                 <li>The data must come from Bernoulli trials: each observation is classified as success or failure.</li>
                 <li>The observations must be independent; if sampling without replacement from a finite population, the sample should be small relative to the population or a specific correction should be applied.</li>
                 <li>The probability of success must be the same for all observations within the analyzed group.</li>
                 <li>For Wald, enough successes and failures are needed: \(n\hat p\ge 5\) and \(n(1-\hat p)\ge 5\). Wilson is more reliable when this condition is doubtful.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>Differences between Wald, Wilson and Clopper-Pearson</h3>
+            <details class="fold"><summary><h3>Differences between Wald, Wilson and Clopper-Pearson</h3></summary>
             <div class="content-table-wrap">
                 <table class="content-table compare-table">
                     <thead>
@@ -354,10 +359,11 @@
                 </table>
             </div>
             <p>In short: Wald is useful as a quick, didactic approximation; Wilson is preferable as the main result because it better respects the binomial nature of the data and avoids impossible bounds. Clopper-Pearson is the cautious option: it never covers less than promised, although its intervals are somewhat wider.</p>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>When to use each method?</h3>
+            <details class="fold"><summary><h3>When to use each method?</h3></summary>
             <ul>
                 <li><strong>Use Wilson by default</strong> if you want a robust interval for most situations.</li>
                 <li><strong>Use Wald</strong> only as a quick approximation when \(n\) is large and there are enough successes and failures.</li>
@@ -365,10 +371,11 @@
                 <li><strong>Use Clopper-Pearson</strong> if you need the guarantee that actual coverage does not fall below the nominal level, even if the interval is somewhat wider.</li>
                 <li><strong>Compare the methods</strong> if you are in an intermediate zone: if they differ a lot, interpret Wald with caution and prioritize Wilson or Clopper-Pearson.</li>
             </ul>
+      </details>
         </section>
 
         <section class="card content-card">
-            <h3>How to interpret the result</h3>
+            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
             <p>The interval \([L, U]\) is the range of values of the population proportion \(p\) compatible with the observed data at the chosen confidence level. In frequentist terms: if you repeated the sampling many times and built the CI with the same method, a proportion \(C\) of those intervals would contain the true value of \(p\). The width depends on the sample size \(n\) and on the estimated proportion itself \(\hat{p}\): variability is greatest when \(\hat{p} = 0.5\) and decreases as it moves away from that value. In the chart, the green region under the standard normal curve is the confidence zone and the red tails (area \(\alpha/2\) each) delimit the critical values \(\pm z_{\alpha/2}\).</p>
             <p>To halve the width of the interval while keeping the same confidence level, you need to quadruple the sample size, since the margin of error is proportional to \(1/\sqrt{n}\). Increasing confidence from 95% to 99% widens the interval because \(z_{0.005} = 2.576 > z_{0.025} = 1.960\); that is, demanding more certainty comes at the cost of a less precise estimate.</p>
             <ul>
@@ -376,6 +383,7 @@
                 <li><strong>Connection with hypothesis testing:</strong> if a reference value \(p_0\) falls outside the interval, the data would reject \(H_0\!: p = p_0\) at level \(\alpha = 1 - C\) in the equivalent two-sided test. If \(p_0\) falls inside, there isn't enough evidence to reject it.</li>
                 <li><strong>Practical relevance:</strong> a very narrow CI indicates high precision, but remember that statistical precision and practical relevance are different concepts. An interval from 67% to 68% is very precise but could be irrelevant in contexts where only exceeding 70% matters.</li>
             </ul>
+      </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -545,7 +553,7 @@ window.CICharts && CICharts.customLevel({ onChange: calculate });
 calculate();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

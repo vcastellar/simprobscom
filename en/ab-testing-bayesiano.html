@@ -50,7 +50,7 @@
     ]
   }
   </script>
-  <link rel="stylesheet" href="../style_new.css?v=20261107-1">
+  <link rel="stylesheet" href="../style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -211,17 +211,19 @@
       <p>In the Bayesian conjugate model for proportions, the prior is a Beta distribution and the likelihood is binomial. The resulting posterior is also a Beta, so the posterior distributions and their credible intervals can be obtained analytically. The probability P(B &gt; A), on the other hand, is estimated by Monte Carlo and carries a small simulation error.</p>
       <p class="formula-line">\( p_A \sim \text{Beta}(\alpha_0, \beta_0) \xrightarrow{\text{data}} p_A \mid \text{data} \sim \text{Beta}(\alpha_0 + x_A,\; \beta_0 + n_A - x_A) \)</p>
       <p class="formula-line">\( p_B \sim \text{Beta}(\alpha_0, \beta_0) \xrightarrow{\text{data}} p_B \mid \text{data} \sim \text{Beta}(\alpha_0 + x_B,\; \beta_0 + n_B - x_B) \)</p>
-      <h3>Choosing the prior</h3>
+      <details class="fold fold-sub"><summary><h3>Choosing the prior</h3></summary>
       <p>The Beta(1, 1) prior is uniform: it expresses total ignorance about the conversion rate. A Beta(α₀, β₀) prior with a large α₀ + β₀ is equivalent to having prior historical data. The calculator lets you customize it.</p>
-      <h3>P(B &gt; A) via Monte Carlo</h3>
+            </details>
+      <details class="fold fold-sub"><summary><h3>P(B &gt; A) via Monte Carlo</h3></summary>
       <p>The probability that B's conversion rate exceeds A's is estimated by sampling from both posteriors:</p>
       <p class="formula-line">\( P(p_B > p_A) \approx \frac{1}{N}\sum_{i=1}^{N} \mathbf{1}\!\left[p_B^{(i)} > p_A^{(i)}\right], \quad p_A^{(i)}, p_B^{(i)} \sim \text{posteriors} \)</p>
+            </details>
     </section>
 
 
 
         <section class="card content-card">
-            <h3>Worked example</h3>
+            <details class="fold"><summary><h3>Worked example</h3></summary>
             <p>A product team wants to improve the sign-up rate on a SaaS application's homepage. The current version (A) has a known conversion rate of roughly 8%. Variant B introduces a new headline and a more prominent call-to-action button. A non-informative Beta(1, 1) prior is adopted for both variants, expressing total ignorance about the true rate before observing any data.</p>
             <p>After 14 days of the experiment, the following data are collected: group A receives <strong>1,200 visitors</strong> and records <strong>94 conversions</strong>; group B receives <strong>1,200 visitors</strong> and records <strong>113 conversions</strong>.</p>
             <p>The Bayesian update is immediate thanks to Beta-Binomial conjugacy. The posterior distribution of each rate is:</p>
@@ -231,24 +233,27 @@
             <p class="formula-line">\( P(p_B > p_A) \approx 0.916 \)</p>
             <p>With 30,000 samples, the Monte Carlo standard error of this estimate is \( \sqrt{0.916 \cdot 0.084/30{,}000} \approx 0.002 \), so the result can change in the third decimal place from one run to the next.</p>
             <p>The expected lift of B over A is approximately \( (9.5 - 7.9)/7.9 \approx +20\% \) in relative terms. With a 91.6% posterior probability that variant B is better, the evidence favours B, but the team does <strong>not reach</strong> the usual 95% decision threshold. It can extend the experiment to gather more data or decide by weighing the cost of each possible error; if it does roll out B, the central estimate is around 16 additional sign-ups per 1,000 visits, with considerable uncertainty.</p>
+      </details>
         </section>
 
     <section class="card content-card">
-        <h3>Advantages of the Bayesian approach</h3>
+        <details class="fold"><summary><h3>Advantages of the Bayesian approach</h3></summary>
         <ul>
         <li>P(B &gt; A) is directly interpretable by stakeholders without statistical training.</li>
         <li>It doesn't require fixing the sample size in advance; it can be updated with new data (although peeking must be controlled).</li>
         <li>The prior allows incorporating historical knowledge about the baseline conversion rate.</li>
         <li>It avoids the p-value problem: there is no binary significance threshold.</li>
         </ul>
+      </details>
     </section>
 
 
     <section class="card content-card">
-      <h3>How to interpret the result</h3>
+      <details class="fold"><summary><h3>How to interpret the result</h3></summary>
       <p>The central result of the Bayesian analysis is <strong>P(B &gt; A)</strong>: the posterior probability that B's conversion rate is genuinely higher than A's, given the observed data. Unlike the frequentist p-value, this probability is directly interpretable: if P(B &gt; A) = 0.97, it means that, with the current data, there is 97% credibility that B beats A. In practice, values above <strong>0.95</strong> are usually considered sufficient evidence to decide to roll out variant B, although the exact threshold depends on the context and the relative cost of the possible errors.</p>
       <p>The <strong>posterior distributions</strong> represent the updated knowledge about each variant's conversion rate after combining the prior with the experiment data. Following the Beta-Binomial model, A's posterior is \(\text{Beta}(\alpha_0 + x_A,\; \beta_0 + n_A - x_A)\) and B's is \(\text{Beta}(\alpha_0 + x_B,\; \beta_0 + n_B - x_B)\). The mean of each posterior is the point estimate of the true rate; when the two distributions overlap little in the chart, the difference between variants is clear; when the overlap is large, uncertainty is high and it's worth continuing to collect data.</p>
       <p>The <strong>credible interval</strong> at the selected level (90%, 95% or 99%) indicates the range of conversion rate values that contains the selected credibility level of the posterior mass. Unlike the frequentist confidence interval, it can be interpreted directly: at a 95% level, "there is a 95% probability that B's true rate lies between these two values" (and analogously for 90% or 99%). If A's and B's intervals do not overlap, the evidence of a difference is very strong. The <strong>expected lift</strong> complements this analysis by showing the average relative improvement of B over A according to the posteriors, a more direct indicator of practical relevance than the p-value.</p>
+      </details>
     </section>
     <section id="seo-support-content" class="card content-card">
       <section class="related-tools">
@@ -416,7 +421,7 @@ document.getElementById('calcBayesBtn').addEventListener('click', calculateBayes
 calculateBayes();
 </script>
 <script src="../field-hints.js?v=20260730-1" defer></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

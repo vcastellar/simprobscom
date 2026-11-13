@@ -32,7 +32,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=optional"></noscript>
-    <link rel="stylesheet" href="../style_new.css?v=20261031-1">
+    <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <style>
         .site-nav { position:sticky; top:0; z-index:100; background:rgba(255,255,255,0.92); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid rgba(15,23,42,0.08); }
         .site-nav-inner { width:min(1200px,94vw); margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 0; }
@@ -95,7 +95,7 @@
         .dist-diagram .dg-caption strong { color: var(--accent); font-weight: 700; }
         .dist-diagram .dg-hint { opacity: 0.7; }
         /* Bloque «Para qué sirve esta tabla» */
-        .table-uses { margin:4px 0 18px; padding:16px 20px; }
+        .table-uses { margin:22px 0 0; padding:16px 20px; }
         .table-uses h2 { font-size:1.05rem; margin:0 0 8px; }
         .table-uses ul { margin:0; padding-left:1.15rem; display:grid; gap:6px; font-size:0.92rem; line-height:1.5; }
         /* Sin mayúsculas: convertirían α, ν, λ y μ en A, N, Λ y M. */
@@ -189,15 +189,6 @@
     </header>
 
     <main>
-        <section class="card table-uses">
-            <h2>What this table is for</h2>
-            <ul>
-                <li><strong>Uncertainty about a proportion</strong> (a conversion rate, a probability of success): the beta takes values between 0 and 1. For other parameters, use the <a href="beta.html" data-goatcounter-click="tabla-beta/calculadora" data-goatcounter-title="beta calculator">beta calculator</a>.</li>
-                <li><strong>Bayesian statistics:</strong> starting from a Beta(α, β), after x successes in n trials the posterior is Beta(α + x, β + n − x). This is the basis of the <a href="ab-testing-bayesiano.html" data-goatcounter-click="tabla-beta/ab-bayesiano" data-goatcounter-title="Bayesian A/B test">Bayesian A/B test</a>.</li>
-                <li><strong>Exact interval for a proportion</strong> (Clopper-Pearson): its ends are beta quantiles. <a href="intervalo-confianza-proporcion.html?method=clopper" data-goatcounter-click="tabla-beta/ic-clopper" data-goatcounter-title="Compute it with your data">Compute it with your data</a>.</li>
-            </ul>
-        </section>
-
         <section class="card" style="margin-top:4px;">
             <div class="tab-bar" role="tablist">
                 <button class="tab-btn active" role="tab" aria-selected="true"  onclick="switchTab('cdf',this)">P(X ≤ x) — Cumulative</button>
@@ -270,14 +261,24 @@
             </div>
         </section>
 
+        <section class="card table-uses">
+            <h2>What this table is for</h2>
+            <ul>
+                <li><strong>Uncertainty about a proportion</strong> (a conversion rate, a probability of success): the beta takes values between 0 and 1. For other parameters, use the <a href="beta.html" data-goatcounter-click="tabla-beta/calculadora" data-goatcounter-title="beta calculator">beta calculator</a>.</li>
+                <li><strong>Bayesian statistics:</strong> starting from a Beta(α, β), after x successes in n trials the posterior is Beta(α + x, β + n − x). This is the basis of the <a href="ab-testing-bayesiano.html" data-goatcounter-click="tabla-beta/ab-bayesiano" data-goatcounter-title="Bayesian A/B test">Bayesian A/B test</a>.</li>
+                <li><strong>Exact interval for a proportion</strong> (Clopper-Pearson): its ends are beta quantiles. <a href="intervalo-confianza-proporcion.html?method=clopper" data-goatcounter-click="tabla-beta/ic-clopper" data-goatcounter-title="Compute it with your data">Compute it with your data</a>.</li>
+            </ul>
+        </section>
+
         <section class="card content-card" style="border-top:3px solid #2563eb;">
             <h3>How to use these tables</h3>
-            <h3>Beta Distribution</h3>
+            <details class="fold fold-sub"><summary><h3>Beta Distribution</h3></summary>
             <p>The Beta distribution Be(α, β) has support on [0, 1] and is very flexible for modeling proportions and probabilities. Its density function is:</p>
             <p class="formula-line">\( f(x;\alpha,\beta) = \dfrac{x^{\alpha-1}(1-x)^{\beta-1}}{B(\alpha,\beta)}, \quad x \in (0,1) \)</p>
             <p>where B(α, β) = Γ(α)Γ(β)/Γ(α+β) is the beta function. The mean is μ = α/(α+β) and the variance σ² = αβ / [(α+β)²(α+β+1)].</p>
+            </details>
 
-            <h3>Shapes of the distribution</h3>
+            <details class="fold fold-sub"><summary><h3>Shapes of the distribution</h3></summary>
             <ul>
                 <li><strong>α = β = 1:</strong> Uniform(0,1) distribution.</li>
                 <li><strong>α = β &gt; 1:</strong> unimodal and symmetric around 0.5.</li>
@@ -285,9 +286,11 @@
                 <li><strong>α &lt; β:</strong> right-skewed (mean &lt; 0.5).</li>
                 <li><strong>α &lt; 1 or β &lt; 1:</strong> U-shaped (bimodal at the endpoints).</li>
             </ul>
+            </details>
 
-            <h3>Relationship with F and t</h3>
+            <details class="fold fold-sub"><summary><h3>Relationship with F and t</h3></summary>
             <p>If F ~ F(2α, 2β) then X = αF/(β + αF) ~ Be(α, β). The regularized incomplete beta function is also the CDF of the F distribution and of Student's t distribution.</p>
+            </details>
 
             <h3>Related calculators</h3>
             <ul class="distribution-links">
@@ -471,7 +474,7 @@
 </script>
 <script src="../table-diagram.js?v=20261102-2"></script>
 <script src="../table-actions.js?v=20261103-3"></script>
-<script src="../theme.js?v=20261031-1" defer></script>
+<script src="../theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

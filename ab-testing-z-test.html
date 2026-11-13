@@ -49,7 +49,7 @@
     ]
   }
   </script>
-  <link rel="stylesheet" href="style_new.css?v=20261107-1">
+  <link rel="stylesheet" href="style_new.css?v=20261113-1">
 
     <script type="application/ld+json">
 {
@@ -218,30 +218,35 @@
       <h3>Hipótesis y estadístico</h3>
       <p>Se contrasta \(H_0: p_A = p_B\) frente a la alternativa seleccionada. Bajo \(H_0\), ambos grupos comparten la misma proporción poblacional, por lo que se usa la proporción combinada \(\hat{p}\) para estimar el error estándar.</p>
       <p class="formula-line">\( z = \dfrac{\hat{p}_B - \hat{p}_A}{\sqrt{\hat{p}(1-\hat{p})\!\left(\tfrac{1}{n_A}+\tfrac{1}{n_B}\right)}}, \quad \hat{p}=\dfrac{x_A+x_B}{n_A+n_B} \)</p>
-      <h3>Corrección por continuidad de Yates</h3>
+      <details class="fold fold-sub"><summary><h3>Corrección por continuidad de Yates</h3></summary>
       <p>Con muestras pequeñas, la distribución discreta del estadístico se aproxima mejor a la normal restando la corrección:</p>
       <p class="formula-line">\( z_{\text{corr}} = \dfrac{\operatorname{sgn}(\hat{p}_B - \hat{p}_A)\cdot\max\!\left(0,\;\left|\hat{p}_B - \hat{p}_A\right| - \tfrac{1}{2}\!\left(\tfrac{1}{n_A}+\tfrac{1}{n_B}\right)\right)}{\sqrt{\hat{p}(1-\hat{p})\!\left(\tfrac{1}{n_A}+\tfrac{1}{n_B}\right)}} \)</p>
-      <h3>Intervalo de confianza para la diferencia</h3>
+            </details>
+      <details class="fold fold-sub"><summary><h3>Intervalo de confianza para la diferencia</h3></summary>
       <p>El IC para \(\Delta = p_B - p_A\) se construye con el error estándar Wald (sin pooling), más conservador que el del contraste:</p>
       <p class="formula-line">\( \Delta \pm z_{\alpha/2}\sqrt{\dfrac{\hat{p}_A(1-\hat{p}_A)}{n_A} + \dfrac{\hat{p}_B(1-\hat{p}_B)}{n_B}} \)</p>
+            </details>
     </section>
 
 
 
     <section class="card content-card">
-        <h3>Ejemplo resuelto: test Z en A/B testing</h3>
+        <details class="fold"><summary><h3>Ejemplo resuelto: test Z en A/B testing</h3></summary>
             <p>Con A = 10.000 visitas y 420 conversiones, B = 10.000 visitas y 480 conversiones, la herramienta compara dos proporciones independientes. Usa contraste bilateral si solo quieres detectar diferencia, o unilateral únicamente si la hipótesis de mejora se fijó antes de ver los datos.</p>
+      </details>
     </section>
 <section class="card content-card">
-        <h3>Cuándo usar la corrección de Yates</h3>
+        <details class="fold"><summary><h3>Cuándo usar la corrección de Yates</h3></summary>
         <p>La corrección por continuidad mejora la aproximación a la distribución normal cuando los tamaños muestrales son pequeños (generalmente n &lt; 50 por grupo) o cuando la proporción está cerca de 0 o 1. Con muestras grandes produce resultados casi idénticos al test sin corrección y resulta ligeramente más conservadora.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-        <h3>Cómo interpretar el resultado</h3>
+        <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
         <p>El <strong>estadístico z</strong> mide cuántas desviaciones típicas se aleja la diferencia observada \(\hat{p}_B - \hat{p}_A\) de cero bajo la hipótesis nula. Cuanto más grande sea \(|z|\) en valor absoluto, más alejados están los datos de lo que esperaríamos si no hubiera ninguna diferencia real. El <strong>p-valor</strong> traduce ese estadístico a una probabilidad: es la probabilidad de obtener un z tan extremo o más en experimentos repetidos donde H₀ fuese cierta. Un p-valor &lt; α (habitualmente 0.05) no significa que B sea mejor con probabilidad 1 − p; significa que la evidencia contra la hipótesis de igualdad es suficientemente fuerte según el umbral elegido.</p>
         <p>El <strong>lift relativo</strong> \(((\hat{p}_B - \hat{p}_A) / \hat{p}_A) \times 100\,\%\) expresa la mejora de B en términos porcentuales sobre la tasa base de A. Es la métrica más directa para juzgar la relevancia práctica del resultado: un experimento puede ser estadísticamente significativo con un lift del 0.5 % que no tiene impacto de negocio real, y otro puede no alcanzar significación pero mostrar un lift del 15 % que merece seguir investigando con más muestra.</p>
         <p>El <strong>intervalo de confianza</strong> para \(\Delta = p_B - p_A\) complementa el p-valor con información sobre la magnitud y la incertidumbre de la diferencia. Si el IC no incluye el cero, la diferencia es significativa al nivel elegido. Más importante, los límites del IC indican el rango plausible de la diferencia real: si incluso el extremo inferior del IC representa una mejora suficientemente grande para tu negocio, puedes confiar en implementar B. Si el IC incluye valores negativos junto con positivos, la dirección del efecto es incierta y conviene extender el experimento.</p>
+      </details>
     </section>
     <section id="seo-support-content" class="card content-card">
       <section class="related-tools">
@@ -410,7 +415,7 @@ calculateZTest();
 <script src="field-hints.js?v=20260730-1" defer></script>
 <script src="search.js?v=20261031-1" defer></script>
 <script src="wizard.js?v=20260730-1" defer></script>
-<script src="theme.js?v=20261031-1" defer></script>
+<script src="theme.js?v=20261113-1" defer></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {

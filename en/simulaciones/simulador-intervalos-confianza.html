@@ -28,7 +28,7 @@
   <meta name="twitter:title" content="Confidence Interval Simulator | ProbLab">
   <meta name="twitter:description" content="Confidence interval simulator: observe empirical coverage, nominal coverage, and sampling variability.">
   <meta name="twitter:image" content="https://problabtools.com/og-image.png">
-  <link rel="stylesheet" href="../../style_new.css?v=20261102-1">
+  <link rel="stylesheet" href="../../style_new.css?v=20261113-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -515,7 +515,7 @@
          EDUCATIONAL SECTION 2: Nominal vs actual coverage
     ============================================================ -->
     <section class="card content-card">
-      <h2>How the simulator works, step by step</h2>
+      <details class="fold"><summary><h2>How the simulator works, step by step</h2></summary>
       <p>The simulator does what can never be done in practice: repeat the same study many times while knowing the true value. Each time you click <strong>Simulate</strong>:</p>
       <ol>
         <li><strong>It fixes the truth.</strong> It takes the value you entered as the real one: the mean μ (and the standard deviation σ) or the proportion p.</li>
@@ -526,10 +526,11 @@
       </ol>
       <p>On the chart, each row is a different study. The central dot of each segment is that sample's estimate (its mean or proportion), and the dashed vertical line is the true value. Note that the true value does not move: what changes from sample to sample is the interval. At the 95% level, in the long run 5 out of every 100 intervals end up red, and nothing in the data of those samples warns that it was their turn.</p>
       <p>The cards at the top summarise the simulation: the chosen nominal level, the empirical coverage, how many intervals covered and the mean width. With 100 intervals, it is normal for the empirical coverage to wobble a few points around the nominal level (91% or 98% do not indicate a problem); with more intervals, it gets closer.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Mean mode: known σ versus unknown σ</h2>
+      <details class="fold"><summary><h2>Mean mode: known σ versus unknown σ</h2></summary>
       <p>With both methods the samples are generated in the same way, from the true μ and σ you entered. The difference lies in <strong>which information each interval is allowed to use</strong>:</p>
       <div class="content-table-wrap">
         <table class="content-table">
@@ -550,10 +551,11 @@
       <p><strong>What would happen without t.</strong> If the sample standard deviation s were used with the normal critical value 1.96, a common mistake, the intervals would be too narrow: with n = 5 they would cover only 88% of the time instead of 95%; with n = 10, 92%; with n = 30, 94%. That is the whole point of Student's t.</p>
       <p><strong>Try it:</strong> choose n = 5 and simulate with each method. With known σ, all intervals have the same length; with unknown σ, their lengths differ a lot and the mean width is larger, but coverage still hovers around 95%. Go up to n = 100 and the two methods become almost indistinguishable.</p>
       <p>With both methods, the simulator generates normal data. With real non-normal data, coverage is only approximate and improves as n grows, by the <a href="../simulaciones/teorema-central-limite.html">central limit theorem</a>.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Proportion mode: how the Wald, Wilson and Clopper-Pearson intervals are built</h2>
+      <details class="fold"><summary><h2>Proportion mode: how the Wald, Wilson and Clopper-Pearson intervals are built</h2></summary>
       <p>Both intervals come from the same reasoning and only part ways at the last step. It is worth going through it slowly, because that is where the reason one works much better than the other lies.</p>
 
       <h3>Starting point: the sample proportion is nearly normal</h3>
@@ -653,10 +655,11 @@
         </table>
       </div>
       <p>With p = 0.05 and n = 20, more than a third of the "95%" Wald intervals do not contain the true value, mainly because many samples come out with 0 successes. With p = 0.5 the three agree. None hits 95% exactly in every case, because the number of successes can only take whole values: Wilson stays close, sometimes above and sometimes below, and Clopper-Pearson never drops below 95%, at the cost of almost always overshooting. The <a href="../intervalo-confianza-proporcion.html">confidence interval calculator for a proportion</a> computes all three from your data, so you can compare them.</p>
+      </details>
     </section>
 
     <section class="card content-card">
-      <h2>Nominal coverage vs actual coverage</h2>
+      <details class="fold"><summary><h2>Nominal coverage vs actual coverage</h2></summary>
       <p>The <strong>nominal level</strong> is the confidence value we specify when constructing the CI (90%, 95%, 99%). The <strong>actual (or empirical) coverage</strong> is the fraction of intervals that actually cover the true parameter across a long series of repetitions.</p>
       <p>For the CI of the mean with a normal population, as in this simulator (both with known σ and with Student's t), the actual coverage matches the nominal level exactly for any sample size, because the sample mean is exactly normal. If the population is not normal, the match is only approximate and improves with n by the CLT.</p>
       <p>For proportions, the situation is more complicated. The parameter p is continuous, but the binomial variable X ~ Bin(n, p) is discrete, and this discretization causes the actual coverage to fluctuate around the nominal level:</p>
@@ -666,13 +669,14 @@
         <li><strong>Clopper-Pearson interval:</strong> obtained by inverting the exact binomial test. Its actual coverage never falls below the nominal level, but almost always exceeds it: it is conservative.</li>
       </ul>
       <p>You can observe this phenomenon directly with the simulator: select Proportion mode, set p = 0.05 and n = 20, and compare the empirical coverage of Wald, Wilson and Clopper-Pearson.</p>
+      </details>
     </section>
 
     <!-- ============================================================
          EDUCATIONAL SECTION 3: Effect of sample size
     ============================================================ -->
     <section class="card content-card">
-      <h2>How does sample size affect it?</h2>
+      <details class="fold"><summary><h2>How does sample size affect it?</h2></summary>
       <p>The sample size n has a direct and clear effect on the width of the confidence interval. For the CI of the mean with known σ:</p>
       <div class="math-block">\[ \text{Width} = 2 \times z_{\alpha/2} \times \dfrac{\sigma}{\sqrt{n}} \]</div>
       <p>The width is proportional to \(1/\sqrt{n}\): if we <strong>quadruple n</strong>, the width is cut in half. To reduce the width to a third, we need to multiply n by 9.</p>
@@ -683,6 +687,7 @@
         <li>The intervals become progressively narrower as n increases.</li>
         <li>With small n, there's more variability in the position of the CI's endpoints.</li>
       </ul>
+      </details>
     </section>
 
     <!-- ============================================================
@@ -1186,7 +1191,7 @@ window.addEventListener('resize', () => {
 });
 </script>
 <script src="../../field-hints.js?v=20260730-1"></script>
-<script src="../../theme.js?v=20261031-1"></script>
+<script src="../../theme.js?v=20261113-1"></script>
 <script>
 // GoatCounter: solo cuenta las visitas a problabtools.com (no a GitHub Pages ni en local).
 if (/(^|\.)problabtools\.com$/.test(location.hostname)) {
