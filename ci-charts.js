@@ -26,6 +26,10 @@
  *   method      nombre del método principal (p. ej. 'Wilson'), opcional.
  *   compare     { label, interval } opcional: otro método, mostrado solo al
  *               nivel elegido para compararlo con el principal.
+ *   methods     [{ label, interval }] opcional: varios métodos en pie de
+ *               igualdad, una fila por método al nivel elegido, todas con el
+ *               mismo estilo y sin filas de 90, 95 y 99 %. `interval` puede
+ *               omitirse (se usa el del primer método).
  *   reference   valor de referencia (0 en diferencias, 1 en cocientes).
  *   referenceLabel  texto de la línea de referencia.
  *   log         eje logarítmico (odds ratio, cocientes).
@@ -192,6 +196,16 @@
     var chosen = o.confidence;
     var prefix = o.method ? o.method : STR.ci;
     var rows = [];
+    if (o.methods && o.methods.length) {
+      // Comparación sin método preferido: el primero arriba, todos iguales.
+      var nm = o.methods.length;
+      o.methods.forEach(function (m, i) {
+        var mr = safeInterval(m.interval, chosen, 1);
+        if (mr) rows.push({ label: m.label + ' ' + fmtPct(chosen), lo: mr[0], hi: mr[1], kind: 'chosen', plain: true, y: nm - 1 - i });
+      });
+      rows.top = nm - 1;
+      return rows;
+    }
     STD_LEVELS.forEach(function (l, i) {
       var r = safeInterval(o.interval, l, 1);
       if (r) rows.push({ label: prefix + ' ' + fmtPct(l), lo: r[0], hi: r[1], kind: 'other', level: l, y: i });
@@ -354,7 +368,7 @@
     rows.forEach(function (r) { vals.push(r.lo, r.hi); });
     if (o.reference != null) vals.push(o.reference);
     if (o.custom) {
-      [o.interval, o.compare && o.compare.interval].forEach(function (fn) {
+      [o.interval, o.compare && o.compare.interval].concat((o.methods || []).map(function (m) { return m.interval; })).forEach(function (fn) {
         var widest = fn ? safeInterval(fn, SLIDER_MAX, 1) : null;
         if (widest) vals.push(widest[0], widest[1]);
       });
@@ -405,7 +419,7 @@
           callback: function (v) {
             var r = rowAt(rows, v);
             if (!r) return '';
-            return r.kind === 'chosen' ? r.label + ' (' + STR.chosen + ')' : r.label;
+            return r.kind === 'chosen' && !r.plain ? r.label + ' (' + STR.chosen + ')' : r.label;
           }
         },
         grid: { display: false },
@@ -691,15 +705,21 @@
   }
   function renderResult(el, o) {
     if (typeof el === 'string') el = document.getElementById(el);
-    if (!el || !o || !o.main) return;
+    if (!el || !o || !(o.main || (o.rows && o.rows.length))) return;
     var prev = el.querySelector('details.ci-res-details');
     var wasOpen = !!(prev && prev.open);
-    var d = decimalsFor(o.main.hi - o.main.lo) + 1;
     var h = '<div class="ci-res">';
     if (o.label) h += '<div class="ci-res-label">' + esc(o.label) + '</div>';
-    h += '<div class="ci-res-main"><span class="ci-res-int" data-lo="' + o.main.lo + '" data-hi="' + o.main.hi + '">' +
-      fmtInterval(o.main.lo, o.main.hi, d) + '</span> <span class="ci-res-width">' + RES.width + ' ' +
-      fmtFixed(o.main.hi - o.main.lo, d) + '</span></div>';
+    // o.rows: varios intervalos con el mismo rango (p. ej., al comparar métodos),
+    // cada uno con su nombre delante; o.main: un intervalo principal destacado.
+    (o.main ? [o.main] : o.rows).forEach(function (m) {
+      if (!m || !Number.isFinite(m.lo) || !Number.isFinite(m.hi)) return;
+      var d = decimalsFor(m.hi - m.lo) + 1;
+      // Con varios intervalos, cifra algo más pequeña para que quepan los tres.
+      h += '<div class="ci-res-main"><span class="ci-res-int"' + (o.main ? '' : ' style="font-size:1.25rem"') + ' data-lo="' + m.lo + '" data-hi="' + m.hi + '">' +
+        (m.label ? esc(m.label) + ': ' : '') + '<span style="white-space:nowrap">' + fmtInterval(m.lo, m.hi, d) + '</span></span> <span class="ci-res-width">' + RES.width + ' ' +
+        fmtFixed(m.hi - m.lo, d) + '</span></div>';
+    });
     (o.secondary || []).forEach(function (s) {
       if (!s || !Number.isFinite(s.lo) || !Number.isFinite(s.hi)) return;
       var sd = decimalsFor(s.hi - s.lo) + 1;
@@ -713,6 +733,10 @@
     // Enlace opcional (por ejemplo, al simulador con estos mismos datos).
     if (o.link && o.link.href) {
       h += '<div class="ci-res-note ci-res-info">' + esc(o.link.before || '') + ' <a href="' + esc(o.link.href) + '">' + esc(o.link.text) + '</a>.</div>';
+    } else if (o.link && o.link.choices && o.link.choices.length) {
+      // Varios destinos equivalentes (p. ej., el simulador con cada método).
+      h += '<div class="ci-res-note ci-res-info">' + esc(o.link.before || '') + ' ' + esc(o.link.text) + ' ' +
+        o.link.choices.map(function (c) { return '<a href="' + esc(c.href) + '">' + esc(c.label) + '</a>'; }).join(' · ') + '.</div>';
     }
     if (o.details && o.details.length) {
       h += '<details class="ci-res-details"' + (wasOpen ? ' open' : '') + '><summary>' + RES.details + '</summary><dl>';
