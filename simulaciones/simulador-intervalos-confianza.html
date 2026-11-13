@@ -407,7 +407,7 @@
 
           <!-- Panel: Proporción -->
           <div class="mode-panel" id="panelProp" role="tabpanel" aria-labelledby="tabProp">
-            <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> simula repetidamente intervalos de confianza para una proporción, comparando el método de Wald con el de Wilson, y muestra qué fracción cubre realmente la p verdadera. Elige este modo para ver cómo la discretización de la binomial afecta a la cobertura real, especialmente con n pequeño o p cerca de 0 o 1.</p>
+            <p class="tab-intro"><strong>Qué muestra esta pestaña:</strong> simula repetidamente intervalos de confianza para una proporción, con el método que elijas (Wald, Wilson o Clopper-Pearson), y muestra qué fracción cubre realmente la p verdadera. Elige este modo para ver cómo la discretización de la binomial afecta a la cobertura real, especialmente con n pequeño o p cerca de 0 o 1.</p>
             <div class="form-grid-ci">
               <div class="form-group">
                 <label for="trueP">Verdadera p (proporción poblacional) <button type="button" class="field-help-btn" aria-expanded="false" aria-label="Más información sobre este campo">i</button></label>
@@ -450,8 +450,9 @@
                 <select id="methodProp">
                   <option value="wald">Wald (normal)</option>
                   <option value="wilson" selected>Wilson (recomendado)</option>
+                  <option value="clopper">Clopper-Pearson (exacto)</option>
                 </select>
-                <p class="field-hint" hidden><strong>Wilson</strong> invierte el test de score de Pearson y suele dar cobertura más próxima al nivel nominal; <strong>Wald</strong> usa la aproximación normal directa y se deteriora con n pequeño o p cerca de 0 o 1.</p>
+                <p class="field-hint" hidden><strong>Wilson</strong> invierte el test de score de Pearson y suele dar cobertura más próxima al nivel nominal; <strong>Wald</strong> usa la aproximación normal directa y se deteriora con n pequeño o p cerca de 0 o 1; <strong>Clopper-Pearson</strong> usa la binomial exacta y garantiza una cobertura de al menos el nivel nominal, con intervalos algo más anchos.</p>
               </div>
             </div>
           </div>
@@ -558,7 +559,7 @@
     </section>
 
     <section class="card content-card">
-      <h2>Modo Proporción: cómo se construyen los intervalos de Wald y de Wilson</h2>
+      <h2>Modo Proporción: cómo se construyen los intervalos de Wald, Wilson y Clopper-Pearson</h2>
       <p>Los dos intervalos salen del mismo razonamiento y solo se separan en el último paso. Conviene verlo despacio, porque ahí está la razón de que uno funcione mucho mejor que el otro.</p>
 
       <h3>Punto de partida: la proporción muestral es casi normal</h3>
@@ -609,6 +610,17 @@
       <p><strong>Cuando n es grande, coincide con Wald.</strong> Los términos \(z^2/n\), \(z^2/2n\) y \(z^2/4n^2\) se hacen despreciables y la fórmula se reduce a \(\hat{p} \pm z\sqrt{\hat{p}(1-\hat{p})/n}\).</p>
       <p><strong>Es el contraste al revés.</strong> La desigualdad de partida es la regla de no rechazo del <a href="../contraste-hipotesis-una-proporcion.html">contraste de una proporción</a>, que usa el error estándar calculado con \(p_0\). Por eso el intervalo de Wilson contiene exactamente los valores \(p_0\) que ese contraste no rechazaría con tus datos; se dice que «invierte» el contraste. El de Wald, en cambio, no corresponde exactamente a ese contraste.</p>
 
+      <h3>Clopper-Pearson: usar la binomial exacta</h3>
+      <p>El tercer método no aproxima nada. El número de éxitos \(X\) sigue exactamente una binomial \(B(n, p)\), y Clopper y Pearson (1934) definen los extremos del intervalo con sus colas: \(p_L\) es el valor de \(p\) con el que obtener \(x\) éxitos o más tiene probabilidad \(\alpha/2\), y \(p_U\), el valor con el que obtener \(x\) o menos la tiene.</p>
+      <div class="math-block">\[ \begin{aligned} P(X \ge x \mid p_L) &= \tfrac{\alpha}{2}, \\ P(X \le x \mid p_U) &= \tfrac{\alpha}{2}. \end{aligned} \]</div>
+      <p><strong>Cómo se resuelve.</strong> Las colas de la binomial coinciden con la función de distribución de una beta. Si se generan \(n\) uniformes entre 0 y 1, el número de ellos menores que \(p\) es una \(B(n, p)\), y hay al menos \(x\) por debajo de \(p\) exactamente cuando el \(x\)-ésimo menor, que sigue una \(\mathrm{Beta}(x,\, n - x + 1)\), está por debajo de \(p\). Por tanto:</p>
+      <div class="math-block">\[ P(X \ge x \mid p) = P\big(\mathrm{Beta}(x,\, n - x + 1) \le p\big), \]</div>
+      <p>y los extremos son cuantiles de la beta:</p>
+      <div class="math-block">\[ \begin{aligned} p_L &= \text{cuantil } \tfrac{\alpha}{2} \text{ de } \mathrm{Beta}(x,\; n - x + 1), \\ p_U &= \text{cuantil } 1 - \tfrac{\alpha}{2} \text{ de } \mathrm{Beta}(x + 1,\; n - x), \end{aligned} \]</div>
+      <p>con \(p_L = 0\) si \(x = 0\) y \(p_U = 1\) si \(x = n\). Es lo que calcula el simulador en cada muestra.</p>
+      <p><strong>Por qué nunca cubre menos de lo prometido.</strong> Para un \(p\) verdadero fijo, el intervalo deja \(p\) fuera por arriba solo cuando sale un \(x\) tan pequeño que \(P(X \le x \mid p) < \alpha/2\). Esos valores de \(x\) forman un tramo \(0, \ldots, x^*\) cuya probabilidad total es \(P(X \le x^* \mid p) < \alpha/2\). Lo mismo ocurre por abajo, así que la probabilidad de fallar es como mucho \(\alpha\) y la cobertura, al menos \(1 - \alpha\), para cualquier \(p\) y cualquier \(n\). Como \(X\) solo toma valores enteros, las colas casi nunca valen justo \(\alpha/2\) y la cobertura real queda por encima: el método es <strong>conservador</strong>.</p>
+      <p>La deducción completa, paso a paso, está en la <a href="../intervalo-confianza-proporcion.html#clopper-pearson">calculadora de intervalo de confianza para una proporción</a>.</p>
+
       <h3>Un ejemplo con números</h3>
       <p>Con 2 éxitos en 20 ensayos (\(\hat{p} = 0{,}10\)) y un nivel del 95 %:</p>
       <div class="content-table-wrap">
@@ -619,6 +631,7 @@
           <tbody>
             <tr><td>Wald</td><td>0,100</td><td>de −0,031 a 0,231, que se recorta a [0; 0,231]</td></tr>
             <tr><td>Wilson</td><td>0,164</td><td>[0,028; 0,301]</td></tr>
+            <tr><td>Clopper-Pearson</td><td>—</td><td>[0,012; 0,317]</td></tr>
           </tbody>
         </table>
       </div>
@@ -629,23 +642,23 @@
         <li><strong>Wilson, semiamplitud:</strong> \(1{,}96\sqrt{0{,}0045 + 0{,}0024}\) \(/\,1{,}1921\) \(= 0{,}137\). Intervalo: \(0{,}164 \pm 0{,}137\).</li>
         <li><strong>Wald:</strong> \(SE = \sqrt{0{,}10 \cdot 0{,}90/20}\) \(= 0{,}067\), e intervalo \(0{,}10 \pm 1{,}96 \cdot 0{,}067\) \(= 0{,}10 \pm 0{,}131\).</li>
       </ul>
-      <p>Con 0 éxitos en 20, Wald da el intervalo [0; 0], mientras que Wilson da [0; 0,161].</p>
+      <p>Con 0 éxitos en 20, Wald da el intervalo [0; 0], mientras que Wilson da [0; 0,161] y Clopper-Pearson, [0; 0,168]. Clopper-Pearson no se construye como un centro más un margen, por eso no tiene «centro» en la tabla.</p>
       <h3>Qué verás en el simulador</h3>
-      <p>La diferencia de cobertura puede calcularse exactamente, y es la que el simulador reproduce:</p>
+      <p>La cobertura real de cada método (la probabilidad de que un intervalo al 95 % contenga el valor verdadero) puede calcularse exactamente, y es la que el simulador reproduce:</p>
       <div class="content-table-wrap">
         <table class="content-table">
           <thead>
-            <tr><th>Caso</th><th>Cobertura real de Wald</th><th>Cobertura real de Wilson</th></tr>
+            <tr><th>Caso</th><th>Wald</th><th>Wilson</th><th>Clopper-Pearson</th></tr>
           </thead>
           <tbody>
-            <tr><td>p = 0,05, n = 20</td><td>63,9 %</td><td>92,5 %</td></tr>
-            <tr><td>p = 0,05, n = 100</td><td>87,7 %</td><td>96,6 %</td></tr>
-            <tr><td>p = 0,10, n = 50</td><td>87,9 %</td><td>97,0 %</td></tr>
-            <tr><td>p = 0,50, n = 30</td><td>95,7 %</td><td>95,7 %</td></tr>
+            <tr><td>p&nbsp;=&nbsp;0,05, n&nbsp;=&nbsp;20</td><td>63,9&nbsp;%</td><td>92,5&nbsp;%</td><td>98,4&nbsp;%</td></tr>
+            <tr><td>p&nbsp;=&nbsp;0,05, n&nbsp;=&nbsp;100</td><td>87,7&nbsp;%</td><td>96,6&nbsp;%</td><td>98,3&nbsp;%</td></tr>
+            <tr><td>p&nbsp;=&nbsp;0,10, n&nbsp;=&nbsp;50</td><td>87,9&nbsp;%</td><td>97,0&nbsp;%</td><td>97,0&nbsp;%</td></tr>
+            <tr><td>p&nbsp;=&nbsp;0,50, n&nbsp;=&nbsp;30</td><td>95,7&nbsp;%</td><td>95,7&nbsp;%</td><td>95,7&nbsp;%</td></tr>
           </tbody>
         </table>
       </div>
-      <p>Con p = 0,05 y n = 20, más de un tercio de los intervalos de Wald «al 95 %» no contienen el valor verdadero, sobre todo porque muchas muestras salen con 0 éxitos. Con p = 0,5 los dos métodos coinciden. Ninguno clava el 95 % en todos los casos, porque el número de éxitos solo puede tomar valores enteros, pero el de Wilson se mantiene siempre cerca. La <a href="../intervalo-confianza-proporcion.html">calculadora de intervalo de confianza para una proporción</a> calcula los dos con tus datos, para que puedas compararlos.</p>
+      <p>Con p = 0,05 y n = 20, más de un tercio de los intervalos de Wald «al 95 %» no contienen el valor verdadero, sobre todo porque muchas muestras salen con 0 éxitos. Con p = 0,5 los tres coinciden. Ninguno clava el 95 % en todos los casos, porque el número de éxitos solo puede tomar valores enteros: Wilson se mantiene cerca, unas veces por encima y otras por debajo, y Clopper-Pearson nunca baja del 95 %, a cambio de pasarse casi siempre. La <a href="../intervalo-confianza-proporcion.html">calculadora de intervalo de confianza para una proporción</a> calcula los tres con tus datos, para que puedas compararlos.</p>
     </section>
 
     <section class="card content-card">
@@ -656,8 +669,9 @@
       <ul>
         <li><strong>Intervalo de Wald:</strong> usa directamente la aproximación normal \(\hat{p} \pm z_{\alpha/2}\sqrt{\hat{p}(1-\hat{p})/n}\). Funciona bien para n grande y p alejado de 0 y 1, pero su cobertura puede ser notablemente inferior al nivel nominal cuando n es pequeño o p está cerca de los extremos.</li>
         <li><strong>Intervalo de Wilson:</strong> se obtiene invirtiendo el test de score de Pearson. Tiende a tener cobertura real más próxima al nivel nominal, especialmente en los extremos, aunque puede ser ligeramente conservador (cobertura superior al nominal) en algunos casos.</li>
+        <li><strong>Intervalo de Clopper-Pearson:</strong> se obtiene invirtiendo el contraste binomial exacto. Su cobertura real nunca baja del nivel nominal, pero casi siempre lo supera: es conservador.</li>
       </ul>
-      <p>Puedes observar este fenómeno directamente con el simulador: selecciona el modo Proporción, fija p = 0.05 y n = 20, y compara la cobertura empírica de Wald vs Wilson.</p>
+      <p>Puedes observar este fenómeno directamente con el simulador: selecciona el modo Proporción, fija p = 0.05 y n = 20, y compara la cobertura empírica de Wald, Wilson y Clopper-Pearson.</p>
     </section>
 
     <!-- ============================================================
@@ -715,6 +729,7 @@
         <li>Neyman, J. (1937). <a href="https://doi.org/10.1098/rsta.1937.0005" target="_blank" rel="noopener noreferrer">Outline of a theory of statistical estimation based on the classical theory of probability</a>. <em>Philosophical Transactions of the Royal Society A</em>, 236, 333–380. El artículo que define los intervalos de confianza y su interpretación como cobertura a largo plazo.</li>
         <li>Student (W. S. Gosset) (1908). <a href="https://doi.org/10.1093/biomet/6.1.1" target="_blank" rel="noopener noreferrer">The probable error of a mean</a>. <em>Biometrika</em>, 6(1), 1–25. El origen de la distribución t, para el caso de σ desconocida.</li>
         <li>Wilson, E. B. (1927). <a href="https://doi.org/10.1080/01621459.1927.10502953" target="_blank" rel="noopener noreferrer">Probable inference, the law of succession, and statistical inference</a>. <em>Journal of the American Statistical Association</em>, 22(158), 209–212. El artículo original del intervalo de Wilson.</li>
+        <li>Clopper, C. J. y Pearson, E. S. (1934). <a href="https://doi.org/10.1093/biomet/26.4.404" target="_blank" rel="noopener noreferrer">The use of confidence or fiducial limits illustrated in the case of the binomial</a>. <em>Biometrika</em>, 26(4), 404–413. El artículo original del intervalo exacto.</li>
         <li>Agresti, A. y Coull, B. A. (1998). <a href="https://doi.org/10.1080/00031305.1998.10480550" target="_blank" rel="noopener noreferrer">Approximate is better than "exact" for interval estimation of binomial proportions</a>. <em>The American Statistician</em>, 52(2), 119–126.</li>
         <li>Brown, L. D., Cai, T. T. y DasGupta, A. (2001). <a href="https://doi.org/10.1214/ss/1009213286" target="_blank" rel="noopener noreferrer">Interval estimation for a binomial proportion</a>. <em>Statistical Science</em>, 16(2), 101–133. El estudio de referencia sobre la mala cobertura del intervalo de Wald; recomienda el de Wilson.</li>
       </ul>
@@ -784,6 +799,12 @@ function ciWilson(phat, n, conf) {
   return [Math.max(0, center - margin), Math.min(1, center + margin)];
 }
 
+/** CI for proportion: Clopper-Pearson (exacto), con cuantiles de la beta */
+function ciClopper(phat, n, conf) {
+  const x = Math.round(phat * n), a = 1 - conf;
+  return [x <= 0 ? 0 : jStat.beta.inv(a / 2, x, n - x + 1), x >= n ? 1 : jStat.beta.inv(1 - a / 2, x + 1, n - x)];
+}
+
 /** Sample one observation from N(mu, sigma) via Box-Muller */
 function sampleNormal(mu, sigma) {
   let u1;
@@ -828,7 +849,7 @@ function runSimulation(mode, params) {
     const { p, n, method } = params;
     for (let i = 0; i < numIntervals; i++) {
       const phat = sampleProportion(p, n);
-      const [lo, hi] = method === 'wilson' ? ciWilson(phat, n, conf) : ciWald(phat, n, conf);
+      const [lo, hi] = method === 'wilson' ? ciWilson(phat, n, conf) : method === 'clopper' ? ciClopper(phat, n, conf) : ciWald(phat, n, conf);
       results.push({ lo, hi, estimate: phat, covers: lo <= p && p <= hi });
     }
   }
@@ -1021,7 +1042,7 @@ function interpretCoverage(empiricalPct, nominalPct, mode, method, total) {
   }
   return {
     cls: 'info',
-    text: `La cobertura empírica (${empiricalPct.toFixed(1)}%) es superior al nivel nominal (${nominalPct}%) en más de dos errores estándar de simulación (±${seText}). El procedimiento parece conservador: produce intervalos más anchos de lo necesario.`
+    text: `La cobertura empírica (${empiricalPct.toFixed(1)}%) es superior al nivel nominal (${nominalPct}%) en más de dos errores estándar de simulación (±${seText}). El procedimiento parece conservador: produce intervalos más anchos de lo necesario.${method === 'clopper' ? ' Es lo esperable con Clopper-Pearson: garantiza al menos la cobertura nominal y, como el número de éxitos es discreto, casi siempre la supera.' : ''}`
   };
 }
 
@@ -1119,7 +1140,7 @@ function runAndDisplay() {
   axisNote.style.display = 'block';
   axisNote.textContent = mode === 'media'
     ? `Eje horizontal: escala de la media. Línea discontinua: μ = ${trueParam}. Cada fila = un IC (${params.method === 't' ? 't de Student, con la s de cada muestra' : 'z, con σ conocida'}) calculado a partir de n = ${params.n} observaciones.`
-    : `Eje horizontal: escala de la proporción [0, 1]. Línea discontinua: p = ${trueParam}. Cada fila = un IC ${methodUsed === 'wilson' ? 'Wilson' : 'Wald'} calculado a partir de n = ${params.n} observaciones.`;
+    : `Eje horizontal: escala de la proporción [0, 1]. Línea discontinua: p = ${trueParam}. Cada fila = un IC ${methodUsed === 'wilson' ? 'Wilson' : methodUsed === 'clopper' ? 'Clopper-Pearson' : 'Wald'} calculado a partir de n = ${params.n} observaciones.`;
 }
 
 document.getElementById('simBtn').addEventListener('click', runAndDisplay);
@@ -1149,7 +1170,7 @@ document.getElementById('simBtn').addEventListener('click', runAndDisplay);
     if (['z', 't'].includes(q.get('method'))) document.getElementById('methodMedia').value = q.get('method');
   } else {
     if (num('p') > 0 && num('p') < 1) document.getElementById('trueP').value = num('p');
-    if (['wald', 'wilson'].includes(q.get('method'))) document.getElementById('methodProp').value = q.get('method');
+    if (['wald', 'wilson', 'clopper'].includes(q.get('method'))) document.getElementById('methodProp').value = q.get('method');
     document.getElementById('tabProp').click();
   }
   if (document.readyState === 'complete') runAndDisplay();

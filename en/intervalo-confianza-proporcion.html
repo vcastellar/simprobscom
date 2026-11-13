@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <title>Confidence interval for a proportion | ProbLab</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Online calculator for the confidence interval of a population proportion. Wald and Wilson methods. Formula, chart and practical examples.">
+    <meta name="description" content="Online calculator for the confidence interval of a population proportion. Wald, Wilson and Clopper-Pearson (exact) methods. Formula, chart and practical examples.">
     <meta name="keywords" content="confidence interval proportion calculator, calculate CI proportion, Wilson interval proportion, Wald confidence interval, CI sample proportion, ProbLab, online statistics, statistics calculator">
     <link rel="canonical" href="https://problabtools.com/en/intervalo-confianza-proporcion.html">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Confidence interval for a proportion | ProbLab">
-    <meta property="og:description" content="Online calculator for the confidence interval of a population proportion. Wald and Wilson methods. Formula, chart and practical examples.">
+    <meta property="og:description" content="Online calculator for the confidence interval of a population proportion. Wald, Wilson and Clopper-Pearson (exact) methods. Formula, chart and practical examples.">
     <meta property="og:url" content="https://problabtools.com/en/intervalo-confianza-proporcion.html">
     <meta property="og:site_name" content="ProbLab">
     <meta property="og:image" content="https://problabtools.com/og-image.png">
@@ -23,7 +23,7 @@
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://problabtools.com/sitemap.xml">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Confidence interval for a proportion | ProbLab">
-    <meta name="twitter:description" content="Online calculator for the confidence interval of a population proportion. Wald and Wilson methods. Formula, chart and practical examples.">
+    <meta name="twitter:description" content="Online calculator for the confidence interval of a population proportion. Wald, Wilson and Clopper-Pearson (exact) methods. Formula, chart and practical examples.">
     <meta name="twitter:image" content="https://problabtools.com/og-image.png">
     <script type="application/ld+json">
     {
@@ -68,7 +68,7 @@
       "name": "What happens if x = 0 or x = n?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Wald gives an interval of zero width, which is not useful. Wilson handles these cases correctly."
+        "text": "Wald gives an interval of zero width, which is not useful. Wilson and Clopper-Pearson handle these cases correctly; for example, with 0 successes in 20, at 95%, Clopper-Pearson gives [0, 0.168]."
       }
     },
     {
@@ -83,6 +83,23 @@
 }
     </script>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+    <style>
+        /* Fórmulas sin recuadro ni barras de desplazamiento; subapartados de la sección de Clopper-Pearson. */
+        .math-block { text-align:center; font-size:1.05rem; margin:14px 0; }
+        .math-block mjx-container[display="true"] { margin:0; }
+        .content-card h4 { font-size:1rem; margin:20px 0 6px; }
+        @media (max-width: 480px) { .math-block { font-size:0.82rem; } .content-table { font-size:0.8rem; } .content-table th, .content-table td { padding:6px 5px; } }
+        /* En el móvil, la tabla comparativa se lee por filas: cada aspecto con los tres métodos debajo. */
+        @media (max-width: 640px) {
+            .compare-table thead { display:none; }
+            .compare-table, .compare-table tbody, .compare-table tr, .compare-table th, .compare-table td { display:block; width:auto; }
+            .compare-table tr { border-bottom:1px solid rgba(79,70,229,0.14); }
+            .compare-table tbody th { background:rgba(79,70,229,0.10); }
+            .compare-table td::before { content:attr(data-label); display:block; font-weight:700; font-size:0.82rem; color:#4f46e5; }
+            html.dark-mode .compare-table td::before { color:#a5b4fc; }
+        }
+        @media (max-width: 360px) { .math-block { font-size:0.7rem; } .content-table { font-size:0.74rem; } .content-table th, .content-table td { padding:6px 4px; } }
+    </style>
 </head>
 <body>
 <nav class="site-nav" aria-label="Main navigation">
@@ -121,7 +138,7 @@
     <header class="hero">
         <p class="eyebrow">Confidence intervals</p>
         <h1>Confidence interval for a proportion</h1>
-        <p class="hero-subtitle">Estimate the population proportion from the successes observed in a sample. Includes the Wald and Wilson methods.</p>
+        <p class="hero-subtitle">Estimate the population proportion from the successes observed in a sample. Includes the Wald, Wilson and Clopper-Pearson (exact) methods.</p>
         <p class="hero-links"><a class="hero-link-button" href="intervalos-confianza/">See all confidence intervals</a></p>
     </header>
 
@@ -172,11 +189,12 @@
                         <div class="form-group">
                             <label for="method">Method <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
                             <select id="method">
-                                <option value="both" selected>Both (Wald + Wilson)</option>
+                                <option value="both" selected>Compare (Wilson, Wald and Clopper-Pearson)</option>
                                 <option value="wald">Wald only</option>
                                 <option value="wilson">Wilson only</option>
+                                <option value="clopper">Clopper-Pearson only (exact)</option>
                             </select>
-                            <p class="field-hint" hidden><strong>Wilson</strong> is the recommended default: it keeps actual coverage closer to the nominal level with small samples or extreme proportions. <strong>Wald</strong> is simpler but can fail when there are few successes or failures.</p>
+                            <p class="field-hint" hidden><strong>Wilson</strong> is the recommended default: it keeps actual coverage closer to the nominal level with small samples or extreme proportions. <strong>Wald</strong> is simpler but can fail when there are few successes or failures. <strong>Clopper-Pearson</strong> uses the exact binomial and guarantees that coverage does not fall below the chosen level, at the cost of somewhat wider intervals.</p>
                         </div>
                     </div>
                 </div>
@@ -206,7 +224,7 @@
         <section class="card content-card">
             <h3>Explanation</h3>
             <p>When we want to estimate the true proportion of a characteristic in a population (defect rate, percentage of satisfied users, prevalence of a disease…), the confidence interval for a proportion gives us the plausible range for that value.</p>
-            <p>The sample proportion \(\hat{p} = x/n\) (successes among observations) is the estimator. There are several methods for building the interval; the most common are Wald (normal approximation) and Wilson (more accurate for extreme proportions or small samples).</p>
+            <p>The sample proportion \(\hat{p} = x/n\) (successes among observations) is the estimator. There are several methods for building the interval; the most common are Wald (normal approximation), Wilson (more accurate for extreme proportions or small samples) and Clopper-Pearson (exact, based directly on the binomial; explained in its own section).</p>
 
             <p>Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area outside the interval. For 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\) in each tail.</p>
 
@@ -232,6 +250,59 @@
 
 
 
+        <section class="card content-card" id="clopper-pearson">
+            <h3>The Clopper-Pearson method (exact)</h3>
+            <p>Wald and Wilson rely on the normal approximation of \(\hat{p}\). Clopper and Pearson (1934) proposed approximating nothing: the number of successes \(X\) follows a binomial \(B(n, p)\) exactly, and the interval is built from that distribution. That is why it is called <strong>exact</strong>.</p>
+
+            <h4>What it consists of</h4>
+            <p>The interval contains all the values of \(p\) for which the observed result, \(x\) successes, is not too extreme. Each end is defined by a binomial tail equal to \(\alpha/2\):</p>
+            <div class="math-block">\[ \begin{aligned} p_L &: \quad P(X \ge x \mid p_L) = \tfrac{\alpha}{2}, \\ p_U &: \quad P(X \le x \mid p_U) = \tfrac{\alpha}{2}. \end{aligned} \]</div>
+            <p>In other words, \(p_L\) is the smallest value of \(p\) for which getting \(x\) successes or more still has probability \(\alpha/2\), and \(p_U\) is the largest for which getting \(x\) or fewer does. If \(x = 0\), \(p_L = 0\) is taken, and if \(x = n\), \(p_U = 1\).</p>
+            <p>Both equations always have a single solution: as \(p\) increases, the probability \(P(X \ge x \mid p)\) rises continuously from 0 to 1, and \(P(X \le x \mid p)\) falls from 1 to 0. It is the same idea as the Wilson interval, which gathers the values of \(p\) a test would not reject, but with the exact binomial test instead of the approximate one.</p>
+
+            <h4>What it is based on: the link between the binomial and the beta</h4>
+            <p>The equations above cannot be solved by hand, but they have a closed-form solution thanks to an identity between the binomial and the beta distribution:</p>
+            <div class="math-block">\[ \begin{gathered} P(X \ge x \mid p) = P(B \le p), \\ B \sim \mathrm{Beta}(x,\; n - x + 1). \end{gathered} \]</div>
+            <p>It is proved with order statistics. Generate \(n\) independent uniform numbers between 0 and 1, \(U_1, \ldots, U_n\). The number of them that fall below \(p\) is a binomial \(B(n, p)\), because each does so with probability \(p\). Sorting them from smallest to largest, \(U_{(1)} \le \cdots \le U_{(n)}\), there are at least \(x\) below \(p\) exactly when the \(x\)-th smallest is below \(p\):</p>
+            <div class="math-block">\[ X \ge x \iff U_{(x)} \le p. \]</div>
+            <p>And the \(x\)-th smallest of \(n\) uniforms follows a \(\mathrm{Beta}(x,\, n - x + 1)\) distribution. Its density is proportional to \(u^{x-1}(1-u)^{n-x}\), because for it to equal \(u\) there must be \(x - 1\) values below \(u\) and \(n - x\) above. Putting the two together, \(P(X \ge x) = P(U_{(x)} \le p)\), which is the identity.</p>
+            <p>With it, the first equation says that \(p_L\) leaves an area \(\alpha/2\) to its left under a \(\mathrm{Beta}(x,\, n - x + 1)\): it is its \(\alpha/2\) quantile. For the second, use \(P(X \le x) = 1 - P(X \ge x + 1)\) and the same identity with \(x + 1\). The result is:</p>
+            <div class="math-block">\[ \begin{aligned} p_L &= \text{quantile } \tfrac{\alpha}{2} \text{ of } \mathrm{Beta}(x,\; n - x + 1), \\ p_U &= \text{quantile } 1 - \tfrac{\alpha}{2} \text{ of } \mathrm{Beta}(x + 1,\; n - x). \end{aligned} \]</div>
+            <p>This is what this calculator computes. Some of those quantiles can be looked up in the <a href="tabla-beta.html">beta distribution table</a>.</p>
+            <p>When \(x = 0\) it can be worked out by hand: \(P(X \le 0 \mid p) = (1-p)^n\), and setting it equal to \(\alpha/2\),</p>
+            <div class="math-block">\[ p_U = 1 - \left(\tfrac{\alpha}{2}\right)^{1/n}. \]</div>
+            <p>With \(n = 20\) and 95%, \(p_U = 1 - 0.025^{1/20} = 0.168\): seeing no successes in 20 trials is compatible with a true proportion of up to 16.8%.</p>
+
+            <h4>Why it guarantees coverage</h4>
+            <p>Fix the true value \(p\). The interval misses on the upper side (\(p_U < p\)) only if an \(x\) is observed so small that \(P(X \le x \mid p) < \alpha/2\). Since that probability increases with \(x\), the values of \(x\) that cause the miss form a run \(0, 1, \ldots, x^*\), and the probability of landing in it is \(P(X \le x^* \mid p)\), which is less than \(\alpha/2\). By the same reasoning, the probability of missing on the lower side is also less than \(\alpha/2\). Therefore,</p>
+            <div class="math-block">\[ \begin{aligned} P(\text{the interval does not contain } p) &\le \frac{\alpha}{2} + \frac{\alpha}{2} \\ &= \alpha, \end{aligned} \]</div>
+            <p>that is, the coverage is <strong>at least</strong> \(1 - \alpha\) for any value of \(p\) and any \(n\). Neither Wald nor Wilson has that guarantee. The price is that the actual coverage is almost never exactly \(1 - \alpha\), but higher: since \(X\) only takes whole values, the binomial tails cannot equal exactly \(\alpha/2\), and the interval always ends up on the safe side. That is why it is called <strong>conservative</strong>, and it is usually somewhat wider than Wilson's.</p>
+
+            <h4>Examples</h4>
+            <ul>
+                <li><strong>2 successes in 20, at 95%:</strong> \(p_L\) is the 0.025 quantile of a \(\mathrm{Beta}(2, 19)\), 0.012; \(p_U\) is the 0.975 quantile of a \(\mathrm{Beta}(3, 18)\), 0.317. Check: with \(p = 0.012\), \(P(X \ge 2) = 0.025\); with \(p = 0.317\), \(P(X \le 2) = 0.025\). Wilson gives \([0.028,\ 0.301]\).</li>
+                <li><strong>134 successes in 200, at 95%</strong> (the worked example): Clopper-Pearson gives \([0.600,\ 0.735]\), Wilson \([0.602,\ 0.731]\) and Wald \([0.605,\ 0.735]\). With large samples and intermediate proportions, the three almost coincide.</li>
+            </ul>
+
+            <h4>Actual coverage of the three methods</h4>
+            <p>Exact probability that a 95% interval contains the true value:</p>
+            <div class="content-table-wrap">
+                <table class="content-table">
+                    <thead>
+                        <tr><th>Case</th><th>Wald</th><th>Wilson</th><th>Clopper-Pearson</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>p&nbsp;=&nbsp;0.05, n&nbsp;=&nbsp;20</td><td>63.9%</td><td>92.5%</td><td>98.4%</td></tr>
+                        <tr><td>p&nbsp;=&nbsp;0.05, n&nbsp;=&nbsp;100</td><td>87.7%</td><td>96.6%</td><td>98.3%</td></tr>
+                        <tr><td>p&nbsp;=&nbsp;0.10, n&nbsp;=&nbsp;50</td><td>87.9%</td><td>97.0%</td><td>97.0%</td></tr>
+                        <tr><td>p&nbsp;=&nbsp;0.30, n&nbsp;=&nbsp;20</td><td>94.7%</td><td>97.5%</td><td>97.5%</td></tr>
+                        <tr><td>p&nbsp;=&nbsp;0.50, n&nbsp;=&nbsp;30</td><td>95.7%</td><td>95.7%</td><td>95.7%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Averaging over all values of \(p\) with \(n = 20\), Wald covers 85%, Wilson 95% and Clopper-Pearson 98%. Wilson is right on average, but for some values of \(p\) it drops to around 89%; Clopper-Pearson never drops below 95%, at the cost of almost always overshooting. You can see it with simulated samples in the <a href="simulaciones/simulador-intervalos-confianza.html?mode=prop&amp;method=clopper&amp;p=0.05&amp;n=20&amp;conf=0.95">confidence interval simulator</a>.</p>
+        </section>
+
         <section class="card content-card">
             <h3>Assumptions for the CI of a proportion</h3>
             <ul>
@@ -243,41 +314,46 @@
         </section>
 
         <section class="card content-card">
-            <h3>Differences between Wald and Wilson</h3>
+            <h3>Differences between Wald, Wilson and Clopper-Pearson</h3>
             <div class="content-table-wrap">
-                <table class="content-table">
+                <table class="content-table compare-table">
                     <thead>
                         <tr>
                             <th>Aspect</th>
                             <th>Wald</th>
                             <th>Wilson</th>
+                            <th>Clopper-Pearson</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <th>Idea</th>
-                            <td>Direct normal approximation of \(\hat{p}\).</td>
-                            <td>Score interval: values of \(p\) compatible with the data.</td>
+                            <td data-label="Wald">Direct normal approximation of \(\hat{p}\).</td>
+                            <td data-label="Wilson">Score interval: values of \(p\) compatible with the data.</td>
+                            <td data-label="Clopper-Pearson">Values of \(p\) compatible with the data according to the exact binomial test.</td>
                         </tr>
                         <tr>
                             <th>Center</th>
-                            <td>Centered on \(\hat{p}\).</td>
-                            <td>Center adjusted toward less extreme values.</td>
+                            <td data-label="Wald">Centered on \(\hat{p}\).</td>
+                            <td data-label="Wilson">Center adjusted toward less extreme values.</td>
+                            <td data-label="Clopper-Pearson">Not built as center ± margin; usually asymmetric.</td>
                         </tr>
                         <tr>
                             <th>Bounds</th>
-                            <td>Can fall outside \([0,1]\).</td>
-                            <td>Stays within \([0,1]\).</td>
+                            <td data-label="Wald">Can fall outside \([0,1]\).</td>
+                            <td data-label="Wilson">Stays within \([0,1]\).</td>
+                            <td data-label="Clopper-Pearson">Stays within \([0,1]\).</td>
                         </tr>
                         <tr>
                             <th>When to use it</th>
-                            <td>Large samples, non-extreme proportions and quick computation.</td>
-                            <td>Recommended for general use; especially if \(n\) is small, \(\hat{p}\) is extreme, or there are few successes/failures.</td>
+                            <td data-label="Wald">Large samples, non-extreme proportions and quick computation.</td>
+                            <td data-label="Wilson">Recommended for general use; especially if \(n\) is small, \(\hat{p}\) is extreme, or there are few successes/failures.</td>
+                            <td data-label="Clopper-Pearson">When coverage must be guaranteed not to fall below the nominal level (clinical trials, quality control, regulatory reports).</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <p>In short: Wald is useful as a quick, didactic approximation; Wilson is preferable as the main result because it better respects the binomial nature of the data and avoids impossible bounds.</p>
+            <p>In short: Wald is useful as a quick, didactic approximation; Wilson is preferable as the main result because it better respects the binomial nature of the data and avoids impossible bounds. Clopper-Pearson is the cautious option: it never covers less than promised, although its intervals are somewhat wider.</p>
         </section>
 
         <section class="card content-card">
@@ -286,7 +362,8 @@
                 <li><strong>Use Wilson by default</strong> if you want a robust interval for most situations.</li>
                 <li><strong>Use Wald</strong> only as a quick approximation when \(n\) is large and there are enough successes and failures.</li>
                 <li><strong>Avoid Wald</strong> if \(x=0\), \(x=n\), \(n\) is small, or \(\hat{p}\) is close to 0 or 1.</li>
-                <li><strong>Compare both</strong> if you are in an intermediate zone: if they differ a lot, interpret Wald with caution and prioritize Wilson.</li>
+                <li><strong>Use Clopper-Pearson</strong> if you need the guarantee that actual coverage does not fall below the nominal level, even if the interval is somewhat wider.</li>
+                <li><strong>Compare the methods</strong> if you are in an intermediate zone: if they differ a lot, interpret Wald with caution and prioritize Wilson or Clopper-Pearson.</li>
             </ul>
         </section>
 
@@ -314,10 +391,10 @@
             <h3>Frequently asked questions</h3>
             <ul>
                 <li><strong>Can I enter p̂ directly instead of x?</strong> Enter x = p̂ × n rounded to the nearest integer; the result will be equivalent.</li>
-                <li><strong>What happens if x = 0 or x = n?</strong> Wald gives an interval of zero width, which is not useful. Wilson handles these cases correctly.</li>
+                <li><strong>What happens if x = 0 or x = n?</strong> Wald gives an interval of zero width, which is not useful. Wilson and Clopper-Pearson handle these cases correctly; for example, with 0 successes in 20, at 95%, Clopper-Pearson gives [0, 0.168].</li>
                 <li><strong>When is the normality condition met?</strong> When n·p̂ ≥ 5 and n·(1−p̂) ≥ 5. The calculator warns you if it isn't met.</li>
             </ul>
-            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval" target="_blank" rel="noopener noreferrer">Binomial proportion confidence interval</a> — Wikipedia</p>
+            <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval" target="_blank" rel="noopener noreferrer">Binomial proportion confidence interval</a> — Wikipedia. Clopper, C. J. and Pearson, E. S. (1934). <a href="https://doi.org/10.1093/biomet/26.4.404" target="_blank" rel="noopener noreferrer">The use of confidence or fiducial limits illustrated in the case of the binomial</a>. <em>Biometrika</em>, 26(4), 404–413. Brown, L. D., Cai, T. T. and DasGupta, A. (2001). <a href="https://doi.org/10.1214/ss/1009213286" target="_blank" rel="noopener noreferrer">Interval estimation for a binomial proportion</a>. <em>Statistical Science</em>, 16(2), 101–133.</p>
         </section>
     </main>
 
@@ -380,19 +457,26 @@ function calculate() {
     const wilsonL = Math.max(0, center - halfWidth);
     const wilsonU = Math.min(1, center + halfWidth);
 
+    // Clopper-Pearson (exacto): cuantiles de la beta, por la relación entre las colas
+    // de la binomial y la distribución beta. Con x = 0 o x = n el extremo es 0 o 1.
+    const cpL = x <= 0 ? 0 : jStat.beta.inv(alpha / 2, x, n - x + 1);
+    const cpU = x >= n ? 1 : jStat.beta.inv(1 - alpha / 2, x + 1, n - x);
+
     const waldOk = n * pHat >= 5 && n * (1 - pHat) >= 5;
-    const warning = waldOk ? '' : '\n⚠ Normality condition not met (n·p̂ < 5 or n·(1−p̂) < 5). Using Wilson is recommended.';
+    const warning = waldOk ? '' : '\n⚠ Normality condition not met (n·p̂ < 5 or n·(1−p̂) < 5). Using Wilson or Clopper-Pearson is recommended.';
 
     const EN = document.documentElement.lang === 'en';
     const mainWald = method === 'wald';
+    const mainCP = method === 'clopper';
+    const mainName = mainWald ? 'Wald' : mainCP ? 'Clopper-Pearson' : 'Wilson';
     window.CICharts && CICharts.result(resultEl, {
-        label: (EN ? CICharts.pct(conf) + ' confidence interval for the proportion p' : 'Intervalo de confianza al ' + CICharts.pct(conf) + ' para la proporción p') + (mainWald ? ' (Wald)' : ' (Wilson)'),
-        main: mainWald ? { lo: waldL, hi: waldU } : { lo: wilsonL, hi: wilsonU },
-        secondary: method === 'both' ? [{ label: 'Wald', lo: waldL, hi: waldU }] : [],
+        label: (EN ? CICharts.pct(conf) + ' confidence interval for the proportion p' : 'Intervalo de confianza al ' + CICharts.pct(conf) + ' para la proporción p') + ' (' + mainName + ')',
+        main: mainWald ? { lo: waldL, hi: waldU } : mainCP ? { lo: cpL, hi: cpU } : { lo: wilsonL, hi: wilsonU },
+        secondary: method === 'both' ? [{ label: 'Wald', lo: waldL, hi: waldU }, { label: 'Clopper-Pearson', lo: cpL, hi: cpU }] : [],
         notes: [warning],
         link: {
             before: EN ? 'What does ' + CICharts.pct(conf) + ' confidence mean?' : '¿Qué significa un ' + CICharts.pct(conf) + ' de confianza?',
-            href: 'simulaciones/simulador-intervalos-confianza.html' + '?mode=prop&method=' + (method === 'wald' ? 'wald' : 'wilson') + '&p=' + Math.min(0.99, Math.max(0.01, +pHat.toFixed(4))) + '&n=' + Math.round(n) + '&conf=' + +conf.toFixed(6),
+            href: 'simulaciones/simulador-intervalos-confianza.html' + '?mode=prop&method=' + (method === 'wald' ? 'wald' : mainCP ? 'clopper' : 'wilson') + '&p=' + Math.min(0.99, Math.max(0.01, +pHat.toFixed(4))) + '&n=' + Math.round(n) + '&conf=' + +conf.toFixed(6),
             text: EN ? 'Simulate 100 samples like yours and see how many intervals capture the true value' : 'Simula 100 muestras como la tuya y mira cuántos intervalos atrapan el valor real'
         },
         details: [
@@ -400,7 +484,10 @@ function calculate() {
             [EN ? 'Critical z' : 'z crítico', '±' + CICharts.num(zCrit, 4)],
             [EN ? 'Sample proportion (p̂)' : 'Proporción muestral (p̂)', CICharts.num(pHat, 4) + ' (' + x + (EN ? ' of ' : ' de ') + n + ')'],
             [EN ? 'Standard error (Wald)' : 'Error estándar (Wald)', seWald],
-            [EN ? 'Margin of error (Wald)' : 'Margen de error (Wald)', '±' + CICharts.num(zCrit * seWald)]
+            [EN ? 'Margin of error (Wald)' : 'Margen de error (Wald)', '±' + CICharts.num(zCrit * seWald)],
+            [EN ? 'Clopper-Pearson: beta quantiles' : 'Clopper-Pearson: cuantiles de la beta',
+                (x > 0 ? (EN ? 'quantile ' : 'cuantil ') + CICharts.num(alpha / 2, 4) + ' Beta(' + x + ', ' + (n - x + 1) + ')' : 'p_L = 0') + ' · ' +
+                (x < n ? (EN ? 'quantile ' : 'cuantil ') + CICharts.num(1 - alpha / 2, 4) + ' Beta(' + (x + 1) + ', ' + (n - x) + ')' : 'p_U = 1')]
         ]
     });
     const waldFn = function (c, f) {
@@ -413,10 +500,14 @@ function calculate() {
         const half = (z / (1 + z2 / nf)) * Math.sqrt(pHat * (1 - pHat) / nf + z2 / (4 * nf * nf));
         return [Math.max(0, mid - half), Math.min(1, mid + half)];
     };
+    const cpFn = function (c, f) {
+        const nf = n * f, xf = pHat * nf, a = 1 - c;
+        return [xf <= 0 ? 0 : jStat.beta.inv(a / 2, xf, nf - xf + 1), xf >= nf ? 1 : jStat.beta.inv(1 - a / 2, xf + 1, nf - xf)];
+    };
     window.CICharts && CICharts.intervals({
         canvas: 'ciChart', estimate: pHat, confidence: conf, custom: document.getElementById('conf').value === 'custom', xLabel: 'p', xMin: 0, xMax: 1,
-        method: method === 'wald' ? 'Wald' : 'Wilson',
-        interval: method === 'wald' ? waldFn : wilsonFn,
+        method: mainName,
+        interval: mainWald ? waldFn : mainCP ? cpFn : wilsonFn,
         compare: method === 'both' ? { label: 'Wald', interval: waldFn } : null,
         sizeLabel: function (f) { return 'n = ' + Math.ceil(n * f); }
     });
@@ -426,7 +517,7 @@ document.getElementById('calcBtn').addEventListener('click', calculate);
 document.getElementById('conf').addEventListener('change', calculate);
 document.getElementById('method').addEventListener('change', calculate);
 document.getElementById('customConf').addEventListener('input', calculate);
-window.CICharts && CICharts.prefill({ x: "x", n: "n" });
+window.CICharts && CICharts.prefill({ x: "x", n: "n", method: "method" });
 window.CICharts && CICharts.customLevel({ onChange: calculate });
 calculate();
 </script>
