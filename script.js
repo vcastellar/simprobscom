@@ -954,17 +954,21 @@ function calculate() {
     let result = null;
 
     try {
+        if (calc === "quantile" && (!Number.isFinite(x) || x < 0 || x > 1)) {
+            throw "El cuantil requiere una probabilidad entre 0 y 1";
+        }
 
         if (dist === "normal") {
             if (calc === "pdf") result = jStat.normal.pdf(x, p1, p2);
             if (calc === "cdf") result = resolveCdfResult(dist, cdfMode, x, b, p1, p2).value;
             if (calc === "quantile") {
-                if (x < 0 || x > 1) throw "El cuantil requiere un valor entre 0 y 1";
+                if (x <= 0 || x >= 1) throw "El cuantil normal requiere una probabilidad estrictamente entre 0 y 1";
                 result = jStat.normal.inv(x, p1, p2);
             }
         }
 
         if (dist === "binomial") {
+            if (!Number.isInteger(p1) || p1 < 0) throw "n debe ser un entero no negativo";
             if (calc === "pdf") result = jStat.binomial.pdf(x, p1, p2);
             if (calc === "cdf") result = resolveCdfResult(dist, cdfMode, x, b, p1, p2).value;
             if (calc === "quantile") {
@@ -1080,6 +1084,10 @@ function calculate() {
 
     } catch (error) {
         document.getElementById("result").innerText = "Error: " + error;
+        if (chart) {
+            chart.destroy();
+            chart = null;
+        }
     }
 }
 

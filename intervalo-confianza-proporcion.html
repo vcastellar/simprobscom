@@ -447,8 +447,8 @@ function calculate() {
     const method = document.getElementById('method').value;
     const resultEl = document.getElementById('result');
 
-    if (![x, n, conf].every(Number.isFinite) || x < 0 || n < 1 || x > n || conf <= 0 || conf >= 1) {
-        resultEl.innerText = 'Error: revisa que 0 ≤ x ≤ n, n ≥ 1 y 0 < confianza < 1.';
+    if (![x, n, conf].every(Number.isFinite) || !Number.isInteger(x) || !Number.isInteger(n) || x < 0 || n < 1 || x > n || conf <= 0 || conf >= 1) {
+        resultEl.innerText = 'Error: x y n deben ser enteros, con 0 ≤ x ≤ n, n ≥ 1 y 0 < confianza < 1.';
         window.CICharts && CICharts.clear('ciChart');
         return;
     }
