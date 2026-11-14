@@ -700,6 +700,23 @@ function renderMeanTestResult(o) {
     el.innerHTML = h + '</dl></details></div>';
 }
 
+// Stable upper tails: avoid subtracting a CDF rounded to 1.
+function meanTestSurvival(value, isT, df) {
+    const z = Math.abs(value);
+    let upper;
+    if (isT) {
+        upper = 0.5 * jStat.ibeta(df / (df + z * z), df / 2, 0.5);
+    } else if (z < 5) {
+        upper = jStat.normal.cdf(-z, 0, 1);
+    } else {
+        // Laplace continued fraction for the normal Mills ratio; z >= 5.
+        let fraction = 0;
+        for (let k = 100; k >= 1; k--) fraction = k / (z + fraction);
+        upper = Math.exp(-z * z / 2) / Math.sqrt(2 * Math.PI) / (z + fraction);
+    }
+    return value < 0 ? 1 - upper : upper;
+}
+
 function calculateMeanTest() {
     const mu0 = parseFloat(document.getElementById('mu0').value);
     const xbar = parseFloat(document.getElementById('xbar').value);
@@ -725,9 +742,9 @@ function calculateMeanTest() {
     const df = n - 1;
 
     let p;
-    if (tail === "two") p = 2 * (1 - (isT ? jStat.studentt.cdf(Math.abs(stat), df) : jStat.normal.cdf(Math.abs(stat), 0, 1)));
-    else if (tail === "right") p = 1 - (isT ? jStat.studentt.cdf(stat, df) : jStat.normal.cdf(stat, 0, 1));
-    else p = isT ? jStat.studentt.cdf(stat, df) : jStat.normal.cdf(stat, 0, 1);
+    if (tail === "two") p = 2 * meanTestSurvival(Math.abs(stat), isT, df);
+    else if (tail === "right") p = meanTestSurvival(stat, isT, df);
+    else p = meanTestSurvival(-stat, isT, df);
 
     renderMeanTestResult({ mu0, xbar, s, n, alpha, tail, isT, df, stat, p, se: s / Math.sqrt(n) });
     renderMeanTestChart(alpha, tail, stat, testType, df);

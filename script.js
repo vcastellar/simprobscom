@@ -332,21 +332,34 @@ function binomialQuantile(probability, n, p) {
     return k;
 }
 
-function continuousQuantile(probability, cdfFn, lower, upper) {
+function continuousQuantile(probability, cdfFn, lower, upper, supportLower = 0, supportUpper = Infinity) {
     if (probability < 0 || probability > 1) {
         throw "El cuantil requiere un valor entre 0 y 1";
     }
 
     if (probability === 0) {
-        return lower;
+        return supportLower;
     }
 
     if (probability === 1) {
-        return upper;
+        return supportUpper;
     }
 
     let left = lower;
     let right = upper;
+
+    // Initial plotting bounds need not contain the requested quantile.
+    for (let i = 0; i < 1024 && cdfFn(left) > probability; i++) {
+        left = Math.max(supportLower, left - (right - left));
+        if (!Number.isFinite(left)) throw "No se pudo acotar el cuantil con precisión";
+    }
+    for (let i = 0; i < 1024 && cdfFn(right) < probability; i++) {
+        right = Math.min(supportUpper, right + (right - left));
+        if (!Number.isFinite(right)) throw "No se pudo acotar el cuantil con precisión";
+    }
+    if (!(cdfFn(left) <= probability && cdfFn(right) >= probability)) {
+        throw "No se pudo acotar el cuantil con precisión";
+    }
 
     for (let i = 0; i < 80; i++) {
         const mid = (left + right) / 2;
@@ -990,7 +1003,7 @@ function calculate() {
             if (calc === "pdf") result = jStat.studentt.pdf(x, p1);
             if (calc === "cdf") result = resolveCdfResult(dist, cdfMode, x, b, p1, p2).value;
             if (calc === "quantile") {
-                result = continuousQuantile(x, (v) => jStat.studentt.cdf(v, p1), -100, 100);
+                result = continuousQuantile(x, (v) => jStat.studentt.cdf(v, p1), -100, 100, -Infinity);
             }
         }
 
@@ -1049,7 +1062,7 @@ function calculate() {
         if (dist === "beta") {
             if (calc === "pdf") result = jStat.beta.pdf(x, p1, p2);
             if (calc === "cdf") result = resolveCdfResult(dist, cdfMode, x, b, p1, p2).value;
-            if (calc === "quantile") result = continuousQuantile(x, (v) => jStat.beta.cdf(v, p1, p2), 0, 1);
+            if (calc === "quantile") result = continuousQuantile(x, (v) => jStat.beta.cdf(v, p1, p2), 0, 1, 0, 1);
         }
 
         if (dist === "lognormal") {
@@ -1071,6 +1084,7 @@ function calculate() {
         }
 
         if (dist === "bernoulli") {
+            if (!Number.isFinite(p1) || p1 < 0 || p1 > 1) throw "p debe ser una probabilidad entre 0 y 1";
             if (calc === "pdf") result = bernoulliPmf(x, p1);
             if (calc === "cdf") result = resolveCdfResult(dist, cdfMode, x, b, p1, p2).value;
             if (calc === "quantile") result = x <= 1 - p1 ? 0 : 1;

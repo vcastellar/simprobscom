@@ -318,6 +318,7 @@
                 <li>Power is approximated using the Jarque–Bera statistic.</li>
                 <li>The approximation is asymptotic, so it is least reliable precisely with small samples.</li>
             </ul>
+            <p>Zero skewness and zero excess kurtosis do not characterize the normal distribution. The JB approximation cannot distinguish alternatives sharing these moments; their Shapiro–Wilk power needs a specified alternative and simulation.</p>
             </details>
             <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
                 <p>The value \(n\) is an <strong>indicative estimate</strong> of the sample size for the Shapiro-Wilk (SW) test to detect the specified deviation from normality with the desired power. The formula relies on the asymptotic Jarque-Bera approximation, which is not conservative: against skewed or heavy-tailed alternatives it can underestimate the required \(n\) several times over (see the reference table), so it should be verified by simulation. Always round up. If you anticipate data loss, divide \(n\) by \((1 - \text{dropout rate})\) to obtain the required recruitment. Keep in mind that SW is only designed for \(3 \leq n \leq 5000\); for \(n > 5000\) it is not directly applicable.</p>
@@ -406,7 +407,7 @@ function calculateSWsampleSize() {
 
     const jbComponent = gamma1 * gamma1 / 6 + gamma2 * gamma2 / 24;
     if (jbComponent <= 0) {
-        resultEl.innerText = 'γ₁ = 0 and γ₂ = 0 correspond to the normal distribution (H₀). Enter at least one nonzero value.';
+        resultEl.innerText = 'With γ₁ = 0 and γ₂ = 0, the JB approximation cannot plan a departure based on these moments. These values do not establish normality; other distributions can share them.';
         return;
     }
 

@@ -18,7 +18,7 @@ class QuietHandler(SimpleHTTPRequestHandler):
         pass
 
 
-class InputValidationTests(unittest.TestCase):
+class BrowserTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         root = Path(__file__).resolve().parents[1]
@@ -74,20 +74,25 @@ class InputValidationTests(unittest.TestCase):
         self.assertTrue(text.startswith("Error:"), text)
         if message:
             self.assertIn(message, text)
-        self.assertFalse(self.page.evaluate(
-            "Array.from(document.querySelectorAll('canvas')).some(c => !!Chart.getChart(c))"
-        ), "An invalid result must not retain the previous chart")
+        for canvas in self.page.locator("canvas").all():
+            self.assertFalse(canvas.is_visible() and canvas.evaluate("c => !!Chart.getChart(c)"),
+                             "An invalid result must not display the previous chart")
 
     def displayed_number(self, pattern, text):
         match = re.search(pattern, text)
         self.assertIsNotNone(match, text)
-        return float(match.group(1).replace(",", ".").replace("−", "-"))
+        number = match.group(1).replace("−", "-")
+        if self.page.locator("html").get_attribute("lang") == "en":
+            number = number.replace(",", "")
+        else:
+            number = number.replace(".", "").replace(",", ".")
+        return float(number)
 
     def assert_chart(self):
-        self.assertTrue(self.page.evaluate(
-            "Array.from(document.querySelectorAll('canvas')).some(c => !!Chart.getChart(c))"
-        ))
+        self.assertTrue(any(canvas.is_visible() and canvas.evaluate("c => !!Chart.getChart(c)")
+                            for canvas in self.page.locator("canvas").all()))
 
+class InputValidationTests(BrowserTestCase):
     def test_binomial_requires_integer_trials_in_all_modes(self):
         for lang in ("/", "/en/"):
             self.open(lang, "binomial.html")

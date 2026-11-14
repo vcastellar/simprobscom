@@ -322,6 +322,7 @@
                 <li>La potencia se aproxima mediante el estadístico de Jarque–Bera.</li>
                 <li>La aproximación es asintótica, por lo que es menos fiable precisamente con muestras pequeñas.</li>
             </ul>
+            <p>La asimetría y el exceso de curtosis nulos no caracterizan la distribución normal. La aproximación JB no distingue alternativas con esos mismos momentos; para estudiar su potencia con Shapiro–Wilk hay que especificar la alternativa y recurrir a simulación.</p>
             </details>
             <details class="fold fold-sub"><summary><h3>Cómo interpretar el resultado</h3></summary>
                 <p>El valor \(n\) es una <strong>estimación orientativa</strong> del tamaño muestral para que el test de Shapiro-Wilk (SW) detecte la desviación de normalidad especificada con la potencia deseada. La fórmula usa la aproximación asintótica de Jarque-Bera, que no es conservadora: frente a alternativas asimétricas o de colas pesadas puede subestimar varias veces el \(n\) necesario (véase la tabla de referencia), así que conviene verificarlo por simulación. Redondea siempre hacia arriba. Si prevés pérdidas de datos, divide \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener el reclutamiento necesario. Ten en cuenta que el SW solo está diseñado para \(3 \leq n \leq 5000\); para \(n > 5000\) no es aplicable directamente.</p>
@@ -410,7 +411,7 @@ function calculateSWsampleSize() {
 
     const jbComponent = gamma1 * gamma1 / 6 + gamma2 * gamma2 / 24;
     if (jbComponent <= 0) {
-        resultEl.innerText = 'γ₁ = 0 y γ₂ = 0 corresponden a la distribución normal (H₀). Introduce al menos un valor distinto de cero.';
+        resultEl.innerText = 'Con γ₁ = 0 y γ₂ = 0, la aproximación JB no permite planificar una desviación a partir de estos momentos. Esos valores no demuestran normalidad: otras distribuciones pueden compartirlos.';
         return;
     }
 

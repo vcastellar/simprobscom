@@ -590,12 +590,19 @@ function shapiroWilkCoeffs(n) {
 function computeShapiroW(sample) {
   const n = sample.length;
   const sorted = [...sample].sort((x, y) => x - y);
-  const mean = sample.reduce((s, v) => s + v, 0) / n;
-  const ss = sample.reduce((s, v) => s + (v - mean) ** 2, 0);
-  if (ss < 1e-15) return 1.0;
+  const min = sorted[0], max = sorted[n - 1];
+  if (!sorted.every(Number.isFinite) || min === max) throw new Error('The sample must contain finite values and must not be constant.');
+  // Normalize before squaring: W is invariant to location and positive scale.
+  // Halving first also avoids overflow for ranges spanning both signs near MAX_VALUE.
+  const range = max - min;
+  const scaled = Number.isFinite(range)
+    ? sorted.map(x => (x - min) / range)
+    : sorted.map(x => (x / 2 - min / 2) / (max / 2 - min / 2));
+  const mean = scaled.reduce((s, v) => s + v, 0) / n;
+  const ss = scaled.reduce((s, v) => s + (v - mean) ** 2, 0);
   const a = shapiroWilkCoeffs(n);
   let b = 0;
-  for (let i = 0; i < a.length; i++) b += a[i] * (sorted[n - 1 - i] - sorted[i]);
+  for (let i = 0; i < a.length; i++) b += a[i] * (scaled[n - 1 - i] - scaled[i]);
   return Math.min(1.0, (b * b) / ss);
 }
 
@@ -705,6 +712,13 @@ document.getElementById('calcShapiroBtn').addEventListener('click', () => {
   if (Number.isNaN(B) || B < 1000 || B > 100000) { document.getElementById('shapiroResult').textContent = 'B must be between 1000 and 100000.'; return; }
   if (Number.isNaN(alpha) || alpha <= 0 || alpha >= 1) { document.getElementById('shapiroResult').textContent = 'The significance level α must be between 0 and 1.'; return; }
   if (Number.isNaN(seed) || seed < 0) { document.getElementById('shapiroResult').textContent = 'The seed must be an integer ≥ 0.'; return; }
+
+  if (!sample.every(Number.isFinite) || sample.every(v => v === sample[0])) {
+    document.getElementById('shapiroResult').textContent = 'The sample must contain finite values and must not be constant.';
+    document.getElementById('shapiroNotes').textContent = '';
+    if (shapiroChart) { shapiroChart.destroy(); shapiroChart = null; }
+    return;
+  }
 
   setSeed(seed);
   const wObs = computeShapiroW(sample);
