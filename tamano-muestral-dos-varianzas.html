@@ -217,15 +217,15 @@
             <p>donde \(df = n-1\) y \(F_{p,df,df}\) es el cuantil \(p\) de la distribución \(F(df, df)\). La calculadora busca el menor \(n\) que satisface la potencia objetivo.</p>
             <ul>
                 <li><strong>R > 1:</strong> σ₁ > σ₂ (el grupo 1 es más variable).</li>
-                <li><strong>R < 1:</strong> equivale a R'=1/R con grupos intercambiados; la potencia es la misma por simetría.</li>
+                <li><strong>R < 1:</strong> en el contraste bilateral equivale a R'=1/R con grupos intercambiados. En el unilateral σ₁ > σ₂ se requiere R > 1.</li>
             </ul>
             </details>
             <details class="fold fold-sub"><summary><h3>Configuración rápida</h3></summary>
             <ul>
-                <li><strong>R:</strong> usa siempre R > 1 (o equivale al inverso por simetría). R=1,5 es un efecto moderado; R=2 ya es grande.</li>
+                <li><strong>R:</strong> usa R > 1 para el unilateral σ₁ > σ₂; en el bilateral también se admite R < 1. R=1,5 es un efecto moderado; R=2 ya es grande.</li>
                 <li><strong>α:</strong> 0,05 es el estándar; 0,01 para decisiones críticas sobre variabilidad.</li>
                 <li><strong>Potencia:</strong> 0,80 como mínimo; 0,90 para estudios de validación.</li>
-                <li><strong>Normalidad:</strong> el test F de varianzas es muy sensible a la no normalidad. Si los datos no son normales, considera el test de Levene o Bartlett.</li>
+                <li><strong>Normalidad:</strong> el test F de varianzas es muy sensible a la no normalidad. Si los datos no son normales, considera Levene o Brown–Forsythe; Bartlett también es sensible a la no normalidad.</li>
             </ul>
             </details>
             <details class="fold fold-sub"><summary><h3>Ejemplo resuelto</h3></summary>
@@ -243,7 +243,7 @@
             </details>
             <details class="fold fold-sub"><summary><h3>Cómo interpretar el resultado</h3></summary>
                 <p>El valor \(n\) es el <strong>tamaño mínimo de cada grupo</strong> en un diseño balanceado para contrastar si dos varianzas poblacionales difieren mediante el test F de Snedecor. El tamaño total del estudio es \(2n\), y los grados de libertad del numerador y denominador son \(n - 1\) cada uno. Redondea siempre hacia arriba; una observación menos puede reducir los grados de libertad justo en el borde crítico. Si prevés pérdidas o rechazos, divide cada \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener el número de reclutamiento real por grupo.</p>
-                <p>El efecto de interés es la razón de varianzas \(\lambda = \sigma_1^2 / \sigma_2^2\) (o su inversa si \(\lambda < 1\)). La sensibilidad del diseño a la especificación de \(\lambda\) es alta: si la razón real resulta ser más cercana a 1 de lo supuesto, el test tendrá menos potencia de la planificada. Realiza un <em>análisis de sensibilidad</em> calculando \(n\) para distintos valores de \(\lambda\) en un rango razonable. Es importante tener presente que el test F es extraordinariamente sensible a la <strong>no normalidad</strong>: incluso desviaciones moderadas de la normalidad pueden inflar gravemente la tasa de error de tipo I, haciendo que el p-valor sea infiable. Si los datos no son claramente normales, considera tests alternativos como Levene o Bartlett (más robustos a la no normalidad) y adapta el \(n\) en consecuencia.</p>
+                <p>El efecto de interés es la razón de varianzas \(\lambda = \sigma_1^2 / \sigma_2^2\) (o su inversa en el contraste bilateral si \(\lambda < 1\)). La sensibilidad del diseño a la especificación de \(\lambda\) es alta: si la razón real resulta ser más cercana a 1 de lo supuesto, el test tendrá menos potencia de la planificada. Realiza un <em>análisis de sensibilidad</em> calculando \(n\) para distintos valores de \(\lambda\) en un rango razonable. Es importante tener presente que el test F es extraordinariamente sensible a la <strong>no normalidad</strong>: incluso desviaciones moderadas de la normalidad pueden inflar gravemente la tasa de error de tipo I, haciendo que el p-valor sea infiable. Si los datos no son claramente normales, considera tests alternativos como Levene o Brown–Forsythe (Bartlett también es sensible a la no normalidad) y adapta el \(n\) en consecuencia.</p>
                 <p>Cuando el \(n\) calculado sea muy grande, suele indicar que el tamaño del efecto especificado (\(\lambda\) cercano a 1) es demasiado pequeño para ser detectado de forma eficiente con un test de razón de varianzas; valora si la diferencia entre varianzas tiene relevancia práctica. Si el objetivo es estimar la razón de varianzas con una precisión determinada en lugar de contrastarla, usa la <a href="tamano-muestral-varianza-ic.html">calculadora de tamaño muestral para el IC de la varianza</a>. Una vez recogidos los datos, analiza los resultados con el <a href="contraste-hipotesis-dos-varianzas.html">contraste F para dos varianzas</a>.</p>
             </details>
         </section>
@@ -314,8 +314,12 @@ function calculateTwoVariancesSampleSize() {
         return;
     }
 
-    const Ruse = R < 1 ? 1 / R : R;
     const oneSided = document.getElementById('twoVarTail').value === 'one-sided';
+    if (oneSided && R < 1) {
+        resultEl.innerText = 'Error: la alternativa σ₁ > σ₂ requiere R > 1. Elige el bilateral si R < 1.';
+        return;
+    }
+    const Ruse = !oneSided && R < 1 ? 1 / R : R;
     let n = 2;
     let actualPower = 0;
     while (n <= 100000) {

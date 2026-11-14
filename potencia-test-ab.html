@@ -585,6 +585,12 @@ function doPower() {
   if (!Number.isFinite(n) || n < 1) { el.textContent = 'Error: n debe ser un entero positivo.'; return; }
   if (!Number.isFinite(alpha) || alpha <= 0 || alpha >= 1) { el.textContent = 'Error: α debe estar entre 0 y 1.'; return; }
 
+  if (alt !== 'two-sided' && pB <= pA) {
+    el.textContent = 'Error: el contraste unilateral de mejora requiere p_B > p_A. Para detectar descensos, elige el bilateral.';
+    if (critChart) { critChart.destroy(); critChart = null; }
+    return;
+  }
+
   const power  = computePower(pA, pB, n, alpha, alt);
   const beta   = 1 - power;
   const delta  = pB - pA;
@@ -625,8 +631,19 @@ function doN() {
   if (!Number.isFinite(alpha) || alpha <= 0 || alpha >= 1) { el.textContent = 'Error: α debe estar entre 0 y 1.'; return; }
   if (!Number.isFinite(targetPower) || targetPower <= 0 || targetPower >= 1) { el.textContent = 'Error: la potencia debe estar entre 0 y 1.'; return; }
 
+  if (alt !== 'two-sided' && pB <= pA) {
+    el.textContent = 'Error: el contraste unilateral de mejora requiere p_B > p_A. Para detectar descensos, elige el bilateral.';
+    if (critChart) { critChart.destroy(); critChart = null; }
+    return;
+  }
+
   const n = computeN(pA, pB, alpha, targetPower, alt);
   const actualPower = computePower(pA, pB, n, alpha, alt);
+  if (!Number.isFinite(n) || !Number.isFinite(actualPower) || actualPower + 1e-12 < targetPower) {
+    el.textContent = 'Error: no se pudo alcanzar la potencia solicitada con estos parámetros.';
+    if (critChart) { critChart.destroy(); critChart = null; }
+    return;
+  }
   const delta = pB - pA;
   const liftRel = delta / pA * 100;
 

@@ -213,15 +213,15 @@
             <p>where \(df = n-1\) and \(F_{p,df,df}\) is the \(p\) quantile of the \(F(df, df)\) distribution. The calculator searches for the smallest \(n\) that satisfies the target power.</p>
             <ul>
                 <li><strong>R > 1:</strong> σ₁ > σ₂ (group 1 is more variable).</li>
-                <li><strong>R < 1:</strong> equivalent to R'=1/R with the groups swapped; the power is the same by symmetry.</li>
+                <li><strong>R < 1:</strong> in the two-tailed test, equivalent to R'=1/R with the groups swapped. In the one-tailed σ₁ > σ₂ test, R must be greater than 1.</li>
             </ul>
             </details>
             <details class="fold fold-sub"><summary><h3>Quick settings</h3></summary>
             <ul>
-                <li><strong>R:</strong> always use R > 1 (or its equivalent inverse by symmetry). R=1.5 is a moderate effect; R=2 is already large.</li>
+                <li><strong>R:</strong> use R > 1 for the one-tailed σ₁ > σ₂ test; the two-tailed test also accepts R < 1. R=1.5 is a moderate effect; R=2 is already large.</li>
                 <li><strong>α:</strong> 0.05 is the standard; 0.01 for critical decisions about variability.</li>
                 <li><strong>Power:</strong> 0.80 as a minimum; 0.90 for validation studies.</li>
-                <li><strong>Normality:</strong> the F-test of variances is very sensitive to non-normality. If the data are not normal, consider the Levene or Bartlett test.</li>
+                <li><strong>Normality:</strong> the F-test of variances is very sensitive to non-normality. If the data are not normal, consider Levene or Brown–Forsythe; Bartlett is also sensitive to non-normality.</li>
             </ul>
             </details>
             <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
@@ -239,7 +239,7 @@
             </details>
             <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
                 <p>The value \(n\) is the <strong>minimum size of each group</strong> in a balanced design to test whether two population variances differ using the Snedecor F-test. The total study size is \(2n\), and the numerator and denominator degrees of freedom are each \(n - 1\). Always round up; one fewer observation can reduce the degrees of freedom right at the critical margin. If you anticipate dropout or rejections, divide each \(n\) by \((1 - \text{dropout rate})\) to get the actual recruitment target per group.</p>
-                <p>The effect of interest is the variance ratio \(\lambda = \sigma_1^2 / \sigma_2^2\) (or its inverse if \(\lambda < 1\)). The design's sensitivity to the specification of \(\lambda\) is high: if the true ratio turns out to be closer to 1 than assumed, the test will have less power than planned. Run a <em>sensitivity analysis</em> by computing \(n\) for different values of \(\lambda\) within a reasonable range. It is important to keep in mind that the F-test is extraordinarily sensitive to <strong>non-normality</strong>: even moderate deviations from normality can seriously inflate the type I error rate, making the p-value unreliable. If the data are not clearly normal, consider alternative tests such as Levene or Bartlett (more robust to non-normality) and adjust \(n\) accordingly.</p>
+                <p>The effect of interest is the variance ratio \(\lambda = \sigma_1^2 / \sigma_2^2\) (or its inverse in the two-tailed test if \(\lambda < 1\)). The design's sensitivity to the specification of \(\lambda\) is high: if the true ratio turns out to be closer to 1 than assumed, the test will have less power than planned. Run a <em>sensitivity analysis</em> by computing \(n\) for different values of \(\lambda\) within a reasonable range. It is important to keep in mind that the F-test is extraordinarily sensitive to <strong>non-normality</strong>: even moderate deviations from normality can seriously inflate the type I error rate, making the p-value unreliable. If the data are not clearly normal, consider alternative tests such as Levene or Brown–Forsythe (Bartlett is also sensitive to non-normality) and adjust \(n\) accordingly.</p>
                 <p>When the calculated \(n\) is very large, it usually indicates that the specified effect size (\(\lambda\) close to 1) is too small to be detected efficiently with a variance-ratio test; consider whether the difference between variances has practical relevance. If the goal is to estimate the variance ratio with a given precision rather than test it, use the <a href="tamano-muestral-varianza-ic.html">sample size calculator for the variance CI</a>. Once the data has been collected, analyze the results with the <a href="contraste-hipotesis-dos-varianzas.html">F-test for two variances</a>.</p>
             </details>
         </section>
@@ -310,8 +310,12 @@ function calculateTwoVariancesSampleSize() {
         return;
     }
 
-    const Ruse = R < 1 ? 1 / R : R;
     const oneSided = document.getElementById('twoVarTail').value === 'one-sided';
+    if (oneSided && R < 1) {
+        resultEl.innerText = 'Error: the alternative σ₁ > σ₂ requires R > 1. Choose a two-tailed test if R < 1.';
+        return;
+    }
+    const Ruse = !oneSided && R < 1 ? 1 / R : R;
     let n = 2;
     let actualPower = 0;
     while (n <= 100000) {

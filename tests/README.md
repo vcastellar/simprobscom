@@ -5,6 +5,12 @@ entrada, los mensajes de error, la retirada del gráfico anterior y la recuperac
 con valores válidos, en español e inglés. Incluyen referencias numéricas conocidas
 y los extremos válidos de Bernoulli y Clopper–Pearson.
 
+Las regresiones numéricas también cubren la invariancia de Shapiro–Wilk al cambiar
+escala y origen, cuantiles en colas largas, tablas de Fisher con ceros y p-valores
+pequeños, dirección de diseños unilaterales y colas normales y t estables. Las
+referencias independientes se guardan en `statistical_references.json`, calculadas
+con SciPy 1.17.0; no hace falta instalar SciPy para ejecutar las pruebas.
+
 Requisitos de desarrollo: Python 3, Playwright para Python y Chromium. La web sigue
 sin necesitar instalación de paquetes para funcionar.
 

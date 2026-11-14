@@ -579,6 +579,12 @@ function doPower() {
   if (!Number.isFinite(n) || n < 1) { el.textContent = 'Error: n must be a positive integer.'; return; }
   if (!Number.isFinite(alpha) || alpha <= 0 || alpha >= 1) { el.textContent = 'Error: α must be between 0 and 1.'; return; }
 
+  if (alt !== 'two-sided' && pB <= pA) {
+    el.textContent = 'Error: the one-tailed improvement test requires p_B > p_A. Choose a two-tailed test for decreases.';
+    if (critChart) { critChart.destroy(); critChart = null; }
+    return;
+  }
+
   const power  = computePower(pA, pB, n, alpha, alt);
   const beta   = 1 - power;
   const delta  = pB - pA;
@@ -619,8 +625,19 @@ function doN() {
   if (!Number.isFinite(alpha) || alpha <= 0 || alpha >= 1) { el.textContent = 'Error: α must be between 0 and 1.'; return; }
   if (!Number.isFinite(targetPower) || targetPower <= 0 || targetPower >= 1) { el.textContent = 'Error: power must be between 0 and 1.'; return; }
 
+  if (alt !== 'two-sided' && pB <= pA) {
+    el.textContent = 'Error: the one-tailed improvement test requires p_B > p_A. Choose a two-tailed test for decreases.';
+    if (critChart) { critChart.destroy(); critChart = null; }
+    return;
+  }
+
   const n = computeN(pA, pB, alpha, targetPower, alt);
   const actualPower = computePower(pA, pB, n, alpha, alt);
+  if (!Number.isFinite(n) || !Number.isFinite(actualPower) || actualPower + 1e-12 < targetPower) {
+    el.textContent = 'Error: could not reach the requested power with these parameters.';
+    if (critChart) { critChart.destroy(); critChart = null; }
+    return;
+  }
   const delta = pB - pA;
   const liftRel = delta / pA * 100;
 

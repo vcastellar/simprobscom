@@ -492,16 +492,14 @@ function computeFisher(a, b, c, d, tail) {
     } else if (tail === 'left') {
         pValue = probs.filter(e => e.k <= a).reduce((s, e) => s + e.p, 0);
     } else {
-        pValue = probs.filter(e => e.p <= pObs + 1e-10).reduce((s, e) => s + e.p, 0);
+        pValue = probs.filter(e => e.p <= pObs * (1 + 1e-10)).reduce((s, e) => s + e.p, 0);
     }
 
     pValue = Math.min(Math.max(pValue, 0), 1);
 
-    let or;
-    if (b === 0 && c === 0) or = NaN;
-    else if (b === 0) or = Infinity;
-    else if (c === 0) or = 0;
-    else or = (a * d) / (b * c);
+    const numerator = a * d;
+    const denominator = b * c;
+    const or = denominator === 0 ? (numerator === 0 ? NaN : Infinity) : numerator / denominator;
 
     return { pValue, or, probs, pObs };
 }
@@ -509,7 +507,7 @@ function computeFisher(a, b, c, d, tail) {
 function isInRejectionRegion(k, a, pObs, tail, e) {
     if (tail === 'right') return k >= a;
     if (tail === 'left') return k <= a;
-    return e.p <= pObs + 1e-10;
+    return e.p <= pObs * (1 + 1e-10);
 }
 
 function renderFisherChart(a, probs, pObs, tail) {
@@ -646,13 +644,15 @@ function renderFisherResult(o) {
 }
 
 function calculateFisher() {
-    const a = parseInt(document.getElementById('cellA').value, 10);
-    const b = parseInt(document.getElementById('cellB').value, 10);
-    const c = parseInt(document.getElementById('cellC').value, 10);
-    const d = parseInt(document.getElementById('cellD').value, 10);
+    const a = parseFloat(document.getElementById('cellA').value);
+    const b = parseFloat(document.getElementById('cellB').value);
+    const c = parseFloat(document.getElementById('cellC').value);
+    const d = parseFloat(document.getElementById('cellD').value);
     const alpha = parseFloat(document.getElementById('alpha').value);
     const tail = document.getElementById('tail').value;
     const resultEl = document.getElementById('fisherResult');
+    // Remove a previous chart whenever the new table is invalid.
+    if (fisherChart) { fisherChart.destroy(); fisherChart = null; }
 
     if ([a, b, c, d].some(v => !Number.isInteger(v) || v < 0)) {
         resultEl.innerText = 'Error: las celdas deben ser enteros no negativos.';
