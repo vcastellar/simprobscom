@@ -704,14 +704,14 @@ function calculateMeanTest() {
     const mu0 = parseFloat(document.getElementById('mu0').value);
     const xbar = parseFloat(document.getElementById('xbar').value);
     const s = parseFloat(document.getElementById('s').value);
-    const n = parseInt(document.getElementById('n').value, 10);
+    const n = parseFloat(document.getElementById('n').value);
     const alpha = parseFloat(document.getElementById('alpha').value);
     const tail = document.getElementById('tail').value;
     const dispersionType = document.getElementById('dispersionType').value;
     const resultEl = document.getElementById('meanResult');
 
-    if (![mu0, xbar, s, n, alpha].every(Number.isFinite) || s <= 0 || n < 2 || alpha <= 0 || alpha >= 1) {
-        resultEl.innerText = 'Error: check that s > 0, n ≥ 2 and 0 < α < 1.';
+    if (![mu0, xbar, s, n, alpha].every(Number.isFinite) || s <= 0 || !Number.isInteger(n) || n < 2 || alpha <= 0 || alpha >= 1) {
+        resultEl.innerText = 'Error: check that s > 0, n is an integer ≥ 2 and 0 < α < 1.';
         if (meanTestChart) {
             meanTestChart.destroy();
             meanTestChart = null;

@@ -443,8 +443,8 @@ function calculate() {
     const method = document.getElementById('method').value;
     const resultEl = document.getElementById('result');
 
-    if (![x, n, conf].every(Number.isFinite) || x < 0 || n < 1 || x > n || conf <= 0 || conf >= 1) {
-        resultEl.innerText = 'Error: check that 0 ≤ x ≤ n, n ≥ 1 and 0 < confidence < 1.';
+    if (![x, n, conf].every(Number.isFinite) || !Number.isInteger(x) || !Number.isInteger(n) || x < 0 || n < 1 || x > n || conf <= 0 || conf >= 1) {
+        resultEl.innerText = 'Error: x and n must be integers, with 0 ≤ x ≤ n, n ≥ 1 and 0 < confidence < 1.';
         window.CICharts && CICharts.clear('ciChart');
         return;
     }
