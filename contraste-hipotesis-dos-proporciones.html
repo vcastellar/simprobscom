@@ -141,6 +141,9 @@
 }
     </script>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="reproduce-code.css?v=20261116-2">
+<script src="reproduce-code.js?v=20261116-2"></script>
+<script src="reproduce-tests.js?v=20261116-2"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Navegación principal">
@@ -221,7 +224,7 @@
                 <button class="calculate-btn" id="calcTwoPropBtn">Calcular contraste</button>
             </section>
 
-            <div id="twoPropResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+            <section class="reproduce-result-group"><div id="twoPropResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div></section>
 
             <section class="card ss-chart-panel">
                 <h2 class="ss-chart-title">Regiones de rechazo y estadístico observado</h2>
@@ -493,6 +496,7 @@ function twoGroupMde(nFn, p2, n1, dir) {
 }
 
 function renderTwoPropResult(o) {
+    window.ReproduceTests?.render('twoProp', 'twoPropResult', o);
     const R = TestResult, EN = R.EN;
     const rejected = o.p < o.alpha;
     const q = o.tail === 'two' ? 1 - o.alpha / 2 : 1 - o.alpha;

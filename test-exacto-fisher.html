@@ -175,6 +175,9 @@
 }
     </script>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="reproduce-code.css?v=20261116-2">
+<script src="reproduce-code.js?v=20261116-2"></script>
+<script src="reproduce-tests.js?v=20261116-2"></script>
 </head>
 
 <body>
@@ -283,7 +286,7 @@
                 <button class="calculate-btn" id="calcFisherBtn">Calcular contraste</button>
             </section>
 
-            <div id="fisherResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+            <section class="reproduce-result-group"><div id="fisherResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div></section>
 
             <section class="card ss-chart-panel">
                 <h2 class="ss-chart-title">Distribución hipergeométrica bajo H₀</h2>
@@ -571,6 +574,7 @@ function fisherSampleSize(p1, p2, r, alpha, tail, power) {
 }
 
 function renderFisherResult(o) {
+    window.ReproduceTests?.render('fisher', 'fisherResult', o);
     const R = TestResult, EN = R.EN;
     const rejected = o.p < o.alpha;
     const n1 = o.a + o.b, n2 = o.c + o.d;

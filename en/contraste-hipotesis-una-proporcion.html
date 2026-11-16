@@ -149,6 +149,9 @@
 }
     </script>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="../reproduce-code.css?v=20261116-2">
+<script src="../reproduce-code.js?v=20261116-2"></script>
+<script src="../reproduce-tests.js?v=20261116-2"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Main navigation">
@@ -238,7 +241,7 @@
                 <button class="calculate-btn" id="calcPropBtn">Calculate test</button>
             </section>
 
-            <div id="propResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+            <section class="reproduce-result-group"><div id="propResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div></section>
 
             <section class="card ss-chart-panel">
                 <h2 class="ss-chart-title">Rejection regions and observed statistic</h2>
@@ -509,6 +512,7 @@ function onePropSampleSize(p0, d, alpha, tail, power) {
 
 // Resultado: decisión, conclusión, diferencia mínima detectable y detalles.
 function renderPropResult(o) {
+    window.ReproduceTests?.render('oneProp', 'propResult', o);
     const R = TestResult, EN = R.EN;
     const rejected = o.p < o.alpha;
     const q = o.tail === 'two' ? 1 - o.alpha / 2 : 1 - o.alpha;

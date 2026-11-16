@@ -14,9 +14,9 @@
         dependencies: 'R: base R, sin paquetes adicionales. Python: instala scipy (pip install scipy).',
         summary: 'Reproduce el estadístico, el valor p y la decisión a partir de la media, la desviación y el tamaño muestral.'
     };
-    let root, code, notice, status, copyButton, snippets, language = 'r', fingerprint;
+    let root, code, notice, status, copyButton, snippets, language = 'r', fingerprint, resultObserver;
     function fields() {
-        return JSON.stringify(Array.from(document.querySelectorAll('main input, main select, main textarea')).map(e => [e.id, e.value]));
+        return JSON.stringify(Array.from(document.querySelectorAll('main input, main select, main textarea')).map(e => [e.id, e.value, e.type === 'checkbox' || e.type === 'radio' ? e.checked : null]));
     }
     function select(lang, focus) {
         language = lang;
@@ -52,47 +52,88 @@
                 catch (_) { status.textContent = T.failed; }
             });
         }
+        if (resultObserver) resultObserver.disconnect();
+        resultObserver = new MutationObserver(() => {
+            if (/^Error:/.test(result.textContent.trim())) clear();
+        });
+        resultObserver.observe(result, {childList:true, subtree:true, characterData:true});
         root.querySelector('.reproduce-note').textContent = value.note || T.note;
+        if (root.previousElementSibling !== result) result.after(root);
         snippets = value; fingerprint = fields(); root.hidden = false; notice.hidden = true;
         select(language);
     }
+    document.addEventListener('click', e => {
+        if (e.target.closest('main .calculate-btn, main .mode-tab')) clear();
+    }, true);
     function clear() { if (root) root.hidden = true; snippets = null; }
     for (const event of ['input', 'change']) document.addEventListener(event, e => {
         if (snippets && e.target.closest('main')) notice.hidden = fields() === fingerprint;
     });
     function distribution(o) {
-        if (!['normal', 'binomial'].includes(o.dist)) return null;
-        const discrete = o.dist === 'binomial';
-        const name = discrete ? 'binom' : 'norm';
-        const rname = discrete ? 'binom' : 'norm';
-        const rparams = discrete ? 'size = n, prob = p' : 'mean = mu, sd = sigma';
-        const params = discrete ? 'n=n, p=p' : 'loc=mu, scale=sigma';
-        const rheader = discrete ? `n <- ${o.p1}\np <- ${o.p2}` : `mu <- ${o.p1}\nsigma <- ${o.p2}`;
-        const pyheader = discrete ? `n = ${o.p1}\np = ${o.p2}` : `mu = ${o.p1}\nsigma = ${o.p2}`;
+        const configs = {
+            normal: ['norm', 'norm', {mu:o.p1, sigma:o.p2}, 'mean = mu, sd = sigma', 'loc=mu, scale=sigma'],
+            binomial: ['binom', 'binom', {n:o.p1, p:o.p2}, 'size = n, prob = p', 'n=n, p=p', 0, 'n'],
+            poisson: ['pois', 'poisson', {rate:o.p1}, 'lambda = rate', 'mu=rate', 0],
+            studentt: ['t', 't', {df:o.p1}, 'df = df', 'df=df'],
+            chisquare: ['chisq', 'chi2', {df:o.p1}, 'df = df', 'df=df'],
+            centralf: ['f', 'f', {df1:o.p1, df2:o.p2}, 'df1 = df1, df2 = df2', 'dfn=df1, dfd=df2'],
+            exponential: ['exp', 'expon', {rate:o.p1}, 'rate = rate', 'scale=1 / rate'],
+            negbin: ['nbinom', 'nbinom', {size:o.p1, p:o.p2}, 'size = size, prob = p', 'n=size, p=p', 0],
+            geometric: ['geom', 'geom', {p:o.p1}, 'prob = p', 'p=p', 1],
+            uniform: ['unif', 'uniform', {a:o.p1, b_max:o.p2}, 'min = a, max = b_max', 'loc=a, scale=b_max - a'],
+            gamma: ['gamma', 'gamma', {shape:o.p1, scale:o.p2}, 'shape = shape, scale = scale', 'a=shape, scale=scale'],
+            beta: ['beta', 'beta', {shape1:o.p1, shape2:o.p2}, 'shape1 = shape1, shape2 = shape2', 'a=shape1, b=shape2'],
+            lognormal: ['lnorm', 'lognorm', {mu:o.p1, sigma:o.p2}, 'meanlog = mu, sdlog = sigma', 's=sigma, scale=exp(mu)'],
+            weibull: ['weibull', 'weibull_min', {shape:o.p1, scale:o.p2}, 'shape = shape, scale = scale', 'c=shape, scale=scale'],
+            hypergeometric: ['hyper', 'hypergeom', {population:o.p1, successes:o.p2, draws:o.p3}, 'm = successes, n = population - successes, k = draws', 'M=population, n=successes, N=draws', 'max(0, draws - (population - successes))', 'min(draws, successes)'],
+            bernoulli: ['binom', 'bernoulli', {p:o.p1}, 'size = 1, prob = p', 'p=p', 0, '1']
+        };
+        const c = configs[o.dist];
+        if (!c) return null;
+        const [rname, name, parameters, rparams, params, lower, upper] = c;
+        const discrete = lower !== undefined;
+        const geometric = o.dist === 'geometric';
+        const rArg = arg => geometric ? `(${arg}) - 1` : arg;
+        const rCDF = (arg, right=false) => `p${rname}(${rArg(arg)}, ${rparams}${right ? ', lower.tail = FALSE' : ''})`;
+        const pyCDF = (arg, right=false) => `${name}.${right ? 'sf' : 'cdf'}(${discrete && (arg === 'x' || arg === 'b') ? 'floor(' + arg + ')' : arg}, ${params})`;
         let r, python;
         if (o.calc === 'pdf') {
-            r = `d${rname}(x, ${rparams})`; python = `${name}.${discrete ? 'pmf' : 'pdf'}(x, ${params})`;
+            r = `d${rname}(${rArg('x')}, ${rparams})`;
+            python = `${name}.${discrete ? 'pmf' : 'pdf'}(x, ${params})`;
         } else if (o.calc === 'quantile') {
-            r = `q${rname}(x, ${rparams})`; python = `${name}.ppf(x, ${params})`;
-            // Explicit endpoints: both engines then follow the calculator's bounded-support convention.
+            r = `q${rname}(x, ${rparams})${geometric ? ' + 1' : ''}`;
+            python = `${name}.ppf(x, ${params})`;
             if (discrete) {
-                r = `if (p == 0) 0 else ${r}`;
-                python = `0.0 if x == 0 or p == 0 else ${python}`;
+                // Explicit endpoint conventions shared with the calculator.
+                r = `if (x == 0) ${lower} else ${r}`;
+                python = `${lower} if x == 0 else ${python}`;
+                if (o.dist === 'binomial' || o.dist === 'bernoulli') {
+                    r = `if (p == 0) 0 else if (x == 1) ${upper} else ${r}`;
+                    python = `0 if p == 0 else ${upper} if x == 1 else ${python}`;
+                } else if (upper !== undefined) {
+                    r = `if (x == 1) ${upper} else ${r}`;
+                    python = `${upper} if x == 1 else ${python}`;
+                }
             }
         } else if (o.cdfMode === 'right') {
-            r = `p${rname}(${discrete ? 'ceiling(x) - 1' : 'x'}, ${rparams}, lower.tail = FALSE)`;
-            python = `${name}.sf(${discrete ? 'ceil(x) - 1' : 'x'}, ${params})`;
+            r = rCDF(discrete ? 'ceiling(x) - 1' : 'x', true);
+            python = pyCDF(discrete ? 'ceil(x) - 1' : 'x', true);
         } else if (o.cdfMode === 'interval') {
-            r = `p${rname}(b, ${rparams}) - p${rname}(${discrete ? 'ceiling(x) - 1' : 'x'}, ${rparams})`;
-            python = `${name}.cdf(b, ${params}) - ${name}.cdf(${discrete ? 'ceil(x) - 1' : 'x'}, ${params})`;
+            r = `${rCDF('b')} - ${rCDF(discrete ? 'ceiling(x) - 1' : 'x')}`;
+            python = `${pyCDF('b')} - ${pyCDF(discrete ? 'ceil(x) - 1' : 'x')}`;
         } else {
-            r = `p${rname}(x, ${rparams})`; python = `${name}.cdf(x, ${params})`;
+            r = rCDF('x'); python = pyCDF('x');
         }
         const interval = o.calc === 'cdf' && o.cdfMode === 'interval';
+        const rheader = Object.entries(parameters).map(([k,v]) => `${k} <- ${v}`).join('\n');
+        const pyheader = Object.entries(parameters).map(([k,v]) => `${k} = ${v}`).join('\n');
+        let note = T.note;
+        if (geometric) note += en ? ' R counts failures before the first success; the shift by 1 matches the support 1, 2, … used here.' : ' R cuenta fallos antes del primer éxito; el desplazamiento de 1 reproduce el soporte 1, 2, … de esta calculadora.';
+        if (discrete && o.calc === 'quantile') note += en ? ' Probability-zero quantiles use the lower endpoint of the calculator support.' : ' Para probabilidad cero se usa el extremo inferior del soporte de la calculadora.';
         return {
-            note: discrete && o.calc === 'quantile' ? T.note + (en ? ' At probability zero, the quantile convention is 0; when p = 0, X is always 0.' : ' En probabilidad cero se usa el cuantil 0; cuando p = 0, X siempre es 0.') : T.note,
+            note,
             r: `${rheader}\nx <- ${o.x}${interval ? '\nb <- ' + o.b : ''}\n\nresult <- ${r}\nprint(result)`,
-            python: `from scipy.stats import ${name}${discrete ? '\nfrom math import ceil' : ''}\n\n${pyheader}\nx = ${o.x}${interval ? '\nb = ' + o.b : ''}\n\nresult = ${python}\nprint(result)`
+            python: `from scipy.stats import ${name}\nfrom math import ceil, floor, exp\n\n${pyheader}\nx = ${o.x}${interval ? '\nb = ' + o.b : ''}\n\nresult = ${python}\nprint(result)`
         };
     }
     function mean(o) {
@@ -109,6 +150,7 @@
     }
     window.ReproduceCode = {
         distribution(o) { const value = distribution(o); if (value) render(document.getElementById('result'), value); else clear(); },
+        show(result, value) { render(result, value); },
         mean(o) { render(document.getElementById('meanResult'), mean(o)); }, clear
     };
 }());

@@ -133,6 +133,9 @@
 }
     </script>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="../reproduce-code.css?v=20261116-2">
+<script src="../reproduce-code.js?v=20261116-2"></script>
+<script src="../reproduce-tests.js?v=20261116-2"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Main navigation">
@@ -269,7 +272,7 @@
                 <button class="calculate-btn" id="calcVarianceBtn">Calculate test</button>
             </section>
 
-            <div id="varianceResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+            <section class="reproduce-result-group"><div id="varianceResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div></section>
 
             <section class="card ss-chart-panel">
                 <h2 class="ss-chart-title">Rejection regions and observed statistic</h2>
@@ -680,6 +683,7 @@ function ratioMde(powerFn, tail) {
 }
 
 function renderOneVarianceResult(o) {
+    window.ReproduceTests?.render('oneVariance', 'varianceResult', o);
     const R = TestResult, EN = R.EN;
     const rejected = o.p < o.alpha;
     const m = ratioMde((r) => oneVariancePower(o.n, r, o.alpha, o.tail), o.tail);
@@ -753,6 +757,7 @@ function twoVarRatioMde(powerFn, tail) {
 }
 
 function renderTwoVariancesResult(elId, o) {
+    window.ReproduceTests?.render('twoVariances', elId, o);
     const R = TestResult, EN = R.EN;
     const rejected = o.p < o.alpha;
     const m = twoVarRatioMde((r) => twoVariancesPower(o.df1, o.df2, r, o.alpha, o.tail), o.tail);

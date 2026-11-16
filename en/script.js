@@ -1071,7 +1071,7 @@ function calculate() {
         renderDistributionResult({ dist, calc, x, b, cdfMode, p1, p2, p3, result });
 
         drawChart(dist, p1, p2, calc, x, cdfMode, b, calc === "quantile" ? result : null);
-        window.ReproduceCode?.distribution({dist, calc, x, b, cdfMode, p1, p2});
+        window.ReproduceCode?.distribution({dist, calc, x, b, cdfMode, p1, p2, p3});
 
     } catch (error) {
         window.ReproduceCode?.clear();

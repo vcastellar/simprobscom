@@ -140,6 +140,9 @@
     </script>
     <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="reproduce-code.css?v=20261116-2">
+<script src="reproduce-code.js?v=20261116-2"></script>
+<script src="reproduce-tests.js?v=20261116-2"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Navegación principal">
@@ -248,7 +251,7 @@
                 <button class="calculate-btn" id="calcBtn">Calcular contraste</button>
             </section>
 
-            <div id="dosVarianzasResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+            <section class="reproduce-result-group"><div id="dosVarianzasResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div></section>
 
             <section class="card ss-chart-panel">
                 <h2 class="ss-chart-title">Regiones de rechazo y estadístico observado</h2>
@@ -582,6 +585,7 @@ function twoVarRatioMde(powerFn, tail) {
 }
 
 function renderTwoVariancesResult(elId, o) {
+    window.ReproduceTests?.render('twoVariances', elId, o);
     const R = TestResult, EN = R.EN;
     const rejected = o.p < o.alpha;
     const m = twoVarRatioMde((r) => twoVariancesPower(o.df1, o.df2, r, o.alpha, o.tail), o.tail);

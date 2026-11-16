@@ -35,8 +35,30 @@ almacén está en un perfil aislado, se puede indicar su directorio raíz con
 PROBLAB_BROWSER_HOME=/workspace/.cloud-browser python3 -m unittest discover -s tests -v
 ```
 
-El piloto «Reproducir el cálculo» añade pruebas que ejecutan los fragmentos de
-Python generados (con SciPy) y, si R está disponible, los de R base. Para elegir
-un ejecutable distinto de `Rscript`, usa `PROBLAB_RSCRIPT`. Sin R, sus dos pruebas
-de ejecución se marcan como omitidas. También se comprueban las pestañas por
-teclado, la copia, el aviso de datos modificados y la vista móvil.
+«Reproducir el cálculo» se comprueba en las 16 distribuciones y las 19 herramientas
+del catálogo de contrastes, tanto en español como en inglés. Las pruebas leen el
+código de las pestañas visibles, lo ejecutan con Python/SciPy y R base y comparan
+el resultado con el cálculo sin redondear del navegador. Incluyen densidad/masa,
+colas e intervalos con límites no enteros, cuantiles y parámetros distintos de
+los predeterminados; además de alternativas unilaterales, Welch, Fisher z,
+McNemar, Yates, TOST, distribuciones de referencia de KS y los modos de potencia
+y tamaño muestral. También se comprueban las pestañas por teclado, la copia,
+el aviso de datos modificados (incluidas casillas), los errores y la vista móvil.
+
+Los fragmentos reproducen el resultado principal: probabilidad/cuantil en las
+distribuciones; estadístico, valor p y decisión en los contrastes; potencia o n en
+las páginas de diseño. Mantienen el método de la calculadora: KS asintótico con
+parámetros especificados, contraste z de proporciones sin corrección, o corrección
+de continuidad cuando está seleccionada. La geométrica desplaza en uno el soporte
+de R; Fisher muestra el OR muestral ad/bc, distinto de la estimación condicional
+de `fisher.test()`. Shapiro–Wilk reproduce la simulación Monte Carlo con B,
+semilla y generador LCG/Box–Muller explícitos: no sustituye el valor p por el
+analítico de `shapiro.test()`. Las notas junto al código explican estas diferencias.
+
+Para elegir un ejecutable distinto de `Rscript`, usa `PROBLAB_RSCRIPT`. Sin R,
+las comprobaciones de ejecución de R se marcan como omitidas y las de Python
+siguen ejecutándose. Con ambos intérpretes disponibles:
+
+```sh
+PROBLAB_RSCRIPT=/ruta/a/Rscript python3 -m unittest discover -s tests -v
+```

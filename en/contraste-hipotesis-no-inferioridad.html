@@ -140,6 +140,9 @@
     </script>
     <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="../reproduce-code.css?v=20261116-2">
+<script src="../reproduce-code.js?v=20261116-2"></script>
+<script src="../reproduce-tests.js?v=20261116-2"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Main navigation">
@@ -308,7 +311,7 @@
                 <button class="calculate-btn" id="calcBtn">Calculate test</button>
             </section>
 
-            <div id="result" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+            <section class="reproduce-result-group"><div id="result" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div></section>
 
             <section class="card ss-chart-panel">
                 <h2 class="ss-chart-title">Decision zones of the test</h2>
@@ -563,6 +566,7 @@ function renderNIChart(alpha, zNI, testType, zNS) {
 
 // Resultado: decisión, conclusión con el intervalo, potencia del diseño y detalles.
 function renderNIResult(o) {
+    window.ReproduceTests?.render('ni', 'result', o);
     const R = TestResult, EN = R.EN;
     const kind = o.testType === 'tost' ? 'tost' : o.direction; // 'ni' | 'ns' | 'tost'
     const declared = o.p < o.alpha;
