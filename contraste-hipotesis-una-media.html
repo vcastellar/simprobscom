@@ -157,6 +157,7 @@
 }
     </script>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="reproduce-code.css?v=20261116-1">
 </head>
 <body>
 <nav class="site-nav" aria-label="Navegación principal">
@@ -267,7 +268,7 @@
                 <button class="calculate-btn" id="calcMeanBtn">Calcular contraste</button>
             </section>
 
-            <div id="meanResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+            <section class="reproduce-result-group"><div id="meanResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div></section>
 
             <section class="card ss-chart-panel">
                 <h2 class="ss-chart-title">Regiones de rechazo y estadístico observado</h2>
@@ -497,6 +498,7 @@
 window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
+<script src="reproduce-code.js?v=20261116-1"></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
 <script>
@@ -732,6 +734,7 @@ function calculateMeanTest() {
     const resultEl = document.getElementById('meanResult');
 
     if (![mu0, xbar, s, n, alpha].every(Number.isFinite) || s <= 0 || !Number.isInteger(n) || n < 2 || alpha <= 0 || alpha >= 1) {
+        window.ReproduceCode?.clear();
         resultEl.innerText = 'Error: revisa que s>0, n sea un entero ≥2 y 0<α<1.';
         if (meanTestChart) {
             meanTestChart.destroy();
@@ -752,6 +755,7 @@ function calculateMeanTest() {
 
     renderMeanTestResult({ mu0, xbar, s, n, alpha, tail, isT, df, stat, p, se: s / Math.sqrt(n) });
     renderMeanTestChart(alpha, tail, stat, testType, df);
+    window.ReproduceCode?.mean({mu0, xbar, s, n, alpha, tail, isT});
 }
 
 function updateDispersionLabel() {
