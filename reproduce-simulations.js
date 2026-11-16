@@ -121,7 +121,7 @@ result <- list(alpha=alpha, beta=beta, power=1-beta, delta=delta, critical=criti
 critical = stats.norm.ppf(1 - alpha / (1 if alternative == "right" else 2))
 beta = stats.norm.cdf(critical, loc=delta) if alternative == "right" else stats.norm.cdf(critical, loc=delta) - stats.norm.cdf(-critical, loc=delta)
 result = {"alpha": alpha, "beta": beta, "power": 1-beta, "delta": delta, "critical": critical}`, '', false);
-        if (kind === 'walk1d') return pair({seed:o.seed,n:o.n,p:o.p,paths:o.nPaths},
+        if (kind === 'walk1d') return pair({seed:o.seed,n:o.n,p:o.p,paths:o.nPaths,show_bands:o.bands,show_mean:o.showMean},
             `walks <- lapply(seq_len(paths), function(k) c(0, cumsum(replicate(n, if (uniform() < p) 1 else -1))))
 finals <- vapply(walks, function(w) tail(w, 1), numeric(1))
 result <- list(mean=mean(finals), sd=sqrt(mean((finals-mean(finals))^2)), minimum=min(finals), maximum=max(finals), theoretical_mean=n*(2*p-1), theoretical_sd=sqrt(4*n*p*(1-p)))`,
@@ -129,7 +129,7 @@ result <- list(mean=mean(finals), sd=sqrt(mean((finals-mean(finals))^2)), minimu
 finals = np.array([w[-1] for w in walks])
 result = {"mean": np.mean(finals), "sd": np.std(finals, ddof=0), "minimum": np.min(finals), "maximum": np.max(finals), "theoretical_mean": n*(2*p-1), "theoretical_sd": sqrt(4*n*p*(1-p))}`,
             en ? 'The empirical standard deviation uses divisor paths, as in the simulator.' : 'La desviación empírica usa el divisor número de trayectorias, como en el simulador.');
-        if (kind === 'walk2d') return pair({seed:o.seed,n:o.n,paths:o.nPaths},
+        if (kind === 'walk2d') return pair({seed:o.seed,n:o.n,paths:o.nPaths,show_circle:o.showC},
             `directions <- rbind(c(1,0), c(-1,0), c(0,1), c(0,-1))
 walks <- lapply(seq_len(paths), function(k) {
     moves <- directions[replicate(n, floor(4*uniform())+1), , drop=FALSE]
@@ -148,7 +148,7 @@ distances = [np.sqrt(np.sum(w*w, axis=1)) for w in walks]
 finals = np.array([d[-1] for d in distances])
 returns = int(np.sum(distances[0][1:] == 0)) if paths == 1 else None
 result = {"mean_distance": np.mean(finals), "mean_squared_distance": np.mean(finals**2), "maximum_distance": max(np.max(d) for d in distances), "returns": returns, "theoretical_squared_distance": n}`);
-        if (kind === 'markov') return pair({seed:o.seed,transition:o.matrix,initial:o.initState,steps:o.nSteps},
+        if (kind === 'markov') return pair({seed:o.seed,transition:o.matrix,initial:o.initState,steps:o.nSteps,state_names:o.names},
             `P <- do.call(rbind, transition)
 states <- nrow(P)
 current <- initial + 1  # Input states are numbered from zero in Python/the web.
@@ -283,7 +283,7 @@ result = {"mean": np.mean(sample_means), "sd": np.std(sample_means, ddof=1), "va
     function bootstrap(o) {
         const rStatistic = ({mean:'mean(x)',median:'median(x)',sd:'sd(x)'})[o.stat];
         const pyStatistic = ({mean:'np.mean(x)',median:'np.median(x)',sd:'np.std(x, ddof=1)'})[o.stat];
-        return pair({seed:o.seed,data:o.sample,B:o.B,confidence:o.confLevel,statistic_name:o.stat},
+        return pair({seed:o.seed,data:o.sample,B:o.B,confidence:o.confLevel,statistic_name:o.stat,distribution:o.dist},
             `statistic <- function(x) ${rStatistic}
 n <- length(data)
 replicates <- replicate(B, statistic(data[replicate(n, floor(n*uniform())+1)]))
@@ -389,6 +389,14 @@ result = {"covered": covered, "coverage": covered/repetitions, "mean_width": np.
         render(kind,id,o) {
             const value = generate(kind,o);
             if (value) {
+                const plots = window.ReproduceSimulationPlots(kind,o);
+                const heading = en ? '# Plots from the same simulation data' : '# Gráficos con los datos de la misma simulación';
+                value.r += '\n\n'+heading+'\n'+plots.r;
+                value.python = value.python.replace('from scipy import stats', 'from scipy import stats\nimport matplotlib.pyplot as plt')+'\n\n'+heading+'\n'+plots.python+'\nplt.show()';
+                value.note += en ? ' Includes plots from these same data.' : ' Incluye los gráficos con estos mismos datos.';
+                value.dependencies = en
+                    ? 'R: base R, no packages required. Python: install scipy and matplotlib (pip install scipy matplotlib).'
+                    : 'R: base R, sin paquetes adicionales. Python: instala scipy y matplotlib (pip install scipy matplotlib).';
                 window.ReproduceCode.show(document.getElementById(id),value);
                 const root = document.getElementById('reproduce-code');
                 root.classList.add('simulation-code');

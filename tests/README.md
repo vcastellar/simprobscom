@@ -11,12 +11,14 @@ pequeños, dirección de diseños unilaterales y colas normales y t estables. La
 referencias independientes se guardan en `statistical_references.json`, calculadas
 con SciPy 1.17.0; las pruebas numéricas comparan contra esos valores guardados.
 
-Requisitos de desarrollo: Python 3, Playwright para Python y Chromium. La web sigue
+Requisitos de desarrollo: Python 3, Playwright para Python, Chromium, Matplotlib y
+Pillow para verificar los gráficos exportados. La web sigue
 sin necesitar instalación de paquetes para funcionar.
 
 ```sh
 python3 -m pip install playwright==1.62.0
 python3 -m pip install scipy==1.17.0
+python3 -m pip install matplotlib pillow
 python3 -m playwright install chromium
 python3 -m unittest discover -s tests -v
 ```
@@ -64,7 +66,7 @@ PROBLAB_RSCRIPT=/ruta/a/Rscript python3 -m unittest discover -s tests -v
 ```
 
 Las siete páginas de simulaciones también generan código R/Python. Sus pruebas
-ejecutan 100 casos en ambos lenguajes, con las variantes de cada simulador y los
+ejecutan 104 casos en ambos lenguajes, con las variantes de cada simulador y los
 extremos válidos de la semilla. Comparan los resultados sin redondear, incluidos
 los vectores de frecuencias, los límites bootstrap y la cobertura de los
 intervalos. Comprueban además las trayectorias, la inclusión de la última espera
@@ -86,3 +88,21 @@ Markov se incluye el estado inicial al contar ocupaciones y se reproduce la
 iteración desde la distribución uniforme, con su tolerancia y límite; no se
 sustituye por un método que presuponga una única distribución estacionaria. El
 simulador de errores I/II calcula probabilidades analíticas y no utiliza semilla.
+
+Los fragmentos de simulaciones incluyen los gráficos de los datos que acaban de
+calcular: histogramas y referencias teóricas, límites bootstrap, trayectorias,
+ocupación de Markov, intervalos coloreados por cobertura y regiones de errores
+I/II. Respetan las opciones de bandas, media teórica y círculo del paseo aleatorio,
+así como los nombres de los estados de Markov. R usa sus gráficos de base; en
+RStudio aparecen en el panel de gráficos y `Rscript` los guarda por defecto en
+`Rplots.pdf`. Python necesita Matplotlib (`pip install scipy matplotlib`) y termina
+con `plt.show()` para mostrarlos en una sesión interactiva o un cuaderno.
+
+Las pruebas usan el backend Agg de Matplotlib y dispositivos PNG de R, comprueban
+que cada fragmento genera una figura visible y contrastan sus series, barras,
+límites y frecuencias con los resultados numéricos. También comprueban que dibujar
+no consume números aleatorios nuevos y que la densidad truncada de las esperas
+de Poisson mantiene como denominador todas las observaciones. Se incluyen muestras
+bootstrap constantes y trayectorias sin eventos. Los PNG se crean en directorios
+temporales; para conservarlos durante una revisión puede indicarse
+`PROBLAB_PLOT_OUTPUT=/tmp/problab-plot-review` al ejecutar las pruebas.

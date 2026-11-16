@@ -312,8 +312,9 @@
   </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
 <link rel="stylesheet" href="../reproduce-code.css?v=20261116-3">
-<script src="../reproduce-code.js?v=20261116-2"></script>
-<script src="../reproduce-simulations.js?v=20261116-3" data-simulation="walk"></script>
+<script src="../reproduce-code.js?v=20261117-1"></script>
+<script src="../reproduce-simulation-plots.js?v=20261117-1"></script>
+<script src="../reproduce-simulations.js?v=20261117-1" data-simulation="walk"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Navegación principal">
@@ -1029,7 +1030,7 @@ function simulate1D() {
     const interp = document.getElementById('interp1d');
     interp.innerHTML = txt;
     interp.style.display = '';
-    ReproduceSimulations.render('walk1d', 'interp1d', {seed, n, p, nPaths,
+    ReproduceSimulations.render('walk1d', 'interp1d', {seed, n, p, nPaths, bands, showMean,
       observed:{mean:arrMean(finals), sd:arrStd(finals), minimum:Math.min(...finals), maximum:Math.max(...finals)}});
 
     btn.disabled = false;
@@ -1248,7 +1249,7 @@ function simulate2D() {
     const interp2 = document.getElementById('interp2d');
     interp2.innerHTML = txt2;
     interp2.style.display = '';
-    ReproduceSimulations.render('walk2d', 'interp2d', {seed, n, nPaths,
+    ReproduceSimulations.render('walk2d', 'interp2d', {seed, n, nPaths, showC,
       observed:{mean_distance:arrMean(dists), mean_squared_distance:arrMean(dists2), maximum_distance:maxDist, returns:nPaths===1 ? Number(returns) : null}});
 
     btn.disabled = false;

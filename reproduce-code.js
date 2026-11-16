@@ -58,6 +58,7 @@
         });
         resultObserver.observe(result, {childList:true, subtree:true, characterData:true});
         root.querySelector('.reproduce-note').textContent = value.note || T.note;
+        root.querySelector('.reproduce-dependencies').textContent = value.dependencies || T.dependencies;
         if (root.previousElementSibling !== result) result.after(root);
         snippets = value; fingerprint = fields(); root.hidden = false; notice.hidden = true;
         select(language);
