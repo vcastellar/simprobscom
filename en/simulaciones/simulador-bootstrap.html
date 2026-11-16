@@ -301,6 +301,9 @@
     }
   </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="../../reproduce-code.css?v=20261116-3">
+<script src="../../reproduce-code.js?v=20261116-2"></script>
+<script src="../../reproduce-simulations.js?v=20261116-3" data-simulation="bootstrap"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Main navigation">
@@ -840,14 +843,14 @@
 
   function sampleBinomial(size, p) {
     let k = 0;
-    for (let i = 0; i < size; i++) if (Math.random() < p) k++;
+    for (let i = 0; i < size; i++) if (ReproduceSimulations.random() < p) k++;
     return k;
   }
   function samplePoisson(lambda) {
     // Knuth's algorithm
     const L = Math.exp(-lambda);
     let k = 0, prod = 1;
-    do { k++; prod *= Math.random(); } while (prod > L);
+    do { k++; prod *= ReproduceSimulations.random(); } while (prod > L);
     return k - 1;
   }
   function factorial(k) {
@@ -875,10 +878,10 @@
     const arr = [];
     for (let i = 0; i < n; i++) {
       switch (dist) {
-        case 'normal':      arr.push(jStat.normal.sample(5, 2));          break;
-        case 'exponential': arr.push(jStat.exponential.sample(0.5));      break;
-        case 'uniform':     arr.push(jStat.uniform.sample(0, 10));        break;
-        case 'lognormal':   arr.push(jStat.lognormal.sample(1, 0.5));     break;
+        case 'normal':      arr.push(ReproduceSimulations.normal(5, 2));          break;
+        case 'exponential': arr.push(ReproduceSimulations.exponential(0.5));      break;
+        case 'uniform':     arr.push(ReproduceSimulations.uniform(0, 10));        break;
+        case 'lognormal':   arr.push(ReproduceSimulations.lognormal(1, 0.5));     break;
         case 'binomial':    arr.push(sampleBinomial(10, 0.5));            break;
         case 'poisson':     arr.push(samplePoisson(5));                   break;
       }
@@ -1204,6 +1207,7 @@
 
   // ─── State ────────────────────────────────────────────────────────────────────
   let currentSample = null;
+  let currentSampleDist = null;
 
   // ─── Statistic labels ─────────────────────────────────────────────────────────
   const STAT_LABELS = {
@@ -1223,6 +1227,8 @@
 
   // ─── Run full simulation (new sample + bootstrap) ─────────────────────────────
   function runAll() {
+    const seed = ReproduceSimulations.begin('newSampleBtn');
+    if (seed === null) return;
     const dist      = document.getElementById('popDist').value;
     const stat      = document.getElementById('statistic').value;
     const n         = parseInt(document.getElementById('sampleN').value, 10);
@@ -1230,19 +1236,22 @@
     const confLevel = parseFloat(document.getElementById('confLevel').value);
 
     currentSample = generateSample(dist, n);
-    runBootstrap(dist, stat, n, B, confLevel);
+    currentSampleDist = dist;
+    runBootstrap(dist, stat, n, B, confLevel, ReproduceSimulations.snapshot());
   }
 
   // ─── Run bootstrap only (keep currentSample) ─────────────────────────────────
-  function runBootstrap(dist, stat, n, B, confLevel) {
+  function runBootstrap(dist, stat, n, B, confLevel, seed = null) {
     if (!currentSample) return;
+    if (seed === null) seed = ReproduceSimulations.begin('rebootBtn');
+    if (seed === null) return;
 
     // Bootstrap resampling
     const bootStats = [];
     for (let b = 0; b < B; b++) {
       const resample = [];
       for (let i = 0; i < n; i++) {
-        resample.push(currentSample[Math.floor(Math.random() * n)]);
+        resample.push(currentSample[Math.floor(ReproduceSimulations.random() * n)]);
       }
       bootStats.push(computeStatistic(resample, stat));
     }
@@ -1302,6 +1311,8 @@
 
     // Interpretation
     buildInterpretation(dist, stat, n, B, confLevel, bootSE, trueSE, ciLo, ciHi, sampleStat, trueParam);
+    ReproduceSimulations.render('bootstrap', 'interpretation', {seed, sample:currentSample, stat, B, confLevel,
+      observed:{estimate:sampleStat, standard_error:bootSE, ci:[ciLo,ciHi]}});
   }
 
   // ─── Interpretation paragraph ─────────────────────────────────────────────────
@@ -1364,9 +1375,9 @@
     setTimeout(() => {
       try {
         if (!currentSample) { runAll(); return; }
-        const dist      = document.getElementById('popDist').value;
+        const dist      = currentSampleDist;
         const stat      = document.getElementById('statistic').value;
-        const n         = parseInt(document.getElementById('sampleN').value, 10);
+        const n         = currentSample.length;
         const B         = parseInt(document.getElementById('numBoot').value, 10);
         const confLevel = parseFloat(document.getElementById('confLevel').value);
         runBootstrap(dist, stat, n, B, confLevel);

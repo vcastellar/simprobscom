@@ -268,6 +268,9 @@
     }
   </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="../reproduce-code.css?v=20261116-3">
+<script src="../reproduce-code.js?v=20261116-2"></script>
+<script src="../reproduce-simulations.js?v=20261116-3" data-simulation="clt"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Navegación principal">
@@ -824,12 +827,12 @@
     const arr = [];
     for (let i = 0; i < n; i++) {
       switch (dist) {
-        case 'normal':      arr.push(jStat.normal.sample(0, 1));     break;
-        case 'uniform':     arr.push(jStat.uniform.sample(0, 1));    break;
-        case 'exponential': arr.push(jStat.exponential.sample(1));   break;
-        case 'bernoulli':   arr.push(Math.random() < 0.3 ? 1 : 0);  break;
-        case 'poisson':     arr.push(jStat.poisson.sample(3));       break;
-        case 'chisquare':   arr.push(jStat.chisquare.sample(3));     break;
+        case 'normal':      arr.push(ReproduceSimulations.normal(0, 1));     break;
+        case 'uniform':     arr.push(ReproduceSimulations.uniform(0, 1));    break;
+        case 'exponential': arr.push(ReproduceSimulations.exponential(1));   break;
+        case 'bernoulli':   arr.push(ReproduceSimulations.random() < 0.3 ? 1 : 0);  break;
+        case 'poisson':     arr.push(ReproduceSimulations.poisson(3));       break;
+        case 'chisquare':   arr.push(ReproduceSimulations.chisquare(3));     break;
       }
     }
     return arr;
@@ -1026,6 +1029,8 @@
   }
 
   function _doSimulation(dist, n, numSims) {
+    const seed = ReproduceSimulations.begin('simBtn');
+    if (seed === null) return;
     const params = DIST_PARAMS[dist];
     const trueMu  = params.mu;
     const trueVar = params.variance;
@@ -1187,6 +1192,8 @@
     const box = document.getElementById('interpretation');
     box.innerHTML = `<p>${p1}</p><p>${p2}</p><p>${p3}</p>`;
     box.style.display = 'block';
+    ReproduceSimulations.render('clt', 'interpretation', {seed, dist, n, numSims, trueMu, trueVar, trueSkew:params.skewness,
+      observed:{mean:empMean, sd:empSd, variance:empVar, skewness:empSkew}});
 
     // Re-typeset MathJax if present
     if (window.MathJax && MathJax.typesetPromise) {

@@ -62,3 +62,27 @@ siguen ejecutándose. Con ambos intérpretes disponibles:
 ```sh
 PROBLAB_RSCRIPT=/ruta/a/Rscript python3 -m unittest discover -s tests -v
 ```
+
+Las siete páginas de simulaciones también generan código R/Python. Sus pruebas
+ejecutan 100 casos en ambos lenguajes, con las variantes de cada simulador y los
+extremos válidos de la semilla. Comparan los resultados sin redondear, incluidos
+los vectores de frecuencias, los límites bootstrap y la cobertura de los
+intervalos. Comprueban además las trayectorias, la inclusión de la última espera
+completa en Poisson, los cambios de modo, los errores y la vista móvil.
+
+Para repetir una simulación se puede fijar una semilla entre 0 y 4294967295.
+Dejarla vacía genera una nueva semilla en cada ejecución; el fragmento conserva
+la utilizada. JavaScript, R y Python utilizan el mismo LCG explícito y las mismas
+transformaciones (Box–Muller para normales), en lugar de los generadores nativos
+de cada lenguaje, cuyas semillas no producen secuencias equivalentes. Se mantiene
+la distribución estadística de cada experimento, con posibles diferencias de
+redondeo entre intérpretes.
+
+En bootstrap se incorpora la muestra observada completa y el estado del generador
+al comenzar el remuestreo. «Regenerar bootstrap» conserva también el tamaño y la
+distribución de origen de esa muestra aunque cambien los selectores. Los límites
+percentiles utilizan los índices de orden de la web, sin interpolación. En
+Markov se incluye el estado inicial al contar ocupaciones y se reproduce la
+iteración desde la distribución uniforme, con su tolerancia y límite; no se
+sustituye por un método que presuponga una única distribución estacionaria. El
+simulador de errores I/II calcula probabilidades analíticas y no utiliza semilla.

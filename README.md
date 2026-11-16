@@ -10,7 +10,7 @@ ProbLab es una herramienta web educativa para calcular, simular y visualizar con
 - Tablas estadísticas online para valores críticos, CDF y cuantiles.
 - Calculadoras de tamaños muestrales para medias, proporciones y comparaciones.
 - Intervalos de confianza y contrastes de hipótesis con explicación de supuestos.
-- Código R y Python para reproducir los resultados de todas las distribuciones y herramientas del catálogo de contrastes, en español e inglés.
+- Código R y Python para reproducir los resultados de las distribuciones, los contrastes y las simulaciones, en español e inglés.
 - Herramientas de test A/B: z-test, enfoque bayesiano, potencia y simulación.
 - Resultados visuales inmediatos y funcionamiento completamente en el navegador.
 

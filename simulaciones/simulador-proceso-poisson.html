@@ -241,6 +241,9 @@
     }
   </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="../reproduce-code.css?v=20261116-3">
+<script src="../reproduce-code.js?v=20261116-2"></script>
+<script src="../reproduce-simulations.js?v=20261116-3" data-simulation="poisson"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Navegación principal">
@@ -653,7 +656,7 @@ function generatePoissonProcess(lambda, T) {
   const events = [];
   let t = 0;
   while (true) {
-    const interarrival = -Math.log(Math.random()) / lambda;
+    const interarrival = -Math.log(ReproduceSimulations.random()) / lambda;
     t += interarrival;
     if (t > T) break;
     events.push(t);
@@ -729,6 +732,8 @@ document.getElementById('btn-simular-t').addEventListener('click', function() {
 });
 
 function simulateTrayectoria() {
+  const seed = ReproduceSimulations.begin('btn-simular-t');
+  if (seed === null) return;
   const lambda = getParam('lambda-t', 3, 0.1, 50);
   const T = getParam('horizon-t', 5, 0.5, 100);
   const numTraj = parseInt(document.getElementById('num-traj').value, 10);
@@ -857,6 +862,7 @@ function simulateTrayectoria() {
     ' trayectoria' + (numTraj > 1 ? 's' : '') + ' es <strong>' + fmt(empiricalMean, 2) + '</strong>.';
 
   document.getElementById('results-t').style.display = 'block';
+  ReproduceSimulations.render('poissonPath', 'interp-t', {seed, lambda, T, repetitions:numTraj, observed:{mean:empiricalMean, counts:trajectories.map(events => events.length)}});
 }
 
 // ─── MODE 2: DISTRIBUCIÓN N(T) ───────────────────────────────────────────────
@@ -866,6 +872,8 @@ document.getElementById('btn-simular-d').addEventListener('click', function() {
 });
 
 function simulateDistribucion() {
+  const seed = ReproduceSimulations.begin('btn-simular-d');
+  if (seed === null) return;
   const lambda = getParam('lambda-d', 3, 0.1, 50);
   const T = getParam('horizon-d', 5, 0.5, 100);
   const numSims = parseInt(document.getElementById('num-sims-d').value, 10);
@@ -991,6 +999,7 @@ function simulateDistribucion() {
     '(teóricas: ' + fmt(mu, 3) + ' ambas).';
 
   document.getElementById('results-d').style.display = 'block';
+  ReproduceSimulations.render('poissonCounts', 'interp-d', {seed, lambda, T, repetitions:numSims, observed:{mean:empiricalMean, variance:empiricalVar}});
 }
 
 // ─── MODE 3: TIEMPOS ENTRE LLEGADAS ─────────────────────────────────────────
@@ -1000,6 +1009,8 @@ document.getElementById('btn-simular-e').addEventListener('click', function() {
 });
 
 function simulateTiempos() {
+  const seed = ReproduceSimulations.begin('btn-simular-e');
+  if (seed === null) return;
   const lambda = getParam('lambda-e', 3, 0.1, 50);
   const T = getParam('horizon-e', 5, 0.5, 100);
   const numSims = parseInt(document.getElementById('num-sims-e').value, 10);
@@ -1011,7 +1022,7 @@ function simulateTiempos() {
     // que cruza T: descartarlo sesgaría la muestra hacia tiempos cortos.
     let t = 0;
     while (t <= T) {
-      const gap = -Math.log(Math.random()) / lambda;
+      const gap = -Math.log(ReproduceSimulations.random()) / lambda;
       interarrivals.push(gap);
       t += gap;
     }
@@ -1180,6 +1191,7 @@ function simulateTiempos() {
     '(teórica: ' + fmt(medianTheory, 3) + ').';
 
   document.getElementById('results-e').style.display = 'block';
+  ReproduceSimulations.render('poissonGaps', 'interp-e', {seed, lambda, T, repetitions:numSims, observed:{mean:empiricalMeanE, median:empiricalMedian, sample_size:n}});
 }
 </script>
 <script src="../field-hints.js?v=20260730-1"></script>

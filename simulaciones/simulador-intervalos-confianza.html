@@ -281,6 +281,9 @@
     }
   </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="../reproduce-code.css?v=20261116-3">
+<script src="../reproduce-code.js?v=20261116-2"></script>
+<script src="../reproduce-simulations.js?v=20261116-3" data-simulation="intervals"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Navegación principal">
@@ -813,8 +816,8 @@ function ciClopper(phat, n, conf) {
 /** Sample one observation from N(mu, sigma) via Box-Muller */
 function sampleNormal(mu, sigma) {
   let u1;
-  do { u1 = Math.random(); } while (u1 === 0);
-  const u2 = Math.random();
+  do { u1 = ReproduceSimulations.random(); } while (u1 === 0);
+  const u2 = ReproduceSimulations.random();
   return mu + sigma * Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
 }
 
@@ -822,7 +825,7 @@ function sampleNormal(mu, sigma) {
 function sampleProportion(p, n) {
   let successes = 0;
   for (let i = 0; i < n; i++) {
-    if (Math.random() < p) successes++;
+    if (ReproduceSimulations.random() < p) successes++;
   }
   return successes / n;
 }
@@ -1074,6 +1077,8 @@ document.querySelectorAll('.mode-tab').forEach(tab => {
 
 // Simulate button handler
 function runAndDisplay() {
+  const seed = ReproduceSimulations.begin('simBtn');
+  if (seed === null) return;
   let params, mode;
 
   if (currentMode === 'media') {
@@ -1139,6 +1144,8 @@ function runAndDisplay() {
   box.style.display = 'block';
   box.className = 'result-box interpretation-box' + (interp.cls ? ' ' + interp.cls : '');
   document.getElementById('ciInterpretation').textContent = interp.text;
+  ReproduceSimulations.render('intervals', 'ciResultBox', {seed, mode, params,
+    observed:{covered, coverage:covered/total, mean_width:meanWidth}});
 
   // Axis note
   const axisNote = document.getElementById('axisNote');

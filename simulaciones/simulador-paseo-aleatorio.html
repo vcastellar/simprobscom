@@ -311,6 +311,9 @@
     }
   </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="../reproduce-code.css?v=20261116-3">
+<script src="../reproduce-code.js?v=20261116-2"></script>
+<script src="../reproduce-simulations.js?v=20261116-3" data-simulation="walk"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Navegación principal">
@@ -869,12 +872,13 @@ let chart1D = null;
 function walk1D(n, p) {
   const pos = new Float32Array(n + 1);
   for (let i = 1; i <= n; i++) {
-    pos[i] = pos[i-1] + (Math.random() < p ? 1 : -1);
+    pos[i] = pos[i-1] + (ReproduceSimulations.random() < p ? 1 : -1);
   }
   return pos;
 }
 
 function simulate1D() {
+  // Initialize inside the deferred callback so runs in different tabs cannot share a stream.
   const n       = parseInt(document.getElementById('n1d').value);
   const p       = parseFloat(document.getElementById('p1d').value);
   const nPaths  = parseInt(document.getElementById('paths1d').value);
@@ -888,6 +892,8 @@ function simulate1D() {
   // defer to next frame so UI updates
   setTimeout(() => {
     // generate walks
+    const seed = ReproduceSimulations.begin('btn1d');
+    if (seed === null) { btn.disabled = false; btn.textContent = 'Simular'; return; }
     const walks = [];
     for (let k = 0; k < nPaths; k++) walks.push(walk1D(n, p));
 
@@ -1023,6 +1029,8 @@ function simulate1D() {
     const interp = document.getElementById('interp1d');
     interp.innerHTML = txt;
     interp.style.display = '';
+    ReproduceSimulations.render('walk1d', 'interp1d', {seed, n, p, nPaths,
+      observed:{mean:arrMean(finals), sd:arrStd(finals), minimum:Math.min(...finals), maximum:Math.max(...finals)}});
 
     btn.disabled = false;
     btn.textContent = 'Simular';
@@ -1041,7 +1049,7 @@ function walk2D(n) {
   const xs = new Int16Array(n + 1);
   const ys = new Int16Array(n + 1);
   for (let i = 1; i <= n; i++) {
-    const d = dirs[(Math.random() * 4) | 0];
+    const d = dirs[(ReproduceSimulations.random() * 4) | 0];
     x += d[0]; y += d[1];
     xs[i] = x; ys[i] = y;
   }
@@ -1049,6 +1057,7 @@ function walk2D(n) {
 }
 
 function simulate2D() {
+  // Initialize inside the deferred callback so runs in different tabs cannot share a stream.
   const n      = parseInt(document.getElementById('n2d').value);
   const nPaths = parseInt(document.getElementById('paths2d').value);
   const showC  = document.getElementById('circle2d').checked;
@@ -1058,6 +1067,8 @@ function simulate2D() {
   btn.textContent = 'Simulando…';
 
   setTimeout(() => {
+    const seed = ReproduceSimulations.begin('btn2d');
+    if (seed === null) { btn.disabled = false; btn.textContent = 'Simular'; return; }
     const paths = [];
     for (let k = 0; k < nPaths; k++) paths.push(walk2D(n));
 
@@ -1237,6 +1248,8 @@ function simulate2D() {
     const interp2 = document.getElementById('interp2d');
     interp2.innerHTML = txt2;
     interp2.style.display = '';
+    ReproduceSimulations.render('walk2d', 'interp2d', {seed, n, nPaths,
+      observed:{mean_distance:arrMean(dists), mean_squared_distance:arrMean(dists2), maximum_distance:maxDist, returns:nPaths===1 ? Number(returns) : null}});
 
     btn.disabled = false;
     btn.textContent = 'Simular';
