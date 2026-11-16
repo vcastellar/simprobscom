@@ -149,6 +149,9 @@
 }
     </script>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="../reproduce-code.css?v=20261116-2">
+<script src="../reproduce-code.js?v=20261116-2"></script>
+<script src="../reproduce-tests.js?v=20261116-2"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Main navigation">
@@ -217,7 +220,7 @@
                 <button class="calculate-btn" id="calcAnovaBtn">Calculate ANOVA</button>
             </section>
 
-            <div id="anovaResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+            <section class="reproduce-result-group"><div id="anovaResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div></section>
 
             <section class="card ss-chart-panel">
                 <h2 class="ss-chart-title">F distribution, rejection region and observed F</h2>
@@ -475,6 +478,7 @@ function renderAnovaChart(alpha, dfBetween, dfWithin, fObserved) {
 
 // Resultado: decisión, conclusión, efecto mínimo detectable y detalles.
 function renderAnovaResult(o) {
+    window.ReproduceTests?.render('anova', 'anovaResult', o);
     const R = TestResult, EN = R.EN;
     const rejected = o.p < o.alpha;
     const fHat = o.eta2 < 1 ? Math.sqrt(o.eta2 / (1 - o.eta2)) : Infinity;
@@ -570,6 +574,7 @@ function calculateAnova() {
     const F = msB / msW;
     const p = 1 - jStat.centralF.cdf(F, dfB, dfW);
     renderAnovaResult({
+        samples: groups,
         k, N, alpha, F, p, dfB, dfW, ssB, ssW, msB, msW,
         eta2: ssB / (ssB + ssW),
         crit: jStat.centralF.inv(1 - alpha, dfB, dfW),

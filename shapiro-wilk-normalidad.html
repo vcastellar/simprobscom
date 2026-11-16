@@ -100,6 +100,9 @@
 }
     </script>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="reproduce-code.css?v=20261116-2">
+<script src="reproduce-code.js?v=20261116-2"></script>
+<script src="reproduce-tests.js?v=20261116-2"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Navegación principal">
@@ -186,7 +189,7 @@
                 <button class="calculate-btn" id="calcShapiroBtn">Calcular contraste</button>
             </section>
 
-            <div id="shapiroResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+            <section class="reproduce-result-group"><div id="shapiroResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div></section>
 
             <section class="card ss-chart-panel">
                 <h2 class="ss-chart-title">p-valor frente al nivel de significación</h2>
@@ -669,6 +672,7 @@ function drawShapiroChart(wSim, wObs, wCrit) {
 
 // Resultado: decisión, conclusión y detalles de la simulación Monte Carlo.
 function renderShapiroResult(o) {
+    window.ReproduceTests?.render('shapiro', 'shapiroResult', o);
     const R = TestResult, EN = R.EN;
     const rejected = o.p < o.alpha;
     const B = o.B.toLocaleString(R.LOCALE);
@@ -740,7 +744,7 @@ document.getElementById('calcShapiroBtn').addEventListener('click', () => {
   // Critical value consistent with the decision: reject iff b ≤ kMax, i.e. iff W_obs < sorted[kMax]
   const kMax = maxRejectCount(B, alpha);
   const wCrit = kMax >= 0 ? [...wSim].sort((a, b) => a - b)[kMax] : null;
-  renderShapiroResult({ n, W: wObs, b: nBelow, B, p: pValue, se: pSe, ciLo, ciHi, digits, wCrit, alpha, nearAlpha });
+  renderShapiroResult({ sample, seed, n, W: wObs, b: nBelow, B, p: pValue, se: pSe, ciLo, ciHi, digits, wCrit, alpha, nearAlpha });
 
   document.getElementById('shapiroNotes').innerHTML =
     (wCrit !== null

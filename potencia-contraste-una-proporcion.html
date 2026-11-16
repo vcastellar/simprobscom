@@ -120,6 +120,9 @@
     .legend-swatch { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
   </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="reproduce-code.css?v=20261116-2">
+<script src="reproduce-code.js?v=20261116-2"></script>
+<script src="reproduce-tests.js?v=20261116-2"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Navegación principal">
@@ -599,6 +602,8 @@ function doPower() {
 
   renderChart(p0, p1, n, alpha, alt);
   if (window.MathJax?.typesetPromise) MathJax.typesetPromise();
+  window.ReproduceTests?.render('powerProp', 'pwResult', {mode:'power',p0,p1,alpha,alternative:alt,n});
+
 }
 
 // ── Mode: Tamaño muestral ─────────────────────────────────────────────────────
@@ -630,6 +635,8 @@ function doN() {
 
   renderChart(p0, p1, n, alpha, alt);
   if (window.MathJax?.typesetPromise) MathJax.typesetPromise();
+  window.ReproduceTests?.render('powerProp', 'nResult', {mode:'n',p0,p1,alpha,alternative:alt,targetPower});
+
 }
 
 // ── Tabs ──────────────────────────────────────────────────────────────────────

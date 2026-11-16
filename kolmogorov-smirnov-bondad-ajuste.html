@@ -124,6 +124,9 @@
 }
     </script>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="reproduce-code.css?v=20261116-2">
+<script src="reproduce-code.js?v=20261116-2"></script>
+<script src="reproduce-tests.js?v=20261116-2"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Navegación principal">
@@ -242,7 +245,7 @@
                 <button class="calculate-btn" id="calcKsBtn">Calcular contraste</button>
             </section>
 
-            <div id="ksResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+            <section class="reproduce-result-group"><div id="ksResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div></section>
 
             <section class="card ss-chart-panel">
                 <h2 class="ss-chart-title">Función de distribución empírica frente a la teórica</h2>
@@ -659,6 +662,7 @@ function ksLimitQuantile(alpha) {
 }
 
 function renderKsResult(o) {
+    window.ReproduceTests?.render('ks', 'ksResult', o);
     const R = TestResult, EN = R.EN;
     const rejected = o.p < o.alpha;
     const kA = ksLimitQuantile(o.alpha);
@@ -738,7 +742,7 @@ document.getElementById('calcKsBtn').addEventListener('click', () => {
         }
 
         const pValue = kolmogorovPValue(n, Dn);
-        renderKsResult({ Dn, n, p: pValue, alpha, xMax: maxDiffX, dist: document.getElementById('distType').selectedOptions[0].textContent.trim().toLowerCase() });
+        renderKsResult({ data, Dn, n, p: pValue, alpha, xMax: maxDiffX, dist: document.getElementById('distType').selectedOptions[0].textContent.trim().toLowerCase() });
 
         document.getElementById('ksTable').innerHTML = buildKSTable(sorted, getCDF);
         renderKSChart(sorted, getCDF, maxDiffX, fnAtMax, f0AtMax, Dn);

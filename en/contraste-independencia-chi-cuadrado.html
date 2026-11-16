@@ -275,6 +275,9 @@
 }
     </script>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="../reproduce-code.css?v=20261116-2">
+<script src="../reproduce-code.js?v=20261116-2"></script>
+<script src="../reproduce-tests.js?v=20261116-2"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Main navigation">
@@ -1234,7 +1237,7 @@ function calculate(){
 
   // En tablas 2×2, el enlace a Fisher lleva la tabla.
   if(r===2 && c===2) validity=validity.replace('href="test-exacto-fisher.html"', `href="test-exacto-fisher.html?a=${O[0][0]}&amp;b=${O[0][1]}&amp;c=${O[1][0]}&amp;d=${O[1][1]}"`);
-  renderChiResult({ r, c, n, chi2, df, p, crit, alpha, V, w, minE, yates, validity, extra: yatesAsked && !yates ? T.yatesIgnored : '' });
+  renderChiResult({ O, r, c, n, chi2, df, p, crit, alpha, V, w, minE, yates, validity, extra: yatesAsked && !yates ? T.yatesIgnored : '' });
 
   const totals={row:rowTotals, col:colTotals, grand:n};
   document.getElementById('expectedTable').innerHTML =
@@ -1276,6 +1279,7 @@ function renderCharts(){
 
 // Resultado: decisión, conclusión, efecto mínimo detectable y detalles.
 function renderChiResult(o) {
+    window.ReproduceTests?.render('independence', 'chiResult', o);
     const R = TestResult, EN = R.EN;
     const rejected = o.p < o.alpha;
     const wMin = R.solveMin((w) => R.chi2Power(w, o.n, o.df, o.alpha) >= R.TARGET, 1e-4, 5);

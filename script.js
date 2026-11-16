@@ -317,6 +317,8 @@ function binomialQuantile(probability, n, p) {
         throw "n debe ser un entero no negativo";
     }
 
+    if (p === 0) return 0;
+
     if (probability === 1) {
         return n;
     }
@@ -972,6 +974,7 @@ function calculate() {
         }
 
         if (dist === "normal") {
+            if (!Number.isFinite(p1) || !Number.isFinite(p2) || p2 <= 0) throw 'La normal requiere una media finita y una desviación estándar positiva';
             if (calc === "pdf") result = jStat.normal.pdf(x, p1, p2);
             if (calc === "cdf") result = resolveCdfResult(dist, cdfMode, x, b, p1, p2).value;
             if (calc === "quantile") {
@@ -982,6 +985,7 @@ function calculate() {
 
         if (dist === "binomial") {
             if (!Number.isInteger(p1) || p1 < 0) throw "n debe ser un entero no negativo";
+            if (!Number.isFinite(p2) || p2 < 0 || p2 > 1) throw "p debe ser una probabilidad entre 0 y 1";
             if (calc === "pdf") result = jStat.binomial.pdf(x, p1, p2);
             if (calc === "cdf") result = resolveCdfResult(dist, cdfMode, x, b, p1, p2).value;
             if (calc === "quantile") {
@@ -1095,8 +1099,10 @@ function calculate() {
         renderDistributionResult({ dist, calc, x, b, cdfMode, p1, p2, p3, result });
 
         drawChart(dist, p1, p2, calc, x, cdfMode, b, calc === "quantile" ? result : null);
+        window.ReproduceCode?.distribution({dist, calc, x, b, cdfMode, p1, p2, p3});
 
     } catch (error) {
+        window.ReproduceCode?.clear();
         document.getElementById("result").innerText = "Error: " + error;
         if (chart) {
             chart.destroy();

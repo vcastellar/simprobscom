@@ -140,6 +140,9 @@
 }
     </script>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="reproduce-code.css?v=20261116-2">
+<script src="reproduce-code.js?v=20261116-2"></script>
+<script src="reproduce-tests.js?v=20261116-2"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Navegación principal">
@@ -219,7 +222,7 @@
                 <button class="calculate-btn" id="calcChiBtn">Calcular contraste</button>
             </section>
 
-            <div id="chiResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+            <section class="reproduce-result-group"><div id="chiResult" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div></section>
 
             <section class="card ss-chart-panel">
                 <h2 class="ss-chart-title">Regiones de rechazo y estadístico observado</h2>
@@ -478,6 +481,7 @@ function formatExpectedGoodness(observed, expected){
 
 // Resultado: decisión, conclusión, efecto mínimo detectable y detalles.
 function renderGofResult(o) {
+    window.ReproduceTests?.render('gof', 'chiResult', o);
     const R = TestResult, EN = R.EN;
     const rejected = o.p < o.alpha;
     const wObs = Math.sqrt(o.chi2 / o.n);
@@ -555,7 +559,7 @@ document.getElementById('calcChiBtn').addEventListener('click',()=>{
 
     const df=k-1;
     const p=Math.max(0,Math.min(1,chiSquareSurvival(chi2,df)));
-    renderGofResult({ chi2, df, p, alpha, n, k, low: lowExpected, minE: Math.min(...expected) });
+    renderGofResult({ observed, probs, chi2, df, p, alpha, n, k, low: lowExpected, minE: Math.min(...expected) });
 
     document.getElementById('expectedTable').innerHTML = formatExpectedGoodness(observed, expected);
     renderChiGoodnessChart(df, alpha, chi2);
