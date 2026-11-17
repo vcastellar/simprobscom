@@ -54,7 +54,7 @@ parámetros especificados, contraste z de proporciones sin corrección, o correc
 de continuidad cuando está seleccionada. La geométrica desplaza en uno el soporte
 de R; Fisher muestra el OR muestral ad/bc, distinto de la estimación condicional
 de `fisher.test()`. Shapiro–Wilk reproduce la simulación Monte Carlo con B,
-semilla y generador LCG/Box–Muller explícitos: no sustituye el valor p por el
+semilla y generadores normales nativos: no sustituye el valor p por el
 analítico de `shapiro.test()`. Las notas junto al código explican estas diferencias.
 
 Para elegir un ejecutable distinto de `Rscript`, usa `PROBLAB_RSCRIPT`. Sin R,
@@ -67,27 +67,32 @@ PROBLAB_RSCRIPT=/ruta/a/Rscript python3 -m unittest discover -s tests -v
 
 Las siete páginas de simulaciones también generan código R/Python. Sus pruebas
 ejecutan 104 casos en ambos lenguajes, con las variantes de cada simulador y los
-extremos válidos de la semilla. Comparan los resultados sin redondear, incluidos
-los vectores de frecuencias, los límites bootstrap y la cobertura de los
-intervalos. Comprueban además las trayectorias, la inclusión de la última espera
-completa en Poisson, los cambios de modo, los errores y la vista móvil.
+extremos válidos de la semilla. Verifican propiedades estadísticas, parámetros,
+identidades deterministas, trayectorias, límites y cobertura, y renderizan los
+gráficos en R y Python. Los resultados aleatorios no se comparan por igualdad
+entre entornos; el aviso de la interfaz explica que pueden variar.
 
-Para repetir una simulación se puede fijar una semilla entre 0 y 4294967295.
-Dejarla vacía genera una nueva semilla en cada ejecución; el fragmento conserva
-la utilizada. JavaScript, R y Python utilizan el mismo LCG explícito y las mismas
-transformaciones (Box–Muller para normales), en lugar de los generadores nativos
-de cada lenguaje, cuyas semillas no producen secuencias equivalentes. Se mantiene
-la distribución estadística de cada experimento, con posibles diferencias de
-redondeo entre intérpretes.
+La web usa Mersenne–Twister MT19937 de `mersenne-twister@1.1.0`, servido localmente
+con su licencia y procedencia en `vendor/`. Las normales de la web se obtienen
+mediante Box–Muller. El motor se verifica con vectores de referencia independientes
+de NumPy y momentos de las distribuciones utilizadas.
 
-En bootstrap se incorpora la muestra observada completa y el estado del generador
-al comenzar el remuestreo. «Regenerar bootstrap» conserva también el tamaño y la
-distribución de origen de esa muestra aunque cambien los selectores. Los límites
-percentiles utilizan los índices de orden de la web, sin interpolación. En
-Markov se incluye el estado inicial al contar ocupaciones y se reproduce la
-iteración desde la distribución uniforme, con su tolerancia y límite; no se
-sustituye por un método que presuponga una única distribución estacionaria. El
-simulador de errores I/II calcula probabilidades analíticas y no utiliza semilla.
+La semilla opcional admite enteros entre 0 y 4294967295, incluido cero; en blanco
+se elige una nueva semilla. R utiliza `set.seed()` y sus funciones nativas; para
+admitir todo el rango de entrada, la semilla se reduce módulo
+`.Machine$integer.max`. Python utiliza `numpy.random.default_rng()` (PCG64) y sus
+métodos de muestreo. No se exportan implementaciones propias de generadores.
+La repetición está garantizada dentro de cada entorno con la misma configuración;
+igualar la semilla entre la web, R y Python no implica igualar la secuencia.
+Las semillas anteriores al cambio de LCG a MT19937 generan otras muestras.
+
+En bootstrap se conserva la muestra observada completa al exportar, junto con la
+semilla de la ejecución. Cada lenguaje genera sus propios remuestreos de esa
+misma muestra. «Regenerar bootstrap» conserva su tamaño y distribución de origen.
+Los límites percentiles mantienen los índices de orden de la web, sin interpolación.
+En Markov se incluye el estado inicial al contar ocupaciones y se conserva la
+iteración estacionaria desde la distribución uniforme, con su tolerancia y límite.
+El simulador de errores I/II es analítico y no utiliza semilla.
 
 Los fragmentos de simulaciones incluyen los gráficos de los datos que acaban de
 calcular: histogramas y referencias teóricas, límites bootstrap, trayectorias,
@@ -100,8 +105,7 @@ con `plt.show()` para mostrarlos en una sesión interactiva o un cuaderno.
 
 Las pruebas usan el backend Agg de Matplotlib y dispositivos PNG de R, comprueban
 que cada fragmento genera una figura visible y contrastan sus series, barras,
-límites y frecuencias con los resultados numéricos. También comprueban que dibujar
-no consume números aleatorios nuevos y que la densidad truncada de las esperas
+límites y frecuencias con los resultados numéricos. También comprueban que la densidad truncada de las esperas
 de Poisson mantiene como denominador todas las observaciones. Se incluyen muestras
 bootstrap constantes y trayectorias sin eventos. Los PNG se crean en directorios
 temporales; para conservarlos durante una revisión puede indicarse
