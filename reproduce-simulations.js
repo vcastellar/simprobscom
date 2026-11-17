@@ -4,37 +4,7 @@
     const pageKind = document.currentScript.dataset.simulation;
     const modulus = 4294967296;
 
-    // One explicit stream shared by JavaScript and the displayed R/Python code.
-    function generator(seed) {
-        let state = seed;
-        return {
-            snapshot: () => state,
-            random() {
-                state = (1664525 * state + 1013904223) % modulus;
-                return (state + 0.5) / modulus; // Strictly between zero and one.
-            },
-            normal(mu=0, sigma=1) {
-                return mu + sigma * Math.sqrt(-2 * Math.log(this.random())) * Math.cos(2 * Math.PI * this.random());
-            },
-            exponential(rate=1) { return -Math.log(this.random()) / rate; },
-            poisson(rate) {
-                const limit = Math.exp(-rate);
-                let product = 1, k = 0;
-                do { k++; product *= this.random(); } while (product > limit);
-                return k - 1;
-            },
-            binomial(n, p) {
-                let successes = 0;
-                for (let i = 0; i < n; i++) if (this.random() < p) successes++;
-                return successes;
-            },
-            chisquare(df) {
-                let sum = 0;
-                for (let i = 0; i < df; i++) sum += this.normal() ** 2;
-                return sum;
-            }
-        };
-    }
+    const generator = ProbLabRandom.create;
     let active = generator(0);
     function begin(buttonId) {
         window.ReproduceCode.clear();
@@ -87,28 +57,16 @@
     }
     const rValue = v => parameterValue(v,true);
     const pyValue = v => parameterValue(v,false);
-    const rRandom = `# Portable LCG: the same uniform stream as the web simulator.
-state <- seed
-uniform <- function() {
-    state <<- (1664525 * state + 1013904223) %% 4294967296
-    (state + 0.5) / 4294967296
-}`;
-    const pyRandom = `# Portable LCG: the same uniform stream as the web simulator.
-state = seed
-def uniform():
-    global state
-    state = (1664525 * state + 1013904223) % 4294967296
-    return (state + 0.5) / 4294967296`;
-    const rNormal = 'normal <- function() sqrt(-2 * log(uniform())) * cos(2 * pi * uniform())';
-    const pyNormal = 'def normal():\n    return sqrt(-2 * log(uniform())) * cos(2 * pi * uniform())';
+    const rRandom = 'set.seed(seed %% .Machine$integer.max)';
+    const pyRandom = 'rng = np.random.default_rng(seed)';
     function pair(parameters, r, python, note='', random=true) {
         const common = random
-            ? (en ? 'Uses the displayed run’s seed and the same random generator to reproduce its numerical results (up to floating-point rounding).' : 'Usa la semilla de la ejecución mostrada y el mismo generador aleatorio para reproducir sus resultados numéricos (salvo redondeo).')
+            ? (en ? 'Reproduces the simulation procedure and parameters. Results and plots may differ between the web, R and Python because their random generators and sampling algorithms differ. A fixed seed repeats a run within the same environment.' : 'Reproduce el procedimiento y los parámetros de la simulación. Los resultados y los gráficos pueden variar entre la web, R y Python porque sus generadores y algoritmos aleatorios son diferentes. Una semilla fija permite repetir la ejecución dentro del mismo entorno.')
             : (en ? 'Reproduces the analytical probabilities; this simulator does not draw random samples.' : 'Reproduce las probabilidades analíticas; este simulador no extrae muestras aleatorias.');
         return {
             note: common + (note ? ' ' + note : ''),
             r: Object.entries(parameters).map(([k,v]) => `${k} <- ${rValue(v)}`).join('\n') + '\n\n' + (random ? rRandom+'\n\n' : '') + r + '\nprint(result)',
-            python: 'from math import sqrt, log, cos, pi, floor, ceil\nimport numpy as np\nfrom scipy import stats\n\n' + Object.entries(parameters).map(([k,v]) => `${k} = ${pyValue(v)}`).join('\n') + '\n\n' + (random ? pyRandom+'\n\n' : '') + python + '\nprint(result)'
+            python: 'from math import sqrt, floor, ceil\nimport numpy as np\nfrom scipy import stats\n\n' + Object.entries(parameters).map(([k,v]) => `${k} = ${pyValue(v)}`).join('\n') + '\n\n' + (random ? pyRandom+'\n\n' : '') + python + '\nprint(result)'
         };
     }
     function generate(kind, o) {
@@ -122,17 +80,17 @@ critical = stats.norm.ppf(1 - alpha / (1 if alternative == "right" else 2))
 beta = stats.norm.cdf(critical, loc=delta) if alternative == "right" else stats.norm.cdf(critical, loc=delta) - stats.norm.cdf(-critical, loc=delta)
 result = {"alpha": alpha, "beta": beta, "power": 1-beta, "delta": delta, "critical": critical}`, '', false);
         if (kind === 'walk1d') return pair({seed:o.seed,n:o.n,p:o.p,paths:o.nPaths,show_bands:o.bands,show_mean:o.showMean},
-            `walks <- lapply(seq_len(paths), function(k) c(0, cumsum(replicate(n, if (uniform() < p) 1 else -1))))
+            `walks <- lapply(seq_len(paths), function(k) c(0, cumsum(sample(c(-1,1),size=n,replace=TRUE,prob=c(1-p,p)))))
 finals <- vapply(walks, function(w) tail(w, 1), numeric(1))
 result <- list(mean=mean(finals), sd=sqrt(mean((finals-mean(finals))^2)), minimum=min(finals), maximum=max(finals), theoretical_mean=n*(2*p-1), theoretical_sd=sqrt(4*n*p*(1-p)))`,
-            `walks = [np.r_[0, np.cumsum([1 if uniform() < p else -1 for _ in range(n)])] for _ in range(paths)]
+            `walks = [np.r_[0, np.cumsum(rng.choice([-1,1],size=n,p=[1-p,p]))] for _ in range(paths)]
 finals = np.array([w[-1] for w in walks])
 result = {"mean": np.mean(finals), "sd": np.std(finals, ddof=0), "minimum": np.min(finals), "maximum": np.max(finals), "theoretical_mean": n*(2*p-1), "theoretical_sd": sqrt(4*n*p*(1-p))}`,
             en ? 'The empirical standard deviation uses divisor paths, as in the simulator.' : 'La desviación empírica usa el divisor número de trayectorias, como en el simulador.');
         if (kind === 'walk2d') return pair({seed:o.seed,n:o.n,paths:o.nPaths,show_circle:o.showC},
             `directions <- rbind(c(1,0), c(-1,0), c(0,1), c(0,-1))
 walks <- lapply(seq_len(paths), function(k) {
-    moves <- directions[replicate(n, floor(4*uniform())+1), , drop=FALSE]
+    moves <- directions[sample.int(4,size=n,replace=TRUE), , drop=FALSE]
     rbind(c(0,0), cbind(cumsum(moves[,1]), cumsum(moves[,2])))
 })
 distances <- lapply(walks, function(w) sqrt(rowSums(w^2)))
@@ -142,7 +100,7 @@ result <- list(mean_distance=mean(finals), mean_squared_distance=mean(finals^2),
             `directions = np.array([[1,0], [-1,0], [0,1], [0,-1]])
 walks = []
 for _ in range(paths):
-    moves = directions[[floor(4*uniform()) for _ in range(n)]]
+    moves = directions[rng.integers(0,4,size=n)]
     walks.append(np.vstack(([0,0], np.cumsum(moves, axis=0))))
 distances = [np.sqrt(np.sum(w*w, axis=1)) for w in walks]
 finals = np.array([d[-1] for d in distances])
@@ -154,9 +112,7 @@ states <- nrow(P)
 current <- initial + 1  # Input states are numbered from zero in Python/the web.
 history <- integer(steps+1); history[1] <- current
 for (i in seq_len(steps)) {
-    u <- uniform(); cumulative <- cumsum(P[current,])
-    match <- which(u < cumulative)
-    if (length(match)) current <- match[1]
+    current <- sample.int(states,size=1,prob=P[current,])
     history[i+1] <- current
 }
 empirical <- tabulate(history, nbins=states)/(steps+1)
@@ -173,13 +129,7 @@ states = len(P)
 current = initial
 history = [current]
 for _ in range(steps):
-    u = uniform()
-    cumulative = 0.0
-    for j in range(states):
-        cumulative += P[current,j]
-        if u < cumulative:
-            current = j
-            break
+    current = int(rng.choice(states,p=P[current]/P[current].sum()))
     history.append(current)
 empirical = np.bincount(history, minlength=states)/(steps+1)
 stationary = np.full(states, 1/states)
@@ -202,7 +152,7 @@ result = {"empirical": empirical, "stationary": stationary, "max_difference": np
         const rbody = `process <- function() {
     time <- 0; events <- numeric(0); gaps <- numeric(0)
     repeat {
-        gap <- -log(uniform())/rate
+        gap <- rexp(1,rate=rate)
         gaps <- c(gaps, gap)
         time <- time + gap
         if (time > horizon) break
@@ -216,7 +166,7 @@ counts <- vapply(runs, function(run) length(run$events), numeric(1))`;
     time = 0.0
     events, gaps = [], []
     while True:
-        gap = -log(uniform())/rate
+        gap = rng.exponential(scale=1/rate)
         gaps.append(gap)
         time += gap
         if time > horizon:
@@ -237,48 +187,30 @@ counts = np.array([len(run["events"]) for run in runs])`;
             kind === 'poissonGaps' ? (en ? 'Includes the complete last waiting time that crosses the horizon, as in the simulator.' : 'Incluye la última espera completa que cruza el horizonte, como en el simulador.') : '');
     }
     function clt(o) {
-        const expressions = {
-            normal: ['normal()', 'normal()'],
-            uniform: ['uniform()', 'uniform()'],
-            exponential: ['-log(uniform())', '-log(uniform())'],
-            bernoulli: ['as.numeric(uniform() < 0.3)', 'int(uniform() < 0.3)'],
-            poisson: ['poisson()', 'poisson()'],
-            chisquare: ['sum(replicate(3, normal()^2))', 'sum(normal()**2 for _ in range(3))']
+        const draws = {
+            normal: ['rnorm(SIZE)', 'rng.normal(size=SIZE)'],
+            uniform: ['runif(SIZE)', 'rng.uniform(size=SIZE)'],
+            exponential: ['rexp(SIZE)', 'rng.exponential(size=SIZE)'],
+            bernoulli: ['rbinom(SIZE,1,.3)', 'rng.binomial(1,.3,size=SIZE)'],
+            poisson: ['rpois(SIZE,3)', 'rng.poisson(3,size=SIZE)'],
+            chisquare: ['rchisq(SIZE,3)', 'rng.chisquare(3,size=SIZE)']
         };
-        const [rExpr,pyExpr] = expressions[o.dist];
-        const rPoisson = o.dist === 'poisson' ? `\npoisson <- function() {
-    product <- 1; k <- 0
-    repeat { k <- k+1; product <- product*uniform(); if (product <= exp(-3)) break }
-    k-1
-}` : '';
-        const pyPoisson = o.dist === 'poisson' ? `\ndef poisson():
-    product, k = 1.0, 0
-    while True:
-        k += 1
-        product *= uniform()
-        if product <= np.exp(-3):
-            return k-1` : '';
+        const [rDraw,pyDraw] = draws[o.dist];
         return pair({seed:o.seed,distribution:o.dist,n:o.n,simulations:o.numSims,true_mean:o.trueMu,true_variance:o.trueVar,true_skewness:o.trueSkew},
-            `${rNormal}${rPoisson}
-draw <- function() ${rExpr}
-original_size <- min(simulations*max(n,10), 50000)
-original_sample <- replicate(original_size, draw())
-sample_means <- replicate(simulations, mean(replicate(n, draw())))
+            `original_size <- min(simulations*max(n,10),50000)
+original_sample <- ${rDraw.replace('SIZE','original_size')}
+sample_means <- replicate(simulations,mean(${rDraw.replace('SIZE','n')}))
 centered <- sample_means-mean(sample_means)
 m2 <- mean(centered^2)
 skewness <- if (m2 > 0) mean(centered^3)/m2^1.5 else 0
 result <- list(mean=mean(sample_means), sd=sd(sample_means), variance=var(sample_means), skewness=skewness, theoretical_mean=true_mean, theoretical_sd=sqrt(true_variance/n), theoretical_variance=true_variance/n, theoretical_skewness=true_skewness/sqrt(n))`,
-            `${pyNormal}${pyPoisson}
-def draw():
-    return ${pyExpr}
-original_size = min(simulations*max(n,10), 50000)
-original_sample = np.array([draw() for _ in range(original_size)])
-sample_means = np.array([sum(draw() for _ in range(n))/n for _ in range(simulations)])
+            `original_size = min(simulations*max(n,10),50000)
+original_sample = ${pyDraw.replace('SIZE','original_size')}
+sample_means = ${pyDraw.replace('SIZE','(simulations,n)')}.mean(axis=1)
 centered = sample_means-np.mean(sample_means)
 m2 = np.mean(centered**2)
 skewness = np.mean(centered**3)/m2**1.5 if m2 > 0 else 0
-result = {"mean": np.mean(sample_means), "sd": np.std(sample_means, ddof=1), "variance": np.var(sample_means, ddof=1), "skewness": skewness, "theoretical_mean": true_mean, "theoretical_sd": sqrt(true_variance/n), "theoretical_variance": true_variance/n, "theoretical_skewness": true_skewness/sqrt(n)}`,
-            en ? 'Generates the original-distribution histogram sample first, followed by the sample means, in the same order as the web.' : 'Genera primero la muestra del histograma original y después las medias muestrales, en el mismo orden que la web.');
+result = {"mean": np.mean(sample_means), "sd": np.std(sample_means, ddof=1), "variance": np.var(sample_means, ddof=1), "skewness": skewness, "theoretical_mean": true_mean, "theoretical_sd": sqrt(true_variance/n), "theoretical_variance": true_variance/n, "theoretical_skewness": true_skewness/sqrt(n)}`);
     }
     function bootstrap(o) {
         const rStatistic = ({mean:'mean(x)',median:'median(x)',sd:'sd(x)'})[o.stat];
@@ -286,7 +218,7 @@ result = {"mean": np.mean(sample_means), "sd": np.std(sample_means, ddof=1), "va
         return pair({seed:o.seed,data:o.sample,B:o.B,confidence:o.confLevel,statistic_name:o.stat,distribution:o.dist},
             `statistic <- function(x) ${rStatistic}
 n <- length(data)
-replicates <- replicate(B, statistic(data[replicate(n, floor(n*uniform())+1)]))
+replicates <- replicate(B, statistic(sample(data,size=n,replace=TRUE)))
 ordered <- sort(replicates)
 alpha <- 1-confidence
 ci <- c(ordered[floor(alpha/2*B)+1], ordered[ceiling((1-alpha/2)*B)])
@@ -295,20 +227,19 @@ result <- list(estimate=statistic(data), standard_error=sd(replicates), ci=ci)`,
 def statistic(x):
     return ${pyStatistic}
 n = len(data)
-replicates = np.array([statistic(data[[floor(n*uniform()) for _ in range(n)]]) for _ in range(B)])
+replicates = np.array([statistic(rng.choice(data,size=n,replace=True)) for _ in range(B)])
 ordered = np.sort(replicates)
 alpha = 1-confidence
 ci = [ordered[floor(alpha/2*B)], ordered[ceil((1-alpha/2)*B)-1]]
 result = {"estimate": statistic(data), "standard_error": np.std(replicates, ddof=1), "ci": ci}`,
-            en ? 'Preserves the displayed sample. The seed starts at resampling. Percentile bounds use the same order-statistic indices as the calculator, without quantile interpolation.' : 'Conserva la muestra mostrada. La semilla corresponde al inicio del remuestreo. Los límites percentiles usan los mismos índices de orden que la calculadora, sin interpolar cuantiles.');
+            en ? 'Preserves the displayed sample; resampling uses the native generator of each language. Percentile bounds use the same order-statistic indices as the calculator, without quantile interpolation.' : 'Conserva la muestra mostrada; el remuestreo utiliza el generador nativo de cada lenguaje. Los límites percentiles usan los mismos índices de orden que la calculadora, sin interpolar cuantiles.');
     }
     function intervals(o) {
         const mean = o.mode === 'media';
         const params = {seed:o.seed,method:o.params.method,n:o.params.n,confidence:o.params.conf,repetitions:o.params.numIntervals,...(mean?{mu:o.params.mu,sigma:o.params.sigma}:{p:o.params.p})};
-        const rbody = mean ? `${rNormal}
-critical <- if (method == "t") qt((1+confidence)/2, df=n-1) else qnorm((1+confidence)/2)
+        const rbody = mean ? `critical <- if (method == "t") qt((1+confidence)/2, df=n-1) else qnorm((1+confidence)/2)
 intervals <- t(replicate(repetitions, {
-    x <- replicate(n, mu+sigma*normal())
+    x <- rnorm(n,mean=mu,sd=sigma)
     estimate <- mean(x)
     s <- sqrt(max(0, sum(x*x)-n*estimate^2)/(n-1))
     margin <- critical*(if (method == "t") s else sigma)/sqrt(n)
@@ -317,7 +248,7 @@ intervals <- t(replicate(repetitions, {
 truth <- mu` : `alpha <- 1-confidence
 z <- qnorm(1-alpha/2)
 intervals <- t(replicate(repetitions, {
-    successes <- sum(replicate(n, uniform() < p))
+    successes <- rbinom(1,size=n,prob=p)
     estimate <- successes/n
     if (method == "clopper") {
         lo <- if (successes == 0) 0 else qbeta(alpha/2, successes, n-successes+1)
@@ -336,11 +267,10 @@ intervals <- t(replicate(repetitions, {
     c(lo,hi,estimate)
 }))
 truth <- p`;
-        const pybody = mean ? `${pyNormal}
-critical = stats.t.ppf((1+confidence)/2, df=n-1) if method == "t" else stats.norm.ppf((1+confidence)/2)
+        const pybody = mean ? `critical = stats.t.ppf((1+confidence)/2, df=n-1) if method == "t" else stats.norm.ppf((1+confidence)/2)
 intervals = []
 for _ in range(repetitions):
-    x = [mu+sigma*normal() for _ in range(n)]
+    x = rng.normal(mu,sigma,size=n)
     estimate = sum(x)/n
     s = sqrt(max(0, sum(v*v for v in x)-n*estimate**2)/(n-1))
     margin = critical*(s if method == "t" else sigma)/sqrt(n)
@@ -349,7 +279,7 @@ truth = mu` : `alpha = 1-confidence
 z = stats.norm.ppf(1-alpha/2)
 intervals = []
 for _ in range(repetitions):
-    successes = sum(uniform() < p for _ in range(n))
+    successes = rng.binomial(n,p)
     estimate = successes/n
     if method == "clopper":
         lo = 0 if successes == 0 else stats.beta.ppf(alpha/2, successes, n-successes+1)
@@ -377,7 +307,6 @@ result = {"covered": covered, "coverage": covered/repetitions, "mean_width": np.
 
     window.ReproduceSimulations = {
         begin, generator,
-        snapshot: () => active.snapshot(),
         random: () => active.random(),
         uniform: (a,b) => a+(b-a)*active.random(),
         normal: (mu=0,sigma=1) => active.normal(mu,sigma),
@@ -393,7 +322,7 @@ result = {"covered": covered, "coverage": covered/repetitions, "mean_width": np.
                 const heading = en ? '# Plots from the same simulation data' : '# Gráficos con los datos de la misma simulación';
                 value.r += '\n\n'+heading+'\n'+plots.r;
                 value.python = value.python.replace('from scipy import stats', 'from scipy import stats\nimport matplotlib.pyplot as plt')+'\n\n'+heading+'\n'+plots.python+'\nplt.show()';
-                value.note += en ? ' Includes plots from these same data.' : ' Incluye los gráficos con estos mismos datos.';
+                value.note += en ? ' Plots use the samples and results of this code.' : ' Los gráficos utilizan las muestras y los resultados de este código.';
                 value.dependencies = en
                     ? 'R: base R, no packages required. Python: install scipy and matplotlib (pip install scipy matplotlib).'
                     : 'R: base R, sin paquetes adicionales. Python: instala scipy y matplotlib (pip install scipy matplotlib).';

@@ -66,8 +66,7 @@ class CatalogReproductionTests(BrowserTestCase):
                 with redirect_stdout(StringIO()):
                     exec(case['python'], namespace)
                 value = float(eval(case['py_expression'], namespace))
-                self.assertTrue(math.isclose(value, case['expected'],
-                    rel_tol=2e-5, abs_tol=1e-7), (value, case['expected']))
+                self.compare_result(value,case)
 
         executable = os.environ.get('PROBLAB_RSCRIPT') or shutil.which('Rscript')
         if not executable:
@@ -89,8 +88,16 @@ class CatalogReproductionTests(BrowserTestCase):
         self.assertEqual(len(values), len(cases), completed.stdout)
         for i, case in enumerate(cases):
             with self.subTest(case=case['name'], runtime='R'):
-                self.assertTrue(math.isclose(values[i], case['expected'],
-                    rel_tol=2e-5, abs_tol=1e-7), (values[i], case['expected']))
+                self.compare_result(values[i],case)
+
+    def compare_result(self,value,case):
+        if case.get('monte_carlo'):
+            B=case['monte_carlo'];p=case['expected']
+            self.assertGreaterEqual(value,1/(B+1));self.assertLessEqual(value,1)
+            tolerance=7*math.sqrt((p*(1-p)+value*(1-value))/B)+2/(B+1)
+            self.assertLessEqual(abs(value-p),tolerance)
+        else:
+            self.assertTrue(math.isclose(value,case['expected'],rel_tol=2e-5,abs_tol=1e-7),(value,case['expected']))
 
     def test_all_distribution_modes_in_both_languages(self):
         cases = []
@@ -159,7 +166,7 @@ class CatalogReproductionTests(BrowserTestCase):
         else:
             expected = payload['o']['p']
             r_expression, py_expression = 'result$p_value', 'result["p_value"]'
-        return dict(name=name, expected=expected, r_expression=r_expression,
+        return dict(name=name, expected=expected, monte_carlo=payload['o']['B'] if payload['kind']=='shapiro' else None, r_expression=r_expression,
             py_expression=py_expression, **self.snippets())
 
     def test_all_hypothesis_tools_in_both_languages(self):

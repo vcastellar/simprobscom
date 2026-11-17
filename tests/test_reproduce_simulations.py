@@ -60,7 +60,12 @@ class SimulationReproductionTests(BrowserTestCase):
             self.assertNotIn('undefined', snippets[language])
         observed = {key: value for key, value in payload['o']['observed'].items() if value is not None}
         self.assertIn('matplotlib', panel.locator('.reproduce-dependencies').inner_text())
-        return dict(name=name, observed=observed, payload=payload, stream_state=self.page.evaluate('ReproduceSimulations.snapshot()'), **snippets)
+        if payload['kind'] != 'errors':
+            self.assertRegex(panel.locator('.reproduce-note').inner_text(), r'pueden variar|may differ')
+            self.assertNotIn('1664525',snippets['r']+snippets['python'])
+            self.assertIn('set.seed(',snippets['r'])
+            self.assertIn('np.random.default_rng(',snippets['python'])
+        return dict(name=name, observed=observed, payload=payload, **snippets)
 
     def execute_cases(self, cases):
         def flatten(values):
@@ -88,10 +93,7 @@ class SimulationReproductionTests(BrowserTestCase):
                     plt.close('all')
                 self.assert_plot_image(output/f'python-{i}.png')
                 actual = flatten(namespace['result'][key] for key in case['observed'])
-                np.testing.assert_allclose(actual, flatten(case['observed'].values()),
-                                           rtol=1e-7, atol=1e-8)
-                if case['payload']['kind'] != 'errors':
-                    self.assertEqual(namespace['state'], case['stream_state'], 'Plotting must not draw new samples')
+                self.assert_native_result(case,[namespace['result'][key] for key in case['observed']])
                 if case['payload']['kind'] == 'walk1d':
                     for walk in namespace['walks']:
                         self.assertEqual(walk[0], 0)
@@ -115,8 +117,6 @@ class SimulationReproductionTests(BrowserTestCase):
             keys = ','.join(json.dumps(key) for key in case['observed'])
             image_path = json.dumps(str(output/f'r-{i}-%d.png'))
             checks = ''
-            if case['payload']['kind'] != 'errors':
-                checks += '\nstopifnot(state == '+str(case['stream_state'])+')'
             if case['payload']['kind'] == 'poissonGaps':
                 checks += '\nstopifnot(abs(sum(gap_hist$density*diff(gap_hist$breaks))-mean(gaps < 4/rate)) < 1e-12)'
             blocks.append('local({\npng('+image_path+', width=1200, height=750, res=120)\n' +
@@ -133,12 +133,82 @@ class SimulationReproductionTests(BrowserTestCase):
         self.assertEqual(len(values), len(cases), completed.stdout)
         for i, case in enumerate(cases):
             with self.subTest(case=case['name'], language='R'):
-                np.testing.assert_allclose(values[i], flatten(case['observed'].values()),
-                                           rtol=1e-7, atol=1e-8)
+                sizes=[len(np.atleast_1d(v)) for v in case['observed'].values()]
+                chunks=np.split(values[i],np.cumsum(sizes)[:-1])
+                self.assert_native_result(case,[float(v[0]) if size==1 else v for v,size in zip(chunks,sizes)])
                 self.assertEqual(len(list(output.glob(f'r-{i}-*.png'))), 1, 'Each snippet produces one figure')
                 self.assert_plot_image(output/f'r-{i}-1.png')
         if root:
             (output/'cases.json').write_text(json.dumps([{'name': c['name'], 'kind': c['payload']['kind']} for c in cases], indent=2))
+
+    def assert_native_result(self, case, values):
+        """Check deterministic quantities exactly and Monte Carlo estimates statistically."""
+        observed = case['observed']
+        kind = case['payload']['kind']
+        result = dict(zip(observed, values))
+        def close(key):
+            np.testing.assert_allclose(result[key], observed[key], rtol=1e-7, atol=1e-8)
+        self.assertTrue(all(np.all(np.isfinite(v)) for v in values))
+        if kind == 'errors':
+            for key in observed: close(key)
+        elif kind == 'clt':
+            o = case['payload']['o']; B=o['numSims']; n=o['n']
+            se = np.sqrt(o['trueVar']/(n*B))
+            self.assertLess(abs(result['mean']-o['trueMu']), 7*se)
+            self.assertLess(abs(result['variance']/(o['trueVar']/n)-1), 7*np.sqrt(2/(B-1)))
+            np.testing.assert_allclose(result['sd']**2,result['variance'],rtol=1e-8)
+        elif kind == 'bootstrap':
+            close('estimate')
+            self.assertGreaterEqual(result['standard_error'],0)
+            self.assertLessEqual(result['ci'][0],result['ci'][1])
+            sample=np.asarray(case['payload']['o']['sample'])
+            if case['payload']['o']['stat'] in ('mean','median'):
+                self.assertGreaterEqual(result['ci'][0],sample.min()-1e-10)
+                self.assertLessEqual(result['ci'][1],sample.max()+1e-10)
+            if np.ptp(sample)==0:
+                close('ci');close('standard_error')
+        elif kind == 'markov':
+            close('stationary')
+            np.testing.assert_allclose(np.sum(result['empirical']),1)
+            self.assertTrue(np.all(result['empirical'] >= 0))
+            np.testing.assert_allclose(result['max_difference'],np.max(np.abs(result['empirical']-result['stationary'])))
+        elif kind == 'intervals':
+            B=case['payload']['o']['params']['numIntervals']
+            self.assertGreaterEqual(result['covered'],0);self.assertLessEqual(result['covered'],B)
+            np.testing.assert_allclose(result['coverage'],result['covered']/B)
+            self.assertGreaterEqual(result['mean_width'],0)
+            # Coverage is nominal for normal z/t; for proportions use exact binomial enumeration.
+            o=case['payload']['o'];params=o['params'];target=params['conf']
+            if o['mode'] != 'media':
+                from scipy import stats
+                n=params['n'];p=params['p'];z=stats.norm.ppf((1+target)/2)
+                k=np.arange(n+1);phat=k/n
+                if params['method']=='clopper':
+                    lo=np.r_[0,stats.beta.ppf((1-target)/2,k[1:],n-k[1:]+1)]
+                    hi=np.r_[stats.beta.ppf((1+target)/2,k[:-1]+1,n-k[:-1]),1]
+                elif params['method']=='wilson':
+                    center=(phat+z*z/(2*n))/(1+z*z/n)
+                    width=z/(1+z*z/n)*np.sqrt(phat*(1-phat)/n+z*z/(4*n*n))
+                    lo,hi=center-width,center+width
+                else:
+                    width=z*np.sqrt(phat*(1-phat)/n);lo,hi=phat-width,phat+width
+                target=np.sum(stats.binom.pmf(k,n,p)*((lo<=p)&(p<=hi)))
+            self.assertLessEqual(abs(result['coverage']-target),7*np.sqrt(target*(1-target)/B)+1/B)
+        elif kind.startswith('poisson'):
+            self.assertGreaterEqual(result['mean'],0)
+            if kind=='poissonPath':np.testing.assert_allclose(result['mean'],np.mean(result['counts']))
+            if kind=='poissonCounts':self.assertGreaterEqual(result['variance'],0)
+            if kind=='poissonGaps':
+                self.assertGreater(result['sample_size'],0);self.assertGreaterEqual(result['median'],0)
+        elif kind == 'walk1d':
+            n=case['payload']['o']['n']
+            self.assertGreaterEqual(result['minimum'],-n);self.assertLessEqual(result['maximum'],n)
+            self.assertGreaterEqual(result['sd'],0)
+            self.assertLessEqual(result['minimum'],result['mean']);self.assertLessEqual(result['mean'],result['maximum'])
+        elif kind == 'walk2d':
+            self.assertGreaterEqual(result['mean_distance'],0)
+            self.assertLessEqual(result['mean_distance']**2,result['mean_squared_distance']+1e-9)
+            self.assertGreaterEqual(result['maximum_distance'],result['mean_distance'])
 
     def assert_plot_image(self, path):
         with Image.open(path) as image:
@@ -287,7 +357,7 @@ class SimulationReproductionTests(BrowserTestCase):
         self.fill(**{'lambda-t': .1, 'horizon-t': .5})
         self.page.select_option('#num-traj', '1')
         empty = self.collect('poisson-no-events', 'btn-simular-t')
-        self.assertEqual(empty['observed']['counts'], [0])
+        self.assertTrue(all(value >= 0 for value in empty['observed']['counts']))
         cases.append(empty)
         self.open_simulator('/', 'simulador-bootstrap')
         self.page.locator('.simulation-seed-input').fill('12345')

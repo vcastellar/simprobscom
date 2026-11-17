@@ -132,22 +132,11 @@ sw_statistic <- function(x) {
     }
     min(1, sum(a*(rev(x)[seq_len(m)]-x[seq_len(m)]))^2/sum((x-mean(x))^2))
 }
-# The calculator uses this LCG and Box-Muller, rather than R's default RNG.
-next_uniform <- local({
-    state <- seed %% 4294967296
-    if (state == 0) state <- 12345
-    function() { state <<- (1664525*state+1013904223) %% 4294967296; state/4294967296 }
-})
-next_normal <- function() {
-    u <- 0; v <- 0
-    while (u == 0) u <- next_uniform()
-    while (v == 0) v <- next_uniform()
-    sqrt(-2*log(u))*cos(2*pi*v)
-}
+set.seed(seed %% .Machine$integer.max)
 statistic <- sw_statistic(data)
-simulated <- replicate(B, sw_statistic(replicate(length(data), next_normal())))
+simulated <- replicate(B, sw_statistic(rnorm(length(data))))
 p_value <- (sum(simulated <= statistic)+1)/(B+1)`;
-            const pybody=`# Royston coefficients and explicit LCG/Box-Muller RNG.
+            const pybody=`# Royston coefficients for the Monte Carlo statistic.
 def sw_statistic(x):
     x = np.sort(np.asarray(x, dtype=float)); n = len(x); m = n//2
     span = x[-1]-x[0]
@@ -173,22 +162,11 @@ def sw_statistic(x):
         for i in range(first,m):
             a[i] = scores[-1-i]/sqrt(max(phi,1e-10))
     return min(1, np.sum(a*(x[::-1][:m]-x[:m]))**2/np.sum((x-np.mean(x))**2))
-rng_state = seed % 4294967296 or 12345
-def next_uniform():
-    global rng_state
-    rng_state = (1664525*rng_state+1013904223) % 4294967296
-    return rng_state/4294967296
-def next_normal():
-    u = v = 0
-    while u == 0:
-        u = next_uniform()
-    while v == 0:
-        v = next_uniform()
-    return sqrt(-2*log(u))*cos(2*pi*v)
+rng = np.random.default_rng(seed)
 statistic = sw_statistic(data)
-simulated = [sw_statistic([next_normal() for _ in data]) for _ in range(B)]
+simulated = [sw_statistic(rng.normal(size=len(data))) for _ in range(B)]
 p_value = (sum(w <= statistic for w in simulated)+1)/(B+1)`;
-            return pair(params,rbody,pybody,en ? 'Shapiro–Wilk with Monte Carlo p-value, the selected B and seed, and the calculator’s RNG. Normal quantile implementations can cause small rounding differences; R shapiro.test() alone uses an analytic p-value instead.' : 'Shapiro–Wilk con valor p Monte Carlo, B y semilla seleccionados y el generador aleatorio de la calculadora. Los cuantiles normales pueden causar pequeñas diferencias de redondeo; shapiro.test() de R por sí solo utiliza un valor p analítico.');
+            return pair(params,rbody,pybody,en ? 'Shapiro–Wilk with the same Monte Carlo procedure, B and sample. R and Python use native normal generators, so simulated p-values may differ from the web even with the same seed. R shapiro.test() alone uses an analytic p-value instead.' : 'Shapiro–Wilk con el mismo procedimiento Monte Carlo, B y muestra. R y Python usan sus generadores normales nativos: los valores p simulados pueden diferir de la web incluso con la misma semilla. shapiro.test() de R por sí solo utiliza un valor p analítico.');
         }
         return null;
     }
