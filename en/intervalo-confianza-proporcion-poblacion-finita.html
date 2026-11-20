@@ -92,6 +92,9 @@
     </script>
     <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="../reproduce-code.css?v=20261120-1">
+<script src="../reproduce-code.js?v=20261117-1"></script>
+<script src="../reproduce-intervals.js?v=20261120-1"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Main navigation">
@@ -176,7 +179,7 @@
                 <button class="calculate-btn" id="fpCalcBtn">Calculate interval</button>
             </section>
 
-            <div id="fpResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+            <section class="reproduce-result-group"><div id="fpResult" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div></section>
 
             <section class="card ss-chart-panel">
                 <h2 class="ss-chart-title">Confidence interval for the proportion</h2>
@@ -380,6 +383,7 @@ function calculateFp() {
     const warning = normOk ? '' : '\n⚠ Normality condition not met (n·p̂ < 5 or n·(1−p̂) < 5). Interpret the CI with caution.';
     const fpcMsg = fraction < 0.05 ? ' (fraction < 5%; FPC marginal)' : '';
     const EN = document.documentElement.lang === 'en';
+    window.ReproduceIntervals?.render('finiteProportion',resultEl,{x,n,bigN,conf});
     window.CICharts && CICharts.result(resultEl, {
         label: EN ? CICharts.pct(conf) + ' confidence interval for the proportion p (with finite population correction)' : 'Intervalo de confianza al ' + CICharts.pct(conf) + ' para la proporción p (con corrección por población finita)',
         main: { lo: corrL, hi: corrU },

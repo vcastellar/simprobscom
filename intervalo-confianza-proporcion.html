@@ -100,6 +100,9 @@
         }
         @media (max-width: 360px) { .math-block { font-size:0.7rem; } .content-table { font-size:0.74rem; } .content-table th, .content-table td { padding:6px 4px; } }
     </style>
+<link rel="stylesheet" href="reproduce-code.css?v=20261120-1">
+<script src="reproduce-code.js?v=20261117-1"></script>
+<script src="reproduce-intervals.js?v=20261120-1"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Navegación principal">
@@ -206,7 +209,7 @@
                 <button class="calculate-btn" id="calcBtn">Calcular intervalo</button>
             </section>
 
-            <div id="result" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+            <section class="reproduce-result-group"><div id="result" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div></section>
 
             <section class="card ss-chart-panel">
                 <h2 class="ss-chart-title">Intervalo de confianza para la proporción (p)</h2>
@@ -510,6 +513,7 @@ function calculate() {
     }
 
     const label = (EN ? CICharts.pct(conf) + ' confidence interval' + (all ? 's' : '') + ' for the proportion p' : (all ? 'Intervalos' : 'Intervalo') + ' de confianza al ' + CICharts.pct(conf) + ' para la proporción p');
+    window.ReproduceIntervals?.render('proportion',resultEl,{x,n,conf,method});
     window.CICharts && CICharts.result(resultEl, Object.assign({
         label: all ? label : label + ' (' + mainName + ')',
         notes: [warning],

@@ -83,6 +83,9 @@
     }
     </script>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="../reproduce-code.css?v=20261120-1">
+<script src="../reproduce-code.js?v=20261117-1"></script>
+<script src="../reproduce-intervals.js?v=20261120-1"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Main navigation">
@@ -196,7 +199,7 @@
                 <button class="calculate-btn" id="calcBtn">Calculate interval</button>
             </section>
 
-            <div id="result" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div>
+            <section class="reproduce-result-group"><div id="result" class="result-box ss-result" role="status" aria-live="polite">Result pending…</div></section>
 
             <section class="card ss-chart-panel">
                 <h2 class="ss-chart-title">Confidence interval for the odds ratio</h2>
@@ -441,6 +444,7 @@ function calculate() {
         ? '\n⚠ Some cells used are smaller than 5. Interpret the normal interval with caution.'
         : '';
     const EN = document.documentElement.lang === 'en';
+    window.ReproduceIntervals?.render('odds',resultEl,{raw,conf,correction});
     window.CICharts && CICharts.result(resultEl, {
         label: EN ? CICharts.pct(conf) + ' confidence interval for the odds ratio (OR)' : 'Intervalo de confianza al ' + CICharts.pct(conf) + ' para la odds ratio (OR)',
         main: { lo: lower, hi: upper },

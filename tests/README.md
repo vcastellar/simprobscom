@@ -110,3 +110,21 @@ de Poisson mantiene como denominador todas las observaciones. Se incluyen muestr
 bootstrap constantes y trayectorias sin eventos. Los PNG se crean en directorios
 temporales; para conservarlos durante una revisión puede indicarse
 `PROBLAB_PLOT_OUTPUT=/tmp/problab-plot-review` al ejecutar las pruebas.
+
+Las 11 calculadoras del catálogo de intervalos de confianza disponen también de
+código R/Python, en español e inglés. `test_reproduce_intervals.py` ejecuta 154
+casos en ambos lenguajes y compara todos los límites con los valores sin redondear
+de la web, incluidas las salidas secundarias y las comparaciones entre métodos.
+Se usan R base y SciPy, sin generar datos ficticios a partir de estadísticos resumen.
+
+La cobertura incluye t y z para medias, Welch y varianza agrupada, diferencias
+apareadas con la definición indicada, corrección por población finita, Wald,
+Wilson, Clopper–Pearson, Newcombe–Wilson, varianza y desviación típica, odds ratio
+y riesgo relativo logarítmicos. Las correcciones de 0,5 respetan la opción elegida
+y se aplican a las cuatro celdas. Wald conserva los recortes de la calculadora.
+Los casos prueban confianza personalizada, cero y todo éxitos, y n = N.
+
+También se comprueban el aviso de parámetros modificados, la retirada del código
+ante entradas o confianza inválidas, la recuperación posterior, la copia y la
+vista móvil. Los gráficos de estas calculadoras siguen funcionando en la web;
+los fragmentos añadidos reproducen los resultados numéricos de los intervalos.
