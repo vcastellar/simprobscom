@@ -206,7 +206,7 @@
             <p>This calculator determines the minimum number of observations <em>per group</em> needed to estimate the difference \(p_1 - p_2\) between two independent proportions with a maximum absolute margin of error \(E\) and a given confidence level. It is the starting point for planning comparative studies between two groups before collecting the data.</p>
             <p>The two key parameters are the expected proportions in each group. If you don't have prior estimates, the conservative scenario is \(p_1 = p_2 = 0.5\), which maximizes the sum \(p_1(1-p_1) + p_2(1-p_2)\) and therefore the sample size. In practice, using proportions informed by pilot data or the literature considerably reduces the required sample.</p>
             <p>The formula assumes balanced allocation (the same number of subjects in each group) and random sampling from two very large populations. The margin of error \(E\) applies to the difference \(p_1-p_2\), not to each proportion separately.</p>
-            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
+            <h3>Sample size formula</h3>
             <p class="formula-line">\( n = \frac{Z^2 \cdot \left[p_1(1-p_1) + p_2(1-p_2)\right]}{E^2} \)</p>
             <ul>
                 <li><strong>n</strong>: minimum number of observations per group (total N = 2n).</li>
@@ -214,10 +214,8 @@
                 <li><strong>\(p_1, p_2\)</strong>: expected proportions in each group.</li>
                 <li><strong>E</strong>: maximum absolute margin of error for the difference \(p_1 - p_2\).</li>
             </ul>
-            </details>
-            <details class="fold fold-sub"><summary><h3>Interpreting the margin of error</h3></summary>
+            <h3>Interpreting the margin of error</h3>
             <p>A margin \(E = 0.10\) means the estimated difference \(\hat{p}_1 - \hat{p}_2\) can differ from the true population difference \(p_1 - p_2\) by at most ±10 percentage points at the chosen confidence level. If the expected difference between groups is small, the margin of error should be small too, which requires larger samples. Always compare the margin of error with the real expected difference: an E larger than that difference makes the study useless for detecting it.</p>
-            </details>
             <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>p₁ and p₂:</strong> take them from pilot data or the literature. If you have no information, use 0.5 for both.</li>
@@ -251,10 +249,11 @@
                 <li>Planning descriptive A/B experiments where the goal is to characterize the difference, not to test a hypothesis.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
                 <p>The value \(n\) is the <strong>minimum number of valid observations per group</strong> needed so that the confidence interval for the difference \(p_1 - p_2\) has a maximum half-width of \(E\) at the chosen confidence level. In a balanced design, the total number of participants to recruit is \(2n\). Always round up and add a margin for dropouts by dividing by \((1 - \text{dropout rate})\) per group; with an expected dropout of 10%, plan for \(\lceil n / 0.90 \rceil\) individuals per group.</p>
                 <p>The proportions \(p_1\) and \(p_2\) are the most critical and uncertain parameters. The variance of the difference depends on \(p_1(1-p_1) + p_2(1-p_2)\), which is maximal when both are close to 0.5. Run a <em>sensitivity analysis</em> varying \(p_1\) and \(p_2\) by ±0.10 around the expected values: when both are extreme (\(&lt;0.10\) or \(&gt;0.90\)), the variance decreases and \(n\) can be smaller than intuitively expected. If you have no prior information, use \(p_1 = p_2 = 0.5\) for the most conservative scenario. Also evaluate different values of \(E\): halving the margin of error quadruples \(n\).</p>
-                <p>This approach (CI) differs from hypothesis testing: here the goal is to <em>estimate</em> the magnitude of the difference with a given precision, not to decide whether it exists. If you need to detect whether \(p_1 \neq p_2\) with a given power, use the <a href="tamano-muestral-dos-proporciones.html">calculator for two-proportion hypothesis testing</a>. Once the data has been collected, build the actual CI with the <a href="intervalo-confianza-diferencia-proporciones.html">confidence interval calculator for the difference of proportions</a>. If the expected frequencies in any cell are small (&lt; 5), consider <a href="tamano-muestral-fisher.html">Fisher's exact test</a>.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
+            <p>This approach (CI) differs from hypothesis testing: here the goal is to <em>estimate</em> the magnitude of the difference with a given precision, not to decide whether it exists. If you need to detect whether \(p_1 \neq p_2\) with a given power, use the <a href="tamano-muestral-dos-proporciones.html">calculator for two-proportion hypothesis testing</a>. Once the data has been collected, build the actual CI with the <a href="intervalo-confianza-diferencia-proporciones.html">confidence interval calculator for the difference of proportions</a>. If the expected frequencies in any cell are small (&lt; 5), consider <a href="tamano-muestral-fisher.html">Fisher's exact test</a>.</p>
             </details>
         </section>
 
@@ -275,12 +274,13 @@
                 <li>Newcombe, R. G. (1998). Interval estimation for the difference between independent proportions, <em>Statistics in Medicine</em>, 17, 873–890.</li>
                 <li>Wikipedia: <a href="https://en.wikipedia.org/wiki/Sample_size_determination" target="_blank" rel="noopener">Sample size determination</a> — derivation for the difference of proportions.</li>
             </ul>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>When is it conservative to use p₁=p₂=0.5?</strong> Whenever you have no prior information. It maximizes the variance of each group and therefore the required sample size.</li>
                 <li><strong>What if the groups are very different in size?</strong> If you can't have the same n in each group, efficiency decreases. With ratio k=n₂/n₁, the n of the larger group grows proportionally.</li>
                 <li><strong>Does this calculation work for hypothesis testing?</strong> Not directly. To detect a difference with a given power and significance level, use the <a href="tamano-muestral-dos-proporciones.html">two-proportion calculator for hypothesis testing</a>.</li>
             </ul>
+            </details>
         </section>
     </main>
 

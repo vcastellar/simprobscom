@@ -242,11 +242,12 @@
     </section>
 
     <section class="card content-card">
-        <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
+        <h3>Cómo interpretar el resultado</h3>
         <p>El <strong>estadístico z</strong> mide cuántas desviaciones típicas se aleja la diferencia observada \(\hat{p}_B - \hat{p}_A\) de cero bajo la hipótesis nula. Cuanto más grande sea \(|z|\) en valor absoluto, más alejados están los datos de lo que esperaríamos si no hubiera ninguna diferencia real. El <strong>p-valor</strong> traduce ese estadístico a una probabilidad: es la probabilidad de obtener un z tan extremo o más en experimentos repetidos donde H₀ fuese cierta. Un p-valor &lt; α (habitualmente 0.05) no significa que B sea mejor con probabilidad 1 − p; significa que la evidencia contra la hipótesis de igualdad es suficientemente fuerte según el umbral elegido.</p>
         <p>El <strong>lift relativo</strong> \(((\hat{p}_B - \hat{p}_A) / \hat{p}_A) \times 100\,\%\) expresa la mejora de B en términos porcentuales sobre la tasa base de A. Es la métrica más directa para juzgar la relevancia práctica del resultado: un experimento puede ser estadísticamente significativo con un lift del 0.5 % que no tiene impacto de negocio real, y otro puede no alcanzar significación pero mostrar un lift del 15 % que merece seguir investigando con más muestra.</p>
+        <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
         <p>El <strong>intervalo de confianza</strong> para \(\Delta = p_B - p_A\) complementa el p-valor con información sobre la magnitud y la incertidumbre de la diferencia. Si el IC no incluye el cero, la diferencia es significativa al nivel elegido. Más importante, los límites del IC indican el rango plausible de la diferencia real: si incluso el extremo inferior del IC representa una mejora suficientemente grande para tu negocio, puedes confiar en implementar B. Si el IC incluye valores negativos junto con positivos, la dirección del efecto es incierta y conviene extender el experimento.</p>
-      </details>
+        </details>
     </section>
     <section id="seo-support-content" class="card content-card">
       <section class="related-tools">
@@ -260,13 +261,14 @@
           <li><a href="intervalo-confianza-proporcion.html">Intervalo de confianza para proporciones</a></li>
         </ul>
       </section>
-      <h3>Preguntas frecuentes</h3>
+      <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
       <ul>
         <li><strong>¿Qué diferencia hay respecto al contraste general de dos proporciones?</strong> Ninguna matemática: el test Z es el mismo. Esta calculadora añade el intervalo de confianza para la diferencia, la corrección de Yates y métricas específicas de A/B (lift relativo).</li>
         <li><strong>¿Es válido con proporciones muy bajas?</strong> Sí, pero requiere tamaños muestrales mayores para que la aproximación normal sea fiable. Como regla práctica, necesitas n·p ≥ 5 y n·(1−p) ≥ 5 en cada grupo.</li>
         <li><strong>¿Debo usar contraste bilateral o unilateral?</strong> Si antes de ver los datos no sabes en qué dirección podría ir el efecto, usa bilateral. El unilateral tiene más potencia, pero solo es legítimo cuando la dirección se fijó a priori.</li>
         <li><strong>¿El p-valor = 0.04 significa que B es mejor al 96%?</strong> No. El p-valor mide la probabilidad de observar un estadístico tan extremo o más si H₀ fuese cierta, no la probabilidad de que B sea mejor.</li>
       </ul>
+      </details>
     </section>
   </main>
 

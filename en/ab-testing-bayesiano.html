@@ -249,9 +249,10 @@
 
 
     <section class="card content-card">
-      <details class="fold"><summary><h3>How to interpret the result</h3></summary>
+      <h3>How to interpret the result</h3>
       <p>The central result of the Bayesian analysis is <strong>P(B &gt; A)</strong>: the posterior probability that B's conversion rate is genuinely higher than A's, given the observed data. Unlike the frequentist p-value, this probability is directly interpretable: if P(B &gt; A) = 0.97, it means that, with the current data, there is 97% credibility that B beats A. In practice, values above <strong>0.95</strong> are usually considered sufficient evidence to decide to roll out variant B, although the exact threshold depends on the context and the relative cost of the possible errors.</p>
       <p>The <strong>posterior distributions</strong> represent the updated knowledge about each variant's conversion rate after combining the prior with the experiment data. Following the Beta-Binomial model, A's posterior is \(\text{Beta}(\alpha_0 + x_A,\; \beta_0 + n_A - x_A)\) and B's is \(\text{Beta}(\alpha_0 + x_B,\; \beta_0 + n_B - x_B)\). The mean of each posterior is the point estimate of the true rate; when the two distributions overlap little in the chart, the difference between variants is clear; when the overlap is large, uncertainty is high and it's worth continuing to collect data.</p>
+      <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
       <p>The <strong>credible interval</strong> at the selected level (90%, 95% or 99%) indicates the range of conversion rate values that contains the selected credibility level of the posterior mass. Unlike the frequentist confidence interval, it can be interpreted directly: at a 95% level, "there is a 95% probability that B's true rate lies between these two values" (and analogously for 90% or 99%). If A's and B's intervals do not overlap, the evidence of a difference is very strong. The <strong>expected lift</strong> complements this analysis by showing the average relative improvement of B over A according to the posteriors, a more direct indicator of practical relevance than the p-value.</p>
       </details>
     </section>
@@ -265,13 +266,14 @@
           <li><a href="beta.html">Beta distribution</a></li>
         </ul>
       </section>
-      <h3>Frequently asked questions</h3>
+      <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
       <ul>
         <li><strong>What prior should I use if I have no historical data?</strong> Beta(1, 1), the uniform prior. If you have historical conversion rates, you can parameterize the prior as if you had α₀ prior successes and β₀ prior failures.</li>
         <li><strong>How many Monte Carlo samples does the calculator use?</strong> 30,000. The standard error of the P(B &gt; A) estimate is approximately √(p(1−p)/30,000): ±0.003 for values around 0.5 and ±0.001 for values around 0.97.</li>
         <li><strong>Can I use this with small sample sizes?</strong> Yes. The Bayesian calculation does not rely on asymptotic approximations, so it remains valid with small samples, where the z-test can be imprecise. In exchange, with little data the result depends more on the chosen prior, so check how it changes under reasonable alternative priors.</li>
         <li><strong>What's the difference between P(B &gt; A) = 0.97 and a p-value of 0.03?</strong> The p-value measures the probability of observing data as extreme under H₀; P(B &gt; A) directly measures how much you believe B beats A given what you've observed. The latter is more intuitive.</li>
       </ul>
+      </details>
     </section>
   </main>
 

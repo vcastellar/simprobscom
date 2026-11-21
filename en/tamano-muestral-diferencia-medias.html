@@ -241,7 +241,7 @@
             <p>This calculator determines the minimum number of observations per group needed to detect a difference between the means of two independent groups. The underlying test is the two-sample Student's t-test: \(H_0\!: \mu_1 = \mu_2\) versus \(H_1\!: |\mu_1 - \mu_2| \geq \Delta\).</p>
             <p>Unlike estimating a single mean, here the goal is not precision but power: we want to ensure that, if the true difference is at least \(\Delta\), the test will detect it with the specified probability \(1-\beta\).</p>
             <p>The effect size is <em>Cohen's d</em>: \(d = \Delta / \sigma\). Reference values: d = 0.2 (small effect), d = 0.5 (medium), d = 0.8 (large). For d = 0.5 with α = 0.05 and power 0.80 the result is n ≈ 64 per group.</p>
-            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
+            <h3>Sample size formula</h3>
             <p class="formula-line">\( n_1 = \frac{(Z_{\alpha/2}+Z_\beta)^2(\sigma_1^2+\sigma_2^2/k)}{\Delta^2} \)</p>
             <p class="formula-line">\( n_2 = k\,n_1 \)</p>
             <ul>
@@ -251,7 +251,6 @@
                 <li><strong>k</strong>: allocation ratio n2/n1 (k = 1 for a balanced design).</li>
                 <li><strong>\(Z_{\alpha/2}\)</strong> and <strong>\(Z_\beta\)</strong>: normal quantiles (two-sided α and power; with a one-tailed test, \(Z_{\alpha}\) replaces \(Z_{\alpha/2}\)).</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>σ1 and σ2:</strong> use historical data, a pilot study, or literature references. If you assume equal variances, use the same σ in both fields.</li>
@@ -288,10 +287,11 @@
                 <li>Educational or psychological intervention studies.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
                 <p>The value \(n\) returned by the calculator is the <strong>minimum size per group</strong> in a balanced design. The total number of participants to recruit is \(2n\) (one per group). Always round up and add a margin for losses: if you expect a dropout rate of \(r\,\%\), the number of subjects to recruit per group is \(\lceil n / (1 - r) \rceil\). The difference \(\Delta\) should be the <em>minimum clinically or practically relevant difference</em>, not simply the expected difference: specifying too small a difference inflates the sample size until it becomes infeasible.</p>
                 <p>The sensitivity of \(n\) to the parameters is critical in this design. Errors in \(\sigma\) propagate squared: if the true standard deviation is 20% larger than assumed, the required \(n\) increases by 44% \((1.2^2 = 1.44)\). It is therefore essential to run a <em>sensitivity analysis</em>: calculate \(n\) for \(\sigma - 25\%\), \(\sigma\) and \(\sigma + 25\%\), and plan for the least favorable scenario. Likewise, if \(\Delta\) is halved, \(n\) quadruples. Increasing power from 80% to 90% increases \(n\) by roughly 30%.</p>
-                <p>If the resulting \(n\) is too large to be feasible, the alternatives are: (1) increase \(\Delta\) if there is clinical consensus to do so, (2) accept lower power (e.g., 80% instead of 90%), (3) design the study with repeated measures that exploit within-subject correlation, or (4) use an adaptive design. When \(n\) is very small (&lt; 20 per group), verify that the normality of the data or the size of the deviations does not invalidate the assumptions of the two-sample t-test. Once the data are collected, analyze the results with the <a href="contraste-hipotesis-dos-medias.html">hypothesis test calculator for difference of means</a>.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
+            <p>If the resulting \(n\) is too large to be feasible, the alternatives are: (1) increase \(\Delta\) if there is clinical consensus to do so, (2) accept lower power (e.g., 80% instead of 90%), (3) design the study with repeated measures that exploit within-subject correlation, or (4) use an adaptive design. When \(n\) is very small (&lt; 20 per group), verify that the normality of the data or the size of the deviations does not invalidate the assumptions of the two-sample t-test. Once the data are collected, analyze the results with the <a href="contraste-hipotesis-dos-medias.html">hypothesis test calculator for difference of means</a>.</p>
             </details>
         </section>
 
@@ -312,13 +312,14 @@
                 <li>Wikipedia: <a href="https://en.wikipedia.org/wiki/Sample_size_determination" target="_blank" rel="noopener">Sample size determination</a> — derivation and variants.</li>
                 <li>Cohen, J. (1988). <em>Statistical Power Analysis for the Behavioral Sciences</em> (2nd ed.). Lawrence Erlbaum. — standard reference for effect sizes.</li>
             </ul>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>What is Cohen's d?</strong> The standardized effect size: Δ/σ. It allows comparing studies independently of units. d = 0.2 (small), 0.5 (medium), 0.8 (large).</li>
                 <li><strong>What if σ1 ≠ σ2?</strong> The formula allows for it; enter each standard deviation separately. If the difference is large, consider a Welch test.</li>
                 <li><strong>What is statistical power?</strong> The probability of rejecting H0 when the true difference is at least Δ.</li>
                 <li><strong>When is a paired design preferable?</strong> When you can measure the same subject under both conditions. A paired design usually requires far fewer subjects because it removes between-subject variability.</li>
             </ul>
+            </details>
         </section>
 
     </main>

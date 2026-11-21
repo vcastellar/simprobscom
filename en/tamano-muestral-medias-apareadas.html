@@ -219,7 +219,7 @@
             <p>In a paired design the same experimental unit is measured under two conditions (before/after, crossover treatment/control, right eye/left eye). The comparison of interest is not the difference of means between two independent groups, but the <strong>mean of the individual differences</strong> \(\bar{d} = \bar{X}_1 - \bar{X}_2\).</p>
             <p>The key advantage of the paired design is that it removes between-subject variability, which is usually the largest source of noise. That's why the relevant parameter is \(\sigma_d\) (the standard deviation of the within-subject differences), which is generally much smaller than the \(\sigma\) of each group taken separately. This translates into significantly smaller samples compared with an independent two-group design.</p>
             <p>The relationship between \(\sigma_d\) and the standard deviations of each measurement is: \(\sigma_d^2 = \sigma_1^2 + \sigma_2^2 - 2\rho\sigma_1\sigma_2\), where \(\rho\) is the correlation between the two measurements. The larger \(\rho\) is, the smaller \(\sigma_d\) is, and the more efficient the paired design becomes.</p>
-            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
+            <h3>Sample size formula</h3>
             <p class="formula-line">\( n = \left\lceil\left(\frac{(Z_{\alpha/2}+Z_\beta)\,\sigma_d}{\Delta}\right)^2\right\rceil \)</p>
             <ul>
                 <li><strong>n</strong>: number of pairs (individuals or units, not total observations).</li>
@@ -227,7 +227,6 @@
                 <li><strong>\(\Delta\)</strong>: the smallest mean difference you want to detect.</li>
                 <li><strong>\(Z_{\alpha/2}\)</strong> and <strong>\(Z_\beta\)</strong>: normal quantiles for two-sided alpha and power; with a one-tailed test, \(Z_{\alpha}\) replaces \(Z_{\alpha/2}\).</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>σd:</strong> estimate it from a paired pilot study (measure differences within each pair) or from the literature. <em>Do not</em> use the individual σ of each group separately.</li>
@@ -265,10 +264,11 @@
                 <li>Evaluations of change in skill, weight, blood pressure, etc.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
                 <p>The value \(n\) is the <strong>minimum number of subjects</strong>, each of whom contributes two measurements (before/after, or condition A/condition B). The total number of observations is \(2n\), but the number of independent statistical units remains \(n\). Always round up, and apply a dropout adjustment: if you expect 15% attrition between the first and second measurement, recruit \(\lceil n / 0.85 \rceil\) subjects in the first phase.</p>
                 <p>The key and most delicate parameter is \(\sigma_d\), the <strong>standard deviation of the within-subject differences</strong>, which should not be confused with the standard deviations of each measurement separately. If \(\sigma\) from a single measurement is used instead of \(\sigma_d\), the calculated \(n\) may be over- or underestimated depending on the correlation between the two measurements: when the within-subject correlation \(\rho\) is high, \(\sigma_d \approx \sigma\sqrt{2(1-\rho)}\) is considerably smaller than \(\sigma\), and the paired design requires far fewer subjects than the independent design. Run a <em>sensitivity analysis</em> with \(\sigma_d \pm 25\%\) and use the larger resulting \(n\).</p>
-                <p>If the calculated \(n\) turns out very small (&lt; 15 pairs), check that the distribution of the differences is approximately normal, since the paired t-test relies on that assumption. With very few pairs, consider the Wilcoxon signed-rank test for related samples. When \(n\) turns out unmanageably large, review whether the minimum detectable difference \(\delta\) is practically relevant or could be relaxed. Once the data has been collected, use the <a href="contraste-hipotesis-medias-apareadas.html">paired-means hypothesis test calculator</a> for the main analysis.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
+            <p>If the calculated \(n\) turns out very small (&lt; 15 pairs), check that the distribution of the differences is approximately normal, since the paired t-test relies on that assumption. With very few pairs, consider the Wilcoxon signed-rank test for related samples. When \(n\) turns out unmanageably large, review whether the minimum detectable difference \(\delta\) is practically relevant or could be relaxed. Once the data has been collected, use the <a href="contraste-hipotesis-medias-apareadas.html">paired-means hypothesis test calculator</a> for the main analysis.</p>
             </details>
         </section>
 
@@ -287,13 +287,14 @@
                 <li>Wikipedia: <a href="https://en.wikipedia.org/wiki/Crossover_study" target="_blank" rel="noopener">Crossover study</a> — crossover designs and order considerations.</li>
                 <li>Cohen, J. (1988). <em>Statistical Power Analysis for the Behavioral Sciences</em> (2nd ed.). Lawrence Erlbaum. — chapter on the t-test for correlated differences.</li>
             </ul>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>Why σd and not the σ of each group?</strong> Because the analysis operates on the within-subject differences, not on the group means. Using the individual σ would overestimate σd if individuals are heterogeneous.</li>
                 <li><strong>How do I get σd without a pilot study?</strong> If you know the individual σ and the expected correlation ρ between measurements: σd ≈ σ·√(2(1−ρ)). For ρ = 0.7 and σ = 10 → σd ≈ 7.7.</li>
                 <li><strong>When is a paired design better than two groups?</strong> Whenever the correlation between measurements is positive (ρ &gt; 0) and you can apply both conditions to the same individual without carryover effects.</li>
                 <li><strong>Is the result exact?</strong> It's the normal approximation; for small n consider using t quantiles with n−1 degrees of freedom iteratively.</li>
             </ul>
+            </details>
         </section>
 
     </main>

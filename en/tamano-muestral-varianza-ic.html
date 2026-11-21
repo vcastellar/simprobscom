@@ -195,7 +195,7 @@
             <p class="formula-line">\( \left[\frac{(n-1)s^2}{\chi^2_{1-\alpha/2,\,n-1}},\;\; \frac{(n-1)s^2}{\chi^2_{\alpha/2,\,n-1}}\right] \)</p>
             <p>Unlike CIs for means or proportions, the <em>absolute</em> width of the CI for the variance depends on the unknown value of \(\sigma^2\), which makes it impossible to express precision in absolute units without knowing it beforehand. The natural solution is to specify precision in relative terms: the <strong>U/L ratio</strong> between the upper and lower limits of the CI.</p>
             <p>This ratio depends only on the quantiles of the chi-square distribution, and therefore only on the sample size \(n\) and the confidence level. No assumption about \(\sigma^2\) is needed.</p>
-            <details class="fold fold-sub"><summary><h3>Formula for the U/L ratio</h3></summary>
+            <h3>Formula for the U/L ratio</h3>
             <p class="formula-line">\( \frac{U}{L} = \frac{\chi^2_{1-\alpha/2,\,n-1}}{\chi^2_{\alpha/2,\,n-1}} \)</p>
             <p>For a given confidence level and a desired ratio \(R\), the calculator searches for the smallest \(n\) such that \(\chi^2_{1-\alpha/2,\,n-1}/\chi^2_{\alpha/2,\,n-1} \leq R\). There is no closed-form formula: the result is obtained by an iterative search over \(n\).</p>
             <ul>
@@ -203,10 +203,8 @@
                 <li><strong>R = 2</strong>: the upper limit doubles the lower limit → reasonable sample (≈ 65 observations at 95%).</li>
                 <li><strong>R = 3</strong>: the upper limit triples the lower limit → much smaller sample (≈ 28 observations at 95%).</li>
             </ul>
-            </details>
-            <details class="fold fold-sub"><summary><h3>Interpreting the U/L ratio</h3></summary>
+            <h3>Interpreting the U/L ratio</h3>
             <p>A ratio \(R = 2.5\) means the upper limit of the CI can be up to 2.5 times larger than the lower limit. For example, if \(s^2 = 4.0\), the CI could go from 2.5 to 6.25 (a variability of 2.5 to 1 between the extremes). The smaller \(R\) is, the narrower and more informative the CI, but the more observations are needed.</p>
-            </details>
             <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>Ratio R:</strong> R between 2 and 4 is common in quality control and process studies. R very close to 1 requires prohibitively large samples.</li>
@@ -236,10 +234,11 @@
                 <li>Auditing of production processes where dispersion needs to be characterized.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
                 <p>The value \(n\) <strong>guarantees that the confidence interval</strong> for \(\sigma^2\) based on the chi-square distribution will have a ratio between the upper and lower limits no greater than the specified value \(R\), at the chosen confidence level. This ensures relative precision: the upper limit of the CI will not exceed \(R\) times the lower limit. Always round up. If you expect losses or exclusions during data collection, divide \(n\) by \((1 - \text{dropout rate})\); with a 10% dropout rate, recruit \(\lceil n / 0.90 \rceil\) units.</p>
                 <p>The most critical and delicate assumption of this method is the <strong>normality of the data</strong>: the chi-square CI for \(\sigma^2\) is very sensitive to deviations from normality, much more so than the CI for the mean. With skewed or heavy-tailed distributions, the actual CI can have coverage well below the nominal level (e.g., a 95% CI may cover the true \(\sigma^2\) only 85% of the time). Before applying this result, check normality with the <a href="shapiro-wilk-normalidad.html">Shapiro-Wilk test</a> or with Q-Q plots. Sensitivity to \(R\): requiring a ratio \(R = 2\) (narrow CI) requires many more subjects than \(R = 4\) (wide CI); increasing \(R\) by 50% can cut \(n\) in half.</p>
-                <p>If the calculated \(n\) is not feasible, the alternatives are: (1) accept a larger ratio \(R\) (wider CI), (2) reduce the confidence level (e.g., from 99% to 95%), or (3) if the data are not normal, use bootstrap methods to build the CI for \(\sigma^2\) without relying on the chi-square distribution. Once the data are collected, build the actual CI with the <a href="intervalo-confianza-varianza.html">CI calculator for the variance</a>; if you also want to test \(\sigma^2\) against a reference value, use the <a href="tamano-muestral-una-varianza.html">sample size calculator for a one-variance test</a>.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
+            <p>If the calculated \(n\) is not feasible, the alternatives are: (1) accept a larger ratio \(R\) (wider CI), (2) reduce the confidence level (e.g., from 99% to 95%), or (3) if the data are not normal, use bootstrap methods to build the CI for \(\sigma^2\) without relying on the chi-square distribution. Once the data are collected, build the actual CI with the <a href="intervalo-confianza-varianza.html">CI calculator for the variance</a>; if you also want to test \(\sigma^2\) against a reference value, use the <a href="tamano-muestral-una-varianza.html">sample size calculator for a one-variance test</a>.</p>
             </details>
         </section>
 
@@ -260,12 +259,13 @@
                 <li>Montgomery, D. C. (2019). <em>Introduction to Statistical Quality Control</em> (8th ed.). Wiley. — applications in SPC.</li>
                 <li>Wikipedia (en): <a href="https://en.wikipedia.org/wiki/Chi-squared_distribution" target="_blank" rel="noopener">Chi-squared distribution</a> — properties and percentiles.</li>
             </ul>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>Why do I need such a large sample for a narrow variance CI?</strong> Because the chi-square distribution converges slowly to symmetry. With few degrees of freedom, the extreme quantiles are far apart, producing very asymmetric and wide CIs.</li>
                 <li><strong>What happens if the data aren't normal?</strong> The chi-square CI can have actual coverage very different from the nominal confidence level. First apply a normality test (<a href="shapiro-wilk-normalidad.html">Shapiro-Wilk</a>) and, if the data aren't normal, consider transformations or bootstrap methods.</li>
                 <li><strong>Can I use this result if I want to estimate σ instead of σ²?</strong> Yes. The CI for σ is obtained by taking the square root of each limit of the σ² CI, and the U/L ratio is the same.</li>
             </ul>
+            </details>
         </section>
     </main>
 

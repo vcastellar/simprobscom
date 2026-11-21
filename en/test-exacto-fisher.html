@@ -308,7 +308,7 @@
             <p>It is the test for deciding whether there is an <strong>association between two dichotomous variables</strong> arranged in a 2×2 table —treatment or placebo against recovered or not, exposed or not against ill or not— when the sample is <strong>small</strong>. Unlike the <a href="contraste-independencia-chi-cuadrado.html">chi-square test</a> and the <a href="contraste-hipotesis-dos-proporciones.html">two-proportion z-test</a>, it does not rely on any normal approximation: it computes the exact probability of every possible table. That makes it the right choice for small trials, rare events, subgroup analyses and whenever an expected frequency is below 5.</p>
             <p>Ronald Fisher devised it with the famous experiment of the lady who claimed she could tell whether the milk or the tea had been poured first into her cup: with only 8 cups, the question was how many correct answers were needed to rule out that she was guessing.</p>
 
-            <details class="fold fold-sub"><summary><h3>The table and the hypothesis</h3></summary>
+            <h3>The table and the hypothesis</h3>
             <div class="content-table-wrap">
                 <table class="content-table">
                     <thead>
@@ -324,11 +324,10 @@
             <p class="formula-line">\(H_0\): rows and columns are independent (\(OR = 1\))</p>
             <p class="formula-line">\(H_1\): there is an association (\(OR \neq 1\), \(OR > 1\) or \(OR < 1\))</p>
             <p>Usually the rows are the groups (treatment and control) and the columns the outcome (yes and no). Then \(H_0\) says that the proportion of column A is the same in both rows: \(a/(a+b)\) against \(c/(c+d)\).</p>
-            </details>
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>How the exact p-value is computed</h3></summary>
+            <h3>How the exact p-value is computed</h3>
             <p>The test fixes the row and column totals and asks: if there were no association, how likely would each possible way of distributing the individuals within the table be? With fixed margins, knowing cell a is enough to know the whole table, and under \(H_0\) that cell follows a <strong>hypergeometric</strong> distribution:</p>
             <p class="formula-line">\( P(X = k) = \dfrac{\dbinom{a+b}{k}\dbinom{c+d}{a+c-k}}{\dbinom{n}{a+c}} \)</p>
             <p>The p-value adds up the probabilities of the tables at least as extreme as the observed one:</p>
@@ -339,14 +338,13 @@
             </ul>
             <p>The calculator's chart shows exactly that distribution: one bar for each possible value of a, with those included in the p-value highlighted.</p>
             <p>Because the distribution is discrete, the test is <strong>conservative</strong>: the real risk of a false positive usually ends up somewhat below \(\alpha\). That is the price of not relying on approximations. With large samples, Fisher and chi-square give very similar results.</p>
-
-            <h3>Decision rule</h3>
+            <details class="fold fold-sub"><summary><h3>Decision rule</h3></summary>
             <ul>
                 <li>If the <strong>exact p-value</strong> is less than \(\alpha\), \(H_0\) is rejected: there is evidence of an association.</li>
                 <li>If it is greater than or equal to \(\alpha\), there is not enough evidence to reject independence.</li>
                 <li>The direction is given by the odds ratio: OR &gt; 1 indicates that column A is more frequent in row 1.</li>
             </ul>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -396,17 +394,16 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
             <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that the two variables are associated. To judge the magnitude, look at the proportions in each row, their difference and the odds ratio with its confidence interval; in small samples, that interval tends to be very wide.</p>
             <p><strong>Not rejecting \(H_0\)</strong> does not prove independence. With little data, the power of the test is low, as in example 1.</p>
             <p>In the calculator, the result shows the decision with the exact p-value, the odds ratio, the proportion of column A in each row and a sentence stating the conclusion. Under "Calculation details" you will find the difference between rows in percentage points and the probability of the observed table.</p>
-
-            <h3>Power and minimum detectable difference</h3>
+            <details class="fold fold-sub"><summary><h3>Power and minimum detectable difference</h3></summary>
             <p>Below the conclusion, the calculator shows the <strong>minimum detectable difference</strong>: the smallest real difference from the proportion of row 2 that, with your row totals, the test would detect with 80% probability. With small samples it is usually huge, or even impossible to reach. The link opens the <a href="tamano-muestral-fisher.html">sample size calculator for Fisher's test</a> with your proportions, your α, the ratio between the rows and the type of test.</p>
 
             <h3>Confidence interval for the odds ratio</h3>
             <p>The other link opens the <a href="intervalo-confianza-odds-ratio.html">odds ratio confidence interval calculator</a> with your table. If a cell is zero, it applies the 0.5 correction automatically.</p>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -432,7 +429,7 @@
                     <li><a href="contraste-hipotesis-odds-ratio.html">Odds ratio test</a></li>
                 </ul>
             </section>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>When is Fisher's exact test used?</strong> For 2×2 tables with small samples, especially when an expected frequency is below 5 and chi-square is not reliable.</li>
                 <li><strong>Why is it called exact?</strong> Because it computes the p-value from the hypergeometric distribution, without normal or chi-square approximations.</li>
@@ -444,6 +441,7 @@
                 <li><strong>Does it work for tables larger than 2×2?</strong> There is an extension (Fisher-Freeman-Halton), but this calculator is for 2×2 tables. For larger tables, use the chi-square test of independence.</li>
             </ul>
             <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Fisher%27s_exact_test" target="_blank" rel="noopener noreferrer">Fisher's exact test</a> — Wikipedia</p>
+            </details>
         </section>
 
     </main>

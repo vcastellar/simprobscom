@@ -278,7 +278,7 @@
             <p>La idea es muy sencilla: para cada pareja se calcula la diferencia \(d_i = x_{i1} - x_{i2}\), y el problema se convierte en un <a href="contraste-hipotesis-una-media.html">contraste para una media</a> sobre esas diferencias. Si la intervención no tiene efecto, las diferencias deberían oscilar alrededor de 0; si su media se aleja de 0 más de lo que el azar explica, se concluye que hay un cambio sistemático.</p>
             <p>La gran ventaja del diseño apareado es que <strong>cada sujeto actúa como su propio control</strong>. Las diferencias entre personas (unas tienen la presión alta, otras baja; unos alumnos sacan mejores notas que otros) desaparecen al restar, y solo queda la variabilidad del cambio. Por eso, con el mismo número de sujetos, suele detectar efectos mucho más pequeños que la comparación de dos grupos independientes.</p>
 
-            <details class="fold fold-sub"><summary><h3>Hipótesis y estadístico</h3></summary>
+            <h3>Hipótesis y estadístico</h3>
             <p class="formula-line">\(H_0: \mu_d = \mu_{d0}\)</p>
             <p class="formula-line">\(H_1: \mu_d \neq \mu_{d0}\), \(\mu_d > \mu_{d0}\) o \(\mu_d &lt; \mu_{d0}\)</p>
             <p class="formula-line">\( t = \dfrac{\bar{d} - \mu_{d0}}{s_d / \sqrt{n}}, \quad gl = n - 1 \)</p>
@@ -290,7 +290,6 @@
             </ul>
             <p>El denominador \(s_d/\sqrt{n}\) es el error estándar de la diferencia media. El estadístico mide a cuántos errores estándar queda \(\bar{d}\) del valor de \(H_0\) y, si \(H_0\) es cierta, sigue una t de Student con \(n-1\) grados de libertad.</p>
             <p>Fíjate en que el signo depende del orden de la resta. Si calculas «antes − después», una reducción da diferencias positivas; si calculas «después − antes», negativas. Decide el orden antes de empezar y elige la cola del contraste de acuerdo con él.</p>
-            </details>
         </section>
 
         <section class="card content-card">
@@ -364,12 +363,11 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que la diferencia media entre las dos mediciones es incompatible con \(\mu_{d0}\): hay un cambio sistemático. Su relevancia práctica depende de su tamaño, así que mira la diferencia media y su intervalo de confianza, y valora si ese cambio importa en tu contexto.</p>
             <p><strong>No rechazar \(H_0\)</strong> (p-valor ≥ α) no demuestra que no haya cambio. El error más frecuente es concluir «el tratamiento no funciona» cuando la muestra era demasiado pequeña para detectarlo, como en el ejemplo 1.</p>
             <p>En la calculadora, el resultado muestra la decisión con el p-valor, el estadístico con sus grados de libertad y una frase con la conclusión. En el gráfico, la zona verde es la región de no rechazo, las rojas son las regiones críticas y la línea ámbar marca el estadístico observado. En «Detalles del cálculo» tienes la diferencia observada, el error estándar, el valor crítico, el intervalo de confianza (en el contraste bilateral) y el tamaño del efecto.</p>
-
-            <h3>Potencia y diferencia mínima detectable</h3>
+            <details class="fold fold-sub"><summary><h3>Potencia y diferencia mínima detectable</h3></summary>
             <p>Debajo de la conclusión, la calculadora indica la <strong>diferencia mínima detectable</strong>: la menor diferencia media real que, con tu número de parejas y tu \(s_d\), el contraste detectaría con un 80 % de probabilidad. Si es mayor que el cambio que te parecería relevante, el estudio tiene poca potencia y un resultado no significativo dice poco. El enlace abre la <a href="tamano-muestral-medias-apareadas.html">calculadora de tamaño muestral para medias apareadas</a> con tu \(s_d\), tu α y el tipo de contraste, para que calcules cuántas parejas necesitarías para detectar la diferencia que te interese.</p>
 
             <h3>Relación con el intervalo de confianza</h3>
@@ -377,7 +375,7 @@
 
             <h3>Tamaño del efecto</h3>
             <p>En datos apareados, el tamaño del efecto más habitual es \(d_z = (\bar{d} - \mu_{d0})/s_d\), que expresa la diferencia media en desviaciones típicas de las diferencias. Ojo al compararlo con la d de Cohen de dos grupos independientes: \(d_z\) suele ser mucho mayor para el mismo cambio, porque \(s_d\) es menor que la desviación típica de los datos originales. En el ejemplo 2, \(d_z \approx 1{,}90\).</p>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -404,7 +402,7 @@
                 <li><a href="contraste-hipotesis-proporciones-apareadas.html">Proporciones apareadas (McNemar)</a></li>
               </ul>
             </section>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Cuándo se usa el test t para medias apareadas?</strong> Cuando cada dato de una condición tiene su pareja en la otra: el mismo sujeto medido antes y después, dos tratamientos en el mismo sujeto o parejas emparejadas por características relevantes.</li>
                 <li><strong>¿En qué se diferencia del contraste de dos medias independientes?</strong> Trabaja con la diferencia dentro de cada pareja, lo que elimina la variabilidad entre sujetos. Si las dos mediciones están correlacionadas, como es habitual, es mucho más potente.</li>
@@ -417,6 +415,7 @@
                 <li><strong>¿Cuántas parejas necesito?</strong> Depende del cambio que quieras detectar, de la desviación típica de las diferencias y de la potencia deseada. Calcúlalo con la calculadora de tamaño muestral para medias apareadas.</li>
             </ul>
             <p class="external-ref">Referencia: <a href="https://es.wikipedia.org/wiki/Prueba_t_de_Student" target="_blank" rel="noopener noreferrer">Prueba t de Student</a> — Wikipedia</p>
+            </details>
         </section>
 
     </main>

@@ -253,7 +253,7 @@
             <li><strong>β (beta):</strong> shape parameter that controls behavior near x = 1. Must satisfy β &gt; 0.</li>
             <li><strong>x:</strong> value of the proportion or probability, on the interval [0, 1].</li>
         </ul>
-        <h3>Worked example</h3>
+        <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
         <p><strong>Situation:</strong> In a quality control trial, the proportion of conforming units \(X\) is modeled with a Beta distribution with parameters \(\alpha = 2\) and \(\beta = 5\). This choice reflects a moderate initial belief: most of the density lies at low values of \(X\), with mean \(\alpha/(\alpha+\beta) = 2/7 \approx 0.286\).</p>
         <p><strong>Question 1:</strong> What is the probability that the conformance rate is 0.3 or less, \(P(X \leq 0.3)\)?</p>
         <p><strong>Solution:</strong> We evaluate the CDF of Beta(2, 5) at \(x = 0.3\) using the regularized incomplete beta function \(I_{0.3}(2,5)\):
@@ -264,6 +264,7 @@
         \[ \text{mode} = \frac{\alpha - 1}{\alpha + \beta - 2} = \frac{2 - 1}{2 + 5 - 2} = \frac{1}{5} = 0.2 \]
         The most likely value of the conformance proportion under this model is <strong>0.2</strong> (20%).</p>
         <p><strong>Interpretation:</strong> The mode of 0.2 lies below the mean of 0.286, which reflects the right skew of this beta distribution. As more data are observed, the parameters \(\alpha\) and \(\beta\) are updated (Bayesian analysis) and the distribution narrows toward the true value of the rate.</p>
+        </details>
     </article>
         <section class="card content-card">
             <h3>How to interpret the result</h3>
@@ -280,13 +281,14 @@
                 <li><a href="poisson.html">Poisson distribution calculator</a></li>
               </ul>
             </section>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>Why is its support the interval [0, 1]?</strong> Because it is designed to model quantities that are proportions or probabilities: conversion rates, defect percentages, shares. Any bounded variable can be rescaled to [0, 1] to use it.</li>
                 <li><strong>How should I interpret α and β?</strong> They act as pseudo-counts: α plays the role of observed successes and β of failures. The mean is α/(α + β), and the larger α + β, the more concentrated the distribution.</li>
                 <li><strong>Why is it central to Bayesian statistics?</strong> Because it is the conjugate prior of the Bernoulli and binomial: if the prior on p is Beta(α, β) and you observe k successes in n trials, the posterior is Beta(α + k, β + n − k), with no numerical integration needed.</li>
             </ul>
             <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Beta_distribution" target="_blank" rel="noopener noreferrer">Beta distribution</a> — Wikipedia</p>
+            </details>
         </section>
 
     </main>

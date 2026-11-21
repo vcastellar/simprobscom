@@ -223,7 +223,7 @@
             <p>En un diseño apareado se mide la misma unidad experimental en dos condiciones (antes/después, tratamiento/control cruzado, ojo derecho/izquierdo). El contraste de interés no es la diferencia de medias de dos grupos independientes, sino la <strong>media de las diferencias individuales</strong> \(\bar{d} = \bar{X}_1 - \bar{X}_2\).</p>
             <p>La ventaja clave del diseño apareado es que elimina la variabilidad entre individuos, que suele ser la mayor fuente de ruido. Por eso, el parámetro relevante es \(\sigma_d\) (desviación estándar de las diferencias intraindividuales), que generalmente es mucho menor que \(\sigma\) de cada grupo por separado. Esto se traduce en muestras significativamente más pequeñas comparado con el diseño de dos grupos independientes.</p>
             <p>La relación entre \(\sigma_d\) y las desviaciones estándar de cada medición es: \(\sigma_d^2 = \sigma_1^2 + \sigma_2^2 - 2\rho\sigma_1\sigma_2\), donde \(\rho\) es la correlación entre ambas mediciones. Cuanto mayor sea \(\rho\), menor será \(\sigma_d\) y más eficiente el diseño apareado.</p>
-            <details class="fold fold-sub"><summary><h3>Fórmula de tamaño muestral</h3></summary>
+            <h3>Fórmula de tamaño muestral</h3>
             <p class="formula-line">\( n = \left\lceil\left(\frac{(Z_{\alpha/2}+Z_\beta)\,\sigma_d}{\Delta}\right)^2\right\rceil \)</p>
             <ul>
                 <li><strong>n</strong>: número de pares (individuos o unidades, no observaciones totales).</li>
@@ -231,7 +231,6 @@
                 <li><strong>\(\Delta\)</strong>: diferencia media mínima que quieres detectar.</li>
                 <li><strong>\(Z_{\alpha/2}\)</strong> y <strong>\(Z_\beta\)</strong>: cuantiles normales para alfa bilateral y potencia; en un contraste unilateral, \(Z_{\alpha}\) sustituye a \(Z_{\alpha/2}\).</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>Configuración rápida</h3></summary>
             <ul>
                 <li><strong>σd:</strong> estímala de un piloto apareado (mide diferencias en cada par) o de la literatura. <em>No</em> uses las σ individuales de cada grupo por separado.</li>
@@ -269,10 +268,11 @@
                 <li>Evaluaciones de cambio de habilidad, peso, presión arterial, etc.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) es el <strong>número mínimo de sujetos</strong>, cada uno de los cuales aporta dos mediciones (antes/después, o condición A/condición B). El número total de observaciones es \(2n\), pero el número de unidades estadísticas independientes sigue siendo \(n\). Redondea siempre hacia arriba y aplica el ajuste por pérdidas: si esperas un 15 % de abandono entre la primera y la segunda medición, recluta \(\lceil n / 0{,}85 \rceil\) sujetos en la primera fase.</p>
                 <p>El parámetro clave y más delicado es \(\sigma_d\), la <strong>desviación estándar de las diferencias</strong> intraindividuales, que no debe confundirse con las desviaciones estándar de cada medición por separado. Si se usa \(\sigma\) de una sola medición en lugar de \(\sigma_d\), el \(n\) calculado puede estar sobreestimado o subestimado dependiendo de la correlación entre ambas medidas: cuando la correlación intraindividual \(\rho\) es alta, \(\sigma_d \approx \sigma\sqrt{2(1-\rho)}\) es considerablemente menor que \(\sigma\) y el diseño apareado exige muchos menos sujetos que el diseño independiente. Haz un <em>análisis de sensibilidad</em> con \(\sigma_d \pm 25\,\%\) y usa el \(n\) mayor.</p>
-                <p>Si el \(n\) calculado resulta muy pequeño (&lt; 15 pares), verifica que la distribución de las diferencias sea aproximadamente normal, ya que el test t para medidas repetidas se basa en ese supuesto. Con muy pocos pares, considera el test de Wilcoxon para muestras relacionadas. Cuando \(n\) sea inasumiblemente grande, revisa si la diferencia mínima detectable \(\delta\) es prácticamente relevante o si puede relajarse. Con los datos recogidos, usa la <a href="contraste-hipotesis-medias-apareadas.html">calculadora de contraste para medias apareadas</a> para el análisis principal.</p>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
+            <p>Si el \(n\) calculado resulta muy pequeño (&lt; 15 pares), verifica que la distribución de las diferencias sea aproximadamente normal, ya que el test t para medidas repetidas se basa en ese supuesto. Con muy pocos pares, considera el test de Wilcoxon para muestras relacionadas. Cuando \(n\) sea inasumiblemente grande, revisa si la diferencia mínima detectable \(\delta\) es prácticamente relevante o si puede relajarse. Con los datos recogidos, usa la <a href="contraste-hipotesis-medias-apareadas.html">calculadora de contraste para medias apareadas</a> para el análisis principal.</p>
             </details>
         </section>
 
@@ -291,13 +291,14 @@
                 <li>Wikipedia (en): <a href="https://en.wikipedia.org/wiki/Crossover_study" target="_blank" rel="noopener">Crossover study</a> — diseños cruzados y consideraciones de orden.</li>
                 <li>Cohen, J. (1988). <em>Statistical Power Analysis for the Behavioral Sciences</em> (2.ª ed.). Lawrence Erlbaum. — capítulo sobre la t de diferencias correladas.</li>
             </ul>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Por qué σd y no σ de cada grupo?</strong> Porque el análisis opera sobre las diferencias intraindividuales, no sobre las medias grupales. Usar σ individual sobreestimaría σd si los individuos son heterogéneos.</li>
                 <li><strong>¿Cómo obtengo σd sin piloto?</strong> Si conoces σ individual y la correlación esperada ρ entre mediciones: σd ≈ σ·√(2(1−ρ)). Para ρ = 0,7 y σ = 10 → σd ≈ 7,7.</li>
                 <li><strong>¿Cuándo conviene diseño apareado frente a dos grupos?</strong> Siempre que la correlación entre mediciones sea positiva (ρ &gt; 0) y puedas aplicar ambas condiciones al mismo individuo sin efecto arrastre.</li>
                 <li><strong>¿El resultado es exacto?</strong> Es la aproximación normal; para n pequeño considera usar cuantiles t con n−1 grados de libertad de forma iterativa.</li>
             </ul>
+            </details>
         </section>
 
     </main>

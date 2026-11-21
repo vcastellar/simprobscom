@@ -227,7 +227,7 @@
             <p><strong>Fisher's exact test</strong> is used to test independence between two binary variables in a 2×2 contingency table. It's the preferred method when the expected frequencies in some cell are below 5, or when the total sample size is small — situations where the asymptotic chi-square approximation may not be valid.</p>
             <p>Since it's an exact test based on the hypergeometric distribution, calculating its power analytically would require enumerating the entire distribution of possible tables, which is computationally expensive for general use. The standard practical solution is to use the <strong>Fleiss (1981) approximation</strong> for two independent proportions, followed by the <strong>Casagrande and Pike (1978) continuity correction</strong>, which adjusts the sample size to compensate for the discrete nature of the exact test.</p>
             <p>This approximation produces results very similar to those obtained by simulation and is the standard recommendation in reference texts such as Fleiss, Levin and Paik (2003).</p>
-            <details class="fold fold-sub"><summary><h3>Formula used</h3></summary>
+            <h3>Formula used</h3>
             <p>Let \(p_1\) be the proportion in group 1, \(p_2\) the proportion in group 2, \(r = n_2/n_1\) the size ratio, and \(\bar{p} = (p_1 + r\,p_2)/(1+r)\) the pooled weighted proportion.</p>
 
             <p><strong>Step 1 — Fleiss approximation (without correction):</strong></p>
@@ -243,7 +243,6 @@
                 <li><strong>\(\bar{p}\):</strong> pooled weighted proportion; represents the proportion under \(H_0\) if the groups were equal.</li>
                 <li><strong>Continuity correction:</strong> increases n to compensate for the discretization of the exact test.</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>Quick settings</h3></summary>
             <ul>
                 <li><strong>p₁ and p₂:</strong> enter the proportions you expect to observe in each group. The difference \(|p_1 - p_2|\) is the effect to detect. Larger differences require a smaller sample.</li>
@@ -271,10 +270,11 @@
                 <li>The sample size is obtained with the Fleiss approximation and rounded up.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
                 <p>The values \(n_1\) and \(n_2\) are the <strong>minimum sizes per group</strong> needed to detect the difference between proportions \(p_1\) and \(p_2\) using Fisher's exact test with the specified power and \(\alpha\) level. The total to recruit is \(N = n_1 + n_2\). Always round up and add a margin for attrition: divide each \(n_i\) by \((1 - \text{dropout rate})\). Fisher's exact test is appropriate precisely when some expected frequency falls below 5; if all expected frequencies are \(\geq 5\), Pearson's chi-square is equally valid and generally more familiar to reviewers.</p>
                 <p>The sample size calculation for Fisher's test is based on the hypergeometric distribution, which is discrete. This means the test's actual significance level can be lower than the nominal \(\alpha\) (the test is conservative), and the actual power may differ slightly from the planned value for the exact \(n\) calculated. In practice, it's recommended to add a couple of extra units to the \(n\) per group to compensate for the discretization. Run a <em>sensitivity analysis</em> by varying \(p_1\) and \(p_2\) by ±0.05: when both proportions are very extreme (\(&lt;0.05\) or \(&gt;0.95\)), the exact test becomes more important relative to chi-square and the \(n\) may differ from the estimate given by the approximate normal formula.</p>
-                <p>If the calculated \(n\) is so large that the expected frequencies in all cells would comfortably exceed 5, consider whether the chi-square test wouldn't be more appropriate (and plan the \(n\) with the <a href="tamano-muestral-dos-proporciones.html">sample size calculator for two proportions</a>). When the \(n\) is unfeasible, check whether the minimum detectable difference \(|p_1 - p_2|\) is realistic or could be widened. Once the data has been collected, run the analysis with the <a href="contraste-hipotesis-dos-proporciones.html">hypothesis test calculator for two proportions</a>, choosing Fisher's test if the expected frequencies are low.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
+            <p>If the calculated \(n\) is so large that the expected frequencies in all cells would comfortably exceed 5, consider whether the chi-square test wouldn't be more appropriate (and plan the \(n\) with the <a href="tamano-muestral-dos-proporciones.html">sample size calculator for two proportions</a>). When the \(n\) is unfeasible, check whether the minimum detectable difference \(|p_1 - p_2|\) is realistic or could be widened. Once the data has been collected, run the analysis with the <a href="contraste-hipotesis-dos-proporciones.html">hypothesis test calculator for two proportions</a>, choosing Fisher's test if the expected frequencies are low.</p>
             </details>
         </section>
 
@@ -296,13 +296,14 @@
         </section>
 
         <section class="card content-card">
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>When should I use Fisher's exact test instead of chi-square?</strong> When some expected frequency in the 2×2 table is below 5, or when the total sample size is small (N &lt; 20–25). In large samples, both tests converge to the same result.</li>
                 <li><strong>Why does the continuity correction increase the sample size?</strong> Because Fisher's exact test operates on the discrete hypergeometric distribution. The correction adjusts n to better approximate the actual power of the discrete test, rather than the continuous asymptotic power; it is still an approximation, so verify the result by simulation or exact enumeration if the study is critical.</li>
                 <li><strong>Is the calculated sample size exact?</strong> No; it's an approximation. The actual value depends on the true parameters and on the discretization of the hypergeometric distribution. For confirmation in critical studies, supplement with Monte Carlo simulation.</li>
                 <li><strong>Can I use this calculator for a case-control design?</strong> Yes. Enter the proportion of exposed cases as \(p_1\), the proportion of exposed controls as \(p_2\), and set \(r\) to the desired ratio of controls per case.</li>
             </ul>
+            </details>
         </section>
     </main>
 

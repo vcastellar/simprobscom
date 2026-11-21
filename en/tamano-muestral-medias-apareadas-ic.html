@@ -204,7 +204,7 @@
             <p>This calculator determines the minimum number of pairs of observations needed to estimate the population mean difference \(\mu_d\) with a maximum absolute margin of error \(E\) and a given confidence level. It is used when the study design pairs each observation in one group with a specific observation in the other: a before/after measurement on the same subjects, two methods applied to the same samples, or pairs matched on relevant characteristics.</p>
             <p>The formula is mathematically identical to the one for a single mean, but applied to the differences. The key parameter you need to know beforehand is \(\sigma_d\), the standard deviation of the individual differences \(d_i = x_{i,\text{after}} - x_{i,\text{before}}\). This value is not the standard deviation of each group separately, but the spread of the individual changes.</p>
             <p>The formula uses the normal quantile Z, which assumes that \(\sigma_d\) is known or that the sample is large enough. For small samples (&lt; 30 pairs) with unknown \(\sigma_d\), the real n may be somewhat larger; you can iterate by replacing Z with the t quantile with n−1 degrees of freedom.</p>
-            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
+            <h3>Sample size formula</h3>
             <p class="formula-line">\( n = \left(\dfrac{Z \cdot \sigma_d}{E}\right)^2 \)</p>
             <ul>
                 <li><strong>n</strong>: minimum number of pairs (rounded up to the nearest integer).</li>
@@ -212,7 +212,6 @@
                 <li><strong>\(\sigma_d\)</strong>: standard deviation of the individual differences \(d_i\).</li>
                 <li><strong>E</strong>: maximum tolerable absolute margin of error for \(\mu_d\) (in the same units as the differences).</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>Relationship between σ_d, E and n</h3></summary>
             <p>The sample size grows quadratically with the required precision: halving E quadruples n. It also grows quadratically with \(\sigma_d\): if the variability of the individual changes doubles, you need four times as many pairs. A key feature of the paired design is that \(\sigma_d\) is usually smaller than the standard deviation of each group separately when the measurements are correlated, which makes this design more efficient than comparing two independent groups.</p>
             </details>
@@ -249,10 +248,11 @@
                 <li>Quality control with samples measured by two operators or at two points in time.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
                 <p>The value \(n\) is the <strong>minimum number of valid pairs</strong> (subjects with both measurements complete) needed so that the confidence interval for the within-subject mean difference has a maximum half-width of \(E\) at the specified confidence level. Always round up. If you expect some pairs to be incomplete (loss of one of the two measurements), add a margin: divide \(n\) by \((1 - \text{loss rate})\) to get the number of pairs you should start with.</p>
                 <p>The most influential and hardest-to-know-in-advance parameter is \(\sigma_d\), the <strong>standard deviation of the paired differences</strong>. This quantity is not the standard deviation of each individual measurement, but the variability of the difference \(d_i = x_{i,\text{post}} - x_{i,\text{pre}}\) for each subject. If you have pilot data, estimate it directly from the observed differences. In the absence of prior data, use the relationship \(\sigma_d \approx \sigma\sqrt{2(1-\rho)}\) where \(\sigma\) is the standard deviation of a single measurement and \(\rho\) is the expected test-retest correlation. Run a sensitivity analysis with \(\sigma_d - 25\%\), \(\sigma_d\) and \(\sigma_d + 25\%\) and plan using the largest value.</p>
-                <p>The advantage of the paired design over independent groups is that it eliminates between-subject variability, which can substantially reduce \(n\) when the within-subject correlation is high (\(\rho > 0.5\)). If the resulting CI will be used to make a clinical decision, check that the value of \(E\) has a clear practical interpretation (e.g., the minimum clinically relevant difference). Once you have collected the pairs, use the <a href="tamano-muestral-medias-apareadas.html">hypothesis-test calculator for paired means</a> if you want to run a hypothesis test, or build the CI directly with the <a href="intervalo-confianza-diferencia-medias.html">confidence interval calculator for the difference of means</a>.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
+            <p>The advantage of the paired design over independent groups is that it eliminates between-subject variability, which can substantially reduce \(n\) when the within-subject correlation is high (\(\rho > 0.5\)). If the resulting CI will be used to make a clinical decision, check that the value of \(E\) has a clear practical interpretation (e.g., the minimum clinically relevant difference). Once you have collected the pairs, use the <a href="tamano-muestral-medias-apareadas.html">hypothesis-test calculator for paired means</a> if you want to run a hypothesis test, or build the CI directly with the <a href="intervalo-confianza-diferencia-medias.html">confidence interval calculator for the difference of means</a>.</p>
             </details>
         </section>
 
@@ -273,13 +273,14 @@
                 <li>Machin, D., Campbell, M. J., Tan, S. B., &amp; Tan, S. H. (2018). <em>Sample Sizes for Clinical, Laboratory and Epidemiology Studies</em> (4th ed.). Wiley-Blackwell.</li>
                 <li>Wikipedia: <a href="https://en.wikipedia.org/wiki/Sample_size_determination" target="_blank" rel="noopener">Sample size determination</a> — derivation for means and other variants.</li>
             </ul>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>What happens if σ_d is larger than expected?</strong> The real margin of error will be larger than E. That's why it's wise to be conservative when estimating σ_d and, if in doubt, run a sensitivity analysis with different values.</li>
                 <li><strong>When should I use t instead of Z?</strong> When n &lt; 30 and σ_d is unknown. Iterate: calculate n with Z, then replace Z with t(n−1) and recalculate until convergence.</li>
                 <li><strong>Does this calculation work for hypothesis testing?</strong> Not directly. To detect a difference with a given power and significance level, use the <a href="tamano-muestral-medias-apareadas.html">paired means calculator for hypothesis testing</a>.</li>
                 <li><strong>Why can the paired design need fewer subjects than two independent groups?</strong> Because \(\sigma_d\) is usually smaller than \(\sqrt{\sigma_1^2 + \sigma_2^2}\) when the measurements within each pair are positively correlated. The higher that correlation, the more efficient the paired design is.</li>
             </ul>
+            </details>
         </section>
 
     </main>

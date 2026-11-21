@@ -252,9 +252,10 @@
 
 
     <section class="card content-card">
-      <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
+      <h3>Cómo interpretar el resultado</h3>
       <p>El resultado central del análisis bayesiano es <strong>P(B &gt; A)</strong>: la probabilidad posterior de que la tasa de conversión de B sea genuinamente superior a la de A, dado lo observado. A diferencia del p-valor frecuentista, esta probabilidad es directamente interpretable: si P(B &gt; A) = 0.97, significa que, con los datos actuales, hay un 97 % de credibilidad en que B supera a A. En la práctica, valores por encima de <strong>0.95</strong> suelen considerarse suficiente evidencia para tomar la decisión de implementar la variante B, aunque el umbral exacto depende del contexto y del coste relativo de los errores posibles.</p>
       <p>Las <strong>distribuciones posteriores</strong> representan el conocimiento actualizado sobre la tasa de conversión de cada variante tras combinar la prior con los datos del experimento. Siguiendo el modelo Beta-Binomial, la posterior de A es \(\text{Beta}(\alpha_0 + x_A,\; \beta_0 + n_A - x_A)\) y la de B es \(\text{Beta}(\alpha_0 + x_B,\; \beta_0 + n_B - x_B)\). La media de cada posterior es la estimación puntual de la tasa real; cuando las dos distribuciones se solapan poco en el gráfico, la diferencia entre variantes es clara; cuando el solapamiento es grande, la incertidumbre es alta y conviene seguir recogiendo datos.</p>
+      <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
       <p>El <strong>intervalo de credibilidad</strong> al nivel seleccionado (90 %, 95 % o 99 %) indica el rango de valores de la tasa de conversión que contiene el nivel de credibilidad seleccionado de la masa posterior. A diferencia del intervalo de confianza frecuentista, puede interpretarse directamente: con un nivel del 95 %, "hay un 95 % de probabilidad de que la tasa real de B esté entre estos dos valores" (y de forma análoga para el 90 % o el 99 %). Si los intervalos de A y B no se solapan, la evidencia de diferencia es muy sólida. El <strong>lift esperado</strong> complementa este análisis mostrando la mejora relativa media de B sobre A según las posteriores, un indicador de relevancia práctica más directo que el p-valor.</p>
       </details>
     </section>
@@ -268,13 +269,14 @@
           <li><a href="beta.html">Distribución Beta</a></li>
         </ul>
       </section>
-      <h3>Preguntas frecuentes</h3>
+      <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
       <ul>
         <li><strong>¿Qué prior usar si no tengo datos históricos?</strong> Beta(1, 1), la prior uniforme. Si tienes tasas de conversión históricas, puedes parametrizar la prior como si tuvieras α₀ éxitos y β₀ fracasos previos.</li>
         <li><strong>¿Cuántas muestras Monte Carlo usa la calculadora?</strong> 30 000. El error estándar de la estimación de P(B &gt; A) es aproximadamente √(p(1−p)/30 000): ±0,003 para valores en torno a 0,5 y ±0,001 para valores en torno a 0,97.</li>
         <li><strong>¿Puedo usar esto con tamaños muestrales pequeños?</strong> Sí. El cálculo bayesiano no depende de aproximaciones asintóticas, por lo que sigue siendo válido con muestras pequeñas, donde el test Z puede ser impreciso. A cambio, con pocos datos el resultado depende más de la prior elegida, así que conviene comprobar cómo cambia con priors razonables alternativas.</li>
         <li><strong>¿Cuál es la diferencia entre P(B &gt; A) = 0.97 y p-valor = 0.03?</strong> El p-valor mide la probabilidad de observar datos tan extremos bajo H₀; P(B &gt; A) mide directamente cuánto crees que B supera a A dado lo que has observado. La segunda es más intuitiva.</li>
       </ul>
+      </details>
     </section>
   </main>
 

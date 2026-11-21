@@ -289,7 +289,7 @@
             <p>The logic resembles a trial. You start from a <strong>null hypothesis</strong> \(H_0\) ("the mean is \(\mu_0\)"), which stands as long as there is no evidence against it, just like the presumption of innocence. Then you look at how far the sample mean \(\bar{x}\) is from \(\mu_0\) and ask: if \(H_0\) were true, would a difference like this be unusual by chance alone? If it would be very unusual, \(H_0\) is rejected in favour of the <strong>alternative hypothesis</strong> \(H_1\); if not, the data are compatible with \(H_0\) and it is not rejected.</p>
             <p>There are two scenarios. If you know the population standard deviation \(\sigma\), you use the <strong>z-test</strong>; if \(\sigma\) is unknown and is estimated with the sample standard deviation \(s\) — the usual case in practice — you use <strong>Student's t-test</strong>, which accounts for the extra uncertainty of estimating variability from the sample itself.</p>
 
-            <details class="fold fold-sub"><summary><h3>Hypotheses and test statistic</h3></summary>
+            <h3>Hypotheses and test statistic</h3>
             <p class="formula-line">\(H_0: \mu = \mu_0\)</p>
             <p class="formula-line">\(H_1: \mu \neq \mu_0\), \(\mu > \mu_0\) or \(\mu < \mu_0\)</p>
             <p class="formula-line">If \(\sigma\) is known: \( z = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}} \)</p>
@@ -302,7 +302,6 @@
                 <li><strong>\(n\)</strong>: sample size.</li>
             </ul>
             <p>The denominator, \(\sigma/\sqrt{n}\) or \(s/\sqrt{n}\), is the <strong>standard error</strong> of the mean: it measures how much \(\bar{x}\) varies from one sample to another. The statistic therefore expresses <em>how many standard errors</em> the observed mean lies from the hypothesized value. A statistic close to 0 means the data fit \(H_0\); the larger it is in absolute value, the harder it is to attribute the difference to chance. That is why the same difference \(\bar{x}-\mu_0\) carries more weight with a large sample or with tightly clustered data.</p>
-            </details>
         </section>
 
         <section class="card content-card">
@@ -417,9 +416,10 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
             <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) means that, if the population mean were really \(\mu_0\), it would be very unlikely to have observed a sample value as far off as the one obtained. It is concluded that there is statistical evidence that \(\mu \neq \mu_0\) (or &gt; / &lt;, depending on the chosen alternative). However, rejecting \(H_0\) does not mean the difference is large or important: with very large samples even a difference of a few tenths can turn out to be significant.</p>
             <p><strong>Failing to reject \(H_0\)</strong> (p-value ≥ α) does not prove that the mean equals \(\mu_0\); it only indicates that the data are compatible with that value at the chosen significance level. Low power — due to a small sample or high variance — can prevent detecting real differences. Before concluding "there is no effect," check the power of the test and the confidence interval.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
             <p>Regarding the <strong>z or t statistic</strong> shown by the tool: its magnitude indicates how many standard errors \(\bar{x}\) is away from \(\mu_0\). In the chart, the green zone is the non-rejection region, the red zones are the critical regions and the amber line marks the observed statistic. If the amber line falls in red, p-value &lt; α.</p>
 
             <h3>The two possible errors</h3>
@@ -435,7 +435,7 @@
 
             <h3>Statistical significance and practical relevance</h3>
             <p>A statistically significant difference is not necessarily one that matters. To judge its magnitude, use the <strong>effect size</strong>; the most common one here is Cohen's d, \(d = (\bar{x}-\mu_0)/s\), which expresses the difference in standard deviations. As a rough guide, 0.2 is considered a small effect, 0.5 medium and 0.8 large, although what counts is which difference is relevant in your problem: 3 g may be irrelevant in a bag of cement and critical in a medicine.</p>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -462,7 +462,7 @@
                 <li><a href="studentt.html">Student's t distribution</a> and <a href="tabla-t-student.html">t table</a></li>
               </ul>
             </section>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>When should I use z and when t?</strong> Use z if you know the population \(\sigma\); use t if \(\sigma\) is unknown and you estimate it from the sample, which is the most common case.</li>
                 <li><strong>Is this the same as the one-sample t-test?</strong> Yes. "Hypothesis test for a mean with unknown \(\sigma\)" and "one-sample t-test" are names for the same procedure.</li>
@@ -476,6 +476,7 @@
                 <li><strong>What is the minimum detectable effect (MDE)?</strong> It is the smallest difference from \(\mu_0\) that your study is designed to detect with a given power (for example, 80%) and a fixed significance level \(\alpha\). If the true effect is smaller than the MDE, the test may fail to detect it due to lack of power.</li>
             </ul>
             <p class="external-ref">References: <a href="https://en.wikipedia.org/wiki/Student%27s_t-test" target="_blank" rel="noopener noreferrer">Student's t-test</a> and <a href="https://en.wikipedia.org/wiki/Statistical_hypothesis_testing" target="_blank" rel="noopener noreferrer">Statistical hypothesis testing</a> — Wikipedia</p>
+            </details>
         </section>
 
     </main>

@@ -223,7 +223,7 @@
             <h3>Explicación</h3>
             <p>Cuando estimas una media poblacional y el tamaño total de la población N es conocido y finito, la fórmula estándar sobreestima la muestra necesaria. El <strong>factor de corrección por población finita</strong> (FPC) aprovecha el hecho de que muestrear una fracción grande de la población aporta más información de la que predice la fórmula infinita.</p>
             <p>La corrección es relevante cuando n₀/N &gt; 5 %. Por ejemplo, para N = 1 000 y n₀ = 139, la fracción de muestreo es 13,9 %, lo que justifica la corrección. Si N &gt; 10 000 y n₀ es pequeño, el ahorro es mínimo y puedes usar la <a href="tamano-muestral-una-media.html">fórmula estándar para una media</a>.</p>
-            <details class="fold fold-sub"><summary><h3>Fórmula de tamaño muestral</h3></summary>
+            <h3>Fórmula de tamaño muestral</h3>
             <p class="formula-line">\( n_0 = \left(\frac{Z\,\sigma}{E}\right)^2 \)</p>
             <p class="formula-line">\( n = \frac{n_0}{1 + \dfrac{n_0-1}{N}} \)</p>
             <ul>
@@ -233,7 +233,6 @@
                 <li><strong>E</strong>: margen de error absoluto máximo tolerable.</li>
                 <li><strong>N</strong>: tamaño total conocido de la población.</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>Configuración rápida</h3></summary>
             <ul>
                 <li><strong>σ:</strong> obtén de datos históricos, un piloto o la literatura. Si no la tienes, usa rango/4 como estimación conservadora.</li>
@@ -268,10 +267,11 @@
                 <li>Inventario: peso o valor medio de artículos en un almacén conocido.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) es el <strong>tamaño muestral mínimo corregido por la finitud de la población</strong> para estimar una media con el margen de error \(E\) y el nivel de confianza especificados. La corrección por población finita (FPC) reduce el \(n\) respecto al caso de población infinita: cuanto mayor es la fracción de muestreo \(f = n/N\), mayor es el ahorro. Si \(f < 5\,\%\), la FPC es prácticamente irrelevante (reduce \(n\) menos de un 5 %) y la fórmula estándar sería suficiente; si \(f > 20\,\%\), el ahorro es sustancial y la corrección resulta necesaria para no sobredimensionar el estudio.</p>
                 <p>Es fundamental que \(N\) represente el <strong>tamaño real de la población objetivo</strong>, no el marco muestral aproximado ni la población de referencia general. Por ejemplo, si el estudio se dirige a los trabajadores de una empresa concreta con 450 empleados, \(N = 450\); usar un \(N\) inflado (como la plantilla de todas las empresas del sector) eliminaría la ventaja de la corrección. Realiza un análisis de sensibilidad probando \(N \pm 10\,\%\) para evaluar cuánto afecta una estimación imprecisa del tamaño poblacional al \(n\) resultante; con poblaciones grandes la sensibilidad es baja, pero con poblaciones pequeñas puede ser relevante.</p>
-                <p>Si prevés tasas de no respuesta o exclusión, calcula el \(n\) de reclutamiento dividiendo el \(n\) corregido entre \((1 - \text{tasa de pérdida})\), siempre verificando que el resultado no supere \(N\). Si tras el ajuste el tamaño muestral necesario supera el 80 % de la población, plantéate un <em>censo</em> en lugar de un muestreo. Con los datos recogidos, usa la <a href="intervalo-confianza-media.html">calculadora de intervalo de confianza para la media</a> aplicando también la FPC para obtener el IC real del estudio.</p>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
+            <p>Si prevés tasas de no respuesta o exclusión, calcula el \(n\) de reclutamiento dividiendo el \(n\) corregido entre \((1 - \text{tasa de pérdida})\), siempre verificando que el resultado no supere \(N\). Si tras el ajuste el tamaño muestral necesario supera el 80 % de la población, plantéate un <em>censo</em> en lugar de un muestreo. Con los datos recogidos, usa la <a href="intervalo-confianza-media.html">calculadora de intervalo de confianza para la media</a> aplicando también la FPC para obtener el IC real del estudio.</p>
             </details>
         </section>
 
@@ -291,13 +291,14 @@
                 <li>Wikipedia (en): <a href="https://en.wikipedia.org/wiki/Simple_random_sample" target="_blank" rel="noopener">Simple random sample</a> — fundamentos del muestreo aleatorio sin reemplazamiento.</li>
                 <li>Cochran, W. G. (1977). <em>Sampling Techniques</em> (3.ª ed.). Wiley. — referencia clásica del muestreo en poblaciones finitas.</li>
             </ul>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Cuándo merece la pena aplicar la corrección?</strong> Cuando n₀/N &gt; 5 %. Con fracciones menores, el ahorro es inferior al 5 % de observaciones.</li>
                 <li><strong>¿Qué pasa si N no se conoce exactamente?</strong> Usa la fórmula sin corrección; sobreestimará la muestra pero el resultado siempre será válido.</li>
                 <li><strong>¿Puede n ser mayor que N?</strong> No: la corrección garantiza n &lt; N. Si n₀ ≥ N, el censo completo es necesario.</li>
                 <li><strong>¿Por qué no usar siempre la corrección?</strong> Porque requiere conocer N con exactitud. Si N es incierto o variable, la corrección puede ser engañosa.</li>
             </ul>
+            </details>
         </section>
 
     </main>

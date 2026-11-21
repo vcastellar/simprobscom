@@ -250,7 +250,7 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>La idea: comparar dos fuentes de variabilidad</h3></summary>
+            <h3>La idea: comparar dos fuentes de variabilidad</h3>
             <p>Aunque su objetivo es comparar medias, el ANOVA lo hace comparando varianzas, de ahí su nombre. La variabilidad total de los datos se descompone en dos partes:</p>
             <ul>
                 <li><strong>Variabilidad entre grupos</strong>: cuánto se separan las medias de los grupos de la media global. Refleja el efecto del factor, más el ruido.</li>
@@ -263,8 +263,7 @@
                 <p class="formula-line">\(F = \dfrac{CM_{\text{entre}}}{CM_{\text{dentro}}} = \dfrac{SC_{\text{entre}}/(k-1)}{SC_{\text{dentro}}/(N-k)}\)</p>
             </div>
             <p>Aquí \(k\) es el número de grupos, \(n_j\) el tamaño del grupo \(j\), \(N\) el total de datos, \(\bar{x}_j\) la media del grupo \(j\) y \(\bar{x}\) la media global. Las <strong>medias cuadráticas</strong> (CM) son las sumas de cuadrados divididas por sus grados de libertad. Bajo \(H_0\), el estadístico sigue una distribución F de Snedecor (puedes consultar sus valores críticos en la <a href="tabla-f-snedecor.html">tabla F</a>) con \(k-1\) y \(N-k\) grados de libertad. El contraste es siempre de cola derecha: solo un F grande es evidencia contra \(H_0\).</p>
-
-            <h3>La tabla ANOVA</h3>
+            <details class="fold fold-sub"><summary><h3>La tabla ANOVA</h3></summary>
             <p>Los resultados se presentan en una tabla con una fila por fuente de variabilidad. La calculadora la incluye en «Detalles del cálculo»:</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -279,7 +278,7 @@
                 </table>
             </div>
             <p>\(CM_{\text{dentro}}\) es la varianza combinada de todos los grupos: estima la varianza común \(\sigma^2\) tanto si \(H_0\) es cierta como si no.</p>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -319,18 +318,17 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que al menos una media es distinta de las demás, pero no cuál ni en qué sentido. Mira las medias de cada grupo y aplica una comparación post hoc. Recuerda también que significativo no es lo mismo que importante: con grupos grandes, diferencias pequeñas entre medias dan un F significativo.</p>
             <p><strong>No rechazar \(H_0\)</strong> (p-valor ≥ α) no demuestra que las medias sean iguales: los datos son compatibles con la igualdad, pero puede que el estudio no tuviera potencia suficiente. Pocos datos por grupo o mucha variabilidad dentro de los grupos impiden detectar diferencias reales.</p>
             <p>El <strong>estadístico F</strong> compara la variabilidad entre grupos con la variabilidad dentro de ellos. Un F cercano a 1 indica que las medias se separan lo que cabría esperar por azar; cuanto mayor, más evidencia de que el factor influye. En el gráfico, la zona verde es la región de no rechazo, la roja es la cola crítica y la línea ámbar marca el F observado.</p>
-
-            <h3>Tamaño del efecto: η² y f de Cohen</h3>
+            <details class="fold fold-sub"><summary><h3>Tamaño del efecto: η² y f de Cohen</h3></summary>
             <p>\(\eta^2 = SC_{\text{entre}}/SC_T\) es la proporción de la variabilidad total que explica el factor. Como orientación, 0,01 es un efecto pequeño, 0,06 mediano y 0,14 grande. Con muestras pequeñas, \(\eta^2\) tiende a sobrestimar el efecto real; el omega cuadrado (\(\omega^2\)) corrige ese sesgo.</p>
             <p>Para calcular la potencia y el tamaño muestral se usa la <strong>f de Cohen</strong>, que se obtiene de \(\eta^2\) como \(f = \sqrt{\eta^2/(1-\eta^2)}\) y mide cuánto se separan las medias de los grupos en unidades de la desviación típica dentro de ellos. Las referencias de Cohen son 0,10 (pequeño), 0,25 (mediano) y 0,40 (grande).</p>
 
             <h3>Potencia y efecto mínimo detectable</h3>
             <p>Debajo de la conclusión, la calculadora indica el <strong>tamaño del efecto mínimo detectable</strong>: el menor f de Cohen que, con tus tamaños de grupo, el ANOVA detectaría con un 80 % de probabilidad. Si es mayor que el efecto que te parecería relevante, un resultado no significativo dice poco. Como referencia, con 3 grupos de 20 datos solo se detectan con esa probabilidad efectos grandes (f ≈ 0,41), y para efectos medianos (f = 0,25) hacen falta unos 53 datos por grupo. El enlace del resultado abre la <a href="tamano-muestral-anova.html">calculadora de tamaño muestral para ANOVA</a> con tu número de grupos y tu α, para que calcules el tamaño necesario para el efecto que te interese.</p>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -370,7 +368,7 @@
                 <li><a href="shapiro-wilk-normalidad.html">Test de normalidad de Shapiro-Wilk</a></li>
               </ul>
             </section>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Qué contrasta el ANOVA de un factor?</strong> Si las medias de tres o más grupos independientes son iguales. La hipótesis alternativa es que al menos una media es distinta de las demás.</li>
                 <li><strong>¿El ANOVA prueba que todas las medias son distintas?</strong> No. Un resultado significativo solo indica que al menos una media difiere. Para saber cuáles, aplica comparaciones post hoc como la prueba de Tukey.</li>
@@ -383,6 +381,7 @@
                 <li><strong>¿Cuántos datos por grupo necesito?</strong> Depende del tamaño del efecto que quieras detectar y de la potencia deseada. Para un efecto mediano (f = 0,25) con 3 grupos, α = 0,05 y potencia del 80 %, unos 53 por grupo. Calcúlalo con la calculadora de tamaño muestral para ANOVA.</li>
             </ul>
             <p class="external-ref">Referencia: <a href="https://es.wikipedia.org/wiki/An%C3%A1lisis_de_la_varianza" target="_blank" rel="noopener noreferrer">Análisis de la varianza (ANOVA)</a> — Wikipedia</p>
+            </details>
         </section>
 
     </main>

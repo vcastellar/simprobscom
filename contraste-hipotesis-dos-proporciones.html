@@ -247,7 +247,7 @@
             <p>Es el procedimiento que permite decidir si la proporción de «éxitos» es la misma en dos grupos independientes. Es el contraste detrás de muchísimas preguntas prácticas: ¿convierte más la versión B de la web que la A? ¿Se curan más pacientes con el tratamiento nuevo que con el estándar? ¿Votan igual hombres y mujeres? ¿Hay más defectos en el turno de noche? En cada grupo se cuenta cuántos individuos cumplen la condición, y se compara el porcentaje.</p>
             <p>Se parte de la <strong>hipótesis nula</strong> de que las dos proporciones poblacionales son iguales, \(H_0: p_1 = p_2\), y se mide cuánto se separan las proporciones muestrales \(\hat{p}_1\) y \(\hat{p}_2\). Aunque los grupos fueran idénticos, sus proporciones muestrales nunca coincidirían exactamente; la pregunta es si la diferencia observada es mayor de lo que el azar explica razonablemente.</p>
 
-            <details class="fold fold-sub"><summary><h3>Hipótesis y estadístico</h3></summary>
+            <h3>Hipótesis y estadístico</h3>
             <p class="formula-line">\(H_0: p_1 = p_2\)</p>
             <p class="formula-line">\(H_1: p_1 \neq p_2\), \(p_1 > p_2\) o \(p_1 < p_2\)</p>
             <p class="formula-line">\( z = \dfrac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1-\hat{p})\left(\dfrac{1}{n_1} + \dfrac{1}{n_2}\right)}}, \qquad \hat{p} = \dfrac{x_1 + x_2}{n_1 + n_2} \)</p>
@@ -259,7 +259,6 @@
             </ul>
             <p>El denominador es el error estándar de la diferencia <em>si \(H_0\) fuera cierta</em>. Bajo \(H_0\) los dos grupos comparten la misma proporción, y la mejor estimación de esa proporción común es la combinada \(\hat{p}\), que junta todos los éxitos y todos los individuos. Con muestras suficientemente grandes, el estadístico sigue aproximadamente una normal estándar.</p>
             <p>Este contraste z es equivalente al <a href="contraste-independencia-chi-cuadrado.html">chi-cuadrado de independencia</a> en una tabla 2×2: en el bilateral, \(z^2 = \chi^2\) y los p-valores coinciden. La ventaja del z es que permite contrastes de una cola y da directamente el sentido de la diferencia.</p>
-            </details>
         </section>
 
         <section class="card content-card">
@@ -329,17 +328,16 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que la diferencia entre las proporciones es demasiado grande para atribuirla al azar si los dos grupos fueran iguales. Para valorar si importa, mira la diferencia en puntos porcentuales y su intervalo de confianza.</p>
             <p><strong>No rechazar \(H_0\)</strong> (p-valor ≥ α) no demuestra que las proporciones sean iguales. Si quieres demostrar precisamente que un tratamiento no es peor que otro, el planteamiento correcto es un <a href="contraste-hipotesis-no-inferioridad.html">contraste de no inferioridad</a>.</p>
             <p>En la calculadora, el resultado muestra la decisión con el p-valor, el estadístico z con las dos proporciones y una frase con la conclusión. En el gráfico, la zona verde es la región de no rechazo, las rojas son las regiones críticas y la línea ámbar marca el estadístico observado. En «Detalles del cálculo» tienes la diferencia en puntos, la proporción combinada, el error estándar, el intervalo de confianza y el riesgo relativo.</p>
-
-            <h3>Potencia y diferencia mínima detectable</h3>
+            <details class="fold fold-sub"><summary><h3>Potencia y diferencia mínima detectable</h3></summary>
             <p>Debajo de la conclusión, la calculadora indica la <strong>diferencia mínima detectable</strong>: la menor diferencia real respecto a la proporción del grupo 2 que, con tus tamaños de grupo, el contraste detectaría con un 80 % de probabilidad. Depende mucho de la proporción de partida y del tamaño: con 120 pacientes por grupo solo se detectan con seguridad diferencias de unos 18 puntos, y con 10 000 por grupo, de menos de un punto. El enlace abre la <a href="tamano-muestral-dos-proporciones.html">calculadora de tamaño muestral para dos proporciones</a> con tus proporciones, tu α, la proporción entre los grupos y el tipo de contraste.</p>
 
             <h3>Relación con el intervalo de confianza</h3>
             <p>El otro enlace abre el <a href="intervalo-confianza-diferencia-proporciones.html">intervalo de confianza para la diferencia de proporciones</a> con tus datos. Contraste e intervalo casi siempre coinciden: si el intervalo no contiene el 0, el contraste es significativo. Pueden discrepar en casos límite, porque el contraste usa el error estándar con la proporción combinada y el intervalo de Wald, el de cada grupo.</p>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -366,7 +364,7 @@
                 <li><a href="ab-testing-z-test.html">Test Z para A/B testing</a></li>
               </ul>
             </section>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Qué contrasta?</strong> Si la proporción de éxitos es la misma en dos grupos independientes (H₀: p₁ = p₂), frente a que sean distintas o a que una sea mayor que la otra.</li>
                 <li><strong>¿Por qué se usa la proporción combinada?</strong> Porque, si H₀ es cierta, los dos grupos comparten la misma proporción, y la mejor estimación de esa proporción común junta los datos de ambos.</li>
@@ -378,6 +376,7 @@
                 <li><strong>¿Qué tamaño de muestra necesito?</strong> Depende de las proporciones esperadas, de la diferencia que quieras detectar y de la potencia deseada. Calcúlalo con la calculadora de tamaño muestral para dos proporciones.</li>
             </ul>
             <p class="external-ref">Referencia: <a href="https://en.wikipedia.org/wiki/Two-proportion_Z-test" target="_blank" rel="noopener noreferrer">Two-proportion Z-test</a> — Wikipedia (en inglés)</p>
+            </details>
         </section>
 
     </main>

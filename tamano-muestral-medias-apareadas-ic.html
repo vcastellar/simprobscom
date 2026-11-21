@@ -208,7 +208,7 @@
             <p>Esta calculadora determina el número mínimo de pares de observaciones para estimar la diferencia media poblacional \(\mu_d\) con un margen de error absoluto máximo \(E\) y un nivel de confianza dado. Se usa cuando el diseño empareja cada observación de un grupo con una observación concreta del otro: medición antes/después en los mismos sujetos, dos métodos aplicados a las mismas muestras, o pares emparejados por características relevantes.</p>
             <p>La fórmula es matemáticamente idéntica a la del tamaño muestral para una media, pero aplicada a las diferencias. El parámetro clave que debes conocer de antemano es \(\sigma_d\), la desviación estándar de las diferencias individuales \(d_i = x_{i,\text{después}} - x_{i,\text{antes}}\). Este valor no es la desviación estándar de cada grupo por separado, sino la dispersión de los cambios individuales.</p>
             <p>La fórmula usa el cuantil normal Z, lo que supone que \(\sigma_d\) es conocida o que la muestra es suficientemente grande. Para muestras pequeñas (&lt; 30 pares) con \(\sigma_d\) desconocida, el n real puede ser algo mayor; puedes iterar reemplazando Z por el cuantil t con n−1 grados de libertad.</p>
-            <details class="fold fold-sub"><summary><h3>Fórmula de tamaño muestral</h3></summary>
+            <h3>Fórmula de tamaño muestral</h3>
             <p class="formula-line">\( n = \left(\dfrac{Z \cdot \sigma_d}{E}\right)^2 \)</p>
             <ul>
                 <li><strong>n</strong>: número mínimo de pares (redondeado al entero superior).</li>
@@ -216,7 +216,6 @@
                 <li><strong>\(\sigma_d\)</strong>: desviación estándar de las diferencias individuales \(d_i\).</li>
                 <li><strong>E</strong>: margen de error absoluto máximo tolerable para \(\mu_d\) (en las mismas unidades que las diferencias).</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>Relación entre σ_d, E y n</h3></summary>
             <p>El tamaño muestral crece cuadráticamente con la precisión exigida: reducir E a la mitad cuadruplica n. También crece cuadráticamente con \(\sigma_d\): si la variabilidad de los cambios individuales es el doble, necesitas cuatro veces más pares. Una clave del diseño apareado es que \(\sigma_d\) suele ser menor que la desviación estándar de cada grupo por separado cuando las mediciones están correlacionadas, lo que hace este diseño más eficiente que comparar dos grupos independientes.</p>
             </details>
@@ -253,10 +252,11 @@
                 <li>Control de calidad con muestras medidas por dos operarios o en dos momentos.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) es el <strong>número mínimo de pares válidos</strong> (sujetos con ambas mediciones completas) para que el intervalo de confianza de la diferencia media intraindividual tenga una semiancho máximo de \(E\) con el nivel de confianza especificado. Redondea siempre hacia arriba. Si prevés que algunos pares quedarán incompletos (pérdida de una de las dos mediciones), añade un margen: divide \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener los pares que debes iniciar.</p>
                 <p>El parámetro más influyente y más difícil de conocer de antemano es \(\sigma_d\), la <strong>desviación estándar de las diferencias</strong> pareadas. Esta cantidad no es la desviación estándar de cada medición individual, sino la variabilidad de la diferencia \(d_i = x_{i,\text{post}} - x_{i,\text{pre}}\) para cada sujeto. Si dispones de datos piloto, estímala directamente a partir de las diferencias observadas. En ausencia de datos previos, usa la relación \(\sigma_d \approx \sigma\sqrt{2(1-\rho)}\) donde \(\sigma\) es la desviación estándar de una medición y \(\rho\) es la correlación test-retest esperada. Realiza un análisis de sensibilidad con \(\sigma_d - 25\,\%\), \(\sigma_d\) y \(\sigma_d + 25\,\%\) y planifica con el valor mayor.</p>
-                <p>La ventaja del diseño apareado frente al de grupos independientes es que elimina la variabilidad entre sujetos, lo que puede reducir sustancialmente \(n\) cuando la correlación intraindividual es alta (\(\rho > 0{,}5\)). Si el IC resultante va a usarse para tomar una decisión clínica, comprueba que el valor de \(E\) tiene una interpretación práctica clara (p. ej., diferencia mínima clínicamente relevante). Con los pares recogidos, usa la <a href="tamano-muestral-medias-apareadas.html">calculadora de contraste para medias apareadas</a> si quieres realizar un test de hipótesis, o construye directamente el IC con la <a href="intervalo-confianza-diferencia-medias.html">calculadora de intervalo de confianza para diferencia de medias</a>.</p>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
+            <p>La ventaja del diseño apareado frente al de grupos independientes es que elimina la variabilidad entre sujetos, lo que puede reducir sustancialmente \(n\) cuando la correlación intraindividual es alta (\(\rho > 0{,}5\)). Si el IC resultante va a usarse para tomar una decisión clínica, comprueba que el valor de \(E\) tiene una interpretación práctica clara (p. ej., diferencia mínima clínicamente relevante). Con los pares recogidos, usa la <a href="tamano-muestral-medias-apareadas.html">calculadora de contraste para medias apareadas</a> si quieres realizar un test de hipótesis, o construye directamente el IC con la <a href="intervalo-confianza-diferencia-medias.html">calculadora de intervalo de confianza para diferencia de medias</a>.</p>
             </details>
         </section>
 
@@ -277,13 +277,14 @@
                 <li>Machin, D., Campbell, M. J., Tan, S. B., &amp; Tan, S. H. (2018). <em>Sample Sizes for Clinical, Laboratory and Epidemiology Studies</em> (4.ª ed.). Wiley-Blackwell.</li>
                 <li>Wikipedia (en): <a href="https://en.wikipedia.org/wiki/Sample_size_determination" target="_blank" rel="noopener">Sample size determination</a> — derivación para medias y otras variantes.</li>
             </ul>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Qué pasa si σ_d es mayor de lo esperado?</strong> El margen de error real será mayor que E. Por eso conviene ser conservador al estimar σ_d y, si hay dudas, realizar un análisis de sensibilidad con distintos valores.</li>
                 <li><strong>¿Cuándo debo usar t en lugar de Z?</strong> Cuando n &lt; 30 y σ_d es desconocida. Itera: calcula n con Z, luego reemplaza Z por t(n−1) y recalcula hasta convergencia.</li>
                 <li><strong>¿Este cálculo sirve para el contraste de hipótesis?</strong> No directamente. Para detectar una diferencia con una potencia y nivel de significación dados, usa la <a href="tamano-muestral-medias-apareadas.html">calculadora de medias apareadas para contraste H0</a>.</li>
                 <li><strong>¿Por qué el diseño apareado puede necesitar menos sujetos que el de dos grupos independientes?</strong> Porque \(\sigma_d\) suele ser menor que \(\sqrt{\sigma_1^2 + \sigma_2^2}\) cuando las mediciones dentro de cada par están correlacionadas positivamente. Cuanto mayor es esa correlación, más eficiente es el diseño apareado.</li>
             </ul>
+            </details>
         </section>
 
     </main>

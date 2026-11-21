@@ -208,7 +208,7 @@
             <p>En la práctica, la desviación típica poblacional \(\sigma\) raramente se conoce con exactitud. Cuando se estima a partir de los propios datos muestrales usando \(s\), aparece una incertidumbre adicional que modela la distribución t de Student con \(n-1\) grados de libertad.</p>
             <p>Con muestras grandes (n ≥ 30), la t de Student converge a la normal estándar y ambos intervalos dan resultados muy similares. Para muestras pequeñas, la t produce intervalos más anchos, reflejando correctamente la mayor incertidumbre.</p>
 
-            <details class="fold fold-sub"><summary><h3>Fórmula</h3></summary>
+            <h3>Fórmula</h3>
             <p>Denotamos por \(C\) el nivel de confianza y por \(\alpha=1-C\) el área total fuera del intervalo. Para un 95 % de confianza, \(C=0{,}95\), \(\alpha=0{,}05\) y \(\alpha/2=0{,}025\) en cada cola.</p>
             <p class="formula-line">\( \bar{x} \pm t_{\alpha/2,\, n-1} \cdot \dfrac{s}{\sqrt{n}} \)</p>
             <ul>
@@ -218,7 +218,6 @@
                 <li><strong>\(n\)</strong>: tamaño de la muestra.</li>
             </ul>
             <p>El margen de error es \(E = t_{\alpha/2,\, n-1} \cdot s/\sqrt{n}\) y el intervalo es \([\bar{x} - E,\; \bar{x} + E]\).</p>
-            </details>
 
             <details class="fold fold-sub"><summary><h3>Ejemplo resuelto</h3></summary>
             <p>Se mide el tiempo de respuesta (en ms) de un servicio web en 15 peticiones: \(\bar{x} = 245{,}3\) ms, \(s = 38{,}7\) ms. Con 95 % de confianza (\(C=0{,}95\), \(\alpha=0{,}05\)) y \(gl = 14\):</p>
@@ -239,15 +238,16 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
             <p>El intervalo \([L, U]\) es el rango de valores de la media poblacional \(\mu\) compatibles con los datos observados y el nivel de confianza elegido. El significado frecuentista es el siguiente: si repitieras el experimento muchas veces —tomando cada vez una muestra del mismo tamaño y construyendo el IC con el mismo procedimiento— aproximadamente un \(C \times 100\,\%\) de esos intervalos contendría el verdadero valor de \(\mu\). No es una afirmación probabilística sobre el parámetro concreto, sino sobre la fiabilidad del método a largo plazo.</p>
             <p>La amplitud del intervalo comunica directamente la precisión de la estimación. Un intervalo estrecho indica mayor precisión: se obtiene con muestras más grandes, con menor variabilidad en los datos o aceptando un nivel de confianza algo menor. Un intervalo ancho no es un error en sí mismo; refleja honestamente que con esa muestra hay mucha incertidumbre sobre \(\mu\). En el gráfico, la región verde es la zona de confianza bajo la curva t y las colas rojas representan cada una \(\alpha/2\) del área total; los valores críticos \(\pm t_{\alpha/2,\,n-1}\) delimitan esas regiones.</p>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
             <ul>
                 <li><strong>Conexión con el contraste:</strong> si un valor de referencia \(\mu_0\) queda fuera del intervalo, los datos rechazarían \(H_0\!: \mu = \mu_0\) al nivel de significación \(\alpha = 1 - C\) en el contraste bilateral equivalente. Si \(\mu_0\) queda dentro, no hay evidencia para rechazarlo.</li>
                 <li><strong>Efecto del tamaño muestral:</strong> duplicar \(n\) reduce el margen de error en un factor \(\sqrt{2} \approx 1{,}41\); para reducirlo a la mitad hace falta cuadruplicar \(n\).</li>
                 <li><strong>Efecto de la confianza:</strong> aumentar la confianza del 95 % al 99 % ensancha el intervalo porque el valor crítico \(t\) crece; exigir mayor certeza tiene el coste de ser menos preciso.</li>
             </ul>
-      </details>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -260,13 +260,14 @@
                     <li><a href="studentt.html">Distribución t de Student</a></li>
                 </ul>
             </section>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Por qué se usa t en lugar de z?</strong> Porque al estimar \(\sigma\) con \(s\) se introduce incertidumbre adicional; la distribución t tiene colas más pesadas para captarla.</li>
                 <li><strong>¿Cuándo convergen t y z?</strong> Para n ≥ 30 la diferencia es prácticamente despreciable en la mayoría de aplicaciones.</li>
                 <li><strong>¿Necesito que los datos sean normales?</strong> Para n pequeño sí importa. Para n grande, el TCL garantiza que \(\bar{x}\) se distribuye aproximadamente normal.</li>
             </ul>
             <p class="external-ref">Referencia: <a href="https://es.wikipedia.org/wiki/Intervalo_de_confianza" target="_blank" rel="noopener noreferrer">Intervalo de confianza</a> — Wikipedia</p>
+            </details>
         </section>
     </main>
 

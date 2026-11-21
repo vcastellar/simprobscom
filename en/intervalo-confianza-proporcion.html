@@ -228,18 +228,16 @@
 
             <p>Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area outside the interval. For 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\) in each tail.</p>
 
-            <details class="fold fold-sub"><summary><h3>Wald method (normal approximation)</h3></summary>
+            <h3>Wald method (normal approximation)</h3>
             <p>Wald applies the normal approximation directly to the sample proportion \(\hat{p}\). It is the simplest interval and the easiest to compute by hand:</p>
             <p class="formula-line">\( \hat{p} \pm z_{\alpha/2} \cdot \sqrt{\dfrac{\hat{p}(1-\hat{p})}{n}} \)</p>
             <p>It works reasonably well when the sample is large and the proportion isn't close to 0 or 1. As a practical rule, it is advisable to require \(n\hat{p} \geq 5\) and \(n(1-\hat{p}) \geq 5\), although with moderate sample sizes this rule doesn't always guarantee good actual coverage.</p>
             <p>Its main limitation is that it centers the interval exactly on \(\hat{p}\) and uses a standard error estimated only from \(\hat{p}\). Because of this it can produce bounds below 0 or above 1, and it can underestimate the uncertainty when there are few successes, few failures, or extreme proportions.</p>
-            </details>
 
-            <details class="fold fold-sub"><summary><h3>Wilson method (score, recommended)</h3></summary>
+            <h3>Wilson method (score, recommended)</h3>
             <p>Wilson starts from the score test for a proportion and works out which values of \(p\) would be compatible with the data. It doesn't simply add and subtract the same margin around \(\hat{p}\); the center of the interval shifts slightly toward less extreme values and the bounds stay within \([0,1]\).</p>
             <p class="formula-line">\( \dfrac{\hat{p} + \dfrac{z^2}{2n} \pm z\sqrt{\dfrac{\hat{p}(1-\hat{p})}{n} + \dfrac{z^2}{4n^2}}}{1 + \dfrac{z^2}{n}} \)</p>
             <p>Wilson is generally recommended because it better maintains the actual coverage of the confidence level, especially with small samples or proportions close to 0 or 1. It also correctly handles extreme cases such as \(x=0\) or \(x=n\), where Wald can give degenerate or uninformative intervals.</p>
-            </details>
 
             <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>In a survey of 200 customers, 134 report being satisfied. \(\hat{p} = 134/200 = 0.67\). With 95% confidence (\(C=0.95\), \(\alpha=0.05\), \(z_{0.025}=1.960\)):</p>
@@ -254,11 +252,12 @@
 
 
         <section class="card content-card" id="clopper-pearson">
-            <details class="fold"><summary><h3>The Clopper-Pearson method (exact)</h3></summary>
+            <h3>The Clopper-Pearson method (exact)</h3>
             <p>Wald and Wilson rely on the normal approximation of \(\hat{p}\). Clopper and Pearson (1934) proposed approximating nothing: the number of successes \(X\) follows a binomial \(B(n, p)\) exactly, and the interval is built from that distribution. That is why it is called <strong>exact</strong>.</p>
 
             <h4>What it consists of</h4>
             <p>The interval contains all the values of \(p\) for which the observed result, \(x\) successes, is not too extreme. Each end is defined by a binomial tail equal to \(\alpha/2\):</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
             <div class="math-block">\[ \begin{aligned} p_L &: \quad P(X \ge x \mid p_L) = \tfrac{\alpha}{2}, \\ p_U &: \quad P(X \le x \mid p_U) = \tfrac{\alpha}{2}. \end{aligned} \]</div>
             <p>In other words, \(p_L\) is the smallest value of \(p\) for which getting \(x\) successes or more still has probability \(\alpha/2\), and \(p_U\) is the largest for which getting \(x\) or fewer does. If \(x = 0\), \(p_L = 0\) is taken, and if \(x = n\), \(p_U = 1\).</p>
             <p>Both equations always have a single solution: as \(p\) increases, the probability \(P(X \ge x \mid p)\) rises continuously from 0 to 1, and \(P(X \le x \mid p)\) falls from 1 to 0. It is the same idea as the Wilson interval, which gathers the values of \(p\) a test would not reject, but with the exact binomial test instead of the approximate one.</p>
@@ -304,7 +303,7 @@
                 </table>
             </div>
             <p>Averaging over all values of \(p\) with \(n = 20\), Wald covers 85%, Wilson 95% and Clopper-Pearson 98%. Wilson is right on average, but for some values of \(p\) it drops to around 89%; Clopper-Pearson never drops below 95%, at the cost of almost always overshooting. You can see it with simulated samples in the <a href="simulaciones/simulador-intervalos-confianza.html?mode=prop&amp;method=clopper&amp;p=0.05&amp;n=20&amp;conf=0.95">confidence interval simulator</a>.</p>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -375,15 +374,16 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
             <p>The interval \([L, U]\) is the range of values of the population proportion \(p\) compatible with the observed data at the chosen confidence level. In frequentist terms: if you repeated the sampling many times and built the CI with the same method, a proportion \(C\) of those intervals would contain the true value of \(p\). The width depends on the sample size \(n\) and on the estimated proportion itself \(\hat{p}\): variability is greatest when \(\hat{p} = 0.5\) and decreases as it moves away from that value. In the chart, the green region under the standard normal curve is the confidence zone and the red tails (area \(\alpha/2\) each) delimit the critical values \(\pm z_{\alpha/2}\).</p>
             <p>To halve the width of the interval while keeping the same confidence level, you need to quadruple the sample size, since the margin of error is proportional to \(1/\sqrt{n}\). Increasing confidence from 95% to 99% widens the interval because \(z_{0.005} = 2.576 > z_{0.025} = 1.960\); that is, demanding more certainty comes at the cost of a less precise estimate.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
             <ul>
                 <li><strong>Wald vs. Wilson:</strong> when the condition \(n\hat{p} \geq 5\) and \(n(1-\hat{p}) \geq 5\) is met at both ends, the two methods usually give very similar results. If the proportion is extreme or the sample is small, Wilson is more reliable because the center of the interval shifts slightly toward less extreme values and the bounds always stay within \([0, 1]\).</li>
                 <li><strong>Connection with hypothesis testing:</strong> if a reference value \(p_0\) falls outside the interval, the data would reject \(H_0\!: p = p_0\) at level \(\alpha = 1 - C\) in the equivalent two-sided test. If \(p_0\) falls inside, there isn't enough evidence to reject it.</li>
                 <li><strong>Practical relevance:</strong> a very narrow CI indicates high precision, but remember that statistical precision and practical relevance are different concepts. An interval from 67% to 68% is very precise but could be irrelevant in contexts where only exceeding 70% matters.</li>
             </ul>
-      </details>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -396,13 +396,14 @@
                     <li><a href="binomial.html">Binomial distribution</a></li>
                 </ul>
             </section>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>Can I enter p̂ directly instead of x?</strong> Enter x = p̂ × n rounded to the nearest integer; the result will be equivalent.</li>
                 <li><strong>What happens if x = 0 or x = n?</strong> Wald gives an interval of zero width, which is not useful. Wilson and Clopper-Pearson handle these cases correctly; for example, with 0 successes in 20, at 95%, Clopper-Pearson gives [0, 0.168].</li>
                 <li><strong>When is the normality condition met?</strong> When n·p̂ ≥ 5 and n·(1−p̂) ≥ 5. The calculator warns you if it isn't met.</li>
             </ul>
             <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval" target="_blank" rel="noopener noreferrer">Binomial proportion confidence interval</a> — Wikipedia. Clopper, C. J. and Pearson, E. S. (1934). <a href="https://doi.org/10.1093/biomet/26.4.404" target="_blank" rel="noopener noreferrer">The use of confidence or fiducial limits illustrated in the case of the binomial</a>. <em>Biometrika</em>, 26(4), 404–413. Brown, L. D., Cai, T. T. and DasGupta, A. (2001). <a href="https://doi.org/10.1214/ss/1009213286" target="_blank" rel="noopener noreferrer">Interval estimation for a binomial proportion</a>. <em>Statistical Science</em>, 16(2), 101–133.</p>
+            </details>
         </section>
     </main>
 

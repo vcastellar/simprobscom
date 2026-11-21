@@ -201,7 +201,7 @@
             <p class="formula-line">\( D_n = \sup_x \left| \hat{F}_n(x) - F_0(x) \right| \)</p>
             <p>The effect size is \(d = \max_x |F_{\text{true}}(x) - F_0(x)|\), that is, the maximum vertical distance between the real CDF and the hypothesized one. Under \(H_0\), the asymptotic distribution of \(\sqrt{n}\,D_n\) is the Kolmogorov distribution.</p>
             <p>The actual power depends on the full shape of the alternative, not just on \(d\). That is why the calculator uses a <strong>lower bound</strong> (Massey, 1951): it computes the size that guarantees at least the requested power for any distribution that is \(d\) away from the theoretical one. It is a <em>sufficient</em> size: for many specific alternatives less data will be enough (see the note in the example).</p>
-            <details class="fold fold-sub"><summary><h3>Power formula</h3></summary>
+            <h3>Power formula</h3>
             <p>The CDF of the Kolmogorov distribution is:</p>
             <p class="formula-line">\( P(K \leq x) = 1 - 2\sum_{k=1}^{\infty} (-1)^{k+1} e^{-2k^2 x^2}, \quad x > 0 \)</p>
             <p>The critical quantile \(k_\alpha\) is defined by \(P(K > k_\alpha) = \alpha\), that is, \(1 - P(K \leq k_\alpha) = \alpha\). It is found by binary search.</p>
@@ -210,7 +210,6 @@
             <p>where \(\Phi\) is the standard normal distribution function. Setting the bound equal to the target power \(1-\beta\) gives the sample size:</p>
             <p class="formula-line">\( n = \left\lceil \left( \dfrac{k_\alpha + z_{1-\beta}/2}{d} \right)^{2} \right\rceil \)</p>
             <p>With \(\alpha = 0.05\) and 80% power, \(k_\alpha \approx 1.358\) and \(z_{0.80} \approx 0.842\), so \(n \approx (1.779/d)^2\).</p>
-            </details>
             <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>d = 0.10:</strong> small effect. The real distribution deviates from the theoretical one by at most 0.10 in the CDF. Requires large samples.</li>
@@ -240,10 +239,11 @@
                 <li>The critical value uses the asymptotic Kolmogorov distribution and power uses Massey's lower bound with a normal approximation; the exact distribution of \(D_n\) for finite \(n\) is not used.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
                 <p>The value \(n\) is the number of observations with which, according to Massey's bound, the Kolmogorov-Smirnov (KS) test reaches at least the indicated power at level \(\alpha\) against any deviation of the specified size. It is a <strong>sufficient, conservative</strong> size: against many specific alternatives less data will be enough. Always round up. If you anticipate data loss or exclusions, divide \(n\) by \((1 - \text{dropout rate})\) to obtain the number of units to collect. A critical assumption is that the theoretical distribution under \(H_0\) must be <strong>fully specified</strong> (all its parameters known a priori): if instead the parameters are estimated from the data themselves (as in the Lilliefors test for normality), the standard KS critical tables are not valid and the p-value will be inflated.</p>
                 <p>The power of the KS test depends on the maximum distance \(D = \sup_x |F_n(x) - F_0(x)|\) you want to detect. The KS test is relatively powerful for detecting differences in the central region of the distribution, but has low power for differences in the tails. If the deviations you care about are mainly in the extremes (heavy tails, skewness), the Anderson-Darling test or the Cramér-von Mises test are more powerful and require a smaller \(n\) for the same effectiveness. Perform a <em>sensitivity analysis</em> by varying the minimum detectable distance \(D\) by ±0.05 to see how much \(n\) changes.</p>
-                <p>If the computed \(n\) exceeds a few hundred, keep in mind that with very large samples the KS test will detect trivial deviations from the theoretical distribution that have no practical relevance: a \(p < 0.05\) does not imply the distribution is "too different" for the purposes of the analysis. In that context, complement the test with Q-Q plots and assess whether the deviations are substantive. Once you have collected the data, run the test with the <a href="kolmogorov-smirnov-bondad-ajuste.html">Kolmogorov-Smirnov calculator</a>; if the goal is specifically to test normality, use the <a href="tamano-muestral-shapiro-wilk.html">Shapiro-Wilk calculator</a> for small or moderate samples.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
+            <p>If the computed \(n\) exceeds a few hundred, keep in mind that with very large samples the KS test will detect trivial deviations from the theoretical distribution that have no practical relevance: a \(p < 0.05\) does not imply the distribution is "too different" for the purposes of the analysis. In that context, complement the test with Q-Q plots and assess whether the deviations are substantive. Once you have collected the data, run the test with the <a href="kolmogorov-smirnov-bondad-ajuste.html">Kolmogorov-Smirnov calculator</a>; if the goal is specifically to test normality, use the <a href="tamano-muestral-shapiro-wilk.html">Shapiro-Wilk calculator</a> for small or moderate samples.</p>
             </details>
         </section>
 

@@ -205,7 +205,7 @@
             <p>This calculator applies Cochran's formula to determine the minimum number of observations needed to estimate a population proportion \(p\) with a preset precision. The goal is for the resulting confidence interval to have a maximum half-width equal to the margin of error \(E\).</p>
             <p>The most influential parameter is the expected proportion \(p\): the variance of a proportion is \(p(1-p)\), which reaches its maximum at \(p = 0.5\). That's why, if you have no prior information, using \(p = 0.5\) guarantees the sample will be sufficient whatever the true value is.</p>
             <p>This formula assumes simple random sampling from a very large population. If the sample will represent more than 5% of the total, use the <a href="tamano-muestral-proporcion-poblacion-finita.html">calculator with finite population correction</a>.</p>
-            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
+            <h3>Sample size formula</h3>
             <p class="formula-line">\( n = \frac{Z^2 \cdot p \cdot (1-p)}{E^2} \)</p>
             <ul>
                 <li><strong>n</strong>: minimum sample size (always rounded up to the nearest integer).</li>
@@ -213,10 +213,8 @@
                 <li><strong>p</strong>: expected proportion. Use 0.5 if you have no prior information.</li>
                 <li><strong>E</strong>: absolute margin of error (half-width of the desired confidence interval).</li>
             </ul>
-            </details>
-            <details class="fold fold-sub"><summary><h3>Interpreting the margin of error</h3></summary>
+            <h3>Interpreting the margin of error</h3>
             <p>A margin E = 0.05 means your sample estimate \(\hat{p}\) can differ from the true population value by ±5 percentage points, with the probability set by the confidence level. For example, if you get \(\hat{p} = 0.62\) with E = 0.05 at 95%, you can state with 95% confidence that the true proportion is between 57% and 67%. Halving E quadruples the required sample, since n is proportional to 1/E².</p>
-            </details>
             <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>If you don't know p:</strong> use <strong>0.5</strong> — it is the conservative scenario that maximizes the variance and therefore the sample size.</li>
@@ -253,10 +251,11 @@
                 <li>Election polls and voting intention.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
                 <p>The calculated \(n\) is the <strong>minimum number of valid responses</strong> needed so that the confidence interval does not exceed the specified margin of error \(E\). Always round up. Keep in mind that this \(n\) represents <em>complete, usable responses</em>, not simply the number of surveys sent out or individuals contacted. If you expect a non-response or exclusion rate of \(r\,\%\), the number of individuals to contact is \(\lceil n / (1 - r) \rceil\); with a 20% loss, for example, you'll need to contact \(\lceil n / 0.80 \rceil\) people.</p>
                 <p>The proportion \(p\) is the most influential parameter and, often, the most uncertain. The function \(p(1-p)\) reaches its maximum at \(p = 0.5\), which is also the most conservative scenario: using \(p = 0.5\) when the true proportion is unknown guarantees that \(n\) is never insufficient. If you have a pilot study or prior data pointing to a different value of \(p\), use it to get a more precise \(n\), but perform a <em>sensitivity analysis</em> by varying \(p\) by \(\pm 0.1\) to see how much the result changes; in the central zone (\(p\) between 0.3 and 0.7) the variation in \(n\) tends to be modest, but at the extremes (\(p < 0.1\) or \(p > 0.9\)) a small difference in \(p\) can substantially alter \(n\).</p>
-                <p>If the resulting \(n\) is unfeasible, the available levers are: (1) increase \(E\) (accept lower precision), (2) reduce the confidence level (e.g., from 95% to 90%), or (3) restrict the target population to make it more homogeneous. Once the data has been collected, use the <a href="intervalo-confianza-proporcion.html">confidence interval calculator for a proportion</a> to get the real CI; or the <a href="contraste-hipotesis-una-proporcion.html">hypothesis test calculator</a> if you want to compare \(\hat{p}\) against a reference value.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
+            <p>If the resulting \(n\) is unfeasible, the available levers are: (1) increase \(E\) (accept lower precision), (2) reduce the confidence level (e.g., from 95% to 90%), or (3) restrict the target population to make it more homogeneous. Once the data has been collected, use the <a href="intervalo-confianza-proporcion.html">confidence interval calculator for a proportion</a> to get the real CI; or the <a href="contraste-hipotesis-una-proporcion.html">hypothesis test calculator</a> if you want to compare \(\hat{p}\) against a reference value.</p>
             </details>
         </section>
 
@@ -278,13 +277,14 @@
                 <li>Wikipedia (es): <a href="https://es.wikipedia.org/wiki/Tama%C3%B1o_de_la_muestra" target="_blank" rel="noopener">Tamaño de la muestra</a> — general formulas and statistical context.</li>
                 <li>Cochran, W. G. (1977). <em>Sampling Techniques</em> (3rd ed.). Wiley. — classic reference for the formula.</li>
             </ul>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>Why does p = 0.5 give the largest sample size?</strong> Because the variance p(1−p) is maximized at p = 0.5, making the estimate hardest.</li>
                 <li><strong>What if p is very small (e.g. 0.02)?</strong> The sample drops considerably, but the normal approximation may not be adequate. Consider the Wilson interval or the exact Clopper-Pearson interval.</li>
                 <li><strong>When do I apply the finite population correction?</strong> When the sampling fraction n/N exceeds 5%. If N = 500 and the estimated n is 50, the correction is relevant.</li>
                 <li><strong>Is the result exact?</strong> It is the theoretical minimum sample under the stated assumptions. Real conditions may require adjustments (stratification, clustering, etc.).</li>
             </ul>
+            </details>
         </section>
 
     </main>

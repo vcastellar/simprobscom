@@ -281,21 +281,20 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>Hypotheses and test statistic</h3></summary>
+            <h3>Hypotheses and test statistic</h3>
             <p class="formula-line">\(H_0: OR = 1\) (no association)</p>
             <p class="formula-line">\(H_1: OR \neq 1\), \(OR > 1\) or \(OR < 1\)</p>
             <p>The OR has a very skewed distribution (it ranges from 0 to infinity, with 1 in the middle), so the test is carried out on its logarithm, which is well approximated by a normal distribution:</p>
             <p class="formula-line">\( SE[\ln \widehat{OR}] = \sqrt{\dfrac{1}{a} + \dfrac{1}{b} + \dfrac{1}{c} + \dfrac{1}{d}}, \qquad z = \dfrac{\ln \widehat{OR}}{SE} \)</p>
             <p>This is the <strong>Wald test</strong>. The same standard error gives Woolf's confidence interval: it is computed on the log scale, \(\ln \widehat{OR} \pm z_{1-\alpha/2}\,SE\), and then exponentiated. That is why the interval is not symmetric around the OR: an OR of 1.56 can have an interval from 0.87 to 2.79.</p>
             <p>The standard error depends mainly on the smallest cell: if one has very few individuals, \(1/a\) shoots up and the test becomes unreliable. With any cell below 5, it is worth checking the result with <a href="test-exacto-fisher.html">Fisher's exact test</a>, which the calculator links to already filled in.</p>
-
-            <h3>Decision rule</h3>
+            <details class="fold fold-sub"><summary><h3>Decision rule</h3></summary>
             <ul>
                 <li>If the <strong>p-value</strong> is less than \(\alpha\), \(H_0\) is rejected: there is evidence of an association.</li>
                 <li>In the two-tailed test, this is equivalent to the OR confidence interval not containing 1.</li>
                 <li>Not rejecting \(H_0\) does not prove that there is no association.</li>
             </ul>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -334,17 +333,16 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
             <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that there is an association between the exposure and the outcome: with OR &gt; 1, the exposure behaves as a risk factor; with OR &lt; 1, as a protective factor. To judge its importance, look at the OR and its confidence interval: an OR of 1.2 can be significant in a huge study and have little practical relevance.</p>
             <p><strong>Not rejecting \(H_0\)</strong> does not prove that there is no association: look at the interval, which tends to be very wide in small studies.</p>
             <p>In the calculator, the result shows the decision with the p-value, the OR with the z statistic and a sentence stating the conclusion. On the chart, the green area is the non-rejection region on the standard normal, the red areas are the critical regions and the amber line marks the statistic. Under "Calculation details" you will find the log OR, its standard error, Woolf's interval, the proportion exposed among cases and controls, and Pearson's chi-square as a check.</p>
-
-            <h3>Power and minimum detectable odds ratio</h3>
+            <details class="fold fold-sub"><summary><h3>Power and minimum detectable odds ratio</h3></summary>
             <p>Below the conclusion, the calculator shows the <strong>minimum detectable odds ratio</strong>: the OR closest to 1 that, with your numbers of cases and controls and the proportion exposed among the controls, the test would detect with 80% probability. If it is more extreme than the effect that would matter to you, the study has low power. The link opens the <a href="tamano-muestral-odds-ratio.html">sample size calculator for the odds ratio</a> with your proportion exposed, your α, the number of controls per case and the type of test.</p>
 
             <h3>Confidence interval</h3>
             <p>The other link opens the <a href="intervalo-confianza-odds-ratio.html">odds ratio confidence interval calculator</a> with your table. That calculator arranges the table by exposure (rows) and outcome (columns), so the link reorders the cells for you; the OR is the same.</p>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -371,7 +369,7 @@
                     <li><a href="contraste-hipotesis-dos-proporciones.html">Two-proportion test</a></li>
                 </ul>
             </section>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>What is the odds ratio?</strong> The ratio between two odds: in a case-control study, the odds of exposure among cases divided by that among controls. It equals 1 if there is no association.</li>
                 <li><strong>How is an OR of 2 interpreted?</strong> The odds of exposure are twice as high among cases as among controls. If the disease is rare, it roughly means that the exposure doubles the risk.</li>
@@ -383,6 +381,7 @@
                 <li><strong>Does a significant OR prove causation?</strong> No. It may be due to selection bias or confounding variables. Logistic regression is used to adjust for them.</li>
             </ul>
             <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Odds_ratio" target="_blank" rel="noopener noreferrer">Odds ratio</a> — Wikipedia</p>
+            </details>
         </section>
 
     </main>

@@ -245,7 +245,7 @@
             <p>Este cálculo determina el número mínimo de observaciones por grupo para detectar una diferencia entre dos proporciones independientes con una potencia y un nivel de significación especificados. A diferencia de estimar una proporción individual, aquí el objetivo es un contraste de hipótesis bilateral: \(H_0\!: p_1 = p_2\) frente a \(H_1\!: p_1 \neq p_2\).</p>
             <p>La fórmula implementada es la de Fleiss, Levin y Paik (2003), que es más precisa que la aproximación de arco seno de Cohen porque tiene en cuenta la variabilidad separada de cada grupo bajo \(H_1\).</p>
             <p>El tamaño del efecto aquí es la diferencia absoluta \(|p_1 - p_2|\): cuanto más pequeña, más difícil de detectar y mayor la muestra necesaria. Para efectos muy pequeños (diferencias &lt; 0,05) considera si el efecto es clínica o prácticamente relevante antes de planificar el estudio.</p>
-            <details class="fold fold-sub"><summary><h3>Fórmula de tamaño muestral</h3></summary>
+            <h3>Fórmula de tamaño muestral</h3>
             <p class="formula-line">\( n_1 = \frac{\left(Z_{\alpha/2}\sqrt{(1+1/k)\bar{p}(1-\bar{p})} + Z_\beta\sqrt{p_1(1-p_1)+\frac{p_2(1-p_2)}{k}}\right)^2}{(p_1-p_2)^2} \)</p>
             <p class="formula-line">\( n_2 = k\,n_1,\quad \bar{p}=\frac{p_1 + kp_2}{1+k} \)</p>
             <ul>
@@ -254,7 +254,6 @@
                 <li><strong>\(\bar{p}\)</strong>: proporción ponderada bajo H0.</li>
                 <li><strong>\(Z_{\alpha/2}\)</strong> y <strong>\(Z_\beta\)</strong>: cuantiles normales para alfa bilateral y potencia; en un contraste unilateral, \(Z_{\alpha}\) sustituye a \(Z_{\alpha/2}\).</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>Configuración rápida</h3></summary>
             <ul>
                 <li><strong>p1 y p2:</strong> usa estimaciones de un piloto, datos históricos o literatura. Si p2 es el grupo de control, p1 es lo que esperas observar en el grupo de intervención.</li>
@@ -292,10 +291,11 @@
                 <li>Estudios epidemiológicos de cohortes con resultado dicotómico.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
                 <p>El \(n\) calculado es el <strong>tamaño mínimo por grupo</strong> para detectar la diferencia \(|p_1 - p_2|\) con la potencia y el nivel de significación especificados. En un diseño balanceado (\(k = 1\)) el total es \(2n\); en uno no balanceado (\(k \neq 1\)) el grupo de referencia necesita \(n\) sujetos y el grupo de intervención \(k \cdot n\). Redondea siempre hacia arriba y divide entre \((1 - \text{tasa de pérdida})\) para obtener el reclutamiento real. Si la tasa de no respuesta esperada es del 20 %, planifica \(\lceil n / 0{,}80 \rceil\) por grupo.</p>
                 <p>La sensibilidad al tamaño del efecto es muy marcada: cuando \(p_1\) y \(p_2\) son ambas cercanas a 0,5, o cuando la diferencia entre ellas es pequeña (&lt; 0,05), \(n\) puede dispararse hasta valores inviables. En este caso, haz un <em>análisis de sensibilidad</em> variando \(p_1\) y \(p_2\) en ±0,05 para evaluar la robustez del plan. Si la diferencia requerida es muy pequeña, plantéate si es <em>prácticamente relevante</em>: una diferencia estadísticamente detectable pero sin relevancia práctica no justifica el coste de reclutar miles de participantes. En contraste, si \(p_1\) o \(p_2\) son muy extremas (\(<0{,}05\) o \(>0{,}95\)), considera utilizar la transformación arcoseno o un modelo de regresión logística en el análisis.</p>
-                <p>Cuando el \(n\) obtenido sea pequeño y las frecuencias esperadas en alguna celda sean inferiores a 5, el test chi-cuadrado puede no ser adecuado; en ese caso, utiliza el <a href="tamano-muestral-fisher.html">test exacto de Fisher</a> como alternativa. Si el diseño es factible, una vez recogidos los datos, contrasta los resultados con la <a href="contraste-hipotesis-dos-proporciones.html">calculadora de contraste para dos proporciones</a> o construye un <a href="tamano-muestral-diferencia-proporciones-ic.html">intervalo de confianza para la diferencia</a> si el objetivo es estimar la magnitud del efecto.</p>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
+            <p>Cuando el \(n\) obtenido sea pequeño y las frecuencias esperadas en alguna celda sean inferiores a 5, el test chi-cuadrado puede no ser adecuado; en ese caso, utiliza el <a href="tamano-muestral-fisher.html">test exacto de Fisher</a> como alternativa. Si el diseño es factible, una vez recogidos los datos, contrasta los resultados con la <a href="contraste-hipotesis-dos-proporciones.html">calculadora de contraste para dos proporciones</a> o construye un <a href="tamano-muestral-diferencia-proporciones-ic.html">intervalo de confianza para la diferencia</a> si el objetivo es estimar la magnitud del efecto.</p>
             </details>
         </section>
 
@@ -316,13 +316,14 @@
                 <li>Wikipedia (en): <a href="https://en.wikipedia.org/wiki/Statistical_power" target="_blank" rel="noopener">Statistical power</a> — relación entre potencia, alfa y tamaño muestral.</li>
                 <li>Fleiss, J. L., Levin, B. y Paik, M. C. (2003). <em>Statistical Methods for Rates and Proportions</em> (3.ª ed.). Wiley. — fuente de la fórmula implementada.</li>
             </ul>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Qué diferencia hay con la fórmula de Cohen?</strong> La de Fleiss es más precisa porque modela la varianza de cada grupo bajo H1; la de Cohen usa la varianza ponderada en ambos términos.</li>
                 <li><strong>¿Puedo usar asignación desigual (k ≠ 1)?</strong> Sí, pero el tamaño total siempre será mayor que con k = 1. Solo compensa cuando el reclutamiento de un grupo es mucho más barato.</li>
                 <li><strong>¿Qué es la potencia estadística?</strong> La probabilidad de rechazar H0 cuando H1 es cierta, es decir, de detectar la diferencia real.</li>
                 <li><strong>¿El resultado es exacto?</strong> Es una aproximación normal; para muestras muy pequeñas o proporciones extremas considera métodos exactos.</li>
             </ul>
+            </details>
         </section>
 
     </main>

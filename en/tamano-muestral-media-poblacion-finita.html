@@ -218,7 +218,7 @@
             <h3>Explanation</h3>
             <p>When you estimate a population mean and the total population size N is known and finite, the standard formula overestimates the sample needed. The <strong>finite population correction factor</strong> (FPC) takes advantage of the fact that sampling a large fraction of the population provides more information than the infinite formula predicts.</p>
             <p>The correction is relevant when n₀/N &gt; 5%. For example, for N = 1,000 and n₀ = 139, the sampling fraction is 13.9%, which justifies the correction. If N &gt; 10,000 and n₀ is small, the savings are minimal and you can use the <a href="tamano-muestral-una-media.html">standard formula for a mean</a>.</p>
-            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
+            <h3>Sample size formula</h3>
             <p class="formula-line">\( n_0 = \left(\frac{Z\,\sigma}{E}\right)^2 \)</p>
             <p class="formula-line">\( n = \frac{n_0}{1 + \dfrac{n_0-1}{N}} \)</p>
             <ul>
@@ -228,7 +228,6 @@
                 <li><strong>E</strong>: maximum tolerable absolute margin of error.</li>
                 <li><strong>N</strong>: known total population size.</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>σ:</strong> obtain from historical data, a pilot study or the literature. If you don't have it, use range/4 as a conservative estimate.</li>
@@ -263,10 +262,11 @@
                 <li>Inventory: average weight or value of items in a known warehouse.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
                 <p>The value \(n\) is the <strong>minimum sample size corrected for the finiteness of the population</strong> to estimate a mean with the specified margin of error \(E\) and confidence level. The finite population correction (FPC) reduces \(n\) relative to the infinite-population case: the larger the sampling fraction \(f = n/N\), the greater the savings. If \(f < 5\,\%\), the FPC is practically irrelevant (it reduces \(n\) by less than 5%) and the standard formula would be sufficient; if \(f > 20\,\%\), the savings are substantial and the correction is necessary to avoid oversizing the study.</p>
                 <p>It is essential that \(N\) represents the <strong>actual size of the target population</strong>, not the approximate sampling frame nor the general reference population. For example, if the study targets the employees of a specific company with 450 employees, \(N = 450\); using an inflated \(N\) (such as the workforce of every company in the sector) would eliminate the advantage of the correction. Run a sensitivity analysis testing \(N \pm 10\,\%\) to assess how much an imprecise estimate of the population size affects the resulting \(n\); with large populations the sensitivity is low, but with small populations it can be significant.</p>
-                <p>If you anticipate non-response or exclusion rates, calculate the recruitment \(n\) by dividing the corrected \(n\) by \((1 - \text{dropout rate})\), always verifying that the result does not exceed \(N\). If, after the adjustment, the required sample size exceeds 80% of the population, consider a <em>census</em> instead of sampling. Once the data has been collected, use the <a href="intervalo-confianza-media.html">confidence interval calculator for the mean</a>, also applying the FPC, to obtain the study's actual CI.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
+            <p>If you anticipate non-response or exclusion rates, calculate the recruitment \(n\) by dividing the corrected \(n\) by \((1 - \text{dropout rate})\), always verifying that the result does not exceed \(N\). If, after the adjustment, the required sample size exceeds 80% of the population, consider a <em>census</em> instead of sampling. Once the data has been collected, use the <a href="intervalo-confianza-media.html">confidence interval calculator for the mean</a>, also applying the FPC, to obtain the study's actual CI.</p>
             </details>
         </section>
 
@@ -286,13 +286,14 @@
                 <li>Wikipedia (en): <a href="https://en.wikipedia.org/wiki/Simple_random_sample" target="_blank" rel="noopener">Simple random sample</a> — fundamentals of sampling without replacement.</li>
                 <li>Cochran, W. G. (1977). <em>Sampling Techniques</em> (3rd ed.). Wiley. — classic reference on sampling in finite populations.</li>
             </ul>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>When is it worth applying the correction?</strong> When n₀/N &gt; 5%. With smaller fractions, the savings are under 5% of observations.</li>
                 <li><strong>What if N isn't known exactly?</strong> Use the uncorrected formula; it will overestimate the sample but the result will always be valid.</li>
                 <li><strong>Can n be greater than N?</strong> No: the correction guarantees n &lt; N. If n₀ ≥ N, a full census is necessary.</li>
                 <li><strong>Why not always use the correction?</strong> Because it requires knowing N exactly. If N is uncertain or variable, the correction can be misleading.</li>
             </ul>
+            </details>
         </section>
 
     </main>

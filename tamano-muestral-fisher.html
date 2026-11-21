@@ -231,7 +231,7 @@
             <p>El <strong>test exacto de Fisher</strong> se usa para contrastar la independencia entre dos variables binarias en una tabla de contingencia 2×2. Es el método preferido cuando las frecuencias esperadas en alguna celda son inferiores a 5, o cuando el tamaño muestral total es pequeño, situaciones en las que la aproximación asintótica chi-cuadrado puede no ser válida.</p>
             <p>Al ser un test exacto basado en la distribución hipergeométrica, calcular su potencia de forma analítica requeriría enumerar toda la distribución de tablas posibles, lo cual es computacionalmente costoso para uso general. La solución práctica estándar es utilizar la <strong>aproximación de Fleiss (1981)</strong> para dos proporciones independientes, seguida de la <strong>corrección de continuidad de Casagrande y Pike (1978)</strong>, que ajusta el tamaño muestral para compensar la naturaleza discreta del test exacto.</p>
             <p>Esta aproximación produce resultados muy similares a los obtenidos por simulación y es la recomendación habitual en textos de referencia como Fleiss, Levin y Paik (2003).</p>
-            <details class="fold fold-sub"><summary><h3>Fórmula utilizada</h3></summary>
+            <h3>Fórmula utilizada</h3>
             <p>Sea \(p_1\) la proporción en el grupo 1, \(p_2\) la proporción en el grupo 2, \(r = n_2/n_1\) la razón de tamaños, y \(\bar{p} = (p_1 + r\,p_2)/(1+r)\) la proporción conjunta ponderada.</p>
 
             <p><strong>Paso 1 — Aproximación de Fleiss (sin corrección):</strong></p>
@@ -247,7 +247,6 @@
                 <li><strong>\(\bar{p}\):</strong> proporción conjunta ponderada; representa la proporción bajo \(H_0\) si los grupos fuesen iguales.</li>
                 <li><strong>Corrección de continuidad:</strong> aumenta el n para compensar la discretización del test exacto.</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>Configuración rápida</h3></summary>
             <ul>
                 <li><strong>p₁ y p₂:</strong> introduce las proporciones que esperas observar en cada grupo. La diferencia \(|p_1 - p_2|\) es el efecto a detectar. Diferencias mayores requieren menos muestra.</li>
@@ -275,10 +274,11 @@
                 <li>El tamaño se obtiene con la aproximación de Fleiss y se redondea hacia arriba.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
                 <p>Los valores \(n_1\) y \(n_2\) son los <strong>tamaños mínimos por grupo</strong> para detectar la diferencia entre proporciones \(p_1\) y \(p_2\) mediante el test exacto de Fisher con la potencia y el nivel \(\alpha\) especificados. El total a reclutar es \(N = n_1 + n_2\). Redondea siempre hacia arriba y añade un margen por pérdidas: divide cada \(n_i\) entre \((1 - \text{tasa de pérdida})\). El test exacto de Fisher es apropiado precisamente cuando alguna frecuencia esperada cae por debajo de 5; si todas las frecuencias esperadas son \(\geq 5\), el chi-cuadrado de Pearson es igualmente válido y generalmente más familiar para revisores.</p>
                 <p>El cálculo de tamaño muestral para Fisher se basa en la distribución hipergeométrica, que es discreta. Esto implica que el nivel de significación real del test puede ser inferior al nominal \(\alpha\) (el test es conservador), y la potencia real puede ser ligeramente distinta de la planificada para el \(n\) exacto calculado. En la práctica, se recomienda añadir un par de unidades adicionales al \(n\) por grupo para compensar la discretización. Realiza un <em>análisis de sensibilidad</em> variando \(p_1\) y \(p_2\) en ±0,05: cuando ambas proporciones son muy extremas (\(&lt;0{,}05\) o \(&gt;0{,}95\)), el test exacto gana importancia frente al chi-cuadrado y el \(n\) puede ser distinto del estimado por la fórmula normal aproximada.</p>
-                <p>Si el \(n\) calculado resulta tan grande que las frecuencias esperadas en todas las celdas superarían ampliamente 5, considera si el test chi-cuadrado no sería más apropiado (y planifica el \(n\) con la <a href="tamano-muestral-dos-proporciones.html">calculadora de contraste para dos proporciones</a>). Cuando el \(n\) sea inviable, revisa si la diferencia mínima detectable \(|p_1 - p_2|\) es realista o si puede ampliarse. Con los datos recogidos, realiza el análisis con la <a href="contraste-hipotesis-dos-proporciones.html">calculadora de contraste para dos proporciones</a> eligiendo el test de Fisher si las frecuencias esperadas son bajas.</p>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
+            <p>Si el \(n\) calculado resulta tan grande que las frecuencias esperadas en todas las celdas superarían ampliamente 5, considera si el test chi-cuadrado no sería más apropiado (y planifica el \(n\) con la <a href="tamano-muestral-dos-proporciones.html">calculadora de contraste para dos proporciones</a>). Cuando el \(n\) sea inviable, revisa si la diferencia mínima detectable \(|p_1 - p_2|\) es realista o si puede ampliarse. Con los datos recogidos, realiza el análisis con la <a href="contraste-hipotesis-dos-proporciones.html">calculadora de contraste para dos proporciones</a> eligiendo el test de Fisher si las frecuencias esperadas son bajas.</p>
             </details>
         </section>
 
@@ -300,13 +300,14 @@
         </section>
 
         <section class="card content-card">
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Cuándo debo usar el test exacto de Fisher en lugar del chi-cuadrado?</strong> Cuando alguna frecuencia esperada en la tabla 2×2 es inferior a 5, o cuando el tamaño muestral total es pequeño (N &lt; 20–25). En muestras grandes, ambos tests convergen al mismo resultado.</li>
                 <li><strong>¿Por qué la corrección de continuidad aumenta el tamaño muestral?</strong> Porque el test exacto de Fisher opera sobre la distribución discreta hipergeométrica. La corrección ajusta el n para aproximar mejor la potencia real del test discreto, en lugar de la potencia asintótica continua; sigue siendo una aproximación, así que conviene verificar el resultado por simulación o enumeración exacta si el estudio es crítico.</li>
                 <li><strong>¿El tamaño muestral calculado es exacto?</strong> No; es una aproximación. El valor real depende de los parámetros verdaderos y de la discretización de la distribución hipergeométrica. Para confirmación en estudios críticos, complementa con simulación de Monte Carlo.</li>
                 <li><strong>¿Puedo usar esta calculadora para un diseño caso-control?</strong> Sí. Introduce la proporción de expuestos en casos como \(p_1\), la de controles como \(p_2\), y ajusta \(r\) a la razón de controles por caso deseada.</li>
             </ul>
+            </details>
         </section>
     </main>
 

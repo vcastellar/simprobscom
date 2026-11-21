@@ -265,7 +265,7 @@
             <p>The logic is that of any test. You start from the <strong>null hypothesis</strong> that the two population means are equal, \(H_0: \mu_1 = \mu_2\), and measure how far apart the sample means \(\bar{x}_1\) and \(\bar{x}_2\) are. Even if the populations had the same mean, two samples would never give exactly the same mean: the question is whether the observed difference is larger than sampling variation can reasonably explain. If it is, \(H_0\) is rejected in favour of the <strong>alternative hypothesis</strong>.</p>
             <p>This calculator uses <strong>Welch's</strong> version of the t-test, which does not require the two populations to have the same variance. It is the recommended default, as explained below.</p>
 
-            <details class="fold fold-sub"><summary><h3>Hypotheses and test statistic</h3></summary>
+            <h3>Hypotheses and test statistic</h3>
             <p class="formula-line">\(H_0: \mu_1 = \mu_2\) (that is, \(\mu_1 - \mu_2 = 0\))</p>
             <p class="formula-line">\(H_1: \mu_1 \neq \mu_2\), \(\mu_1 > \mu_2\) or \(\mu_1 < \mu_2\)</p>
             <p class="formula-line">\( t = \dfrac{\bar{x}_1 - \bar{x}_2}{\sqrt{\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}}} \)</p>
@@ -274,6 +274,7 @@
                 <li><strong>\(s_1, s_2\)</strong>: sample standard deviations of each group.</li>
                 <li><strong>\(n_1, n_2\)</strong>: group sizes.</li>
             </ul>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
             <p>The denominator is the <strong>standard error of the difference</strong>: it measures how much \(\bar{x}_1 - \bar{x}_2\) would vary if you repeated the study with other samples. Since each mean has its own uncertainty, the two variances add up. The t statistic therefore tells you how many standard errors the observed difference lies from zero, which is what \(H_0\) predicts.</p>
             <p>Under \(H_0\), the statistic approximately follows a Student's t distribution with the <strong>Welch-Satterthwaite</strong> degrees of freedom, which are usually not whole numbers:</p>
             <p class="formula-line">\( \nu = \dfrac{\left(s_1^2/n_1 + s_2^2/n_2\right)^2}{\dfrac{(s_1^2/n_1)^2}{n_1-1} + \dfrac{(s_2^2/n_2)^2}{n_2-1}} \)</p>
@@ -376,9 +377,10 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
             <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) means that, if both populations had the same mean, it would be very unlikely to observe a difference between the sample means as large as the one obtained. But significant is not the same as important: with large samples, tiny differences become significant. Always look at the observed difference, its confidence interval and the effect size.</p>
             <p><strong>Not rejecting \(H_0\)</strong> (p-value ≥ α) does not prove that the means are equal. It only shows that the data are compatible with equality, and perhaps also with relevant differences, as in example 1. If what you want to show is precisely that two treatments are equivalent, the correct approach is an <a href="contraste-hipotesis-no-inferioridad.html">equivalence or non-inferiority test</a>.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
             <p>In the calculator, the result shows the decision with the p-value, the t statistic with its Welch degrees of freedom and a sentence stating the conclusion. On the chart, the green area is the non-rejection region, the red areas are the critical regions and the amber line marks the observed statistic. Under "Calculation details" you will find the observed difference, the standard error, the critical value, the confidence interval (for the two-tailed test) and Cohen's d.</p>
 
             <h3>Power and minimum detectable difference</h3>
@@ -391,7 +393,7 @@
 
             <h3>Effect size: Cohen's d</h3>
             <p>To express the difference on a scale that can be compared across studies, Cohen's d is used: \(d = (\bar{x}_1 - \bar{x}_2)/s_p\), where \(s_p\) is the pooled standard deviation of the two groups. As a rough guide, 0.2 is a small effect, 0.5 medium and 0.8 large. In example 1, \(d \approx 0.44\); in example 2, \(d \approx 0.54\).</p>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -419,7 +421,7 @@
                 <li><a href="studentt.html">Student's t distribution</a> and <a href="tabla-t-student.html">t table</a></li>
               </ul>
             </section>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>What hypothesis does it test?</strong> That the means of two independent populations are equal (H₀: μ₁ = μ₂), against the alternative that they differ or that one is greater than the other.</li>
                 <li><strong>Why does the calculator use Welch's t?</strong> Because it does not require the two populations to have the same variance. When the variances are equal it gives practically the same result as Student's t, and when they are not it is much more reliable.</li>
@@ -433,6 +435,7 @@
                 <li><strong>What if I have three or more groups?</strong> Use one-way ANOVA. Running every pairwise test increases the probability of finding some significant difference by chance.</li>
             </ul>
             <p class="external-ref">References: <a href="https://en.wikipedia.org/wiki/Student%27s_t-test" target="_blank" rel="noopener noreferrer">Student's t-test</a> and <a href="https://en.wikipedia.org/wiki/Welch%27s_t-test" target="_blank" rel="noopener noreferrer">Welch's t-test</a> — Wikipedia</p>
+            </details>
         </section>
 
     </main>

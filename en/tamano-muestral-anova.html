@@ -184,7 +184,7 @@
             <p>One-way ANOVA tests the null hypothesis that the means of <strong>k ≥ 2</strong> independent groups are equal against the alternative that at least two of them differ. When k = 2 it is equivalent to the two-sample t-test, but for k ≥ 3 it controls the overall type I error rate without requiring multiple pairwise comparisons.</p>
             <p>The parameter that summarizes the effect size is <strong>Cohen's f</strong>, defined as \(f = \sigma_{\text{means}} / \sigma_{\text{residual}}\), where \(\sigma_{\text{means}}\) is the standard deviation of the group means and \(\sigma_{\text{residual}}\) is the variability within groups. f is related to \(\eta^2\) (eta squared) by \(f = \sqrt{\eta^2/(1-\eta^2)}\).</p>
             <p>The power calculation is based on the <strong>noncentral F distribution</strong>: under H₁, the F statistic follows a noncentral F with noncentrality parameter \(\lambda = n \cdot k \cdot f^2\). This calculator searches for the minimum integer n for which the power exceeds the target using an iterative search.</p>
-            <details class="fold fold-sub"><summary><h3>Formula and calculation method</h3></summary>
+            <h3>Formula and calculation method</h3>
             <p>With <em>n</em> observations per group (balanced design):</p>
             <p class="formula-line">\( \lambda = n \cdot k \cdot f^2 \)</p>
             <p class="formula-line">\( 1-\beta = P\!\left(F'(k-1,\;k(n-1),\;\lambda) > F_{\alpha,\,k-1,\,k(n-1)}\right) \)</p>
@@ -194,7 +194,6 @@
                 <li><strong>λ</strong>: noncentrality parameter; it grows linearly with n and k, and quadratically with f.</li>
                 <li><strong>k−1 and k(n−1)</strong>: numerator and denominator degrees of freedom of the F statistic.</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>How to calculate f from prior data</h3></summary>
             <p>If you know the expected means of each group \(\mu_1, \ldots, \mu_k\) and the common residual standard deviation \(\sigma\):</p>
             <p class="formula-line">\( \sigma_{\text{means}} = \sqrt{\frac{1}{k}\sum_{i=1}^{k}(\mu_i - \bar{\mu})^2}, \quad f = \frac{\sigma_{\text{means}}}{\sigma} \)</p>
@@ -236,10 +235,11 @@
                 <li>Experimental psychology, agronomy, pharmacology, education.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
                 <p>The value \(n\) is the <strong>minimum sample size per group</strong> in a balanced one-way ANOVA design with \(k\) groups. The total number of participants to recruit is \(k \times n\). Always round up. If you anticipate losses or dropouts, calculate the per-group recruitment number as \(\lceil n / (1 - \text{loss rate}) \rceil\). A key feature of the ANOVA design is that imbalance between groups (different \(n\) per group) does not invalidate the analysis, but it does reduce power and complicate interpretation; if you anticipate unequal groups, use the formula for unbalanced designs or increase the \(n\) of the smallest group.</p>
                 <p>Cohen's effect size \(f\) (or the between-means variance \(\sigma_\mu^2\)) is the hardest parameter to specify. A value \(f = 0.10\) is considered small, \(f = 0.25\) medium and \(f = 0.40\) large. Small errors in \(f\) have a quadratic impact on \(n\): if the real effect is 20% smaller than expected, the required \(n\) increases by approximately 56% \((1/0.8^2 \approx 1.56)\). Perform a <em>sensitivity analysis</em> by evaluating \(n\) for different values of \(f\) or of the within-group variance \(\sigma^2\). Keep in mind that the calculated \(n\) protects the overall significance level of the ANOVA F test, but <strong>not the post-hoc comparisons</strong>: if you plan to make all pairwise comparisons between groups with a Bonferroni correction (\(\alpha/\binom{k}{2}\)), the \(n\) needed for each individual comparison is considerably larger.</p>
-                <p>When \(n\) is very small per group (&lt; 15), verify that normality of the residuals and homoscedasticity are reasonable, or use the nonparametric equivalent (Kruskal-Wallis test) with its own adjusted \(n\). If the total \(n\), \(kn\), turns out to be unfeasible, consider whether the number of groups \(k\) can be reduced (by merging similar groups) or whether the design could be more efficient as a repeated-measures ANOVA. Once the data have been collected, use the <a href="anova.html">ANOVA calculator</a> for the analysis of variance and the relevant post-hoc tests.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
+            <p>When \(n\) is very small per group (&lt; 15), verify that normality of the residuals and homoscedasticity are reasonable, or use the nonparametric equivalent (Kruskal-Wallis test) with its own adjusted \(n\). If the total \(n\), \(kn\), turns out to be unfeasible, consider whether the number of groups \(k\) can be reduced (by merging similar groups) or whether the design could be more efficient as a repeated-measures ANOVA. Once the data have been collected, use the <a href="anova.html">ANOVA calculator</a> for the analysis of variance and the relevant post-hoc tests.</p>
             </details>
         </section>
 
@@ -259,13 +259,14 @@
                 <li>Wikipedia (en): <a href="https://en.wikipedia.org/wiki/Noncentral_F-distribution" target="_blank" rel="noopener">Noncentral F-distribution</a> — the distribution used for the power calculation.</li>
                 <li>Cohen, J. (1988). <em>Statistical Power Analysis for the Behavioral Sciences</em> (2nd ed.). Lawrence Erlbaum. — chapter 8 on one-way ANOVA.</li>
             </ul>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>What is Cohen's f and how is it obtained?</strong> f = σ_means/σ_residual. From η²: f = √(η²/(1−η²)). Reference values: 0.10 small, 0.25 medium, 0.40 large.</li>
                 <li><strong>Does it work for ANOVA with unequal groups?</strong> This calculator assumes a balanced design. For unequal groups use the harmonic n \(\tilde{n} = k/\sum(1/n_i)\) as an approximation.</li>
                 <li><strong>How does increasing k affect the n per group?</strong> Adding groups with the same f reduces the n per group because there are more error degrees of freedom, but the total n increases.</li>
                 <li><strong>Does the calculated size guarantee power for post-hoc comparisons?</strong> No; multiple post-hoc comparisons may require a larger sample or a corrected α.</li>
             </ul>
+            </details>
         </section>
     </main>
 

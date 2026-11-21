@@ -197,7 +197,7 @@
             <h3>Explanation</h3>
             <p>In a <strong>case-control study</strong> the parameter of interest is not the difference of means but the <strong>odds ratio</strong> (OR): the ratio between the odds of exposure in cases and in controls. The OR is a fundamental measure of association in epidemiology, especially useful when the disease is rare, because it estimates the relative risk with good approximation in that scenario.</p>
             <p>To calculate the sample size, the OR is converted into exposure proportions and Fleiss's formula for two independent proportions is applied. The key is that the OR implicitly defines the proportion of exposed cases (\(p_1\)) from the proportion in controls (\(p_0\)) and the desired OR. It also allows adjusting the controls-per-case ratio (r), which is useful when cases are scarce and controls are abundant.</p>
-            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
+            <h3>Sample size formula</h3>
             <p>Let \(p_0\) be the proportion of exposed controls. The proportion in cases is obtained as:</p>
             <p class="formula-line">\( p_1 = \frac{\text{OR}\cdot p_0}{1 + p_0\,(\text{OR}-1)} \)</p>
             <p>With \(\bar{p} = (p_1 + r\,p_0)/(1+r)\) and allocation ratio \(r\) (controls per case):</p>
@@ -210,7 +210,6 @@
                 <li><strong>r</strong>: number of controls per case. Increasing r raises power when cases are scarce, but with diminishing returns: going from r = 1 to r = 2 gains more than going from r = 3 to r = 4.</li>
                 <li><strong>p̄</strong>: weighted proportion of combined exposure in the sample.</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>p₀:</strong> use population data or health registries. If unknown, 0.20–0.30 is common for many environmental and lifestyle risk factors.</li>
@@ -249,10 +248,11 @@
                 <li>Case-control studies nested within cohorts.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
                 <p>The value \(n\) is the <strong>minimum size per group</strong> (cases and controls, or exposed and unexposed) needed to detect the specified odds ratio with the indicated power and \(\alpha\) level. The total number of participants to recruit is \(2n\) in a balanced design. Always round up and add a margin for losses: divide \(n\) by \((1 - \text{dropout rate})\) per group. If the design is unbalanced (a different number of cases and controls in a \(k\!:\!1\) ratio), the case group needs \(n\) and the control group \(k \cdot n\); increasing \(k\) beyond 4:1 rarely reduces the total \(n\) substantially.</p>
                 <p>The OR is the parameter of interest, but the sensitivity of \(n\) also depends on the baseline probability \(p_0\) (proportion of events in the reference group). A given OR requires more subjects when \(p_0\) is extreme (close to 0 or 1) than when it is close to 0.5. Perform a <em>sensitivity analysis</em> by varying \(p_0\) by ±0.05 and the OR over a reasonable range (\(\pm 0.2\) on the natural scale) to assess the robustness of the plan. Keep in mind that the OR is a relative measure of association; for it to have clinical interpretation, it is useful to translate it into the relative risk (RR) or the risk difference (RD) when the baseline prevalence is known.</p>
-                <p>If the computed \(n\) is not feasible, consider whether the minimum detectable OR can be increased or whether the power can be reduced to 80%. In case-control studies, the controls-per-case ratio can also be increased (e.g., 2:1 or 3:1) to reduce the number of cases needed when they are scarce. Once you have collected the data, estimate the OR and its CI with the <a href="intervalo-confianza-odds-ratio.html">odds ratio calculator</a>; if the goal was to estimate the OR with a given precision rather than testing it, use the <a href="tamano-muestral-odds-ratio-ic.html">sample size calculator for the OR confidence interval</a>.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
+            <p>If the computed \(n\) is not feasible, consider whether the minimum detectable OR can be increased or whether the power can be reduced to 80%. In case-control studies, the controls-per-case ratio can also be increased (e.g., 2:1 or 3:1) to reduce the number of cases needed when they are scarce. Once you have collected the data, estimate the OR and its CI with the <a href="intervalo-confianza-odds-ratio.html">odds ratio calculator</a>; if the goal was to estimate the OR with a given precision rather than testing it, use the <a href="tamano-muestral-odds-ratio-ic.html">sample size calculator for the OR confidence interval</a>.</p>
             </details>
             <h3>External references</h3>
             <ul>
@@ -272,7 +272,7 @@
                     <li><a href="contraste-hipotesis-dos-proporciones.html">Hypothesis test for two proportions</a></li>
                 </ul>
             </section>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>What is the odds ratio?</strong> The ratio of the odds of exposure between cases and controls: OR = [p₁/(1−p₁)] / [p₀/(1−p₀)]. OR = 1 implies no association; OR &gt; 1, the factor is a risk factor; OR &lt; 1, it is protective.</li>
                 <li><strong>Why not use the relative risk (RR) directly?</strong> In case-control studies, the researcher chooses how many cases and controls to include, so the actual incidence cannot be estimated, and therefore neither can the RR. The OR can be estimated directly and approximates the RR well when the disease is rare (&lt; 10%).</li>
@@ -280,6 +280,7 @@
                 <li><strong>How many controls per case?</strong> Increasing r from 1 to 2 or 3 substantially reduces the number of cases needed when cases are scarce; going from r = 3 to r = 4 adds little. The practical rule is r ≤ 4.</li>
                 <li><strong>Is the sample size exact?</strong> No; it depends on the assumptions (p₀, actual OR) and is rounded up to the nearest integer. Add a 10–20% margin for expected losses.</li>
             </ul>
+            </details>
         </section>
     </main>
 

@@ -197,7 +197,7 @@
             <h3>Explanation</h3>
             <p>This calculation determines how many pairs of observations (n) are needed to detect a population correlation \(\rho\) different from zero with a given power and significance level. The logic differs from the mean or proportion calculators: here we use <strong>Fisher's z transformation</strong>, which stabilizes the variance of \(\hat{\rho}\).</p>
             <p>The sample estimator \(\hat{\rho}\) (Pearson correlation) has a skewed, asymmetric distribution when \(\rho \neq 0\), with variance that depends on \(\rho\) itself. The transformation \(z = \operatorname{arctanh}(\hat{\rho})\) converts this distribution into an approximately normal one with variance \(1/(n-3)\), independent of \(\rho\). This allows n to be derived directly from the signal-to-noise ratio.</p>
-            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
+            <h3>Sample size formula</h3>
             <p>Let \(z_\rho = \operatorname{arctanh}(\rho) = \frac{1}{2}\ln\!\left(\frac{1+\rho}{1-\rho}\right)\). Then:</p>
             <p class="formula-line">\( n = \left\lceil \frac{(Z_{\alpha/2} + Z_\beta)^2}{z_\rho^2} \right\rceil + 3 \)</p>
             <p>where \(Z_{\alpha/2}\) is the normal quantile for a two-tailed test (or \(Z_\alpha\) for a one-tailed test) and \(Z_\beta = \Phi^{-1}(1-\beta)\).</p>
@@ -207,7 +207,6 @@
                 <li><strong>+3</strong>: comes from the fact that the variance of \(z = \operatorname{arctanh}(\hat{\rho})\) is approximately \(1/(n-3)\); it is an approximation that improves the result for small n, not an exact value.</li>
                 <li>Reference (Cohen, 1988): ρ = 0.10 (small), 0.30 (moderate), 0.50 (large).</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>Unknown ρ:</strong> use ρ = 0.30 as a conservative reference for a moderate effect.</li>
@@ -246,10 +245,11 @@
                 <li>Validation studies of measurement methods (e.g., comparison of two laboratory techniques).</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
                 <p>The value \(n\) is the <strong>minimum number of pairs of observations</strong> (subjects with both required measurements) needed to detect a Pearson correlation \(\rho_1\) when the null hypothesis is \(\rho = \rho_0\) (usually \(\rho_0 = 0\)) with the specified power and significance level. Always round up. If you expect that some subjects will not be measurable on both variables (loss to follow-up, missing data), divide \(n\) by \((1 - \text{loss rate})\) to obtain the required recruitment number.</p>
                 <p>The formula uses Fisher's \(z\) transformation \(z = \frac{1}{2}\ln\!\left(\frac{1+\rho}{1-\rho}\right)\) to stabilize the variance. This transformation is more accurate when \(n \geq 10\) and \(|\rho| < 0.9\); for very high correlations (\(|\rho| > 0.9\)) the approximation may underestimate the required \(n\). Perform a <em>sensitivity analysis</em> by varying \(\rho_1\) by ±0.10: an expected correlation of 0.5 instead of 0.6 may require 40–60% more pairs. If the actual correlation turns out to be larger than expected, the test will have more power than planned (generally good news), but if it turns out to be smaller, the study may end up underpowered.</p>
-                <p>When the calculated \(n\) is very small (&lt; 20 pairs), verify that the relationship between the variables is reasonably linear and that there are no influential outliers, since Pearson correlation is sensitive to both factors. If the data show nonlinearity or heavy tails, consider Spearman correlation and adjust \(n\) with a relative efficiency factor. Once the data are collected, calculate the correlation and its CI with the <a href="contraste-hipotesis-correlacion.html">hypothesis test calculator for correlation</a> or run the formal test with the corresponding tool.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
+            <p>When the calculated \(n\) is very small (&lt; 20 pairs), verify that the relationship between the variables is reasonably linear and that there are no influential outliers, since Pearson correlation is sensitive to both factors. If the data show nonlinearity or heavy tails, consider Spearman correlation and adjust \(n\) with a relative efficiency factor. Once the data are collected, calculate the correlation and its CI with the <a href="contraste-hipotesis-correlacion.html">hypothesis test calculator for correlation</a> or run the formal test with the corresponding tool.</p>
             </details>
             <h3>External references</h3>
             <ul>
@@ -269,7 +269,7 @@
                     <li><a href="tamano-muestral-anova.html">Sample size for ANOVA</a></li>
                 </ul>
             </section>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>What is Fisher's z transformation?</strong> z = arctanh(ρ) = ½·ln((1+ρ)/(1−ρ)); it converts the skewed distribution of r̂ into an approximately normal one with variance 1/(n−3), which allows the normal approximation to be used to derive n directly.</li>
                 <li><strong>Negative correlation?</strong> The magnitude |ρ| is what determines the sample size; the direction (positive or negative) does not affect n, although it does affect the type of test (use a one-tailed test if you have a directional hypothesis).</li>
@@ -277,6 +277,7 @@
                 <li><strong>Does it work for Spearman or tau correlation?</strong> Fisher's formula is strictly valid for Pearson correlation with bivariate normality. For Spearman it can be used as an approximation, though with less precision.</li>
                 <li><strong>Is the sample size exact?</strong> It is an approximation; it works well for n > 20. For very small n, methods based on the exact distribution of the correlation coefficient (for example, G*Power) or simulation are preferable.</li>
             </ul>
+            </details>
         </section>
     </main>
 

@@ -210,7 +210,7 @@
             <p>Esta calculadora determina el número mínimo de observaciones <em>por grupo</em> para estimar la diferencia \(p_1 - p_2\) entre dos proporciones independientes con un margen de error absoluto máximo \(E\) y un nivel de confianza dado. Es el punto de partida para planificar estudios comparativos entre dos grupos antes de recoger los datos.</p>
             <p>Los dos parámetros clave son las proporciones esperadas en cada grupo. Si no dispones de estimaciones previas, el escenario conservador es \(p_1 = p_2 = 0{,}5\), que maximiza la suma \(p_1(1-p_1) + p_2(1-p_2)\) y por tanto el tamaño muestral. En la práctica, usar proporciones informadas de datos piloto o literatura reduce considerablemente la muestra necesaria.</p>
             <p>La fórmula asume asignación equilibrada (mismo número de sujetos en cada grupo) y muestreo aleatorio de dos poblaciones muy grandes. El margen de error \(E\) se aplica a la diferencia \(p_1-p_2\), no a cada proporción por separado.</p>
-            <details class="fold fold-sub"><summary><h3>Fórmula de tamaño muestral</h3></summary>
+            <h3>Fórmula de tamaño muestral</h3>
             <p class="formula-line">\( n = \frac{Z^2 \cdot \left[p_1(1-p_1) + p_2(1-p_2)\right]}{E^2} \)</p>
             <ul>
                 <li><strong>n</strong>: número mínimo de observaciones por grupo (total N = 2n).</li>
@@ -218,10 +218,8 @@
                 <li><strong>\(p_1, p_2\)</strong>: proporciones esperadas en cada grupo.</li>
                 <li><strong>E</strong>: margen de error absoluto máximo para la diferencia \(p_1 - p_2\).</li>
             </ul>
-            </details>
-            <details class="fold fold-sub"><summary><h3>Interpretación del margen de error</h3></summary>
+            <h3>Interpretación del margen de error</h3>
             <p>Un margen \(E = 0{,}10\) significa que la diferencia estimada \(\hat{p}_1 - \hat{p}_2\) puede diferir del valor poblacional real \(p_1 - p_2\) en como mucho ±10 puntos porcentuales con la confianza elegida. Si la diferencia esperada entre grupos es pequeña, el margen de error debe serlo también, lo que requiere muestras más grandes. Compara siempre el margen de error con la diferencia real esperada: un E mayor que esa diferencia hace el estudio inútil para detectarla.</p>
-            </details>
             <details class="fold fold-sub"><summary><h3>Configuración rápida</h3></summary>
             <ul>
                 <li><strong>p₁ y p₂:</strong> tómalas de datos piloto o de la literatura. Si no tienes información, usa ambas en 0,5.</li>
@@ -255,10 +253,11 @@
                 <li>Planificación de experimentos A/B descriptivos donde el objetivo es caracterizar la diferencia, no contrastar hipótesis.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) es el <strong>mínimo de observaciones válidas por grupo</strong> para que el intervalo de confianza de la diferencia \(p_1 - p_2\) tenga un semiancho máximo de \(E\) con el nivel de confianza elegido. En un diseño balanceado, el número total de participantes a reclutar es \(2n\). Redondea siempre hacia arriba y añade el margen por pérdidas dividiendo entre \((1 - \text{tasa de abandono})\) por grupo; con un 10 % de abandono esperado, planifica \(\lceil n / 0{,}90 \rceil\) individuos por grupo.</p>
                 <p>Las proporciones \(p_1\) y \(p_2\) son los parámetros más críticos e inciertos. La varianza de la diferencia depende de \(p_1(1-p_1) + p_2(1-p_2)\), que es máxima cuando ambas están cerca de 0,5. Realiza un <em>análisis de sensibilidad</em> variando \(p_1\) y \(p_2\) en ±0,10 alrededor de los valores esperados: cuando ambas sean extremas (\(&lt;0{,}10\) o \(&gt;0{,}90\)), la varianza disminuye y el \(n\) puede ser menor de lo que se esperaría intuitivamente. Si no tienes información previa, usa \(p_1 = p_2 = 0{,}5\) para el escenario más conservador. También evalúa distintos valores de \(E\): reducir el margen de error a la mitad cuadruplica \(n\).</p>
-                <p>Este enfoque (IC) difiere del de contraste de hipótesis: aquí el objetivo es <em>estimar</em> la magnitud de la diferencia con cierta precisión, no decidir si existe. Si lo que necesitas es detectar si \(p_1 \neq p_2\) con determinada potencia, usa la <a href="tamano-muestral-dos-proporciones.html">calculadora de contraste para dos proporciones</a>. Una vez recogidos los datos, construye el IC real con la <a href="intervalo-confianza-diferencia-proporciones.html">calculadora de intervalo de confianza para diferencia de proporciones</a>. Si las frecuencias esperadas en alguna celda son pequeñas (&lt; 5), considera el <a href="tamano-muestral-fisher.html">test exacto de Fisher</a>.</p>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
+            <p>Este enfoque (IC) difiere del de contraste de hipótesis: aquí el objetivo es <em>estimar</em> la magnitud de la diferencia con cierta precisión, no decidir si existe. Si lo que necesitas es detectar si \(p_1 \neq p_2\) con determinada potencia, usa la <a href="tamano-muestral-dos-proporciones.html">calculadora de contraste para dos proporciones</a>. Una vez recogidos los datos, construye el IC real con la <a href="intervalo-confianza-diferencia-proporciones.html">calculadora de intervalo de confianza para diferencia de proporciones</a>. Si las frecuencias esperadas en alguna celda son pequeñas (&lt; 5), considera el <a href="tamano-muestral-fisher.html">test exacto de Fisher</a>.</p>
             </details>
         </section>
 
@@ -279,12 +278,13 @@
                 <li>Newcombe, R. G. (1998). Interval estimation for the difference between independent proportions, <em>Statistics in Medicine</em>, 17, 873–890.</li>
                 <li>Wikipedia (en): <a href="https://en.wikipedia.org/wiki/Sample_size_determination" target="_blank" rel="noopener">Sample size determination</a> — derivación para diferencia de proporciones.</li>
             </ul>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Cuándo es conservador usar p₁=p₂=0,5?</strong> Siempre que no tengas información previa. Maximiza la varianza de cada grupo y por tanto el tamaño muestral necesario.</li>
                 <li><strong>¿Qué pasa si los grupos son muy distintos en tamaño?</strong> Si no puedes tener el mismo n en cada grupo, la eficiencia disminuye. Con ratio k=n₂/n₁, el n por grupo mayor crece en proporción.</li>
                 <li><strong>¿Este cálculo sirve para contrastar hipótesis?</strong> No directamente. Para detectar una diferencia con potencia y nivel de significación dados, usa la <a href="tamano-muestral-dos-proporciones.html">calculadora de dos proporciones para contraste H0</a>.</li>
             </ul>
+            </details>
         </section>
     </main>
 
