@@ -83,6 +83,9 @@
 }
     </script>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="reproduce-code.css?v=20261120-1">
+<script src="reproduce-code.js?v=20261117-1"></script>
+<script src="reproduce-intervals.js?v=20261120-1"></script>
 </head>
 <body>
 <nav class="site-nav" aria-label="Navegación principal">
@@ -184,7 +187,7 @@
                 <button class="calculate-btn" id="calcBtn">Calcular intervalo</button>
             </section>
 
-            <div id="result" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div>
+            <section class="reproduce-result-group"><div id="result" class="result-box ss-result" role="status" aria-live="polite">Resultado pendiente…</div></section>
 
             <section class="card ss-chart-panel">
                 <h2 class="ss-chart-title">Intervalo de confianza para la media (μ)</h2>
@@ -322,6 +325,7 @@ function calculate() {
     const lower = xbar - margin;
     const upper = xbar + margin;
     const EN = document.documentElement.lang === 'en';
+    window.ReproduceIntervals?.render('mean',resultEl,{mean:xbar,sd:s,n,conf});
     window.CICharts && CICharts.result(resultEl, {
         label: EN ? CICharts.pct(conf) + ' confidence interval for the mean μ' : 'Intervalo de confianza al ' + CICharts.pct(conf) + ' para la media μ',
         main: { lo: lower, hi: upper },
