@@ -104,6 +104,7 @@
     </script>
     <link rel="stylesheet" href="style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="reproduce-code.css?v=20261121-1">
 </head>
 <body>
 <nav class="site-nav" aria-label="Navegación principal">
@@ -375,6 +376,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="reproduce-code.js?v=20261121-1"></script>
+<script src="reproduce-sample-sizes.js?v=20261121-1"></script>
 <script src="sample-size-charts.js?v=20261101-2"></script>
 <script>
 function ncChiSqCDF(x, df, lambda) {
@@ -398,6 +401,7 @@ function applyPreset(g1, g2) {
 }
 
 function calculateSWsampleSize() {
+ window.ReproduceCode && ReproduceCode.clear();
     window.SampleSizeCharts && SampleSizeCharts.clear('swChart');
     const gamma1 = parseFloat(document.getElementById('swGamma1').value);
     const gamma2 = parseFloat(document.getElementById('swGamma2').value);
@@ -442,6 +446,7 @@ function calculateSWsampleSize() {
         `γ₁ = ${gamma1}  |  γ₂ = ${gamma2}  |  λ = n·(γ₁²/6 + γ₂²/24) = ${lambda.toFixed(3)}  |  α = ${alpha}` +
         warning +
         '\nLa aproximación JB puede ser muy optimista con muestras pequeñas: verifica el resultado por simulación si el tamaño muestral es importante.';
+    window.ReproduceSampleSize && ReproduceSampleSize.show("sw", {gamma1,gamma2,alpha,power}, resultEl);
     window.SampleSizeCharts && SampleSizeCharts.power({
         canvas: 'swChart', n: n, target: power, nMin: 3,
         xLabel: 'Tamaño muestral n',

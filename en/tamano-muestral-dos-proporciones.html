@@ -109,6 +109,7 @@
 }
     </script>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="../reproduce-code.css?v=20261121-1">
 </head>
 <body>
 <nav class="site-nav" aria-label="Main navigation">
@@ -341,6 +342,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../reproduce-code.js?v=20261121-1"></script>
+<script src="../reproduce-sample-sizes.js?v=20261121-1"></script>
 <script src="../sample-size-charts.js?v=20261101-2"></script>
 <script>
 function refreshMathJaxTwoProp() {
@@ -360,6 +363,7 @@ function getTwoPropRatio() {
 }
 
 function calculateTwoPropSampleSize() {
+ window.ReproduceCode && ReproduceCode.clear();
     window.SampleSizeCharts && SampleSizeCharts.clear('twoPropChart');
     const resultEl = document.getElementById("twoPropResult");
 
@@ -398,7 +402,8 @@ function calculateTwoPropSampleSize() {
         resultEl.innerText = Math.abs(k - 1) < 1e-10
             ? `Minimum n per group: ${n1} (total: ${n1 + n2}).`
             : `Minimum n group 1: ${n1}; group 2: ${n2} (k=${k.toFixed(2)}, total: ${n1 + n2}).`;
-        window.SampleSizeCharts && SampleSizeCharts.power({
+        window.ReproduceSampleSize && ReproduceSampleSize.show("twoProps", {p1,p2,alpha,power,k,twoSided:!oneSided}, resultEl);
+    window.SampleSizeCharts && SampleSizeCharts.power({
             canvas: 'twoPropChart', n: n1, target: power,
             xLabel: Math.abs(k - 1) < 1e-10 ? 'n per group' : 'Group 1 sample size n',
             powerFn: function (m) {
