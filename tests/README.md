@@ -128,3 +128,22 @@ También se comprueban el aviso de parámetros modificados, la retirada del cód
 ante entradas o confianza inválidas, la recuperación posterior, la copia y la
 vista móvil. Los gráficos de estas calculadoras siguen funcionando en la web;
 los fragmentos añadidos reproducen los resultados numéricos de los intervalos.
+
+
+## Código de tamaños muestrales
+
+Las 25 calculadoras de tamaños muestrales incluyen código R base y Python/SciPy,
+en ambos idiomas. Los fragmentos conservan las fórmulas de planificación,
+redondeos y razones de asignación; identifican explícitamente las aproximaciones
+Fleiss/Casagrande–Pike, Fisher z, Jarque–Bera y la cota de Massey.
+
+La prueba numérica ejecuta el script real de cada calculadora en Node con un DOM
+mínimo y compara su n con el código Python generado (y con R si está instalado).
+Comprueba valores iniciales y cambios de confianza, potencia, colas, asignación,
+corrección por población finita y TOST. No sustituye las pruebas del navegador
+para las pestañas, copia, accesibilidad y aviso de datos modificados compartidos.
+
+```sh
+curl -fsSL https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js -o /tmp/problab-jstat.js
+PROBLAB_JSTAT=/tmp/problab-jstat.js python3 -m unittest discover -s tests -p test_reproduce_sample_sizes.py -v
+```

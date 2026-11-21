@@ -104,6 +104,7 @@
     </script>
     <link rel="stylesheet" href="../style_new.css?v=20261113-1">
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="../reproduce-code.css?v=20261121-1">
 </head>
 <body>
 <nav class="site-nav" aria-label="Main navigation">
@@ -324,9 +325,12 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="../reproduce-code.js?v=20261121-1"></script>
+<script src="../reproduce-sample-sizes.js?v=20261121-1"></script>
 <script src="../sample-size-charts.js?v=20261101-2"></script>
 <script>
 function calculateFisherSampleSize() {
+ window.ReproduceCode && ReproduceCode.clear();
     window.SampleSizeCharts && SampleSizeCharts.clear('fisherChart');
     const resultEl = document.getElementById('fisherResult');
     try {
@@ -375,7 +379,8 @@ function calculateFisherSampleSize() {
             `n₁ (group 1): ${n1_final}  |  n₂ (group 2): ${n2_cc}  |  N total: ${n_total}\n` +
             `With α = ${alpha} (${tailLabel}), power = ${(power * 100).toFixed(0)} %, p₁ = ${p1}, p₂ = ${p2}, r = ${+r.toFixed(3)}.\n` +
             `n₁ without continuity correction (basic Fleiss): ${Math.ceil(n1_approx)}`;
-        window.SampleSizeCharts && SampleSizeCharts.power({
+        window.ReproduceSampleSize && ReproduceSampleSize.show("fisher", {p1,p2,alpha,power,k:r,twoSided:tail === "two"}, resultEl);
+    window.SampleSizeCharts && SampleSizeCharts.power({
             canvas: 'fisherChart', n: n1_final, target: power,
             xLabel: 'Group 1 sample size n',
             // Potencia de un n con corrección de continuidad: se deshace la corrección

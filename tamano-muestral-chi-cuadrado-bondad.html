@@ -120,6 +120,7 @@
         .content-card ol li { margin-bottom: 4px; }
     </style>
     <script>try{if(localStorage.getItem('prob-theme')==='dark')document.documentElement.classList.add('dark-mode');}catch(e){}</script>
+<link rel="stylesheet" href="reproduce-code.css?v=20261121-1">
 </head>
 <body>
 <nav class="site-nav" aria-label="Navegación principal">
@@ -399,6 +400,8 @@ window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script src="reproduce-code.js?v=20261121-1"></script>
+<script src="reproduce-sample-sizes.js?v=20261121-1"></script>
 <script src="sample-size-charts.js?v=20261101-2"></script>
 <script>
 function ncChiSqCDF(x, df, lambda) {
@@ -422,6 +425,7 @@ function ncChiSqPower(N, df, w, alpha) {
 }
 
 function calculateBondadSampleSize() {
+ window.ReproduceCode && ReproduceCode.clear();
     window.SampleSizeCharts && SampleSizeCharts.clear('bondadChart');
     const w = parseFloat(document.getElementById('bondadW').value);
     const k = parseInt(document.getElementById('bondadK').value);
@@ -455,6 +459,7 @@ function calculateBondadSampleSize() {
         `Potencia alcanzada: ${(actualPower * 100).toFixed(2)} % (objetivo: ${(power * 100).toFixed(0)} %)\n` +
         `w = ${w}  |  k = ${k}  |  λ = N·w² = ${(N * w * w).toFixed(2)}  |  α = ${alpha}\n` +
         `Frecuencia media esperada por celda: N/k = ${freqPerCell}${cellWarning}`;
+    window.ReproduceSampleSize && ReproduceSampleSize.show("chi", {w,df,alpha,power}, resultEl);
     window.SampleSizeCharts && SampleSizeCharts.power({
         canvas: 'bondadChart', n: N, target: power,
         xLabel: 'N total',
