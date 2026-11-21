@@ -352,9 +352,10 @@
             </ul>
             </details>
 
-            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
             <p>The value \(N\) is the <strong>total number of observations needed</strong> (sum across all categories) for the chi-square goodness-of-fit test to have the specified power and significance level. Always round up. If you expect some records to be discarded due to errors or missing values, divide \(N\) by \((1 - \text{dropout rate})\) to get the number you actually need to collect.</p>
             <p>Check the expected frequencies: the expected number of observations in each category \(i\) under \(H_0\) is \(N \cdot p_{0,i}\), and all of them should be \(\ge 5\). If any theoretical proportion is very small, that category may fall short even when \(N/k\) is comfortable; in that case, merge categories with theoretical justification until expected frequencies of \(\ge 5\) are reached and recompute \(k\), \(w\) and the degrees of freedom.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
             <p>Keep in mind that the sensitivity of \(N\) to \(w\) is quadratic: if the real effect is 30% smaller than you assumed, \(N\) should be roughly double \((1/0.7^2 \approx 2.04)\). That is why it pays to compute \(w\) from realistic proportions and, when in doubt, to plan with a somewhat conservative value.</p>
             <p>When the calculated \(N\) turns out to be impractical, there are three levers: (1) accept a larger \(w\), i.e. settle for detecting only larger departures; (2) reduce the target power; or (3) reduce the number of categories by merging the smallest ones, which lowers \(df\) and the required \(\lambda\) (recompute \(w\), because it changes too). If any expected frequency is still below 5 even with the calculated \(N\), fall back on an exact multinomial test. Once the data have been collected, run the test with the <a href="chi-cuadrado-bondad-ajuste.html">chi-square goodness-of-fit test calculator</a> and examine the standardised residuals per category to locate where the differences from the theoretical distribution are concentrated.</p>
             </details>

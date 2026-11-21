@@ -204,7 +204,7 @@
             <p>In practice, the population standard deviation \(\sigma\) is rarely known exactly. When it is estimated from the sample data itself using \(s\), extra uncertainty appears, which Student's t distribution with \(n-1\) degrees of freedom models correctly.</p>
             <p>With large samples (n ≥ 30), Student's t converges to the standard normal and both intervals give very similar results. For small samples, t produces wider intervals, correctly reflecting the greater uncertainty.</p>
 
-            <details class="fold fold-sub"><summary><h3>Formula</h3></summary>
+            <h3>Formula</h3>
             <p>Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area outside the interval. For 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\) in each tail.</p>
             <p class="formula-line">\( \bar{x} \pm t_{\alpha/2,\, n-1} \cdot \dfrac{s}{\sqrt{n}} \)</p>
             <ul>
@@ -214,7 +214,6 @@
                 <li><strong>\(n\)</strong>: sample size.</li>
             </ul>
             <p>The margin of error is \(E = t_{\alpha/2,\, n-1} \cdot s/\sqrt{n}\) and the interval is \([\bar{x} - E,\; \bar{x} + E]\).</p>
-            </details>
 
             <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>The response time (in ms) of a web service is measured over 15 requests: \(\bar{x} = 245.3\) ms, \(s = 38.7\) ms. With 95% confidence (\(C=0.95\), \(\alpha=0.05\)) and \(df = 14\):</p>
@@ -235,15 +234,16 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
             <p>The interval \([L, U]\) is the range of values of the population mean \(\mu\) compatible with the observed data and the chosen confidence level. The frequentist meaning is the following: if you repeated the experiment many times — each time taking a sample of the same size and building the CI with the same procedure — approximately \(C \times 100\%\) of those intervals would contain the true value of \(\mu\). It is not a probability statement about the specific parameter, but about the long-run reliability of the method.</p>
             <p>The width of the interval directly communicates the precision of the estimate. A narrow interval indicates greater precision: it is obtained with larger samples, lower variability in the data, or by accepting a somewhat lower confidence level. A wide interval is not an error in itself; it honestly reflects that with that sample there is a lot of uncertainty about \(\mu\). In the chart, the green region is the confidence zone under the t curve and the red tails each represent \(\alpha/2\) of the total area; the critical values \(\pm t_{\alpha/2,\,n-1}\) delimit those regions.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
             <ul>
                 <li><strong>Connection with hypothesis testing:</strong> if a reference value \(\mu_0\) falls outside the interval, the data would reject \(H_0\!: \mu = \mu_0\) at significance level \(\alpha = 1 - C\) in the equivalent two-sided test. If \(\mu_0\) falls inside, there is no evidence to reject it.</li>
                 <li><strong>Effect of sample size:</strong> doubling \(n\) reduces the margin of error by a factor of \(\sqrt{2} \approx 1.41\); to halve it you need to quadruple \(n\).</li>
                 <li><strong>Effect of confidence level:</strong> increasing confidence from 95% to 99% widens the interval because the critical value \(t\) grows; demanding more certainty comes at the cost of less precision.</li>
             </ul>
-      </details>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -256,13 +256,14 @@
                     <li><a href="studentt.html">Student's t distribution</a></li>
                 </ul>
             </section>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>Why use t instead of z?</strong> Because estimating \(\sigma\) with \(s\) introduces extra uncertainty; the t distribution has heavier tails to account for it.</li>
                 <li><strong>When do t and z converge?</strong> For n ≥ 30 the difference is practically negligible in most applications.</li>
                 <li><strong>Do I need the data to be normal?</strong> For small n it does matter. For large n, the CLT guarantees that \(\bar{x}\) is approximately normally distributed.</li>
             </ul>
             <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Confidence_interval" target="_blank" rel="noopener noreferrer">Confidence interval</a> — Wikipedia</p>
+            </details>
         </section>
     </main>
 

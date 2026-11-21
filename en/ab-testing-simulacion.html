@@ -313,10 +313,9 @@
         </section>
 
     <section class="card content-card">
-      <details class="fold"><summary><h3>How to interpret the result</h3></summary>
+      <h3>How to interpret the result</h3>
       <p>Monte Carlo simulation lets you empirically verify the test's properties: whether the type I error is really α when p_A = p_B, whether the power matches the theoretical value, and how the distribution of the z statistic behaves in practice. It is especially useful when you want to understand the test's behavior under specific conditions, or when the model's assumptions are not exactly met. The empirical rejection rate returned by the simulation is a direct estimate of power: how many times out of 100 identical experiments you would correctly conclude that B differs from A.</p>
-
-      <h3>How to read the z histogram</h3>
+      <details class="fold fold-sub"><summary><h3>How to read the z histogram</h3></summary>
       <p>Under H₀ (p_A = p_B), the z statistic follows approximately an N(0,1): the histogram should be symmetric, centered on 0, and the proportion of red bars (rejection zone) should approach α. Under H₁ (p_A ≠ p_B), the histogram shifts in the direction of the effect: the larger the real difference between rates or the sample size, the more pronounced that shift, and the greater the proportion of replicates that fall in the rejection zone.</p>
 
       <h3>How to read the p-value distribution</h3>
@@ -333,13 +332,14 @@
           <li><a href="ab-testing-potencia.html">MDE, power & sample size for A/B testing</a></li>
         </ul>
       </section>
-      <h3>Frequently asked questions</h3>
+      <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
       <ul>
         <li><strong>Does the simulation use binomial samples?</strong> Each replicate approximates x_A ~ Bin(n, p_A) and x_B ~ Bin(n, p_B) using the De Moivre-Laplace normal approximation. It is adequate when n·p and n·(1−p) are not small; for small samples or extreme proportions the simulation should be interpreted as approximate.</li>
         <li><strong>Why doesn't the empirical power exactly match the theoretical one?</strong> For two reasons. The empirical power has Monte Carlo error: its standard error is approximately √(p(1−p)/N), which with 5,000 replicates is ±0.006 for powers around 80% and ±0.003 for rejection rates around 5%. In addition, the “theoretical” power is itself a normal approximation, which can depart from the true power with small samples or extreme rates.</li>
         <li><strong>Can I simulate with p_A = p_B to check the α level?</strong> Yes: enter the same value for p_A and p_B and check that the empirical rejection rate approaches α.</li>
         <li><strong>Are the replicates independent?</strong> Yes: each replicate generates new samples with no dependency on the previous ones.</li>
       </ul>
+      </details>
     </section>
   </main>
 

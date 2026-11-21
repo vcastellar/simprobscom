@@ -197,7 +197,7 @@
             <p>Mientras los intervalos para la media usan la distribución normal o t (que son simétricas), el intervalo para la varianza usa la distribución chi-cuadrado, que es asimétrica y positiva. Por eso los límites del intervalo no están equidistantes del estimador puntual \(s^2\).</p>
             <p>Este intervalo es fundamental en control de procesos (SPC), donde importa no solo la media de un proceso sino también su variabilidad. También aparece en metaanálisis, diseño de experimentos y auditoría de procesos de medición.</p>
 
-            <details class="fold fold-sub"><summary><h3>Fórmula para la varianza</h3></summary>
+            <h3>Fórmula para la varianza</h3>
             <p>Denotamos por \(C\) el nivel de confianza y por \(\alpha=1-C\) el área total fuera del intervalo. Para un 95 % de confianza, \(C=0{,}95\), \(\alpha=0{,}05\) y \(\alpha/2=0{,}025\) en cada cola.</p>
             <p class="formula-line">\( \left[\dfrac{(n-1)s^2}{\chi^2_{1-\alpha/2,\, n-1}},\;\; \dfrac{(n-1)s^2}{\chi^2_{\alpha/2,\, n-1}}\right] \)</p>
             <ul>
@@ -206,12 +206,10 @@
                 <li><strong>\(\chi^2_{1-\alpha/2,\, n-1}\)</strong>: percentil superior de la chi-cuadrado (percentil \(1-\alpha/2\), cola derecha); es el valor <em>mayor</em> y va en el denominador del extremo inferior del IC.</li>
                 <li><strong>\(\chi^2_{\alpha/2,\, n-1}\)</strong>: percentil inferior de la chi-cuadrado (percentil \(\alpha/2\), cola izquierda); es el valor <em>menor</em> y va en el denominador del extremo superior del IC.</li>
             </ul>
-            </details>
 
-            <details class="fold fold-sub"><summary><h3>Fórmula para la desviación típica</h3></summary>
+            <h3>Fórmula para la desviación típica</h3>
             <p class="formula-line">\( \left[\sqrt{\dfrac{(n-1)s^2}{\chi^2_{1-\alpha/2,\, n-1}}},\;\; \sqrt{\dfrac{(n-1)s^2}{\chi^2_{\alpha/2,\, n-1}}}\right] \)</p>
             <p>Se obtiene aplicando raíz cuadrada a cada extremo del IC de la varianza.</p>
-            </details>
 
             <details class="fold fold-sub"><summary><h3>Ejemplo resuelto</h3></summary>
             <p>Una línea de envasado llena botellas con \(s = 2{,}3\) ml a partir de \(n = 25\) mediciones. Con 95 % de confianza (\(C=0{,}95\), \(\alpha=0{,}05\), \(gl = 24\), \(\chi^2_{0{,}975} \approx 39{,}36\), \(\chi^2_{0{,}025} \approx 12{,}40\)):</p>
@@ -229,15 +227,16 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
             <p>El intervalo para \(\sigma^2\) es el rango de valores de la varianza poblacional compatibles con los datos al nivel de confianza elegido. El intervalo para \(\sigma\) expresa la misma incertidumbre en las unidades originales de la variable: se obtiene simplemente aplicando la raíz cuadrada a cada límite. En términos frecuentistas, si repitieras el experimento muchas veces y construyeras el IC con el mismo método, una proporción \(C\) de esos intervalos contendría la verdadera varianza \(\sigma^2\). La distribución chi-cuadrado es asimétrica y solo toma valores positivos, por eso el intervalo no es simétrico: el límite superior está más alejado de \(s^2\) que el límite inferior.</p>
             <p>En el gráfico, la región verde bajo la curva chi-cuadrado es la zona de confianza y las colas rojas (cada una con área \(\alpha/2\)) indican los percentiles inferior \(\chi^2_{\alpha/2,\,n-1}\) y superior \(\chi^2_{1-\alpha/2,\,n-1}\). Cuanto mayor sea \(n\), más simétrica y concentrada será la distribución chi-cuadrado y, en consecuencia, el intervalo será más estrecho y más próximo a la simetría.</p>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
             <ul>
                 <li><strong>Amplitud e incertidumbre:</strong> un intervalo muy ancho refleja alta incertidumbre sobre la variabilidad real del proceso, habitualmente debida a un tamaño muestral pequeño. Con muestras grandes, el IC se estrecha considerablemente.</li>
                 <li><strong>Límite superior en control de calidad:</strong> si el objetivo es controlar la dispersión de un proceso, el límite superior \(U(\sigma^2)\) es el valor más relevante; superar un valor de especificación con ese límite indica que la variabilidad puede exceder lo tolerado incluso con los datos actuales.</li>
                 <li><strong>Conexión con el contraste:</strong> si un valor de referencia \(\sigma_0^2\) queda fuera del intervalo, los datos rechazarían \(H_0\!: \sigma^2 = \sigma_0^2\) al nivel \(\alpha = 1 - C\) en el contraste chi-cuadrado bilateral equivalente. Si \(\sigma_0^2\) está dentro del intervalo, no hay evidencia para rechazarlo.</li>
             </ul>
-      </details>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -250,12 +249,13 @@
                     <li><a href="tamano-muestral-una-media.html">Tamaño muestral para una media</a></li>
                 </ul>
             </section>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Por qué el intervalo no es simétrico respecto a s²?</strong> Porque la distribución chi-cuadrado es asimétrica; los percentiles superior e inferior no están equidistantes del centro.</li>
                 <li><strong>¿Puedo usar este IC si los datos no son normales?</strong> No es recomendable; el intervalo chi-cuadrado es muy sensible a la no normalidad. Usa tests de normalidad primero.</li>
                 <li><strong>¿Qué pasa si n es muy pequeño?</strong> El intervalo será muy amplio, reflejando la alta incertidumbre con pocas observaciones.</li>
             </ul>
+            </details>
         </section>
     </main>
 

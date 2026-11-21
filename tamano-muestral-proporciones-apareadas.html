@@ -214,7 +214,7 @@
             <p>Para datos binarios apareados (sí/no medido dos veces en la misma unidad), el contraste adecuado es el <strong>test de McNemar</strong>. Su lógica central es que los <em>pares concordantes</em> (0→0 y 1→1) no aportan información sobre el cambio: solo los <strong>pares discordantes</strong> determinan si la intervención tiene efecto.</p>
             <p>Los pares discordantes son de dos tipos: \(p_{01}\) (la respuesta cambió de negativa a positiva, 0→1) y \(p_{10}\) (cambió de positiva a negativa, 1→0). El efecto de interés es la diferencia \(p_{10} - p_{01}\): si la intervención es efectiva, \(p_{10}\) será mayor que \(p_{01}\) (más sujetos pasan a respuesta negativa bajo el tratamiento, o viceversa según el diseño).</p>
             <p>La eficiencia del diseño apareado frente al de dos grupos independientes depende de la concordancia: cuantos más pares concordantes (sujetos que no cambian), el apareo ayuda menos porque esos pares quedan excluidos del análisis efectivo.</p>
-            <details class="fold fold-sub"><summary><h3>Fórmula de tamaño muestral</h3></summary>
+            <h3>Fórmula de tamaño muestral</h3>
             <p class="formula-line">\( n = \left\lceil\frac{\left(Z_{\alpha/2}\sqrt{p_d}+Z_\beta\sqrt{p_d-\Delta^2}\right)^2}{\Delta^2}\right\rceil \)</p>
             <p style="font-size:0.9em;color:var(--text-muted)">donde \(p_d = p_{01}+p_{10}\) y \(\Delta = |p_{10}-p_{01}|\). Fórmula de Connett <em>et al.</em> (1987), más precisa que la aproximación de Fleiss.</p>
             <ul>
@@ -223,7 +223,6 @@
                 <li><strong>p₁₀</strong>: probabilidad de que un par cambie de 1 a 0 (respuesta positiva → negativa).</li>
                 <li><strong>Nota:</strong> el denominador \((p_{10}-p_{01})^2\) requiere \(p_{10} \neq p_{01}\); si son iguales, no hay efecto que detectar.</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>Configuración rápida</h3></summary>
             <ul>
                 <li><strong>p₀₁ y p₁₀:</strong> deben estimarse de un piloto o de datos históricos. Si solo tienes la prevalencia antes (p_antes) y el efecto esperado, necesitas hacer suposiciones sobre la estructura de pares.</li>
@@ -259,10 +258,11 @@
                 <li>Diseños cruzados con resultado binario.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) es el <strong>número mínimo de pares totales</strong> (incluyendo los concordantes, es decir, los pares en que ambas condiciones producen el mismo resultado). Redondea siempre hacia arriba. Añade un margen por pérdidas de pares completos: si esperas que un 10 % de los sujetos no complete ambas mediciones o condiciones, recluta \(\lceil n / 0{,}90 \rceil\) pares. Es fundamental distinguir entre el número de pares y el número de observaciones: cada par aporta dos observaciones binarias, pero el test de McNemar solo utiliza los pares <em>discordantes</em>.</p>
                 <p>La característica más importante de este diseño es que el poder estadístico depende fundamentalmente de la proporción esperada de <strong>pares discordantes</strong> \((p_{01} + p_{10})\), no del total de pares. Si los sujetos responden de forma muy consistente en ambas condiciones (alta concordancia), los pares discordantes serán escasos y el estudio quedará infrapotenciado aunque el \(n\) total sea grande. Por ello, cuando se estime que la proporción de pares discordantes es baja (&lt; 20 %), será necesario reclutar muchos más sujetos para acumular los pares discordantes suficientes. Realiza un <em>análisis de sensibilidad</em> variando \(p_{01}\) y \(p_{10}\) en ±0,05 para ver el impacto en \(n\).</p>
-                <p>Si el \(n\) requerido resulta inviable, las alternativas son: (1) relajar la potencia (p. ej., de 90 % a 80 %), (2) reducir las exigencias de nivel de significación (aumentar \(\alpha\)), o (3) replantear el diseño del estudio para aumentar la tasa de discordancia esperada cambiando las condiciones. Con los datos recogidos, analiza los resultados con el <a href="contraste-hipotesis-proporciones-apareadas.html">test de McNemar para proporciones apareadas</a>; si los recuentos de pares discordantes son muy bajos (&lt; 25 en total), usa la versión exacta del test.</p>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
+            <p>Si el \(n\) requerido resulta inviable, las alternativas son: (1) relajar la potencia (p. ej., de 90 % a 80 %), (2) reducir las exigencias de nivel de significación (aumentar \(\alpha\)), o (3) replantear el diseño del estudio para aumentar la tasa de discordancia esperada cambiando las condiciones. Con los datos recogidos, analiza los resultados con el <a href="contraste-hipotesis-proporciones-apareadas.html">test de McNemar para proporciones apareadas</a>; si los recuentos de pares discordantes son muy bajos (&lt; 25 en total), usa la versión exacta del test.</p>
             </details>
         </section>
 
@@ -281,13 +281,14 @@
                 <li>Wikipedia (en): <a href="https://en.wikipedia.org/wiki/Matched_pairs" target="_blank" rel="noopener">Matched pairs</a> — diseños de pares emparejados y sus aplicaciones.</li>
                 <li>Fleiss, J. L., Levin, B. y Paik, M. C. (2003). <em>Statistical Methods for Rates and Proportions</em> (3.ª ed.). Wiley. — capítulo sobre el test de McNemar y cálculo de n.</li>
             </ul>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Por qué solo importan los pares discordantes?</strong> Porque los pares concordantes (respuesta igual en ambas condiciones) no aportan información sobre si la intervención cambió el resultado.</li>
                 <li><strong>¿Cómo estimo p₀₁ y p₁₀ sin piloto?</strong> Si conoces la prevalencia antes (p_a) y después (p_d) y la correlación entre mediciones, puedes aproximar: p₀₁ ≈ p_d·(1−ρ) y p₁₀ ≈ p_a·(1−ρ).</li>
                 <li><strong>¿Cuándo es mejor diseño apareado que dos grupos?</strong> Cuando la correlación entre mediciones es alta (ρ &gt; 0,3) y puedes aplicar ambas condiciones al mismo individuo sin arrastre.</li>
                 <li><strong>¿Es exacta la fórmula?</strong> Es la aproximación normal. Para n pequeño o proporciones extremas, usa la versión exacta del test de McNemar.</li>
             </ul>
+            </details>
         </section>
 
     </main>

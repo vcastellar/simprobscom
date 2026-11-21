@@ -339,14 +339,13 @@
       <p>p_A es la tasa de conversión actual del grupo de control (por ejemplo, 12 % de clicks → 0.12). p_B es la tasa que esperas, o la mínima mejora que te importaría detectar en la variante. La diferencia \(\Delta = p_B - p_A\) es el efecto del experimento.</p>
             </details>
 
-      <details class="fold fold-sub"><summary><h3>Fórmulas utilizadas</h3></summary>
+      <h3>Fórmulas utilizadas</h3>
       <p>Para la comparación de dos proporciones con asignación 1:1, el tamaño muestral necesario por grupo es:</p>
       <p class="formula-line">\( n = \left\lceil \dfrac{\left(z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})} + z_\beta\sqrt{p_A(1-p_A)+p_B(1-p_B)}\right)^2}{(p_A - p_B)^2} \right\rceil \)</p>
       <p>donde \(\bar{p} = (p_A + p_B)/2\), \(z_{\alpha/2}\) es el cuantil normal para el nivel de significación bilateral (o \(z_{\alpha}\) en unilateral) y \(z_{1-\beta}\) el cuantil para la potencia deseada.</p>
       <p>La potencia dado n se obtiene con la aproximación normal equivalente; en contraste bilateral se suman ambas colas de rechazo:</p>
       <p class="formula-line">\( 1-\beta \approx P\!\left(\hat{p}_B-\hat{p}_A > z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})/n}\right) + P\!\left(\hat{p}_B-\hat{p}_A < -z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})/n}\right) \)</p>
       <p>El <strong>MDE</strong> se obtiene por búsqueda binaria sobre el efecto que consigue la potencia objetivo con el n disponible.</p>
-            </details>
     </section>
 
 
@@ -364,10 +363,9 @@
         </section>
 
     <section class="card content-card">
-      <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
+      <h3>Cómo interpretar el resultado</h3>
       <p>Dependiendo del modo seleccionado, la calculadora devuelve una de las tres métricas clave del diseño experimental. Cada una responde a una pregunta distinta y debe leerse de forma diferente.</p>
-
-      <h3>Modo: Tamaño muestral</h3>
+      <details class="fold fold-sub"><summary><h3>Modo: Tamaño muestral</h3></summary>
       <p>La calculadora devuelve el número mínimo de usuarios <em>por grupo</em> necesarios para que el experimento tenga la potencia deseada. Por ejemplo, si obtienes n = 2 000, necesitas 2 000 usuarios en el grupo A y otros 2 000 en el grupo B, es decir 4 000 en total. Si lanzas el experimento con menos usuarios, la probabilidad de detectar el efecto real cae por debajo del umbral que has fijado y aumentan los falsos negativos.</p>
       <p>El resultado también muestra el efecto absoluto Δ (diferencia en puntos porcentuales entre p_A y p_B) y el lift relativo (cuánto sube la tasa en términos porcentuales respecto a la base). Estos dos números ayudan a juzgar si el efecto que estás diseñando detectar es realista para tu negocio.</p>
 
@@ -401,13 +399,14 @@
         </ul>
       </section>
 
-      <h3>Preguntas frecuentes</h3>
+      <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
       <ul>
         <li><strong>¿El cálculo de n asume asignación igual 1:1?</strong> Sí. La fórmula implementada maximiza la potencia con asignación balanceada. Para asignación desigual usa la calculadora general de dos proporciones.</li>
         <li><strong>¿Qué diferencia hay entre contraste bilateral y unilateral?</strong> El bilateral detecta efectos en ambas direcciones (p_B mayor o menor que p_A) y es el más usado. El unilateral solo detecta efectos en una dirección y necesita menos muestra, pero es válido únicamente si de antemano sabes que la variante solo puede mejorar, nunca empeorar.</li>
         <li><strong>¿El MDE es el efecto que espero o el mínimo que importa?</strong> El MDE es el mínimo detectable con la muestra dada. Deberías dimensionar el experimento para que su MDE sea igual o menor al efecto mínimo que tendría relevancia práctica para tu negocio.</li>
         <li><strong>¿Por qué el gráfico muestra lifts relativos y no el efecto exacto que introduje?</strong> El gráfico ilustra cómo varía la potencia con n para tres escenarios de referencia (+5 %, +10 %, +20 % relativo sobre p_A). Tu cálculo concreto está en el cuadro de resultados; el gráfico aporta contexto visual para entender la sensibilidad general del experimento.</li>
       </ul>
+      </details>
     </section>
   </main>
 

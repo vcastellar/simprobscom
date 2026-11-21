@@ -209,7 +209,7 @@
             <h3>Explanation</h3>
             <p>The chi-square variance test checks \(H_0: \sigma^2 = \sigma_0^2\) using the statistic \(T = (n-1)S^2/\sigma_0^2\), which under \(H_0\) follows a \(\chi^2_{n-1}\) distribution.</p>
             <p>Under the alternative \(\sigma_1 = R\cdot\sigma_0\), the statistic \(T\) follows an \(R^2 \cdot \chi^2_{n-1}\) distribution, equivalently \(T/R^2 \sim \chi^2_{n-1}\). If the data are normal, the power is exact: it is evaluated with the central chi-square CDF, without normal approximations.</p>
-            <details class="fold fold-sub"><summary><h3>Exact power formula</h3></summary>
+            <h3>Exact power formula</h3>
             <p>For the two-sided alternative (\(H_a: \sigma \neq \sigma_0\)):</p>
             <p class="formula-line">\( \text{Power} = F_{\chi^2_{n-1}}\!\left(\frac{\chi^2_{\alpha/2,\,n-1}}{R^2}\right) + 1 - F_{\chi^2_{n-1}}\!\left(\frac{\chi^2_{1-\alpha/2,\,n-1}}{R^2}\right) \)</p>
             <p>For the upper one-sided alternative (\(H_a: \sigma \geq \sigma_0\)):</p>
@@ -217,7 +217,6 @@
             <p>For the lower one-sided alternative (\(H_a: \sigma \leq \sigma_0\)):</p>
             <p class="formula-line">\( \text{Power} = F_{\chi^2_{n-1}}\!\left(\frac{\chi^2_{\alpha,\,n-1}}{R^2}\right) \)</p>
             <p>The calculator finds the smallest \(n\) such that the exact power reaches the target value.</p>
-            </details>
             <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>R:</strong> specify the ratio σ₁/σ₀ you want to detect. R=1.5 (a 50% increase) is a moderate effect size. R=2 (quadruple variance) is detected with smaller samples.</li>
@@ -240,10 +239,11 @@
                 <li>The calculation uses the exact chi-square distribution with \(n-1\) degrees of freedom.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
                 <p>The value \(n\) obtained is the <strong>minimum number of observations needed</strong> for the hypothesis test on the variance to reach the specified power. With that sample size, if the true deviation of the variance from \(\sigma_0^2\) is at least the one indicated by the ratio \(R = \sigma_1/\sigma_0\), the test will detect it with the desired probability. Always round up. If you expect losses of observations, divide \(n\) by \((1 - \text{dropout rate})\) to get the recruitment size needed.</p>
                 <p>The power of the variance test depends on the relative deviation \(R\) in a nonlinear way: detecting small variations (for example \(R = 1.2\)) requires very large samples, while large variations (\(R = 2\) or more) are detected with few observations. Run a sensitivity analysis varying \(R\) by ±0.1 or ±0.2 to assess the robustness of the sample size to uncertainty about the true magnitude of the effect.</p>
-                <p>A critical assumption is <strong>normality of the data</strong>: the chi-square statistic for the variance is notably more sensitive to deviations from normality than the \(t\) statistic for the mean. If the data are skewed or heavy-tailed, the nominal \(\alpha\) level may not hold. Before using this result, check normality with the <a href="tamano-muestral-shapiro-wilk.html">sample size calculator for Shapiro-Wilk</a> or draw a Q-Q plot. Once the data are collected, run the test with the <a href="contraste-hipotesis-varianzas.html">hypothesis test calculator for variances</a>.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
+            <p>A critical assumption is <strong>normality of the data</strong>: the chi-square statistic for the variance is notably more sensitive to deviations from normality than the \(t\) statistic for the mean. If the data are skewed or heavy-tailed, the nominal \(\alpha\) level may not hold. Before using this result, check normality with the <a href="tamano-muestral-shapiro-wilk.html">sample size calculator for Shapiro-Wilk</a> or draw a Q-Q plot. Once the data are collected, run the test with the <a href="contraste-hipotesis-varianzas.html">hypothesis test calculator for variances</a>.</p>
             </details>
         </section>
 

@@ -319,10 +319,9 @@
         </section>
 
     <section class="card content-card">
-      <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
+      <h3>Cómo interpretar el resultado</h3>
       <p>La simulación Monte Carlo permite verificar empíricamente las propiedades del test: si el error de tipo I es realmente α cuando p_A = p_B, si la potencia coincide con la teórica, y cómo se comporta la distribución del estadístico z en la práctica. Es especialmente útil cuando quieres entender el comportamiento del test bajo condiciones concretas o cuando los supuestos del modelo no se cumplen exactamente. La tasa de rechazo empírica que devuelve la simulación es la estimación directa de la potencia: cuántas veces en 100 experimentos idénticos concluirías correctamente que B es diferente de A.</p>
-
-      <h3>Cómo leer el histograma de z</h3>
+      <details class="fold fold-sub"><summary><h3>Cómo leer el histograma de z</h3></summary>
       <p>Bajo H₀ (p_A = p_B), el estadístico z sigue aproximadamente una N(0,1): el histograma debería ser simétrico centrado en 0, y la proporción de barras rojas (zona de rechazo) debería aproximarse a α. Bajo H₁ (p_A ≠ p_B), el histograma se desplaza hacia la dirección del efecto: cuanto mayor es la diferencia real entre tasas o mayor el tamaño muestral, más pronunciado es ese desplazamiento y mayor la proporción de réplicas que caen en la zona de rechazo.</p>
 
       <h3>Cómo leer la distribución de p-valores</h3>
@@ -339,13 +338,14 @@
           <li><a href="ab-testing-potencia.html">MDE, potencia y tamaño muestral para A/B</a></li>
         </ul>
       </section>
-      <h3>Preguntas frecuentes</h3>
+      <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
       <ul>
         <li><strong>¿La simulación usa muestras binomiales?</strong> Cada réplica aproxima x_A ~ Bin(n, p_A) y x_B ~ Bin(n, p_B) con la aproximación normal de De Moivre-Laplace. Es adecuada cuando n·p y n·(1−p) no son pequeños; para muestras pequeñas o proporciones extremas conviene interpretar la simulación como aproximada.</li>
         <li><strong>¿Por qué la potencia empírica no coincide exactamente con la teórica?</strong> Por dos motivos. La potencia empírica tiene error de Monte Carlo: su error estándar es aproximadamente √(p(1−p)/N), que con 5 000 réplicas vale ±0,006 para potencias en torno al 80 % y ±0,003 para tasas de rechazo en torno al 5 %. Además, la potencia «teórica» es a su vez una aproximación normal, que puede desviarse de la real con muestras pequeñas o tasas extremas.</li>
         <li><strong>¿Puedo simular con p_A = p_B para verificar el nivel α?</strong> Sí: introduce el mismo valor en p_A y p_B y comprueba que la tasa de rechazo empírica se aproxima a α.</li>
         <li><strong>¿Las réplicas son independientes?</strong> Sí: cada réplica genera nuevas muestras sin dependencia con las anteriores.</li>
       </ul>
+      </details>
     </section>
   </main>
 

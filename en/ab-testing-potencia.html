@@ -332,14 +332,13 @@
       <p>p_A is the current conversion rate of the control group (for example, 12% clicks → 0.12). p_B is the rate you expect, or the minimum improvement you would care to detect in the variant. The difference \(\Delta = p_B - p_A\) is the effect of the experiment.</p>
             </details>
 
-      <details class="fold fold-sub"><summary><h3>Formulas used</h3></summary>
+      <h3>Formulas used</h3>
       <p>For a comparison of two proportions with 1:1 allocation, the required sample size per group is:</p>
       <p class="formula-line">\( n = \left\lceil \dfrac{\left(z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})} + z_\beta\sqrt{p_A(1-p_A)+p_B(1-p_B)}\right)^2}{(p_A - p_B)^2} \right\rceil \)</p>
       <p>where \(\bar{p} = (p_A + p_B)/2\), \(z_{\alpha/2}\) is the normal quantile for the two-tailed significance level (or \(z_{\alpha}\) for one-tailed) and \(z_{1-\beta}\) is the quantile for the desired power.</p>
       <p>The power given n is obtained with the equivalent normal approximation; for a two-tailed test both rejection tails are added:</p>
       <p class="formula-line">\( 1-\beta \approx P\!\left(\hat{p}_B-\hat{p}_A > z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})/n}\right) + P\!\left(\hat{p}_B-\hat{p}_A < -z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})/n}\right) \)</p>
       <p>The <strong>MDE</strong> is obtained by binary search over the effect that achieves the target power with the available n.</p>
-            </details>
     </section>
 
 
@@ -357,10 +356,9 @@
         </section>
 
     <section class="card content-card">
-      <details class="fold"><summary><h3>How to interpret the result</h3></summary>
+      <h3>How to interpret the result</h3>
       <p>Depending on the selected mode, the calculator returns one of the three key metrics of experimental design. Each answers a different question and must be read differently.</p>
-
-      <h3>Mode: Sample size</h3>
+      <details class="fold fold-sub"><summary><h3>Mode: Sample size</h3></summary>
       <p>The calculator returns the minimum number of users <em>per group</em> needed for the experiment to have the desired power. For example, if you get n = 2,000, you need 2,000 users in group A and another 2,000 in group B, i.e., 4,000 in total. If you launch the experiment with fewer users, the probability of detecting the real effect drops below the threshold you set, and false negatives increase.</p>
       <p>The result also shows the absolute effect Δ (difference in percentage points between p_A and p_B) and the relative lift (how much the rate increases in percentage terms relative to the baseline). These two numbers help you judge whether the effect you're designing to detect is realistic for your business.</p>
 
@@ -394,13 +392,14 @@
         </ul>
       </section>
 
-      <h3>Frequently asked questions</h3>
+      <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
       <ul>
         <li><strong>Does the sample size calculation assume 1:1 allocation?</strong> Yes. The formula implemented maximizes power with balanced allocation. For unequal allocation, use the general two-proportion sample size calculator.</li>
         <li><strong>What is the difference between a two-tailed and a one-tailed test?</strong> The two-tailed test detects effects in both directions (p_B greater or smaller than p_A) and is the most commonly used. The one-tailed test only detects effects in one direction and needs a smaller sample, but is valid only if you know in advance that the variant can only improve, never worsen.</li>
         <li><strong>Is the MDE the effect I expect, or the minimum effect that matters?</strong> The MDE is the minimum effect detectable with the given sample. You should size the experiment so that its MDE is equal to or smaller than the minimum effect that would have practical relevance for your business.</li>
         <li><strong>Why does the chart show relative lifts instead of the exact effect I entered?</strong> The chart illustrates how power varies with n for three reference scenarios (+5%, +10%, +20% relative to p_A). Your specific calculation is shown in the results box; the chart provides visual context to understand the general sensitivity of the experiment.</li>
       </ul>
+      </details>
     </section>
   </main>
 

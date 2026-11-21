@@ -210,7 +210,7 @@
             <p>For paired binary data (yes/no measured twice on the same unit), the appropriate test is <strong>McNemar's test</strong>. Its core logic is that <em>concordant pairs</em> (0→0 and 1→1) provide no information about change: only <strong>discordant pairs</strong> determine whether the intervention has an effect.</p>
             <p>Discordant pairs come in two types: \(p_{01}\) (the response changed from negative to positive, 0→1) and \(p_{10}\) (changed from positive to negative, 1→0). The effect of interest is the difference \(p_{10} - p_{01}\): if the intervention is effective, \(p_{10}\) will be larger than \(p_{01}\) (more subjects move to a negative response under treatment, or vice versa depending on the design).</p>
             <p>The efficiency of the paired design compared with two independent groups depends on concordance: the more concordant pairs there are (subjects who don't change), the less the pairing helps, because those pairs are effectively excluded from the analysis.</p>
-            <details class="fold fold-sub"><summary><h3>Sample size formula</h3></summary>
+            <h3>Sample size formula</h3>
             <p class="formula-line">\( n = \left\lceil\frac{\left(Z_{\alpha/2}\sqrt{p_d}+Z_\beta\sqrt{p_d-\Delta^2}\right)^2}{\Delta^2}\right\rceil \)</p>
             <p style="font-size:0.9em;color:var(--text-muted)">where \(p_d = p_{01}+p_{10}\) and \(\Delta = |p_{10}-p_{01}|\). Connett <em>et al.</em>'s (1987) formula, more precise than Fleiss's approximation.</p>
             <ul>
@@ -219,7 +219,6 @@
                 <li><strong>p₁₀</strong>: probability that a pair changes from 1 to 0 (positive response → negative).</li>
                 <li><strong>Note:</strong> the denominator \((p_{10}-p_{01})^2\) requires \(p_{10} \neq p_{01}\); if they are equal, there is no effect to detect.</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>p₀₁ and p₁₀:</strong> should be estimated from a pilot study or historical data. If you only have the prevalence before (p_before) and the expected effect, you need to make assumptions about the pair structure.</li>
@@ -255,10 +254,11 @@
                 <li>Crossover designs with a binary outcome.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
                 <p>The value \(n\) is the <strong>minimum total number of pairs</strong> (including concordant ones, i.e. pairs where both conditions produce the same result). Always round up. Add a margin for loss of complete pairs: if you expect 10% of subjects to not complete both measurements or conditions, recruit \(\lceil n / 0.90 \rceil\) pairs. It is essential to distinguish between the number of pairs and the number of observations: each pair contributes two binary observations, but McNemar's test only uses the <em>discordant</em> pairs.</p>
                 <p>The most important feature of this design is that statistical power depends fundamentally on the expected proportion of <strong>discordant pairs</strong> \((p_{01} + p_{10})\), not on the total number of pairs. If subjects respond very consistently under both conditions (high concordance), discordant pairs will be scarce and the study will be underpowered even if the total \(n\) is large. Therefore, when the proportion of discordant pairs is expected to be low (&lt; 20%), many more subjects will need to be recruited to accumulate enough discordant pairs. Run a <em>sensitivity analysis</em> varying \(p_{01}\) and \(p_{10}\) by ±0.05 to see the impact on \(n\).</p>
-                <p>If the required \(n\) turns out to be unfeasible, the alternatives are: (1) relax the power (e.g., from 90% to 80%), (2) relax the significance requirement (increase \(\alpha\)), or (3) reconsider the study design to increase the expected discordance rate by changing conditions. Once the data has been collected, analyze the results with the <a href="contraste-hipotesis-proporciones-apareadas.html">McNemar test for paired proportions</a> calculator; if the discordant pair counts are very low (&lt; 25 total), use the exact version of the test.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
+            <p>If the required \(n\) turns out to be unfeasible, the alternatives are: (1) relax the power (e.g., from 90% to 80%), (2) relax the significance requirement (increase \(\alpha\)), or (3) reconsider the study design to increase the expected discordance rate by changing conditions. Once the data has been collected, analyze the results with the <a href="contraste-hipotesis-proporciones-apareadas.html">McNemar test for paired proportions</a> calculator; if the discordant pair counts are very low (&lt; 25 total), use the exact version of the test.</p>
             </details>
         </section>
 
@@ -277,13 +277,14 @@
                 <li>Wikipedia: <a href="https://en.wikipedia.org/wiki/Matched_pairs" target="_blank" rel="noopener">Matched pairs</a> — matched pair designs and their applications.</li>
                 <li>Fleiss, J. L., Levin, B. and Paik, M. C. (2003). <em>Statistical Methods for Rates and Proportions</em> (3rd ed.). Wiley. — chapter on McNemar's test and sample size calculation.</li>
             </ul>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>Why do only discordant pairs matter?</strong> Because concordant pairs (same response in both conditions) provide no information about whether the intervention changed the outcome.</li>
                 <li><strong>How do I estimate p₀₁ and p₁₀ without a pilot study?</strong> If you know the prevalence before (p_a) and after (p_d) and the correlation between measurements, you can approximate: p₀₁ ≈ p_d·(1−ρ) and p₁₀ ≈ p_a·(1−ρ).</li>
                 <li><strong>When is a paired design better than two groups?</strong> When the correlation between measurements is high (ρ &gt; 0.3) and you can apply both conditions to the same individual without carryover.</li>
                 <li><strong>Is the formula exact?</strong> It's the normal approximation. For small n or extreme proportions, use the exact version of McNemar's test.</li>
             </ul>
+            </details>
         </section>
 
     </main>

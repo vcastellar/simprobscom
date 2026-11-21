@@ -245,7 +245,7 @@
             <p>Esta calculadora determina el número mínimo de observaciones por grupo para detectar una diferencia entre las medias de dos grupos independientes. El contraste subyacente es el test t de Student de dos muestras: \(H_0\!: \mu_1 = \mu_2\) frente a \(H_1\!: |\mu_1 - \mu_2| \geq \Delta\).</p>
             <p>A diferencia de la estimación de una media, aquí el objetivo no es precisión sino potencia: queremos asegurar que, si la diferencia real es al menos \(\Delta\), el contraste la detectará con la probabilidad especificada \(1-\beta\).</p>
             <p>El tamaño del efecto es la <em>d de Cohen</em>: \(d = \Delta / \sigma\). Valores de referencia: d = 0,2 (efecto pequeño), d = 0,5 (mediano), d = 0,8 (grande). Para d = 0,5 con α = 0,05 y potencia 0,80 el resultado es n ≈ 64 por grupo.</p>
-            <details class="fold fold-sub"><summary><h3>Fórmula de tamaño muestral</h3></summary>
+            <h3>Fórmula de tamaño muestral</h3>
             <p class="formula-line">\( n_1 = \frac{(Z_{\alpha/2}+Z_\beta)^2(\sigma_1^2+\sigma_2^2/k)}{\Delta^2} \)</p>
             <p class="formula-line">\( n_2 = k\,n_1 \)</p>
             <ul>
@@ -255,7 +255,6 @@
                 <li><strong>k</strong>: razón de asignación n2/n1 (k = 1 para diseño balanceado).</li>
                 <li><strong>\(Z_{\alpha/2}\)</strong> y <strong>\(Z_\beta\)</strong>: cuantiles normales (α bilateral y potencia; en un contraste unilateral, \(Z_{\alpha}\) sustituye a \(Z_{\alpha/2}\)).</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>Configuración rápida</h3></summary>
             <ul>
                 <li><strong>σ1 y σ2:</strong> usa datos históricos, piloto o referencias de la literatura. Si asumes varianzas iguales, usa la misma σ en ambos campos.</li>
@@ -292,10 +291,11 @@
                 <li>Estudios de intervención educativa o psicológica.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) que devuelve la calculadora es el <strong>tamaño mínimo por grupo</strong> en un diseño balanceado. El número total de participantes a reclutar es \(2n\) (uno por grupo). Redondea siempre hacia arriba y añade un margen por pérdidas: si esperas una tasa de abandono del \(r\,\%\), el número de sujetos a reclutar por grupo es \(\lceil n / (1 - r) \rceil\). La diferencia \(\Delta\) debe ser la <em>diferencia mínima clínicamente o prácticamente relevante</em>, no simplemente la diferencia esperada: especificar una diferencia demasiado pequeña dispara el tamaño muestral hasta hacerlo inviable.</p>
                 <p>La sensibilidad de \(n\) a los parámetros es crítica en este diseño. Los errores en \(\sigma\) se propagan al cuadrado: si la desviación estándar real es un 20 % mayor de lo supuesto, el \(n\) necesario aumenta un 44 % \((1{,}2^2 = 1{,}44)\). Por tanto, es imprescindible un <em>análisis de sensibilidad</em>: calcula \(n\) para \(\sigma - 25\,\%\), \(\sigma\) y \(\sigma + 25\,\%\) y planifica según el escenario más desfavorable. Del mismo modo, si \(\Delta\) se reduce a la mitad, \(n\) se cuadruplica. Aumentar la potencia del 80 % al 90 % incrementa \(n\) aproximadamente en un 30 %.</p>
-                <p>Si el \(n\) resultante es demasiado grande para ser factible, las alternativas son: (1) aumentar \(\Delta\) si existe consenso clínico para ello, (2) aceptar menor potencia (p. ej., 80 % en lugar de 90 %), (3) diseñar el estudio con medidas repetidas que aprovechen la correlación intraindividual, o (4) recurrir a un diseño adaptativo. Cuando \(n\) sea muy pequeño (&lt; 20 por grupo), verifica que la normalidad de los datos o el tamaño de las desviaciones no invaliden los supuestos del test t de dos muestras. Con los datos recogidos, analiza los resultados con la <a href="contraste-hipotesis-dos-medias.html">calculadora de contraste para diferencia de medias</a>.</p>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
+            <p>Si el \(n\) resultante es demasiado grande para ser factible, las alternativas son: (1) aumentar \(\Delta\) si existe consenso clínico para ello, (2) aceptar menor potencia (p. ej., 80 % en lugar de 90 %), (3) diseñar el estudio con medidas repetidas que aprovechen la correlación intraindividual, o (4) recurrir a un diseño adaptativo. Cuando \(n\) sea muy pequeño (&lt; 20 por grupo), verifica que la normalidad de los datos o el tamaño de las desviaciones no invaliden los supuestos del test t de dos muestras. Con los datos recogidos, analiza los resultados con la <a href="contraste-hipotesis-dos-medias.html">calculadora de contraste para diferencia de medias</a>.</p>
             </details>
         </section>
 
@@ -316,13 +316,14 @@
                 <li>Wikipedia (en): <a href="https://en.wikipedia.org/wiki/Sample_size_determination" target="_blank" rel="noopener">Sample size determination</a> — derivación y variantes.</li>
                 <li>Cohen, J. (1988). <em>Statistical Power Analysis for the Behavioral Sciences</em> (2.ª ed.). Lawrence Erlbaum. — referencia estándar para tamaños del efecto.</li>
             </ul>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Qué es la d de Cohen?</strong> El tamaño del efecto estandarizado: Δ/σ. Permite comparar estudios independientemente de las unidades. d = 0,2 (pequeño), 0,5 (mediano), 0,8 (grande).</li>
                 <li><strong>¿Qué pasa si σ1 ≠ σ2?</strong> La fórmula lo admite; introduce cada desviación estándar por separado. Si la diferencia es grande, considera un test de Welch.</li>
                 <li><strong>¿Qué es la potencia estadística?</strong> La probabilidad de rechazar H0 cuando la diferencia real es al menos Δ.</li>
                 <li><strong>¿Cuándo conviene un diseño apareado?</strong> Cuando puedes medir el mismo sujeto en ambas condiciones. El diseño apareado suele requerir muchos menos sujetos porque elimina la variabilidad entre individuos.</li>
             </ul>
+            </details>
         </section>
 
     </main>

@@ -194,7 +194,7 @@
             <p>When an appreciable fraction of a finite population of size \(N\) is sampled without replacement, the observations are no longer strictly independent. The <strong>finite population correction factor</strong> (FPC) adjusts the standard error to account for the fact that knowing part of the population reduces the uncertainty about the rest.</p>
             <p>The FPC is relevant when the sampling fraction \(f = n/N\) exceeds 5%. Below that threshold, the standard CI and the corrected one are practically identical.</p>
 
-            <details class="fold fold-sub"><summary><h3>Formula for the CI with FPC</h3></summary>
+            <h3>Formula for the CI with FPC</h3>
             <p class="formula-line">\( \hat{p} = \frac{x}{n} \)</p>
             <p class="formula-line">\( \text{FPC} = \sqrt{\frac{N-n}{N-1}} \)</p>
             <p class="formula-line">\( \text{SE}_{\text{FPC}} = \sqrt{\frac{\hat{p}(1-\hat{p})}{n}} \cdot \text{FPC} \)</p>
@@ -204,7 +204,6 @@
                 <li><strong>FPC</strong>: factor that reduces the standard error when \(n/N\) is large. If \(n \ll N\), FPC ≈ 1.</li>
                 <li><strong>z_{α/2}</strong>: standard normal quantile (1.645 for 90%; 1.960 for 95%; 2.576 for 99%).</li>
             </ul>
-            </details>
 
             <details class="fold fold-sub"><summary><h3>When the FPC matters</h3></summary>
             <ul>
@@ -233,14 +232,15 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
             <p>The interval \([L, U]\) is the plausible range for the population proportion \(p\) given the chosen confidence level. In frequentist terms, if you repeated the sampling many times and built the CI with the same method, a proportion \(C\) of those intervals would contain the true value of \(p\). The CI with FPC is always equal to or narrower than the standard one: this is not a less precise or less honest result, but a correct reflection of the extra information provided by sampling an appreciable fraction of the population without replacement.</p>
             <p>The magnitude of the effect depends directly on \(n/N\). With \(n/N &lt; 5\,\%\), the FPC is practically 1 and both CIs coincide. With \(n/N = 25\,\%\) (as in the example), the width reduction can exceed 10%. The chart shows both intervals side by side so you can see how much the correction gains in your specific case. If you want to report the proportion with the least uncertainty that is honestly justified, always choose the CI with FPC when the design is sampling without replacement and the fraction exceeds 5%.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
             <ul>
                 <li><strong>Connection with hypothesis testing:</strong> if a reference value \(p_0\) falls outside the CI with FPC, the data would reject \(H_0\!: p = p_0\) at significance level \(\alpha = 1 - C\) in the equivalent two-sided test.</li>
                 <li><strong>Limits and the normality condition:</strong> the CI is based on the normal (Wald) approximation with FPC; it is more reliable when \(n\hat{p} \geq 5\) and \(n(1-\hat{p}) \geq 5\). If these conditions are not met, the interval should be interpreted with caution.</li>
             </ul>
-      </details>
+            </details>
         </section>
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">

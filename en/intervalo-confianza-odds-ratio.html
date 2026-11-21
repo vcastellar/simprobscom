@@ -243,11 +243,12 @@
             <p class="formula-line">\( \widehat{OR} = \dfrac{a/b}{c/d} = \dfrac{a\cdot d}{b\cdot c} \)</p>
             <p>In the example, \(\widehat{OR} = (35\cdot80)/(65\cdot20) \approx 2.154\). This means the observed odds of the event in the exposed group are approximately 2.15 times the observed odds in the unexposed group. An OR equal to 1 indicates no association; an OR greater than 1 indicates higher odds of the event in the exposed group; and an OR less than 1 indicates lower odds.</p>
 
-            <details class="fold fold-sub"><summary><h3>Woolf's logarithmic method</h3></summary>
+            <h3>Woolf's logarithmic method</h3>
             <p>Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area outside the interval. For 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\) in each tail.</p>
             <p>Woolf's method builds the interval on the logarithmic scale because the sampling distribution of \(\widehat{OR}\) is skewed and only takes positive values. After the log transform, \(\log(\widehat{OR})\) can be better approximated by a normal distribution when the counts are large enough.</p>
             <p>The first step is to calculate the point estimate \(\widehat{OR} = ad/(bc)\) and its logarithm. Then the standard error of \(\log(\widehat{OR})\) is estimated by summing the uncertainty contribution of the four cells:</p>
             <p class="formula-line">\( SE\left[\log(\widehat{OR})\right] = \sqrt{\dfrac{1}{a}+\dfrac{1}{b}+\dfrac{1}{c}+\dfrac{1}{d}} \)</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
             <p>With that standard error, the two-sided interval on the logarithmic scale is:</p>
             <p class="formula-line">\( \log(\widehat{OR}) \pm z_{\alpha/2}\cdot SE\left[\log(\widehat{OR})\right] \)</p>
             <p>Finally, the exponential is applied to both limits to return to the original scale of the odds ratio. This step matters: the resulting interval is not symmetric around the OR itself, but rather it is symmetric on the \(\log(OR)\) scale. That's why the lower and upper limits are usually at different distances from the point estimate when viewed on the original scale.</p>
@@ -317,15 +318,16 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
             <p>The interval \([L, U]\) is the plausible range of the population odds ratio \(OR\) given the chosen confidence level. The null value for an OR is 1, which indicates no association between the exposure and the event. In frequentist terms: if you repeated the study many times and built the CI with the same procedure, a proportion \(C\) of those intervals would contain the true OR. The interval is built and presented symmetrically on the logarithmic scale but, once transformed back with the exponential, the limits are not equidistant from the point estimate on the original scale: the OR is always positive and its sampling distribution is skewed.</p>
             <p>Reading the result follows three straightforward cases. If \(1 \in [L, U]\), the data are compatible with no association at the chosen confidence level; equivalently, the two-sided test \(H_0\!: OR = 1\) would not be rejected at level \(\alpha = 1 - C\). If \(L > 1\) (the entire interval is above 1), the odds of the event are significantly higher in the exposed group. If \(U < 1\) (the entire interval is below 1), the odds are significantly lower. The chart shows the approximate normal distribution of \(\log(OR)\): the green region is the confidence zone and the red tails mark the critical values \(\pm z_{\alpha/2}\) on the logarithmic scale.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
             <ul>
                 <li><strong>Effect magnitude:</strong> an OR = 2.15 means the observed odds of the event in the exposed group are 2.15 times the odds in the unexposed group. The farther the OR is from 1, the larger the estimated association; the CI communicates the uncertainty around that estimate.</li>
                 <li><strong>Don't confuse OR with relative risk:</strong> the OR is not a relative risk. They only become close when the event is rare (\(p &lt; 0.1\)). With common events, the OR can be considerably more extreme than the RR and should not be interpreted as a ratio of probabilities.</li>
                 <li><strong>Width and counts:</strong> cells with small counts produce very wide intervals because the standard error of \(\log(OR)\) grows as the reciprocals \(1/a + 1/b + 1/c + 1/d\) are summed. If any cell is smaller than 5, interpret the result with caution.</li>
             </ul>
-      </details>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -338,12 +340,13 @@
                     <li><a href="tamano-muestral-odds-ratio.html">Sample size for odds ratio</a></li>
                 </ul>
             </section>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>What value indicates no effect?</strong> For an odds ratio, the null value is 1.</li>
                 <li><strong>Is it interpreted as a relative risk?</strong> Not exactly. The OR compares odds, not probabilities; it only approximates the relative risk when the event is rare.</li>
                 <li><strong>What happens with very small counts?</strong> The normal method on \(\log(OR)\) can be imprecise; the result should be interpreted with caution and exact methods should be considered.</li>
             </ul>
+            </details>
             <h3>References used</h3>
             <ul>
                 <li>Woolf, B. (1955). <em>On estimating the relation between blood group and disease</em>, Annals of Human Genetics, 19, 251–253.</li>

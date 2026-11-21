@@ -209,7 +209,7 @@
             <p>Esta calculadora determina el número mínimo de observaciones para estimar una media poblacional \(\mu\) con un margen de error absoluto máximo \(E\) y un nivel de confianza dado. Es el cálculo análogo al de una proporción, pero para variables cuantitativas continuas.</p>
             <p>El parámetro clave que debes conocer de antemano es la desviación estándar \(\sigma\). Si no la tienes, puedes estimarla de datos históricos, de la literatura o de un estudio piloto. Una regla práctica conservadora cuando la distribución es aproximadamente normal: \(\sigma \approx \text{rango} / 4\) (un cuarto del rango probable de los datos).</p>
             <p>Esta fórmula usa el cuantil normal Z, lo que supone que \(\sigma\) es conocida o que la muestra es suficientemente grande para que el cuantil t converja a Z. Para muestras pequeñas (&lt; 30) con \(\sigma\) desconocida, el n real puede ser algo mayor (usa el cuantil t con n−1 grados de libertad de forma iterativa).</p>
-            <details class="fold fold-sub"><summary><h3>Fórmula de tamaño muestral</h3></summary>
+            <h3>Fórmula de tamaño muestral</h3>
             <p class="formula-line">\( n = \left(\frac{Z \cdot \sigma}{E}\right)^2 \)</p>
             <ul>
                 <li><strong>n</strong>: tamaño muestral mínimo (redondeado al entero superior).</li>
@@ -217,7 +217,6 @@
                 <li><strong>\(\sigma\)</strong>: desviación estándar esperada de la variable.</li>
                 <li><strong>E</strong>: margen de error absoluto máximo tolerable (en las mismas unidades que \(\sigma\)).</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>Relación entre σ, E y n</h3></summary>
             <p>El tamaño muestral crece cuadráticamente con la precisión exigida: reducir E a la mitad cuadruplica n. También crece cuadráticamente con \(\sigma\): si la variabilidad de la población es el doble, necesitas cuatro veces más observaciones para la misma precisión. Comprueba siempre que E sea razonable en términos prácticos: un E muy pequeño puede hacer el estudio inviable.</p>
             </details>
@@ -255,10 +254,11 @@
                 <li>Encuestas sobre variables continuas (peso, altura, puntuación).</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) que devuelve la calculadora es el <strong>mínimo de observaciones válidas</strong> que debes recoger para que el intervalo de confianza resultante tenga, como máximo, el margen de error \(E\) especificado. Redondea siempre hacia arriba (nunca hacia abajo), porque trabajar con una sola observación menos ya hace que el margen real supere el objetivo. Si prevés que algún participante abandonará el estudio o que ciertas observaciones quedarán fuera por criterios de exclusión, divide \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener el número de reclutamiento; por ejemplo, con una pérdida esperada del 15 %, recluta \(\lceil n / 0{,}85 \rceil\) sujetos.</p>
                 <p>La sensibilidad de \(n\) a los parámetros de entrada es asimétrica: \(n\) crece con el <strong>cuadrado</strong> de \(\sigma\) y decrece con el cuadrado de \(E\). Esto significa que si la desviación estándar real resulta ser un 20 % mayor de lo esperado, necesitarás aproximadamente un 44 % más de sujetos \((1{,}2^2 = 1{,}44)\). Por ello se recomienda un <em>análisis de sensibilidad</em>: calcula \(n\) para \(\sigma - 25\,\%\), \(\sigma\) y \(\sigma + 25\,\%\) y utiliza el valor mayor como margen de seguridad. Reducir \(E\) a la mitad cuadruplica \(n\), de modo que si el tamaño calculado resulta inviable es preferible relajar la precisión requerida antes que bajar el nivel de confianza.</p>
-                <p>Cuando el \(n\) obtenido sea muy pequeño (por ejemplo, &lt; 30), comprueba que los datos son razonablemente normales o que el teorema central del límite puede aplicarse, ya que la fórmula se basa en la distribución normal. Si \(n\) resulta inasumible por restricciones de tiempo o coste, considera aceptar un margen de error mayor o una confianza del 90 % en lugar del 95 %. Una vez recogida la muestra, usa la <a href="intervalo-confianza-media.html">calculadora de intervalo de confianza para la media</a> para obtener el IC real con los datos observados.</p>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
+            <p>Cuando el \(n\) obtenido sea muy pequeño (por ejemplo, &lt; 30), comprueba que los datos son razonablemente normales o que el teorema central del límite puede aplicarse, ya que la fórmula se basa en la distribución normal. Si \(n\) resulta inasumible por restricciones de tiempo o coste, considera aceptar un margen de error mayor o una confianza del 90 % en lugar del 95 %. Una vez recogida la muestra, usa la <a href="intervalo-confianza-media.html">calculadora de intervalo de confianza para la media</a> para obtener el IC real con los datos observados.</p>
             </details>
         </section>
 
@@ -280,13 +280,14 @@
                 <li>Wikipedia (en): <a href="https://en.wikipedia.org/wiki/Standard_deviation" target="_blank" rel="noopener">Standard deviation</a> — cómo estimar σ de datos previos.</li>
                 <li>Montgomery, D. C. (2019). <em>Introduction to Statistical Quality Control</em> (8.ª ed.). Wiley. — aplicaciones de tamaño muestral en control de procesos.</li>
             </ul>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Qué hago si no conozco σ?</strong> Usa una muestra piloto de 15–30 observaciones para estimarla, o busca σ en literatura similar. Como fallback conservador, usa rango/4.</li>
                 <li><strong>¿Cuándo debo usar t en lugar de Z?</strong> Cuando n &lt; 30 y σ es desconocida. Para esos casos, itera: calcula n con Z, luego reemplaza Z por t(n−1) y recalcula hasta convergencia.</li>
                 <li><strong>¿El resultado es exacto?</strong> Es la muestra mínima teórica. En la práctica, añade un colchón del 10–20 % para compensar observaciones inválidas o perdidas.</li>
                 <li><strong>¿Qué es el nivel de confianza?</strong> El porcentaje de veces que el intervalo de confianza calculado con ese procedimiento contendría el verdadero valor poblacional si repitiéramos el muestreo.</li>
             </ul>
+            </details>
         </section>
 
     </main>

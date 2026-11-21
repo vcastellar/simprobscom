@@ -207,7 +207,7 @@
             <h3>Explanation</h3>
             <p>The Snedecor-Fisher F-test tests the equality of variances of two independent normal populations using the statistic \(F = S_1^2/S_2^2\), which under \(H_0\) follows an \(F(n_1-1, n_2-1)\) distribution.</p>
             <p>Under the alternative \(\sigma_1 = R \cdot \sigma_2\) with \(R \neq 1\), we have \(F/R^2 \sim F(n_1-1, n_2-1)\), which, if both populations are normal, allows the exact power to be computed without needing noncentral F distributions. The calculator searches for the smallest \(n\) (per group) so that the exact two-tailed power reaches the target.</p>
-            <details class="fold fold-sub"><summary><h3>Exact power formula</h3></summary>
+            <h3>Exact power formula</h3>
             <p>For the two-tailed test \(H_a: \sigma_1 \neq \sigma_2\) with equal-sized groups \(n\):</p>
             <p class="formula-line">\( \text{Power} = F_{F(df,df)}\!\left(\frac{F_{\alpha/2,\,df,\,df}}{R^2}\right) + 1 - F_{F(df,df)}\!\left(\frac{F_{1-\alpha/2,\,df,\,df}}{R^2}\right) \)</p>
             <p>where \(df = n-1\) and \(F_{p,df,df}\) is the \(p\) quantile of the \(F(df, df)\) distribution. The calculator searches for the smallest \(n\) that satisfies the target power.</p>
@@ -215,7 +215,6 @@
                 <li><strong>R > 1:</strong> σ₁ > σ₂ (group 1 is more variable).</li>
                 <li><strong>R < 1:</strong> in the two-tailed test, equivalent to R'=1/R with the groups swapped. In the one-tailed σ₁ > σ₂ test, R must be greater than 1.</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>Quick settings</h3></summary>
             <ul>
                 <li><strong>R:</strong> use R > 1 for the one-tailed σ₁ > σ₂ test; the two-tailed test also accepts R < 1. R=1.5 is a moderate effect; R=2 is already large.</li>
@@ -237,10 +236,11 @@
                 <li>The sample size is derived from the exact \(F\) distribution for the variance ratio.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
                 <p>The value \(n\) is the <strong>minimum size of each group</strong> in a balanced design to test whether two population variances differ using the Snedecor F-test. The total study size is \(2n\), and the numerator and denominator degrees of freedom are each \(n - 1\). Always round up; one fewer observation can reduce the degrees of freedom right at the critical margin. If you anticipate dropout or rejections, divide each \(n\) by \((1 - \text{dropout rate})\) to get the actual recruitment target per group.</p>
                 <p>The effect of interest is the variance ratio \(\lambda = \sigma_1^2 / \sigma_2^2\) (or its inverse in the two-tailed test if \(\lambda < 1\)). The design's sensitivity to the specification of \(\lambda\) is high: if the true ratio turns out to be closer to 1 than assumed, the test will have less power than planned. Run a <em>sensitivity analysis</em> by computing \(n\) for different values of \(\lambda\) within a reasonable range. It is important to keep in mind that the F-test is extraordinarily sensitive to <strong>non-normality</strong>: even moderate deviations from normality can seriously inflate the type I error rate, making the p-value unreliable. If the data are not clearly normal, consider alternative tests such as Levene or Brown–Forsythe (Bartlett is also sensitive to non-normality) and adjust \(n\) accordingly.</p>
-                <p>When the calculated \(n\) is very large, it usually indicates that the specified effect size (\(\lambda\) close to 1) is too small to be detected efficiently with a variance-ratio test; consider whether the difference between variances has practical relevance. If the goal is to estimate the variance ratio with a given precision rather than test it, use the <a href="tamano-muestral-varianza-ic.html">sample size calculator for the variance CI</a>. Once the data has been collected, analyze the results with the <a href="contraste-hipotesis-dos-varianzas.html">F-test for two variances</a>.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
+            <p>When the calculated \(n\) is very large, it usually indicates that the specified effect size (\(\lambda\) close to 1) is too small to be detected efficiently with a variance-ratio test; consider whether the difference between variances has practical relevance. If the goal is to estimate the variance ratio with a given precision rather than test it, use the <a href="tamano-muestral-varianza-ic.html">sample size calculator for the variance CI</a>. Once the data has been collected, analyze the results with the <a href="contraste-hipotesis-dos-varianzas.html">F-test for two variances</a>.</p>
             </details>
         </section>
 

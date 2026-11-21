@@ -201,7 +201,7 @@
             <h3>Explicación</h3>
             <p>Este cálculo determina cuántos pares de observaciones (n) se necesitan para detectar una correlación poblacional \(\rho\) diferente de cero con una potencia y un nivel de significación dados. La lógica es diferente a la de las calculadoras de medias o proporciones: aquí se utiliza la <strong>transformación z de Fisher</strong>, que estabiliza la varianza de \(\hat{\rho}\).</p>
             <p>El estimador muestral \(\hat{\rho}\) (correlación de Pearson) tiene una distribución sesgada y asimétrica cuando \(\rho \neq 0\), con varianza que depende del propio \(\rho\). La transformación \(z = \operatorname{arctanh}(\hat{\rho})\) convierte esta distribución en aproximadamente normal con varianza \(1/(n-3)\), independiente de \(\rho\). Esto permite derivar n de forma directa a partir del cociente señal-ruido.</p>
-            <details class="fold fold-sub"><summary><h3>Fórmula de tamaño muestral</h3></summary>
+            <h3>Fórmula de tamaño muestral</h3>
             <p>Sea \(z_\rho = \operatorname{arctanh}(\rho) = \frac{1}{2}\ln\!\left(\frac{1+\rho}{1-\rho}\right)\). Entonces:</p>
             <p class="formula-line">\( n = \left\lceil \frac{(Z_{\alpha/2} + Z_\beta)^2}{z_\rho^2} \right\rceil + 3 \)</p>
             <p>donde \(Z_{\alpha/2}\) es el cuantil normal para contraste bilateral (o \(Z_\alpha\) para unilateral) y \(Z_\beta = \Phi^{-1}(1-\beta)\).</p>
@@ -211,7 +211,6 @@
                 <li><strong>+3</strong>: procede de que la varianza de \(z = \operatorname{arctanh}(\hat{\rho})\) es aproximadamente \(1/(n-3)\); es una aproximación que mejora el resultado para n pequeños, no un valor exacto.</li>
                 <li>Referencia (Cohen, 1988): ρ = 0,10 (pequeña), 0,30 (moderada), 0,50 (grande).</li>
             </ul>
-            </details>
             <details class="fold fold-sub"><summary><h3>Configuración rápida</h3></summary>
             <ul>
                 <li><strong>ρ desconocido:</strong> usa ρ = 0,30 como referencia conservadora de efecto moderado.</li>
@@ -250,10 +249,11 @@
                 <li>Estudios de validación de métodos de medición (p. ej. comparación de dos técnicas de laboratorio).</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) es el <strong>número mínimo de pares de observaciones</strong> (sujetos con las dos medidas requeridas) para detectar una correlación de Pearson \(\rho_1\) cuando la hipótesis nula es \(\rho = \rho_0\) (habitualmente \(\rho_0 = 0\)) con la potencia y el nivel de significación especificados. Redondea siempre hacia arriba. Si prevés que algunos sujetos no podrán ser medidos en ambas variables (pérdidas de seguimiento, datos faltantes), divide \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener el reclutamiento necesario.</p>
                 <p>La fórmula utiliza la transformación \(z\) de Fisher \(z = \frac{1}{2}\ln\!\left(\frac{1+\rho}{1-\rho}\right)\) para estabilizar la varianza. Esta transformación es más precisa cuando \(n \geq 10\) y \(|\rho| < 0{,}9\); para correlaciones muy altas (\(|\rho| > 0{,}9\)) la aproximación puede subestimar el \(n\) necesario. Realiza un <em>análisis de sensibilidad</em> variando \(\rho_1\) en ±0,10: una correlación esperada de 0,5 en lugar de 0,6 puede exigir un 40–60 % más de pares. Si la correlación real resulta ser mayor de la esperada, el test tendrá más potencia de la planificada (lo que generalmente es una buena noticia), pero si resulta ser menor, el estudio puede quedar infrapotenciado.</p>
-                <p>Cuando el \(n\) calculado resulte muy pequeño (&lt; 20 pares), verifica que la relación entre las variables es razonablemente lineal y que no hay valores atípicos influyentes, ya que la correlación de Pearson es sensible a ambos factores. Si los datos presentan no linealidad o colas pesadas, considera la correlación de Spearman y ajusta el \(n\) con un factor de eficiencia relativa. Con los datos recogidos, calcula la correlación y su IC con la <a href="contraste-hipotesis-correlacion.html">calculadora de contraste de hipótesis para la correlación</a> o realiza el contraste formal con la herramienta correspondiente.</p>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
+            <p>Cuando el \(n\) calculado resulte muy pequeño (&lt; 20 pares), verifica que la relación entre las variables es razonablemente lineal y que no hay valores atípicos influyentes, ya que la correlación de Pearson es sensible a ambos factores. Si los datos presentan no linealidad o colas pesadas, considera la correlación de Spearman y ajusta el \(n\) con un factor de eficiencia relativa. Con los datos recogidos, calcula la correlación y su IC con la <a href="contraste-hipotesis-correlacion.html">calculadora de contraste de hipótesis para la correlación</a> o realiza el contraste formal con la herramienta correspondiente.</p>
             </details>
             <h3>Referencias externas</h3>
             <ul>
@@ -274,7 +274,7 @@
                     <li><a href="tamano-muestral-anova.html">Tamaño muestral para ANOVA</a></li>
                 </ul>
             </section>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Qué es la transformación z de Fisher?</strong> z = arctanh(ρ) = ½·ln((1+ρ)/(1−ρ)); convierte la distribución sesgada de r̂ en aproximadamente normal con varianza 1/(n−3), lo que permite aplicar la aproximación normal para derivar n directamente.</li>
                 <li><strong>¿Correlación negativa?</strong> El módulo |ρ| es lo que determina el tamaño muestral; la dirección (positiva o negativa) no afecta a n, aunque sí al tipo de contraste (usa unilateral si tienes una hipótesis direccional).</li>
@@ -282,6 +282,7 @@
                 <li><strong>¿Funciona para correlación de Spearman o tau?</strong> La fórmula de Fisher es estricta para la correlación de Pearson con normalidad bivariada. Para Spearman puede usarse como aproximación, aunque con menor precisión.</li>
                 <li><strong>¿El tamaño muestral es exacto?</strong> Es una aproximación; funciona bien para n > 20. Para n muy pequeños son preferibles métodos basados en la distribución exacta del coeficiente de correlación (por ejemplo, G*Power) o la simulación.</li>
             </ul>
+            </details>
         </section>
     </main>
 

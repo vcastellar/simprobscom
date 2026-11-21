@@ -210,7 +210,7 @@
             <p>Paired samples are used when there is a natural unit-to-unit correspondence and that correspondence carries information: the same patient before and after a treatment, the same batch measured by two methods, or subjects matched by age, sex, or another characteristic. By contrast, the <a href="intervalo-confianza-diferencia-medias.html">CI for the difference of independent means</a> is used when the groups are distinct and there is no observation-to-observation pairing.</p>
             <p>The key is not to treat the groups as independent. First, an individual difference is computed for each pair, for example \(d_i = \text{after}_i - \text{before}_i\). Then a t interval is built for the population mean of those differences, \(\mu_d\). This takes advantage of the correlation within each pair and removes part of the between-individual variability.</p>
 
-            <details class="fold fold-sub"><summary><h3>Formula</h3></summary>
+            <h3>Formula</h3>
             <p>Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area outside the interval. For 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\) in each tail.</p>
             <p class="formula-line">\( \bar{d} \pm t_{\alpha/2,\, n-1}\cdot \dfrac{s_d}{\sqrt{n}} \)</p>
             <ul>
@@ -220,7 +220,6 @@
                 <li><strong>\(t_{\alpha/2,\,n-1}\)</strong>: critical value of Student's t with \(n-1\) degrees of freedom.</li>
             </ul>
             <p>The margin of error is \(E=t_{\alpha/2,\,n-1}s_d/\sqrt{n}\), and the interval is \([\bar{d}-E,\;\bar{d}+E]\).</p>
-            </details>
 
             <details class="fold fold-sub"><summary><h3>Worked example</h3></summary>
             <p>In 18 patients a variable is measured before and after an intervention, defining \(d=\text{after}-\text{before}\). The mean of the differences is \(\bar{d}=4.2\) and its standard deviation is \(s_d=6.1\). It's important that \(s_d\) be the standard deviation of the individual differences, not the standard deviation of the before measurements or the after measurements separately.</p>
@@ -280,15 +279,16 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
             <p>The interval \([L, U]\) is the plausible range for the population mean of the individual differences \(\mu_d\) at the chosen confidence level. Remember that \(\mu_d\) is not the difference of two independent means, but the mean change within each pair: the same parameter that would be measured, on average, over all possible individual changes in the population. If the experiment were repeated many times with \(n\) pairs, a proportion \(C\) of the CIs built with the same method would contain the true value of \(\mu_d\).</p>
             <p>The reference value for this type of interval is 0, which represents no mean change. If \(0 \in [L, U]\), the data are compatible with there being no systematic change at the chosen confidence level; equivalently, the two-sided test \(H_0\!: \mu_d = 0\) would not be rejected at level \(\alpha = 1 - C\). If \(L > 0\), the mean change is positive under the chosen difference definition; if \(U < 0\), the mean change is negative. The direction of the interval depends directly on how \(d_i\) is defined: switching from "after − before" to "before − after" flips the signs of all the bounds.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
             <ul>
                 <li><strong>Advantage of pairing:</strong> by working with individual differences \(d_i\), the between-individual variability that is not relevant to estimating the change is removed. The standard error \(s_d/\sqrt{n}\) is usually smaller than what would be obtained by treating the groups as independent, so the paired CI is typically narrower and more precise.</li>
                 <li><strong>Width and uncertainty:</strong> the width of the interval depends on \(s_d\) (the variability of the change between individuals), \(n\) (the number of pairs), and the confidence level. Increasing \(n\) or reducing \(s_d\) (for example, by improving the homogeneity of the pairing) reduces the margin of error.</li>
                 <li><strong>Reading the chart:</strong> the green region under the t curve is the confidence zone and the red tails (area \(\alpha/2\) each) delimit the critical values \(\pm t_{\alpha/2,\,n-1}\). The interval on the original scale \([\bar{d} - E, \bar{d} + E]\) corresponds to the values of \(\mu_d\) whose t statistic would fall inside the green region.</li>
             </ul>
-      </details>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -302,12 +302,13 @@
                     <li><a href="studentt.html">Student's t distribution</a></li>
                 </ul>
             </section>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>Can I use the two means separately?</strong> That's not recommended. For paired data you need the individual differences or, at least, \(\bar d\), \(s_d\) and \(n\).</li>
                 <li><strong>What happens if the CI includes 0?</strong> There is not enough evidence of mean change at the chosen confidence level.</li>
                 <li><strong>What sign will the interval have?</strong> It depends on the definition of \(d\). The calculator shows the selected definition to avoid confusion.</li>
             </ul>
+            </details>
             <h3>References used</h3>
             <ul>
                 <li>Student (1908). <em>The probable error of a mean</em>, Biometrika, 6, 1–25.</li>

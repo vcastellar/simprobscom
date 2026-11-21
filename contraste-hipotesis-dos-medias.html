@@ -276,7 +276,7 @@
             <p>La lógica es la de cualquier contraste. Se parte de la <strong>hipótesis nula</strong> de que las dos medias poblacionales son iguales, \(H_0: \mu_1 = \mu_2\), y se mide cuánto se separan las medias muestrales \(\bar{x}_1\) y \(\bar{x}_2\). Aunque las poblaciones tuvieran la misma media, dos muestras nunca darían exactamente la misma media: la pregunta es si la diferencia observada es mayor de lo que el azar del muestreo explica razonablemente. Si lo es, se rechaza \(H_0\) en favor de la <strong>hipótesis alternativa</strong>.</p>
             <p>Esta calculadora aplica la versión de <strong>Welch</strong> de la prueba t, que no exige que las dos poblaciones tengan la misma varianza. Es la opción recomendada por defecto, como se explica más abajo.</p>
 
-            <details class="fold fold-sub"><summary><h3>Hipótesis y estadístico</h3></summary>
+            <h3>Hipótesis y estadístico</h3>
             <p class="formula-line">\(H_0: \mu_1 = \mu_2\) (es decir, \(\mu_1 - \mu_2 = 0\))</p>
             <p class="formula-line">\(H_1: \mu_1 \neq \mu_2\), \(\mu_1 > \mu_2\) o \(\mu_1 < \mu_2\)</p>
             <p class="formula-line">\( t = \dfrac{\bar{x}_1 - \bar{x}_2}{\sqrt{\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}}} \)</p>
@@ -285,6 +285,7 @@
                 <li><strong>\(s_1, s_2\)</strong>: desviaciones típicas muestrales de cada grupo.</li>
                 <li><strong>\(n_1, n_2\)</strong>: tamaños de los grupos.</li>
             </ul>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
             <p>El denominador es el <strong>error estándar de la diferencia</strong>: mide cuánto variaría \(\bar{x}_1 - \bar{x}_2\) si repitieras el estudio con otras muestras. Como cada media tiene su propia incertidumbre, las dos varianzas se suman. El estadístico t dice, por tanto, a cuántos errores estándar queda la diferencia observada de cero, que es lo que predice \(H_0\).</p>
             <p>Bajo \(H_0\), el estadístico sigue aproximadamente una t de Student con los grados de libertad de <strong>Welch-Satterthwaite</strong>, que no suelen ser enteros:</p>
             <p class="formula-line">\( \nu = \dfrac{\left(s_1^2/n_1 + s_2^2/n_2\right)^2}{\dfrac{(s_1^2/n_1)^2}{n_1-1} + \dfrac{(s_2^2/n_2)^2}{n_2-1}} \)</p>
@@ -387,9 +388,10 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) significa que, si las dos poblaciones tuvieran la misma media, sería muy improbable observar una diferencia entre las medias muestrales tan grande como la obtenida. Pero significativo no es lo mismo que importante: con muestras grandes, diferencias minúsculas resultan significativas. Mira siempre la diferencia observada, su intervalo de confianza y el tamaño del efecto.</p>
             <p><strong>No rechazar \(H_0\)</strong> (p-valor ≥ α) no demuestra que las medias sean iguales. Solo indica que los datos son compatibles con la igualdad, y quizá también con diferencias relevantes, como en el ejemplo 1. Si lo que quieres demostrar es precisamente que dos tratamientos son equivalentes, el planteamiento correcto es un <a href="contraste-hipotesis-no-inferioridad.html">contraste de equivalencia o de no inferioridad</a>.</p>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
             <p>En la calculadora, el resultado muestra la decisión con el p-valor, el estadístico t con sus grados de libertad de Welch y una frase con la conclusión. En el gráfico, la zona verde es la región de no rechazo, las rojas son las regiones críticas y la línea ámbar marca el estadístico observado. En «Detalles del cálculo» tienes la diferencia observada, el error estándar, el valor crítico, el intervalo de confianza (en el contraste bilateral) y la d de Cohen.</p>
 
             <h3>Potencia y diferencia mínima detectable</h3>
@@ -402,7 +404,7 @@
 
             <h3>Tamaño del efecto: la d de Cohen</h3>
             <p>Para expresar la diferencia en una escala comparable entre estudios se usa la d de Cohen, \(d = (\bar{x}_1 - \bar{x}_2)/s_p\), donde \(s_p\) es la desviación típica agrupada de los dos grupos. Como referencia orientativa, 0,2 es un efecto pequeño, 0,5 mediano y 0,8 grande. En el ejemplo 1, \(d \approx 0{,}44\); en el ejemplo 2, \(d \approx 0{,}54\).</p>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -430,7 +432,7 @@
                 <li><a href="studentt.html">Distribución t de Student</a> y <a href="tabla-t-student.html">tabla t</a></li>
               </ul>
             </section>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Qué hipótesis contrasta?</strong> Que las medias de dos poblaciones independientes son iguales (H₀: μ₁ = μ₂), frente a que son distintas o a que una es mayor que la otra.</li>
                 <li><strong>¿Por qué la calculadora usa la t de Welch?</strong> Porque no exige que las dos poblaciones tengan la misma varianza. Cuando las varianzas son iguales da prácticamente el mismo resultado que la t de Student, y cuando no lo son es mucho más fiable.</li>
@@ -444,6 +446,7 @@
                 <li><strong>¿Y si tengo tres o más grupos?</strong> Usa el ANOVA de un factor. Hacer todos los contrastes por parejas aumenta la probabilidad de encontrar alguna diferencia significativa por azar.</li>
             </ul>
             <p class="external-ref">Referencias: <a href="https://es.wikipedia.org/wiki/Prueba_t_de_Student" target="_blank" rel="noopener noreferrer">Prueba t de Student</a> y <a href="https://en.wikipedia.org/wiki/Welch%27s_t-test" target="_blank" rel="noopener noreferrer">Welch's t-test</a> — Wikipedia</p>
+            </details>
         </section>
 
     </main>

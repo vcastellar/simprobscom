@@ -274,7 +274,7 @@
             <p>The idea is very simple: for each pair you compute the difference \(d_i = x_{i1} - x_{i2}\), and the problem becomes a <a href="contraste-hipotesis-una-media.html">one-mean test</a> on those differences. If the intervention has no effect, the differences should hover around 0; if their mean moves away from 0 by more than chance can explain, you conclude that there is a systematic change.</p>
             <p>The great advantage of the paired design is that <strong>each subject acts as their own control</strong>. Differences between people (some have high blood pressure, others low; some students get better grades than others) disappear when you subtract, and only the variability of the change remains. That is why, with the same number of subjects, it can usually detect much smaller effects than a comparison of two independent groups.</p>
 
-            <details class="fold fold-sub"><summary><h3>Hypotheses and test statistic</h3></summary>
+            <h3>Hypotheses and test statistic</h3>
             <p class="formula-line">\(H_0: \mu_d = \mu_{d0}\)</p>
             <p class="formula-line">\(H_1: \mu_d \neq \mu_{d0}\), \(\mu_d > \mu_{d0}\) or \(\mu_d &lt; \mu_{d0}\)</p>
             <p class="formula-line">\( t = \dfrac{\bar{d} - \mu_{d0}}{s_d / \sqrt{n}}, \quad df = n - 1 \)</p>
@@ -286,7 +286,6 @@
             </ul>
             <p>The denominator \(s_d/\sqrt{n}\) is the standard error of the mean difference. The statistic measures how many standard errors \(\bar{d}\) lies from the value under \(H_0\) and, if \(H_0\) is true, follows a Student's t distribution with \(n-1\) degrees of freedom.</p>
             <p>Note that the sign depends on the order of the subtraction. If you compute "before − after", a reduction gives positive differences; if you compute "after − before", negative ones. Decide the order before you start and choose the tail of the test accordingly.</p>
-            </details>
         </section>
 
         <section class="card content-card">
@@ -360,12 +359,11 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
             <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that the mean difference between the two measurements is incompatible with \(\mu_{d0}\): there is a systematic change. Its practical relevance depends on its size, so look at the mean difference and its confidence interval, and judge whether that change matters in your context.</p>
             <p><strong>Not rejecting \(H_0\)</strong> (p-value ≥ α) does not prove that there is no change. The most common mistake is to conclude "the treatment does not work" when the sample was too small to detect it, as in example 1.</p>
             <p>In the calculator, the result shows the decision with the p-value, the statistic with its degrees of freedom and a sentence stating the conclusion. On the chart, the green area is the non-rejection region, the red areas are the critical regions and the amber line marks the observed statistic. Under "Calculation details" you will find the observed difference, the standard error, the critical value, the confidence interval (for the two-tailed test) and the effect size.</p>
-
-            <h3>Power and minimum detectable difference</h3>
+            <details class="fold fold-sub"><summary><h3>Power and minimum detectable difference</h3></summary>
             <p>Below the conclusion, the calculator shows the <strong>minimum detectable difference</strong>: the smallest real mean difference that, with your number of pairs and your \(s_d\), the test would detect with 80% probability. If it is larger than the change that would matter to you, the study has low power and a non-significant result says little. The link opens the <a href="tamano-muestral-medias-apareadas.html">sample size calculator for paired means</a> with your \(s_d\), your α and the type of test, so you can work out how many pairs you would need to detect the difference you care about.</p>
 
             <h3>Relationship with the confidence interval</h3>
@@ -373,7 +371,7 @@
 
             <h3>Effect size</h3>
             <p>With paired data, the most common effect size is \(d_z = (\bar{d} - \mu_{d0})/s_d\), which expresses the mean difference in standard deviations of the differences. Be careful when comparing it with Cohen's d for two independent groups: \(d_z\) is usually much larger for the same change, because \(s_d\) is smaller than the standard deviation of the original data. In example 2, \(d_z \approx 1.90\).</p>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -400,7 +398,7 @@
                 <li><a href="contraste-hipotesis-proporciones-apareadas.html">Paired proportions (McNemar)</a></li>
               </ul>
             </section>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>When is the paired t-test used?</strong> When each value in one condition has its partner in the other: the same subject measured before and after, two treatments in the same subject, or pairs matched on relevant characteristics.</li>
                 <li><strong>How does it differ from the independent two-sample test?</strong> It works with the difference within each pair, which removes the variability between subjects. If the two measurements are correlated, as is usual, it is much more powerful.</li>
@@ -413,6 +411,7 @@
                 <li><strong>How many pairs do I need?</strong> It depends on the change you want to detect, the standard deviation of the differences and the desired power. Work it out with the sample size calculator for paired means.</li>
             </ul>
             <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/Student%27s_t-test#Dependent_t-test_for_paired_samples" target="_blank" rel="noopener noreferrer">Dependent t-test for paired samples</a> — Wikipedia</p>
+            </details>
         </section>
 
     </main>

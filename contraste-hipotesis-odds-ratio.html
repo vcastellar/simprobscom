@@ -285,21 +285,20 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>Hipótesis y estadístico</h3></summary>
+            <h3>Hipótesis y estadístico</h3>
             <p class="formula-line">\(H_0: OR = 1\) (no hay asociación)</p>
             <p class="formula-line">\(H_1: OR \neq 1\), \(OR > 1\) o \(OR < 1\)</p>
             <p>El OR tiene una distribución muy asimétrica (va de 0 a infinito, con el 1 en medio), así que el contraste se hace sobre su logaritmo, que se aproxima bien a una normal:</p>
             <p class="formula-line">\( SE[\ln \widehat{OR}] = \sqrt{\dfrac{1}{a} + \dfrac{1}{b} + \dfrac{1}{c} + \dfrac{1}{d}}, \qquad z = \dfrac{\ln \widehat{OR}}{SE} \)</p>
             <p>Es el <strong>contraste de Wald</strong>. Con el mismo error estándar se construye el intervalo de confianza de Woolf: se calcula en escala logarítmica, \(\ln \widehat{OR} \pm z_{1-\alpha/2}\,SE\), y se deshace el logaritmo. Por eso el intervalo no es simétrico alrededor del OR: un OR de 1,56 puede tener un intervalo de 0,87 a 2,79.</p>
             <p>El error estándar depende sobre todo de la casilla más pequeña: si alguna tiene muy pocos casos, \(1/a\) se dispara y el contraste pierde fiabilidad. Con alguna celda por debajo de 5, conviene comprobar el resultado con el <a href="test-exacto-fisher.html">test exacto de Fisher</a>, que la calculadora enlaza ya rellenado.</p>
-
-            <h3>Regla de decisión</h3>
+            <details class="fold fold-sub"><summary><h3>Regla de decisión</h3></summary>
             <ul>
                 <li>Si el <strong>p-valor</strong> es menor que \(\alpha\), se rechaza \(H_0\): hay evidencia de asociación.</li>
                 <li>En el contraste bilateral, equivale a que el intervalo de confianza del OR no contenga el 1.</li>
                 <li>No rechazar \(H_0\) no demuestra que no haya asociación.</li>
             </ul>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -338,17 +337,16 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que hay asociación entre la exposición y el desenlace: con OR &gt; 1, la exposición se comporta como factor de riesgo; con OR &lt; 1, como factor protector. Para valorar su importancia, mira el OR y su intervalo de confianza: un OR de 1,2 puede ser significativo en un estudio enorme y tener poca relevancia práctica.</p>
             <p><strong>No rechazar \(H_0\)</strong> no demuestra que no haya asociación: mira el intervalo, que en estudios pequeños suele ser muy ancho.</p>
             <p>En la calculadora, el resultado muestra la decisión con el p-valor, el OR con el estadístico z y una frase con la conclusión. En el gráfico, la zona verde es la región de no rechazo sobre la normal estándar, las rojas son las regiones críticas y la línea ámbar marca el estadístico. En «Detalles del cálculo» tienes el logaritmo del OR, su error estándar, el intervalo de Woolf, la proporción de expuestos en casos y controles y el chi-cuadrado de Pearson como verificación.</p>
-
-            <h3>Potencia y odds ratio mínimo detectable</h3>
+            <details class="fold fold-sub"><summary><h3>Potencia y odds ratio mínimo detectable</h3></summary>
             <p>Debajo de la conclusión, la calculadora indica el <strong>odds ratio mínimo detectable</strong>: el OR más cercano a 1 que, con tu número de casos y controles y la proporción de expuestos entre los controles, el contraste detectaría con un 80 % de probabilidad. Si es más extremo que el efecto que te parecería relevante, el estudio tiene poca potencia. El enlace abre la <a href="tamano-muestral-odds-ratio.html">calculadora de tamaño muestral para el odds ratio</a> con tu proporción de expuestos, tu α, el número de controles por caso y el tipo de contraste.</p>
 
             <h3>Intervalo de confianza</h3>
             <p>El otro enlace abre la <a href="intervalo-confianza-odds-ratio.html">calculadora del intervalo de confianza para el odds ratio</a> con tu tabla. Esa calculadora ordena la tabla por exposición (filas) y desenlace (columnas), así que el enlace reordena las casillas por ti; el OR es el mismo.</p>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -375,7 +373,7 @@
                     <li><a href="contraste-hipotesis-dos-proporciones.html">Contraste para dos proporciones</a></li>
                 </ul>
             </section>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Qué es el odds ratio?</strong> El cociente entre dos odds: en un estudio de casos y controles, la odds de exposición entre los casos dividida por la de los controles. Vale 1 si no hay asociación.</li>
                 <li><strong>¿Cómo se interpreta un OR de 2?</strong> La odds de exposición es el doble entre los casos que entre los controles. Si la enfermedad es poco frecuente, equivale aproximadamente a que la exposición duplica el riesgo.</li>
@@ -387,6 +385,7 @@
                 <li><strong>¿Un OR significativo demuestra causalidad?</strong> No. Puede deberse a sesgos de selección o a variables de confusión. Para ajustar por ellas se usa la regresión logística.</li>
             </ul>
             <p class="external-ref">Referencia: <a href="https://es.wikipedia.org/wiki/Raz%C3%B3n_de_momios" target="_blank" rel="noopener noreferrer">Razón de momios (odds ratio)</a> — Wikipedia</p>
+            </details>
         </section>
 
     </main>

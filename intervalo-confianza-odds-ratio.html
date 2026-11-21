@@ -247,11 +247,12 @@
             <p class="formula-line">\( \widehat{OR} = \dfrac{a/b}{c/d} = \dfrac{a\cdot d}{b\cdot c} \)</p>
             <p>En el ejemplo, \(\widehat{OR} = (35\cdot80)/(65\cdot20) \approx 2{,}154\). Esto significa que las odds observadas del evento en expuestos son aproximadamente 2,15 veces las odds observadas en no expuestos. Una OR igual a 1 indica ausencia de asociación; una OR mayor que 1 indica mayores odds del evento en el grupo expuesto; y una OR menor que 1 indica menores odds.</p>
 
-            <details class="fold fold-sub"><summary><h3>Método logarítmico de Woolf</h3></summary>
+            <h3>Método logarítmico de Woolf</h3>
             <p>Denotamos por \(C\) el nivel de confianza y por \(\alpha=1-C\) el área total fuera del intervalo. Para un 95 % de confianza, \(C=0{,}95\), \(\alpha=0{,}05\) y \(\alpha/2=0{,}025\) en cada cola.</p>
             <p>El método de Woolf construye el intervalo en la escala logarítmica porque la distribución muestral de \(\widehat{OR}\) es asimétrica y solo toma valores positivos. Al transformar con logaritmos, \(\log(\widehat{OR})\) puede aproximarse mejor por una distribución normal cuando los recuentos son suficientemente grandes.</p>
             <p>El primer paso es calcular la estimación puntual \(\widehat{OR} = ad/(bc)\) y su logaritmo. Después se estima el error estándar de \(\log(\widehat{OR})\) sumando la contribución de incertidumbre de las cuatro celdas:</p>
             <p class="formula-line">\( SE\left[\log(\widehat{OR})\right] = \sqrt{\dfrac{1}{a}+\dfrac{1}{b}+\dfrac{1}{c}+\dfrac{1}{d}} \)</p>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
             <p>Con ese error estándar, el intervalo bilateral en escala logarítmica es:</p>
             <p class="formula-line">\( \log(\widehat{OR}) \pm z_{\alpha/2}\cdot SE\left[\log(\widehat{OR})\right] \)</p>
             <p>Por último, se aplica la exponencial a ambos límites para volver a la escala original de la odds ratio. Este paso es importante: el intervalo final no queda centrado de forma simétrica alrededor de la OR, sino que es simétrico en la escala \(\log(OR)\). Por eso los límites inferior y superior suelen estar a distancias diferentes de la estimación puntual cuando se miran en la escala original.</p>
@@ -321,15 +322,16 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
             <p>El intervalo \([L, U]\) es el rango plausible de la odds ratio poblacional \(OR\) dado el nivel de confianza elegido. El valor nulo para una OR es 1, que indica ausencia de asociación entre la exposición y el evento. En términos frecuentistas: si repitieras el estudio muchas veces y construyeras el IC con el mismo procedimiento, una proporción \(C\) de esos intervalos contendría la verdadera OR. El intervalo se construye y se presenta simétricamente en escala logarítmica pero, al transformar de vuelta con la exponencial, los límites no están equidistantes de la estimación puntual en la escala original: la OR siempre es positiva y su distribución muestral es asimétrica.</p>
             <p>La lectura del resultado sigue tres casos directos. Si \(1 \in [L, U]\), los datos son compatibles con ausencia de asociación al nivel de confianza elegido; equivalentemente, el contraste bilateral \(H_0\!: OR = 1\) no se rechazaría al nivel \(\alpha = 1 - C\). Si \(L > 1\) (el intervalo completo está por encima de 1), las odds del evento son significativamente mayores en el grupo expuesto. Si \(U < 1\) (el intervalo completo está por debajo de 1), las odds son significativamente menores. En el gráfico se representa la distribución normal aproximada de \(\log(OR)\): la región verde es la zona de confianza y las colas rojas delimitan los valores críticos \(\pm z_{\alpha/2}\) en escala logarítmica.</p>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
             <ul>
                 <li><strong>Magnitud del efecto:</strong> una OR = 2,15 significa que las odds observadas del evento en expuestos son 2,15 veces las odds en no expuestos. Cuanto más se aleja la OR de 1, mayor es la asociación estimada; el IC comunica la incertidumbre alrededor de esa estimación.</li>
                 <li><strong>No confundir OR con riesgo relativo:</strong> la OR no es un riesgo relativo. Solo cuando el evento es raro (\(p &lt; 0{,}1\)) se aproximan. Con eventos frecuentes, la OR puede ser bastante más extrema que el RR y no debe interpretarse como si fuera un cociente de probabilidades.</li>
                 <li><strong>Amplitud y recuentos:</strong> celdas con recuentos pequeños producen intervalos muy anchos porque el error estándar de \(\log(OR)\) crece al sumar los recíprocos \(1/a + 1/b + 1/c + 1/d\). Si alguna celda es menor que 5, interpreta el resultado con cautela.</li>
             </ul>
-      </details>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -342,12 +344,13 @@
                     <li><a href="tamano-muestral-odds-ratio.html">Tamaño muestral para odds ratio</a></li>
                 </ul>
             </section>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Qué valor indica ausencia de efecto?</strong> En una odds ratio, el valor nulo es 1.</li>
                 <li><strong>¿Se interpreta como riesgo relativo?</strong> No exactamente. La OR compara odds, no probabilidades; solo se aproxima al riesgo relativo cuando el evento es poco frecuente.</li>
                 <li><strong>¿Qué pasa con recuentos muy pequeños?</strong> El método normal sobre \(\log(OR)\) puede ser impreciso; conviene interpretar el resultado con cautela y considerar métodos exactos.</li>
             </ul>
+            </details>
             <h3>Referencias usadas</h3>
             <ul>
                 <li>Woolf, B. (1955). <em>On estimating the relation between blood group and disease</em>, Annals of Human Genetics, 19, 251–253.</li>

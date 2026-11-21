@@ -206,7 +206,7 @@
             <p>The odds ratio (OR) measures the association between an exposure and an event in a 2×2 table. To plan how many subjects are needed to estimate it with a given precision, the calculation is done on the logarithmic scale, because \(\log(\widehat{OR})\) is approximately normally distributed with a standard error that depends on the counts in each cell.</p>
             <p>The inputs are: the OR expected to be found, the event proportion in the reference group (\(p_2\)), and the desired precision expressed as the half-width of the CI on the \(\log(OR)\) scale. From \(p_2\) and OR, the calculator derives \(p_1\) (the event proportion in the exposed group). With both proportions it calculates the minimum number of subjects per group so that the CI has the specified width.</p>
             <p>The formula assumes balanced allocation (the same number of subjects in each group) and sufficient counts in all four cells for the normal approximation to be valid.</p>
-            <details class="fold fold-sub"><summary><h3>Formulas</h3></summary>
+            <h3>Formulas</h3>
             <p>Given the expected OR and \(p_2\), the event proportion in the exposed group is obtained by inverting the definition of the odds ratio:</p>
             <p class="formula-line">\( p_1 = \frac{OR \cdot p_2}{1 + (OR - 1)\cdot p_2} \)</p>
             <p>The standard error of \(\log(\widehat{OR})\) for a table with \(n\) observations per group is:</p>
@@ -218,10 +218,8 @@
                 <li><strong>Z</strong>: normal quantile — 1.645 (90%), 1.960 (95%), 2.576 (99%).</li>
                 <li><strong>\(E_{\log}\)</strong>: half-width of the CI on the \(\log(OR)\) scale. The CI for OR falls between \(OR \cdot e^{-E_{\log}}\) and \(OR \cdot e^{+E_{\log}}\).</li>
             </ul>
-            </details>
-            <details class="fold fold-sub"><summary><h3>How to interpret E_log</h3></summary>
+            <h3>How to interpret E_log</h3>
             <p>The half-width \(E_{\log}\) determines how far each CI limit can be from the estimated OR on the multiplicative scale. With OR = 2 and \(E_{\log} = 0.5\), the CI runs from \(2 \cdot e^{-0.5} \approx 1.21\) to \(2 \cdot e^{+0.5} \approx 3.30\). A useful reference: \(E_{\log} = \log(2) \approx 0.693\) produces a CI where the upper limit is exactly double the lower limit.</p>
-            </details>
             <details class="fold fold-sub"><summary><h3>Quick setup</h3></summary>
             <ul>
                 <li><strong>Expected OR:</strong> based on prior studies or on the smallest association you consider relevant.</li>
@@ -255,10 +253,11 @@
                 <li>Studies of risk factor prevalence in analytic epidemiology.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
                 <p>The value \(n\) is the <strong>minimum sample size per group</strong> so that the confidence interval of the odds ratio on the log scale has a maximum half-width of \(E_{\log}\) at the specified confidence level. In terms of the natural OR, this means the ratio between the upper and lower limits of the CI will be at most \(e^{2E_{\log}}\). Always round \(n\) up. Add the margin for losses by dividing \(n\) by \((1 - \text{dropout rate})\) to get the recruitment number per group; the total to recruit is \(2n\) adjusted.</p>
                 <p>The most influential parameters are \(p_2\) (the reference proportion) and the specified OR, since together they determine \(p_1 = \text{OR} \times p_2 / (1 + p_2(\text{OR} - 1))\) and the variance of the estimator. Run a <em>sensitivity analysis</em> varying \(p_2\) by ±0.05 and the OR over a reasonable range: when \(p_2\) is very small or very large, the variance of \(\log(\widehat{\text{OR}})\) is larger and more subjects are needed. Likewise, an OR closer to 1 requires more subjects to estimate the log-OR with the same absolute precision. Keep in mind that \(E_{\log}\) is the precision on the log scale; if you need to interpret the result on the natural scale, note that \(E_{\log} = 0.3\) corresponds to a multiplicative factor of \(e^{0.3} \approx 1.35\) on the upper limit relative to the center of the CI.</p>
-                <p>This approach (CI) differs from hypothesis testing: here the goal is to <em>estimate</em> the OR with a given precision, not to decide whether it differs from 1. If what you need is to detect an OR \(\neq 1\) with a certain power, use the <a href="tamano-muestral-odds-ratio.html">sample size calculator for testing the OR</a>. Once the data are collected, calculate the OR and its CI with the <a href="intervalo-confianza-odds-ratio.html">odds ratio calculator</a> and interpret the CI limits in the clinical or epidemiological context of the study.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
+            <p>This approach (CI) differs from hypothesis testing: here the goal is to <em>estimate</em> the OR with a given precision, not to decide whether it differs from 1. If what you need is to detect an OR \(\neq 1\) with a certain power, use the <a href="tamano-muestral-odds-ratio.html">sample size calculator for testing the OR</a>. Once the data are collected, calculate the OR and its CI with the <a href="intervalo-confianza-odds-ratio.html">odds ratio calculator</a> and interpret the CI limits in the clinical or epidemiological context of the study.</p>
             </details>
         </section>
 
@@ -279,12 +278,13 @@
                 <li>Kelsey, J. L., Whittemore, A. S., Evans, A. S., &amp; Thompson, W. D. (1996). <em>Methods in Observational Epidemiology</em> (2nd ed.). Oxford University Press.</li>
                 <li>Schlesselman, J. J. (1982). <em>Case-Control Studies: Design, Conduct, Analysis</em>. Oxford University Press.</li>
             </ul>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>What E_log is reasonable?</strong> It depends on how much imprecision is tolerable. E_log=0.5 gives a CI that varies by a factor of e≈2.7 between limits; E_log=0.3 reduces it to e^(0.6)≈1.82. Smaller E_log requires more sample.</li>
                 <li><strong>Why is the OR estimated on the log scale?</strong> Because log(OR) has an approximately normal sampling distribution and a stable standard error, while OR is positive and skewed.</li>
                 <li><strong>Does this calculation work for case-control studies?</strong> With caution. In case-control studies the logic is different (the groups are cases and controls, not exposed and unexposed), although the formula can be used as an approximation when the event is not rare.</li>
             </ul>
+            </details>
         </section>
     </main>
 

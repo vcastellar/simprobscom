@@ -243,7 +243,7 @@
             <p class="formula-line">\( \widehat{RR} = \dfrac{\hat{p}_1}{\hat{p}_2} = \dfrac{x_1/n_1}{x_2/n_2} \)</p>
             <p>A value equal to 1 indicates equal proportions. Values greater than 1 indicate that group 1's proportion is higher; values less than 1 indicate that it is lower.</p>
 
-            <details class="fold fold-sub"><summary><h3>Logarithmic method for the ratio of proportions</h3></summary>
+            <h3>Logarithmic method for the ratio of proportions</h3>
             <p>Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area outside the interval. For 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\) in each tail.</p>
             <p>The interval is built on a logarithmic scale because the ratio can only take positive values and its distribution is usually skewed. On the \(\log(RR)\) scale, the normal approximation is more stable for moderate or large samples.</p>
             <p>First \(\widehat{RR} = (x_1/n_1)/(x_2/n_2)\) is computed. Then the standard error of \(\log(\widehat{RR})\) is estimated with:</p>
@@ -251,7 +251,6 @@
             <p>The two-sided interval on the logarithmic scale is:</p>
             <p class="formula-line">\( \log(\widehat{RR}) \pm z_{\alpha/2}\cdot SE\left[\log(\widehat{RR})\right] \)</p>
             <p>Finally, the exponential is applied to both limits. The final result is on the original scale of the ratio of proportions and is interpreted by comparing it with the null value 1.</p>
-            </details>
 
             <details class="fold fold-sub"><summary><h3>Zero-cell correction</h3></summary>
             <p>If either group has no events, \(\log(\widehat{RR})\) cannot be computed directly. The 0.5 correction option adds 0.5 to the four cells of the 2x2 table before computing proportions, ratio and interval.</p>
@@ -316,15 +315,16 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
             <p>The interval \([L, U]\) is the plausible range of the population ratio of proportions \(RR = p_1/p_2\) given the chosen confidence level. The null value is 1, indicating equal proportions (\(p_1 = p_2\)). In frequentist terms: if you repeated the study many times with the same sample sizes and built the CI with the same procedure, a proportion \(C\) of those intervals would contain the true ratio. As with the odds ratio, the interval is built symmetrically on the logarithmic scale and then transformed with the exponential; this produces an asymmetric CI on the original scale (the distance from \(\widehat{RR}\) to \(L\) is not equal to the distance from \(\widehat{RR}\) to \(U\)).</p>
             <p>The interpretation follows three cases. If \(1 \in [L, U]\), the data are compatible with equal proportions at the chosen confidence level; the test \(H_0\!: p_1 = p_2\) would not be rejected at level \(\alpha = 1 - C\). If \(L > 1\), group 1's proportion is significantly higher. If \(U < 1\), group 1's proportion is significantly lower. The chart shows the approximate normal distribution of \(\log(RR)\): the green region is the confidence zone and the red tails (area \(\alpha/2\) each) delimit the critical values \(\pm z_{\alpha/2}\) on the logarithmic scale.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
             <ul>
                 <li><strong>Multiplicative scale:</strong> an \(RR = 1.75\) means group 1's proportion is 75% higher than group 2's, not 75 percentage points higher. The difference between the additive scale (difference of proportions) and the multiplicative scale (ratio) matters for communicating results.</li>
                 <li><strong>Difference from odds ratio:</strong> RR compares proportions directly. OR compares odds. With the same example (35/100 versus 20/100), \(RR = 1.75\) but \(OR \approx 2.15\). If the event is rare, both converge; if the event is common, OR can be much more extreme than RR and should not be used to estimate relative risks.</li>
                 <li><strong>Width and counts:</strong> the standard error of \(\log(RR)\) grows when the event counts (\(x_1\), \(x_2\)) are small. With few events in either group, the interval will be very wide and imprecise; if either group has 0 events, applying the 0.5 correction is mandatory.</li>
             </ul>
-      </details>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -337,12 +337,13 @@
                     <li><a href="contraste-hipotesis-dos-proporciones.html">Hypothesis test for two proportions</a></li>
                 </ul>
             </section>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>What is the null value?</strong> In a ratio of proportions, the null value is 1.</li>
                 <li><strong>Is it the same as the difference of proportions?</strong> No. The difference uses an additive scale \(p_1-p_2\); the ratio uses a multiplicative scale \(p_1/p_2\).</li>
                 <li><strong>When is it interpreted as relative risk?</strong> When \(p_1\) and \(p_2\) represent risks, cumulative incidences, or event probabilities over a defined period.</li>
             </ul>
+            </details>
             <h3>References used</h3>
             <ul>
                 <li>Katz, D., Baptista, J., Azen, S. P. and Pike, M. C. (1978). <em>Obtaining confidence intervals for the risk ratio in cohort studies</em>, Biometrics, 34, 469–474.</li>

@@ -312,7 +312,7 @@
             <p>Es el contraste para decidir si hay <strong>asociación entre dos variables dicotómicas</strong> recogidas en una tabla 2×2 —tratamiento o placebo frente a curación sí o no, expuestos o no frente a enfermos o no— cuando la muestra es <strong>pequeña</strong>. A diferencia del <a href="contraste-independencia-chi-cuadrado.html">chi-cuadrado</a> y del <a href="contraste-hipotesis-dos-proporciones.html">contraste z de dos proporciones</a>, no se apoya en ninguna aproximación normal: calcula la probabilidad exacta de cada tabla posible. Por eso es la opción adecuada en ensayos pequeños, eventos raros, análisis de subgrupos y siempre que alguna frecuencia esperada sea menor que 5.</p>
             <p>Lo ideó Ronald Fisher con el célebre experimento de la dama que decía distinguir si en su taza se había echado primero la leche o el té: con solo 8 tazas, la pregunta era cuántos aciertos hacían falta para descartar que adivinara al azar.</p>
 
-            <details class="fold fold-sub"><summary><h3>La tabla y la hipótesis</h3></summary>
+            <h3>La tabla y la hipótesis</h3>
             <div class="content-table-wrap">
                 <table class="content-table">
                     <thead>
@@ -328,11 +328,10 @@
             <p class="formula-line">\(H_0\): filas y columnas son independientes (\(OR = 1\))</p>
             <p class="formula-line">\(H_1\): hay asociación (\(OR \neq 1\), \(OR > 1\) o \(OR < 1\))</p>
             <p>Lo habitual es que las filas sean los grupos (tratamiento y control) y las columnas, el desenlace (sí y no). Entonces \(H_0\) dice que la proporción de la columna A es la misma en las dos filas: \(a/(a+b)\) frente a \(c/(c+d)\).</p>
-            </details>
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>Cómo se calcula el p-valor exacto</h3></summary>
+            <h3>Cómo se calcula el p-valor exacto</h3>
             <p>El test fija los totales de filas y columnas y se pregunta: si no hubiera asociación, ¿qué probabilidad tendría cada forma posible de repartir los casos dentro de la tabla? Con los márgenes fijos, basta con conocer la casilla a para conocer toda la tabla, y bajo \(H_0\) esa casilla sigue una distribución <strong>hipergeométrica</strong>:</p>
             <p class="formula-line">\( P(X = k) = \dfrac{\dbinom{a+b}{k}\dbinom{c+d}{a+c-k}}{\dbinom{n}{a+c}} \)</p>
             <p>El p-valor suma las probabilidades de las tablas al menos tan extremas como la observada:</p>
@@ -343,14 +342,13 @@
             </ul>
             <p>El gráfico de la calculadora muestra precisamente esa distribución: una barra por cada valor posible de a, con las que entran en el p-valor resaltadas.</p>
             <p>Como la distribución es discreta, el test es <strong>conservador</strong>: el riesgo real de falso positivo suele quedar algo por debajo de \(\alpha\). Es el precio de no depender de aproximaciones. Con muestras grandes, Fisher y chi-cuadrado dan resultados muy parecidos.</p>
-
-            <h3>Regla de decisión</h3>
+            <details class="fold fold-sub"><summary><h3>Regla de decisión</h3></summary>
             <ul>
                 <li>Si el <strong>p-valor exacto</strong> es menor que \(\alpha\), se rechaza \(H_0\): hay evidencia de asociación.</li>
                 <li>Si es mayor o igual que \(\alpha\), no hay evidencia suficiente para rechazar la independencia.</li>
                 <li>La dirección la da el odds ratio: OR &gt; 1 indica que la columna A es más frecuente en la fila 1.</li>
             </ul>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -400,17 +398,16 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
             <p><strong>Rechazar \(H_0\)</strong> (p-valor &lt; α) indica que las dos variables están asociadas. Para valorar la magnitud, mira las proporciones de cada fila, su diferencia y el odds ratio con su intervalo de confianza; en muestras pequeñas, ese intervalo suele ser muy ancho.</p>
             <p><strong>No rechazar \(H_0\)</strong> no demuestra independencia. Con pocos datos, la potencia del test es baja, como en el ejemplo 1.</p>
             <p>En la calculadora, el resultado muestra la decisión con el p-valor exacto, el odds ratio, las proporciones de la columna A en cada fila y una frase con la conclusión. En «Detalles del cálculo» tienes la diferencia entre filas en puntos porcentuales y la probabilidad de la tabla observada.</p>
-
-            <h3>Potencia y diferencia mínima detectable</h3>
+            <details class="fold fold-sub"><summary><h3>Potencia y diferencia mínima detectable</h3></summary>
             <p>Debajo de la conclusión, la calculadora indica la <strong>diferencia mínima detectable</strong>: la menor diferencia real respecto a la proporción de la fila 2 que, con tus totales por fila, el test detectaría con un 80 % de probabilidad. Con muestras pequeñas suele ser enorme, o incluso imposible de alcanzar. El enlace abre la <a href="tamano-muestral-fisher.html">calculadora de tamaño muestral para el test de Fisher</a> con tus proporciones, tu α, la proporción entre las filas y el tipo de contraste.</p>
 
             <h3>Intervalo de confianza para el odds ratio</h3>
             <p>El otro enlace abre la <a href="intervalo-confianza-odds-ratio.html">calculadora del intervalo de confianza para el odds ratio</a> con tu tabla. Si alguna casilla es cero, aplica la corrección de 0,5 automáticamente.</p>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -436,7 +433,7 @@
                     <li><a href="contraste-hipotesis-odds-ratio.html">Contraste del odds ratio</a></li>
                 </ul>
             </section>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Cuándo se usa el test exacto de Fisher?</strong> En tablas 2×2 con muestras pequeñas, sobre todo cuando alguna frecuencia esperada es menor que 5 y el chi-cuadrado no es fiable.</li>
                 <li><strong>¿Por qué se llama exacto?</strong> Porque calcula el p-valor con la distribución hipergeométrica, sin aproximaciones normales ni chi-cuadrado.</li>
@@ -448,6 +445,7 @@
                 <li><strong>¿Sirve para tablas mayores que 2×2?</strong> Existe una extensión (Fisher-Freeman-Halton), pero esta calculadora es para tablas 2×2. Para tablas mayores, usa el chi-cuadrado de independencia.</li>
             </ul>
             <p class="external-ref">Referencia: <a href="https://es.wikipedia.org/wiki/Prueba_exacta_de_Fisher" target="_blank" rel="noopener noreferrer">Prueba exacta de Fisher</a> — Wikipedia</p>
+            </details>
         </section>
 
     </main>

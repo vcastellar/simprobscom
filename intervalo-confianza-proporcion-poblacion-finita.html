@@ -198,7 +198,7 @@
             <p>Cuando se muestrea sin reemplazamiento una fracción apreciable de una población finita de tamaño \(N\), las observaciones ya no son estrictamente independientes. El <strong>factor de corrección por población finita</strong> (FPC) ajusta el error estándar para tener en cuenta que conocer parte de la población reduce la incertidumbre sobre el resto.</p>
             <p>El FPC es relevante cuando la fracción de muestreo \(f = n/N\) supera el 5 %. Por debajo de ese umbral, el IC estándar y el corregido son prácticamente iguales.</p>
 
-            <details class="fold fold-sub"><summary><h3>Fórmula del IC con FPC</h3></summary>
+            <h3>Fórmula del IC con FPC</h3>
             <p class="formula-line">\( \hat{p} = \frac{x}{n} \)</p>
             <p class="formula-line">\( \text{FPC} = \sqrt{\frac{N-n}{N-1}} \)</p>
             <p class="formula-line">\( \text{SE}_{\text{FPC}} = \sqrt{\frac{\hat{p}(1-\hat{p})}{n}} \cdot \text{FPC} \)</p>
@@ -208,7 +208,6 @@
                 <li><strong>FPC</strong>: factor que reduce el error estándar cuando \(n/N\) es grande. Si \(n \ll N\), FPC ≈ 1.</li>
                 <li><strong>z_{α/2}</strong>: cuantil normal estándar (1,645 para 90 %; 1,960 para 95 %; 2,576 para 99 %).</li>
             </ul>
-            </details>
 
             <details class="fold fold-sub"><summary><h3>Cuándo el FPC es importante</h3></summary>
             <ul>
@@ -237,14 +236,15 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
             <p>El intervalo \([L, U]\) es el rango plausible de la proporción poblacional \(p\) dado el nivel de confianza elegido. En términos frecuentistas, si repitieras el muestreo muchas veces y construyeras el IC con el mismo método, una proporción \(C\) de esos intervalos contendría el verdadero valor de \(p\). El IC con FPC es siempre igual o más estrecho que el estándar: no es un resultado más impreciso ni menos honesto, sino un reflejo correcto de la información adicional que aporta muestrear sin reemplazamiento una fracción apreciable de la población.</p>
             <p>La magnitud del efecto depende directamente de \(n/N\). Con \(n/N &lt; 5\,\%\), el FPC es prácticamente 1 y ambos ICs coinciden. Con \(n/N = 25\,\%\) (como en el ejemplo), la reducción de amplitud puede superar el 10 %. El gráfico muestra ambos intervalos en paralelo para que puedas ver cuánto gana la corrección en tu caso concreto. Si deseas reportar la proporción con la menor incertidumbre honestamente justificada, elige siempre el IC con FPC cuando el diseño sea muestreo sin reemplazamiento y la fracción supere el 5 %.</p>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
             <ul>
                 <li><strong>Conexión con el contraste:</strong> si un valor de referencia \(p_0\) queda fuera del IC con FPC, los datos rechazarían \(H_0\!: p = p_0\) al nivel \(\alpha = 1 - C\) en el contraste bilateral equivalente.</li>
                 <li><strong>Límites y condición de normalidad:</strong> el IC está basado en la aproximación normal de Wald con FPC; es más fiable cuando \(n\hat{p} \geq 5\) y \(n(1-\hat{p}) \geq 5\). Si estas condiciones no se cumplen, el intervalo debe interpretarse con cautela.</li>
             </ul>
-      </details>
+            </details>
         </section>
         <section id="seo-support-content" class="card content-card">
             <section class="related-tools">

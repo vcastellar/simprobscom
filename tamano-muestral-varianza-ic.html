@@ -199,7 +199,7 @@
             <p class="formula-line">\( \left[\frac{(n-1)s^2}{\chi^2_{1-\alpha/2,\,n-1}},\;\; \frac{(n-1)s^2}{\chi^2_{\alpha/2,\,n-1}}\right] \)</p>
             <p>A diferencia de los ICs para medias o proporciones, el ancho <em>absoluto</em> del IC para la varianza depende del valor desconocido de \(\sigma^2\), lo que impide expresar la precisión en unidades absolutas sin conocerla de antemano. La solución natural es especificar la precisión en términos relativos: el <strong>cociente \(U/L\)</strong> entre el límite superior e inferior del IC.</p>
             <p>Este cociente solo depende de los cuantiles de la chi-cuadrado, y por tanto únicamente del tamaño muestral \(n\) y del nivel de confianza. No se necesita ningún supuesto sobre \(\sigma^2\).</p>
-            <details class="fold fold-sub"><summary><h3>Fórmula del cociente U/L</h3></summary>
+            <h3>Fórmula del cociente U/L</h3>
             <p class="formula-line">\( \frac{U}{L} = \frac{\chi^2_{1-\alpha/2,\,n-1}}{\chi^2_{\alpha/2,\,n-1}} \)</p>
             <p>Para un nivel de confianza y un cociente \(R\) deseado, la calculadora busca el menor \(n\) tal que \(\chi^2_{1-\alpha/2,\,n-1}/\chi^2_{\alpha/2,\,n-1} \leq R\). No existe una fórmula cerrada: el resultado se obtiene por búsqueda iterativa sobre \(n\).</p>
             <ul>
@@ -207,10 +207,8 @@
                 <li><strong>R = 2</strong>: el límite superior dobla al inferior → muestra razonable (≈ 65 observaciones al 95 %).</li>
                 <li><strong>R = 3</strong>: el límite superior triplica al inferior → muestra mucho más pequeña (≈ 28 observaciones al 95 %).</li>
             </ul>
-            </details>
-            <details class="fold fold-sub"><summary><h3>Interpretación del cociente U/L</h3></summary>
+            <h3>Interpretación del cociente U/L</h3>
             <p>Un cociente \(R = 2{,}5\) significa que el límite superior del IC puede ser hasta 2,5 veces mayor que el límite inferior. Por ejemplo, si \(s^2 = 4{,}0\), el IC podría ir de 2,5 a 6,25 (una variabilidad de 2,5 a 1 entre los extremos). Cuanto menor sea \(R\), más estrecho y más informativo es el IC, pero más observaciones son necesarias.</p>
-            </details>
             <details class="fold fold-sub"><summary><h3>Configuración rápida</h3></summary>
             <ul>
                 <li><strong>Cociente R:</strong> R entre 2 y 4 es habitual en estudios de control de calidad y procesos. R muy cercano a 1 requiere muestras prohibitivamente grandes.</li>
@@ -240,10 +238,11 @@
                 <li>Auditoría de procesos productivos donde se necesita caracterizar la dispersión.</li>
             </ul>
             </details>
-            <details class="fold fold-sub"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) <strong>garantiza que el intervalo de confianza</strong> para \(\sigma^2\) basado en la distribución chi-cuadrado tendrá un cociente entre el límite superior e inferior no mayor que el valor \(R\) especificado, con el nivel de confianza elegido. Esto asegura una precisión relativa: el límite superior del IC no superará \(R\) veces el límite inferior. Redondea siempre hacia arriba. Si prevés pérdidas o exclusiones durante la recogida, divide \(n\) entre \((1 - \text{tasa de pérdida})\); con un 10 % de pérdida, recluta \(\lceil n / 0{,}90 \rceil\) unidades.</p>
                 <p>El supuesto más crítico y delicado de este método es la <strong>normalidad de los datos</strong>: el IC chi-cuadrado para \(\sigma^2\) es muy sensible a desviaciones de la normalidad, mucho más que el IC para la media. Con distribuciones asimétricas o de colas pesadas, el IC real puede tener una cobertura muy inferior al nivel nominal (p. ej., un IC del 95 % puede cubrir el verdadero \(\sigma^2\) solo el 85 % de las veces). Antes de aplicar este resultado, verifica la normalidad con el <a href="shapiro-wilk-normalidad.html">test de Shapiro-Wilk</a> o mediante Q-Q plots. La sensibilidad a \(R\): exigir un cociente \(R = 2\) (IC estrecho) requiere muchos más sujetos que \(R = 4\) (IC amplio); incrementar \(R\) en un 50 % puede reducir \(n\) a la mitad.</p>
-                <p>Si el \(n\) calculado es inviable, las alternativas son: (1) aceptar un cociente \(R\) mayor (IC más amplio), (2) reducir el nivel de confianza (p. ej., de 99 % a 95 %), o (3) si los datos no son normales, utilizar métodos de bootstrap para construir el IC de \(\sigma^2\) sin depender de la distribución chi-cuadrado. Una vez recogidos los datos, construye el IC real con la <a href="intervalo-confianza-varianza.html">calculadora de IC para la varianza</a>; si también quieres contrastar \(\sigma^2\) frente a un valor de referencia, usa la <a href="tamano-muestral-una-varianza.html">calculadora de tamaño muestral para contraste de una varianza</a>.</p>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
+            <p>Si el \(n\) calculado es inviable, las alternativas son: (1) aceptar un cociente \(R\) mayor (IC más amplio), (2) reducir el nivel de confianza (p. ej., de 99 % a 95 %), o (3) si los datos no son normales, utilizar métodos de bootstrap para construir el IC de \(\sigma^2\) sin depender de la distribución chi-cuadrado. Una vez recogidos los datos, construye el IC real con la <a href="intervalo-confianza-varianza.html">calculadora de IC para la varianza</a>; si también quieres contrastar \(\sigma^2\) frente a un valor de referencia, usa la <a href="tamano-muestral-una-varianza.html">calculadora de tamaño muestral para contraste de una varianza</a>.</p>
             </details>
         </section>
 
@@ -264,12 +263,13 @@
                 <li>Montgomery, D. C. (2019). <em>Introduction to Statistical Quality Control</em> (8.ª ed.). Wiley. — aplicaciones en SPC.</li>
                 <li>Wikipedia (en): <a href="https://en.wikipedia.org/wiki/Chi-squared_distribution" target="_blank" rel="noopener">Chi-squared distribution</a> — propiedades y percentiles.</li>
             </ul>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Por qué necesito tanta muestra para un IC de varianza estrecho?</strong> Porque la distribución chi-cuadrado converge lentamente a la simetría. Con pocos grados de libertad, los cuantiles extremos están muy separados, produciendo ICs muy asimétricos y amplios.</li>
                 <li><strong>¿Qué pasa si los datos no son normales?</strong> El IC chi-cuadrado puede tener una cobertura real muy distinta del nivel de confianza nominal. Aplica primero un test de normalidad (<a href="shapiro-wilk-normalidad.html">Shapiro-Wilk</a>) y, si los datos no son normales, considera transformaciones o métodos bootstrap.</li>
                 <li><strong>¿Puedo usar este resultado si quiero estimar σ en lugar de σ²?</strong> Sí. El IC para σ se obtiene aplicando raíz cuadrada a cada límite del IC de σ², y el cociente U/L es el mismo.</li>
             </ul>
+            </details>
         </section>
     </main>
 

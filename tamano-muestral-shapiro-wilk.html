@@ -226,7 +226,7 @@
             <h3>Explicación</h3>
             <p>El test de Shapiro–Wilk contrasta la hipótesis nula de que una muestra proviene de una distribución normal. Su potencia depende de cuánto difiere la distribución real (alternativa) de la normal, y esa diferencia se cuantifica principalmente mediante la <strong>asimetría</strong> (\(\gamma_1\)) y la <strong>curtosis en exceso</strong> (\(\gamma_2\)) de la distribución alternativa. Para la distribución normal, \(\gamma_1 = 0\) y \(\gamma_2 = 0\).</p>
             <p>Dado que el test de Shapiro–Wilk no dispone de una fórmula analítica de potencia en función de \(n\), esta calculadora utiliza la <strong>aproximación de Jarque–Bera</strong>, que combina asimetría y curtosis en un estadístico ómnibus cuya distribución bajo \(H_0\) es asintóticamente \(\chi^2(2)\). El resultado es aproximado en dos sentidos: sustituye el test de Shapiro–Wilk por el de Jarque–Bera y, además, supone que el estadístico JB sigue una chi-cuadrado no central, algo que con muestras pequeñas puede alejarse mucho de la realidad. Por eso la estimación <strong>no es conservadora</strong>: como muestra la tabla de referencia, frente a alternativas asimétricas o de colas pesadas el \(n\) que realmente necesita Shapiro–Wilk puede ser varias veces mayor que el calculado, mientras que frente a alternativas de colas ligeras (uniforme) puede ser menor.</p>
-            <details class="fold fold-sub"><summary><h3>Fórmula de potencia (aproximación Jarque–Bera)</h3></summary>
+            <h3>Fórmula de potencia (aproximación Jarque–Bera)</h3>
             <p>Bajo la alternativa con parámetros de forma \(\gamma_1\) y \(\gamma_2\), el parámetro de no centralidad del estadístico Jarque–Bera para una muestra de tamaño \(n\) es:</p>
             <p class="formula-line">\( \lambda(n) = n \left(\frac{\gamma_1^2}{6} + \frac{\gamma_2^2}{24}\right) \)</p>
             <p>Bajo \(H_1\), el estadístico JB sigue aproximadamente una distribución chi-cuadrado no central con 2 grados de libertad y parámetro \(\lambda(n)\). La potencia del test al nivel \(\alpha\) es:</p>
@@ -234,7 +234,6 @@
             <p>La distribución chi-cuadrado no central se evalúa mediante la mezcla de Poisson de chi-cuadrados centrales:</p>
             <p class="formula-line">\( F_{\chi^2(df,\lambda)}(x) = \sum_{k=0}^{\infty} \frac{e^{-\lambda/2}(\lambda/2)^k}{k!} \cdot F_{\chi^2(df+2k)}(x) \)</p>
             <p>La calculadora busca el mínimo entero \(n \geq 3\) para el que la potencia calculada supera el objetivo.</p>
-            </details>
             <details class="fold fold-sub"><summary><h3>Distribuciones de referencia</h3></summary>
             <p>La siguiente tabla muestra los momentos de varias distribuciones, el tamaño muestral que devuelve esta calculadora (aproximación JB) y el que necesita realmente el test de Shapiro–Wilk según simulación, en ambos casos para una potencia del 80 % con \(\alpha = 0{,}05\).</p>
             <div class="content-table-wrap">
@@ -324,10 +323,11 @@
             </ul>
             <p>La asimetría y el exceso de curtosis nulos no caracterizan la distribución normal. La aproximación JB no distingue alternativas con esos mismos momentos; para estudiar su potencia con Shapiro–Wilk hay que especificar la alternativa y recurrir a simulación.</p>
             </details>
-            <details class="fold fold-sub"><summary><h3>Cómo interpretar el resultado</h3></summary>
+            <h3>Cómo interpretar el resultado</h3>
                 <p>El valor \(n\) es una <strong>estimación orientativa</strong> del tamaño muestral para que el test de Shapiro-Wilk (SW) detecte la desviación de normalidad especificada con la potencia deseada. La fórmula usa la aproximación asintótica de Jarque-Bera, que no es conservadora: frente a alternativas asimétricas o de colas pesadas puede subestimar varias veces el \(n\) necesario (véase la tabla de referencia), así que conviene verificarlo por simulación. Redondea siempre hacia arriba. Si prevés pérdidas de datos, divide \(n\) entre \((1 - \text{tasa de pérdida})\) para obtener el reclutamiento necesario. Ten en cuenta que el SW solo está diseñado para \(3 \leq n \leq 5000\); para \(n > 5000\) no es aplicable directamente.</p>
                 <p>La potencia de SW para detectar no-normalidad depende del tipo de desviación y del \(n\): las alternativas claramente asimétricas se detectan con muestras relativamente pequeñas, mientras que las simétricas requieren bastantes más observaciones, sobre todo si tienen colas pesadas (véase la tabla de referencia). Para \(n < 8\), la potencia de SW es muy baja independientemente del efecto; si tu muestra es muy pequeña, los tests de normalidad tienen poca utilidad práctica y es preferible apoyarse en el diseño y los gráficos (histograma, Q-Q plot). Realiza un <em>análisis de sensibilidad</em> variando el parámetro de asimetría o curtosis objetivo para ver cuánto cambia el \(n\) requerido.</p>
-                <p>Si el \(n\) calculado supera 5000, el test SW no es aplicable y deberías usar alternativas como Kolmogorov-Smirnov (con la corrección de Lilliefors para parámetros estimados), Anderson-Darling, o simplemente evaluar la normalidad mediante métodos gráficos (Q-Q plot, histograma). Con muestras grandes, recuerda que el p-valor del test de normalidad se vuelve muy sensible a desviaciones triviales; en ese contexto, la pregunta relevante no es «¿son los datos exactamente normales?» sino «¿se alejan tanto de la normalidad que el procedimiento estadístico se ve comprometido?». Con los datos recogidos, realiza el contraste de normalidad con la <a href="shapiro-wilk-normalidad.html">calculadora de Shapiro-Wilk</a> e interpreta el resultado junto con el Q-Q plot.</p>
+            <details class="fold fold-sub"><summary><h3>Desarrollo y detalles adicionales</h3></summary>
+            <p>Si el \(n\) calculado supera 5000, el test SW no es aplicable y deberías usar alternativas como Kolmogorov-Smirnov (con la corrección de Lilliefors para parámetros estimados), Anderson-Darling, o simplemente evaluar la normalidad mediante métodos gráficos (Q-Q plot, histograma). Con muestras grandes, recuerda que el p-valor del test de normalidad se vuelve muy sensible a desviaciones triviales; en ese contexto, la pregunta relevante no es «¿son los datos exactamente normales?» sino «¿se alejan tanto de la normalidad que el procedimiento estadístico se ve comprometido?». Con los datos recogidos, realiza el contraste de normalidad con la <a href="shapiro-wilk-normalidad.html">calculadora de Shapiro-Wilk</a> e interpreta el resultado junto con el Q-Q plot.</p>
             </details>
         </section>
 
@@ -347,13 +347,14 @@
                 <li>Jarque, C. M. &amp; Bera, A. K. (1987). A test for normality of observations and regression residuals. <em>International Statistical Review</em>, 55(2), 163–172.</li>
                 <li>Shapiro, S. S. &amp; Wilk, M. B. (1965). An analysis of variance test for normality (complete samples). <em>Biometrika</em>, 52(3–4), 591–611.</li>
             </ul>
-            <h3>Preguntas frecuentes</h3>
+            <details class="fold fold-sub"><summary><h3>Preguntas frecuentes</h3></summary>
             <ul>
                 <li><strong>¿Qué es la asimetría (γ₁) y la curtosis en exceso (γ₂)?</strong> La asimetría mide el grado de inclinación de la distribución (\(\gamma_1 = 0\) para distribuciones simétricas). La curtosis en exceso mide la pesadez de las colas respecto a la normal (\(\gamma_2 = 0\) para la normal, positivo para colas más pesadas). Cualquier desviación de estos valores cero indica no normalidad.</li>
                 <li><strong>¿Por qué usar la aproximación Jarque–Bera?</strong> Porque ofrece una fórmula analítica de potencia basada en la distribución chi-cuadrado no central, lo que permite calcular el tamaño muestral sin simulación. A cambio, la estimación es solo orientativa y no conservadora: frente a alternativas asimétricas o de colas pesadas, SW puede necesitar bastantes más observaciones de las indicadas.</li>
                 <li><strong>¿Para qué tamaños muestrales es válido el test de Shapiro–Wilk?</strong> Para 3 ≤ n ≤ 5000. Para n &lt; 8 la potencia es muy baja. Para n &gt; 5000, el test es excesivamente sensible; se recomienda combinar con análisis gráfico (Q-Q plot).</li>
                 <li><strong>¿Es esta calculadora válida para detectar curtosis sin asimetría?</strong> Puede usarse, pero con mucha cautela. Con γ₁ = 0, el parámetro de no centralidad se reduce a λ(n) = n·γ₂²/24, pero con colas pesadas la aproximación es especialmente optimista: para una t de Student con 5 gl indica n = 7, mientras que en simulación SW necesita unas 195 observaciones. Las distribuciones simétricas con curtosis elevada (t de Student, Laplace) requieren muestras mucho mayores que las asimétricas.</li>
             </ul>
+            </details>
         </section>
     </main>
 

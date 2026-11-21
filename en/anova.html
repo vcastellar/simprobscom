@@ -246,7 +246,7 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>The idea: comparing two sources of variability</h3></summary>
+            <h3>The idea: comparing two sources of variability</h3>
             <p>Although its aim is to compare means, ANOVA does so by comparing variances, hence its name. The total variability of the data is split into two parts:</p>
             <ul>
                 <li><strong>Between-group variability</strong>: how far the group means are from the overall mean. It reflects the effect of the factor, plus noise.</li>
@@ -259,8 +259,7 @@
                 <p class="formula-line">\(F = \dfrac{MS_{\text{between}}}{MS_{\text{within}}} = \dfrac{SS_{\text{between}}/(k-1)}{SS_{\text{within}}/(N-k)}\)</p>
             </div>
             <p>Here \(k\) is the number of groups, \(n_j\) the size of group \(j\), \(N\) the total number of observations, \(\bar{x}_j\) the mean of group \(j\) and \(\bar{x}\) the overall mean. The <strong>mean squares</strong> (MS) are the sums of squares divided by their degrees of freedom. Under \(H_0\), the statistic follows Snedecor's F distribution with \(k-1\) and \(N-k\) degrees of freedom (you can look up its critical values in the <a href="tabla-f-snedecor.html">F table</a>). The test is always right-tailed: only a large F is evidence against \(H_0\).</p>
-
-            <h3>The ANOVA table</h3>
+            <details class="fold fold-sub"><summary><h3>The ANOVA table</h3></summary>
             <p>The results are presented in a table with one row per source of variability. The calculator includes it under "Calculation details":</p>
             <div class="content-table-wrap">
                 <table class="content-table">
@@ -275,7 +274,7 @@
                 </table>
             </div>
             <p>\(MS_{\text{within}}\) is the pooled variance of all the groups: it estimates the common variance \(\sigma^2\) whether or not \(H_0\) is true.</p>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -315,18 +314,17 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
             <p><strong>Rejecting \(H_0\)</strong> (p-value &lt; α) indicates that at least one mean differs from the others, but not which one or in which direction. Look at the mean of each group and apply a post hoc comparison. Remember too that significant is not the same as important: with large groups, small differences between means give a significant F.</p>
             <p><strong>Not rejecting \(H_0\)</strong> (p-value ≥ α) does not prove that the means are equal: the data are compatible with equality, but the study may not have had enough power. Few observations per group or high within-group variability prevent real differences from being detected.</p>
             <p>The <strong>F statistic</strong> compares the variability between groups with the variability within them. An F close to 1 indicates that the means are as far apart as chance would lead you to expect; the larger it is, the more evidence that the factor has an influence. On the chart, the green area is the non-rejection region, the red area is the critical tail and the amber line marks the observed F.</p>
-
-            <h3>Effect size: η² and Cohen's f</h3>
+            <details class="fold fold-sub"><summary><h3>Effect size: η² and Cohen's f</h3></summary>
             <p>\(\eta^2 = SS_{\text{between}}/SS_T\) is the proportion of the total variability explained by the factor. As a rough guide, 0.01 is a small effect, 0.06 medium and 0.14 large. With small samples, \(\eta^2\) tends to overestimate the real effect; omega squared (\(\omega^2\)) corrects that bias.</p>
             <p>Power and sample size calculations use <strong>Cohen's f</strong>, obtained from \(\eta^2\) as \(f = \sqrt{\eta^2/(1-\eta^2)}\), which measures how far apart the group means are in units of the within-group standard deviation. Cohen's benchmarks are 0.10 (small), 0.25 (medium) and 0.40 (large).</p>
 
             <h3>Power and minimum detectable effect</h3>
             <p>Below the conclusion, the calculator shows the <strong>minimum detectable effect size</strong>: the smallest Cohen's f that, with your group sizes, ANOVA would detect with 80% probability. If it is larger than the effect that would matter to you, a non-significant result says little. For reference, with 3 groups of 20 observations only large effects (f ≈ 0.41) are detected with that probability, and medium effects (f = 0.25) require about 53 observations per group. The link in the result opens the <a href="tamano-muestral-anova.html">sample size calculator for ANOVA</a> with your number of groups and your α, so you can work out the size needed for the effect you care about.</p>
-      </details>
+            </details>
         </section>
 
         <section class="card content-card">
@@ -366,7 +364,7 @@
                 <li><a href="shapiro-wilk-normalidad.html">Shapiro-Wilk normality test</a></li>
               </ul>
             </section>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>What does one-way ANOVA test?</strong> Whether the means of three or more independent groups are equal. The alternative hypothesis is that at least one mean differs from the others.</li>
                 <li><strong>Does ANOVA prove that all the means are different?</strong> No. A significant result only indicates that at least one mean differs. To find out which, apply post hoc comparisons such as Tukey's test.</li>
@@ -379,6 +377,7 @@
                 <li><strong>How many observations per group do I need?</strong> It depends on the effect size you want to detect and the desired power. For a medium effect (f = 0.25) with 3 groups, α = 0.05 and 80% power, about 53 per group. Work it out with the sample size calculator for ANOVA.</li>
             </ul>
             <p class="external-ref">Reference: <a href="https://en.wikipedia.org/wiki/One-way_analysis_of_variance" target="_blank" rel="noopener noreferrer">One-way analysis of variance</a> — Wikipedia</p>
+            </details>
         </section>
 
     </main>

@@ -216,16 +216,16 @@
 
             <p>Let \(C\) denote the confidence level and \(\alpha=1-C\) the total area outside the interval. For 95% confidence, \(C=0.95\), \(\alpha=0.05\) and \(\alpha/2=0.025\) in each tail.</p>
 
-            <details class="fold fold-sub"><summary><h3>Wald method (normal approximation)</h3></summary>
+            <h3>Wald method (normal approximation)</h3>
             <p class="formula-line">\( (\hat{p}_1 - \hat{p}_2) \pm z_{\alpha/2} \cdot \sqrt{\dfrac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \dfrac{\hat{p}_2(1-\hat{p}_2)}{n_2}} \)</p>
             <p>This is the classic method and is adequate when both groups have enough successes and failures: \(n_i\hat{p}_i \geq 5\) and \(n_i(1-\hat{p}_i) \geq 5\).</p>
-            </details>
 
-            <details class="fold fold-sub"><summary><h3>Newcombe-Wilson method (recommended)</h3></summary>
+            <h3>Newcombe-Wilson method (recommended)</h3>
             <p>The Newcombe-Wilson method does not apply the normal approximation directly to the difference \(\hat{p}_1-\hat{p}_2\). It first computes, separately, a Wilson score interval for each proportion: \([L_1, U_1]\) for \(p_1\) and \([L_2, U_2]\) for \(p_2\). The idea comes from Newcombe's (1998) work, which compared several methods for the difference of proportions and highlighted the good performance of Wilson-based methods.</p>
             <p>It then combines the distances from each observed proportion to its Wilson limits, keeping the sign of the estimated difference \(d = \hat{p}_1 - \hat{p}_2\). The combination is not simply \([L_1-U_2, U_1-L_2]\): the uncertainties of both groups are added quadratically to build each end of the interval:</p>
             <p class="formula-line">\( L = d - \sqrt{(\hat{p}_1-L_1)^2 + (U_2-\hat{p}_2)^2} \)</p>
             <p class="formula-line">\( U = d + \sqrt{(U_1-\hat{p}_1)^2 + (\hat{p}_2-L_2)^2} \)</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
             <p>This combination tends to keep the actual coverage of the interval closer to nominal than Wald, especially with small samples or proportions near 0 or 1. That's why it's a good default choice for comparing two independent percentages. This page uses the version without continuity correction, which is the standard form for a fast, reproducible calculator.</p>
             </details>
 
@@ -255,15 +255,16 @@
         </section>
 
         <section class="card content-card">
-            <details class="fold"><summary><h3>How to interpret the result</h3></summary>
+            <h3>How to interpret the result</h3>
             <p>The interval \([L, U]\) is the plausible range of the difference of population proportions \(p_1 - p_2\) given the chosen confidence level. If the experiment were repeated many times with samples of the same size, a proportion \(C\) of the intervals built with the same method would contain the true value of \(p_1 - p_2\). The width of the interval reflects precision: larger samples or proportions farther from 0.5 produce narrower intervals; lower variability and larger \(n\) lead to more precise estimates.</p>
             <p>The key decision hinges on whether 0 belongs to the interval. If \(0 \in [L, U]\), the data do not rule out \(p_1 = p_2\) at the chosen confidence level; equivalently, the two-sided test \(H_0\!: p_1 = p_2\) would not be rejected at level \(\alpha = 1 - C\). If \(0 \notin [L, U]\), there is evidence of a difference: if \(L > 0\) group 1's proportion is significantly higher; if \(U < 0\) group 2's proportion is significantly higher. The calculator automatically states which of the two cases applies, for both methods when shown together.</p>
+            <details class="fold fold-sub"><summary><h3>Development and additional details</h3></summary>
             <ul>
                 <li><strong>Effect magnitude:</strong> beyond significance, the center of the interval (\(\hat{p}_1 - \hat{p}_2\)) indicates the estimated difference in percentage points. A significant CI centered close to 0 may have little practical relevance.</li>
                 <li><strong>Wald vs. Newcombe-Wilson:</strong> when Wald's normality condition holds in both groups, both methods usually agree on the conclusion. If either group has few successes or failures, Newcombe-Wilson tends to be more reliable because it uses individual Wilson intervals and combines their uncertainties quadratically.</li>
                 <li><strong>Reading the chart:</strong> the green region under the standard normal curve is the confidence zone and the red tails (area \(\alpha/2\) each) mark the critical values \(\pm z_{\alpha/2}\). The chart visualizes the z values compatible with the data; the CI on the original scale is obtained by mapping those values back to the difference of proportions.</li>
             </ul>
-      </details>
+            </details>
         </section>
 
         <section id="seo-support-content" class="card content-card">
@@ -276,12 +277,13 @@
                     <li><a href="binomial.html">Binomial distribution</a></li>
                 </ul>
             </section>
-            <h3>Frequently asked questions</h3>
+            <details class="fold fold-sub"><summary><h3>Frequently asked questions</h3></summary>
             <ul>
                 <li><strong>When does the CI indicate a significant difference?</strong> When the value 0 falls outside the interval [L, U].</li>
                 <li><strong>Which difference is calculated?</strong> The tool computes p₁ − p₂; if you swap the groups, the sign of the difference changes.</li>
                 <li><strong>What does it mean if the CI includes 0?</strong> That at the chosen confidence level you cannot rule out that both population proportions are equal.</li>
             </ul>
+            </details>
             <h3>References used</h3>
             <ul>
                 <li><a href="https://www.graphpad.com/support/faq/how-does-prism-compute-the-95-confidence-interval-for-the-difference-between-two-proportions/" target="_blank" rel="noopener noreferrer">GraphPad: CI for the difference between two proportions</a> — explains the classic Wald-type interval and cites the comparison of Newcombe's methods.</li>
