@@ -47,10 +47,16 @@ class TableLayoutTests(BrowserTestCase):
         for lang in ('/', '/en/'):
             self.open_table(lang, 'f-snedecor')
             for text in self.page.locator('table.dist-table td[data-val]').all_text_contents():
-                self.assertRegex(text, r'^\d+\.\d{4}$')
+                self.assertEqual(len(text.replace('.', '')), 5)
             self.page.evaluate("document.querySelectorAll('[data-prerendered]').forEach(t => delete t.dataset.prerendered); ALPHAS.forEach(a => buildFCritTable('tbl-'+a.key,a.val,a.val));buildFCdfTable(3,20)")
             self.assertTrue(self.page.locator('table.dist-table td[data-val]').evaluate_all(
-                'cs => cs.every(c => c.textContent === window.tableCellExact(c).toFixed(4))'))
+                'cs => cs.every(c => c.textContent === formatFTableValue(window.tableCellExact(c)))'))
+            samples = [0, .853612, .001234, 3.098391, 62.26504, 123.4567, 1234.567,
+                       12345.67, 9.99999, 99.9999, 9999.99, 99999.6, 123456.78]
+            expected = ['0.0000', '0.8536', '0.0012', '3.0984', '62.265', '123.46', '1234.6',
+                        '12346', '10.000', '100.00', '10000', '100000', '123457']
+            self.assertEqual(self.page.evaluate('(xs) => xs.map(formatFTableValue)', samples), expected)
+            self.assertEqual(self.page.evaluate('formatFTableValue(Infinity)'), '∞')
             for width in (390, 1280):
                 self.page.set_viewport_size({'width': width, 'height': 844})
                 for dark in (False, True):
