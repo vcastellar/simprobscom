@@ -99,7 +99,7 @@
             case "student": var df = +ds.df; return { pdf: function (v) { return jStat.studentt.pdf(v, df); }, cdf: function (v) { return jStat.studentt.cdf(v, df); }, inv: function (p) { return jStat.studentt.inv(p, df); }, kind: "sym", params: "ν = " + df };
             case "chisquare": var c = +ds.df; return { pdf: function (v) { return jStat.chisquare.pdf(v, c); }, cdf: function (v) { return jStat.chisquare.cdf(v, c); }, inv: function (p) { return jStat.chisquare.inv(p, c); }, kind: "pos", params: "ν = " + c };
             case "centralF": return fDist(ds);
-            case "beta": var ba = +ds.alpha, bb = +ds.beta; return { pdf: function (v) { return jStat.beta.pdf(v, ba, bb); }, cdf: function (v) { return jStat.beta.cdf(v, ba, bb); }, inv: function (p) { return jStat.beta.inv(p, ba, bb); }, kind: "unit", params: "α = " + ba + ", β = " + bb };
+            case "beta": var ba = +ds.alpha, bb = +ds.beta; return { pdf: function (v) { if (v === 0) return ba < 1 ? Infinity : (ba === 1 ? bb : 0); if (v === 1) return bb < 1 ? Infinity : (bb === 1 ? ba : 0); return jStat.beta.pdf(v, ba, bb); }, cdf: function (v) { return jStat.beta.cdf(v, ba, bb); }, inv: function (p) { return jStat.beta.inv(p, ba, bb); }, kind: "unit", params: "α = " + ba + ", β = " + bb };
             case "gamma": var ga = +ds.alpha, gb = +ds.beta; return { pdf: function (v) { return jStat.gamma.pdf(v, ga, gb); }, cdf: function (v) { return jStat.gamma.cdf(v, ga, gb); }, inv: function (p) { return jStat.gamma.inv(p, ga, gb); }, kind: "pos", params: "α = " + ga + ", β = " + gb };
         }
         return null;
@@ -154,7 +154,7 @@
         for (i = 0; i <= N; i++) { v = lo + (hi - lo) * i / N; dv = d.pdf(v); if (isFinite(dv)) { pts.push([v, dv]); if (dv > dmax) dmax = dv; } }
         if (dmax <= 0) dmax = 1;
         var px = function (t) { return padL + (t - lo) / (hi - lo) * plotW; };
-        var py = function (val) { return baseline - (val / (dmax * 1.12)) * (baseline - topY); };
+        var py = function (val) { if (!isFinite(val)) return topY; return baseline - (val / (dmax * 1.12)) * (baseline - topY); };
         var curve = "M" + pts.map(function (p) { return px(p[0]).toFixed(1) + "," + py(p[1]).toFixed(1); }).join(" L");
 
         function area(a, b) {
@@ -169,7 +169,12 @@
         if (spec.mode === "left") { shade = area(lo, x); marks = vline(px(x), py(d.pdf(x))); }
         else if (spec.mode === "right") { shade = area(x, hi); marks = vline(px(x), py(d.pdf(x))); }
         else if (spec.mode === "twotail") { shade = area(lo, -x) + area(x, hi); marks = vline(px(-x), py(d.pdf(-x))) + vline(px(x), py(d.pdf(x))); }
-        else if (spec.mode === "point") { marks = vline(px(x), py(d.pdf(x))) + '<circle cx="' + px(x).toFixed(1) + '" cy="' + py(d.pdf(x)).toFixed(1) + '" r="4" fill="var(--accent)"/>'; }
+        else if (spec.mode === "point") {
+            var height = d.pdf(x);
+            marks = vline(px(x), py(height));
+            // An unbounded endpoint has no finite point to mark on the curve.
+            if (isFinite(height)) marks += '<circle cx="' + px(x).toFixed(1) + '" cy="' + py(height).toFixed(1) + '" r="4" fill="var(--accent)"/>';
+        }
 
         var ticks = "", tk = niceTicks(lo, hi);
         for (i = 0; i < tk.length; i++) ticks += '<text class="dg-tick" x="' + px(tk[i]).toFixed(1) + '" y="' + (baseline + 15) + '" text-anchor="middle">' + tk[i] + "</text>";
