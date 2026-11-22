@@ -95,3 +95,16 @@ Solo cambian el `<title>`, la meta description y sus copias en Open Graph y Twit
 **Hipótesis:** subir el CTR de las páginas que ya están entre las posiciones 6 y 10 (Poisson, correlación, ANOVA, población finita, binomial, uniforme). En las que están peor posicionadas (`tabla-t-student`, `normal`, `binomial`), un cambio de snippet tendrá poco efecto si no mejora la posición.
 
 **Evaluación:** a las 4–6 semanas del despliegue, con el método de «Cómo evaluar», filtrando por los mercados en inglés (Estados Unidos, India, Reino Unido, Canadá, Australia, Filipinas). Meta orientativa: pasar del 0,73 % a un 1,0–1,2 % de CTR en el conjunto, a posición similar.
+
+
+## Prueba: recuperar el título anterior de la tabla normal (es)
+
+- **Fecha de preparación:** 22/11/2026.
+- **Fecha de publicación en producción:** pendiente de confirmar; empezar la comparación desde la publicación efectiva.
+- **URL:** https://problabtools.com/tabla-normal.html
+- **Cambio:** «Tabla normal Z: distribución, probabilidades y ejemplos | ProbLab» → «Tabla de la distribución Normal estándar (Z) | ProbLab».
+- **Copias coherentes:** título HTML, Open Graph, Twitter y nombre de WebPage en JSON-LD.
+- **Alcance:** se conserva la descripción, el H1, las tablas, sus cinco decimales, el contenido y los desplegables. La versión inglesa mantiene su título.
+- **Motivo:** el título se cambió en el commit `cf45edc` del 15/10/2026; la consulta «tabla de distribucion normal» perdió impresiones desde aproximadamente el 23/10. La relación causal no está demostrada y no consta la fecha de despliegue de aquel cambio.
+- **Referencia disponible:** para esa consulta, 3.284 impresiones y 15 clics entre el 25/09 y el 22/10, frente a 328 impresiones y 4 clics entre el 23/10 y el 19/11. Son datos de una consulta, no del total de la página.
+- **Evaluación:** comparar 28 días completos después de la publicación con los 28 anteriores, filtrando primero solo la URL y después la consulta, país y dispositivo. Registrar impresiones, clics, CTR, posición y posibles cambios en las consultas. Evitar nuevas modificaciones SEO en esta página durante la observación para poder interpretar el resultado.
