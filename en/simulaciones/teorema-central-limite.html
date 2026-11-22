@@ -82,18 +82,24 @@
   <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
   <style>
-    .charts-grid {
+    .ss-main .charts-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 20px;
       margin-top: 20px;
     }
     .chart-panel {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
       background: var(--surface);
       border: 1px solid var(--surface-border);
       border-radius: 14px;
       padding: 18px;
       box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+    }
+    .chart-panel .chart-wrap {
+      margin-top: auto;
     }
     .chart-panel h3 {
       margin: 0 0 4px;
@@ -241,7 +247,7 @@
       line-height: 1.7;
     }
     @media (max-width: 900px) {
-      .charts-grid {
+      .ss-main .charts-grid {
         grid-template-columns: 1fr;
       }
       .sim-form-grid {
@@ -347,7 +353,7 @@
                 <option value="50">n = 50</option>
                 <option value="100">n = 100</option>
               </select>
-                <p class="field-hint" hidden>Number of independent observations drawn and averaged to obtain each sample mean. With n = 1 there is no averaging and the two histograms coincide; as n grows, the lower histogram becomes more symmetric (the CLT effect) and narrower, because the standard deviation of the mean is σ/√n.</p>
+                <p class="field-hint" hidden>Number of independent observations drawn and averaged to obtain each sample mean. With n = 1 there is no averaging and the two histograms coincide; as n grows, the sample means histogram becomes more symmetric (the CLT effect) and narrower, because the standard deviation of the mean is σ/√n.</p>
             </div>
             <div class="form-group">
               <label for="numSims">Number of simulations <button type="button" class="field-help-btn" aria-expanded="false" aria-label="More information about this field">i</button></label>
@@ -358,7 +364,7 @@
                 <option value="5000">5000</option>
                 <option value="10000">10000</option>
               </select>
-                <p class="field-hint" hidden>How many times the process "draw n observations and compute their mean" is repeated. Each repetition contributes one point to the lower histogram. More simulations do not change the shape of the distribution of the mean (that depends on n), but they make the histogram smoother and the figures in the "Empirical" column more stable. In total, n × simulations individual observations are generated.</p>
+                <p class="field-hint" hidden>How many times the process "draw n observations and compute their mean" is repeated. Each repetition contributes one point to the sample means histogram. More simulations do not change the shape of the distribution of the mean (that depends on n), but they make the histogram smoother and the figures in the "Empirical" column more stable. In total, n × simulations individual observations are generated.</p>
             </div>
           </div>
           <button class="calculate-btn" id="simBtn" type="button">Simulate</button>
@@ -429,7 +435,7 @@
 
             <div class="legend-dots" id="legendArea" style="display:none;">
               <span class="legend-dot"><span class="dot-bar" style="background:rgba(79,70,229,0.5); border:1px solid rgba(79,70,229,0.8);"></span> Bars: relative frequency of the simulated values, on a density scale (total area = 1)</span>
-              <span class="legend-dot"><span style="background:#dc2626;"></span> Red line: theoretical density (top, that of the base distribution; bottom, the normal N(μ, σ²/n) predicted by the CLT)</span>
+              <span class="legend-dot"><span style="background:#dc2626;"></span> Red line: theoretical density (original distribution: that of the base distribution; sample means: the normal N(μ, σ²/n) predicted by the CLT)</span>
               <span class="legend-dot"><span style="background:#16a34a; border-top: 2px dashed #16a34a; height:0; width:24px;"></span> Dashed green line: normal fitted to the simulated means (empirical mean and standard deviation)</span>
             </div>
 
@@ -466,16 +472,16 @@
         <li>
           <strong>Steps 1 and 2 are repeated</strong> as many times as "Number of simulations" indicates.
           With 1000 simulations you get 1000 sample means, which amounts to \(1000 \times n\) individual observations
-          in total. Those 1000 means are the data behind the lower chart and the "Empirical" column.
+          in total. Those 1000 means are the data behind the sample means chart and the "Empirical" column.
         </li>
         <li>
-          <strong>For the upper chart</strong>, a separate, large sample of individual observations (up to 50,000) is also
+          <strong>For the original distribution chart</strong>, a separate, large sample of individual observations (up to 50,000) is also
           drawn from the same base distribution. These are not the observations used to compute the means, but they come from
           the same distribution and serve to display its shape clearly.
         </li>
       </ol>
 
-      <details class="fold fold-sub"><summary><h3>Upper chart: original distribution</h3></summary>
+      <details class="fold fold-sub"><summary><h3>Original distribution chart</h3></summary>
       <p>
         The <strong>bars</strong> are the histogram of the individual observations. Their height is on a density scale,
         meaning that each bar's height is the proportion of observations falling in that interval divided by the interval width,
@@ -485,11 +491,11 @@
         the bars show the relative frequency of each integer value and the gaps between them are expected.
         The purpose of this chart is to see <em>what shape you start from</em>: a bell (Normal), a plateau (Uniform), a long
         right tail (Exponential, Chi-square) or just two values (Bernoulli). The less it looks like a bell, the more striking
-        the lower chart becomes.
+        the sample means chart becomes.
       </p>
             </details>
 
-      <details class="fold fold-sub"><summary><h3>Lower chart: sampling distribution of the mean</h3></summary>
+      <details class="fold fold-sub"><summary><h3>Sampling distribution of the mean chart</h3></summary>
       <p>
         The <strong>bars</strong> are the histogram of the sample means, one per simulation, also on a density scale:
         each bar's height shows what proportion of the simulations produced a mean within that interval.
@@ -521,7 +527,7 @@
           Carlo noise and shrinks as the number of simulations increases.
         </li>
         <li>
-          <strong>How wide is the histogram?</strong> Compare the horizontal axis scale with that of the upper chart:
+          <strong>How wide is the histogram?</strong> Compare the horizontal axis scale with that of the original distribution chart:
           the one for the means is much narrower, because averaging reduces the spread by a factor of \(\sqrt{n}\).
         </li>
       </ul>
@@ -591,7 +597,7 @@
 
     <section class="card content-card">
       <details class="fold"><summary><h2>Where the mean, the standard error and the bell come from</h2></summary>
-      <p>The "Theoretical" column of the table and the red curve in the lower chart come from three results. The first two are exact for any \(n\); the third is the central limit theorem proper.</p>
+      <p>The "Theoretical" column of the table and the red curve in the sample means chart come from three results. The first two are exact for any \(n\); the third is the central limit theorem proper.</p>
 
       <h3>The mean of the means is μ</h3>
       <p>The expectation of a sum is the sum of the expectations, and constants factor out:</p>
@@ -1150,17 +1156,17 @@
     const totalDraws = numSims * n;
 
     // Paragraph 1: what was generated
-    let p1 = `<strong>${numSims.toLocaleString('en-US')}</strong> samples of <strong>n = ${n}</strong> observations were drawn from the <em>${distName}</em> distribution (${totalDraws.toLocaleString('en-US')} individual observations in total) and the mean of each sample was computed. The upper chart shows ${origSize.toLocaleString('en-US')} individual observations from that same distribution; the lower chart shows the ${numSims.toLocaleString('en-US')} means obtained.`;
+    let p1 = `<strong>${numSims.toLocaleString('en-US')}</strong> samples of <strong>n = ${n}</strong> observations were drawn from the <em>${distName}</em> distribution (${totalDraws.toLocaleString('en-US')} individual observations in total) and the mean of each sample was computed. The original distribution chart shows ${origSize.toLocaleString('en-US')} individual observations from that same distribution; the sample means chart shows the ${numSims.toLocaleString('en-US')} means obtained.`;
 
     // Paragraph 2: shape of the distribution of the mean
     let p2 = '';
     if (n === 1) {
-      p2 = `With <strong>n = 1</strong> there is no averaging: each "sample mean" is a single individual value, so the lower histogram reproduces the shape of the original distribution and the red normal curve does not fit the bars (unless the base distribution is already normal). This is the starting point of the experiment.`;
+      p2 = `With <strong>n = 1</strong> there is no averaging: each "sample mean" is a single individual value, so the sample means histogram reproduces the shape of the original distribution and the red normal curve does not fit the bars (unless the base distribution is already normal). This is the starting point of the experiment.`;
     } else if (n <= 5) {
       if (isSymmetric) {
-        p2 = `With <strong>n = ${n}</strong> and a symmetric starting distribution, the histogram of the means already looks fairly bell-shaped: averaging symmetric values creates no dominant tail. Notice that the bars cluster around μ and that the horizontal scale is narrower than in the upper chart.`;
+        p2 = `With <strong>n = ${n}</strong> and a symmetric starting distribution, the histogram of the means already looks fairly bell-shaped: averaging symmetric values creates no dominant tail. Notice that the bars cluster around μ and that the horizontal scale is narrower than in the original distribution chart.`;
       } else {
-        p2 = `With <strong>n = ${n}</strong> the histogram of the means is already smoother and more concentrated than the original distribution, but it keeps its skewness: the longer tail is still on the same side as in the upper chart, and the bars rise above the red curve on one side and fall below it on the other. The CLT effect is only just beginning.`;
+        p2 = `With <strong>n = ${n}</strong> the histogram of the means is already smoother and more concentrated than the original distribution, but it keeps its skewness: the longer tail is still on the same side as in the original distribution chart, and the bars rise above the red curve on one side and fall below it on the other. The CLT effect is only just beginning.`;
       }
       if (isDiscrete) {
         p2 += ` Because the distribution is discrete, the means can only take values spaced 1/n = ${fmt(1 / n, 3)} apart; that is why the histogram looks like a "comb" with gaps between bars.`;
