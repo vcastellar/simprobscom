@@ -82,18 +82,24 @@
   <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
   <style>
-    .charts-grid {
+    .ss-main .charts-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 20px;
       margin-top: 20px;
     }
     .chart-panel {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
       background: var(--surface);
       border: 1px solid var(--surface-border);
       border-radius: 14px;
       padding: 18px;
       box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+    }
+    .chart-panel .chart-wrap {
+      margin-top: auto;
     }
     .chart-panel h3 {
       margin: 0 0 4px;
@@ -250,7 +256,7 @@
       }
     }
     @media (max-width: 900px) {
-      .charts-grid {
+      .ss-main .charts-grid {
         grid-template-columns: 1fr;
       }
       .sim-form-grid {
@@ -540,10 +546,10 @@
       <details class="fold"><summary><h2>Qué hace el simulador, paso a paso</h2></summary>
       <p>El simulador tiene una ventaja que no existe con datos reales: conoce la población de la que sale la muestra. Eso permite comparar lo que dice el bootstrap, que solo ve la muestra, con la verdad.</p>
       <ol>
-        <li><strong>«Nueva muestra» extrae n observaciones</strong> de la distribución poblacional elegida. Es la única vez que se usa la población. El gráfico superior muestra esa muestra (barras) junto a la densidad teórica (línea roja).</li>
+        <li><strong>«Nueva muestra» extrae n observaciones</strong> de la distribución poblacional elegida. Es la única vez que se usa la población. El gráfico de la muestra original muestra esa muestra (barras) junto a la densidad teórica (línea roja).</li>
         <li><strong>Calcula el estadístico en la muestra</strong> (media, mediana o desviación típica): es la estimación \(\hat{\theta}\), que aparece en la columna «Bootstrap / Muestral».</li>
         <li><strong>Remuestrea.</strong> Forma una muestra bootstrap eligiendo n veces, al azar y con reemplazamiento, una de las n observaciones. Unas salen repetidas y otras no salen.</li>
-        <li><strong>Calcula el estadístico en la muestra bootstrap</strong> y repite los pasos 3 y 4 hasta tener B réplicas. Su histograma es el gráfico inferior.</li>
+        <li><strong>Calcula el estadístico en la muestra bootstrap</strong> y repite los pasos 3 y 4 hasta tener B réplicas. Su histograma es el gráfico de la distribución bootstrap.</li>
         <li><strong>Error estándar bootstrap:</strong> la desviación típica de las B réplicas.</li>
         <li><strong>Intervalo percentil:</strong> ordena las B réplicas de menor a mayor y toma los valores que dejan fuera α/2 a cada lado. Con B = 1000 y un nivel del 95 %, son la 26.ª y la 975.ª réplicas ordenadas. En el gráfico, las barras verdes quedan dentro del intervalo y las grises fuera.</li>
       </ol>

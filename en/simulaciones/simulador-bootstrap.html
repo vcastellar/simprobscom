@@ -82,18 +82,24 @@
   <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.4/dist/jstat.min.js" integrity="sha384-G0LNImWgCl2Dv94gWHL462179lItxVdMl0mIkiGu4HaUYuC4jZlAVdyqTZxTKRTs" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js" integrity="sha384-AHAnt9ZhGeHIrydA1Kp1L7FN+2UosbF7RQg6C+9Is/a7kDpQ1684C2iH2VWil6r4" crossorigin="anonymous" defer></script>
   <style>
-    .charts-grid {
+    .ss-main .charts-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 20px;
       margin-top: 20px;
     }
     .chart-panel {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
       background: var(--surface);
       border: 1px solid var(--surface-border);
       border-radius: 14px;
       padding: 18px;
       box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+    }
+    .chart-panel .chart-wrap {
+      margin-top: auto;
     }
     .chart-panel h3 {
       margin: 0 0 4px;
@@ -250,7 +256,7 @@
       }
     }
     @media (max-width: 900px) {
-      .charts-grid {
+      .ss-main .charts-grid {
         grid-template-columns: 1fr;
       }
       .sim-form-grid {
@@ -535,10 +541,10 @@
       <details class="fold"><summary><h2>What the simulator does, step by step</h2></summary>
       <p>The simulator has an advantage that does not exist with real data: it knows the population the sample comes from. That makes it possible to compare what the bootstrap says, seeing only the sample, with the truth.</p>
       <ol>
-        <li><strong>"New sample" draws n observations</strong> from the chosen population distribution. This is the only time the population is used. The upper chart shows that sample (bars) next to the theoretical density (red line).</li>
+        <li><strong>"New sample" draws n observations</strong> from the chosen population distribution. This is the only time the population is used. The original sample chart shows that sample (bars) next to the theoretical density (red line).</li>
         <li><strong>It computes the statistic on the sample</strong> (mean, median or standard deviation): this is the estimate \(\hat{\theta}\), shown in the "Bootstrap / Sample" column.</li>
         <li><strong>It resamples.</strong> It builds a bootstrap sample by choosing one of the n observations n times, at random and with replacement. Some appear more than once and others do not appear.</li>
-        <li><strong>It computes the statistic on the bootstrap sample</strong> and repeats steps 3 and 4 until it has B replicates. Their histogram is the lower chart.</li>
+        <li><strong>It computes the statistic on the bootstrap sample</strong> and repeats steps 3 and 4 until it has B replicates. Their histogram is the bootstrap distribution chart.</li>
         <li><strong>Bootstrap standard error:</strong> the standard deviation of the B replicates.</li>
         <li><strong>Percentile interval:</strong> it sorts the B replicates from smallest to largest and takes the values that leave α/2 outside on each side. With B = 1000 and a 95% level, these are the 26th and the 975th sorted replicates. On the chart, the green bars lie inside the interval and the grey ones outside.</li>
       </ol>
