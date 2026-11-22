@@ -1,4 +1,4 @@
-"""Regression checks for beta endpoints and the frozen F-table row labels."""
+"""Regression checks for the beta matrix and the frozen F-table row labels."""
 import math
 
 from scipy.stats import beta
@@ -11,21 +11,23 @@ class TableLayoutTests(BrowserTestCase):
         self.page.goto(self.base + lang + 'tabla-' + name + '.html', wait_until='domcontentloaded')
         self.page.wait_for_function("typeof jStat !== 'undefined'")
 
-    def test_beta_grid_and_endpoint_limits(self):
+    def test_beta_matrix_and_values(self):
         for lang in ('/', '/en/'):
             self.open_table(lang, 'beta')
             for kind in ('cdf', 'pdf'):
                 self.page.locator('.tab-btn').nth(0 if kind == 'cdf' else 1).click()
                 table = self.page.locator('#tbl-' + kind)
-                self.assertEqual(table.locator('tbody tr').count(), 21)
-                self.assertEqual(table.locator('thead th').count(), 2)
+                self.assertEqual(table.locator('tbody tr').count(), 10)
+                self.assertEqual(table.locator('thead th').count(), 11)
+                self.assertEqual(table.locator('thead th').all_text_contents(), ['x'] + ['.0' + str(i) for i in range(10)])
+                self.assertEqual(table.locator('tbody tr').first.locator('td').nth(1).inner_text(), '—')
                 for a, b in ((2, 2), (.5, .5), (1, 1), (1, 2), (2, 1), (.5, 2), (2, .5), (10, 10)):
                     with self.subTest(lang=lang, kind=kind, alpha=a, beta=b):
                         self.page.select_option('#alpha-' + kind, str(a))
                         self.page.select_option('#beta-' + kind, str(b))
                         cells = table.locator('td[data-x]').evaluate_all(
                             'cs => cs.map(c => ({x:+c.dataset.x, text:c.textContent, exact:window.tableCellExact(c)}))')
-                        self.assertEqual([c['x'] for c in cells], [i / 20 for i in range(21)])
+                        self.assertEqual([c['x'] for c in cells], [i / 100 for i in range(1, 100)])
                         for cell in cells:
                             expected = beta.cdf(cell['x'], a, b) if kind == 'cdf' else beta.pdf(cell['x'], a, b)
                             if math.isinf(expected):
@@ -35,13 +37,11 @@ class TableLayoutTests(BrowserTestCase):
                                 self.assertRegex(cell['text'], r'^\d+\.\d{5}$')
                                 self.assertAlmostEqual(float(cell['text']), expected, delta=5.1e-6)
                                 self.assertAlmostEqual(cell['exact'], expected, delta=1e-14 if cell['x'] in (0, 1) else 1e-7)
-                        for x in ('0.00', '1.00'):
+                        for x in ('0.01', '0.99'):
                             table.locator('[data-x="' + x + '"]').click()
                             self.assertNotRegex(self.page.locator('#lookup-' + kind).inner_text(), r'NaN|undefined')
                             svg = self.page.locator('#tab-' + kind + ' svg')
                             self.assertNotRegex(svg.inner_html(), r'NaN|Infinity')
-                            if kind == 'pdf' and (a, b) == (.5, .5):
-                                self.assertIn('∞', self.page.locator('#tab-pdf figcaption').inner_text())
 
     def test_f_precision_and_opaque_sticky_column(self):
         for lang in ('/', '/en/'):
